@@ -4137,12 +4137,7 @@
         "recipe": {
             "time": 35,
             "yield": 1,
-            "ingredients": [
-                {
-                    "id": "iron-plate",
-                    "amount": 5
-                }
-            ]
+            "ingredients": []
         }
     },
     {

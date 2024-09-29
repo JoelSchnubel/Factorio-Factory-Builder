@@ -73,13 +73,16 @@ class FactorioProductionTree:
         # Calculate how many recipe runs are needed per minute
         recipe_runs_needed_per_minute = items_per_minute / yield_per_recipe
 
+        
+        
         # Store total required amounts, including assemblers, inserters, and belts
         total_requirements = {
             item_id: {
-                "amount_per_minute": items_per_minute,
+                "output_per_minute": items_per_minute,
                 "assemblers": math.ceil(self._calculate_assemblers(time_per_unit, recipe_runs_needed_per_minute)),
-                "inserters": math.ceil(self._calculate_inserters(recipe_runs_needed_per_minute)),
-                "belts": 0  # We'll calculate belts below for each ingredient
+                "output_inserters": math.ceil(self._calculate_inserters(recipe_runs_needed_per_minute)),
+                "input_inserters": recipe["ingredients"],
+                "belts": 0  
             }
         }
 
@@ -161,85 +164,26 @@ class FactorioProductionTree:
 
     def solve(self,production_data):
         # Initialize solver with grid size and production data
-        z3_solver = Z3Solver(self.grid_width,self.grid_height, production_data)
+        z3_solver = Z3Solver(20,20, production_data)
         # Process the input to place assemblers
-        z3_solver.process_input()
+        z3_solver.solve()
 
-        # Add constraints for assemblers, inserters, belts, and non-overlapping
-        z3_solver.add_assembler_constraints()
-        z3_solver.add_inserter_constraints()
-        z3_solver.add_belt_constraints()
-        z3_solver.add_non_overlap_constraints()
-
-        # Solve the constraints
-        self.model = z3_solver.solve()
-
-        # Display the result
-        z3_solver.display_solution(self.model)
         self.z3_solver = z3_solver
         
     def display_solution(self):
-        pygame.init()
-        grid_size = 50  # Size of each grid cell in pixels
-        screen_width = self.grid_width * grid_size
-        screen_height = self.grid_height * grid_size
-        
-        screen = pygame.display.set_mode((screen_width, screen_height))
-        pygame.display.set_caption("Solution Grid")
-
-        # Colors
-        color_background = (255, 255, 255)
-        color_assembler = (0, 0, 255) # Blue
-        color_inserter = (0, 255, 0) # Green
-        color_belt_start = (255, 0, 0) # Red
-        color_belt_end = (255, 165, 0) # orange
-        color_grid = (200, 200, 200)
-        # Main display loop
-        running = True
-        
-        while running:
-            screen.fill(color_background)
-
-            # Draw the grid
-            for x in range(self.grid_width):
-                for y in range(self.grid_height):
-                    rect = pygame.Rect(x * grid_size, y * grid_size, grid_size, grid_size)
-                    pygame.draw.rect(screen, color_grid, rect, 1)
-
-                    # Draw assemblers
-                    if self.model.evaluate(self.z3_solver.assemblers[x][y]):
-                        pygame.draw.rect(screen, color_assembler, rect)
-
-                    # Draw inserters
-                    if self.model.evaluate(self.z3_solver.inserters[x][y]):
-                        pygame.draw.circle(screen, color_inserter, rect.center, grid_size // 4)
-
-                    # Draw belt start
-                    if self.model.evaluate(self.z3_solver.belt_start[x][y]):
-                        pygame.draw.rect(screen, color_belt_start, rect)
-
-                    # Draw belt end
-                    if self.model.evaluate(self.z3_solver.belt_end[x][y]):
-                        pygame.draw.rect(screen, color_belt_end, rect)
-
-            # Pygame event handling
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    running = False
-
-            pygame.display.flip()
-
-        pygame.quit()
+        self.z3_solver.visualize_factory()
         
         
         
         
 def main():
     factorioProductionTree = FactorioProductionTree()
-    total_requirements = factorioProductionTree.calculate_production("electronic-circuit", 50)
-    factorioProductionTree.calculate_minimal_grid_size(total_requirements)
+    total_requirements = factorioProductionTree.calculate_production('electronic-circuit', 10)
     print(total_requirements)
+    #factorioProductionTree.calculate_minimal_grid_size(total_requirements)
+    
     factorioProductionTree.solve(total_requirements)
     factorioProductionTree.display_solution()
+   
 if __name__ == "__main__":
     main()
