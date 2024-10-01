@@ -1,27 +1,44 @@
 import heapq
 
 # Directions for moving in a grid (up, down, left, right)
-DIRECTIONS = [(0, 1), (1, 0), (0, -1), (-1, 0)]  # Can extend with diagonal directions
-
+DIRECTIONS = [(0, 1), (1, 0), (0, -1), (-1, 0)]  
 class AStarPathfinder:
-    def __init__(self, grid, grid_width, grid_height):
+    def __init__(self, grid, pairs):
         self.grid = grid
-        self.width = grid_width
-        self.height = grid_height
+        self.pairs = self.remove_redundant_pairs(pairs)
+        self.width = len(grid[0])
+        self.height = len(grid)
 
+    # Removes redundant pairs of start and goal points
+    def remove_redundant_pairs(self, pairs):
+        unique_pairs = []
+        for pair in pairs:
+            if pair not in unique_pairs:
+                unique_pairs.append(pair)
+                
+        self.adapt_grid(unique_pairs)
+        return unique_pairs
+    
+    # Modifies the grid based on the pairs -> make start and goal points not obstacle
+    def adapt_grid(self,pairs):
+        for start, goal in pairs:
+            sx, sy = start
+            gx, gy = goal
+            # Set the start and goal points in the grid to 0
+            self.grid[sy][sx] = 0  
+            self.grid[gy][gx] = 0
+    
+    # Manhattan distance 
     def heuristic(self, current, goal):
-        """Manhattan distance heuristic for A*."""
         return abs(current[0] - goal[0]) + abs(current[1] - goal[1])
 
+    # Check if the node is within bounds and not an obstacle
     def is_valid(self, node):
-        """Check if the node is within bounds and not an obstacle (assembler or inserter)."""
         x, y = node
-        if 0 <= x < self.width and 0 <= y < self.height and self.grid[x][y] == 0:
-            return True
-        return False
+        return 0 <= x < self.width and 0 <= y < self.height and self.grid[y][x] == 0
 
+    # search algorithm to find the shortest path from start to goal
     def astar(self, start, goal):
-        """A* search algorithm to find the shortest path from start to goal."""
         open_list = []
         heapq.heappush(open_list, (0, start))
         came_from = {}
@@ -48,70 +65,73 @@ class AStarPathfinder:
         # No path found
         return None
 
+    # Reconstruct the path from start to goal
     def reconstruct_path(self, came_from, current):
-        """Reconstruct the path from start to goal using the came_from dictionary."""
         total_path = [current]
         while current in came_from:
             current = came_from[current]
             total_path.append(current)
         total_path.reverse()
         return total_path
+
+    # Define a function to connect all belt start and end points using A*
+    # if all pairs can be connnected return True else False
+    def connect_belts(self):
+        self.direction_grid = [[None for _ in range(self.width)] for _ in range(self.height)]
+        for points in self.pairs:
+            # Connect each consecutive point in the pair
+            belt_start = points[0]
+            belt_end = points[1]
+            path = self.astar(belt_start, belt_end)
+
+            if path:
+                print(f"Path from {belt_start} to {belt_end}")
+                # Mark the path on the grid, excluding start and goal points
+                
+                
+                for i in range(1, len(path) - 1):  # Skip start and end points
+                    x, y = path[i]
+                    next_x, next_y = path[i + 1]
+                    dx, dy = next_x - x, next_y - y
+                    
+                    # Mark direction based on the relative position of the next cell
+                    if dx == 1 and dy == 0:
+                        direction = 'right'
+                    elif dx == -1 and dy == 0:
+                        direction = 'left'
+                    elif dx == 0 and dy == 1:
+                        direction = 'down'
+                    elif dx == 0 and dy == -1:
+                        direction = 'up'
+                    else:
+                        direction = None  
+                    
+                    self.direction_grid[y][x] = direction
+                
+                for x, y in path[1:-1]:  # Skip start and end points
+                    self.grid[y][x] = 2  # Belt path marked with '2'
+            else:
+                print(f"No valid path found from {belt_start} to {belt_end}")
+                return False
+            
+        return True
+    
+    
     
 
-# Example grid: 0 = free, 1 = obstacle (assembler or inserter)
-# Create the grid based on assembler and inserter positions
-def create_grid(assemblers, inserters, grid_width, grid_height):
-    grid = [[0 for _ in range(grid_height)] for _ in range(grid_width)]
+
+
+
+def main():
+
+    return
+    astar = AStarPathfinder(grid,pairs)
+
+    grid = astar.connect_belts()
     
-    # Mark assemblers on the grid
-    for assembler in assemblers:
-        x, y = assembler
-        for i in range(3):
-            for j in range(3):
-                grid[x + i][y + j] = 1  # Occupied by an assembler
-
-    # Mark inserters on the grid
-    for inserter in inserters:
-        x, y = inserter
-        grid[x][y] = 1  # Occupied by an inserter
+    #paths = astar.connect_pairs()
     
-    return grid
-
-# Define a function to connect all belt start and end points using A*
-def connect_belts(belt_pairs, grid, grid_width, grid_height):
-    pathfinder = AStarPathfinder(grid, grid_width, grid_height)
-    
-    for belt_start, belt_end in belt_pairs:
-        path = pathfinder.astar(belt_start, belt_end)
-        if path:
-            print(f"Path from {belt_start} to {belt_end}: {path}")
-            # Mark the path on the grid
-            for x, y in path:
-                grid[x][y] = 2  # Belt path marked with '2'
-        else:
-            print(f"No valid path found from {belt_start} to {belt_end}")
-    
-    return grid
-
-# Example usage:
-
-# Define some assemblers and inserters (assembler is 3x3, inserter is 1x1)
-assemblers = [(1, 1), (5, 1)]  # Assemblers placed at these positions
-inserters = [(4, 2), (8, 2)]  # Inserters placed next to assemblers
-
-# Define belt start and end positions
-belt_pairs = [((4, 2), (8, 2))]  # Example: belt starts at (4, 2) and ends at (8, 2)
-
-# Define the grid size
-grid_width = 10
-grid_height = 5
-
-# Create the grid with obstacles
-grid = create_grid(assemblers, inserters, grid_width, grid_height)
-
-# Connect belts using A*
-connected_grid = connect_belts(belt_pairs, grid, grid_width, grid_height)
-
-# Display the final grid with paths
-for row in connected_grid:
-    print(' '.join(map(str, row)))
+    for row in grid:
+        print(row)
+if __name__ == "__main__":
+    main()
