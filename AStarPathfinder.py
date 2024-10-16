@@ -8,6 +8,8 @@ class AStarPathfinder:
         self.pairs = self.remove_redundant_pairs(pairs)
         self.width = len(grid[0])
         self.height = len(grid)
+        self.paths = {}
+        
 
     # Removes redundant pairs of start and goal points
     def remove_redundant_pairs(self, pairs):
@@ -83,7 +85,7 @@ class AStarPathfinder:
             belt_start = points[0]
             belt_end = points[1]
             path = self.astar(belt_start, belt_end)
-
+            self.paths[points] = path
             if path:
                 print(f"Path from {belt_start} to {belt_end}")
                 # Mark the path on the grid, excluding start and goal points
