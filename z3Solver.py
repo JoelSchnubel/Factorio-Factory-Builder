@@ -53,7 +53,8 @@ class Inserter:
         self.item = item
         
         self.direct_interaction = Bool(f"{id}_direct")
-        
+
+        self.is_merged = False
     
         
     def __str__(self) -> str:
@@ -108,17 +109,17 @@ class Z3Solver:
             
             
             self.add_single_assembler_constraint(assembler)
-
-            self.add_single_inserter_constraint(assembler)
             
             self.add_input_belt_merging(assembler)
             self.add_inserter_merging(assembler)
             
+            self.add_single_inserter_constraint(assembler)
+
             
             #self.add_single_belt_constraint(assembler)
      
             self.add_single_overlapping_constraints(assembler)
-            #self.add_overlapping_constraints()
+
             self.add_bound_constraints()
             self.solve()
             obstacle_map,belt_point_information = self.build_map()
@@ -128,21 +129,7 @@ class Z3Solver:
             self.fix_position(assembler)
             
         return self.placed_assembler, self.model
-           
-      
-    def create_constraints(self):
-        self.create_assemblers()
-        
-            
-        self.add_assembler_constraints()
-        
-        self.add_bound_constraints()
-        self.add_overlapping_constraints()
-        self.add_inserter_constraints()
-        self.add_belt_penalty()
-    
-        
-        
+
     def fix_position(self,assembler):
         # model is solved at that point, we can eval the positions using the solver
         ax = self.model.evaluate(assembler.x).as_long()
@@ -224,68 +211,6 @@ class Z3Solver:
         
         self.solver.add(constraint)
         
-    def create_global_belts(self):
-        # Create input belts
-        for item_id, item_info in self.production_data.items():
-            if len( item_info) == 1:  # This identifies input items
-                #self.global_input_belts.append({'id': item_id, 'amount': math.ceil(item_info['amount_per_minute']/(ITEMS_PER_SECOND*60))})
-                for i in range( math.ceil(item_info['amount_per_minute']/(ITEMS_PER_SECOND*60))):
-                    self.global_input_belts.append(Belt(id=item_id+"_"+str(i)+"_"+"start" , type='start'))
-                
-            # Create output belt for the final product
-        for item_id, item_info in self.production_data.items():
-            if 'assemblers' in item_info and item_info['assemblers'] > 0:
-                self.global_output_belt = Belt(id=item_id+"_"+str(i)+"_"+"end" , type='end')
-                break
-            
-        # Print out the created belts for verification
-        print("Global Input Belts:")
-        for belt in self.global_input_belts:
-            print(belt)
-
-        print("Global Output Belt:")
-        if self.global_output_belt:
-            print(self.global_output_belt)
-
-    def add_global_belt_constraints(self):
-        # Ensure global input belts are placed on the edges and within bounds
-        for belt in self.global_input_belts:
-            self.solver.add(And(
-                Or(
-                    belt.x == 0,  # Left edge
-                    belt.x == self.width - 1  # Right edge
-                ),
-                Or(
-                    belt.y == 0,  # Top edge
-                    belt.y == self.height - 1   # Bottom edge
-                ),
-                belt.x >= 0, belt.y >= 0  # Non-negative constraints
-            ))
-
-        # Ensure global output belt is placed on the edge and within bounds
-        if self.global_output_belt:
-            self.solver.add(And(
-                Or(
-                    self.global_output_belt.x == 0,  # Left edge
-                    self.global_output_belt.x == self.width - 1  # Right edge
-                ),
-                Or(
-                    self.global_output_belt.y == 0,  # Top edge
-                    self.global_output_belt.y == self.height - 1  # Bottom edge
-                ),
-                self.global_output_belt.x >= 0, self.global_output_belt.y >= 0  # Non-negative constraints
-            ))
-
-        # Add non-overlapping constraints for all belts
-        all_belts = self.global_input_belts + [self.global_output_belt] if self.global_output_belt else self.global_input_belts
-        for i, belt1 in enumerate(all_belts):
-            for belt2 in all_belts[i+1:]:
-                # Ensure that no two belts occupy the same position
-                self.solver.add(Or(
-                    belt1.x != belt2.x,
-                    belt1.y != belt2.y
-                ))
-        print("Global belt constraints added.")
 
     
     def create_assemblers(self):
@@ -350,7 +275,7 @@ class Z3Solver:
                                     Or(belt.y < assembler.y, belt.y > assembler.y + 2)
                                 ))
                 
-            # assembler does not overlap with other assemblers or inserters
+            # assembler does not overlap with other assemblers or inserters or belts
             for other in self.placed_assembler:
                 if assembler.id != other.id:
                     # Non-overlapping assembler regions
@@ -366,7 +291,7 @@ class Z3Solver:
                         
                         # they can overlap, if they have the same item -> see merging of inserters and direct interaction
                         belt = inserter.belt
-                        if belt.item != assembler.item:
+                        if belt is not None:   #(belt.item != assembler.item):# and belt.type == "end":
                             self.solver.add(Or(
                                 Or(belt.x < assembler.x, belt.x > assembler.x + 2),
                                 Or(belt.y < assembler.y, belt.y > assembler.y + 2)
@@ -387,26 +312,27 @@ class Z3Solver:
             ]
         
         for inserter in assembler.inserters:
-                # Ensure each inserter is adjacent to its assembler
-                self.solver.add(Or([And(inserter.x == pos[0], inserter.y == pos[1]) for pos in input_positions]))
-                
-                belt = inserter.belt
+            # standard direct interaction set to False
+            #inserter.direct_interaction = False
+            # Ensure each inserter is adjacent to its assembler
+            self.solver.add(Or([And(inserter.x == pos[0], inserter.y == pos[1]) for pos in input_positions]))
+
+            belt = inserter.belt
+            if belt is not None:
                 # Ensure that the belt corresponding to the inserter is at the opposite side of the assembler
-                self.solver.add(Or(
+                self.solver.add(
                 # Option 1: Direct interaction (no belt)
-                inserter.direct_interaction,
-                # Option 2: Standard case with a belt
+                    # Option 2: Standard case with a belt
                 Or(
-                    # Inserter to the left of the assembler, belt is to the left of the inserter
-                    And(inserter.x == assembler.x - 1, belt.x == inserter.x - 1, belt.y == inserter.y),
-                    # Inserter to the right of the assembler, belt is to the right of the inserter
-                    And(inserter.x == assembler.x + 3, belt.x == inserter.x + 1, belt.y == inserter.y),
-                    # Inserter above the assembler, belt is above the inserter
-                    And(inserter.y == assembler.y - 1, belt.x == inserter.x, belt.y == inserter.y - 1),
-                    # Inserter below the assembler, belt is below the inserter
-                    And(inserter.y == assembler.y + 3, belt.x == inserter.x, belt.y == inserter.y + 1)
-                )
-                ))
+                            # Inserter to the left of the assembler, belt is to the left of the inserter
+                            And(inserter.x == assembler.x - 1, belt.x == inserter.x - 1, belt.y == inserter.y),
+                            # Inserter to the right of the assembler, belt is to the right of the inserter
+                            And(inserter.x == assembler.x + 3, belt.x == inserter.x + 1, belt.y == inserter.y),
+                            # Inserter above the assembler, belt is above the inserter
+                            And(inserter.y == assembler.y - 1, belt.x == inserter.x, belt.y == inserter.y - 1),
+                            # Inserter below the assembler, belt is below the inserter
+                            And(inserter.y == assembler.y + 3, belt.x == inserter.x, belt.y == inserter.y + 1)
+                    ))
         
     # @Preprocessing
     # Returns a dictionary with each belt as the key and the following structure as the value:
@@ -677,7 +603,7 @@ class Z3Solver:
                 for inserter in assembler.inserters:
                     
                     # get own input inserter
-                    if inserter.type == "input":
+                    if inserter.type == "input" and not inserter.is_merged:
                         
                         for other_inserter in other_assembler.inserters:
                             
@@ -686,11 +612,22 @@ class Z3Solver:
 
                                 possible_positions = self.check_space_around_assembler(other_assembler,other_inserter)
                                 
+                                # Limit to the first 3 entries so we know which other belt to discard
+                                possible_positions = possible_positions[:3]
+                                
                                 # if space is avaible, set the position of our inserter to the output insert of the placed assembler
                                 if not possible_positions:
                                     inserter.direct_interaction = False
                                     continue  # Skip to the next inserter
-
+                                
+                                # input inserter
+                                inserter.direct_interaction = True
+                                inserter.is_merged = True
+                                
+                                # destroy the input belt
+                                inserter.belt = None
+                                other_inserter.belt = None
+                                
                                 # If space is available, enable direct interaction
                                 print(f'set direct interaction for {assembler.id}')
                                 #inserter.direct_interaction = True
@@ -701,175 +638,28 @@ class Z3Solver:
                                 inserter.y == self.model.evaluate(other_inserter.y).as_long()
                                 )
                                 
+                                self.solver.add(inserter_pos_constraint) 
                                 # destroy belt of input and output inserter
-                                inserter.belt = None
+                                
+                                # later we need to know which inserter the model choose in order to determine the belt to set to None
                                 other_inserter.belt = None
+                                #self.solver.add(And(inserter_pos_constraint,assembler_constraint))
                                 
-                                #assembler_constraint = And(assembler.x == possible_positions[0][0], assembler.y == possible_positions[0][1])
+                                self.solver.add 
                                 
-                                #self.solver.add(inserter_pos_constraint)
-                                #self.solver.add(assembler_constraint)
-                                
-                                position_constraints = [inserter_pos_constraint]
+                                assembler_pos_constraints = []
                                 for pos in possible_positions:
                                     assembler_constraint = And(assembler.x == pos[0], assembler.y == pos[1])
-                                    position_constraints.append(assembler_constraint)
+                                    assembler_pos_constraints.append(assembler_constraint)
                                     
-                                end_constraints.append(Or(*position_constraints))
+                                
+                                self.solver.add(Or(*assembler_pos_constraints))
+                                break
+                                
         if len(end_constraints)>0:
             self.solver.add(Or(*end_constraints))
         
-        
-                                
-    
-    def add_single_belt_penalty(self,assembler):
-        belt_penalty = Bool(f"{assembler.id}_belt_penalty")  # Penalty for belt usage
-        self.solver.add(belt_penalty >= 0)  # Penalty is non-negative
-        
-        total_belt_penalty = 0  # Accumulate belt penalties
-        
-        for inserter in assembler.inserters:
-            direct_interaction = Bool(f"{inserter.id}_direct")
-            belt_used = Not(direct_interaction)  # Belt is used when direct interaction is false
-            total_belt_penalty += If(belt_used, 1, 0)  # Add 1 to penalty if belt is used
-            
-            
-            merged = Bool(f"{inserter.belt.id}_merged")
-            
-        self.solver.minimize(total_belt_penalty)    
-    
-    def add_assembler_constraints(self):
-        # assembler has pos x,y and 
-        for assembler in self.assemblers:
-            # Ensure assembler fits within the grid boundaries (W-3 x H-3 grid)
-            self.solver.add(And(assembler.x >= 0, assembler.x <= self.width - 3))
-            self.solver.add(And(assembler.y >= 0, assembler.y <= self.height - 3))
-            
-            
-            #belts = self.global_input_belts
-            #belts.extend(self.global_output_belts)
-            
-            belts = self.global_input_belts + self.global_output_belts
-            # Allow for some flexibility in overlap
-            for belt in belts:
-                
-                self.solver.add(Or(
-                                    Or(belt.x < assembler.x, belt.x > assembler.x + 2),
-                                    Or(belt.y < assembler.y, belt.y > assembler.y + 2)
-                                ))
-                                
-            
-            #Ensure no other assembler the assembler's 3x3 space
-            for other in self.assemblers:
-                if assembler.id != other.id:
-                    # Non-overlapping assembler regions
-                    self.solver.add(Or(assembler.x + 2 < other.x, assembler.x > other.x + 2,
-                                    assembler.y + 2 < other.y, assembler.y > other.y + 2))
-                    
-                    for inserter in other.inserters:
-                        
-                        # Ensure the inserter is not inside the current assembler's 3x3 space
-                        self.solver.add(Or(
-                            Or(inserter.x < assembler.x, inserter.x > assembler.x + 2),
-                            Or(inserter.y < assembler.y, inserter.y > assembler.y + 2)
-                        ))
 
-                        # Ensure the belt is not inside the current assembler's 3x3 space
-                        #belt = inserter.belt
-                        #if belt is not None:
-                        #    self.solver.add(Or(
-                        #        Or(belt.x < assembler.x, belt.x > assembler.x + 2),
-                        #        Or(belt.y < assembler.y, belt.y > assembler.y + 2)
-                        #    ))
-                                
-        print('Assembler constraints added')
-    
-    # adds constraint that inserts need to be around its assembler as well as its belt
-
-    def add_inserter_constraints(self):
-        for assembler in self.assemblers:
-            # Define the possible positions of inserters around an assembler (adjacent cells)
-            input_positions = [
-                (assembler.x, assembler.y - 1), (assembler.x + 1, assembler.y - 1), (assembler.x + 2, assembler.y - 1),  # Top row
-                (assembler.x, assembler.y + 3), (assembler.x + 1, assembler.y + 3), (assembler.x + 2, assembler.y + 3),  # Bottom row
-                (assembler.x - 1, assembler.y), (assembler.x - 1, assembler.y + 1), (assembler.x - 1, assembler.y + 2),  # Left column
-                (assembler.x + 3, assembler.y), (assembler.x + 3, assembler.y + 1), (assembler.x + 3, assembler.y + 2)  # Right column
-            ]
-
-            for inserter in assembler.inserters:
-                # Ensure each inserter is adjacent to its assembler
-                self.solver.add(Or([And(inserter.x == pos[0], inserter.y == pos[1]) for pos in input_positions]))
-                
-                
-                direct_interaction = Bool(f"{inserter.id}_direct")
-                direct_preferred = Bool(f"{inserter.id}_direct_preferred")  # flag preference direct insertion over belt usage
-                
-                belt = inserter.belt
-                # Ensure that the belt corresponding to the inserter is at the opposite side of the assembler
-                self.solver.add(Or(
-                # Option 1: Direct interaction (no belt)
-                direct_interaction,
-                # Option 2: Standard case with a belt
-                Or(
-                    # Inserter to the left of the assembler, belt is to the left of the inserter
-                    And(inserter.x == assembler.x - 1, belt.x == inserter.x - 1, belt.y == inserter.y),
-                    # Inserter to the right of the assembler, belt is to the right of the inserter
-                    And(inserter.x == assembler.x + 3, belt.x == inserter.x + 1, belt.y == inserter.y),
-                    # Inserter above the assembler, belt is above the inserter
-                    And(inserter.y == assembler.y - 1, belt.x == inserter.x, belt.y == inserter.y - 1),
-                    # Inserter below the assembler, belt is below the inserter
-                    And(inserter.y == assembler.y + 3, belt.x == inserter.x, belt.y == inserter.y + 1)
-                )
-                ))
-
-                # If direct interaction is chosen, ensure no belt is involved (set belt positions to -1, -1)
-                self.solver.add(Implies(direct_interaction, And(belt.x == -1, belt.y == -1)))
-
-                # Enforce direct interaction if direct_preferred is True
-                self.solver.add(Implies(direct_preferred, direct_interaction))
-
-                # Ensure correct item flow for direct interactions
-                if inserter.type == 'output':
-                    #self.solver.add(inserter.item == assembler.item)
-
-                    # Check for merging with input inserter of adjacent assembler
-                    for other_assembler in self.assemblers:
-                        if assembler.id != other_assembler.id:
-                            other_input_positions = [
-                                (other_assembler.x, other_assembler.y - 1), (other_assembler.x + 1, other_assembler.y - 1), (other_assembler.x + 2, other_assembler.y - 1),
-                                (other_assembler.x, other_assembler.y + 3), (other_assembler.x + 1, other_assembler.y + 3), (other_assembler.x + 2, other_assembler.y + 3),
-                                (other_assembler.x - 1, other_assembler.y), (other_assembler.x - 1, other_assembler.y + 1), (other_assembler.x - 1, other_assembler.y + 2),
-                                (other_assembler.x + 3, other_assembler.y), (other_assembler.x + 3, other_assembler.y + 1), (other_assembler.x + 3, other_assembler.y + 2)
-                            ]
-
-                            for other_inserter in other_assembler.inserters:
-                                if other_inserter.type == 'input':
-                                    # Check if inserters are adjacent and handle the same item
-                                    self.solver.add(Implies(And(direct_interaction,
-                                                                inserter.item == other_inserter.item,
-                                                                Or([And(inserter.x == other_inserter.x, inserter.y == other_inserter.y)])),
-                                                            True))
-
-                                    # Merge input and output inserters
-                                    self.solver.add(Implies(And(direct_interaction,
-                                                                inserter.item == other_inserter.item),
-                                                            And(inserter.x == other_inserter.x, inserter.y == other_inserter.y)))                    
-    def add_belt_penalty(self):
-        belt_penalty = Int('belt_penalty')  # Penalty for belt usage
-        self.solver.add(belt_penalty >= 0)  # Penalty is non-negative
-        
-        total_belt_penalty = 0  # Accumulate belt penalties
-        
-        for assembler in self.assemblers:
-            for inserter in assembler.inserters:
-                # Add penalty if belt is used instead of direct interaction
-                direct_interaction = Bool(f"{inserter.id}_direct")
-                belt_used = Not(direct_interaction)  # Belt is used when direct interaction is false
-                total_belt_penalty += If(belt_used, 1, 0)  # Add 1 to penalty if belt is used
-        
-        # Minimize belt usage by minimizing the belt penalty
-        self.solver.minimize(total_belt_penalty)                         
-                
     def add_bound_constraints(self):
 
         # Ensure all inserters stay within the grid boundaries
@@ -883,12 +673,10 @@ class Z3Solver:
                 self.solver.add(And(inserter.y >= 0, inserter.y < self.height))
                 
                 if belt is not None:
-                # If direct interaction is not used, belt must stay within the grid boundaries
+                    # If direct interaction is not used, belt must stay within the grid boundaries
                     self.solver.add(And(belt.x >= 0, belt.x < self.width, belt.y >= 0, belt.y < self.height))
 
-                    # If direct interaction is used, the belt's position must be invalid (-1, -1)
-                    #self.solver.add(Implies(direct_interaction, And(belt.x == -1, belt.y == -1)))
-
+                
                 
     # what is done: assembler can't overlap other assembler, belt or inserter
     def add_single_overlapping_constraints(self,assembler):
@@ -963,16 +751,18 @@ class Z3Solver:
                         inserter1.y != inserter2.y
                     ))
 
-        #Ensure no belts overlap with each other, except they have the same item 
+        # Ensure no belts overlap with each other, except they have the same item  or they are out of bounds -> not used due to direct insertion
         for i, belt1 in enumerate(belts):
             for belt2 in belts[i+1:]:
-                if(belt1.id != belt2.id) or  (belt1.item != belt2.item):
+                if belt1.id != belt2.id or belt1.item != belt2.item:
                     self.solver.add(Or(
                         belt1.x != belt2.x,
-                        belt1.y != belt2.y
+                        belt1.y != belt2.y,
+                        And(belt1.x == -1, belt1.y == -1),
+                        And(belt2.x == -1, belt2.y == -1)
                     ))
 
-        #Ensure no inserter overlaps with any belt
+        # Ensure no inserter overlaps with any belt
         for inserter in inserters:
             for belt in belts:
                 self.solver.add(Or(
@@ -1053,25 +843,31 @@ class Z3Solver:
                     ix = self.model.evaluate(inserter.x).as_long()
                     iy = self.model.evaluate(inserter.y).as_long()
                     # Mark inserter position as occupied
-                    if 0 <= ix < self.width and 0 <= iy < self.height:
-                        obstacle_map[iy][ix] = 44
-
+                    if inserter.type == "input":
+                        if 0 <= ix < self.width and 0 <= iy < self.height:
+                            obstacle_map[iy][ix] = 44
+                    else:
+                        if 0 <= ix < self.width and 0 <= iy < self.height:
+                            obstacle_map[iy][ix] = 55
+                            
+                    belt = inserter.belt
                     if belt is not None:
                         
-                        try:
-                            # Mark the corresponding belt if not directly feeding
-                            belt = inserter.belt
-                            bx = self.model.evaluate(belt.x).as_long()
-                            by = self.model.evaluate(belt.y).as_long()
+                        bx = self.model.evaluate(belt.x).as_long()
+                        by = self.model.evaluate(belt.y).as_long()
 
+                        if belt.type == "start":
                             if 0 <= bx < self.width and 0 <= by < self.height:
                                 obstacle_map[by][bx] = 88
+                                    
+                        else:
+                            if 0 <= bx < self.width and 0 <= by < self.height:
+                                obstacle_map[by][bx] = 99
                             
-                            if bx > -1 and by > -1:
-                                start_id = belt.id.split('_')[0]
-                                belt_point_information.append([start_id, bx, by, belt.type])
-                        except:
-                            print("der scheißt einfach aufs if")
+                        if bx > -1 and by > -1:
+                            start_id = belt.id.split('_')[0]
+                            belt_point_information.append([start_id, bx, by, belt.type])
+                        
         else:
             print('not sat')
             
@@ -1079,120 +875,11 @@ class Z3Solver:
         return obstacle_map,belt_point_information
     
         
-    def visualize_factory(self):
-        
-        
-        
-        # Initialize Pygame
-        pygame.init()
-        
-        # Set up the window size (based on grid dimensions)
-        window_width = self.width * CELL_SIZE 
-        window_height = self.height * CELL_SIZE
-        window = pygame.display.set_mode((window_width, window_height))
-        
-        pygame.display.set_caption('Factory Layout Visualization')
-        
-        # Set up the clock for controlling the frame rate
-        clock = pygame.time.Clock()
-        
-        # Run the game loop
-        running = True
-        while running:
-            # Handle events (like quitting the window)
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    running = False
-            
-            # Fill the background with white
-            window.fill(WHITE)
-            
-            # Draw the grid
-            for x in range(0, window_width, CELL_SIZE):
-                for y in range(0, window_height, CELL_SIZE):
-                    pygame.draw.rect(window, BLACK, pygame.Rect(x, y, CELL_SIZE, CELL_SIZE), 1)
-            
-            for belt in self.global_input_belts:
-                belt_x = self.model.evaluate(belt.x).as_long()
-                belt_y = self.model.evaluate(belt.y).as_long()
-                belt_rect = pygame.Rect(belt_x * CELL_SIZE, belt_y * CELL_SIZE, CELL_SIZE, CELL_SIZE)
-                belt_color = BELT_COLOR_MAP.get(belt.type, GREEN)
-                
-                pygame.draw.rect(window, belt_color, belt_rect)
-                
-                font = pygame.font.Font(None, 20)
-                text_surface = font.render(belt.id, True, BLACK)
-                window.blit(text_surface, (belt_rect.x+5 , belt_rect.y+5 ))
-                
-            
-            
-            out_belt_x = self.model.evaluate(self.global_output_belt.x).as_long()
-            out_belt_y = self.model.evaluate(self.global_output_belt.y).as_long()
-            belt_rect = pygame.Rect(out_belt_x * CELL_SIZE, out_belt_y * CELL_SIZE, CELL_SIZE, CELL_SIZE)
-            belt_color = BELT_COLOR_MAP.get("end", GREEN)
-                
-            pygame.draw.rect(window, belt_color, belt_rect)
-                
-            font = pygame.font.Font(None, 20)
-            text_surface = font.render(self.global_output_belt.id, True, BLACK)
-            window.blit(text_surface, (belt_rect.x+5 , belt_rect.y+5 ))
-                
-            # Draw the assemblers, inserters, and belts
-            for assembler in self.assemblers:
-                
-                # Draw assembler (blue 3x3 grid)
-                assembler_x = self.model.evaluate(assembler.x).as_long()
-                assembler_y = self.model.evaluate(assembler.y).as_long()
-                assembler_rect = pygame.Rect(assembler_x * CELL_SIZE, assembler_y * CELL_SIZE, 3 * CELL_SIZE, 3 * CELL_SIZE)
-                pygame.draw.rect(window, BLUE, assembler_rect)
-                
-                # Draw assembler name
-                font = pygame.font.Font(None, 24)
-                text_surface = font.render(assembler.id, True, BLACK)
-                window.blit(text_surface, (assembler_rect.x + 5, assembler_rect.y + 5))
-                
-                # Draw inserters (red 1x1 grid)
-                for inserter in assembler.inserters:
-                    inserter_x = self.model.evaluate(inserter.x).as_long()
-                    inserter_y = self.model.evaluate(inserter.y).as_long()
-                    inserter_rect = pygame.Rect(inserter_x * CELL_SIZE, inserter_y * CELL_SIZE, CELL_SIZE, CELL_SIZE)
-                    # Change inserter color based on type
-                    inserter_color = INSERTER_COLOR_MAP.get(inserter.type, RED)
-                    pygame.draw.rect(window, inserter_color, inserter_rect)
-                    
-                    # Draw the associated belt (green 1x1 grid)
-                    belt_x = self.model.evaluate(inserter.belt.x).as_long()
-                    belt_y = self.model.evaluate(inserter.belt.y).as_long()
-                    belt_rect = pygame.Rect(belt_x * CELL_SIZE, belt_y * CELL_SIZE, CELL_SIZE, CELL_SIZE)
-                    belt_color = BELT_COLOR_MAP.get(inserter.belt.type, GREEN)
-                    pygame.draw.rect(window, belt_color, belt_rect)
-            
-            # Update the display
-            pygame.display.flip()
-            
-            # Limit the frame rate to 30 FPS
-            clock.tick(30)
-        
-        # Quit Pygame properly when the loop ends
-        pygame.quit()
-        
-        
+
         
 # Example usage
 def main():
-    # Define grid dimensions
-    grid_width = 20
-    grid_height = 20
-    
-    production_data= {'electronic-circuit': {'output_per_minute': 10, 'assemblers': 1, 'output_inserters': 1, 'input_inserters': [{'id': 'copper-cable', 'amount': 3}, {'id': 'iron-plate', 'amount': 1}], 'belts': 1}, 'copper-cable': {'output_per_minute': 30.0, 'assemblers': 1, 'output_inserters': 1, 'input_inserters': [{'id': 'copper-plate', 'amount': 1}], 'belts': 1}, 'copper-plate': {'amount_per_minute': 15.0}, 'iron-plate': {'amount_per_minute': 10.0}}
-
-    z3_solver = Z3Solver(grid_width, grid_height, production_data)
-    z3_solver.solve()
-    z3_solver.visualize_factory()
-    
-    obstacle_map,pairs = z3_solver.build_map()
-    print(obstacle_map)
-    print(pairs)
+    pass
 
 if __name__ == "__main__":
     main()

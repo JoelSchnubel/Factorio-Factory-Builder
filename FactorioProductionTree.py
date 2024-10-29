@@ -821,14 +821,12 @@ def main():
     factorioProductionTree = FactorioProductionTree(10,10)
     total_requirements = factorioProductionTree.calculate_production("electronic-circuit", 20) #60
     
+    #total_requirements = factorioProductionTree.calculate_production("copper-cable", 20) #60
     print(f"production data {total_requirements}")
 
     factorioProductionTree.manual_Input()
  
     factorioProductionTree.manual_Output("electronic-circuit")
-    
-    
-    
 
    
     factorioProductionTree.add_manual_IO_constraints(total_requirements,sequential=True)

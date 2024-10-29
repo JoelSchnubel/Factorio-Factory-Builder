@@ -3,12 +3,15 @@ import heapq
 # Directions for moving in a grid (up, down, left, right)
 DIRECTIONS = [(0, 1), (1, 0), (0, -1), (-1, 0)]  
 class AStarPathfinder:
-    def __init__(self, grid, pairs):
+    def __init__(self, grid, pairs,underground_length=3):
         self.grid = grid
         self.pairs = self.remove_redundant_pairs(pairs)
         self.width = len(grid[0])
         self.height = len(grid)
         self.paths = {}
+        self.underground_length = underground_length
+        
+        self.jump_markers_grid = [[None for _ in range(self.width)] for _ in range(self.height)]
         
 
     # Removes redundant pairs of start and goal points
@@ -37,35 +40,78 @@ class AStarPathfinder:
     # Check if the node is within bounds and not an obstacle
     def is_valid(self, node):
         x, y = node
-        return 0 <= x < self.width and 0 <= y < self.height and self.grid[y][x] == 0
+        return 0 <= x < self.width and 0 <= y < self.height #and (self.grid[y][x] == 0 or self.grid[y][x] == 3)
+    
+    # Check if we can jump over terrain
+    def can_jump(self, current, direction):
+        x, y = current
+        dx, dy = direction
+        
+        
+        for step in range(1, self.underground_length + 1):
+            next_x = x + dx * step
+            next_y = y + dy * step
+            
+            if not (0 <= next_x < self.width and 0 <= next_y < self.height):
+                return False  # Out of bounds
+            
+            if self.grid[next_y][next_x] != 0:  # Not a valid tile
+                return False
+            
+        return True
 
     # search algorithm to find the shortest path from start to goal
     def astar(self, start, goal):
-        open_list = []
-        heapq.heappush(open_list, (0, start))
-        came_from = {}
-        g_costs = {start: 0}
-        f_costs = {start: self.heuristic(start, goal)}
+            open_list = []
+            heapq.heappush(open_list, (0, start))
+            came_from = {}
+            g_costs = {start: 0}
+            f_costs = {start: self.heuristic(start, goal)}
 
-        while open_list:
-            _, current = heapq.heappop(open_list)
+            while open_list:
+                _, current = heapq.heappop(open_list)
 
-            if current == goal:
-                return self.reconstruct_path(came_from, current)
+                if current == goal:
+                    return self.reconstruct_path(came_from, current)
 
-            for direction in DIRECTIONS:
-                neighbor = (current[0] + direction[0], current[1] + direction[1])
-                if self.is_valid(neighbor):
-                    tentative_g_cost = g_costs[current] + 1
+                for direction in DIRECTIONS:
+                    neighbor = (current[0] + direction[0], current[1] + direction[1])
+                    
+                    # Standard move to a neighboring cell
+                    if self.is_valid(neighbor):
+                        tentative_g_cost = g_costs[current] + 1
 
-                    if neighbor not in g_costs or tentative_g_cost < g_costs[neighbor]:
-                        came_from[neighbor] = current
-                        g_costs[neighbor] = tentative_g_cost
-                        f_costs[neighbor] = tentative_g_cost + self.heuristic(neighbor, goal)
-                        heapq.heappush(open_list, (f_costs[neighbor], neighbor))
+                        if neighbor not in g_costs or tentative_g_cost < g_costs[neighbor]:
+                            came_from[neighbor] = current
+                            g_costs[neighbor] = tentative_g_cost
+                            f_costs[neighbor] = tentative_g_cost + self.heuristic(neighbor, goal)
+                            heapq.heappush(open_list, (f_costs[neighbor], neighbor))
 
-        # No path found
-        return None
+                    # Check for jumping over obstacles
+                    if self.can_jump(current, direction):
+                        # Calculate the end position after a jump
+                        jump_neighbor = (
+                            current[0] + direction[0] * self.underground_length,
+                            current[1] + direction[1] * self.underground_length
+                        )
+
+                        if self.is_valid(jump_neighbor):
+                            tentative_g_cost = g_costs[current] + self.underground_length
+
+                            if jump_neighbor not in g_costs or tentative_g_cost < g_costs[jump_neighbor]:
+                                # Record jump start and end in the jump_markers_grid
+                                sx, sy = current
+                                ex, ey = jump_neighbor
+                                self.jump_markers_grid[sy][sx] = "S"  # Start of jump
+                                self.jump_markers_grid[ey][ex] = "E"  # End of jump
+
+                                came_from[jump_neighbor] = current
+                                g_costs[jump_neighbor] = tentative_g_cost
+                                f_costs[jump_neighbor] = tentative_g_cost + self.heuristic(jump_neighbor, goal)
+                                heapq.heappush(open_list, (f_costs[jump_neighbor], jump_neighbor))
+
+            # No path found
+            return None
 
     # Reconstruct the path from start to goal
     def reconstruct_path(self, came_from, current):
@@ -119,21 +165,52 @@ class AStarPathfinder:
         return True
     
     
-    
+    def test_jump_over_terrain(self):
+        # Example grid: 0 = free, 1 = obstacle, 3 = jumpable terrain
+        test_grid = [
+            [0, 0, 0, 1, 1, 1, 0],
+            [0, 0, 0, 1, 1, 1, 0],
+            [0, 0, 0, 1, 1, 1, 0],
+            [0, 0, 0, 1, 1, 1, 0],
+            [0, 0, 0, 1, 1, 1, 0],
+        ]
+        
+        pairs = [((0, 0), (6, 0))]  # Start at (0, 0) and end at (6, 0)
+        astar = AStarPathfinder(test_grid, pairs)
+        result = astar.connect_belts()
+        
+        
+        
+        print("Jumping over terrain test result:", result)
+        for row in astar.grid:
+            print(row)
+            
+        print("Jumping over terrain test result direction grid:", result)
+        for row in astar.direction_grid:
+            print(row)
+            
+        print("Jumping over terrain test result jump_markers_grid :", result)
+        for row in astar.jump_markers_grid :
+            print(row)
 
 
 
 
 def main():
+    test_grid = [
+            [0, 0, 0, 1, 1, 1, 0],
+            [0, 0, 0, 1, 1, 1, 0],
+            [0, 0, 0, 3, 3, 3, 0],
+            [0, 0, 0, 1, 1, 1, 0],
+            [0, 0, 0, 0, 0, 0, 0],
+        ]
+        
+    pairs = [((0, 0), (6, 0))]  # Start at (0, 0) and end at (6, 0)
 
-    return
-    astar = AStarPathfinder(grid,pairs)
-
-    grid = astar.connect_belts()
     
-    #paths = astar.connect_pairs()
+    astar = AStarPathfinder(test_grid, pairs,3)
+    astar.test_jump_over_terrain()
     
-    for row in grid:
-        print(row)
+   
 if __name__ == "__main__":
     main()
