@@ -6,7 +6,9 @@ import math
 import sys ,os
 from z3 import And , Or
 from z3Solver  import Z3Solver
-from AStarPathfinder import AStarPathfinder
+from AStarPathFinderold import AStarPathFinderold
+
+from AStarPathFinder import AStarPathFinder
 
 # Define constants for colors
 WHITE = (255, 255, 255)
@@ -55,6 +57,8 @@ class FactorioProductionTree:
         # init after calulation of production data
         self.z3_solver = None
         self.AStar = None
+        
+        self.obstacle_map = None
     
         
         
@@ -282,7 +286,7 @@ class FactorioProductionTree:
                                             
                                         # Create an AStarPathfinder object for pathfinding
                                         pairs = [(output_information[current_item]['input'], output_information[current_item]['output'])]
-                                        astar = AStarPathfinder(grid_astar, pairs)
+                                        astar = AStarPathFinderold(grid_astar, pairs)
                                         connected = astar.connect_belts()  # This updates the grid with belt paths
 
                                         
@@ -497,7 +501,7 @@ class FactorioProductionTree:
                                             
                                         # Create an AStarPathfinder object for pathfinding
                                         pairs = [(input_information[current_item]['input'], input_information[current_item]['output'])]
-                                        astar = AStarPathfinder(grid_astar, pairs)
+                                        astar = AStarPathFinderold(grid_astar, pairs)
                                         connected = astar.connect_belts()  # This updates the grid with belt paths
                                         
                                         
@@ -605,7 +609,7 @@ class FactorioProductionTree:
             
             
         else:
-            self.z3_solver.create_constraints()
+            self.z3_solver.build_constraints()
             self.z3_solver.solve()
 
         
@@ -613,53 +617,211 @@ class FactorioProductionTree:
     def add_manual_IO_constraints(self,production_data,sequential):
         if self.z3_solver is None:
             self.z3_solver = Z3Solver(self.grid_width,self.grid_height, production_data)
-            
-        self.z3_solver.add_manuel_IO_constraints(self.input_information,self.output_information)
         
+        
+        
+        self.z3_solver.add_manuel_IO_constraints(self.input_information,self.output_information)
+    
+    
+    def detect_belt_overlap(self,belt):
+        belt_coords = (belt[1], belt[2]) 
+        # Step 2: Extract input/output belt coordinates
+        input_coords = set()
+        output_coords = set()
+
+        # Gather all coordinates in input/output grids where a belt (value 2) is present
+        for material, data in self.input_information.items():
+            input_grid = data['grid']
+            for row in range(len(input_grid)):
+                for col in range(len(input_grid[0])):
+                    if input_grid[row][col] == 2:
+                        input_coords.add((row, col))
+
+        for material, data in self.output_information.items():
+            output_grid = data['grid']
+            for row in range(len(output_grid)):
+                for col in range(len(output_grid[0])):
+                    if output_grid[row][col] == 2:
+                        output_coords.add((row, col))
+        
+        return belt_coords in input_coords or belt_coords in output_coords
+
+    def detect_assembler_overlap(self,belt,assembler_information):
+        belt_coords = (belt[1], belt[2]) 
+        
+        for assembler in assembler_information:
+            assembler_item, assembler_x, assembler_y = assembler
+            
+            # Check if the belt's coordinates overlap with the assembler's 3x3 area
+            for dx in range(3):  # Assembler width: 3
+                for dy in range(3):  # Assembler height: 3
+                    assembler_coords = (assembler_x + dx, assembler_y + dy)
+                    
+                    # If the belt's coordinates overlap with any of the assembler's coordinates
+                    if belt_coords == assembler_coords:
+                        return True  # There is an overlap
+        return False  # No overlap detected
+        
+
+    def is_position_available(self, pos):
+        x, y = pos
+        # Check if position is within bounds of the obstacle_map and if it's free (0)
+        if 0 <= x < len(self.obstacle_map) and 0 <= y < len(self.obstacle_map[0]):
+            return self.obstacle_map[y][x] == 0
+        return False  # Out-of-bounds positions are considered unavailable
+
+    def get_retrieval_points(self, belt_point_information, assembler_information):
+        retrieval_points = {}  # Dictionary to store all retrieval points for each item
+
+        # Step 1: Check direct input points from `input_information`
+        for item, x, y, _ in belt_point_information:
+            retrieval_points[item] = {
+            'destination': [(x, y)],  # This is the destination point from belt_point_information
+            'start_points': []  # List to store relevant start points
+            }
+
+            # Step 2: Check if item is in `input_information`
+            if item in self.input_information:
+                # Get all positions with the matching item from `input_information`
+                input_point = self.input_information[item]['input']
+                output_point = self.input_information[item]['output']
+                input_point = (input_point[1], input_point[0])  # Swap the coordinates
+                output_point = (output_point[1], output_point[0])  # Swap the coordinates
+                
+                # Add these points to the start_points list
+                retrieval_points[item]['start_points'].append(input_point)
+                retrieval_points[item]['start_points'].append(output_point)
+                
+                # Retrieve the grid for the item and locate all positions with '2' (indicating belt presence)
+                item_grid = self.input_information[item]['grid']
+                for row in range(len(item_grid)):
+                    for col in range(len(item_grid[0])):
+                        if item_grid[row][col] == 2:  # Belt presence for this item
+                            retrieval_points[item]["start_points"].append((row, col))
+                continue  # Move to the next belt item after checking input information
+
+            # Step 2: Check assembler output points from `assembler_information`
+            for asm_item, assembler_x, assembler_y in assembler_information:
+                if asm_item == item:
+        
+                    # Define assembler output positions based on `output_positions` template
+                    output_positions = [
+                        [(assembler_x, assembler_y - 1), (assembler_x, assembler_y - 2)],  # Upper left
+                        [(assembler_x + 1, assembler_y - 1), (assembler_x + 1, assembler_y - 2)],  # Upper middle
+                        [(assembler_x + 2, assembler_y - 1), (assembler_x + 2, assembler_y - 2)],  # Upper right
+                        [(assembler_x, assembler_y + 3), (assembler_x, assembler_y + 4)],  # Bottom left
+                        [(assembler_x + 1, assembler_y + 3), (assembler_x + 1, assembler_y + 4)],  # Bottom middle
+                        [(assembler_x + 2, assembler_y + 3), (assembler_x + 2, assembler_y + 4)],  # Bottom right
+                        [(assembler_x - 1, assembler_y), (assembler_x - 2, assembler_y)],  # Left up
+                        [(assembler_x - 1, assembler_y + 1), (assembler_x - 2, assembler_y + 1)],  # Left middle
+                        [(assembler_x - 1, assembler_y + 2), (assembler_x - 2, assembler_y + 2)],  # Left bottom
+                        [(assembler_x + 4, assembler_y), (assembler_x + 5, assembler_y)],  # Right up
+                        [(assembler_x + 4, assembler_y + 1), (assembler_x + 5, assembler_y + 1)],  # Right middle
+                        [(assembler_x + 4, assembler_y + 2), (assembler_x + 5, assembler_y + 2)]  # Right bottom
+                    ]
+
+                    # Filter output positions to ensure no overlap with any existing structures
+                    for position_pair in output_positions:
+                        # Filter output positions to ensure no overlap with any existing structures
+                            if self.is_position_available(position_pair[0]) and self.is_position_available(position_pair[1]):
+                                retrieval_points[item]["start_points"].append(position_pair[1])
+
+        return retrieval_points
+
+    
+    def add_out_point_information(self,output_item,assembler_information):
+        retrieval_points = {}
+        retrieval_points[output_item] = {
+            'destination': [],  # This is the destination point from belt_point_information
+            'start_points': []  # List to store relevant start points
+        }
+        
+        output_coords = []
+        for material, data in self.output_information.items():
+            output_grid = data['grid']
+            for row in range(len(output_grid)):
+                for col in range(len(output_grid[0])):
+                    if output_grid[row][col] == 2:
+                        output_coords.append((row, col))
+                        
+        input_point = self.output_information[output_item]['input']
+        output_point = self.output_information[output_item]['output']         
+                        
+        input_point = (input_point[1], input_point[0])  # Swap the coordinates
+        output_point = (output_point[1], output_point[0])  # Swap the coordinates
+        
+        output_coords.append(input_point)
+        output_coords.append(output_point)
+        retrieval_points[output_item]["destination"] = output_coords
+        
+        for asm_item, assembler_x, assembler_y in assembler_information:
+                if asm_item == output_item:
+        
+                    # Define assembler output positions based on `output_positions` template
+                    output_positions = [
+                        [(assembler_x, assembler_y - 1), (assembler_x, assembler_y - 2)],  # Upper left
+                        [(assembler_x + 1, assembler_y - 1), (assembler_x + 1, assembler_y - 2)],  # Upper middle
+                        [(assembler_x + 2, assembler_y - 1), (assembler_x + 2, assembler_y - 2)],  # Upper right
+                        [(assembler_x, assembler_y + 3), (assembler_x, assembler_y + 4)],  # Bottom left
+                        [(assembler_x + 1, assembler_y + 3), (assembler_x + 1, assembler_y + 4)],  # Bottom middle
+                        [(assembler_x + 2, assembler_y + 3), (assembler_x + 2, assembler_y + 4)],  # Bottom right
+                        [(assembler_x - 1, assembler_y), (assembler_x - 2, assembler_y)],  # Left up
+                        [(assembler_x - 1, assembler_y + 1), (assembler_x - 2, assembler_y + 1)],  # Left middle
+                        [(assembler_x - 1, assembler_y + 2), (assembler_x - 2, assembler_y + 2)],  # Left bottom
+                        [(assembler_x + 4, assembler_y), (assembler_x + 5, assembler_y)],  # Right up
+                        [(assembler_x + 4, assembler_y + 1), (assembler_x + 5, assembler_y + 1)],  # Right middle
+                        [(assembler_x + 4, assembler_y + 2), (assembler_x + 5, assembler_y + 2)]  # Right bottom
+                    ]
+
+                    # Filter output positions to ensure no overlap with any existing structures
+                    for position_pair in output_positions:
+                            if self.is_position_available(position_pair[0]) and self.is_position_available(position_pair[1]):
+                                retrieval_points[output_item]["start_points"].append(position_pair[1])
+        return retrieval_points
     # need to solve once before you can execute this
-    def build_belts(self,max_tries):
+    def build_belts(self,output_item,max_tries):
         
         
         for i in range(max_tries):
             
             print(f'Try Number: {i}')
             
-            # TODO rework build map
-            obstacle_map,belt_point_information = self.z3_solver.build_map()
             
-            print(obstacle_map)
+            self.obstacle_map,belt_point_information,assembler_information = self.z3_solver.build_map()
+            
+            print(self.obstacle_map)
             
             print(belt_point_information)
             
-            return
+            print(f"assembler_information {assembler_information}")
+            
+            # get rid of belts that are already connected -> overlap with other input and output belts set by user or overlap with assembler -> direct insertion
+            belt_point_information = [belt for belt in belt_point_information if not self.detect_belt_overlap(belt)]
+            belt_point_information = [belt for belt in belt_point_information if not self.detect_assembler_overlap(belt,assembler_information)]
+            
+            print(f"belt_point_information {belt_point_information}")
+            
+            retrieval_points = self.get_retrieval_points(belt_point_information,assembler_information)
+            print(f" retrieval points :{retrieval_points}")
+            
         
-            #self.AStar = AStarPathfinder(obstacle_map,pairs)
+            # add output belt if needed to form all possible to all possible
+            retrieval_points.update(self.add_out_point_information(output_item,assembler_information))
+            print(f"finished retrieval points :{retrieval_points}")
             
             
-            if(self.AStar.connect_belts()):
-                # Successfully connected all belts, return True
-                self.grid = self.AStar.grid
-                self.direction_grid = self.AStar.direction_grid
-                return True
-            else:
-                # add constraint to solver and let him solve again
-                # add assembler not at same pos constraint
-                model = self.z3_solver.model
-                for assembler in self.z3_solver.assemblers:
-                    
-                    assembler_x = model.evaluate(assembler.x).as_long()
-                    assembler_y = model.evaluate(assembler.y).as_long()
-                    
-                    constraint = Or(assembler.x != assembler_x, assembler.y != assembler_y )
-                    
-                    self.z3_solver.add_constraint(constraint)
-                    self.z3_solver.solve()
+            astar_pathfinder = AStarPathFinder(self.obstacle_map)
+            paths = astar_pathfinder.find_path_for_item(retrieval_points)
+
+            print(paths)
+            
+            return True
                 
         return False            
             
         
         
-    def visualize_factory(self,A_star_paths):
+    def visualize_factory(self,paths):
         side_panel_width = 300
         
         direction_angle_map = {
@@ -829,14 +991,15 @@ def main():
     factorioProductionTree.manual_Output("electronic-circuit")
 
    
-    factorioProductionTree.add_manual_IO_constraints(total_requirements,sequential=True)
+    factorioProductionTree.add_manual_IO_constraints(total_requirements,sequential=False)
     
     #factorioProductionTree.calculate_minimal_grid_size(total_requirements)
     
-    factorioProductionTree.solve(total_requirements,sequential=True)
+    factorioProductionTree.solve(total_requirements,sequential=False)
     
-    if(factorioProductionTree.build_belts(max_tries=20)):
-        factorioProductionTree.visualize_factory("")
+    if(factorioProductionTree.build_belts("electronic-circuit",max_tries=20)):
+        #factorioProductionTree.visualize_factory("")
+        pass
         #print(factorioProductionTree.grid)
    
 if __name__ == "__main__":
