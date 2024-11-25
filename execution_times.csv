@@ -1,0 +1,22 @@
+Item,Amount,Minimizer,Method,Execution Time (seconds)
+electronic-circuit,20,0,solve,0.796117499936372
+electronic-circuit,20,0,build_belts,0.21417579986155033
+electronic-circuit,20,0,solve,0.8748022997751832
+electronic-circuit,20,0,build_belts,0.2547251000069082
+electronic-circuit,30,0,solve,0.391125800088048
+electronic-circuit,30,0,build_belts,0.0038936003111302853
+electronic-circuit,30,0,solve,0.7817678996361792
+electronic-circuit,30,0,build_belts,0.23207220016047359
+electronic-circuit,100,0,solve,6.7116952002979815
+electronic-circuit,100,0,build_belts,3.6844750000163913
+electronic-circuit,100,0,solve,6.7921871999278665
+electronic-circuit,100,0,build_belts,3.7165350997820497
+electronic-circuit,100,0,solve,6.908477699849755
+electronic-circuit,100,0,build_belts,2.88269059965387
+electronic-circuit,100,0,solve,7.619905599858612
+electronic-circuit,100,0,build_belts,2.3950041998177767
+electronic-circuit,100,0,solve,7.388596700038761
+electronic-circuit,100,0,solve,7.009394899941981
+electronic-circuit,100,0,solve,7.024994800332934
+electronic-circuit,100,0,solve,6.852782799862325
+electronic-circuit,100,0,build_belts,2.1864081998355687

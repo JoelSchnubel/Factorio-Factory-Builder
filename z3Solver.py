@@ -39,7 +39,7 @@ BELT_COLOR_MAP = {
 
 
 class Assembler:
-    def __init__(self,id,inserters,item=None):
+    def __init__(self,id,inserters,item=None,capacity=0):
         self.id = id
         self.x = Int(f'{id}_x')
         self.y = Int(f'{id}_y')
@@ -47,11 +47,15 @@ class Assembler:
         self.inserters = inserters
         self.item = item
         
+        #self.capacity = Int(f'{id}_capacity')
+        self.capacity = capacity
+     
     def __str__(self) -> str:
             inserters_str = ', '.join([str(inserter) for inserter in self.inserters])
-
-            return (f"Assembler(id={self.id}, position=({self.x}, {self.y}),"
-                    f"inserters=[{inserters_str}]")
+            return (f"Assembler(id={self.id}, position=({self.x}, {self.y}), "
+                    f"capacity={self.capacity}, inserters=[{inserters_str}])")
+   
+        
         
 class Inserter:
     def __init__(self,id,type,belt,item=None):
@@ -105,7 +109,7 @@ class Z3Solver:
         self.additional_constraints = []
         
         self.input_information = None
-        self.output_information =None
+        self.output_information = None
 
         self.obstacle_maps= []
      
@@ -137,7 +141,7 @@ class Z3Solver:
         self.add_input_inserter_merge_assembler_constraint()
         
         
-        self.add_minimize_belts()
+        #self.add_minimize_belts()
 
     def add_manuel_IO_constraints(self, input_information, output_information):
         logging.info("Starting to add manual I/O constraints.")
@@ -216,28 +220,42 @@ class Z3Solver:
                     logging.info(f"Creating assembler for item '{item_id}', instance {i}")
                     
                     # Create input inserters for the assembler
-                    input_inserters = [
-                        Inserter(
-                            id=f"{input_info['id']}_in_{assembler_count}_{i}",
-                            type='input',
-                            item=input_info['id'],
-                            belt=Belt(
-                                id=f"{input_info['id']}_end_{assembler_count}_{i}",
-                                type="end",
-                                item=input_info['id']
+                    input_inserters = []
+                    
+                    for inserter_info in item_info['input_inserters']:
+                        for j in range(inserter_info['amount']):
+                            input_inserter_id = f"{inserter_info['id']}_in_{assembler_count}_{i}_{j}"
+                            belt_id = f"{inserter_info['id']}_end_{assembler_count}_{i}_{j}"
+                            
+                            logging.info(f"Creating input inserter for {inserter_info['id']} at {input_inserter_id}")
+
+                            # Create the input inserter with a unique ID and associated belt
+                            input_inserters.append(
+                                Inserter(
+                                    id=input_inserter_id,
+                                    type='input',
+                                    item=inserter_info['id'],
+                                    belt=Belt(
+                                        id=belt_id,
+                                        type="end",  # or "start" depending on your logic
+                                        item=inserter_info['id']
+                                    )
+                                )
                             )
-                        ) for input_info in item_info['input_inserters']
-                    ]
+                            
                     
                     assembler = Assembler(
                         id=f"{item_id}_{assembler_count}_{i}",
                         inserters=input_inserters,
-                        item=item_id
+                        item=item_id,
+                        capacity=item_info['capacity']
                     )
+                    
                     
                     self.assemblers.append(assembler)
                     logging.debug(f"Created assembler with ID: {assembler.id} and input inserters: {[inserter.id for inserter in input_inserters]}")
                     logging.debug(f"Created assembler with ID: {assembler.id} with item = {assembler.item}")
+                    logging.debug(f"Created assembler with ID: {assembler.id} with capacity = {assembler.capacity}")
                 assembler_count += 1
 
         logging.info(f"Created {len(self.assemblers)} assemblers in total.")
@@ -337,11 +355,20 @@ class Z3Solver:
                                 Or(belt.y < assembler.y, belt.y > assembler.y + 2)
                             ))
                             
-    # inserters are not allowd to overlap each other 
+    # inserters are not allowed to overlap each other 
+    # also for same assembler
     def add_inserter_overlap_inserter_constraint(self):
         logging.info("Adding inserter overlap constraints to prevent inserter-inserter overlap.")
         for assembler in self.assemblers:
             for inserter in assembler.inserters:
+                
+                for other_inserter in assembler.inserters:
+                    if inserter.id != other_inserter.id:
+                        self.solver.add(Or(
+                                Or(inserter.x < other_inserter.x, inserter.x > other_inserter.x),
+                                Or(inserter.y < other_inserter.y, inserter.y > other_inserter.y)
+                            ))
+                
                 for other_assembler in self.assemblers:
                     if assembler.id != other_assembler.id:
                         for other_inserter in other_assembler.inserters:
@@ -513,6 +540,11 @@ class Z3Solver:
         
         
     # we can force the belt to overlap with either an belt defined by the user or force merge it with an assemblers outline. assembler (x,y) = its upper left corner
+    
+    # merge assemblers belt with other assembler -> eg. assembler = 
+    
+    # additionally we need to look at the capacity of an assembler:
+    # the assembler we wan
     def add_input_inserter_merge_assembler_constraint(self):
         
         merge_constraints = []
@@ -521,6 +553,9 @@ class Z3Solver:
          
         for assembler in self.assemblers:
             for inserter in assembler.inserters:
+                
+                # Create a list to hold the constraints for each valid assembler
+                assembler_constraints = []
         
                 for other_assembler in self.assemblers:
                     if assembler.id != other_assembler.id:
@@ -528,8 +563,10 @@ class Z3Solver:
                         #logging.debug(f"Assembler {assembler.id} and other assembler {other_assembler.id}")
                         #logging.debug(f"Inserter item {inserter.item} and other assembler item {other_assembler.item}")
                         
-                        # if my inout inserter and the other assembler produces/transports same item, set the belt on one of the edge positions of the assembler -> all but the middle
-                        if inserter.item == other_assembler.item:
+                        # if my input inserter and the other assembler produces/transports same item, set the belt on one of the edge positions of the assembler -> all but the middle
+                        if inserter.item == other_assembler.item: #and assembler.capacity > 0:
+                            
+                            
                             logging.debug(  f"Assembler {assembler.id} and other assembler {other_assembler.id} "
                                         f"have matching items: {inserter.item}")
                             
@@ -548,16 +585,40 @@ class Z3Solver:
                             
                             
                             belt = inserter.belt 
-                            #self.solver.add(And(belt.x == merge_positions[2][0],belt.y == merge_positions[2][1] ))
-                            
-                            constraints = [And(belt.x == pos[0], belt.y == pos[1]) for pos in merge_positions]
+      
+                            constraints = [
+                                And(inserter.belt.x == pos[0], inserter.belt.y == pos[1])
+                                for pos in merge_positions
+                            ]
                             
                             if constraints:
                                 logging.debug(f"Adding constraints to position belt for inserter {inserter.id} "
                                             f"at positions: {merge_positions}")
-                                merge_constraints.append(Or(constraints))
+                                
+                                assembler_constraints.append(Or(constraints))
+                                #merge_constraints.append(Or(constraints))
+                                #self.solver.add(merge_constraints)
+                                
                             else:
+                
                                 logging.debug(f"No valid merge positions found for inserter {inserter.id}.")
+                                
+                # If there are valid constraints for this inserter, combine them with 'Or' between different assemblers
+                if assembler_constraints:
+                    # reduce capacity by 1 
+                    assembler.capacity -= 1
+                    
+                    
+                    logging.debug(f"Adding 'Or' between valid positions for inserter {inserter.id}.")
+                    merge_constraints.append(Or(assembler_constraints))  # This Or ensures multiple assemblers are considered
+                    self.solver.add(merge_constraints)
+                
+                else:
+                    logging.debug(f"No valid merge positions found for inserter {inserter.id}.")
+                    
+        #if merge_constraints:
+        #    self.solver.add(Or(merge_constraints))  # This 'Or' handles multiple inserters' constraints
+                        
     
     
     # minimizes the number of non merged belts 
@@ -648,6 +709,7 @@ class Z3Solver:
 
         belt_point_information = []
         assembler_information = []
+        inserter_information = []
         
         if self.solver.check() == sat:
             # add input and output belts:
@@ -682,7 +744,9 @@ class Z3Solver:
                     ix = self.model.evaluate(inserter.x).as_long()
                     iy = self.model.evaluate(inserter.y).as_long()
                     
-                    print(str(inserter.id) + " x: "+str(ix)+ "y: "+str(iy))
+                    inserter_information.append([inserter.item,ix,iy])
+                    
+                    #print(str(inserter.id) + " x: "+str(ix)+ "y: "+str(iy))
                     
                     # Mark inserter position as occupied
                     if inserter.type == "input":
@@ -692,7 +756,7 @@ class Z3Solver:
                     belt = inserter.belt
                     if belt is not None:
                         
-                        print(f"inserter_belt {belt}")
+                        #print(f"inserter_belt {belt}")
                         
                         bx = self.model.evaluate(belt.x).as_long()
                         by = self.model.evaluate(belt.y).as_long()
@@ -713,8 +777,38 @@ class Z3Solver:
             print('not sat')
             
             
-        return obstacle_map,belt_point_information,assembler_information
-    
+        return obstacle_map,belt_point_information,assembler_information,inserter_information
+
+        
+    def restrict_current_setup(self):
+        """
+        Restricts the current setup of assemblers and inserters by adding a negated constraint
+        for the current configuration to the solver.
+        """
+        if self.solver.check() == sat:
+            model = self.solver.model()
+            constraints = []
+            # Capture assembler positions
+            for assembler in self.assemblers:
+                x = model.evaluate(assembler.x).as_long()
+                y = model.evaluate(assembler.y).as_long()
+                assembler_constraint = And(assembler.x == x, assembler.y == y)
+                constraints.append(assembler_constraint)
+                # Capture inserter positions associated with the assembler
+                for inserter in assembler.inserters:
+                    ix = model.evaluate(inserter.x).as_long()
+                    iy = model.evaluate(inserter.y).as_long()
+                    inserter_constraint = And(inserter.x == ix, inserter.y == iy)
+                    constraints.append(inserter_constraint)
+            # Add the negated constraint to forbid this setup
+            if constraints:
+                forbidden_constraint = Not(And(*constraints))
+                self.solver.add(forbidden_constraint)
+                print("Added a constraint to forbid the current setup of assemblers and inserters.")
+        else:
+            print("No valid configuration to restrict (solver state is not SAT).")
+            
+            
         
 
         

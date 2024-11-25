@@ -4,7 +4,10 @@ import json
 import logging
 import pygame
 import math
-import sys ,os
+import sys, os
+import csv
+import time
+import re
 from z3 import And , Or
 from z3Solver  import Z3Solver
 from AStarPathFinderold import AStarPathFinderold
@@ -48,7 +51,7 @@ class FactorioProductionTree:
         # Create a lookup dictionary for items by their ID
         self.item_lookup = {item["id"]: item for item in items_data}
 
-        # info for inout items with belts
+        # info for input items with belts
         self.input_items=[]
         self.input_information = None
         
@@ -60,6 +63,8 @@ class FactorioProductionTree:
         self.AStar = None
         
         self.obstacle_map = None
+        
+        self.production_data = {}
     
         
         
@@ -111,7 +116,8 @@ class FactorioProductionTree:
                 "assemblers": math.ceil(self._calculate_assemblers(time_per_unit, recipe_runs_needed_per_minute)),
                 "output_inserters": math.ceil(self._calculate_inserters(recipe_runs_needed_per_minute)),
                 "input_inserters": recipe["ingredients"],
-                "belts": 0  
+                "belts": 0  ,
+                "capacity": 0
             }
         }
 
@@ -135,6 +141,55 @@ class FactorioProductionTree:
 
         total_requirements[item_id]["belts"] = math.ceil(total_requirements[item_id]["belts"])  # Round up belts
         return total_requirements
+        
+        
+    def set_capacities(self,production_data):
+        # create a reverse map of all the items in the production data
+        reverse_mapping = {}
+        
+         # Collect ingredients used in production data
+        for item_id, data in production_data.items():
+            # Skip items that don't have recipes
+            if "input_inserters" not in data:
+                continue
+            for ingredient in data["input_inserters"]:
+                ingredient_id = ingredient["id"]
+                
+                # Only include items that are in the production data (i.e., their capacities will be calculated)
+                if ingredient_id in production_data:
+                    if ingredient_id not in reverse_mapping:
+                        reverse_mapping[ingredient_id] = []
+                    reverse_mapping[ingredient_id].append(item_id)
+            
+        # for each item calculate the capacity using the map as the number of its assemblers devided by the number of other assemblers
+        # only do if both items are in the production data and the item is not the output item else set to 0 
+        
+        for item_id, data in production_data.items():
+            # Skip if this item is already an output product (it shouldn't calculate capacity for itself)
+            if "input_inserters" not in data:
+                data['capacity'] = 0
+                continue
+
+            # Get the number of assemblers for this item
+            item_assemblers = data.get("assemblers", 0)
+
+            # Find the items that use this item as an ingredient (from the reverse mapping)
+            if item_id in reverse_mapping:
+                total_assemblers_needed = 0
+                for product in reverse_mapping[item_id]:
+                    if product in production_data:
+                        total_assemblers_needed += production_data[product]["assemblers"]
+
+                if total_assemblers_needed > 0:
+                    data['capacity'] = round(item_assemblers / total_assemblers_needed)
+                else:
+                    data['capacity'] = 0
+            else:
+                # If no items are using this as an ingredient, set the capacity to 0
+                data['capacity'] = 0
+        return production_data
+
+
 
     # Calculate how many assemblers are needed to produce the required amount per minute.
     def _calculate_assemblers(self, time_per_unit, recipe_runs_needed_per_minute):
@@ -675,11 +730,15 @@ class FactorioProductionTree:
         retrieval_points = {}  # Dictionary to store all retrieval points for each item
 
         # Step 1: Check direct input points from `input_information`
-        for item, x, y, _ in belt_point_information:
-            retrieval_points[item] = {
-            'destination': [(x, y)],  # This is the destination point from belt_point_information
+        for i,(item, x, y, _) in enumerate(belt_point_information):
+            key = f"{item}_{i}"  # Unique key per occurrence of the item on the belt
+            
+            retrieval_points[key] = {
+            'item': item,
+            'destination': [(x,y)],  # This is the destination point from belt_point_information
             'start_points': []  # List to store relevant start points
             }
+            
 
             # Step 2: Check if item is in `input_information`
             if item in self.input_information:
@@ -690,15 +749,15 @@ class FactorioProductionTree:
                 output_point = (output_point[1], output_point[0])  # Swap the coordinates
                 
                 # Add these points to the start_points list
-                retrieval_points[item]['start_points'].append(input_point)
-                retrieval_points[item]['start_points'].append(output_point)
+                retrieval_points[key]['start_points'].append(input_point)
+                retrieval_points[key]['start_points'].append(output_point)
                 
                 # Retrieve the grid for the item and locate all positions with '2' (indicating belt presence)
                 item_grid = self.input_information[item]['grid']
                 for row in range(len(item_grid)):
                     for col in range(len(item_grid[0])):
                         if item_grid[row][col] == 2:  # Belt presence for this item
-                            retrieval_points[item]["start_points"].append((row, col))
+                            retrieval_points[key]["start_points"].append((row, col))
                 continue  # Move to the next belt item after checking input information
 
             # Step 2: Check assembler output points from `assembler_information`
@@ -725,16 +784,18 @@ class FactorioProductionTree:
                     for position_pair in output_positions:
                         # Filter output positions to ensure no overlap with any existing structures
                             if self.is_position_available(position_pair[0]) and self.is_position_available(position_pair[1]):
-                                retrieval_points[item]["start_points"].append(position_pair[1])
+                                retrieval_points[key]["start_points"].append(position_pair[1])
 
         return retrieval_points
 
     
     def add_out_point_information(self,output_item,assembler_information):
+        
+        
         retrieval_points = {}
         retrieval_points[output_item] = {
             'destination': [],  # This is the destination point from belt_point_information
-            'start_points': []  # List to store relevant start points
+            'start_points': [],  # List to store relevant start points
         }
         
         output_coords = []
@@ -788,13 +849,13 @@ class FactorioProductionTree:
             print(f'Try Number: {i}')
             
             
-            self.obstacle_map,belt_point_information,assembler_information = self.z3_solver.build_map()
+            self.obstacle_map,belt_point_information,assembler_information,_ = self.z3_solver.build_map()
             
             print(self.obstacle_map)
             
-            print(belt_point_information)
+            #print(belt_point_information)
             
-            print(f"assembler_information {assembler_information}")
+            #print(f"assembler_information {assembler_information}")
             
             # get rid of belts that are already connected -> overlap with other input and output belts set by user or overlap with assembler -> direct insertion
             belt_point_information = [belt for belt in belt_point_information if not self.detect_belt_overlap(belt)]
@@ -808,22 +869,42 @@ class FactorioProductionTree:
         
             # add output belt if needed to form all possible to all possible
             retrieval_points.update(self.add_out_point_information(output_item,assembler_information))
-            print(f"finished retrieval points :{retrieval_points}")
+            #print(f"finished retrieval points :{retrieval_points}")
             
-            
-            astar_pathfinder = AStarPathFinder(self.obstacle_map)
-            paths = astar_pathfinder.find_path_for_item(retrieval_points)
+            try:
+                astar_pathfinder = AStarPathFinder(self.obstacle_map)
+                paths = astar_pathfinder.find_path_for_item(retrieval_points)
 
-            print(paths)
-            
-            return True
+                #print(paths)
                 
-        return False            
+                return paths
             
-        
+            except:
+                print(f"could not assign valid paths to that setup")
+                logging.warn(f"coould not assign valid paths to that setup")
+                
+                # restrict the assembler and inserter positions to occur in teh same setup -> belts are not needed as they are bound by the inserter
+                self.z3_solver.restrict_current_setup()
+                self.z3_solver.solve()
+                
+                pass
+                
+        return None            
+            
+
         
     def visualize_factory(self,paths):
+        #print(paths)
+        
+        _ ,belt_point_information,assembler_information,inserter_information = self.z3_solver.build_map()
+        
+        print(assembler_information)
+        
+        print(inserter_information)
+        
         side_panel_width = 300
+        
+
         
         direction_angle_map = {
             'right': 90,
@@ -855,8 +936,14 @@ class FactorioProductionTree:
         assembler_image = pygame.transform.scale(assembler_image, (3 * CELL_SIZE, 3 * CELL_SIZE))
         inserter_image = pygame.transform.scale(inserter_image, (CELL_SIZE, CELL_SIZE))
         conveyor_image = pygame.transform.scale(conveyor_image, (CELL_SIZE, CELL_SIZE))
-        underground_image = pygame.transform.scale(underground_image, (CELL_SIZE, CELL_SIZE))
+        underground_belt_image = pygame.transform.scale(underground_image, (CELL_SIZE, CELL_SIZE))
 
+        conveyor_image_rotated = {
+            (0, 1): pygame.transform.rotate(conveyor_image, 0),     # Right
+            (1, 0): pygame.transform.rotate(conveyor_image, 90),    # Down
+            (0, -1): pygame.transform.rotate(conveyor_image, 180),  # Left
+            (-1, 0): pygame.transform.rotate(conveyor_image, 270)   # Up
+        }
         
         item_images = {}
 
@@ -942,33 +1029,99 @@ class FactorioProductionTree:
                                     # Draw the belt image at the correct position
                                     window.blit(rotated_belt_image, (side_panel_width + col * CELL_SIZE, row * CELL_SIZE))
             
-            # draw assembler inserter and belts
-            # assembler is 3x3 and x,y is upper left corner of teh assembler
-            # image is correctly scaled
-            for assembler in self.placed_assembler:
-                assembler_x = self.model.evaluate(assembler.x).as_long()
-                assembler_y = self.model.evaluate(assembler.y).as_long() 
-                
-                # Draw the assembler at its position
-                window.blit(assembler_image, (assembler_x, assembler_y))  # Draw the assembler image
 
-                window.blit(item_images[assembler.item],(assembler_x, assembler_y))
-                
-                for inserter in assembler.inserters:
-                    belt = inserter.belt
+            # Draw assemblers
+            for assembler_item, assembler_x, assembler_y in assembler_information:
+                # Convert grid coordinates to pixel coordinates
+                pixel_x = side_panel_width + assembler_x * CELL_SIZE
+                pixel_y = assembler_y * CELL_SIZE
+
+                # Draw the assembler at its position
+                window.blit(assembler_image, (pixel_x, pixel_y))
+                window.blit(item_images[assembler_item], (pixel_x, pixel_y))
+
+            # Draw inserters
+            for inserter_item, inserter_x, inserter_y in inserter_information:
+                # Convert grid coordinates to pixel coordinates
+                pixel_x = side_panel_width + inserter_x * CELL_SIZE
+                pixel_y = inserter_y * CELL_SIZE
+
+                # Draw the inserter at its position
+                window.blit(inserter_image, (pixel_x, pixel_y))
+
+                # Scale the inserter_item image to a quarter of its size
+                original_image = item_images[inserter_item]
+                quarter_size = (original_image.get_width() // 2, original_image.get_height() // 2)
+                scaled_image = pygame.transform.scale(original_image, quarter_size)
+
+                # Calculate the position for the lower-right corner of the inserter
+                inserter_width = inserter_image.get_width()
+                inserter_height = inserter_image.get_height()
+                scaled_width = scaled_image.get_width()
+                scaled_height = scaled_image.get_height()
+                corner_x = pixel_x + inserter_width - scaled_width
+                corner_y = pixel_y + inserter_height - scaled_height
+
+                # Draw the scaled-down inserter_item image at the calculated position
+                window.blit(scaled_image, (corner_x, corner_y))
                     
-                    inserter_x = self.model.evaluate(inserter.x).as_long()
-                    inserter_y = self.model.evaluate(inserter.y).as_long() 
-                    
-                    window.blit(inserter_image, (inserter_x, inserter_y))
-                    
-                    belt_x = self.model.evaluate(belt.x).as_long()
-                    belt_y = self.model.evaluate(belt.y).as_long() 
-                    
-                    window.blit(conveyor_image, (belt_x, belt_y))
+            # Draw paths
+            for item, path_info in paths.items():
+                path = path_info['path']
+                direction_grid = path_info['direction_grid']
+                jump_markers = path_info['jump_markers']
                 
-                
-                
+                match = re.match(r"^[^_]+", item)
+                if match:
+                    item = match.group(0)
+                            # Draw each point on the path
+                for i, (x, y) in enumerate(path):
+                    # Calculate position
+                    center_pixel = (
+                        side_panel_width + x * CELL_SIZE + CELL_SIZE // 2,
+                        y * CELL_SIZE + CELL_SIZE // 2
+                    )
+                    
+                    # Draw conveyor belt image based on direction
+                    if direction_grid[y][x]:  # Only draw if direction is not None
+                        dx, dy = direction_grid[y][x]
+                        rotated_belt = conveyor_image_rotated[(dx, dy)]
+                        window.blit(rotated_belt, (center_pixel[0] - rotated_belt.get_width() // 2, 
+                                                center_pixel[1] - rotated_belt.get_height() // 2))
+
+                    # Draw item image at the lower-right corner of each path cell
+                    item_image = item_images[item]
+                    if item_image:
+                        
+                        
+                        #quarter_size = (item_image.get_width() // 2, item_image.get_height() // 2)
+                        #scaled_image = pygame.transform.scale(item_image, quarter_size)
+
+                        # Calculate the position for the lower-right corner of the belt
+                        #belt_width = item_image.get_width()
+                        #belt_height = item_image.get_height()
+                        #scaled_width = scaled_image.get_width()
+                        #scaled_height = scaled_image.get_height()
+                        #corner_x = pixel_x + belt_width - scaled_width
+                        #corner_y = pixel_y + belt_height - scaled_height
+
+                        # Draw the scaled-down inserter_item image at the calculated position
+                        #window.blit(scaled_image, (corner_x, corner_y))
+                        
+                        quarter_size = (item_image.get_width() // 2, item_image.get_height() // 2)
+                        scaled_image = pygame.transform.scale(item_image, quarter_size)
+                        window.blit(item_image, (center_pixel[0] + CELL_SIZE // 2 - item_image.get_width(), 
+                                                 center_pixel[1] + CELL_SIZE // 2 - item_image.get_height()))
+                        
+                # Draw jump markers
+                for marker_pair in jump_markers:
+                    for marker in marker_pair:
+                        jump_pixel = (
+                            side_panel_width + marker[0] * CELL_SIZE + CELL_SIZE // 2,
+                            marker[1] * CELL_SIZE + CELL_SIZE // 2
+                        )
+                        window.blit(underground_belt_image, (jump_pixel[0] - underground_belt_image.get_width() // 2, 
+                                                            jump_pixel[1] - underground_belt_image.get_height() // 2))
             # Update display
             pygame.display.flip()
 
@@ -978,30 +1131,76 @@ class FactorioProductionTree:
             
         pygame.quit()
         
+
+ 
+# Function to log method execution times with additional information
+def log_method_time(item, amount, minimizer, method_name, start_time, end_time):
+    execution_time = end_time - start_time
+    logging.info(f"Execution time for {method_name}: {execution_time:.4f} seconds.")
     
+    # Open the CSV file and append the data
+    try:
+        with open("execution_times.csv", "a", newline="") as file:
+            writer = csv.writer(file)
+            writer.writerow([item, amount, minimizer, method_name, execution_time])
+    except Exception as e:
+        logging.error(f"Error logging execution time for {method_name}: {e}")
+        
         
 def main():
-    factorioProductionTree = FactorioProductionTree(10,10)
-    total_requirements = factorioProductionTree.calculate_production("electronic-circuit", 20) #60
     
-    #total_requirements = factorioProductionTree.calculate_production("copper-cable", 20) #60
-    print(f"production data {total_requirements}")
+    # Set up logging for better output in the console
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
 
+    
+    
+    # Example item and amount
+    item_to_produce = "electronic-circuit"
+    amount_needed = 100
+    
+    # init 
+    factorioProductionTree = FactorioProductionTree(14,14)
+    production_data  = factorioProductionTree.calculate_production(item_to_produce,amount_needed) #60
+    production_data = factorioProductionTree.set_capacities(production_data)
+    minimizer = 0
+    
+    
+    
+    print(f"production data {production_data}")
+    
+    
+    # Manual input and output
     factorioProductionTree.manual_Input()
- 
-    factorioProductionTree.manual_Output("electronic-circuit")
+    factorioProductionTree.manual_Output(item_to_produce)
+    factorioProductionTree.add_manual_IO_constraints(production_data,sequential=False)
+    
 
-   
-    factorioProductionTree.add_manual_IO_constraints(total_requirements,sequential=False)
+    # Track time for solving the problem
+    start_time = time.perf_counter()
+    factorioProductionTree.solve(production_data,sequential=False)
+    end_time = time.perf_counter()
+    log_method_time(item_to_produce, amount_needed, minimizer, "solve", start_time, end_time)
+
     
-    #factorioProductionTree.calculate_minimal_grid_size(total_requirements)
     
-    factorioProductionTree.solve(total_requirements,sequential=False)
+    start_time = time.perf_counter()
+    paths = factorioProductionTree.build_belts(item_to_produce,max_tries=20)
+    end_time = time.perf_counter()
+    log_method_time(item_to_produce, amount_needed, minimizer, "build_belts", start_time, end_time)
     
-    if(factorioProductionTree.build_belts("electronic-circuit",max_tries=20)):
-        #factorioProductionTree.visualize_factory("")
+    if(paths):
+        factorioProductionTree.visualize_factory(paths)
         pass
         #print(factorioProductionTree.grid)
    
 if __name__ == "__main__":
+    # Prepare CSV file header if not exists
+    if not os.path.exists("execution_times.csv"):
+        try:
+            with open("execution_times.csv", "w", newline="") as file:
+                writer = csv.writer(file)
+                writer.writerow(["Item", "Amount", "Minimizer", "Method", "Execution Time (seconds)"])
+        except Exception as e:
+            logging.error(f"Error initializing CSV file: {e}")
+
     main()
