@@ -1,187 +1,210 @@
-2024-11-12 17:33:09,141 - INFO - Starting to add manual I/O constraints.
-2024-11-12 17:33:09,142 - DEBUG - Processing input item 'copper-plate' with data: {'input': (0, 0), 'output': (8, 0), 'grid': [[0, 2, 2, 2, 2, 2, 2, 2, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]], 'direction_grid': [[None, 'right', 'right', 'right', 'right', 'right', 'right', 'right', None, None], [None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None]]}
-2024-11-12 17:33:09,143 - INFO - Adding input belt for item 'copper-plate' at position (0, 0)
-2024-11-12 17:33:09,144 - INFO - Adding output belt for item 'copper-plate' at position (8, 0)
-2024-11-12 17:33:09,145 - DEBUG - Processing grid path for input item 'copper-plate'
-2024-11-12 17:33:09,145 - INFO - Adding belt path for 'copper-plate' at grid position (0, 1)
-2024-11-12 17:33:09,146 - INFO - Adding belt path for 'copper-plate' at grid position (0, 2)
-2024-11-12 17:33:09,147 - INFO - Adding belt path for 'copper-plate' at grid position (0, 3)
-2024-11-12 17:33:09,148 - INFO - Adding belt path for 'copper-plate' at grid position (0, 4)
-2024-11-12 17:33:09,149 - INFO - Adding belt path for 'copper-plate' at grid position (0, 5)
-2024-11-12 17:33:09,150 - INFO - Adding belt path for 'copper-plate' at grid position (0, 6)
-2024-11-12 17:33:09,151 - INFO - Adding belt path for 'copper-plate' at grid position (0, 7)
-2024-11-12 17:33:09,152 - DEBUG - Processing input item 'iron-plate' with data: {'input': (0, 9), 'output': (8, 9), 'grid': [[1, 1, 1, 1, 1, 1, 1, 1, 1, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 2, 2, 2, 2, 2, 2, 2, 0, 0]], 'direction_grid': [[None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None], [None, 'right', 'right', 'right', 'right', 'right', 'right', 'right', None, None]]}
-2024-11-12 17:33:09,153 - INFO - Adding input belt for item 'iron-plate' at position (0, 9)
-2024-11-12 17:33:09,154 - INFO - Adding output belt for item 'iron-plate' at position (8, 9)
-2024-11-12 17:33:09,155 - DEBUG - Processing grid path for input item 'iron-plate'
-2024-11-12 17:33:09,155 - INFO - Adding belt path for 'iron-plate' at grid position (9, 1)
-2024-11-12 17:33:09,156 - INFO - Adding belt path for 'iron-plate' at grid position (9, 2)
-2024-11-12 17:33:09,157 - INFO - Adding belt path for 'iron-plate' at grid position (9, 3)
-2024-11-12 17:33:09,158 - INFO - Adding belt path for 'iron-plate' at grid position (9, 4)
-2024-11-12 17:33:09,159 - INFO - Adding belt path for 'iron-plate' at grid position (9, 5)
-2024-11-12 17:33:09,160 - INFO - Adding belt path for 'iron-plate' at grid position (9, 6)
-2024-11-12 17:33:09,161 - INFO - Adding belt path for 'iron-plate' at grid position (9, 7)
-2024-11-12 17:33:09,162 - DEBUG - Processing output item 'electronic-circuit' with data: {'input': (9, 6), 'output': (9, 9), 'grid': [[1, 1, 1, 1, 1, 1, 1, 1, 1, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 2], [0, 0, 0, 0, 0, 0, 0, 0, 0, 2], [1, 1, 1, 1, 1, 1, 1, 1, 1, 0]], 'direction_grid': [[None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, 'down'], [None, None, None, None, None, None, None, None, None, 'down'], [None, None, None, None, None, None, None, None, None, None]]}
-2024-11-12 17:33:09,162 - INFO - Adding input belt for output item 'electronic-circuit' at position (9, 6)
-2024-11-12 17:33:09,163 - INFO - Adding output belt for output item 'electronic-circuit' at position (9, 9)
-2024-11-12 17:33:09,164 - DEBUG - Processing grid path for output item 'electronic-circuit'
-2024-11-12 17:33:09,164 - INFO - Adding belt path for 'electronic-circuit' at grid position (7, 9)
-2024-11-12 17:33:09,166 - INFO - Adding belt path for 'electronic-circuit' at grid position (8, 9)
-2024-11-12 17:33:09,167 - INFO - Finished adding manual I/O constraints. Calling solver.
-2024-11-12 17:33:09,172 - INFO - Solver check result: sat
-2024-11-12 17:33:09,181 - INFO - Starting to create assemblers based on production data.
-2024-11-12 17:33:09,181 - DEBUG - Processing item 'electronic-circuit' with production data: {'output_per_minute': 20, 'assemblers': 1, 'output_inserters': 1, 'input_inserters': [{'id': 'copper-cable', 'amount': 3}, {'id': 'iron-plate', 'amount': 1}], 'belts': 1}
-2024-11-12 17:33:09,182 - INFO - Creating assembler for item 'electronic-circuit', instance 0
-2024-11-12 17:33:09,182 - DEBUG - Created assembler with ID: electronic-circuit_0_0 and input inserters: ['copper-cable_in_0_0', 'iron-plate_in_0_0']
-2024-11-12 17:33:09,183 - DEBUG - Created assembler with ID: electronic-circuit_0_0 with item = electronic-circuit
-2024-11-12 17:33:09,183 - DEBUG - Processing item 'copper-cable' with production data: {'output_per_minute': 60.0, 'assemblers': 1, 'output_inserters': 1, 'input_inserters': [{'id': 'copper-plate', 'amount': 1}], 'belts': 1}
-2024-11-12 17:33:09,183 - INFO - Creating assembler for item 'copper-cable', instance 0
-2024-11-12 17:33:09,183 - DEBUG - Created assembler with ID: copper-cable_1_0 and input inserters: ['copper-plate_in_1_0']
-2024-11-12 17:33:09,184 - DEBUG - Created assembler with ID: copper-cable_1_0 with item = copper-cable
-2024-11-12 17:33:09,184 - DEBUG - Processing item 'copper-plate' with production data: {'amount_per_minute': 30.0}
-2024-11-12 17:33:09,184 - DEBUG - Processing item 'iron-plate' with production data: {'amount_per_minute': 20.0}
-2024-11-12 17:33:09,184 - INFO - Created 2 assemblers in total.
-2024-11-12 17:33:09,184 - INFO - Adding assembler overlap constraints to avoid global belts.
-2024-11-12 17:33:09,234 - INFO - Adding inserter overlap constraints to avoid global belts.
-2024-11-12 17:33:09,318 - INFO - Adding belt overlap constraints to avoid conflicts with global belts (different items only).
-2024-11-12 17:33:09,372 - INFO - Adding boundary constraints for assemblers.
-2024-11-12 17:33:09,373 - DEBUG - Setting boundary constraints for assembler ID electronic-circuit_0_0
-2024-11-12 17:33:09,374 - DEBUG - Setting boundary constraints for assembler ID copper-cable_1_0
-2024-11-12 17:33:09,375 - INFO - Adding boundary constraints for belts and inserters.
-2024-11-12 17:33:09,376 - DEBUG - Setting boundary constraints for inserter ID copper-cable_in_0_0 and belt ID copper-cable_end_0_0
-2024-11-12 17:33:09,378 - DEBUG - Setting boundary constraints for inserter ID iron-plate_in_0_0 and belt ID iron-plate_end_0_0
-2024-11-12 17:33:09,382 - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_1_0 and belt ID copper-plate_end_1_0
-2024-11-12 17:33:09,385 - INFO - Adding assembler overlap constraints to prevent assembler-assembler overlap.
-2024-11-12 17:33:09,389 - INFO - Adding assembler-inserter overlap constraints.
-2024-11-12 17:33:09,395 - INFO - Adding assembler-belt overlap constraints (excluding same-item belts).
-2024-11-12 17:33:09,399 - INFO - Adding inserter overlap constraints to prevent inserter-inserter overlap.
-2024-11-12 17:33:09,404 - INFO - Adding inserter-belt overlap constraints to prevent inserters from overlapping with belts.
-2024-11-12 17:33:09,410 - INFO - Adding belt overlap constraints to prevent belt-belt overlap (except same-item belts).
-2024-11-12 17:33:09,418 - INFO - Ensuring inserter copper-cable_in_0_0 is adjacent to assembler electronic-circuit_0_0
-2024-11-12 17:33:09,426 - INFO - Adding belt position constraint for inserter copper-cable_in_0_0 with belt copper-cable_end_0_0
-2024-11-12 17:33:09,430 - INFO - Ensuring inserter iron-plate_in_0_0 is adjacent to assembler electronic-circuit_0_0
-2024-11-12 17:33:09,436 - INFO - Adding belt position constraint for inserter iron-plate_in_0_0 with belt iron-plate_end_0_0
-2024-11-12 17:33:09,443 - INFO - Ensuring inserter copper-plate_in_1_0 is adjacent to assembler copper-cable_1_0
-2024-11-12 17:33:09,449 - INFO - Adding belt position constraint for inserter copper-plate_in_1_0 with belt copper-plate_end_1_0
-2024-11-12 17:33:09,723 - INFO - Adding output space constraints for assembler electronic-circuit_0_0
-2024-11-12 17:33:09,995 - INFO - Adding output space constraints for assembler copper-cable_1_0
-2024-11-12 17:33:09,997 - DEBUG - Adding constraints to merge input inserters with belts of matching items.
-2024-11-12 17:33:09,997 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 0)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0, Item: copper-plate)
-2024-11-12 17:33:09,997 - DEBUG - Matching item found: Belt (ID: copper-plate_(8, 0)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0, Item: copper-plate)
-2024-11-12 17:33:09,998 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 1)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0, Item: copper-plate)
-2024-11-12 17:33:09,998 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 2)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0, Item: copper-plate)
-2024-11-12 17:33:09,999 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 3)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0, Item: copper-plate)
-2024-11-12 17:33:09,999 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 4)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0, Item: copper-plate)
-2024-11-12 17:33:09,999 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 5)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0, Item: copper-plate)
-2024-11-12 17:33:10,000 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 6)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0, Item: copper-plate)
-2024-11-12 17:33:10,000 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 7)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0, Item: copper-plate)
-2024-11-12 17:33:10,001 - DEBUG - Matching item found: Belt (ID: iron-plate_(0, 9)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_0, Item: iron-plate)
-2024-11-12 17:33:10,001 - DEBUG - Matching item found: Belt (ID: iron-plate_(8, 9)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_0, Item: iron-plate)
-2024-11-12 17:33:10,001 - DEBUG - Matching item found: Belt (ID: iron-plate_(9, 1)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_0, Item: iron-plate)
-2024-11-12 17:33:10,001 - DEBUG - Matching item found: Belt (ID: iron-plate_(9, 2)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_0, Item: iron-plate)
-2024-11-12 17:33:10,003 - DEBUG - Matching item found: Belt (ID: iron-plate_(9, 3)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_0, Item: iron-plate)
-2024-11-12 17:33:10,003 - DEBUG - Matching item found: Belt (ID: iron-plate_(9, 4)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_0, Item: iron-plate)
-2024-11-12 17:33:10,003 - DEBUG - Matching item found: Belt (ID: iron-plate_(9, 5)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_0, Item: iron-plate)
-2024-11-12 17:33:10,004 - DEBUG - Matching item found: Belt (ID: iron-plate_(9, 6)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_0, Item: iron-plate)
-2024-11-12 17:33:10,004 - DEBUG - Matching item found: Belt (ID: iron-plate_(9, 7)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_0, Item: iron-plate)
-2024-11-12 17:33:10,005 - DEBUG - Adding merge constraints for input inserters to the solver.
-2024-11-12 17:33:10,006 - DEBUG - Adding constraints to merge input inserters with assembler edges for items with matching types.
-2024-11-12 17:33:10,006 - DEBUG - Assembler electronic-circuit_0_0 and other assembler copper-cable_1_0 have matching items: copper-cable
-2024-11-12 17:33:10,006 - DEBUG - Assembler electronic-circuit_0_0 and other assembler copper-cable_1_0 have matching items: copper-cable
-2024-11-12 17:33:10,020 - DEBUG - Adding constraints to position belt for inserter copper-cable_in_0_0 at positions: [(copper-cable_1_0_x, copper-cable_1_0_y), (copper-cable_1_0_x + 1, copper-cable_1_0_y), (copper-cable_1_0_x + 2, copper-cable_1_0_y), (copper-cable_1_0_x, copper-cable_1_0_y + 1), (copper-cable_1_0_x + 2, copper-cable_1_0_y + 1), (copper-cable_1_0_x, copper-cable_1_0_y + 2), (copper-cable_1_0_x + 1, copper-cable_1_0_y + 2), (copper-cable_1_0_x + 2, copper-cable_1_0_y + 2)]
-2024-11-12 17:33:10,316 - INFO - Solver check result: sat
-2024-11-12 17:33:10,812 - INFO - Attempting path for copper-cable from (2, 1) to (5, 4)
-2024-11-12 17:33:10,812 - INFO - Starting A* from (2, 1) to (5, 4)
-2024-11-12 17:33:10,812 - INFO - Processing node (2, 1)
-2024-11-12 17:33:10,812 - INFO - Moving to (2, 2) with direction right
-2024-11-12 17:33:10,812 - INFO - Moving to (3, 1) with direction down
-2024-11-12 17:33:10,813 - INFO - Moving to (2, 0) with direction left
-2024-11-12 17:33:10,813 - INFO - Moving to (1, 1) with direction up
-2024-11-12 17:33:10,813 - INFO - Processing node (2, 2)
-2024-11-12 17:33:10,813 - INFO - Moving to (3, 2) with direction down
-2024-11-12 17:33:10,813 - INFO - Moving to (1, 2) with direction up
-2024-11-12 17:33:10,813 - INFO - Processing node (3, 1)
-2024-11-12 17:33:10,813 - INFO - Moving to (4, 1) with direction down
-2024-11-12 17:33:10,813 - INFO - Moving to (3, 0) with direction left
-2024-11-12 17:33:10,813 - INFO - Processing node (3, 2)
-2024-11-12 17:33:10,813 - INFO - Moving to (4, 2) with direction down
-2024-11-12 17:33:10,813 - INFO - Processing node (4, 1)
-2024-11-12 17:33:10,813 - INFO - Moving to (5, 1) with direction down
-2024-11-12 17:33:10,813 - INFO - Moving to (4, 0) with direction left
-2024-11-12 17:33:10,813 - INFO - Processing node (4, 2)
-2024-11-12 17:33:10,813 - INFO - Moving to (5, 2) with direction down
-2024-11-12 17:33:10,814 - INFO - Processing node (5, 1)
-2024-11-12 17:33:10,814 - INFO - Moving to (6, 1) with direction down
-2024-11-12 17:33:10,814 - INFO - Moving to (5, 0) with direction left
-2024-11-12 17:33:10,814 - INFO - Processing node (5, 2)
-2024-11-12 17:33:10,814 - INFO - Moving to (5, 3) with direction right
-2024-11-12 17:33:10,814 - INFO - Moving to (6, 2) with direction down
-2024-11-12 17:33:10,814 - INFO - Processing node (5, 3)
-2024-11-12 17:33:10,814 - INFO - Moving to (5, 4) with direction right
-2024-11-12 17:33:10,814 - INFO - Moving to (6, 3) with direction down
-2024-11-12 17:33:10,814 - INFO - Processing node (5, 4)
-2024-11-12 17:33:10,815 - INFO - Goal reached at (5, 4)
-2024-11-12 17:33:10,815 - INFO - Reconstructed path: [(2, 1), (2, 2), (3, 2), (4, 2), (5, 2), (5, 3), (5, 4)]
-2024-11-12 17:33:10,815 - INFO - Attempting path for iron-plate from (9, 0) to (6, 4)
-2024-11-12 17:33:10,815 - INFO - Starting A* from (9, 0) to (6, 4)
-2024-11-12 17:33:10,815 - INFO - Processing node (9, 0)
-2024-11-12 17:33:10,815 - INFO - Moving to (9, 1) with direction right
-2024-11-12 17:33:10,815 - INFO - Moving to (8, 0) with direction up
-2024-11-12 17:33:10,815 - INFO - Processing node (8, 0)
-2024-11-12 17:33:10,815 - INFO - Moving to (8, 1) with direction right
-2024-11-12 17:33:10,816 - INFO - Moving to (7, 0) with direction up
-2024-11-12 17:33:10,816 - INFO - Processing node (7, 0)
-2024-11-12 17:33:10,816 - INFO - Moving to (7, 1) with direction right
-2024-11-12 17:33:10,816 - INFO - Moving to (6, 0) with direction up
-2024-11-12 17:33:10,816 - INFO - Processing node (6, 0)
-2024-11-12 17:33:10,816 - INFO - Moving to (6, 1) with direction right
-2024-11-12 17:33:10,816 - INFO - Moving to (5, 0) with direction up
-2024-11-12 17:33:10,816 - INFO - Processing node (6, 1)
-2024-11-12 17:33:10,816 - INFO - Moving to (6, 2) with direction right
-2024-11-12 17:33:10,816 - INFO - Moving to (5, 1) with direction up
-2024-11-12 17:33:10,816 - INFO - Processing node (6, 2)
-2024-11-12 17:33:10,817 - INFO - Moving to (6, 3) with direction right
-2024-11-12 17:33:10,817 - INFO - Moving to (7, 2) with direction down
-2024-11-12 17:33:10,817 - INFO - Moving to (5, 2) with direction up
-2024-11-12 17:33:10,817 - INFO - Processing node (6, 3)
-2024-11-12 17:33:10,817 - INFO - Moving to (6, 4) with direction right
-2024-11-12 17:33:10,817 - INFO - Moving to (7, 3) with direction down
-2024-11-12 17:33:10,817 - INFO - Moving to (5, 3) with direction up
-2024-11-12 17:33:10,817 - INFO - Processing node (6, 4)
-2024-11-12 17:33:10,817 - INFO - Goal reached at (6, 4)
-2024-11-12 17:33:10,817 - INFO - Reconstructed path: [(9, 0), (8, 0), (7, 0), (6, 0), (6, 1), (6, 2), (6, 3), (6, 4)]
-2024-11-12 17:33:10,817 - INFO - Attempting path for electronic-circuit from (7, 4) to (7, 9)
-2024-11-12 17:33:10,817 - INFO - Starting A* from (7, 4) to (7, 9)
-2024-11-12 17:33:10,818 - INFO - Processing node (7, 4)
-2024-11-12 17:33:10,818 - INFO - Moving to (7, 5) with direction right
-2024-11-12 17:33:10,818 - INFO - Moving to (8, 4) with direction down
-2024-11-12 17:33:10,818 - INFO - Moving to (7, 3) with direction left
-2024-11-12 17:33:10,818 - INFO - Moving to (6, 4) with direction up
-2024-11-12 17:33:10,818 - INFO - Processing node (7, 5)
-2024-11-12 17:33:10,818 - INFO - Moving to (8, 5) with direction down
-2024-11-12 17:33:10,818 - INFO - Processing node (6, 4)
-2024-11-12 17:33:10,818 - INFO - Moving to (6, 3) with direction left
-2024-11-12 17:33:10,818 - INFO - Moving to (5, 4) with direction up
-2024-11-12 17:33:10,819 - INFO - Processing node (7, 3)
-2024-11-12 17:33:10,819 - INFO - Moving to (8, 3) with direction down
-2024-11-12 17:33:10,819 - INFO - Moving to (7, 2) with direction left
-2024-11-12 17:33:10,819 - INFO - Processing node (8, 4)
-2024-11-12 17:33:10,819 - INFO - Moving to (9, 4) with direction down
-2024-11-12 17:33:10,819 - INFO - Processing node (8, 5)
-2024-11-12 17:33:10,819 - INFO - Moving to (8, 6) with direction right
-2024-11-12 17:33:10,819 - INFO - Moving to (9, 5) with direction down
-2024-11-12 17:33:10,819 - INFO - Processing node (8, 6)
-2024-11-12 17:33:10,819 - INFO - Moving to (8, 7) with direction right
-2024-11-12 17:33:10,819 - INFO - Moving to (9, 6) with direction down
-2024-11-12 17:33:10,820 - INFO - Processing node (8, 7)
-2024-11-12 17:33:10,820 - INFO - Moving to (8, 8) with direction right
-2024-11-12 17:33:10,820 - INFO - Moving to (9, 7) with direction down
-2024-11-12 17:33:10,820 - INFO - Processing node (8, 8)
-2024-11-12 17:33:10,820 - INFO - Moving to (8, 9) with direction right
-2024-11-12 17:33:10,820 - INFO - Moving to (9, 8) with direction down
-2024-11-12 17:33:10,820 - INFO - Processing node (8, 9)
-2024-11-12 17:33:10,820 - INFO - Moving to (9, 9) with direction down
-2024-11-12 17:33:10,820 - INFO - Moving to (7, 9) with direction up
-2024-11-12 17:33:10,820 - INFO - Processing node (7, 9)
-2024-11-12 17:33:10,820 - INFO - Goal reached at (7, 9)
-2024-11-12 17:33:10,821 - INFO - Reconstructed path: [(7, 4), (7, 5), (8, 5), (8, 6), (8, 7), (8, 8), (8, 9), (7, 9)]
+2024-11-23 13:57:57,886 - INFO - Starting to add manual I/O constraints.
+2024-11-23 13:57:57,887 - DEBUG - Processing input item 'copper-plate' with data: {'input': (0, 0), 'output': (9, 0), 'grid': [[0, 2, 2, 2, 2, 2, 2, 2, 2, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]], 'direction_grid': [[None, 'right', 'right', 'right', 'right', 'right', 'right', 'right', 'right', None], [None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None]]}
+2024-11-23 13:57:57,887 - INFO - Adding input belt for item 'copper-plate' at position (0, 0)
+2024-11-23 13:57:57,888 - INFO - Adding output belt for item 'copper-plate' at position (9, 0)
+2024-11-23 13:57:57,888 - DEBUG - Processing grid path for input item 'copper-plate'
+2024-11-23 13:57:57,888 - INFO - Adding belt path for 'copper-plate' at grid position (0, 1)
+2024-11-23 13:57:57,889 - INFO - Adding belt path for 'copper-plate' at grid position (0, 2)
+2024-11-23 13:57:57,889 - INFO - Adding belt path for 'copper-plate' at grid position (0, 3)
+2024-11-23 13:57:57,890 - INFO - Adding belt path for 'copper-plate' at grid position (0, 4)
+2024-11-23 13:57:57,890 - INFO - Adding belt path for 'copper-plate' at grid position (0, 5)
+2024-11-23 13:57:57,891 - INFO - Adding belt path for 'copper-plate' at grid position (0, 6)
+2024-11-23 13:57:57,891 - INFO - Adding belt path for 'copper-plate' at grid position (0, 7)
+2024-11-23 13:57:57,892 - INFO - Adding belt path for 'copper-plate' at grid position (0, 8)
+2024-11-23 13:57:57,892 - DEBUG - Processing input item 'iron-plate' with data: {'input': (0, 9), 'output': (8, 9), 'grid': [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 2, 2, 2, 2, 2, 2, 2, 0, 0]], 'direction_grid': [[None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None], [None, 'right', 'right', 'right', 'right', 'right', 'right', 'right', None, None]]}
+2024-11-23 13:57:57,892 - INFO - Adding input belt for item 'iron-plate' at position (0, 9)
+2024-11-23 13:57:57,893 - INFO - Adding output belt for item 'iron-plate' at position (8, 9)
+2024-11-23 13:57:57,893 - DEBUG - Processing grid path for input item 'iron-plate'
+2024-11-23 13:57:57,893 - INFO - Adding belt path for 'iron-plate' at grid position (9, 1)
+2024-11-23 13:57:57,894 - INFO - Adding belt path for 'iron-plate' at grid position (9, 2)
+2024-11-23 13:57:57,894 - INFO - Adding belt path for 'iron-plate' at grid position (9, 3)
+2024-11-23 13:57:57,895 - INFO - Adding belt path for 'iron-plate' at grid position (9, 4)
+2024-11-23 13:57:57,895 - INFO - Adding belt path for 'iron-plate' at grid position (9, 5)
+2024-11-23 13:57:57,896 - INFO - Adding belt path for 'iron-plate' at grid position (9, 6)
+2024-11-23 13:57:57,896 - INFO - Adding belt path for 'iron-plate' at grid position (9, 7)
+2024-11-23 13:57:57,897 - DEBUG - Processing output item 'electronic-circuit' with data: {'input': (9, 7), 'output': (9, 9), 'grid': [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 2], [1, 1, 1, 1, 1, 1, 1, 1, 1, 0]], 'direction_grid': [[None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, 'down'], [None, None, None, None, None, None, None, None, None, None]]}
+2024-11-23 13:57:57,897 - INFO - Adding input belt for output item 'electronic-circuit' at position (9, 7)
+2024-11-23 13:57:57,898 - INFO - Adding output belt for output item 'electronic-circuit' at position (9, 9)
+2024-11-23 13:57:57,898 - DEBUG - Processing grid path for output item 'electronic-circuit'
+2024-11-23 13:57:57,898 - INFO - Adding belt path for 'electronic-circuit' at grid position (8, 9)
+2024-11-23 13:57:57,899 - INFO - Finished adding manual I/O constraints. Calling solver.
+2024-11-23 13:57:57,902 - INFO - Solver check result: sat
+2024-11-23 13:57:57,906 - INFO - Starting to create assemblers based on production data.
+2024-11-23 13:57:57,906 - DEBUG - Processing item 'electronic-circuit' with production data: {'output_per_minute': 20, 'assemblers': 1, 'output_inserters': 1, 'input_inserters': [{'id': 'copper-cable', 'amount': 3}, {'id': 'iron-plate', 'amount': 1}], 'belts': 1}
+2024-11-23 13:57:57,906 - INFO - Creating assembler for item 'electronic-circuit', instance 0
+2024-11-23 13:57:57,907 - DEBUG - Created assembler with ID: electronic-circuit_0_0 and input inserters: ['copper-cable_in_0_0', 'iron-plate_in_0_0']
+2024-11-23 13:57:57,907 - DEBUG - Created assembler with ID: electronic-circuit_0_0 with item = electronic-circuit
+2024-11-23 13:57:57,907 - DEBUG - Processing item 'copper-cable' with production data: {'output_per_minute': 60.0, 'assemblers': 1, 'output_inserters': 1, 'input_inserters': [{'id': 'copper-plate', 'amount': 1}], 'belts': 1}
+2024-11-23 13:57:57,907 - INFO - Creating assembler for item 'copper-cable', instance 0
+2024-11-23 13:57:57,907 - DEBUG - Created assembler with ID: copper-cable_1_0 and input inserters: ['copper-plate_in_1_0']
+2024-11-23 13:57:57,907 - DEBUG - Created assembler with ID: copper-cable_1_0 with item = copper-cable
+2024-11-23 13:57:57,907 - DEBUG - Processing item 'copper-plate' with production data: {'amount_per_minute': 30.0}
+2024-11-23 13:57:57,907 - DEBUG - Processing item 'iron-plate' with production data: {'amount_per_minute': 20.0}
+2024-11-23 13:57:57,907 - INFO - Created 2 assemblers in total.
+2024-11-23 13:57:57,907 - INFO - Adding assembler overlap constraints to avoid global belts.
+2024-11-23 13:57:57,929 - INFO - Adding inserter overlap constraints to avoid global belts.
+2024-11-23 13:57:57,964 - INFO - Adding belt overlap constraints to avoid conflicts with global belts (different items only).
+2024-11-23 13:57:57,987 - INFO - Adding boundary constraints for assemblers.
+2024-11-23 13:57:57,987 - DEBUG - Setting boundary constraints for assembler ID electronic-circuit_0_0
+2024-11-23 13:57:57,987 - DEBUG - Setting boundary constraints for assembler ID copper-cable_1_0
+2024-11-23 13:57:57,988 - INFO - Adding boundary constraints for belts and inserters.
+2024-11-23 13:57:57,988 - DEBUG - Setting boundary constraints for inserter ID copper-cable_in_0_0 and belt ID copper-cable_end_0_0
+2024-11-23 13:57:57,989 - DEBUG - Setting boundary constraints for inserter ID iron-plate_in_0_0 and belt ID iron-plate_end_0_0
+2024-11-23 13:57:57,989 - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_1_0 and belt ID copper-plate_end_1_0
+2024-11-23 13:57:57,990 - INFO - Adding assembler overlap constraints to prevent assembler-assembler overlap.
+2024-11-23 13:57:57,991 - INFO - Adding assembler-inserter overlap constraints.
+2024-11-23 13:57:57,992 - INFO - Adding assembler-belt overlap constraints (excluding same-item belts).
+2024-11-23 13:57:57,993 - INFO - Adding inserter overlap constraints to prevent inserter-inserter overlap.
+2024-11-23 13:57:57,995 - INFO - Adding inserter-belt overlap constraints to prevent inserters from overlapping with belts.
+2024-11-23 13:57:57,996 - INFO - Adding belt overlap constraints to prevent belt-belt overlap (except same-item belts).
+2024-11-23 13:57:57,999 - INFO - Ensuring inserter copper-cable_in_0_0 is adjacent to assembler electronic-circuit_0_0
+2024-11-23 13:57:58,001 - INFO - Adding belt position constraint for inserter copper-cable_in_0_0 with belt copper-cable_end_0_0
+2024-11-23 13:57:58,002 - INFO - Ensuring inserter iron-plate_in_0_0 is adjacent to assembler electronic-circuit_0_0
+2024-11-23 13:57:58,004 - INFO - Adding belt position constraint for inserter iron-plate_in_0_0 with belt iron-plate_end_0_0
+2024-11-23 13:57:58,006 - INFO - Ensuring inserter copper-plate_in_1_0 is adjacent to assembler copper-cable_1_0
+2024-11-23 13:57:58,008 - INFO - Adding belt position constraint for inserter copper-plate_in_1_0 with belt copper-plate_end_1_0
+2024-11-23 13:57:58,149 - INFO - Adding output space constraints for assembler electronic-circuit_0_0
+2024-11-23 13:57:58,277 - INFO - Adding output space constraints for assembler copper-cable_1_0
+2024-11-23 13:57:58,278 - DEBUG - Adding constraints to merge input inserters with belts of matching items.
+2024-11-23 13:57:58,278 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 0)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0, Item: copper-plate)
+2024-11-23 13:57:58,278 - DEBUG - Matching item found: Belt (ID: copper-plate_(9, 0)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0, Item: copper-plate)
+2024-11-23 13:57:58,278 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 1)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0, Item: copper-plate)
+2024-11-23 13:57:58,278 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 2)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0, Item: copper-plate)
+2024-11-23 13:57:58,279 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 3)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0, Item: copper-plate)
+2024-11-23 13:57:58,279 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 4)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0, Item: copper-plate)
+2024-11-23 13:57:58,279 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 5)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0, Item: copper-plate)
+2024-11-23 13:57:58,279 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 6)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0, Item: copper-plate)
+2024-11-23 13:57:58,279 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 7)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0, Item: copper-plate)
+2024-11-23 13:57:58,280 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 8)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0, Item: copper-plate)
+2024-11-23 13:57:58,280 - DEBUG - Matching item found: Belt (ID: iron-plate_(0, 9)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_0, Item: iron-plate)
+2024-11-23 13:57:58,280 - DEBUG - Matching item found: Belt (ID: iron-plate_(8, 9)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_0, Item: iron-plate)
+2024-11-23 13:57:58,280 - DEBUG - Matching item found: Belt (ID: iron-plate_(9, 1)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_0, Item: iron-plate)
+2024-11-23 13:57:58,281 - DEBUG - Matching item found: Belt (ID: iron-plate_(9, 2)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_0, Item: iron-plate)
+2024-11-23 13:57:58,281 - DEBUG - Matching item found: Belt (ID: iron-plate_(9, 3)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_0, Item: iron-plate)
+2024-11-23 13:57:58,281 - DEBUG - Matching item found: Belt (ID: iron-plate_(9, 4)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_0, Item: iron-plate)
+2024-11-23 13:57:58,281 - DEBUG - Matching item found: Belt (ID: iron-plate_(9, 5)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_0, Item: iron-plate)
+2024-11-23 13:57:58,282 - DEBUG - Matching item found: Belt (ID: iron-plate_(9, 6)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_0, Item: iron-plate)
+2024-11-23 13:57:58,282 - DEBUG - Matching item found: Belt (ID: iron-plate_(9, 7)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_0, Item: iron-plate)
+2024-11-23 13:57:58,282 - DEBUG - Adding merge constraints for input inserters to the solver.
+2024-11-23 13:57:58,283 - DEBUG - Adding constraints to merge input inserters with assembler edges for items with matching types.
+2024-11-23 13:57:58,283 - DEBUG - Assembler electronic-circuit_0_0 and other assembler copper-cable_1_0 have matching items: copper-cable
+2024-11-23 13:57:58,283 - DEBUG - Assembler electronic-circuit_0_0 and other assembler copper-cable_1_0 have matching items: copper-cable
+2024-11-23 13:57:58,288 - DEBUG - Adding constraints to position belt for inserter copper-cable_in_0_0 at positions: [(copper-cable_1_0_x, copper-cable_1_0_y), (copper-cable_1_0_x + 1, copper-cable_1_0_y), (copper-cable_1_0_x + 2, copper-cable_1_0_y), (copper-cable_1_0_x, copper-cable_1_0_y + 1), (copper-cable_1_0_x + 2, copper-cable_1_0_y + 1), (copper-cable_1_0_x, copper-cable_1_0_y + 2), (copper-cable_1_0_x + 1, copper-cable_1_0_y + 2), (copper-cable_1_0_x + 2, copper-cable_1_0_y + 2)]
+2024-11-23 13:57:58,289 - INFO - Adding constraints to maximize overlaps of inserter belts with global belts and assemblers.
+2024-11-23 13:57:58,299 - INFO - Adding optimization goal to maximize belt overlaps.
+2024-11-23 13:57:58,464 - INFO - Solver check result: sat
+2024-11-23 13:57:58,811 - INFO - Attempting path for copper-cable from (2, 5) to (3, 6)
+2024-11-23 13:57:58,811 - INFO - Starting A* from (2, 5) to (3, 6)
+2024-11-23 13:57:58,811 - INFO - Processing node (2, 5)
+2024-11-23 13:57:58,811 - INFO - Moving to (2, 6) with direction right
+2024-11-23 13:57:58,811 - INFO - Moving to (3, 5) with direction down
+2024-11-23 13:57:58,812 - INFO - Moving to (2, 4) with direction left
+2024-11-23 13:57:58,812 - INFO - Moving to (1, 5) with direction up
+2024-11-23 13:57:58,812 - INFO - Processing node (2, 6)
+2024-11-23 13:57:58,812 - INFO - Moving to (3, 6) with direction down
+2024-11-23 13:57:58,812 - INFO - Moving to (1, 6) with direction up
+2024-11-23 13:57:58,812 - INFO - Processing node (3, 5)
+2024-11-23 13:57:58,812 - INFO - Moving to (4, 5) with direction down
+2024-11-23 13:57:58,812 - INFO - Moving to (3, 4) with direction left
+2024-11-23 13:57:58,812 - INFO - Processing node (3, 6)
+2024-11-23 13:57:58,812 - INFO - Goal reached at (3, 6)
+2024-11-23 13:57:58,812 - INFO - Reconstructed path: [(2, 5), (2, 6), (3, 6)]
+2024-11-23 13:57:58,812 - INFO - Attempting path for iron-plate from (9, 0) to (5, 3)
+2024-11-23 13:57:58,812 - INFO - Starting A* from (9, 0) to (5, 3)
+2024-11-23 13:57:58,812 - INFO - Processing node (9, 0)
+2024-11-23 13:57:58,812 - INFO - Moving to (9, 1) with direction right
+2024-11-23 13:57:58,812 - INFO - Moving to (8, 0) with direction up
+2024-11-23 13:57:58,812 - INFO - Processing node (8, 0)
+2024-11-23 13:57:58,812 - INFO - Moving to (8, 1) with direction right
+2024-11-23 13:57:58,812 - INFO - Moving to (7, 0) with direction up
+2024-11-23 13:57:58,812 - INFO - Processing node (7, 0)
+2024-11-23 13:57:58,813 - INFO - Moving to (7, 1) with direction right
+2024-11-23 13:57:58,813 - INFO - Moving to (6, 0) with direction up
+2024-11-23 13:57:58,813 - INFO - Processing node (6, 0)
+2024-11-23 13:57:58,813 - INFO - Moving to (6, 1) with direction right
+2024-11-23 13:57:58,813 - INFO - Moving to (5, 0) with direction up
+2024-11-23 13:57:58,813 - INFO - Processing node (5, 0)
+2024-11-23 13:57:58,813 - INFO - Moving to (5, 1) with direction right
+2024-11-23 13:57:58,813 - INFO - Moving to (4, 0) with direction up
+2024-11-23 13:57:58,813 - INFO - Processing node (5, 1)
+2024-11-23 13:57:58,813 - INFO - Moving to (5, 2) with direction right
+2024-11-23 13:57:58,813 - INFO - Moving to (4, 1) with direction up
+2024-11-23 13:57:58,813 - INFO - Processing node (5, 2)
+2024-11-23 13:57:58,813 - INFO - Moving to (5, 3) with direction right
+2024-11-23 13:57:58,813 - INFO - Moving to (6, 2) with direction down
+2024-11-23 13:57:58,813 - INFO - Moving to (4, 2) with direction up
+2024-11-23 13:57:58,813 - INFO - Processing node (5, 3)
+2024-11-23 13:57:58,813 - INFO - Goal reached at (5, 3)
+2024-11-23 13:57:58,813 - INFO - Reconstructed path: [(9, 0), (8, 0), (7, 0), (6, 0), (5, 0), (5, 1), (5, 2), (5, 3)]
+2024-11-23 13:57:58,813 - INFO - Attempting path for copper-plate from (0, 0) to (0, 9)
+2024-11-23 13:57:58,813 - INFO - Starting A* from (0, 0) to (0, 9)
+2024-11-23 13:57:58,813 - INFO - Processing node (0, 0)
+2024-11-23 13:57:58,813 - INFO - Moving to (0, 1) with direction right
+2024-11-23 13:57:58,814 - INFO - Moving to (1, 0) with direction down
+2024-11-23 13:57:58,814 - INFO - Processing node (0, 1)
+2024-11-23 13:57:58,814 - INFO - Moving to (0, 2) with direction right
+2024-11-23 13:57:58,814 - INFO - Moving to (1, 1) with direction down
+2024-11-23 13:57:58,814 - INFO - Processing node (0, 2)
+2024-11-23 13:57:58,814 - INFO - Moving to (0, 3) with direction right
+2024-11-23 13:57:58,814 - INFO - Moving to (1, 2) with direction down
+2024-11-23 13:57:58,814 - INFO - Processing node (0, 3)
+2024-11-23 13:57:58,814 - INFO - Moving to (0, 4) with direction right
+2024-11-23 13:57:58,814 - INFO - Moving to (1, 3) with direction down
+2024-11-23 13:57:58,814 - INFO - Processing node (0, 4)
+2024-11-23 13:57:58,814 - INFO - Moving to (0, 5) with direction right
+2024-11-23 13:57:58,814 - INFO - Moving to (1, 4) with direction down
+2024-11-23 13:57:58,814 - INFO - Processing node (0, 5)
+2024-11-23 13:57:58,814 - INFO - Moving to (0, 6) with direction right
+2024-11-23 13:57:58,814 - INFO - Moving to (1, 5) with direction down
+2024-11-23 13:57:58,814 - INFO - Processing node (0, 6)
+2024-11-23 13:57:58,814 - INFO - Moving to (0, 7) with direction right
+2024-11-23 13:57:58,815 - INFO - Moving to (1, 6) with direction down
+2024-11-23 13:57:58,815 - INFO - Processing node (0, 7)
+2024-11-23 13:57:58,815 - INFO - Moving to (0, 8) with direction right
+2024-11-23 13:57:58,815 - INFO - Moving to (1, 7) with direction down
+2024-11-23 13:57:58,815 - INFO - Processing node (0, 8)
+2024-11-23 13:57:58,815 - INFO - Moving to (0, 9) with direction right
+2024-11-23 13:57:58,815 - INFO - Moving to (1, 8) with direction down
+2024-11-23 13:57:58,815 - INFO - Processing node (0, 9)
+2024-11-23 13:57:58,815 - INFO - Goal reached at (0, 9)
+2024-11-23 13:57:58,815 - INFO - Reconstructed path: [(0, 0), (0, 1), (0, 2), (0, 3), (0, 4), (0, 5), (0, 6), (0, 7), (0, 8), (0, 9)]
+2024-11-23 13:57:58,815 - INFO - Attempting path for electronic-circuit from (6, 3) to (8, 9)
+2024-11-23 13:57:58,815 - INFO - Starting A* from (6, 3) to (8, 9)
+2024-11-23 13:57:58,815 - INFO - Processing node (6, 3)
+2024-11-23 13:57:58,815 - INFO - Moving to (6, 4) with direction right
+2024-11-23 13:57:58,815 - INFO - Moving to (7, 3) with direction down
+2024-11-23 13:57:58,815 - INFO - Moving to (6, 2) with direction left
+2024-11-23 13:57:58,815 - INFO - Moving to (5, 3) with direction up
+2024-11-23 13:57:58,815 - INFO - Processing node (6, 4)
+2024-11-23 13:57:58,815 - INFO - Moving to (7, 4) with direction down
+2024-11-23 13:57:58,815 - DEBUG - Checking jump to (4, 4) from (6, 4) with length 2
+2024-11-23 13:57:58,815 - INFO - Jumping to (4, 4) from (6, 4) with direction up
+2024-11-23 13:57:58,815 - DEBUG - Checking jump to (3, 4) from (6, 4) with length 3
+2024-11-23 13:57:58,816 - INFO - Jumping to (3, 4) from (6, 4) with direction up
+2024-11-23 13:57:58,816 - INFO - Processing node (7, 3)
+2024-11-23 13:57:58,816 - INFO - Moving to (8, 3) with direction down
+2024-11-23 13:57:58,816 - INFO - Moving to (7, 2) with direction left
+2024-11-23 13:57:58,816 - INFO - Processing node (7, 4)
+2024-11-23 13:57:58,816 - INFO - Moving to (8, 4) with direction down
+2024-11-23 13:57:58,816 - INFO - Processing node (8, 3)
+2024-11-23 13:57:58,816 - INFO - Moving to (9, 3) with direction down
+2024-11-23 13:57:58,816 - INFO - Moving to (8, 2) with direction left
+2024-11-23 13:57:58,816 - INFO - Processing node (8, 4)
+2024-11-23 13:57:58,816 - INFO - Moving to (8, 5) with direction right
+2024-11-23 13:57:58,816 - INFO - Moving to (9, 4) with direction down
+2024-11-23 13:57:58,816 - INFO - Processing node (8, 5)
+2024-11-23 13:57:58,816 - INFO - Moving to (8, 6) with direction right
+2024-11-23 13:57:58,816 - INFO - Moving to (9, 5) with direction down
+2024-11-23 13:57:58,816 - INFO - Processing node (8, 6)
+2024-11-23 13:57:58,816 - INFO - Moving to (8, 7) with direction right
+2024-11-23 13:57:58,816 - INFO - Moving to (9, 6) with direction down
+2024-11-23 13:57:58,816 - INFO - Processing node (8, 7)
+2024-11-23 13:57:58,816 - INFO - Moving to (8, 8) with direction right
+2024-11-23 13:57:58,816 - INFO - Moving to (9, 7) with direction down
+2024-11-23 13:57:58,816 - INFO - Processing node (8, 8)
+2024-11-23 13:57:58,817 - INFO - Moving to (8, 9) with direction right
+2024-11-23 13:57:58,817 - INFO - Moving to (9, 8) with direction down
+2024-11-23 13:57:58,817 - INFO - Moving to (7, 8) with direction up
+2024-11-23 13:57:58,817 - INFO - Processing node (8, 9)
+2024-11-23 13:57:58,817 - INFO - Goal reached at (8, 9)
+2024-11-23 13:57:58,817 - INFO - Reconstructed path: [(6, 3), (6, 4), (7, 4), (8, 4), (8, 5), (8, 6), (8, 7), (8, 8), (8, 9)]

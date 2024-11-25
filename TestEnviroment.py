@@ -1,3 +1,4 @@
+#! .venv\Scripts\python.exe
 
 class TestEnvironment:
     def __init__(self, width, height):

@@ -12,7 +12,7 @@ logging.basicConfig(
 DIRECTIONS = [(0, 1), (1, 0), (0, -1), (-1, 0)]  
 DIRECTION_MAP = {(0, 1): 'right', (1, 0): 'down', (0, -1): 'left', (-1, 0): 'up'}
 class AStarPathFinder:
-    def __init__(self, grid,underground_length=3,allow_jump = False):
+    def __init__(self, grid,underground_length=3,allow_jump = True):
         self.base_grid  = grid
         self.underground_length = underground_length
         self.allow_jump = allow_jump
@@ -93,7 +93,7 @@ class AStarPathFinder:
                         direction_grid[neighbor[1]][neighbor[0]] = direction
                         logging.info(f"Moving to {neighbor} with direction {DIRECTION_MAP[direction]}")
                         
-                else:
+                elif self.allow_jump:
                     for length in range(1, self.underground_length + 1):
                         jump_target = (current[0] + direction[0] * length, current[1] + direction[1] * length)
         
