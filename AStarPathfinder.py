@@ -11,11 +11,13 @@ logging.basicConfig(
 # Directions for moving in a grid (up, down, left, right)
 DIRECTIONS = [(0, 1), (1, 0), (0, -1), (-1, 0)]  
 DIRECTION_MAP = {(0, 1): 'right', (1, 0): 'down', (0, -1): 'left', (-1, 0): 'up'}
+
 class AStarPathFinder:
-    def __init__(self, grid,underground_length=3,allow_jump = True):
+    def __init__(self, grid,points,underground_length=3,allow_jump = True):
         self.base_grid  = grid
         self.underground_length = underground_length
         self.allow_jump = allow_jump
+        self.points = points
         self.paths = {}
   
         
@@ -140,82 +142,106 @@ class AStarPathFinder:
         
         return jump_markers
     
-    def find_path_for_item(self, start_dest_sets):
+    def find_path_for_item(self):
+        
+        placed_inserter_information = []
         paths = {}
         grid = [row[:] for row in self.base_grid]  # Deep copy of the grid for each function call
+        
         # Clear starting and destination points on the grid
-        for item, points in start_dest_sets.items():
+        for item, points in self.points.items():
             for x, y in points['start_points'] + points['destination']:
                 grid[y][x] = 0
             found_path = False
-            for start in points['start_points']:
-                for dest in points['destination']:
-                    logging.info(f"Attempting path for {item} from {start} to {dest}")
-                    path, direction_grid = self.astar(grid, start, dest)
+            
+            
+               # Calculate all possible pairs of start and destination points, sorted by distance
+            pairs = [
+                (start, dest, self.heuristic(start,dest))
+                for start in points['start_points']
+                for dest in points['destination']
+            ]
+            pairs.sort(key=lambda x: x[2])  # Sort by distance (smallest first)
+            
+            for start , dest ,_  in pairs:
+            
+                logging.info(f"Attempting path for {item} from {start} to {dest}")
+                print(f"Attempting path for {item} from {start} to {dest}")
+
+                path, direction_grid = self.astar(grid, start, dest)
+                
+                
+                if path:
+                    
+                    # check if we need to add an inserter:
+                    if points.get("inserter_mapping") is not None:
+
+                        (ix,iy) = points["inserter_mapping"][str(start)]
+                        placed_inserter_information.append([points['item'],ix,iy])
+                        self.base_grid[ix][iy] = 12
+                    
+                       
                     
                     jump_markers = self.get_jump_markers(path)
+                     
+                    # Mark the path on the grid to prevent overlaps
+                    for px, py in path:
+                        self.base_grid[py][px] = 9 
                     
-                    if path:
-                        paths[item] = {
-                            "path": path,
-                            "direction_grid": direction_grid,
-                            "jump_markers": jump_markers
-                        }
-                        found_path = True
-                        break
-                if found_path:
+                    # add point information to the retirval points
+                    for updated_item, updated_points in self.points.items():
+                        if updated_item != item and updated_points['item'] == points['item']:
+                            
+                            
+                            self.points[updated_item]['destination'].extend(path)
+                    
+                    paths[item] = {
+                        "path": path,
+                        "direction_grid": direction_grid,
+                        "jump_markers": jump_markers
+                    }
+                    found_path = True
                     break
-        return paths
+                
+            if found_path:
+                continue
+            
+        return paths,placed_inserter_information
     
     
 def main():
     
-    grid = [
-        [99, 44, 33, 33, 33, 0, 0, 0, 0, 1],
-        [1, 0, 33, 33, 33, 0, 0, 0, 0, 1],
-        [1, 0, 33, 33, 33, 0, 0, 0, 0, 1],
-        [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 0, 99, 0, 0, 0, 0, 1],
-        [1, 0, 0, 0, 44, 0, 0, 0, 0, 1],
-        [1, 99, 44, 33, 33, 33, 0, 0, 0, 1],
-        [1, 0, 0, 33, 33, 33, 0, 0, 0, 1],
-        [1, 0, 0, 33, 33, 33, 0, 0, 0, 1],
-        [0, 0, 0, 0, 0, 22, 22, 22, 22, 22]
-    ]
-        
-    start_dest_sets = {
-    'electronic-circuit': {
-        'destination': [(6, 9), (7, 9), (8, 9), (9, 9), (5, 9)],
-        'start_points': [(3, 4), (5, 4), (1, 7), (1, 8), (8, 6), (8, 7), (8, 8)]
-    }
-    }
-    '''
-    grid = [
-    [0,  0,  0,  0,  0],
-    [0,  0,  0,  0,  0],
-    [1,  1,  1,  1,  1],
-    [0,  0,  0,  0,  0],
-    [0,  0,  0,  0,  0]
-    ]
+    obstacle_map=  [[ 1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1],
+                    [ 1,  0, 33, 33, 33,  0,  0,  0,  0,  0,  0,  0,  0,  1],
+                    [99, 44, 33, 33, 33,  0,  0,  0,  0,  0,  0,  0,  0,  1],
+                    [ 1,  0, 33, 33, 33,  0,  0,  0,  0,  0,  0,  0,  0,  1],
+                    [ 1,  0, 44, 44, 44,  0,  0,  0,  0,  0,  0,  0,  0,  1],
+                    [ 1,  0, 33, 33, 33,  0,  0,  0,  0,  0,  0,  0,  0,  1],
+                    [ 1,  0, 33, 33, 33,  0,  0,  0,  0,  0,  0,  0,  0,  1],
+                    [ 1,  0, 33, 33, 33,  0,  0,  0,  0,  0,  0,  0,  0,  1],
+                    [ 1,  0, 44,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1],
+                    [ 1,  0, 99,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1],
+                    [ 1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1],
+                    [ 1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1],
+                    [ 1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1],
+                    [ 1,  0,  0,  0,  0,  0,  0,  0,  0, 22, 22, 22, 22, 22],]
 
-    start_dest_sets = {
-        'simple-item': {
-            'start_points': [(0, 0)],
-            'destination': [(4, 4)]
-        }
-    }
-    '''
-
+    retrieval_points ={'iron-plate_0': {'item': 'iron-plate', 'destination': [(13, 0), (13, 12), (13, 1), (13, 2), (13, 3), (13, 4), (13, 5), (13, 6), (13, 7), (13, 8), (13, 9), (13, 10), (13, 11)], 'start_points': [(2, 9)], 
+                                        'inserter_mapping': None}, 
+                       'electronic-circuit_0': {'item': 'electronic-circuit', 'destination': [(10, 13), (11, 13), (12, 13), (13, 13), (9, 13)], 'start_points': [(3, 9), (4, 9), (6, 5), (6, 6), (6, 7)], 
+                                                'inserter_mapping': {'(3, 9)': (3, 8), '(4, 9)': (4, 8), '(6, 5)': (5, 5), '(6, 6)': (5, 6), '(6, 7)': (5, 7)}}}
     
-    astar_pathfinder = AStarPathFinder(grid)
-    paths = astar_pathfinder.find_path_for_item(start_dest_sets)
+    astar_pathfinder = AStarPathFinder(obstacle_map,retrieval_points)
+    paths, placed_inserter_information = astar_pathfinder.find_path_for_item()
     
     print("Path results:")
     for item, path_data in paths.items():
         print(f"Item: {item}")
         print("Path:", path_data["path"])
-        print("Direction Grid" ,path_data["direction_grid"])
-        print("Jump Markers:", path_data["jump_markers"])
+        #print("Direction Grid" ,path_data["direction_grid"])
+        #print("Jump Markers:", path_data["jump_markers"])
+        
+    print(f"placed_inserter_information{placed_inserter_information}")
         
     
    

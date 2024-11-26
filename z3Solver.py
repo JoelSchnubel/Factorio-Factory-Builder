@@ -141,7 +141,7 @@ class Z3Solver:
         self.add_input_inserter_merge_assembler_constraint()
         
         
-        #self.add_minimize_belts()
+        self.add_minimize_belts()
 
     def add_manuel_IO_constraints(self, input_information, output_information):
         logging.info("Starting to add manual I/O constraints.")
@@ -545,6 +545,7 @@ class Z3Solver:
     
     # additionally we need to look at the capacity of an assembler:
     # the assembler we wan
+    # TODO capcity 
     def add_input_inserter_merge_assembler_constraint(self):
         
         merge_constraints = []
@@ -564,7 +565,7 @@ class Z3Solver:
                         #logging.debug(f"Inserter item {inserter.item} and other assembler item {other_assembler.item}")
                         
                         # if my input inserter and the other assembler produces/transports same item, set the belt on one of the edge positions of the assembler -> all but the middle
-                        if inserter.item == other_assembler.item: #and assembler.capacity > 0:
+                        if inserter.item == other_assembler.item and other_assembler.capacity > 0:
                             
                             
                             logging.debug(  f"Assembler {assembler.id} and other assembler {other_assembler.id} "
@@ -606,7 +607,7 @@ class Z3Solver:
                 # If there are valid constraints for this inserter, combine them with 'Or' between different assemblers
                 if assembler_constraints:
                     # reduce capacity by 1 
-                    assembler.capacity -= 1
+                    other_assembler.capacity -= 1
                     
                     
                     logging.debug(f"Adding 'Or' between valid positions for inserter {inserter.id}.")

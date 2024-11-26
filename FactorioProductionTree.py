@@ -735,8 +735,9 @@ class FactorioProductionTree:
             
             retrieval_points[key] = {
             'item': item,
-            'destination': [(x,y)],  # This is the destination point from belt_point_information
-            'start_points': []  # List to store relevant start points
+            'destination': [],  # This is the destination point from belt_point_information
+            'start_points': [(x,y)],  # List to store relevant start points
+            'inserter_mapping':None
             }
             
 
@@ -749,15 +750,15 @@ class FactorioProductionTree:
                 output_point = (output_point[1], output_point[0])  # Swap the coordinates
                 
                 # Add these points to the start_points list
-                retrieval_points[key]['start_points'].append(input_point)
-                retrieval_points[key]['start_points'].append(output_point)
+                retrieval_points[key]['destination'].append(input_point)
+                retrieval_points[key]['destination'].append(output_point)
                 
                 # Retrieve the grid for the item and locate all positions with '2' (indicating belt presence)
                 item_grid = self.input_information[item]['grid']
                 for row in range(len(item_grid)):
                     for col in range(len(item_grid[0])):
                         if item_grid[row][col] == 2:  # Belt presence for this item
-                            retrieval_points[key]["start_points"].append((row, col))
+                            retrieval_points[key]["destination"].append((row, col))
                 continue  # Move to the next belt item after checking input information
 
             # Step 2: Check assembler output points from `assembler_information`
@@ -790,14 +791,11 @@ class FactorioProductionTree:
 
     
     def add_out_point_information(self,output_item,assembler_information):
-        
-        
+ 
         retrieval_points = {}
-        retrieval_points[output_item] = {
-            'destination': [],  # This is the destination point from belt_point_information
-            'start_points': [],  # List to store relevant start points
-        }
         
+        # get all the possible output positions from the output information set by the user
+        # same for all the output assemblers
         output_coords = []
         for material, data in self.output_information.items():
             output_grid = data['grid']
@@ -805,6 +803,7 @@ class FactorioProductionTree:
                 for col in range(len(output_grid[0])):
                     if output_grid[row][col] == 2:
                         output_coords.append((row, col))
+                        
                         
         input_point = self.output_information[output_item]['input']
         output_point = self.output_information[output_item]['output']         
@@ -814,32 +813,68 @@ class FactorioProductionTree:
         
         output_coords.append(input_point)
         output_coords.append(output_point)
-        retrieval_points[output_item]["destination"] = output_coords
         
-        for asm_item, assembler_x, assembler_y in assembler_information:
+        #retrieval_points[output_item]["destination"] = output_coords
+        
+        for i,(asm_item, assembler_x, assembler_y) in enumerate(assembler_information):
                 if asm_item == output_item:
-        
+                    
+                    # for each output assembler build own representation    
+                    key = f"{output_item}_{i}"
+                    
+                    logging.info(f"build output path infomation for {key}")
+            
+                      
                     # Define assembler output positions based on `output_positions` template
                     output_positions = [
                         [(assembler_x, assembler_y - 1), (assembler_x, assembler_y - 2)],  # Upper left
                         [(assembler_x + 1, assembler_y - 1), (assembler_x + 1, assembler_y - 2)],  # Upper middle
                         [(assembler_x + 2, assembler_y - 1), (assembler_x + 2, assembler_y - 2)],  # Upper right
+                        
                         [(assembler_x, assembler_y + 3), (assembler_x, assembler_y + 4)],  # Bottom left
                         [(assembler_x + 1, assembler_y + 3), (assembler_x + 1, assembler_y + 4)],  # Bottom middle
                         [(assembler_x + 2, assembler_y + 3), (assembler_x + 2, assembler_y + 4)],  # Bottom right
+                        
                         [(assembler_x - 1, assembler_y), (assembler_x - 2, assembler_y)],  # Left up
                         [(assembler_x - 1, assembler_y + 1), (assembler_x - 2, assembler_y + 1)],  # Left middle
                         [(assembler_x - 1, assembler_y + 2), (assembler_x - 2, assembler_y + 2)],  # Left bottom
-                        [(assembler_x + 4, assembler_y), (assembler_x + 5, assembler_y)],  # Right up
-                        [(assembler_x + 4, assembler_y + 1), (assembler_x + 5, assembler_y + 1)],  # Right middle
-                        [(assembler_x + 4, assembler_y + 2), (assembler_x + 5, assembler_y + 2)]  # Right bottom
+                        
+                        [(assembler_x + 3, assembler_y), (assembler_x + 4, assembler_y)],  # Right up
+                        [(assembler_x + 3, assembler_y + 1), (assembler_x + 4, assembler_y + 1)],  # Right middle
+                        [(assembler_x + 3, assembler_y + 2), (assembler_x + 4, assembler_y + 2)]  # Right bottom
                     ]
+                    
+                
+                    
+                    retrieval_points[key] = {
+                        'item':output_item,
+                        'destination':  output_coords,  # This is the destination point from belt_point_information
+                        'start_points': [],  # List to store relevant start points
+                        'inserter_mapping':{}      
+                    }
 
                     # Filter output positions to ensure no overlap with any existing structures
                     for position_pair in output_positions:
                             if self.is_position_available(position_pair[0]) and self.is_position_available(position_pair[1]):
-                                retrieval_points[output_item]["start_points"].append(position_pair[1])
+                                
+                                
+                                retrieval_points[key]["inserter_mapping"][str(position_pair[1])] = position_pair[0]
+                                
+                                retrieval_points[key]["start_points"].append(position_pair[1])
+                                
+                                
+                                
         return retrieval_points
+    
+    
+    def rearrange_dict(self,input_dict, target_item):
+        # Separate items based on the 'item' value
+        target_items = {key: value for key, value in input_dict.items() if value.get('item') == target_item}
+        other_items = {key: value for key, value in input_dict.items() if value.get('item') != target_item}
+        
+        # Combine the dictionaries with target items first
+        rearranged_dict = {**target_items, **other_items}
+        return rearranged_dict
     # need to solve once before you can execute this
     def build_belts(self,output_item,max_tries):
         
@@ -861,42 +896,49 @@ class FactorioProductionTree:
             belt_point_information = [belt for belt in belt_point_information if not self.detect_belt_overlap(belt)]
             belt_point_information = [belt for belt in belt_point_information if not self.detect_assembler_overlap(belt,assembler_information)]
             
-            print(f"belt_point_information {belt_point_information}")
+            #print(f"belt_point_information {belt_point_information}")
             
             retrieval_points = self.get_retrieval_points(belt_point_information,assembler_information)
-            print(f" retrieval points :{retrieval_points}")
+            #print(f" retrieval points :{retrieval_points}")
             
         
             # add output belt if needed to form all possible to all possible
             retrieval_points.update(self.add_out_point_information(output_item,assembler_information))
-            #print(f"finished retrieval points :{retrieval_points}")
+            print(f"finished retrieval points :{retrieval_points}")
             
             try:
-                astar_pathfinder = AStarPathFinder(self.obstacle_map)
-                paths = astar_pathfinder.find_path_for_item(retrieval_points)
+                
+                # rearrange such that we first build paths for outputs
+                retrieval_points = self.rearrange_dict(retrieval_points, output_item)
+                
+                
+                astar_pathfinder = AStarPathFinder(self.obstacle_map,retrieval_points)
+                paths , placed_inserter_information = astar_pathfinder.find_path_for_item()
 
                 #print(paths)
                 
-                return paths
+                return paths,placed_inserter_information
             
             except:
                 print(f"could not assign valid paths to that setup")
-                logging.warn(f"coould not assign valid paths to that setup")
+                logging.warning(f"coould not assign valid paths to that setup")
                 
                 # restrict the assembler and inserter positions to occur in teh same setup -> belts are not needed as they are bound by the inserter
                 self.z3_solver.restrict_current_setup()
                 self.z3_solver.solve()
                 
-                pass
+                
                 
         return None            
             
 
         
-    def visualize_factory(self,paths):
+    def visualize_factory(self,paths,placed_inserter_information):
         #print(paths)
         
         _ ,belt_point_information,assembler_information,inserter_information = self.z3_solver.build_map()
+        
+        inserter_information = inserter_information + placed_inserter_information
         
         print(assembler_information)
         
@@ -1156,13 +1198,13 @@ def main():
     
     # Example item and amount
     item_to_produce = "electronic-circuit"
-    amount_needed = 100
+    amount_needed = 60
     
     # init 
     factorioProductionTree = FactorioProductionTree(14,14)
     production_data  = factorioProductionTree.calculate_production(item_to_produce,amount_needed) #60
     production_data = factorioProductionTree.set_capacities(production_data)
-    minimizer = 0
+    minimizer = 1
     
     
     
@@ -1184,12 +1226,12 @@ def main():
     
     
     start_time = time.perf_counter()
-    paths = factorioProductionTree.build_belts(item_to_produce,max_tries=20)
+    paths, placed_inserter_information = factorioProductionTree.build_belts(item_to_produce,max_tries=2)
     end_time = time.perf_counter()
     log_method_time(item_to_produce, amount_needed, minimizer, "build_belts", start_time, end_time)
     
     if(paths):
-        factorioProductionTree.visualize_factory(paths)
+        factorioProductionTree.visualize_factory(paths,placed_inserter_information)
         pass
         #print(factorioProductionTree.grid)
    
