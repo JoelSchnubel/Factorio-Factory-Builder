@@ -8,6 +8,8 @@ import sys, os
 import csv
 import time
 import re
+import pandas as pd
+import matplotlib.pyplot as plt
 from z3 import And , Or
 from z3Solver  import Z3Solver
 from AStarPathFinderold import AStarPathFinderold
@@ -1175,6 +1177,46 @@ class FactorioProductionTree:
         
 
  
+def plot_csv_data(file_path):
+    # Read the CSV file
+    df = pd.read_csv(file_path)
+
+    # Ensure relevant columns are numeric
+    df['Execution Time (seconds)'] = pd.to_numeric(df['Execution Time (seconds)'], errors='coerce')
+    df['Amount'] = pd.to_numeric(df['Amount'], errors='coerce')
+    
+    # Get unique items and methods
+    items = df['Item'].unique()
+    methods = df['Method'].unique()
+
+    # Create a figure with subplots, one for each item
+    fig, axes = plt.subplots(len(items), len(methods), figsize=(15, 10))
+
+    # Iterate over each item
+    for i, item in enumerate(items):
+        for j, method in enumerate(methods):
+            # Get the data for the current item and method
+            item_method_data = df[(df['Item'] == item) & (df['Method'] == method)]
+            
+            # Set color based on 'Minimizer' value (1 for red, otherwise blue)
+            colors = item_method_data['Minimizer'].apply(lambda x: 'red' if x == 1 else 'blue')
+            
+            # Select the axis for the current subplot
+            ax = axes[i, j] if len(items) > 1 else axes[j]
+            
+            # Plot the data using scatter (no connecting lines), with conditional color
+            ax.scatter(item_method_data['Amount'], item_method_data['Execution Time (seconds)'], c=colors)
+            
+            # Set subplot title and labels
+            ax.set_title(f'{item} - {method}')
+            ax.set_xlabel('Amount')
+            ax.set_ylabel('Execution Time (seconds)')
+            ax.grid(True)
+
+    # Adjust layout for better spacing
+    plt.tight_layout()
+    plt.show()
+ 
 # Function to log method execution times with additional information
 def log_method_time(item, amount, minimizer, method_name, start_time, end_time):
     execution_time = end_time - start_time
@@ -1198,7 +1240,7 @@ def main():
     
     # Example item and amount
     item_to_produce = "electronic-circuit"
-    amount_needed = 60
+    amount_needed = 10
     
     # init 
     factorioProductionTree = FactorioProductionTree(14,14)
@@ -1245,4 +1287,5 @@ if __name__ == "__main__":
         except Exception as e:
             logging.error(f"Error initializing CSV file: {e}")
 
+    #plot_csv_data("execution_times.csv")
     main()

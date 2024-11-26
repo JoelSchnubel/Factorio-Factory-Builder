@@ -1,7 +1,7 @@
 #! .venv\Scripts\python.exe
 
 from z3 import *
-import pygame
+from z3 import Optimize , Context
 import numpy as np
 import logging
 
@@ -99,7 +99,6 @@ class Z3Solver:
         self.height = height
         self.production_data = production_data
         self.solver = Optimize()
-
         # Create variables for assemblers, input inserters, output inserters, and belts
         self.assemblers = []
         self.placed_assembler = []
@@ -112,6 +111,8 @@ class Z3Solver:
         self.output_information = None
 
         self.obstacle_maps= []
+     
+     
      
     def build_constraints(self):
         self.create_assemblers()
@@ -815,7 +816,9 @@ class Z3Solver:
         
 # Example usage
 def main():
-    pass
+    solver = Z3Solver(1,1,{})
 
+    solver
+    
 if __name__ == "__main__":
     main()
