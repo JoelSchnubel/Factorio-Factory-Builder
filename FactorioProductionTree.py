@@ -89,12 +89,16 @@ class FactorioProductionTree:
         )
 
     # Recursively calculate the production requirements, including assemblers, inserters, and belts.
-    def calculate_production(self, item_id, items_per_minute):
-
+    # TODO adjust number of inserters needed 
+ 
+    def calculate_production(self, item_id, items_per_minute,input_items=[],first=True):
+        if first:
+            self.output_item = item_id
+            self.input_items += input_items
         item = self.item_lookup.get(item_id)
         
         # If the item doesn't exist or there's no recipe, return the required amount as it is.
-        if not item or "recipe" not in item:
+        if not item or "recipe" not in item or item in input_items:
             return {item_id: {"amount_per_minute": items_per_minute}}
 
         recipe = item["recipe"]
@@ -114,9 +118,8 @@ class FactorioProductionTree:
         # Store total required amounts, including assemblers, inserters, and belts
         total_requirements = {
             item_id: {
-                "output_per_minute": items_per_minute,
+                "amount_per_minute": items_per_minute,
                 "assemblers": math.ceil(self._calculate_assemblers(time_per_unit, recipe_runs_needed_per_minute)),
-                "output_inserters": math.ceil(self._calculate_inserters(recipe_runs_needed_per_minute)),
                 "input_inserters": recipe["ingredients"],
                 "belts": 0  ,
                 "capacity": 0
@@ -129,17 +132,26 @@ class FactorioProductionTree:
             ingredient_amount = ingredient["amount"]
             total_ingredient_needed_per_minute = ingredient_amount * recipe_runs_needed_per_minute
             
-            sub_requirements = self.calculate_production(ingredient_id, total_ingredient_needed_per_minute)
-
-            # Merge sub-requirements into total requirements
-            for sub_item, sub_data in sub_requirements.items():
-                if sub_item in total_requirements:
-                    total_requirements[sub_item]["amount_per_minute"] += sub_data["amount_per_minute"]
-                else:
-                    total_requirements[sub_item] = sub_data
             
-            # Calculate belts needed to transfer ingredients to the assemblers
-            total_requirements[item_id]["belts"] += self._calculate_belts(total_ingredient_needed_per_minute)
+            if ingredient_id in input_items:
+                # Add the ingredient directly if it's in input_items
+                total_requirements[ingredient_id] = {
+                    "amount_per_minute": total_ingredient_needed_per_minute,
+                    "capacity": 0
+                }
+            else:
+                sub_requirements = self.calculate_production(ingredient_id, total_ingredient_needed_per_minute,first=False)
+
+                # Merge sub-requirements into total requirements
+                for sub_item, sub_data in sub_requirements.items():
+                    if sub_item in total_requirements:
+                        
+                        total_requirements[sub_item]["amount_per_minute"] += sub_data["amount_per_minute"]
+                    else:
+                        total_requirements[sub_item] = sub_data
+                
+                # Calculate belts needed to transfer ingredients to the assemblers
+                total_requirements[item_id]["belts"] += self._calculate_belts(total_ingredient_needed_per_minute)
 
         total_requirements[item_id]["belts"] = math.ceil(total_requirements[item_id]["belts"])  # Round up belts
         return total_requirements
@@ -247,7 +259,7 @@ class FactorioProductionTree:
         return self.grid_height * self.grid_width + sum(row.count(2) for row in self.grid)
 
     
-    def manual_Output(self,output_item):
+    def manual_Output(self,Title="Manual Input"):
         side_panel_width = 300
         CELL_SIZE = 50  # Assuming a default cell size
         WHITE = (255, 255, 255)
@@ -263,7 +275,7 @@ class FactorioProductionTree:
         }
         
         
-        output_image = pygame.image.load(f"assets/{output_item}.png")
+        output_image = pygame.image.load(f"assets/{self.output_item}.png")
         output_image = pygame.transform.scale(output_image, (CELL_SIZE, CELL_SIZE))
         
         input_information = self.input_information
@@ -277,7 +289,7 @@ class FactorioProductionTree:
         conveyor_image = pygame.transform.scale(conveyor_image, (CELL_SIZE, CELL_SIZE))
     
 
-        output_information = {output_item:{'input': None, 'output': None,'grid': None, 'direction_grid': None}}
+        output_information = {self.output_item:{'input': None, 'output': None,'grid': None, 'direction_grid': None}}
         setting_input = True
         # build obstacle map
         grid_astar =[[0 for _ in range(self.grid_width)] for _ in range(self.grid_height)]
@@ -306,7 +318,7 @@ class FactorioProductionTree:
         window_height = self.grid_height * CELL_SIZE
         window = pygame.display.set_mode((window_width, window_height))
 
-        pygame.display.set_caption('IO Items')
+        pygame.display.set_caption(Title)
 
         # Set up clock
         clock = pygame.time.Clock()
@@ -446,7 +458,7 @@ class FactorioProductionTree:
             # Draw the side panel
             pygame.draw.rect(window, BLACK, (0, 0, side_panel_width, window_height))  # Side panel background
             font = pygame.font.Font(None, 36)
-            item_text = f"Setting: {output_item}"
+            item_text = f"Setting: {self.output_item}"
             setting_text = "Input" if setting_input else "Output"
             text_surface_item = font.render(item_text, True, WHITE)
             text_surface_setting = font.render(setting_text, True, WHITE)
@@ -462,7 +474,7 @@ class FactorioProductionTree:
         self.output_information = output_information
         pygame.quit()
     
-    def manual_Input(self):
+    def manual_Input(self,Title="Manuel Input"):
         
         side_panel_width = 300
         CELL_SIZE = 50  # Assuming a default cell size
@@ -501,7 +513,7 @@ class FactorioProductionTree:
         window_height = self.grid_height * CELL_SIZE
         window = pygame.display.set_mode((window_width, window_height))
 
-        pygame.display.set_caption('IO Items')
+        pygame.display.set_caption(Title)
 
         # Set up clock
         clock = pygame.time.Clock()
@@ -878,7 +890,7 @@ class FactorioProductionTree:
         rearranged_dict = {**target_items, **other_items}
         return rearranged_dict
     # need to solve once before you can execute this
-    def build_belts(self,output_item,max_tries):
+    def build_belts(self,max_tries):
         
         
         for i in range(max_tries):
@@ -905,13 +917,13 @@ class FactorioProductionTree:
             
         
             # add output belt if needed to form all possible to all possible
-            retrieval_points.update(self.add_out_point_information(output_item,assembler_information))
+            retrieval_points.update(self.add_out_point_information(self.output_item,assembler_information))
             print(f"finished retrieval points :{retrieval_points}")
             
             try:
                 
                 # rearrange such that we first build paths for outputs
-                retrieval_points = self.rearrange_dict(retrieval_points, output_item)
+                retrieval_points = self.rearrange_dict(retrieval_points, self.output_item)
                 
                 
                 astar_pathfinder = AStarPathFinder(self.obstacle_map,retrieval_points)
@@ -942,10 +954,7 @@ class FactorioProductionTree:
         
         inserter_information = inserter_information + placed_inserter_information
         
-        print(assembler_information)
-        
-        print(inserter_information)
-        
+    
         side_panel_width = 300
         
 
@@ -1235,12 +1244,10 @@ def main():
     
     # Set up logging for better output in the console
     logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
-
-    
     
     # Example item and amount
-    item_to_produce = "electronic-circuit"
-    amount_needed = 10
+    item_to_produce = "fast-inserter"
+    amount_needed = 1 
     
     # init 
     factorioProductionTree = FactorioProductionTree(14,14)
@@ -1252,12 +1259,14 @@ def main():
     
     print(f"production data {production_data}")
     
-    
+
+    print(factorioProductionTree.output_item)
+   
     # Manual input and output
     factorioProductionTree.manual_Input()
-    factorioProductionTree.manual_Output(item_to_produce)
+    factorioProductionTree.manual_Output()
     factorioProductionTree.add_manual_IO_constraints(production_data,sequential=False)
-    
+    return 
 
     # Track time for solving the problem
     start_time = time.perf_counter()
@@ -1268,7 +1277,7 @@ def main():
     
     
     start_time = time.perf_counter()
-    paths, placed_inserter_information = factorioProductionTree.build_belts(item_to_produce,max_tries=2)
+    paths, placed_inserter_information = factorioProductionTree.build_belts(max_tries=2)
     end_time = time.perf_counter()
     log_method_time(item_to_produce, amount_needed, minimizer, "build_belts", start_time, end_time)
     
