@@ -120,7 +120,7 @@ class FactorioProductionTree:
             item_id: {
                 "amount_per_minute": items_per_minute,
                 "assemblers": math.ceil(self._calculate_assemblers(time_per_unit, recipe_runs_needed_per_minute)),
-                "input_inserters": recipe["ingredients"],
+                "input_inserters": [],
                 "belts": 0  ,
                 "capacity": 0
             }
@@ -128,10 +128,20 @@ class FactorioProductionTree:
 
         # Process each ingredient recursively and calculate belt requirements
         for ingredient in recipe["ingredients"]:
-            ingredient_id = ingredient["id"]
+
+        
+
+            ingredient_id = ingredient['id']
             ingredient_amount = ingredient["amount"]
             total_ingredient_needed_per_minute = ingredient_amount * recipe_runs_needed_per_minute
-            
+
+            # Calculate inserters needed for this ingredient
+            inserters_needed = math.ceil(total_ingredient_needed_per_minute / 60 / self.machines_data['inserters']['ItemsPerSecond'])
+            total_requirements[item_id]["input_inserters"].append({
+                "id": ingredient_id,
+                "inserters": inserters_needed,
+                "amount": ingredient_amount
+            })
             
             if ingredient_id in input_items:
                 # Add the ingredient directly if it's in input_items
@@ -166,7 +176,10 @@ class FactorioProductionTree:
             # Skip items that don't have recipes
             if "input_inserters" not in data:
                 continue
+
+            
             for ingredient in data["input_inserters"]:
+                
                 ingredient_id = ingredient["id"]
                 
                 # Only include items that are in the production data (i.e., their capacities will be calculated)
@@ -1267,13 +1280,16 @@ def main():
     # init 
     factorioProductionTree = FactorioProductionTree(14,14)
     production_data  = factorioProductionTree.calculate_production(item_to_produce,amount_needed) #60
-    production_data = factorioProductionTree.set_capacities(production_data)
+   
     minimizer = 0
     
     
     
+    #print(f"production data {production_data}")
+
+    production_data = factorioProductionTree.set_capacities(production_data)
+
     print(f"production data {production_data}")
-    
 
     print(factorioProductionTree.output_item)
    

@@ -226,7 +226,7 @@ class Z3Solver:
                     input_inserters = []
                     
                     for inserter_info in item_info['input_inserters']:
-                        for j in range(inserter_info['amount']):
+                        for j in range(inserter_info['inserters']):
                             input_inserter_id = f"{inserter_info['id']}_in_{assembler_count}_{i}_{j}"
                             belt_id = f"{inserter_info['id']}_end_{assembler_count}_{i}_{j}"
                             
@@ -600,7 +600,7 @@ class Z3Solver:
                                 logging.debug(f"Adding constraints to position belt for inserter {inserter.id} and assembler {other_assembler.id} with capcity: {other_assembler.capacity}.")
                                 logging.debug(f"Adding 'Or' between valid positions for inserter {inserter.id} and reducing capacity of {other_assembler.id} to {other_assembler.capacity}")
                                 logging.debug(f"{inserter.id} merged is set to {inserter.is_merged}")
-                                
+
                                 other_assembler.capacity -= 1
                                 inserter.is_merged = True
                                 assembler_constraints.append(Or(constraints))
