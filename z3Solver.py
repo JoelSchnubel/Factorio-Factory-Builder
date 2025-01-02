@@ -557,7 +557,7 @@ class Z3Solver:
          
         for assembler in self.assemblers:
             for inserter in assembler.inserters:
-                
+            
                 # Create a list to hold the constraints for each valid assembler
                 assembler_constraints = []
         
@@ -568,13 +568,13 @@ class Z3Solver:
                         #logging.debug(f"Inserter item {inserter.item} and other assembler item {other_assembler.item}")
                         
                         # if my input inserter and the other assembler produces/transports same item, set the belt on one of the edge positions of the assembler -> all but the middle
-                        if inserter.item == other_assembler.item and other_assembler.capacity > 0:
+                        if inserter.item == other_assembler.item and other_assembler.capacity > 0 and not inserter.is_merged:
                             
-                            
+                            logging.debug(f"------------------------")
                             logging.debug(  f"Assembler {assembler.id} and other assembler {other_assembler.id} "
                                         f"have matching items: {inserter.item}")
                             
-                            logging.debug(f"Assembler {assembler.id} and other assembler {other_assembler.id} have matching items: {inserter.item}")
+                            
                             
                             merge_positions = [ (other_assembler.x,other_assembler.y), # upper left
                                                 (other_assembler.x+1,other_assembler.y  ), # upper middle
@@ -596,29 +596,58 @@ class Z3Solver:
                             ]
                             
                             if constraints:
-                                logging.debug(f"Adding constraints to position belt for inserter {inserter.id} "
-                                            f"at positions: {merge_positions}")
                                 
+                                logging.debug(f"Adding constraints to position belt for inserter {inserter.id} and assembler {other_assembler.id} with capcity: {other_assembler.capacity}.")
+                                logging.debug(f"Adding 'Or' between valid positions for inserter {inserter.id} and reducing capacity of {other_assembler.id} to {other_assembler.capacity}")
+                                logging.debug(f"{inserter.id} merged is set to {inserter.is_merged}")
+                                
+                                other_assembler.capacity -= 1
+                                inserter.is_merged = True
                                 assembler_constraints.append(Or(constraints))
-                                #merge_constraints.append(Or(constraints))
-                                #self.solver.add(merge_constraints)
-                                
+                                merge_constraints.append(Or(constraints))
+                                self.solver.add(merge_constraints)
                             else:
-                
-                                logging.debug(f"No valid merge positions found for inserter {inserter.id}.")
+                                logging.debug(f"no valid constraints can be build")
                                 
-                # If there are valid constraints for this inserter, combine them with 'Or' between different assemblers
-                if assembler_constraints:
-                    # reduce capacity by 1 
-                    other_assembler.capacity -= 1
+                        else:
+                                
+                                merge_positions = [(other_assembler.x,other_assembler.y), # upper left
+                                                (other_assembler.x+1,other_assembler.y  ), # upper middle
+                                                (other_assembler.x+2,other_assembler.y  ), # upper right
+                                                (other_assembler.x,other_assembler.y+1  ), # middle left
+                                                # leave out middle
+                                                (other_assembler.x+2,other_assembler.y+1), # middle right
+                                                (other_assembler.x,other_assembler.y+2  ), # lower left
+                                                (other_assembler.x+1,other_assembler.y+2), # lower middle
+                                                (other_assembler.x+2,other_assembler.y+2), # lower right
+                                            ]
+
+                                belt = inserter.belt 
+
+                                constraints = [
+                                Not(Or(inserter.belt.x == pos[0], inserter.belt.y == pos[1]))
+                                for pos in merge_positions
+                                ]
+                                #self.solver.add(constraints)
+                                assembler_constraints.append(Or(constraints))
+                                # add constraint to diallow the positionong of the assembler next to the inserter
+
+                                logging.debug(f"dissallow merge for inserter {inserter.id} and assembler {other_assembler.id} with capcity: {other_assembler.capacity}.")
+                                
+                    # If there are valid constraints for this inserter, combine them with 'Or' between different assemblers
+                    #if assembler_constraints:
+                    #    # reduce capacity by 1 
+                    #    other_assembler.capacity -= 1
+                    #    inserter.is_merged = True
+                        
+                        
+                    #    logging.debug(f"Adding 'Or' between valid positions for inserter {inserter.id} and reducing capacity of {other_assembler.id} to {other_assembler.capacity}")
+                    #    logging.debug(f"{inserter.id} merged is set to {inserter.is_merged}")
+                    #    merge_constraints.append(Or(assembler_constraints))  # This Or ensures multiple assemblers are considered
+                    #    self.solver.add(merge_constraints)
                     
-                    
-                    logging.debug(f"Adding 'Or' between valid positions for inserter {inserter.id}.")
-                    merge_constraints.append(Or(assembler_constraints))  # This Or ensures multiple assemblers are considered
-                    self.solver.add(merge_constraints)
-                
-                else:
-                    logging.debug(f"No valid merge positions found for inserter {inserter.id}.")
+                    #else:
+                    #    logging.debug(f"No valid merge positions found for inserter {inserter.id}.")
                     
         #if merge_constraints:
         #    self.solver.add(Or(merge_constraints))  # This 'Or' handles multiple inserters' constraints

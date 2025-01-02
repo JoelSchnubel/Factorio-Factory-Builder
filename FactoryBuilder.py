@@ -193,8 +193,8 @@ class FactoryBuilder:
         
 def main():
     
-    output_item = "fast-inserter"
-    amount = 1
+    output_item = "electronic-circuit"
+    amount = 1000
     max_assembler_per_blueprint = 10
     
     start_width = 14
@@ -202,8 +202,9 @@ def main():
 
     
     builder = FactoryBuilder(output_item,amount,max_assembler_per_blueprint,start_width,start_height)
-    #num_factories, production_data = builder.eval_split()
-    #print(f"Number of factories required: {num_factories}")
+    
+    num_factories, production_data = builder.eval_split()
+    print(f"Number of factories required: {num_factories}")
     
     production_data_list = builder.split_recipies()
     print(production_data_list)

@@ -945,6 +945,7 @@ class FactorioProductionTree:
                 
         return None            
             
+  
 
         
     def visualize_factory(self,paths,placed_inserter_information):
@@ -952,8 +953,11 @@ class FactorioProductionTree:
         
         _ ,belt_point_information,assembler_information,inserter_information = self.z3_solver.build_map()
         
+
+
         inserter_information = inserter_information + placed_inserter_information
         
+
     
         side_panel_width = 300
         
@@ -1257,14 +1261,14 @@ def main():
     logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
     
     # Example item and amount
-    item_to_produce = "electronic-circuit"
-    amount_needed = 1 
+    item_to_produce = "big-electric-pole"
+    amount_needed = 1
     
     # init 
     factorioProductionTree = FactorioProductionTree(14,14)
     production_data  = factorioProductionTree.calculate_production(item_to_produce,amount_needed) #60
     production_data = factorioProductionTree.set_capacities(production_data)
-    minimizer = 1
+    minimizer = 0
     
     
     
