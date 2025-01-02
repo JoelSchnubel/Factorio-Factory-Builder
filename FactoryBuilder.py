@@ -3,6 +3,10 @@
 from FactorioProductionTree import FactorioProductionTree
 from FactoryZ3Solver import FactoryZ3Solver
 import pygame
+import json
+
+
+
 
 
 class FactoryBuilder:
@@ -23,6 +27,14 @@ class FactoryBuilder:
         
         self.block_data = {}
 
+        self.items_data = self.load_json("recipes.json")
+
+
+    def load_json(self,recipe_file):
+        with open(recipe_file, "r") as file:
+                recipes = json.load(file)
+                return {item["id"]: item for item in recipes}
+        
 
     # gets a list of production_data and evals each for number of assemblers
     # if number of assemblers > than limit -> split the production data in half 
@@ -49,6 +61,37 @@ class FactoryBuilder:
                 
         print(total_assemblers)
         return total_assemblers
+    
+
+    def get_input_items(self,output,partial_items=[]):
+        if not partial_items:
+            return []
+        
+        def collect_ingredients(item_id, excluded_items, visited=set()):
+            """
+            Recursively collects ingredients for the given item ID, discarding those in excluded_items.
+            """
+            if item_id in visited:
+                return set()  # Prevent infinite loops in case of circular recipes
+            visited.add(item_id)
+            
+            item = self.items_data.get(item_id)  
+            if not item or "recipe" not in item or "ingredients" not in item["recipe"]:
+                return set()  # No recipe or ingredients, so nothing to add
+
+            ingredients = set()
+            for ingredient in item["recipe"]["ingredients"]:
+                ingredient_id = ingredient["id"]
+                if ingredient_id not in excluded_items:
+                    ingredients.add(ingredient_id)
+                    # Recursively collect ingredients for sub-items
+                    ingredients.update(collect_ingredients(ingredient_id, excluded_items, visited))
+            return ingredients
+
+        # Collect ingredients, excluding partial_items
+        result = collect_ingredients(output, set(partial_items))
+        return list(result)
+
     
     # allows the user to split recipies at any given point
     # from that rebuild the production data for each subfactory and let the user design all the subfactories in and outputs
@@ -109,14 +152,18 @@ class FactoryBuilder:
 
         pygame.quit()
             
-
+        print(f"Selected items: {selected_items}")
         
         # TODO Fix production data 
 
-       
         factorioProductionTree = FactorioProductionTree(grid_width=self.start_width,grid_height=self.start_height)
         # Always include the output item
-        production_data  = factorioProductionTree.calculate_production(self.output_item , self.amount, list(selectable_items.keys())) 
+
+        input_items = self.get_input_items(self.output_item,list(selected_items)) + list(selected_items)
+
+        print(input_items)
+
+        production_data  = factorioProductionTree.calculate_production(self.output_item , self.amount, input_items) 
         production_data = factorioProductionTree.set_capacities(production_data)
         
         production_data,num_factories = self.eval_split(production_data, list(selectable_items.keys()))
@@ -125,7 +172,7 @@ class FactoryBuilder:
         
         factorioProductionTree.manual_Input(Title=f"Setting Manual Input for {self.output_item}")
         factorioProductionTree.manual_Output(Title=f"Setting Manual Output for {self.output_item}")
-        #factorioProductionTree.add_manual_IO_constraints(production_data,sequential=False)
+        factorioProductionTree.add_manual_IO_constraints(production_data,sequential=False)
         if self.output_item not in self.block_data:
             self.block_data[self.output_item] = {}
         
@@ -134,7 +181,7 @@ class FactoryBuilder:
         self.block_data[self.output_item]["num_factories"]=num_factories
         
         
-     # Print input information (keys with input and output values)
+        # Print input information (keys with input and output values)
         print("Input Information:")
         for key, value in self.block_data[self.output_item]["tree"].input_information.items():
             if 'input' in value and 'output' in value:
@@ -145,17 +192,23 @@ class FactoryBuilder:
         for key, value in self.block_data[self.output_item]["tree"].output_information.items():
             if 'input' in value and 'output' in value:
                 print(f"{key}: input={value['input']}, output={value['output']}")
-        return
+
+       
         for item in selected_items:
             
+            print(f"building block for subitem {item}")
+
             if item not in self.block_data:
                 self.block_data[item] = {}
             
             factorioProductionTree = FactorioProductionTree(grid_width=self.start_width,grid_height=self.start_height)
-            new_data = factorioProductionTree.calculate_production(item, production_data[item]['amount_per_minute'])
+
+            input_items = self.get_input_items(item,list(selected_items)) + list(selected_items)
+
+            new_data = factorioProductionTree.calculate_production(item, production_data[item]['amount_per_minute'],input_items)
             new_data = factorioProductionTree.set_capacities(new_data)
             
-            new_data,num_factories = self.eval_split(new_data)
+            new_data,num_factories = self.eval_split(new_data,input_items)
             
             
                  
@@ -186,6 +239,8 @@ class FactoryBuilder:
         self.z3_solver = FactoryZ3Solver(self.block_data,self.output_point)
         self.z3_solver.solve()
     
+
+    
     def visualize_factory(self):
         pass
     
@@ -194,7 +249,7 @@ class FactoryBuilder:
 def main():
     
     output_item = "electronic-circuit"
-    amount = 1000
+    amount = 200
     max_assembler_per_blueprint = 10
     
     start_width = 14
@@ -203,13 +258,12 @@ def main():
     
     builder = FactoryBuilder(output_item,amount,max_assembler_per_blueprint,start_width,start_height)
     
-    num_factories, production_data = builder.eval_split()
-    print(f"Number of factories required: {num_factories}")
+    #num_factories, production_data = builder.eval_split()
+    #print(f"Number of factories required: {num_factories}")
     
-    production_data_list = builder.split_recipies()
-    print(production_data_list)
+    builder.split_recipies()
     
-    pass
+    
     
     
 if __name__ == "__main__":

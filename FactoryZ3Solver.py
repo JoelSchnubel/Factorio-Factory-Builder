@@ -13,7 +13,7 @@ logging.basicConfig(
 
 
 class Block:
-    def __init__(self,id,width,height):
+    def __init__(self,id,width,height,gates=[]):
         self.width = width
         self.height = height
         
@@ -24,6 +24,7 @@ class Block:
         
         self.input_points = []
         self.output_points = []
+
         
 class Gate:
     def __init__(self,id,x,y,item,type):
@@ -32,6 +33,8 @@ class Gate:
         self.y = Int(f'{id}_{y}')
         self.type = type # 'start' or 'end'
         self.item = item
+
+       
         
         
 class FactoryZ3Solver:
@@ -86,4 +89,92 @@ class FactoryZ3Solver:
 
             # Append block to the list of blocks
             self.blocks.append(block)
-            
+
+    
+    def add_constraints(self):
+        max_x = Int("max_x")
+        max_y = Int("max_y")
+
+        # Boundary and non-overlapping constraints
+        for block in self.blocks:
+            self.solver.add(block.x >= 0)
+            self.solver.add(block.y >= 0)
+            self.solver.add(block.x + block.width <= max_x)
+            self.solver.add(block.y + block.height <= max_y)
+
+        for i, block1 in enumerate(self.blocks):
+            for j, block2 in enumerate(self.blocks):
+                if i >= j:
+                    continue
+                self.solver.add(
+                    Or(
+                        block1.x + block1.width <= block2.x,
+                        block2.x + block2.width <= block1.x,
+                        block1.y + block1.height <= block2.y,
+                        block2.y + block2.height <= block1.y
+                    )
+                )
+
+
+        # Add gate connection constraints
+        for block1 in self.blocks:
+            for input_gate in block1.input_points:
+                for block2 in self.blocks:
+                    for output_gate in block2.output_points:
+                        if input_gate.item == output_gate.item:
+                            # Connection variable: 1 if connected, 0 otherwise
+                            connect_var = Int(f"connect_{input_gate.id}_{output_gate.id}")
+                            self.solver.add(If(connect_var == 1, True, False))
+
+                            # Distance variable
+                            distance = Int(f"distance_{input_gate.id}_{output_gate.id}")
+                            self.solver.add(
+                                distance == 
+                                If(connect_var == 1, 
+                                   abs(input_gate.x - output_gate.x) + abs(input_gate.y - output_gate.y), 
+                                   0)
+                            )
+                            
+                            # Ensure each gate is used only once
+                            self.solver.add(Sum([connect_var for _ in self.gate_connections]) <= 1)
+                            self.gate_connections.append((connect_var, distance))
+
+        # Minimize map size
+        self.solver.minimize(max_x * max_y)
+
+        # Minimize total gate connection distance
+        total_distance = Sum([dist for _, dist in self.gate_connections])
+        self.solver.minimize(total_distance)
+
+
+    def solve(self):
+        if self.solver.check() == sat:
+            model = self.solver.model()
+            block_positions = {
+                block.id: {
+                    "x": model[block.x].as_long(),
+                    "y": model[block.y].as_long()
+                }
+                for block in self.blocks
+            }
+            gate_connections = {
+                f"{input_gate.id}->{output_gate.id}": model[connect_var].as_long()
+                for connect_var, _ in self.gate_connections
+            }
+            return block_positions, gate_connections
+        else:
+            return None, None
+
+
+    def solve(self):
+        if self.solver.check() == sat:
+            model = self.solver.model()
+            return {
+                block.id: {
+                    "x": model[block.x].as_long(),
+                    "y": model[block.y].as_long()
+                }
+                for block in self.blocks
+            }, model[Int("max_x")].as_long(), model[Int("max_y")].as_long()
+        else:
+            return None, None, None
