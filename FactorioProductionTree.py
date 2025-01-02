@@ -1226,6 +1226,17 @@ def plot_csv_data(file_path):
     plt.tight_layout()
     plt.show()
  
+    # Ensure the 'Plots' directory exists
+    output_dir = "Plots"
+    os.makedirs(output_dir, exist_ok=True)
+
+    # Save the plot to the 'Plots' folder
+    plot_path = os.path.join(output_dir, "plot.png")
+    plt.savefig(plot_path)
+
+    # Display the plot
+    plt.show()
+    
 # Function to log method execution times with additional information
 def log_method_time(item, amount, minimizer, method_name, start_time, end_time):
     execution_time = end_time - start_time
@@ -1246,7 +1257,7 @@ def main():
     logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
     
     # Example item and amount
-    item_to_produce = "fast-inserter"
+    item_to_produce = "electronic-circuit"
     amount_needed = 1 
     
     # init 
@@ -1266,7 +1277,7 @@ def main():
     factorioProductionTree.manual_Input()
     factorioProductionTree.manual_Output()
     factorioProductionTree.add_manual_IO_constraints(production_data,sequential=False)
-    return 
+   
 
     # Track time for solving the problem
     start_time = time.perf_counter()

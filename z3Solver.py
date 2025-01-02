@@ -5,6 +5,8 @@ from z3 import Optimize , Context
 import numpy as np
 import logging
 
+set_param('parallel.enable',True)
+
 logging.basicConfig(
     level=logging.DEBUG,  # Use DEBUG level for detailed information, change to INFO for less verbosity
     format='%(asctime)s - %(levelname)s - %(message)s',

@@ -147,3 +147,7 @@ electronic-circuit,60,1,solve,1.7157368999996834
 electronic-circuit,60,1,build_belts,0.5716584999991028
 electronic-circuit,60,1,solve,2.0138154999986
 electronic-circuit,60,1,build_belts,0.830540299999484
+electronic-circuit,1,1,solve,1.4886743000001843
+electronic-circuit,1,1,build_belts,0.39566489999970145
+electronic-circuit,1,1,solve,1.4084992000002785
+electronic-circuit,1,1,build_belts,0.3983008999998674
