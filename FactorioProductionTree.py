@@ -136,7 +136,8 @@ class FactorioProductionTree:
             total_ingredient_needed_per_minute = ingredient_amount * recipe_runs_needed_per_minute
 
             # Calculate inserters needed for this ingredient
-            inserters_needed = math.ceil(total_ingredient_needed_per_minute / 60 / self.machines_data['inserters']['ItemsPerSecond'])
+            # set upper bound for number inserters to 3
+            inserters_needed = min(3, math.ceil(total_ingredient_needed_per_minute / 60 / self.machines_data['inserters']['ItemsPerSecond']))
             total_requirements[item_id]["input_inserters"].append({
                 "id": ingredient_id,
                 "inserters": inserters_needed,
@@ -1274,14 +1275,14 @@ def main():
     logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
     
     # Example item and amount
-    item_to_produce = "big-electric-pole"
-    amount_needed = 1
+    item_to_produce = "copper-cable"
+    amount_needed = 500
     
     # init 
     factorioProductionTree = FactorioProductionTree(14,14)
     production_data  = factorioProductionTree.calculate_production(item_to_produce,amount_needed) #60
    
-    minimizer = 0
+    minimizer = 1
     
     
     
@@ -1318,6 +1319,7 @@ def main():
         #print(factorioProductionTree.grid)
    
 if __name__ == "__main__":
+    
     # Prepare CSV file header if not exists
     if not os.path.exists("execution_times.csv"):
         try:
@@ -1327,5 +1329,5 @@ if __name__ == "__main__":
         except Exception as e:
             logging.error(f"Error initializing CSV file: {e}")
 
-    #plot_csv_data("execution_times.csv")
-    main()
+    plot_csv_data("execution_times.csv")
+    #main()
