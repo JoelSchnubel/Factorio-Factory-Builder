@@ -6,6 +6,8 @@ import numpy as np
 import logging
 
 set_param('parallel.enable',True)
+set_param('smt.threads', 8)
+
 
 logging.basicConfig(
     level=logging.DEBUG,  # Use DEBUG level for detailed information, change to INFO for less verbosity
@@ -100,6 +102,10 @@ class Z3Solver:
         self.width = width
         self.height = height
         self.production_data = production_data
+        
+        logging.debug(f"production data: {production_data}")
+        print(production_data)
+        
         self.solver = Optimize()
         # Create variables for assemblers, input inserters, output inserters, and belts
         self.assemblers = []

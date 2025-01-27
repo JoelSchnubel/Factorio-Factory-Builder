@@ -88,6 +88,10 @@ class FactorioProductionTree:
             format="%(asctime)s - %(levelname)s - %(message)s",
         )
 
+    
+    def destroy_solver(self):
+        self.z3_solver = None
+    
     # Recursively calculate the production requirements, including assemblers, inserters, and belts.
     # TODO adjust number of inserters needed 
  
@@ -960,7 +964,17 @@ class FactorioProductionTree:
         return None            
             
   
-
+    def count_assemblers(self,production_data):
+        assembler_counts = {}
+    
+        for item, data in production_data.items():
+            # Check if the item has an 'assemblers' field
+            if 'assemblers' in data:
+                assembler_counts[item] = data['assemblers']
+            else:
+                assembler_counts[item] = 0  # Assume 0 assemblers if the field is not present
+        
+        return assembler_counts
         
     def visualize_factory(self,paths,placed_inserter_information):
         #print(paths)
@@ -1256,7 +1270,7 @@ def plot_csv_data(file_path):
     plt.show()
     
 # Function to log method execution times with additional information
-def log_method_time(item, amount, minimizer, method_name, start_time, end_time):
+def log_method_time(item, amount, minimizer, method_name, assembler_counts,start_time, end_time):
     execution_time = end_time - start_time
     logging.info(f"Execution time for {method_name}: {execution_time:.4f} seconds.")
     
@@ -1264,29 +1278,36 @@ def log_method_time(item, amount, minimizer, method_name, start_time, end_time):
     try:
         with open("execution_times.csv", "a", newline="") as file:
             writer = csv.writer(file)
-            writer.writerow([item, amount, minimizer, method_name, execution_time])
+            writer.writerow([item, amount, minimizer, method_name,assembler_counts,execution_time])
     except Exception as e:
         logging.error(f"Error logging execution time for {method_name}: {e}")
         
         
 def main():
     
+    Simple_Run()
+    
+    # Eval_Runs("engine-unit",5,100,5,10)
+    
+
+   
+   
+def Simple_Run():
     # Set up logging for better output in the console
     logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
     
     # Example item and amount
-    item_to_produce = "copper-cable"
-    amount_needed = 500
+    item_to_produce = "electronic-circuit"
+    amount_needed = 100
     
     # init 
-    factorioProductionTree = FactorioProductionTree(14,14)
+    factorioProductionTree = FactorioProductionTree(15,15)
     production_data  = factorioProductionTree.calculate_production(item_to_produce,amount_needed) #60
    
     minimizer = 1
     
     
-    
-    #print(f"production data {production_data}")
+    print(f"production data {production_data}")
 
     production_data = factorioProductionTree.set_capacities(production_data)
 
@@ -1301,22 +1322,96 @@ def main():
    
 
     # Track time for solving the problem
-    start_time = time.perf_counter()
+    #start_time = time.perf_counter()
     factorioProductionTree.solve(production_data,sequential=False)
-    end_time = time.perf_counter()
-    log_method_time(item_to_produce, amount_needed, minimizer, "solve", start_time, end_time)
+    #end_time = time.perf_counter()
+    #log_method_time(item_to_produce, amount_needed, minimizer, "solve", start_time, end_time)
 
     
     
-    start_time = time.perf_counter()
+    #start_time = time.perf_counter()
     paths, placed_inserter_information = factorioProductionTree.build_belts(max_tries=2)
-    end_time = time.perf_counter()
-    log_method_time(item_to_produce, amount_needed, minimizer, "build_belts", start_time, end_time)
+    #end_time = time.perf_counter()
+    #log_method_time(item_to_produce, amount_needed, minimizer, "build_belts", start_time, end_time)
     
     if(paths):
         factorioProductionTree.visualize_factory(paths,placed_inserter_information)
         pass
         #print(factorioProductionTree.grid)
+   
+
+   
+def Eval_Runs(item_to_produce, start, end, step, rep_per_step):
+    # Initialize the production tree
+    factorioProductionTree = FactorioProductionTree(15, 15)
+    
+    # Always start with a simulation for 1 unit
+    production_data = factorioProductionTree.calculate_production(item_to_produce, 1)
+    
+    # Set manual input and output
+    factorioProductionTree.manual_Input()
+    factorioProductionTree.manual_Output()
+    
+    
+    for rep in range(rep_per_step):
+        factorioProductionTree.destroy_solver()
+        
+        print(f"\nRun {rep + 1}/{rep_per_step} for {1} unit of {item_to_produce}\n")
+      
+        # Set capacities and get initial assembler count
+        production_data = factorioProductionTree.set_capacities(production_data)
+        assembler_counts = factorioProductionTree.count_assemblers(production_data)
+        
+        factorioProductionTree.add_manual_IO_constraints(production_data, sequential=False)
+        
+        # Solve the production problem for amount_needed = 1
+        start_time = time.perf_counter()
+        factorioProductionTree.solve(production_data, sequential=False)
+        end_time = time.perf_counter()
+        log_method_time(item_to_produce, 1, 1, "solve", assembler_counts, start_time, end_time)
+        
+        # Build belts and visualize for amount_needed = 1
+        start_time = time.perf_counter()
+        paths, placed_inserter_information = factorioProductionTree.build_belts(max_tries=2)
+        end_time = time.perf_counter()
+        log_method_time(item_to_produce, 1, 1, "build_belts", assembler_counts, start_time, end_time)
+    
+
+    
+    # Loop through different amounts
+    for amount_needed in range(start, end, step):
+        for rep in range(rep_per_step):
+            print(f"\nRun {rep + 1}/{rep_per_step} for {amount_needed} units of {item_to_produce}\n")
+            
+            # Reset solver for a clean state
+            factorioProductionTree.destroy_solver()
+            
+            # Recalculate production data with the new amount
+            production_data = factorioProductionTree.calculate_production(item_to_produce, amount_needed)
+            production_data = factorioProductionTree.set_capacities(production_data)
+            assembler_counts = factorioProductionTree.count_assemblers(production_data)
+            
+            # Reapply manual IO constraints
+            factorioProductionTree.add_manual_IO_constraints(production_data, sequential=False)
+            
+            # Solve the production problem
+            start_time = time.perf_counter()
+            factorioProductionTree.solve(production_data, sequential=False)
+            end_time = time.perf_counter()
+            log_method_time(item_to_produce, amount_needed, 1, "solve", assembler_counts, start_time, end_time)
+            
+            # Build belts and optionally visualize the factory
+            start_time = time.perf_counter()
+            paths, placed_inserter_information = factorioProductionTree.build_belts(max_tries=2)
+            end_time = time.perf_counter()
+            log_method_time(item_to_produce, amount_needed, 1, "build_belts", assembler_counts, start_time, end_time)
+            
+           
+        
+        
+    
+
+
    
 if __name__ == "__main__":
     
@@ -1325,9 +1420,9 @@ if __name__ == "__main__":
         try:
             with open("execution_times.csv", "w", newline="") as file:
                 writer = csv.writer(file)
-                writer.writerow(["Item", "Amount", "Minimizer", "Method", "Execution Time (seconds)"])
+                writer.writerow(["Item", "Amount", "Minimizer", "Method","Assemblers", "Execution Time (seconds)"])
         except Exception as e:
             logging.error(f"Error initializing CSV file: {e}")
 
-    plot_csv_data("execution_times.csv")
-    #main()
+    #plot_csv_data("execution_times.csv")
+    main()

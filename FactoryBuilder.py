@@ -5,7 +5,7 @@ from FactoryZ3Solver import FactoryZ3Solver
 import pygame
 import json
 
-
+import time
 
 
 
@@ -41,9 +41,16 @@ class FactoryBuilder:
     def eval_split(self,production_data,input_items):
         num_factories = 1
         factorioProductionTree = FactorioProductionTree(grid_width=self.start_width,grid_height=self.start_height)
-        if self.count_assembler(production_data) > self.max_assembler_per_blueprint:
+        
+        amount = self.amount
+        
+        while self.count_assembler(production_data) > self.max_assembler_per_blueprint:
+            
+            amount = amount/2
+            
             # split in half and check again 
-            production_data  = factorioProductionTree.calculate_production(self.output_item , self.amount/2,input_items) 
+            production_data  = factorioProductionTree.calculate_production(self.output_item , amount,input_items) 
+            
             production_data = factorioProductionTree.set_capacities(production_data)
             num_factories +=1 
 
@@ -59,7 +66,6 @@ class FactoryBuilder:
             if 'assemblers' in value:
                 total_assemblers += value['assemblers']
                 
-        print(total_assemblers)
         return total_assemblers
     
 
@@ -157,8 +163,8 @@ class FactoryBuilder:
         # TODO Fix production data 
 
         factorioProductionTree = FactorioProductionTree(grid_width=self.start_width,grid_height=self.start_height)
+        
         # Always include the output item
-
         input_items = self.get_input_items(self.output_item,list(selected_items)) + list(selected_items)
 
         print(input_items)
@@ -166,13 +172,14 @@ class FactoryBuilder:
         production_data  = factorioProductionTree.calculate_production(self.output_item , self.amount, input_items) 
         production_data = factorioProductionTree.set_capacities(production_data)
         
-        production_data,num_factories = self.eval_split(production_data, list(selectable_items.keys()))
+        production_data,num_factories = self.eval_split(production_data, list(selected_items))
         
 
         
         factorioProductionTree.manual_Input(Title=f"Setting Manual Input for {self.output_item}")
         factorioProductionTree.manual_Output(Title=f"Setting Manual Output for {self.output_item}")
         factorioProductionTree.add_manual_IO_constraints(production_data,sequential=False)
+        
         if self.output_item not in self.block_data:
             self.block_data[self.output_item] = {}
         
@@ -224,20 +231,28 @@ class FactoryBuilder:
             
     
     
-    def solve_small_blocks(self):
+    def solve_small_blocks(self, visualize):
         
-        for item in self.block_data.keys:
+        for item in self.block_data.keys():
             self.block_data[item]["tree"].solve(self.block_data[item]["production_data"],sequential=False)
             paths, placed_inserter_information = self.block_data[item]["tree"].build_belts(max_tries=2)
             self.block_data[item]["paths"] = paths
             self.block_data[item]["placed_inserter_information"]=placed_inserter_information
-    
+
+            if visualize:
+                self.block_data[item]["tree"].visualize_factory(paths,placed_inserter_information)
 
         
             
     def solve_factory(self):
         self.z3_solver = FactoryZ3Solver(self.block_data,self.output_point)
-        self.z3_solver.solve()
+        self.z3_solver.build_constraints()
+        
+        a,b,c = self.z3_solver.solve()
+        
+        print(a)
+        print(b)
+        print(c)
     
 
     
@@ -249,11 +264,11 @@ class FactoryBuilder:
 def main():
     
     output_item = "electronic-circuit"
-    amount = 200
-    max_assembler_per_blueprint = 10
+    amount = 1500
+    max_assembler_per_blueprint = 5
     
-    start_width = 14
-    start_height = 14
+    start_width = 15
+    start_height = 15
 
     
     builder = FactoryBuilder(output_item,amount,max_assembler_per_blueprint,start_width,start_height)
@@ -262,7 +277,10 @@ def main():
     #print(f"Number of factories required: {num_factories}")
     
     builder.split_recipies()
+    print(builder.block_data)
+    builder.solve_small_blocks(visualize=False)
     
+    builder.solve_factory()
     
     
     
