@@ -127,6 +127,9 @@ class FactoryZ3Solver:
         
         max_x = Int("max_x")
         max_y = Int("max_y")
+        
+        #self.solver.add(max_x <= )
+        #self.solver.add(max_y <= )
 
         self.gate_connections = []  # Ensure this attribute is initialized
 

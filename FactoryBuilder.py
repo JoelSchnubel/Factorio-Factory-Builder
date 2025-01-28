@@ -6,6 +6,8 @@ import pygame
 import json
 import os
 import time
+import logging
+import csv
 
 CELL_SIZE = 10
 
@@ -36,6 +38,8 @@ class FactoryBuilder:
         
         self.block_size = 10
         self.images = {}
+        
+        
 
 
     def load_json(self,recipe_file):
@@ -73,7 +77,7 @@ class FactoryBuilder:
         for key, value in production_data.items():
             if 'assemblers' in value:
                 total_assemblers += value['assemblers']
-                
+        
         return total_assemblers
     
 
@@ -262,7 +266,6 @@ class FactoryBuilder:
         print(self.final_x)
         print(self.final_y)
 
-        print(self.block_data)
         
         
     def load_images(self):
@@ -279,6 +282,11 @@ class FactoryBuilder:
             else:
                 print(f"Image not found for {base_name} at {image_path}")
 
+ 
+    
+    def get_num_subfactories(self):
+        return len(self.final_blocks)
+    
     def visualize_factory(self):
         """Draw the factory using Pygame."""
         # Initialize Pygame
@@ -354,11 +362,32 @@ def main():
     print(builder.block_data)
     builder.solve_small_blocks(visualize=False)
     
+    start_time = time.perf_counter()       
+    print(start_time)
     builder.solve_factory()
+    end_time = time.perf_counter()
+    print(end_time)
+
     
+    log_method_time(item=output_item,amount=amount,method_name="solve",assemblers_per_recipie=max_assembler_per_blueprint,num_subfactories=builder.get_num_subfactories(),start_time=start_time,end_time=end_time)
+    
+    builder.visualize_factory()
     
 
 
+
+def log_method_time(item, amount, method_name,assemblers_per_recipie,num_subfactories,start_time, end_time):
+    execution_time = end_time - start_time
+    logging.info(f"Execution time for {method_name}: {execution_time:.4f} seconds.")
+    
+    # Open the CSV file and append the data
+    try:
+        with open("execution_times_big_factory.csv", "a", newline="") as file:
+            writer = csv.writer(file)
+            writer.writerow([item, amount, method_name,assemblers_per_recipie,num_subfactories,execution_time])
+    except Exception as e:
+        logging.error(f"Error logging execution time for {method_name}: {e}")
+    
 
 def visualize_test():
     output_item = "electronic-circuit"
@@ -378,5 +407,5 @@ def visualize_test():
     
         
 if __name__ == "__main__":
-    #main()
-    visualize_test()
+    main()
+    #visualize_test()
