@@ -197,13 +197,48 @@ class FactoryZ3Solver:
     def solve(self):
         if self.solver.check() == sat:
             model = self.solver.model()
-            return {
-                block.id: {
-                    "x": model[block.x].as_long(),
-                    "y": model[block.y].as_long()
+            
+            # Create a dictionary to store all block information
+            final_blocks = {}
+            
+            for block in self.blocks:
+                # Extract block position from the model
+                x = model[block.x].as_long()
+                y = model[block.y].as_long()
+                
+                # Store block details
+                final_blocks[block.id] = {
+                    "x": x,
+                    "y": y,
+                    "width": block.width,
+                    "height": block.height,
+                    "input_points": [
+                        {
+                            "id": gate.id,
+                            "item": gate.item,
+                            "type": gate.type,
+                            "x": model[gate.x].as_long(),  # Relative to block position
+                            "y": model[gate.y].as_long()  # Relative to block position
+                        }
+                        for gate in block.input_points
+                    ],
+                    "output_points": [
+                        {
+                            "id": gate.id,
+                            "item": gate.item,
+                            "type": gate.type,
+                            "x": model[gate.x].as_long(),  # Relative to block position
+                            "y": model[gate.y].as_long()   # Relative to block position
+                        }
+                        for gate in block.output_points
+                    ]
                 }
-                for block in self.blocks
-            }, model[Int("max_x")].as_long(), model[Int("max_y")].as_long()
+            
+            # Extract the maximum dimensions of the factory
+            max_x = model[Int("max_x")].as_long()
+            max_y = model[Int("max_y")].as_long()
+            
+            return final_blocks, max_x, max_y
         else:
             return None, None, None
         

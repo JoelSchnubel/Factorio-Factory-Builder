@@ -4,9 +4,10 @@ from FactorioProductionTree import FactorioProductionTree
 from FactoryZ3Solver import FactoryZ3Solver
 import pygame
 import json
-
+import os
 import time
 
+CELL_SIZE = 10
 
 
 class FactoryBuilder:
@@ -28,6 +29,13 @@ class FactoryBuilder:
         self.block_data = {}
 
         self.items_data = self.load_json("recipes.json")
+        
+        self.final_x = None
+        self.final_y = None
+        self.final_blocks = None
+        
+        self.block_size = 10
+        self.images = {}
 
 
     def load_json(self,recipe_file):
@@ -248,17 +256,83 @@ class FactoryBuilder:
         self.z3_solver = FactoryZ3Solver(self.block_data,self.output_point)
         self.z3_solver.build_constraints()
         
-        a,b,c = self.z3_solver.solve()
-        
-        print(a)
-        print(b)
-        print(c)
+        self.final_blocks,self.final_x,self.final_y = self.z3_solver.solve()
     
+        print(self.final_blocks)
+        print(self.final_x)
+        print(self.final_y)
 
-    
+        print(self.block_data)
+        
+        
+    def load_images(self):
+        """Load images from the assets folder based on block names."""
+        for block_key in self.final_blocks.keys():
+            # Extract the base name of the block (e.g., 'electronic-circuit')
+            base_name = block_key.split('_')[1]
+            image_path = os.path.join('assets', f'{base_name}.png')
+            
+            
+            print(image_path)
+            if os.path.exists(image_path):
+                self.images[block_key] = pygame.image.load(image_path)
+            else:
+                print(f"Image not found for {base_name} at {image_path}")
+
     def visualize_factory(self):
-        pass
-    
+        """Draw the factory using Pygame."""
+        # Initialize Pygame
+        pygame.init()
+        screen = pygame.display.set_mode(
+            (self.final_x * self.block_size, self.final_y * self.block_size)
+        )
+        pygame.display.set_caption('Factory Layout')
+
+        # Load images
+        self.load_images()
+
+        # Main loop
+        running = True
+        while running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+
+            # Clear the screen
+            screen.fill((255, 255, 255))  # White background
+
+            # Draw each block
+            for block_id, block_info in self.final_blocks.items():
+                x = block_info["x"] * self.block_size
+                y = block_info["y"] * self.block_size
+                width = block_info["width"] * self.block_size
+                height = block_info["height"] * self.block_size
+
+                # Draw the block (image or placeholder rectangle)
+                if block_id in self.images:
+                    # Scale the image to fit the block size
+                    image = pygame.transform.scale(self.images[block_id], (width, height))
+                    screen.blit(image, (x, y))
+                else:
+                    # Draw a placeholder rectangle if the image is not found
+                    pygame.draw.rect(screen, (0, 0, 0), (x, y, width, height))  # Black rectangle
+
+                # Draw input and output gates
+                for gate in block_info["input_points"]:
+                    gate_x = x + gate["x"] * self.block_size
+                    gate_y = y + gate["y"] * self.block_size
+                    pygame.draw.circle(screen, (0, 255, 0), (gate_x, gate_y), 5)  # Green circle for input gates
+
+                for gate in block_info["output_points"]:
+                    gate_x = x + gate["x"] * self.block_size
+                    gate_y = y + gate["y"] * self.block_size
+                    pygame.draw.circle(screen, (255, 0, 0), (gate_x, gate_y), 5)  # Red circle for output gates
+
+            # Update the display
+            pygame.display.flip()
+
+        # Quit Pygame
+        pygame.quit()
     
         
 def main():
@@ -283,6 +357,26 @@ def main():
     builder.solve_factory()
     
     
+
+
+
+def visualize_test():
+    output_item = "electronic-circuit"
+    amount = 1500
+    max_assembler_per_blueprint = 5
     
+    start_width = 15
+    start_height = 15
+
+    
+    builder = FactoryBuilder(output_item,amount,max_assembler_per_blueprint,start_width,start_height)
+    
+    builder.final_x=15
+    builder.final_y=75
+    builder.final_blocks = {'Block_electronic-circuit_0_0': {'x': 0, 'y': 15, 'width': 15, 'height': 15, 'input_points': [{'id': 'electronic-circuit_input_copper-plate_0_0', 'item': 'copper-plate', 'type': 'input', 'x': -194, 'y': -195}, {'id': 'electronic-circuit_input_iron-plate_0_0', 'item': 'iron-plate', 'type': 'input', 'x': -1, 'y': 522}, {'id': 'electronic-circuit_input_electronic-circuit_0_0', 'item': 'electronic-circuit', 'type': 'input', 'x': -234, 'y': -234}], 'output_points': [{'id': 'electronic-circuit_output_copper-plate_0_0', 'item': 'copper-plate', 'type': 'output', 'x': -215, 'y': -215}, {'id': 'electronic-circuit_output_iron-plate_0_0', 'item': 'iron-plate', 'type': 'output', 'x': -115, 'y': 467}, {'id': 'electronic-circuit_output_electronic-circuit_0_0', 'item': 'electronic-circuit', 'type': 'output', 'x': -236, 'y': -290}]}, 'Block_electronic-circuit_0_1': {'x': 0, 'y': 30, 'width': 15, 'height': 15, 'input_points': [{'id': 'electronic-circuit_input_copper-plate_0_1', 'item': 'copper-plate', 'type': 'input', 'x': -204, 'y': -199}, {'id': 'electronic-circuit_input_iron-plate_0_1', 'item': 'iron-plate', 'type': 'input', 'x': 9, 'y': 669}, {'id': 'electronic-circuit_input_electronic-circuit_0_1', 'item': 'electronic-circuit', 'type': 'input', 'x': -1, 'y': -1}], 'output_points': [{'id': 'electronic-circuit_output_copper-plate_0_1', 'item': 'copper-plate', 'type': 'output', 'x': -207, 'y': -207}, {'id': 'electronic-circuit_output_iron-plate_0_1', 'item': 'iron-plate', 'type': 'output', 'x': -100, 'y': -1}, {'id': 'electronic-circuit_output_electronic-circuit_0_1', 'item': 'electronic-circuit', 'type': 'output', 'x': -505, 'y': -498}]}, 'Block_electronic-circuit_0_2': {'x': 0, 'y': 45, 'width': 15, 'height': 15, 'input_points': [{'id': 'electronic-circuit_input_copper-plate_0_2', 'item': 'copper-plate', 'type': 'input', 'x': -160, 'y': -200}, {'id': 'electronic-circuit_input_iron-plate_0_2', 'item': 'iron-plate', 'type': 'input', 'x': -99, 'y': 468}, {'id': 'electronic-circuit_input_electronic-circuit_0_2', 'item': 'electronic-circuit', 'type': 'input', 'x': -178, 'y': -178}], 'output_points': [{'id': 'electronic-circuit_output_copper-plate_0_2', 'item': 'copper-plate', 'type': 'output', 'x': -198, 'y': -198}, {'id': 'electronic-circuit_output_iron-plate_0_2', 'item': 'iron-plate', 'type': 'output', 'x': -127, 'y': 451}, {'id': 'electronic-circuit_output_electronic-circuit_0_2', 'item': 'electronic-circuit', 'type': 'output', 'x': -273, 'y': -271}]}, 'Block_electronic-circuit_0_3': {'x': 0, 'y': 0, 'width': 15, 'height': 15, 'input_points': [{'id': 'electronic-circuit_input_copper-plate_0_3', 'item': 'copper-plate', 'type': 'input', 'x': -196, 'y': -196}, {'id': 'electronic-circuit_input_iron-plate_0_3', 'item': 'iron-plate', 'type': 'input', 'x': -105, 'y': 114}, {'id': 'electronic-circuit_input_electronic-circuit_0_3', 'item': 'electronic-circuit', 'type': 'input', 'x': 117, 'y': 117}], 'output_points': [{'id': 'electronic-circuit_output_copper-plate_0_3', 'item': 'copper-plate', 'type': 'output', 'x': -466, 'y': -466}, {'id': 'electronic-circuit_output_iron-plate_0_3', 'item': 'iron-plate', 'type': 'output', 'x': 8, 'y': 647}, {'id': 'electronic-circuit_output_electronic-circuit_0_3', 'item': 'electronic-circuit', 'type': 'output', 'x': 409, 'y': -507}]}, 'Block_electronic-circuit_0_4': {'x': 0, 'y': 60, 'width': 15, 'height': 15, 'input_points': [{'id': 'electronic-circuit_input_copper-plate_0_4', 'item': 'copper-plate', 'type': 'input', 'x': 50, 'y': -478}, {'id': 'electronic-circuit_input_iron-plate_0_4', 'item': 'iron-plate', 'type': 'input', 'x': -101, 'y': 662}, {'id': 'electronic-circuit_input_electronic-circuit_0_4', 'item': 'electronic-circuit', 'type': 'input', 'x': -250, 'y': -250}], 'output_points': [{'id': 'electronic-circuit_output_copper-plate_0_4', 'item': 'copper-plate', 'type': 'output', 'x': -479, 'y': -479}, {'id': 'electronic-circuit_output_iron-plate_0_4', 'item': 'iron-plate', 'type': 'output', 'x': -104, 'y': 407}, {'id': 'electronic-circuit_output_electronic-circuit_0_4', 'item': 'electronic-circuit', 'type': 'output', 'x': -292, 'y': -291}]}}
+    builder.visualize_factory()
+    
+        
 if __name__ == "__main__":
-    main()
+    #main()
+    visualize_test()
