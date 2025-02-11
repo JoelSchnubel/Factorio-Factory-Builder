@@ -1,727 +1,143 @@
-2025-01-28 15:57:38,624 - DEBUG - production data: {'electronic-circuit': {'amount_per_minute': 93.75, 'assemblers': 2, 'input_inserters': [{'id': 'copper-cable', 'inserters': 3, 'amount': 3}, {'id': 'iron-plate', 'inserters': 2, 'amount': 1}], 'belts': 1, 'capacity': 0}, 'copper-cable': {'amount_per_minute': 281.25, 'assemblers': 3, 'input_inserters': [{'id': 'copper-plate', 'inserters': 3, 'amount': 1}], 'belts': 1, 'capacity': 2}, 'copper-plate': {'amount_per_minute': 140.625, 'capacity': 0}, 'iron-plate': {'amount_per_minute': 93.75, 'capacity': 0}}
-2025-01-28 15:57:38,633 - INFO - Starting to add manual I/O constraints.
-2025-01-28 15:57:38,633 - DEBUG - Processing input item 'copper-plate' with data: {'input': (14, 0), 'output': (0, 0), 'grid': [[0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]], 'direction_grid': [[None, 'left', 'left', 'left', 'left', 'left', 'left', 'left', 'left', 'left', 'left', 'left', 'left', 'left', None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None]]}
-2025-01-28 15:57:38,633 - INFO - Adding input belt for item 'copper-plate' at position (14, 0)
-2025-01-28 15:57:38,633 - INFO - Adding output belt for item 'copper-plate' at position (0, 0)
-2025-01-28 15:57:38,634 - DEBUG - Processing grid path for input item 'copper-plate'
-2025-01-28 15:57:38,634 - INFO - Adding belt path for 'copper-plate' at grid position (0, 1)
-2025-01-28 15:57:38,634 - INFO - Adding belt path for 'copper-plate' at grid position (0, 2)
-2025-01-28 15:57:38,634 - INFO - Adding belt path for 'copper-plate' at grid position (0, 3)
-2025-01-28 15:57:38,634 - INFO - Adding belt path for 'copper-plate' at grid position (0, 4)
-2025-01-28 15:57:38,635 - INFO - Adding belt path for 'copper-plate' at grid position (0, 5)
-2025-01-28 15:57:38,635 - INFO - Adding belt path for 'copper-plate' at grid position (0, 6)
-2025-01-28 15:57:38,635 - INFO - Adding belt path for 'copper-plate' at grid position (0, 7)
-2025-01-28 15:57:38,635 - INFO - Adding belt path for 'copper-plate' at grid position (0, 8)
-2025-01-28 15:57:38,636 - INFO - Adding belt path for 'copper-plate' at grid position (0, 9)
-2025-01-28 15:57:38,636 - INFO - Adding belt path for 'copper-plate' at grid position (0, 10)
-2025-01-28 15:57:38,636 - INFO - Adding belt path for 'copper-plate' at grid position (0, 11)
-2025-01-28 15:57:38,636 - INFO - Adding belt path for 'copper-plate' at grid position (0, 12)
-2025-01-28 15:57:38,638 - INFO - Adding belt path for 'copper-plate' at grid position (0, 13)
-2025-01-28 15:57:38,638 - DEBUG - Processing input item 'iron-plate' with data: {'input': (14, 12), 'output': (0, 12), 'grid': [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]], 'direction_grid': [[None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, 'left', 'left', 'left', 'left', 'left', 'left', 'left', 'left', 'left', 'left', 'left', 'left', 'left', None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None]]}
-2025-01-28 15:57:38,638 - INFO - Adding input belt for item 'iron-plate' at position (14, 12)
-2025-01-28 15:57:38,638 - INFO - Adding output belt for item 'iron-plate' at position (0, 12)
-2025-01-28 15:57:38,638 - DEBUG - Processing grid path for input item 'iron-plate'
-2025-01-28 15:57:38,638 - INFO - Adding belt path for 'iron-plate' at grid position (12, 1)
-2025-01-28 15:57:38,638 - INFO - Adding belt path for 'iron-plate' at grid position (12, 2)
-2025-01-28 15:57:38,638 - INFO - Adding belt path for 'iron-plate' at grid position (12, 3)
-2025-01-28 15:57:38,638 - INFO - Adding belt path for 'iron-plate' at grid position (12, 4)
-2025-01-28 15:57:38,638 - INFO - Adding belt path for 'iron-plate' at grid position (12, 5)
-2025-01-28 15:57:38,639 - INFO - Adding belt path for 'iron-plate' at grid position (12, 6)
-2025-01-28 15:57:38,639 - INFO - Adding belt path for 'iron-plate' at grid position (12, 7)
-2025-01-28 15:57:38,639 - INFO - Adding belt path for 'iron-plate' at grid position (12, 8)
-2025-01-28 15:57:38,639 - INFO - Adding belt path for 'iron-plate' at grid position (12, 9)
-2025-01-28 15:57:38,640 - INFO - Adding belt path for 'iron-plate' at grid position (12, 10)
-2025-01-28 15:57:38,640 - INFO - Adding belt path for 'iron-plate' at grid position (12, 11)
-2025-01-28 15:57:38,640 - INFO - Adding belt path for 'iron-plate' at grid position (12, 12)
-2025-01-28 15:57:38,640 - INFO - Adding belt path for 'iron-plate' at grid position (12, 13)
-2025-01-28 15:57:38,642 - DEBUG - Processing output item 'electronic-circuit' with data: {'input': (14, 14), 'output': (0, 14), 'grid': [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0]], 'direction_grid': [[None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, 'left', 'left', 'left', 'left', 'left', 'left', 'left', 'left', 'left', 'left', 'left', 'left', 'left', None]]}
-2025-01-28 15:57:38,642 - INFO - Adding input belt for output item 'electronic-circuit' at position (14, 14)
-2025-01-28 15:57:38,642 - INFO - Adding output belt for output item 'electronic-circuit' at position (0, 14)
-2025-01-28 15:57:38,642 - DEBUG - Processing grid path for output item 'electronic-circuit'
-2025-01-28 15:57:38,642 - INFO - Adding belt path for 'electronic-circuit' at grid position (14, 1)
-2025-01-28 15:57:38,642 - INFO - Adding belt path for 'electronic-circuit' at grid position (14, 2)
-2025-01-28 15:57:38,642 - INFO - Adding belt path for 'electronic-circuit' at grid position (14, 3)
-2025-01-28 15:57:38,642 - INFO - Adding belt path for 'electronic-circuit' at grid position (14, 4)
-2025-01-28 15:57:38,642 - INFO - Adding belt path for 'electronic-circuit' at grid position (14, 5)
-2025-01-28 15:57:38,643 - INFO - Adding belt path for 'electronic-circuit' at grid position (14, 6)
-2025-01-28 15:57:38,643 - INFO - Adding belt path for 'electronic-circuit' at grid position (14, 7)
-2025-01-28 15:57:38,643 - INFO - Adding belt path for 'electronic-circuit' at grid position (14, 8)
-2025-01-28 15:57:38,643 - INFO - Adding belt path for 'electronic-circuit' at grid position (14, 9)
-2025-01-28 15:57:38,644 - INFO - Adding belt path for 'electronic-circuit' at grid position (14, 10)
-2025-01-28 15:57:38,644 - INFO - Adding belt path for 'electronic-circuit' at grid position (14, 11)
-2025-01-28 15:57:38,644 - INFO - Adding belt path for 'electronic-circuit' at grid position (14, 12)
-2025-01-28 15:57:38,644 - INFO - Adding belt path for 'electronic-circuit' at grid position (14, 13)
-2025-01-28 15:57:38,645 - INFO - Finished adding manual I/O constraints. Calling solver.
-2025-01-28 15:57:38,647 - INFO - Solver check result: sat
-2025-01-28 15:57:38,653 - INFO - Starting to create assemblers based on production data.
-2025-01-28 15:57:38,653 - DEBUG - Processing item 'electronic-circuit' with production data: {'amount_per_minute': 93.75, 'assemblers': 2, 'input_inserters': [{'id': 'copper-cable', 'inserters': 3, 'amount': 3}, {'id': 'iron-plate', 'inserters': 2, 'amount': 1}], 'belts': 1, 'capacity': 0}
-2025-01-28 15:57:38,653 - INFO - Creating assembler for item 'electronic-circuit', instance 0
-2025-01-28 15:57:38,653 - INFO - Creating input inserter for copper-cable at copper-cable_in_0_0_0
-2025-01-28 15:57:38,653 - INFO - Creating input inserter for copper-cable at copper-cable_in_0_0_1
-2025-01-28 15:57:38,653 - INFO - Creating input inserter for copper-cable at copper-cable_in_0_0_2
-2025-01-28 15:57:38,653 - INFO - Creating input inserter for iron-plate at iron-plate_in_0_0_0
-2025-01-28 15:57:38,653 - INFO - Creating input inserter for iron-plate at iron-plate_in_0_0_1
-2025-01-28 15:57:38,653 - DEBUG - Created assembler with ID: electronic-circuit_0_0 and input inserters: ['copper-cable_in_0_0_0', 'copper-cable_in_0_0_1', 'copper-cable_in_0_0_2', 'iron-plate_in_0_0_0', 'iron-plate_in_0_0_1']
-2025-01-28 15:57:38,654 - DEBUG - Created assembler with ID: electronic-circuit_0_0 with item = electronic-circuit
-2025-01-28 15:57:38,654 - DEBUG - Created assembler with ID: electronic-circuit_0_0 with capacity = 0
-2025-01-28 15:57:38,654 - INFO - Creating assembler for item 'electronic-circuit', instance 1
-2025-01-28 15:57:38,654 - INFO - Creating input inserter for copper-cable at copper-cable_in_0_1_0
-2025-01-28 15:57:38,654 - INFO - Creating input inserter for copper-cable at copper-cable_in_0_1_1
-2025-01-28 15:57:38,654 - INFO - Creating input inserter for copper-cable at copper-cable_in_0_1_2
-2025-01-28 15:57:38,654 - INFO - Creating input inserter for iron-plate at iron-plate_in_0_1_0
-2025-01-28 15:57:38,654 - INFO - Creating input inserter for iron-plate at iron-plate_in_0_1_1
-2025-01-28 15:57:38,654 - DEBUG - Created assembler with ID: electronic-circuit_0_1 and input inserters: ['copper-cable_in_0_1_0', 'copper-cable_in_0_1_1', 'copper-cable_in_0_1_2', 'iron-plate_in_0_1_0', 'iron-plate_in_0_1_1']
-2025-01-28 15:57:38,654 - DEBUG - Created assembler with ID: electronic-circuit_0_1 with item = electronic-circuit
-2025-01-28 15:57:38,654 - DEBUG - Created assembler with ID: electronic-circuit_0_1 with capacity = 0
-2025-01-28 15:57:38,654 - DEBUG - Processing item 'copper-cable' with production data: {'amount_per_minute': 281.25, 'assemblers': 3, 'input_inserters': [{'id': 'copper-plate', 'inserters': 3, 'amount': 1}], 'belts': 1, 'capacity': 2}
-2025-01-28 15:57:38,654 - INFO - Creating assembler for item 'copper-cable', instance 0
-2025-01-28 15:57:38,655 - INFO - Creating input inserter for copper-plate at copper-plate_in_1_0_0
-2025-01-28 15:57:38,655 - INFO - Creating input inserter for copper-plate at copper-plate_in_1_0_1
-2025-01-28 15:57:38,655 - INFO - Creating input inserter for copper-plate at copper-plate_in_1_0_2
-2025-01-28 15:57:38,655 - DEBUG - Created assembler with ID: copper-cable_1_0 and input inserters: ['copper-plate_in_1_0_0', 'copper-plate_in_1_0_1', 'copper-plate_in_1_0_2']
-2025-01-28 15:57:38,655 - DEBUG - Created assembler with ID: copper-cable_1_0 with item = copper-cable
-2025-01-28 15:57:38,655 - DEBUG - Created assembler with ID: copper-cable_1_0 with capacity = 2
-2025-01-28 15:57:38,655 - INFO - Creating assembler for item 'copper-cable', instance 1
-2025-01-28 15:57:38,655 - INFO - Creating input inserter for copper-plate at copper-plate_in_1_1_0
-2025-01-28 15:57:38,655 - INFO - Creating input inserter for copper-plate at copper-plate_in_1_1_1
-2025-01-28 15:57:38,655 - INFO - Creating input inserter for copper-plate at copper-plate_in_1_1_2
-2025-01-28 15:57:38,655 - DEBUG - Created assembler with ID: copper-cable_1_1 and input inserters: ['copper-plate_in_1_1_0', 'copper-plate_in_1_1_1', 'copper-plate_in_1_1_2']
-2025-01-28 15:57:38,656 - DEBUG - Created assembler with ID: copper-cable_1_1 with item = copper-cable
-2025-01-28 15:57:38,656 - DEBUG - Created assembler with ID: copper-cable_1_1 with capacity = 2
-2025-01-28 15:57:38,656 - INFO - Creating assembler for item 'copper-cable', instance 2
-2025-01-28 15:57:38,656 - INFO - Creating input inserter for copper-plate at copper-plate_in_1_2_0
-2025-01-28 15:57:38,656 - INFO - Creating input inserter for copper-plate at copper-plate_in_1_2_1
-2025-01-28 15:57:38,656 - INFO - Creating input inserter for copper-plate at copper-plate_in_1_2_2
-2025-01-28 15:57:38,656 - DEBUG - Created assembler with ID: copper-cable_1_2 and input inserters: ['copper-plate_in_1_2_0', 'copper-plate_in_1_2_1', 'copper-plate_in_1_2_2']
-2025-01-28 15:57:38,656 - DEBUG - Created assembler with ID: copper-cable_1_2 with item = copper-cable
-2025-01-28 15:57:38,656 - DEBUG - Created assembler with ID: copper-cable_1_2 with capacity = 2
-2025-01-28 15:57:38,656 - DEBUG - Processing item 'copper-plate' with production data: {'amount_per_minute': 140.625, 'capacity': 0}
-2025-01-28 15:57:38,656 - DEBUG - Processing item 'iron-plate' with production data: {'amount_per_minute': 93.75, 'capacity': 0}
-2025-01-28 15:57:38,656 - INFO - Created 5 assemblers in total.
-2025-01-28 15:57:38,656 - INFO - Adding assembler overlap constraints to avoid global belts.
-2025-01-28 15:57:38,750 - INFO - Adding inserter overlap constraints to avoid global belts.
-2025-01-28 15:57:39,125 - INFO - Adding belt overlap constraints to avoid conflicts with global belts (different items only).
-2025-01-28 15:57:39,401 - INFO - Adding boundary constraints for assemblers.
-2025-01-28 15:57:39,401 - DEBUG - Setting boundary constraints for assembler ID electronic-circuit_0_0
-2025-01-28 15:57:39,401 - DEBUG - Setting boundary constraints for assembler ID electronic-circuit_0_1
-2025-01-28 15:57:39,401 - DEBUG - Setting boundary constraints for assembler ID copper-cable_1_0
-2025-01-28 15:57:39,402 - DEBUG - Setting boundary constraints for assembler ID copper-cable_1_1
-2025-01-28 15:57:39,402 - DEBUG - Setting boundary constraints for assembler ID copper-cable_1_2
-2025-01-28 15:57:39,402 - INFO - Adding boundary constraints for belts and inserters.
-2025-01-28 15:57:39,402 - DEBUG - Setting boundary constraints for inserter ID copper-cable_in_0_0_0 and belt ID copper-cable_end_0_0_0
-2025-01-28 15:57:39,403 - DEBUG - Setting boundary constraints for inserter ID copper-cable_in_0_0_1 and belt ID copper-cable_end_0_0_1
-2025-01-28 15:57:39,404 - DEBUG - Setting boundary constraints for inserter ID copper-cable_in_0_0_2 and belt ID copper-cable_end_0_0_2
-2025-01-28 15:57:39,404 - DEBUG - Setting boundary constraints for inserter ID iron-plate_in_0_0_0 and belt ID iron-plate_end_0_0_0
-2025-01-28 15:57:39,405 - DEBUG - Setting boundary constraints for inserter ID iron-plate_in_0_0_1 and belt ID iron-plate_end_0_0_1
-2025-01-28 15:57:39,406 - DEBUG - Setting boundary constraints for inserter ID copper-cable_in_0_1_0 and belt ID copper-cable_end_0_1_0
-2025-01-28 15:57:39,406 - DEBUG - Setting boundary constraints for inserter ID copper-cable_in_0_1_1 and belt ID copper-cable_end_0_1_1
-2025-01-28 15:57:39,407 - DEBUG - Setting boundary constraints for inserter ID copper-cable_in_0_1_2 and belt ID copper-cable_end_0_1_2
-2025-01-28 15:57:39,407 - DEBUG - Setting boundary constraints for inserter ID iron-plate_in_0_1_0 and belt ID iron-plate_end_0_1_0
-2025-01-28 15:57:39,408 - DEBUG - Setting boundary constraints for inserter ID iron-plate_in_0_1_1 and belt ID iron-plate_end_0_1_1
-2025-01-28 15:57:39,409 - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_1_0_0 and belt ID copper-plate_end_1_0_0
-2025-01-28 15:57:39,410 - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_1_0_1 and belt ID copper-plate_end_1_0_1
-2025-01-28 15:57:39,410 - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_1_0_2 and belt ID copper-plate_end_1_0_2
-2025-01-28 15:57:39,411 - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_1_1_0 and belt ID copper-plate_end_1_1_0
-2025-01-28 15:57:39,411 - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_1_1_1 and belt ID copper-plate_end_1_1_1
-2025-01-28 15:57:39,412 - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_1_1_2 and belt ID copper-plate_end_1_1_2
-2025-01-28 15:57:39,413 - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_1_2_0 and belt ID copper-plate_end_1_2_0
-2025-01-28 15:57:39,413 - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_1_2_1 and belt ID copper-plate_end_1_2_1
-2025-01-28 15:57:39,414 - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_1_2_2 and belt ID copper-plate_end_1_2_2
-2025-01-28 15:57:39,415 - INFO - Adding assembler overlap constraints to prevent assembler-assembler overlap.
-2025-01-28 15:57:39,423 - INFO - Adding assembler-inserter overlap constraints.
-2025-01-28 15:57:39,456 - INFO - Adding assembler-belt overlap constraints (excluding same-item belts).
-2025-01-28 15:57:39,480 - INFO - Adding inserter overlap constraints to prevent inserter-inserter overlap.
-2025-01-28 15:57:39,594 - INFO - Adding inserter-belt overlap constraints to prevent inserters from overlapping with belts.
-2025-01-28 15:57:39,688 - INFO - Adding belt overlap constraints to prevent belt-belt overlap (except same-item belts).
-2025-01-28 15:57:39,756 - INFO - Ensuring inserter copper-cable_in_0_0_0 is adjacent to assembler electronic-circuit_0_0
-2025-01-28 15:57:39,758 - INFO - Adding belt position constraint for inserter copper-cable_in_0_0_0 with belt copper-cable_end_0_0_0
-2025-01-28 15:57:39,760 - INFO - Ensuring inserter copper-cable_in_0_0_1 is adjacent to assembler electronic-circuit_0_0
-2025-01-28 15:57:39,762 - INFO - Adding belt position constraint for inserter copper-cable_in_0_0_1 with belt copper-cable_end_0_0_1
-2025-01-28 15:57:39,763 - INFO - Ensuring inserter copper-cable_in_0_0_2 is adjacent to assembler electronic-circuit_0_0
-2025-01-28 15:57:39,765 - INFO - Adding belt position constraint for inserter copper-cable_in_0_0_2 with belt copper-cable_end_0_0_2
-2025-01-28 15:57:39,766 - INFO - Ensuring inserter iron-plate_in_0_0_0 is adjacent to assembler electronic-circuit_0_0
-2025-01-28 15:57:39,768 - INFO - Adding belt position constraint for inserter iron-plate_in_0_0_0 with belt iron-plate_end_0_0_0
-2025-01-28 15:57:39,769 - INFO - Ensuring inserter iron-plate_in_0_0_1 is adjacent to assembler electronic-circuit_0_0
-2025-01-28 15:57:39,771 - INFO - Adding belt position constraint for inserter iron-plate_in_0_0_1 with belt iron-plate_end_0_0_1
-2025-01-28 15:57:39,774 - INFO - Ensuring inserter copper-cable_in_0_1_0 is adjacent to assembler electronic-circuit_0_1
-2025-01-28 15:57:39,776 - INFO - Adding belt position constraint for inserter copper-cable_in_0_1_0 with belt copper-cable_end_0_1_0
-2025-01-28 15:57:39,778 - INFO - Ensuring inserter copper-cable_in_0_1_1 is adjacent to assembler electronic-circuit_0_1
-2025-01-28 15:57:39,780 - INFO - Adding belt position constraint for inserter copper-cable_in_0_1_1 with belt copper-cable_end_0_1_1
-2025-01-28 15:57:39,782 - INFO - Ensuring inserter copper-cable_in_0_1_2 is adjacent to assembler electronic-circuit_0_1
-2025-01-28 15:57:39,784 - INFO - Adding belt position constraint for inserter copper-cable_in_0_1_2 with belt copper-cable_end_0_1_2
-2025-01-28 15:57:39,786 - INFO - Ensuring inserter iron-plate_in_0_1_0 is adjacent to assembler electronic-circuit_0_1
-2025-01-28 15:57:39,788 - INFO - Adding belt position constraint for inserter iron-plate_in_0_1_0 with belt iron-plate_end_0_1_0
-2025-01-28 15:57:39,790 - INFO - Ensuring inserter iron-plate_in_0_1_1 is adjacent to assembler electronic-circuit_0_1
-2025-01-28 15:57:39,792 - INFO - Adding belt position constraint for inserter iron-plate_in_0_1_1 with belt iron-plate_end_0_1_1
-2025-01-28 15:57:39,795 - INFO - Ensuring inserter copper-plate_in_1_0_0 is adjacent to assembler copper-cable_1_0
-2025-01-28 15:57:39,798 - INFO - Adding belt position constraint for inserter copper-plate_in_1_0_0 with belt copper-plate_end_1_0_0
-2025-01-28 15:57:39,799 - INFO - Ensuring inserter copper-plate_in_1_0_1 is adjacent to assembler copper-cable_1_0
-2025-01-28 15:57:39,802 - INFO - Adding belt position constraint for inserter copper-plate_in_1_0_1 with belt copper-plate_end_1_0_1
-2025-01-28 15:57:39,803 - INFO - Ensuring inserter copper-plate_in_1_0_2 is adjacent to assembler copper-cable_1_0
-2025-01-28 15:57:39,806 - INFO - Adding belt position constraint for inserter copper-plate_in_1_0_2 with belt copper-plate_end_1_0_2
-2025-01-28 15:57:39,808 - INFO - Ensuring inserter copper-plate_in_1_1_0 is adjacent to assembler copper-cable_1_1
-2025-01-28 15:57:39,811 - INFO - Adding belt position constraint for inserter copper-plate_in_1_1_0 with belt copper-plate_end_1_1_0
-2025-01-28 15:57:39,813 - INFO - Ensuring inserter copper-plate_in_1_1_1 is adjacent to assembler copper-cable_1_1
-2025-01-28 15:57:39,815 - INFO - Adding belt position constraint for inserter copper-plate_in_1_1_1 with belt copper-plate_end_1_1_1
-2025-01-28 15:57:39,817 - INFO - Ensuring inserter copper-plate_in_1_1_2 is adjacent to assembler copper-cable_1_1
-2025-01-28 15:57:39,819 - INFO - Adding belt position constraint for inserter copper-plate_in_1_1_2 with belt copper-plate_end_1_1_2
-2025-01-28 15:57:39,822 - INFO - Ensuring inserter copper-plate_in_1_2_0 is adjacent to assembler copper-cable_1_2
-2025-01-28 15:57:39,824 - INFO - Adding belt position constraint for inserter copper-plate_in_1_2_0 with belt copper-plate_end_1_2_0
-2025-01-28 15:57:39,826 - INFO - Ensuring inserter copper-plate_in_1_2_1 is adjacent to assembler copper-cable_1_2
-2025-01-28 15:57:39,828 - INFO - Adding belt position constraint for inserter copper-plate_in_1_2_1 with belt copper-plate_end_1_2_1
-2025-01-28 15:57:39,829 - INFO - Ensuring inserter copper-plate_in_1_2_2 is adjacent to assembler copper-cable_1_2
-2025-01-28 15:57:39,831 - INFO - Adding belt position constraint for inserter copper-plate_in_1_2_2 with belt copper-plate_end_1_2_2
-2025-01-28 15:57:40,187 - INFO - Adding output space constraints for assembler electronic-circuit_0_0
-2025-01-28 15:57:40,547 - INFO - Adding output space constraints for assembler electronic-circuit_0_1
-2025-01-28 15:57:40,956 - INFO - Adding output space constraints for assembler copper-cable_1_0
-2025-01-28 15:57:41,364 - INFO - Adding output space constraints for assembler copper-cable_1_1
-2025-01-28 15:57:41,727 - INFO - Adding output space constraints for assembler copper-cable_1_2
-2025-01-28 15:57:41,728 - DEBUG - Adding constraints to merge input inserters with belts of matching items.
-2025-01-28 15:57:41,728 - DEBUG - Matching item found: Belt (ID: copper-plate_(14, 0)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0_0, Item: copper-plate)
-2025-01-28 15:57:41,728 - DEBUG - Matching item found: Belt (ID: copper-plate_(14, 0)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0_1, Item: copper-plate)
-2025-01-28 15:57:41,728 - DEBUG - Matching item found: Belt (ID: copper-plate_(14, 0)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0_2, Item: copper-plate)
-2025-01-28 15:57:41,728 - DEBUG - Matching item found: Belt (ID: copper-plate_(14, 0)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_1_0, Item: copper-plate)
-2025-01-28 15:57:41,728 - DEBUG - Matching item found: Belt (ID: copper-plate_(14, 0)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_1_1, Item: copper-plate)
-2025-01-28 15:57:41,729 - DEBUG - Matching item found: Belt (ID: copper-plate_(14, 0)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_1_2, Item: copper-plate)
-2025-01-28 15:57:41,729 - DEBUG - Matching item found: Belt (ID: copper-plate_(14, 0)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_2_0, Item: copper-plate)
-2025-01-28 15:57:41,729 - DEBUG - Matching item found: Belt (ID: copper-plate_(14, 0)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_2_1, Item: copper-plate)
-2025-01-28 15:57:41,729 - DEBUG - Matching item found: Belt (ID: copper-plate_(14, 0)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_2_2, Item: copper-plate)
-2025-01-28 15:57:41,729 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 0)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0_0, Item: copper-plate)
-2025-01-28 15:57:41,730 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 0)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0_1, Item: copper-plate)
-2025-01-28 15:57:41,730 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 0)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0_2, Item: copper-plate)
-2025-01-28 15:57:41,730 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 0)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_1_0, Item: copper-plate)
-2025-01-28 15:57:41,730 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 0)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_1_1, Item: copper-plate)
-2025-01-28 15:57:41,730 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 0)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_1_2, Item: copper-plate)
-2025-01-28 15:57:41,730 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 0)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_2_0, Item: copper-plate)
-2025-01-28 15:57:41,731 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 0)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_2_1, Item: copper-plate)
-2025-01-28 15:57:41,731 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 0)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_2_2, Item: copper-plate)
-2025-01-28 15:57:41,731 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 1)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0_0, Item: copper-plate)
-2025-01-28 15:57:41,731 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 1)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0_1, Item: copper-plate)
-2025-01-28 15:57:41,731 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 1)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0_2, Item: copper-plate)
-2025-01-28 15:57:41,732 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 1)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_1_0, Item: copper-plate)
-2025-01-28 15:57:41,732 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 1)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_1_1, Item: copper-plate)
-2025-01-28 15:57:41,732 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 1)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_1_2, Item: copper-plate)
-2025-01-28 15:57:41,732 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 1)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_2_0, Item: copper-plate)
-2025-01-28 15:57:41,732 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 1)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_2_1, Item: copper-plate)
-2025-01-28 15:57:41,733 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 1)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_2_2, Item: copper-plate)
-2025-01-28 15:57:41,733 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 2)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0_0, Item: copper-plate)
-2025-01-28 15:57:41,733 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 2)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0_1, Item: copper-plate)
-2025-01-28 15:57:41,733 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 2)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0_2, Item: copper-plate)
-2025-01-28 15:57:41,733 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 2)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_1_0, Item: copper-plate)
-2025-01-28 15:57:41,733 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 2)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_1_1, Item: copper-plate)
-2025-01-28 15:57:41,734 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 2)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_1_2, Item: copper-plate)
-2025-01-28 15:57:41,734 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 2)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_2_0, Item: copper-plate)
-2025-01-28 15:57:41,734 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 2)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_2_1, Item: copper-plate)
-2025-01-28 15:57:41,734 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 2)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_2_2, Item: copper-plate)
-2025-01-28 15:57:41,734 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 3)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0_0, Item: copper-plate)
-2025-01-28 15:57:41,735 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 3)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0_1, Item: copper-plate)
-2025-01-28 15:57:41,735 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 3)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0_2, Item: copper-plate)
-2025-01-28 15:57:41,735 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 3)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_1_0, Item: copper-plate)
-2025-01-28 15:57:41,735 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 3)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_1_1, Item: copper-plate)
-2025-01-28 15:57:41,735 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 3)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_1_2, Item: copper-plate)
-2025-01-28 15:57:41,736 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 3)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_2_0, Item: copper-plate)
-2025-01-28 15:57:41,736 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 3)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_2_1, Item: copper-plate)
-2025-01-28 15:57:41,736 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 3)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_2_2, Item: copper-plate)
-2025-01-28 15:57:41,736 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 4)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0_0, Item: copper-plate)
-2025-01-28 15:57:41,736 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 4)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0_1, Item: copper-plate)
-2025-01-28 15:57:41,736 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 4)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0_2, Item: copper-plate)
-2025-01-28 15:57:41,737 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 4)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_1_0, Item: copper-plate)
-2025-01-28 15:57:41,737 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 4)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_1_1, Item: copper-plate)
-2025-01-28 15:57:41,737 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 4)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_1_2, Item: copper-plate)
-2025-01-28 15:57:41,737 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 4)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_2_0, Item: copper-plate)
-2025-01-28 15:57:41,737 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 4)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_2_1, Item: copper-plate)
-2025-01-28 15:57:41,738 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 4)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_2_2, Item: copper-plate)
-2025-01-28 15:57:41,738 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 5)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0_0, Item: copper-plate)
-2025-01-28 15:57:41,738 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 5)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0_1, Item: copper-plate)
-2025-01-28 15:57:41,738 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 5)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0_2, Item: copper-plate)
-2025-01-28 15:57:41,738 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 5)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_1_0, Item: copper-plate)
-2025-01-28 15:57:41,738 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 5)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_1_1, Item: copper-plate)
-2025-01-28 15:57:41,739 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 5)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_1_2, Item: copper-plate)
-2025-01-28 15:57:41,739 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 5)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_2_0, Item: copper-plate)
-2025-01-28 15:57:41,739 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 5)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_2_1, Item: copper-plate)
-2025-01-28 15:57:41,739 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 5)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_2_2, Item: copper-plate)
-2025-01-28 15:57:41,739 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 6)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0_0, Item: copper-plate)
-2025-01-28 15:57:41,740 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 6)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0_1, Item: copper-plate)
-2025-01-28 15:57:41,740 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 6)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0_2, Item: copper-plate)
-2025-01-28 15:57:41,740 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 6)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_1_0, Item: copper-plate)
-2025-01-28 15:57:41,740 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 6)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_1_1, Item: copper-plate)
-2025-01-28 15:57:41,740 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 6)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_1_2, Item: copper-plate)
-2025-01-28 15:57:41,740 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 6)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_2_0, Item: copper-plate)
-2025-01-28 15:57:41,741 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 6)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_2_1, Item: copper-plate)
-2025-01-28 15:57:41,741 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 6)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_2_2, Item: copper-plate)
-2025-01-28 15:57:41,741 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 7)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0_0, Item: copper-plate)
-2025-01-28 15:57:41,741 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 7)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0_1, Item: copper-plate)
-2025-01-28 15:57:41,741 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 7)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0_2, Item: copper-plate)
-2025-01-28 15:57:41,741 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 7)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_1_0, Item: copper-plate)
-2025-01-28 15:57:41,742 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 7)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_1_1, Item: copper-plate)
-2025-01-28 15:57:41,742 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 7)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_1_2, Item: copper-plate)
-2025-01-28 15:57:41,742 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 7)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_2_0, Item: copper-plate)
-2025-01-28 15:57:41,742 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 7)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_2_1, Item: copper-plate)
-2025-01-28 15:57:41,742 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 7)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_2_2, Item: copper-plate)
-2025-01-28 15:57:41,743 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 8)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0_0, Item: copper-plate)
-2025-01-28 15:57:41,743 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 8)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0_1, Item: copper-plate)
-2025-01-28 15:57:41,743 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 8)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0_2, Item: copper-plate)
-2025-01-28 15:57:41,743 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 8)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_1_0, Item: copper-plate)
-2025-01-28 15:57:41,743 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 8)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_1_1, Item: copper-plate)
-2025-01-28 15:57:41,744 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 8)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_1_2, Item: copper-plate)
-2025-01-28 15:57:41,744 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 8)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_2_0, Item: copper-plate)
-2025-01-28 15:57:41,744 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 8)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_2_1, Item: copper-plate)
-2025-01-28 15:57:41,744 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 8)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_2_2, Item: copper-plate)
-2025-01-28 15:57:41,744 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 9)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0_0, Item: copper-plate)
-2025-01-28 15:57:41,744 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 9)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0_1, Item: copper-plate)
-2025-01-28 15:57:41,745 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 9)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0_2, Item: copper-plate)
-2025-01-28 15:57:41,745 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 9)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_1_0, Item: copper-plate)
-2025-01-28 15:57:41,745 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 9)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_1_1, Item: copper-plate)
-2025-01-28 15:57:41,745 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 9)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_1_2, Item: copper-plate)
-2025-01-28 15:57:41,745 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 9)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_2_0, Item: copper-plate)
-2025-01-28 15:57:41,746 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 9)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_2_1, Item: copper-plate)
-2025-01-28 15:57:41,746 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 9)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_2_2, Item: copper-plate)
-2025-01-28 15:57:41,746 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 10)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0_0, Item: copper-plate)
-2025-01-28 15:57:41,746 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 10)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0_1, Item: copper-plate)
-2025-01-28 15:57:41,746 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 10)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0_2, Item: copper-plate)
-2025-01-28 15:57:41,746 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 10)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_1_0, Item: copper-plate)
-2025-01-28 15:57:41,747 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 10)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_1_1, Item: copper-plate)
-2025-01-28 15:57:41,747 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 10)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_1_2, Item: copper-plate)
-2025-01-28 15:57:41,747 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 10)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_2_0, Item: copper-plate)
-2025-01-28 15:57:41,747 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 10)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_2_1, Item: copper-plate)
-2025-01-28 15:57:41,747 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 10)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_2_2, Item: copper-plate)
-2025-01-28 15:57:41,748 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 11)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0_0, Item: copper-plate)
-2025-01-28 15:57:41,748 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 11)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0_1, Item: copper-plate)
-2025-01-28 15:57:41,748 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 11)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0_2, Item: copper-plate)
-2025-01-28 15:57:41,748 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 11)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_1_0, Item: copper-plate)
-2025-01-28 15:57:41,748 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 11)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_1_1, Item: copper-plate)
-2025-01-28 15:57:41,748 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 11)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_1_2, Item: copper-plate)
-2025-01-28 15:57:41,749 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 11)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_2_0, Item: copper-plate)
-2025-01-28 15:57:41,749 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 11)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_2_1, Item: copper-plate)
-2025-01-28 15:57:41,749 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 11)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_2_2, Item: copper-plate)
-2025-01-28 15:57:41,749 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 12)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0_0, Item: copper-plate)
-2025-01-28 15:57:41,749 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 12)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0_1, Item: copper-plate)
-2025-01-28 15:57:41,749 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 12)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0_2, Item: copper-plate)
-2025-01-28 15:57:41,750 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 12)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_1_0, Item: copper-plate)
-2025-01-28 15:57:41,750 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 12)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_1_1, Item: copper-plate)
-2025-01-28 15:57:41,750 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 12)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_1_2, Item: copper-plate)
-2025-01-28 15:57:41,750 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 12)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_2_0, Item: copper-plate)
-2025-01-28 15:57:41,750 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 12)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_2_1, Item: copper-plate)
-2025-01-28 15:57:41,751 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 12)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_2_2, Item: copper-plate)
-2025-01-28 15:57:41,751 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 13)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0_0, Item: copper-plate)
-2025-01-28 15:57:41,751 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 13)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0_1, Item: copper-plate)
-2025-01-28 15:57:41,751 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 13)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_0_2, Item: copper-plate)
-2025-01-28 15:57:41,751 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 13)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_1_0, Item: copper-plate)
-2025-01-28 15:57:41,752 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 13)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_1_1, Item: copper-plate)
-2025-01-28 15:57:41,752 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 13)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_1_2, Item: copper-plate)
-2025-01-28 15:57:41,752 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 13)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_2_0, Item: copper-plate)
-2025-01-28 15:57:41,752 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 13)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_2_1, Item: copper-plate)
-2025-01-28 15:57:41,752 - DEBUG - Matching item found: Belt (ID: copper-plate_(0, 13)_input, Item: copper-plate) and Inserter Belt (ID: copper-plate_end_1_2_2, Item: copper-plate)
-2025-01-28 15:57:41,752 - DEBUG - Matching item found: Belt (ID: iron-plate_(14, 12)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_0_0, Item: iron-plate)
-2025-01-28 15:57:41,753 - DEBUG - Matching item found: Belt (ID: iron-plate_(14, 12)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_0_1, Item: iron-plate)
-2025-01-28 15:57:41,753 - DEBUG - Matching item found: Belt (ID: iron-plate_(14, 12)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_1_0, Item: iron-plate)
-2025-01-28 15:57:41,753 - DEBUG - Matching item found: Belt (ID: iron-plate_(14, 12)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_1_1, Item: iron-plate)
-2025-01-28 15:57:41,753 - DEBUG - Matching item found: Belt (ID: iron-plate_(0, 12)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_0_0, Item: iron-plate)
-2025-01-28 15:57:41,753 - DEBUG - Matching item found: Belt (ID: iron-plate_(0, 12)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_0_1, Item: iron-plate)
-2025-01-28 15:57:41,754 - DEBUG - Matching item found: Belt (ID: iron-plate_(0, 12)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_1_0, Item: iron-plate)
-2025-01-28 15:57:41,754 - DEBUG - Matching item found: Belt (ID: iron-plate_(0, 12)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_1_1, Item: iron-plate)
-2025-01-28 15:57:41,754 - DEBUG - Matching item found: Belt (ID: iron-plate_(12, 1)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_0_0, Item: iron-plate)
-2025-01-28 15:57:41,754 - DEBUG - Matching item found: Belt (ID: iron-plate_(12, 1)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_0_1, Item: iron-plate)
-2025-01-28 15:57:41,754 - DEBUG - Matching item found: Belt (ID: iron-plate_(12, 1)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_1_0, Item: iron-plate)
-2025-01-28 15:57:41,754 - DEBUG - Matching item found: Belt (ID: iron-plate_(12, 1)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_1_1, Item: iron-plate)
-2025-01-28 15:57:41,755 - DEBUG - Matching item found: Belt (ID: iron-plate_(12, 2)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_0_0, Item: iron-plate)
-2025-01-28 15:57:41,755 - DEBUG - Matching item found: Belt (ID: iron-plate_(12, 2)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_0_1, Item: iron-plate)
-2025-01-28 15:57:41,755 - DEBUG - Matching item found: Belt (ID: iron-plate_(12, 2)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_1_0, Item: iron-plate)
-2025-01-28 15:57:41,755 - DEBUG - Matching item found: Belt (ID: iron-plate_(12, 2)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_1_1, Item: iron-plate)
-2025-01-28 15:57:41,755 - DEBUG - Matching item found: Belt (ID: iron-plate_(12, 3)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_0_0, Item: iron-plate)
-2025-01-28 15:57:41,756 - DEBUG - Matching item found: Belt (ID: iron-plate_(12, 3)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_0_1, Item: iron-plate)
-2025-01-28 15:57:41,756 - DEBUG - Matching item found: Belt (ID: iron-plate_(12, 3)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_1_0, Item: iron-plate)
-2025-01-28 15:57:41,756 - DEBUG - Matching item found: Belt (ID: iron-plate_(12, 3)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_1_1, Item: iron-plate)
-2025-01-28 15:57:41,756 - DEBUG - Matching item found: Belt (ID: iron-plate_(12, 4)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_0_0, Item: iron-plate)
-2025-01-28 15:57:41,756 - DEBUG - Matching item found: Belt (ID: iron-plate_(12, 4)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_0_1, Item: iron-plate)
-2025-01-28 15:57:41,756 - DEBUG - Matching item found: Belt (ID: iron-plate_(12, 4)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_1_0, Item: iron-plate)
-2025-01-28 15:57:41,757 - DEBUG - Matching item found: Belt (ID: iron-plate_(12, 4)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_1_1, Item: iron-plate)
-2025-01-28 15:57:41,757 - DEBUG - Matching item found: Belt (ID: iron-plate_(12, 5)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_0_0, Item: iron-plate)
-2025-01-28 15:57:41,757 - DEBUG - Matching item found: Belt (ID: iron-plate_(12, 5)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_0_1, Item: iron-plate)
-2025-01-28 15:57:41,757 - DEBUG - Matching item found: Belt (ID: iron-plate_(12, 5)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_1_0, Item: iron-plate)
-2025-01-28 15:57:41,757 - DEBUG - Matching item found: Belt (ID: iron-plate_(12, 5)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_1_1, Item: iron-plate)
-2025-01-28 15:57:41,758 - DEBUG - Matching item found: Belt (ID: iron-plate_(12, 6)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_0_0, Item: iron-plate)
-2025-01-28 15:57:41,758 - DEBUG - Matching item found: Belt (ID: iron-plate_(12, 6)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_0_1, Item: iron-plate)
-2025-01-28 15:57:41,758 - DEBUG - Matching item found: Belt (ID: iron-plate_(12, 6)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_1_0, Item: iron-plate)
-2025-01-28 15:57:41,758 - DEBUG - Matching item found: Belt (ID: iron-plate_(12, 6)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_1_1, Item: iron-plate)
-2025-01-28 15:57:41,758 - DEBUG - Matching item found: Belt (ID: iron-plate_(12, 7)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_0_0, Item: iron-plate)
-2025-01-28 15:57:41,758 - DEBUG - Matching item found: Belt (ID: iron-plate_(12, 7)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_0_1, Item: iron-plate)
-2025-01-28 15:57:41,759 - DEBUG - Matching item found: Belt (ID: iron-plate_(12, 7)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_1_0, Item: iron-plate)
-2025-01-28 15:57:41,759 - DEBUG - Matching item found: Belt (ID: iron-plate_(12, 7)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_1_1, Item: iron-plate)
-2025-01-28 15:57:41,759 - DEBUG - Matching item found: Belt (ID: iron-plate_(12, 8)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_0_0, Item: iron-plate)
-2025-01-28 15:57:41,759 - DEBUG - Matching item found: Belt (ID: iron-plate_(12, 8)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_0_1, Item: iron-plate)
-2025-01-28 15:57:41,759 - DEBUG - Matching item found: Belt (ID: iron-plate_(12, 8)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_1_0, Item: iron-plate)
-2025-01-28 15:57:41,760 - DEBUG - Matching item found: Belt (ID: iron-plate_(12, 8)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_1_1, Item: iron-plate)
-2025-01-28 15:57:41,760 - DEBUG - Matching item found: Belt (ID: iron-plate_(12, 9)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_0_0, Item: iron-plate)
-2025-01-28 15:57:41,760 - DEBUG - Matching item found: Belt (ID: iron-plate_(12, 9)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_0_1, Item: iron-plate)
-2025-01-28 15:57:41,760 - DEBUG - Matching item found: Belt (ID: iron-plate_(12, 9)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_1_0, Item: iron-plate)
-2025-01-28 15:57:41,760 - DEBUG - Matching item found: Belt (ID: iron-plate_(12, 9)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_1_1, Item: iron-plate)
-2025-01-28 15:57:41,760 - DEBUG - Matching item found: Belt (ID: iron-plate_(12, 10)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_0_0, Item: iron-plate)
-2025-01-28 15:57:41,761 - DEBUG - Matching item found: Belt (ID: iron-plate_(12, 10)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_0_1, Item: iron-plate)
-2025-01-28 15:57:41,761 - DEBUG - Matching item found: Belt (ID: iron-plate_(12, 10)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_1_0, Item: iron-plate)
-2025-01-28 15:57:41,761 - DEBUG - Matching item found: Belt (ID: iron-plate_(12, 10)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_1_1, Item: iron-plate)
-2025-01-28 15:57:41,761 - DEBUG - Matching item found: Belt (ID: iron-plate_(12, 11)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_0_0, Item: iron-plate)
-2025-01-28 15:57:41,761 - DEBUG - Matching item found: Belt (ID: iron-plate_(12, 11)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_0_1, Item: iron-plate)
-2025-01-28 15:57:41,762 - DEBUG - Matching item found: Belt (ID: iron-plate_(12, 11)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_1_0, Item: iron-plate)
-2025-01-28 15:57:41,762 - DEBUG - Matching item found: Belt (ID: iron-plate_(12, 11)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_1_1, Item: iron-plate)
-2025-01-28 15:57:41,762 - DEBUG - Matching item found: Belt (ID: iron-plate_(12, 12)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_0_0, Item: iron-plate)
-2025-01-28 15:57:41,762 - DEBUG - Matching item found: Belt (ID: iron-plate_(12, 12)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_0_1, Item: iron-plate)
-2025-01-28 15:57:41,762 - DEBUG - Matching item found: Belt (ID: iron-plate_(12, 12)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_1_0, Item: iron-plate)
-2025-01-28 15:57:41,762 - DEBUG - Matching item found: Belt (ID: iron-plate_(12, 12)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_1_1, Item: iron-plate)
-2025-01-28 15:57:41,763 - DEBUG - Matching item found: Belt (ID: iron-plate_(12, 13)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_0_0, Item: iron-plate)
-2025-01-28 15:57:41,763 - DEBUG - Matching item found: Belt (ID: iron-plate_(12, 13)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_0_1, Item: iron-plate)
-2025-01-28 15:57:41,763 - DEBUG - Matching item found: Belt (ID: iron-plate_(12, 13)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_1_0, Item: iron-plate)
-2025-01-28 15:57:41,763 - DEBUG - Matching item found: Belt (ID: iron-plate_(12, 13)_input, Item: iron-plate) and Inserter Belt (ID: iron-plate_end_0_1_1, Item: iron-plate)
-2025-01-28 15:57:41,763 - DEBUG - Adding merge constraints for input inserters to the solver.
-2025-01-28 15:57:41,768 - DEBUG - Adding constraints to merge input inserters with assembler edges for items with matching types.
-2025-01-28 15:57:41,770 - DEBUG - dissallow merge for inserter copper-cable_in_0_0_0 and assembler electronic-circuit_0_1 with capcity: 0.
-2025-01-28 15:57:41,770 - DEBUG - ------------------------
-2025-01-28 15:57:41,770 - DEBUG - Assembler electronic-circuit_0_0 and other assembler copper-cable_1_0 have matching items: copper-cable
-2025-01-28 15:57:41,771 - DEBUG - Adding constraints to position belt for inserter copper-cable_in_0_0_0 and assembler copper-cable_1_0 with capcity: 2.
-2025-01-28 15:57:41,771 - DEBUG - Adding 'Or' between valid positions for inserter copper-cable_in_0_0_0 and reducing capacity of copper-cable_1_0 to 2
-2025-01-28 15:57:41,772 - DEBUG - copper-cable_in_0_0_0 merged is set to False
-2025-01-28 15:57:41,774 - DEBUG - dissallow merge for inserter copper-cable_in_0_0_0 and assembler copper-cable_1_1 with capcity: 2.
-2025-01-28 15:57:41,776 - DEBUG - dissallow merge for inserter copper-cable_in_0_0_0 and assembler copper-cable_1_2 with capcity: 2.
-2025-01-28 15:57:41,777 - DEBUG - dissallow merge for inserter copper-cable_in_0_0_1 and assembler electronic-circuit_0_1 with capcity: 0.
-2025-01-28 15:57:41,777 - DEBUG - ------------------------
-2025-01-28 15:57:41,778 - DEBUG - Assembler electronic-circuit_0_0 and other assembler copper-cable_1_0 have matching items: copper-cable
-2025-01-28 15:57:41,779 - DEBUG - Adding constraints to position belt for inserter copper-cable_in_0_0_1 and assembler copper-cable_1_0 with capcity: 1.
-2025-01-28 15:57:41,779 - DEBUG - Adding 'Or' between valid positions for inserter copper-cable_in_0_0_1 and reducing capacity of copper-cable_1_0 to 1
-2025-01-28 15:57:41,779 - DEBUG - copper-cable_in_0_0_1 merged is set to False
-2025-01-28 15:57:41,782 - DEBUG - dissallow merge for inserter copper-cable_in_0_0_1 and assembler copper-cable_1_1 with capcity: 2.
-2025-01-28 15:57:41,784 - DEBUG - dissallow merge for inserter copper-cable_in_0_0_1 and assembler copper-cable_1_2 with capcity: 2.
-2025-01-28 15:57:41,786 - DEBUG - dissallow merge for inserter copper-cable_in_0_0_2 and assembler electronic-circuit_0_1 with capcity: 0.
-2025-01-28 15:57:41,789 - DEBUG - dissallow merge for inserter copper-cable_in_0_0_2 and assembler copper-cable_1_0 with capcity: 0.
-2025-01-28 15:57:41,789 - DEBUG - ------------------------
-2025-01-28 15:57:41,789 - DEBUG - Assembler electronic-circuit_0_0 and other assembler copper-cable_1_1 have matching items: copper-cable
-2025-01-28 15:57:41,791 - DEBUG - Adding constraints to position belt for inserter copper-cable_in_0_0_2 and assembler copper-cable_1_1 with capcity: 2.
-2025-01-28 15:57:41,791 - DEBUG - Adding 'Or' between valid positions for inserter copper-cable_in_0_0_2 and reducing capacity of copper-cable_1_1 to 2
-2025-01-28 15:57:41,791 - DEBUG - copper-cable_in_0_0_2 merged is set to False
-2025-01-28 15:57:41,793 - DEBUG - dissallow merge for inserter copper-cable_in_0_0_2 and assembler copper-cable_1_2 with capcity: 2.
-2025-01-28 15:57:41,796 - DEBUG - dissallow merge for inserter iron-plate_in_0_0_0 and assembler electronic-circuit_0_1 with capcity: 0.
-2025-01-28 15:57:41,798 - DEBUG - dissallow merge for inserter iron-plate_in_0_0_0 and assembler copper-cable_1_0 with capcity: 0.
-2025-01-28 15:57:41,800 - DEBUG - dissallow merge for inserter iron-plate_in_0_0_0 and assembler copper-cable_1_1 with capcity: 1.
-2025-01-28 15:57:41,803 - DEBUG - dissallow merge for inserter iron-plate_in_0_0_0 and assembler copper-cable_1_2 with capcity: 2.
-2025-01-28 15:57:41,805 - DEBUG - dissallow merge for inserter iron-plate_in_0_0_1 and assembler electronic-circuit_0_1 with capcity: 0.
-2025-01-28 15:57:41,807 - DEBUG - dissallow merge for inserter iron-plate_in_0_0_1 and assembler copper-cable_1_0 with capcity: 0.
-2025-01-28 15:57:41,810 - DEBUG - dissallow merge for inserter iron-plate_in_0_0_1 and assembler copper-cable_1_1 with capcity: 1.
-2025-01-28 15:57:41,812 - DEBUG - dissallow merge for inserter iron-plate_in_0_0_1 and assembler copper-cable_1_2 with capcity: 2.
-2025-01-28 15:57:41,814 - DEBUG - dissallow merge for inserter copper-cable_in_0_1_0 and assembler electronic-circuit_0_0 with capcity: 0.
-2025-01-28 15:57:41,817 - DEBUG - dissallow merge for inserter copper-cable_in_0_1_0 and assembler copper-cable_1_0 with capcity: 0.
-2025-01-28 15:57:41,817 - DEBUG - ------------------------
-2025-01-28 15:57:41,817 - DEBUG - Assembler electronic-circuit_0_1 and other assembler copper-cable_1_1 have matching items: copper-cable
-2025-01-28 15:57:41,819 - DEBUG - Adding constraints to position belt for inserter copper-cable_in_0_1_0 and assembler copper-cable_1_1 with capcity: 1.
-2025-01-28 15:57:41,819 - DEBUG - Adding 'Or' between valid positions for inserter copper-cable_in_0_1_0 and reducing capacity of copper-cable_1_1 to 1
-2025-01-28 15:57:41,819 - DEBUG - copper-cable_in_0_1_0 merged is set to False
-2025-01-28 15:57:41,822 - DEBUG - dissallow merge for inserter copper-cable_in_0_1_0 and assembler copper-cable_1_2 with capcity: 2.
-2025-01-28 15:57:41,824 - DEBUG - dissallow merge for inserter copper-cable_in_0_1_1 and assembler electronic-circuit_0_0 with capcity: 0.
-2025-01-28 15:57:41,826 - DEBUG - dissallow merge for inserter copper-cable_in_0_1_1 and assembler copper-cable_1_0 with capcity: 0.
-2025-01-28 15:57:41,829 - DEBUG - dissallow merge for inserter copper-cable_in_0_1_1 and assembler copper-cable_1_1 with capcity: 0.
-2025-01-28 15:57:41,829 - DEBUG - ------------------------
-2025-01-28 15:57:41,829 - DEBUG - Assembler electronic-circuit_0_1 and other assembler copper-cable_1_2 have matching items: copper-cable
-2025-01-28 15:57:41,831 - DEBUG - Adding constraints to position belt for inserter copper-cable_in_0_1_1 and assembler copper-cable_1_2 with capcity: 2.
-2025-01-28 15:57:41,831 - DEBUG - Adding 'Or' between valid positions for inserter copper-cable_in_0_1_1 and reducing capacity of copper-cable_1_2 to 2
-2025-01-28 15:57:41,831 - DEBUG - copper-cable_in_0_1_1 merged is set to False
-2025-01-28 15:57:41,833 - DEBUG - dissallow merge for inserter copper-cable_in_0_1_2 and assembler electronic-circuit_0_0 with capcity: 0.
-2025-01-28 15:57:41,835 - DEBUG - dissallow merge for inserter copper-cable_in_0_1_2 and assembler copper-cable_1_0 with capcity: 0.
-2025-01-28 15:57:41,837 - DEBUG - dissallow merge for inserter copper-cable_in_0_1_2 and assembler copper-cable_1_1 with capcity: 0.
-2025-01-28 15:57:41,837 - DEBUG - ------------------------
-2025-01-28 15:57:41,837 - DEBUG - Assembler electronic-circuit_0_1 and other assembler copper-cable_1_2 have matching items: copper-cable
-2025-01-28 15:57:41,840 - DEBUG - Adding constraints to position belt for inserter copper-cable_in_0_1_2 and assembler copper-cable_1_2 with capcity: 1.
-2025-01-28 15:57:41,840 - DEBUG - Adding 'Or' between valid positions for inserter copper-cable_in_0_1_2 and reducing capacity of copper-cable_1_2 to 1
-2025-01-28 15:57:41,840 - DEBUG - copper-cable_in_0_1_2 merged is set to False
-2025-01-28 15:57:41,841 - DEBUG - dissallow merge for inserter iron-plate_in_0_1_0 and assembler electronic-circuit_0_0 with capcity: 0.
-2025-01-28 15:57:41,843 - DEBUG - dissallow merge for inserter iron-plate_in_0_1_0 and assembler copper-cable_1_0 with capcity: 0.
-2025-01-28 15:57:41,845 - DEBUG - dissallow merge for inserter iron-plate_in_0_1_0 and assembler copper-cable_1_1 with capcity: 0.
-2025-01-28 15:57:41,847 - DEBUG - dissallow merge for inserter iron-plate_in_0_1_0 and assembler copper-cable_1_2 with capcity: 0.
-2025-01-28 15:57:41,849 - DEBUG - dissallow merge for inserter iron-plate_in_0_1_1 and assembler electronic-circuit_0_0 with capcity: 0.
-2025-01-28 15:57:41,851 - DEBUG - dissallow merge for inserter iron-plate_in_0_1_1 and assembler copper-cable_1_0 with capcity: 0.
-2025-01-28 15:57:41,852 - DEBUG - dissallow merge for inserter iron-plate_in_0_1_1 and assembler copper-cable_1_1 with capcity: 0.
-2025-01-28 15:57:41,854 - DEBUG - dissallow merge for inserter iron-plate_in_0_1_1 and assembler copper-cable_1_2 with capcity: 0.
-2025-01-28 15:57:41,856 - DEBUG - dissallow merge for inserter copper-plate_in_1_0_0 and assembler electronic-circuit_0_0 with capcity: 0.
-2025-01-28 15:57:41,858 - DEBUG - dissallow merge for inserter copper-plate_in_1_0_0 and assembler electronic-circuit_0_1 with capcity: 0.
-2025-01-28 15:57:41,860 - DEBUG - dissallow merge for inserter copper-plate_in_1_0_0 and assembler copper-cable_1_1 with capcity: 0.
-2025-01-28 15:57:41,862 - DEBUG - dissallow merge for inserter copper-plate_in_1_0_0 and assembler copper-cable_1_2 with capcity: 0.
-2025-01-28 15:57:41,865 - DEBUG - dissallow merge for inserter copper-plate_in_1_0_1 and assembler electronic-circuit_0_0 with capcity: 0.
-2025-01-28 15:57:41,868 - DEBUG - dissallow merge for inserter copper-plate_in_1_0_1 and assembler electronic-circuit_0_1 with capcity: 0.
-2025-01-28 15:57:41,871 - DEBUG - dissallow merge for inserter copper-plate_in_1_0_1 and assembler copper-cable_1_1 with capcity: 0.
-2025-01-28 15:57:41,873 - DEBUG - dissallow merge for inserter copper-plate_in_1_0_1 and assembler copper-cable_1_2 with capcity: 0.
-2025-01-28 15:57:41,875 - DEBUG - dissallow merge for inserter copper-plate_in_1_0_2 and assembler electronic-circuit_0_0 with capcity: 0.
-2025-01-28 15:57:41,878 - DEBUG - dissallow merge for inserter copper-plate_in_1_0_2 and assembler electronic-circuit_0_1 with capcity: 0.
-2025-01-28 15:57:41,880 - DEBUG - dissallow merge for inserter copper-plate_in_1_0_2 and assembler copper-cable_1_1 with capcity: 0.
-2025-01-28 15:57:41,882 - DEBUG - dissallow merge for inserter copper-plate_in_1_0_2 and assembler copper-cable_1_2 with capcity: 0.
-2025-01-28 15:57:41,883 - DEBUG - dissallow merge for inserter copper-plate_in_1_1_0 and assembler electronic-circuit_0_0 with capcity: 0.
-2025-01-28 15:57:41,885 - DEBUG - dissallow merge for inserter copper-plate_in_1_1_0 and assembler electronic-circuit_0_1 with capcity: 0.
-2025-01-28 15:57:41,887 - DEBUG - dissallow merge for inserter copper-plate_in_1_1_0 and assembler copper-cable_1_0 with capcity: 0.
-2025-01-28 15:57:41,889 - DEBUG - dissallow merge for inserter copper-plate_in_1_1_0 and assembler copper-cable_1_2 with capcity: 0.
-2025-01-28 15:57:41,891 - DEBUG - dissallow merge for inserter copper-plate_in_1_1_1 and assembler electronic-circuit_0_0 with capcity: 0.
-2025-01-28 15:57:41,893 - DEBUG - dissallow merge for inserter copper-plate_in_1_1_1 and assembler electronic-circuit_0_1 with capcity: 0.
-2025-01-28 15:57:41,896 - DEBUG - dissallow merge for inserter copper-plate_in_1_1_1 and assembler copper-cable_1_0 with capcity: 0.
-2025-01-28 15:57:41,898 - DEBUG - dissallow merge for inserter copper-plate_in_1_1_1 and assembler copper-cable_1_2 with capcity: 0.
-2025-01-28 15:57:41,900 - DEBUG - dissallow merge for inserter copper-plate_in_1_1_2 and assembler electronic-circuit_0_0 with capcity: 0.
-2025-01-28 15:57:41,902 - DEBUG - dissallow merge for inserter copper-plate_in_1_1_2 and assembler electronic-circuit_0_1 with capcity: 0.
-2025-01-28 15:57:41,905 - DEBUG - dissallow merge for inserter copper-plate_in_1_1_2 and assembler copper-cable_1_0 with capcity: 0.
-2025-01-28 15:57:41,907 - DEBUG - dissallow merge for inserter copper-plate_in_1_1_2 and assembler copper-cable_1_2 with capcity: 0.
-2025-01-28 15:57:41,909 - DEBUG - dissallow merge for inserter copper-plate_in_1_2_0 and assembler electronic-circuit_0_0 with capcity: 0.
-2025-01-28 15:57:41,911 - DEBUG - dissallow merge for inserter copper-plate_in_1_2_0 and assembler electronic-circuit_0_1 with capcity: 0.
-2025-01-28 15:57:41,913 - DEBUG - dissallow merge for inserter copper-plate_in_1_2_0 and assembler copper-cable_1_0 with capcity: 0.
-2025-01-28 15:57:41,915 - DEBUG - dissallow merge for inserter copper-plate_in_1_2_0 and assembler copper-cable_1_1 with capcity: 0.
-2025-01-28 15:57:41,917 - DEBUG - dissallow merge for inserter copper-plate_in_1_2_1 and assembler electronic-circuit_0_0 with capcity: 0.
-2025-01-28 15:57:41,919 - DEBUG - dissallow merge for inserter copper-plate_in_1_2_1 and assembler electronic-circuit_0_1 with capcity: 0.
-2025-01-28 15:57:41,921 - DEBUG - dissallow merge for inserter copper-plate_in_1_2_1 and assembler copper-cable_1_0 with capcity: 0.
-2025-01-28 15:57:41,923 - DEBUG - dissallow merge for inserter copper-plate_in_1_2_1 and assembler copper-cable_1_1 with capcity: 0.
-2025-01-28 15:57:41,925 - DEBUG - dissallow merge for inserter copper-plate_in_1_2_2 and assembler electronic-circuit_0_0 with capcity: 0.
-2025-01-28 15:57:41,927 - DEBUG - dissallow merge for inserter copper-plate_in_1_2_2 and assembler electronic-circuit_0_1 with capcity: 0.
-2025-01-28 15:57:41,928 - DEBUG - dissallow merge for inserter copper-plate_in_1_2_2 and assembler copper-cable_1_0 with capcity: 0.
-2025-01-28 15:57:41,930 - DEBUG - dissallow merge for inserter copper-plate_in_1_2_2 and assembler copper-cable_1_1 with capcity: 0.
-2025-01-28 15:57:41,930 - INFO - Adding constraints to maximize overlaps of inserter belts with global belts and assemblers.
-2025-01-28 15:57:41,980 - INFO - Adding optimization goal to maximize belt overlaps.
-2025-01-28 15:57:56,299 - INFO - Solver check result: sat
-2025-01-28 15:58:31,731 - INFO - build output path infomation for electronic-circuit_0
-2025-01-28 15:58:31,732 - INFO - build output path infomation for electronic-circuit_1
-2025-01-28 15:58:31,733 - INFO - Attempting path for electronic-circuit_0 from (10, 9) to (14, 9)
-2025-01-28 15:58:31,733 - INFO - Starting A* from (10, 9) to (14, 9)
-2025-01-28 15:58:31,733 - INFO - Processing node (10, 9)
-2025-01-28 15:58:31,733 - INFO - Moving to (10, 10) with direction right
-2025-01-28 15:58:31,733 - INFO - Moving to (11, 9) with direction down
-2025-01-28 15:58:31,733 - INFO - Moving to (10, 8) with direction left
-2025-01-28 15:58:31,734 - INFO - Moving to (9, 9) with direction up
-2025-01-28 15:58:31,734 - INFO - Processing node (11, 9)
-2025-01-28 15:58:31,734 - INFO - Moving to (11, 10) with direction right
-2025-01-28 15:58:31,734 - DEBUG - Checking jump to (13, 9) from (11, 9) with length 2
-2025-01-28 15:58:31,734 - INFO - Jumping to (13, 9) from (11, 9) with direction down
-2025-01-28 15:58:31,734 - DEBUG - Checking jump to (14, 9) from (11, 9) with length 3
-2025-01-28 15:58:31,734 - INFO - Jumping to (14, 9) from (11, 9) with direction down
-2025-01-28 15:58:31,734 - INFO - Moving to (11, 8) with direction left
-2025-01-28 15:58:31,734 - INFO - Processing node (14, 9)
-2025-01-28 15:58:31,734 - INFO - Goal reached at (14, 9)
-2025-01-28 15:58:31,734 - INFO - Reconstructed path: [(10, 9), (11, 9), (14, 9)]
-2025-01-28 15:58:31,734 - INFO - Attempting path for electronic-circuit_1 from (10, 6) to (10, 9)
-2025-01-28 15:58:31,734 - INFO - Starting A* from (10, 6) to (10, 9)
-2025-01-28 15:58:31,734 - INFO - Processing node (10, 6)
-2025-01-28 15:58:31,734 - DEBUG - Checking jump to (10, 8) from (10, 6) with length 2
-2025-01-28 15:58:31,734 - INFO - Jumping to (10, 8) from (10, 6) with direction right
-2025-01-28 15:58:31,734 - DEBUG - Checking jump to (10, 9) from (10, 6) with length 3
-2025-01-28 15:58:31,735 - INFO - Jumping to (10, 9) from (10, 6) with direction right
-2025-01-28 15:58:31,735 - INFO - Moving to (11, 6) with direction down
-2025-01-28 15:58:31,735 - INFO - Moving to (10, 5) with direction left
-2025-01-28 15:58:31,735 - INFO - Moving to (9, 6) with direction up
-2025-01-28 15:58:31,735 - INFO - Processing node (10, 9)
-2025-01-28 15:58:31,735 - INFO - Goal reached at (10, 9)
-2025-01-28 15:58:31,735 - INFO - Reconstructed path: [(10, 6), (10, 9)]
-2025-01-28 15:58:31,735 - INFO - Attempting path for iron-plate_0 from (8, 13) to (12, 13)
-2025-01-28 15:58:31,735 - INFO - Starting A* from (8, 13) to (12, 13)
-2025-01-28 15:58:31,735 - INFO - Processing node (8, 13)
-2025-01-28 15:58:31,735 - INFO - Moving to (8, 14) with direction right
-2025-01-28 15:58:31,735 - INFO - Moving to (9, 13) with direction down
-2025-01-28 15:58:31,735 - INFO - Moving to (7, 13) with direction up
-2025-01-28 15:58:31,735 - INFO - Processing node (9, 13)
-2025-01-28 15:58:31,735 - INFO - Moving to (9, 14) with direction right
-2025-01-28 15:58:31,735 - INFO - Moving to (10, 13) with direction down
-2025-01-28 15:58:31,735 - INFO - Moving to (9, 12) with direction left
-2025-01-28 15:58:31,735 - INFO - Processing node (10, 13)
-2025-01-28 15:58:31,735 - INFO - Moving to (10, 14) with direction right
-2025-01-28 15:58:31,736 - INFO - Moving to (11, 13) with direction down
-2025-01-28 15:58:31,736 - INFO - Moving to (10, 12) with direction left
-2025-01-28 15:58:31,736 - INFO - Processing node (11, 13)
-2025-01-28 15:58:31,736 - INFO - Moving to (11, 14) with direction right
-2025-01-28 15:58:31,736 - INFO - Moving to (12, 13) with direction down
-2025-01-28 15:58:31,736 - INFO - Moving to (11, 12) with direction left
-2025-01-28 15:58:31,736 - INFO - Processing node (12, 13)
-2025-01-28 15:58:31,736 - INFO - Goal reached at (12, 13)
-2025-01-28 15:58:31,736 - INFO - Reconstructed path: [(8, 13), (9, 13), (10, 13), (11, 13), (12, 13)]
-2025-01-28 15:58:31,736 - INFO - Attempting path for iron-plate_1 from (6, 13) to (8, 13)
-2025-01-28 15:58:31,736 - INFO - Starting A* from (6, 13) to (8, 13)
-2025-01-28 15:58:31,737 - INFO - Processing node (6, 13)
-2025-01-28 15:58:31,737 - INFO - Moving to (6, 14) with direction right
-2025-01-28 15:58:31,737 - INFO - Moving to (7, 13) with direction down
-2025-01-28 15:58:31,737 - INFO - Moving to (5, 13) with direction up
-2025-01-28 15:58:31,737 - INFO - Processing node (7, 13)
-2025-01-28 15:58:31,737 - INFO - Moving to (7, 14) with direction right
-2025-01-28 15:58:31,737 - INFO - Moving to (8, 13) with direction down
-2025-01-28 15:58:31,737 - INFO - Moving to (7, 12) with direction left
-2025-01-28 15:58:31,737 - INFO - Processing node (8, 13)
-2025-01-28 15:58:31,737 - INFO - Goal reached at (8, 13)
-2025-01-28 15:58:31,738 - INFO - Reconstructed path: [(6, 13), (7, 13), (8, 13)]
-2025-01-28 15:58:31,738 - INFO - Attempting path for iron-plate_2 from (7, 3) to (12, 3)
-2025-01-28 15:58:31,738 - INFO - Starting A* from (7, 3) to (12, 3)
-2025-01-28 15:58:31,738 - INFO - Processing node (7, 3)
-2025-01-28 15:58:31,738 - INFO - Moving to (8, 3) with direction down
-2025-01-28 15:58:31,738 - INFO - Moving to (7, 2) with direction left
-2025-01-28 15:58:31,738 - INFO - Moving to (6, 3) with direction up
-2025-01-28 15:58:31,738 - INFO - Processing node (8, 3)
-2025-01-28 15:58:31,738 - INFO - Moving to (8, 4) with direction right
-2025-01-28 15:58:31,738 - INFO - Moving to (9, 3) with direction down
-2025-01-28 15:58:31,738 - INFO - Moving to (8, 2) with direction left
-2025-01-28 15:58:31,738 - INFO - Processing node (9, 3)
-2025-01-28 15:58:31,738 - INFO - Moving to (9, 4) with direction right
-2025-01-28 15:58:31,738 - INFO - Moving to (10, 3) with direction down
-2025-01-28 15:58:31,738 - INFO - Moving to (9, 2) with direction left
-2025-01-28 15:58:31,738 - INFO - Processing node (10, 3)
-2025-01-28 15:58:31,739 - INFO - Moving to (10, 4) with direction right
-2025-01-28 15:58:31,739 - INFO - Moving to (11, 3) with direction down
-2025-01-28 15:58:31,739 - INFO - Moving to (10, 2) with direction left
-2025-01-28 15:58:31,739 - INFO - Processing node (11, 3)
-2025-01-28 15:58:31,739 - INFO - Moving to (11, 4) with direction right
-2025-01-28 15:58:31,739 - INFO - Moving to (12, 3) with direction down
-2025-01-28 15:58:31,739 - INFO - Moving to (11, 2) with direction left
-2025-01-28 15:58:31,739 - INFO - Processing node (12, 3)
-2025-01-28 15:58:31,739 - INFO - Goal reached at (12, 3)
-2025-01-28 15:58:31,739 - INFO - Reconstructed path: [(7, 3), (8, 3), (9, 3), (10, 3), (11, 3), (12, 3)]
-2025-01-28 15:58:31,739 - INFO - Attempting path for iron-plate_3 from (10, 7) to (12, 7)
-2025-01-28 15:58:31,739 - INFO - Starting A* from (10, 7) to (12, 7)
-2025-01-28 15:58:31,740 - INFO - Processing node (10, 7)
-2025-01-28 15:58:31,740 - INFO - Moving to (10, 8) with direction right
-2025-01-28 15:58:31,740 - INFO - Moving to (11, 7) with direction down
-2025-01-28 15:58:31,740 - DEBUG - Checking jump to (10, 5) from (10, 7) with length 2
-2025-01-28 15:58:31,740 - INFO - Jumping to (10, 5) from (10, 7) with direction left
-2025-01-28 15:58:31,740 - DEBUG - Checking jump to (10, 4) from (10, 7) with length 3
-2025-01-28 15:58:31,740 - INFO - Jumping to (10, 4) from (10, 7) with direction left
-2025-01-28 15:58:31,740 - INFO - Processing node (11, 7)
-2025-01-28 15:58:31,740 - INFO - Moving to (11, 8) with direction right
-2025-01-28 15:58:31,740 - INFO - Moving to (12, 7) with direction down
-2025-01-28 15:58:31,740 - INFO - Moving to (11, 6) with direction left
-2025-01-28 15:58:31,740 - INFO - Processing node (12, 7)
-2025-01-28 15:58:31,740 - INFO - Goal reached at (12, 7)
-2025-01-28 15:58:31,740 - INFO - Reconstructed path: [(10, 7), (11, 7), (12, 7)]
-2025-01-28 15:58:31,741 - INFO - FactoryZ3Solver
-2025-01-28 15:58:31,741 - DEBUG - block data: {'electronic-circuit': {'tree': <FactorioProductionTree.FactorioProductionTree object at 0x0000026AC16E37A0>, 'production_data': {'electronic-circuit': {'amount_per_minute': 93.75, 'assemblers': 2, 'input_inserters': [{'id': 'copper-cable', 'inserters': 3, 'amount': 3}, {'id': 'iron-plate', 'inserters': 2, 'amount': 1}], 'belts': 1, 'capacity': 0}, 'copper-cable': {'amount_per_minute': 281.25, 'assemblers': 3, 'input_inserters': [{'id': 'copper-plate', 'inserters': 3, 'amount': 1}], 'belts': 1, 'capacity': 2}, 'copper-plate': {'amount_per_minute': 140.625, 'capacity': 0}, 'iron-plate': {'amount_per_minute': 93.75, 'capacity': 0}}, 'num_factories': 5, 'paths': {'electronic-circuit_0': {'path': [(10, 9), (11, 9), (14, 9)], 'direction_grid': [[None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, (0, -1), (0, -1), None, None, None], [None, None, None, None, None, None, None, None, None, (-1, 0), None, (1, 0), None, (1, 0), (1, 0)], [None, None, None, None, None, None, None, None, None, None, (0, 1), (0, 1), None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None]], 'jump_markers': [((11, 9), (14, 9))]}, 'electronic-circuit_1': {'path': [(10, 6), (10, 9)], 'direction_grid': [[None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, (0, -1), None, None, None, None], [None, None, None, None, None, None, None, None, None, (-1, 0), None, (1, 0), None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, (0, 1), None, None, None, None], [None, None, None, None, None, None, None, None, None, None, (0, 1), None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None]], 'jump_markers': [((10, 6), (10, 9))]}, 'iron-plate_0': {'path': [(8, 13), (9, 13), (10, 13), (11, 13), (12, 13)], 'direction_grid': [[None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, (0, -1), (0, -1), (0, -1), None, None, None], [None, None, None, None, None, None, None, (-1, 0), None, (1, 0), (1, 0), (1, 0), (1, 0), None, None], [None, None, None, None, None, None, None, None, (0, 1), (0, 1), (0, 1), (0, 1), None, None, None]], 'jump_markers': []}, 'iron-plate_1': {'path': [(6, 13), (7, 13), (8, 13)], 'direction_grid': [[None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, (0, -1), None, None, None, None, None, None, None], [None, None, None, None, None, (-1, 0), None, (1, 0), (1, 0), None, None, None, None, None, None], [None, None, None, None, None, None, (0, 1), (0, 1), None, None, None, None, None, None, None]], 'jump_markers': []}, 'iron-plate_2': {'path': [(7, 3), (8, 3), (9, 3), (10, 3), (11, 3), (12, 3)], 'direction_grid': [[None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, (0, -1), (0, -1), (0, -1), (0, -1), (0, -1), None, None, None], [None, None, None, None, None, None, (-1, 0), None, (1, 0), (1, 0), (1, 0), (1, 0), (1, 0), None, None], [None, None, None, None, None, None, None, None, (0, 1), (0, 1), (0, 1), (0, 1), None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None]], 'jump_markers': []}, 'iron-plate_3': {'path': [(10, 7), (11, 7), (12, 7)], 'direction_grid': [[None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, (0, -1), None, None, None, None], [None, None, None, None, None, None, None, None, None, None, (0, -1), None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, (0, -1), None, None, None], [None, None, None, None, None, None, None, None, None, None, None, (1, 0), (1, 0), None, None], [None, None, None, None, None, None, None, None, None, None, (0, 1), (0, 1), None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None]], 'jump_markers': []}}, 'placed_inserter_information': [['electronic-circuit', 9, 9], ['electronic-circuit', 9, 6]]}}
-2025-01-28 15:58:31,741 - DEBUG - Solver and data structures initialized
-2025-01-28 15:58:31,741 - INFO - Building constraints
-2025-01-28 15:58:31,741 - INFO - Building blocks
-2025-01-28 15:58:31,741 - DEBUG - Processing block electronic-circuit
-2025-01-28 15:58:31,741 - DEBUG - Block electronic-circuit dimensions: width=15, height=15, num_factories=5
-2025-01-28 15:58:31,742 - DEBUG - Created Block with ID Block_electronic-circuit_0_0
-2025-01-28 15:58:31,742 - DEBUG - Added input gate electronic-circuit_input_copper-plate_0_0 for item copper-plate
-2025-01-28 15:58:31,742 - DEBUG - Added output gate electronic-circuit_output_copper-plate_0_0 for item copper-plate
-2025-01-28 15:58:31,742 - DEBUG - Added input gate electronic-circuit_input_iron-plate_0_0 for item iron-plate
-2025-01-28 15:58:31,742 - DEBUG - Added output gate electronic-circuit_output_iron-plate_0_0 for item iron-plate
-2025-01-28 15:58:31,742 - DEBUG - Added input gate electronic-circuit_input_electronic-circuit_0_0 for item electronic-circuit
-2025-01-28 15:58:31,742 - DEBUG - Added output gate electronic-circuit_output_electronic-circuit_0_0 for item electronic-circuit
-2025-01-28 15:58:31,742 - DEBUG - Block Block_electronic-circuit_0_0 added to blocks list
-2025-01-28 15:58:31,742 - DEBUG - Created Block with ID Block_electronic-circuit_0_1
-2025-01-28 15:58:31,742 - DEBUG - Added input gate electronic-circuit_input_copper-plate_0_1 for item copper-plate
-2025-01-28 15:58:31,742 - DEBUG - Added output gate electronic-circuit_output_copper-plate_0_1 for item copper-plate
-2025-01-28 15:58:31,742 - DEBUG - Added input gate electronic-circuit_input_iron-plate_0_1 for item iron-plate
-2025-01-28 15:58:31,742 - DEBUG - Added output gate electronic-circuit_output_iron-plate_0_1 for item iron-plate
-2025-01-28 15:58:31,743 - DEBUG - Added input gate electronic-circuit_input_electronic-circuit_0_1 for item electronic-circuit
-2025-01-28 15:58:31,743 - DEBUG - Added output gate electronic-circuit_output_electronic-circuit_0_1 for item electronic-circuit
-2025-01-28 15:58:31,743 - DEBUG - Block Block_electronic-circuit_0_1 added to blocks list
-2025-01-28 15:58:31,743 - DEBUG - Created Block with ID Block_electronic-circuit_0_2
-2025-01-28 15:58:31,743 - DEBUG - Added input gate electronic-circuit_input_copper-plate_0_2 for item copper-plate
-2025-01-28 15:58:31,743 - DEBUG - Added output gate electronic-circuit_output_copper-plate_0_2 for item copper-plate
-2025-01-28 15:58:31,743 - DEBUG - Added input gate electronic-circuit_input_iron-plate_0_2 for item iron-plate
-2025-01-28 15:58:31,743 - DEBUG - Added output gate electronic-circuit_output_iron-plate_0_2 for item iron-plate
-2025-01-28 15:58:31,743 - DEBUG - Added input gate electronic-circuit_input_electronic-circuit_0_2 for item electronic-circuit
-2025-01-28 15:58:31,743 - DEBUG - Added output gate electronic-circuit_output_electronic-circuit_0_2 for item electronic-circuit
-2025-01-28 15:58:31,743 - DEBUG - Block Block_electronic-circuit_0_2 added to blocks list
-2025-01-28 15:58:31,743 - DEBUG - Created Block with ID Block_electronic-circuit_0_3
-2025-01-28 15:58:31,743 - DEBUG - Added input gate electronic-circuit_input_copper-plate_0_3 for item copper-plate
-2025-01-28 15:58:31,743 - DEBUG - Added output gate electronic-circuit_output_copper-plate_0_3 for item copper-plate
-2025-01-28 15:58:31,743 - DEBUG - Added input gate electronic-circuit_input_iron-plate_0_3 for item iron-plate
-2025-01-28 15:58:31,744 - DEBUG - Added output gate electronic-circuit_output_iron-plate_0_3 for item iron-plate
-2025-01-28 15:58:31,744 - DEBUG - Added input gate electronic-circuit_input_electronic-circuit_0_3 for item electronic-circuit
-2025-01-28 15:58:31,744 - DEBUG - Added output gate electronic-circuit_output_electronic-circuit_0_3 for item electronic-circuit
-2025-01-28 15:58:31,744 - DEBUG - Block Block_electronic-circuit_0_3 added to blocks list
-2025-01-28 15:58:31,744 - DEBUG - Created Block with ID Block_electronic-circuit_0_4
-2025-01-28 15:58:31,744 - DEBUG - Added input gate electronic-circuit_input_copper-plate_0_4 for item copper-plate
-2025-01-28 15:58:31,744 - DEBUG - Added output gate electronic-circuit_output_copper-plate_0_4 for item copper-plate
-2025-01-28 15:58:31,744 - DEBUG - Added input gate electronic-circuit_input_iron-plate_0_4 for item iron-plate
-2025-01-28 15:58:31,744 - DEBUG - Added output gate electronic-circuit_output_iron-plate_0_4 for item iron-plate
-2025-01-28 15:58:31,744 - DEBUG - Added input gate electronic-circuit_input_electronic-circuit_0_4 for item electronic-circuit
-2025-01-28 15:58:31,744 - DEBUG - Added output gate electronic-circuit_output_electronic-circuit_0_4 for item electronic-circuit
-2025-01-28 15:58:31,744 - DEBUG - Block Block_electronic-circuit_0_4 added to blocks list
-2025-01-28 15:58:31,744 - INFO - Adding constraints to solver
-2025-01-28 15:58:31,745 - DEBUG - Added boundary constraints for block Block_electronic-circuit_0_0
-2025-01-28 15:58:31,745 - DEBUG - Added boundary constraints for block Block_electronic-circuit_0_1
-2025-01-28 15:58:31,746 - DEBUG - Added boundary constraints for block Block_electronic-circuit_0_2
-2025-01-28 15:58:31,746 - DEBUG - Added boundary constraints for block Block_electronic-circuit_0_3
-2025-01-28 15:58:31,746 - DEBUG - Added boundary constraints for block Block_electronic-circuit_0_4
-2025-01-28 15:58:31,747 - DEBUG - Added non-overlapping constraints between blocks Block_electronic-circuit_0_0 and Block_electronic-circuit_0_1
-2025-01-28 15:58:31,747 - DEBUG - Added non-overlapping constraints between blocks Block_electronic-circuit_0_0 and Block_electronic-circuit_0_2
-2025-01-28 15:58:31,748 - DEBUG - Added non-overlapping constraints between blocks Block_electronic-circuit_0_0 and Block_electronic-circuit_0_3
-2025-01-28 15:58:31,749 - DEBUG - Added non-overlapping constraints between blocks Block_electronic-circuit_0_0 and Block_electronic-circuit_0_4
-2025-01-28 15:58:31,749 - DEBUG - Added non-overlapping constraints between blocks Block_electronic-circuit_0_1 and Block_electronic-circuit_0_2
-2025-01-28 15:58:31,750 - DEBUG - Added non-overlapping constraints between blocks Block_electronic-circuit_0_1 and Block_electronic-circuit_0_3
-2025-01-28 15:58:31,750 - DEBUG - Added non-overlapping constraints between blocks Block_electronic-circuit_0_1 and Block_electronic-circuit_0_4
-2025-01-28 15:58:31,751 - DEBUG - Added non-overlapping constraints between blocks Block_electronic-circuit_0_2 and Block_electronic-circuit_0_3
-2025-01-28 15:58:31,751 - DEBUG - Added non-overlapping constraints between blocks Block_electronic-circuit_0_2 and Block_electronic-circuit_0_4
-2025-01-28 15:58:31,752 - DEBUG - Added non-overlapping constraints between blocks Block_electronic-circuit_0_3 and Block_electronic-circuit_0_4
-2025-01-28 15:58:31,753 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_copper-plate_0_0 and electronic-circuit_output_copper-plate_0_0
-2025-01-28 15:58:31,754 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_copper-plate_0_0 and electronic-circuit_output_copper-plate_0_1
-2025-01-28 15:58:31,754 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_copper-plate_0_0 and electronic-circuit_output_copper-plate_0_2
-2025-01-28 15:58:31,755 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_copper-plate_0_0 and electronic-circuit_output_copper-plate_0_3
-2025-01-28 15:58:31,756 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_copper-plate_0_0 and electronic-circuit_output_copper-plate_0_4
-2025-01-28 15:58:31,757 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_iron-plate_0_0 and electronic-circuit_output_iron-plate_0_0
-2025-01-28 15:58:31,758 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_iron-plate_0_0 and electronic-circuit_output_iron-plate_0_1
-2025-01-28 15:58:31,759 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_iron-plate_0_0 and electronic-circuit_output_iron-plate_0_2
-2025-01-28 15:58:31,760 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_iron-plate_0_0 and electronic-circuit_output_iron-plate_0_3
-2025-01-28 15:58:31,762 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_iron-plate_0_0 and electronic-circuit_output_iron-plate_0_4
-2025-01-28 15:58:31,763 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_electronic-circuit_0_0 and electronic-circuit_output_electronic-circuit_0_0
-2025-01-28 15:58:31,764 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_electronic-circuit_0_0 and electronic-circuit_output_electronic-circuit_0_1
-2025-01-28 15:58:31,765 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_electronic-circuit_0_0 and electronic-circuit_output_electronic-circuit_0_2
-2025-01-28 15:58:31,767 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_electronic-circuit_0_0 and electronic-circuit_output_electronic-circuit_0_3
-2025-01-28 15:58:31,768 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_electronic-circuit_0_0 and electronic-circuit_output_electronic-circuit_0_4
-2025-01-28 15:58:31,769 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_copper-plate_0_1 and electronic-circuit_output_copper-plate_0_0
-2025-01-28 15:58:31,771 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_copper-plate_0_1 and electronic-circuit_output_copper-plate_0_1
-2025-01-28 15:58:31,772 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_copper-plate_0_1 and electronic-circuit_output_copper-plate_0_2
-2025-01-28 15:58:31,774 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_copper-plate_0_1 and electronic-circuit_output_copper-plate_0_3
-2025-01-28 15:58:31,775 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_copper-plate_0_1 and electronic-circuit_output_copper-plate_0_4
-2025-01-28 15:58:31,776 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_iron-plate_0_1 and electronic-circuit_output_iron-plate_0_0
-2025-01-28 15:58:31,778 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_iron-plate_0_1 and electronic-circuit_output_iron-plate_0_1
-2025-01-28 15:58:31,779 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_iron-plate_0_1 and electronic-circuit_output_iron-plate_0_2
-2025-01-28 15:58:31,781 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_iron-plate_0_1 and electronic-circuit_output_iron-plate_0_3
-2025-01-28 15:58:31,783 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_iron-plate_0_1 and electronic-circuit_output_iron-plate_0_4
-2025-01-28 15:58:31,784 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_electronic-circuit_0_1 and electronic-circuit_output_electronic-circuit_0_0
-2025-01-28 15:58:31,786 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_electronic-circuit_0_1 and electronic-circuit_output_electronic-circuit_0_1
-2025-01-28 15:58:31,787 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_electronic-circuit_0_1 and electronic-circuit_output_electronic-circuit_0_2
-2025-01-28 15:58:31,789 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_electronic-circuit_0_1 and electronic-circuit_output_electronic-circuit_0_3
-2025-01-28 15:58:31,790 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_electronic-circuit_0_1 and electronic-circuit_output_electronic-circuit_0_4
-2025-01-28 15:58:31,792 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_copper-plate_0_2 and electronic-circuit_output_copper-plate_0_0
-2025-01-28 15:58:31,794 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_copper-plate_0_2 and electronic-circuit_output_copper-plate_0_1
-2025-01-28 15:58:31,796 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_copper-plate_0_2 and electronic-circuit_output_copper-plate_0_2
-2025-01-28 15:58:31,799 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_copper-plate_0_2 and electronic-circuit_output_copper-plate_0_3
-2025-01-28 15:58:31,801 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_copper-plate_0_2 and electronic-circuit_output_copper-plate_0_4
-2025-01-28 15:58:31,803 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_iron-plate_0_2 and electronic-circuit_output_iron-plate_0_0
-2025-01-28 15:58:31,806 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_iron-plate_0_2 and electronic-circuit_output_iron-plate_0_1
-2025-01-28 15:58:31,808 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_iron-plate_0_2 and electronic-circuit_output_iron-plate_0_2
-2025-01-28 15:58:31,810 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_iron-plate_0_2 and electronic-circuit_output_iron-plate_0_3
-2025-01-28 15:58:31,812 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_iron-plate_0_2 and electronic-circuit_output_iron-plate_0_4
-2025-01-28 15:58:31,814 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_electronic-circuit_0_2 and electronic-circuit_output_electronic-circuit_0_0
-2025-01-28 15:58:31,816 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_electronic-circuit_0_2 and electronic-circuit_output_electronic-circuit_0_1
-2025-01-28 15:58:31,817 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_electronic-circuit_0_2 and electronic-circuit_output_electronic-circuit_0_2
-2025-01-28 15:58:31,819 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_electronic-circuit_0_2 and electronic-circuit_output_electronic-circuit_0_3
-2025-01-28 15:58:31,821 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_electronic-circuit_0_2 and electronic-circuit_output_electronic-circuit_0_4
-2025-01-28 15:58:31,823 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_copper-plate_0_3 and electronic-circuit_output_copper-plate_0_0
-2025-01-28 15:58:31,825 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_copper-plate_0_3 and electronic-circuit_output_copper-plate_0_1
-2025-01-28 15:58:31,828 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_copper-plate_0_3 and electronic-circuit_output_copper-plate_0_2
-2025-01-28 15:58:31,830 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_copper-plate_0_3 and electronic-circuit_output_copper-plate_0_3
-2025-01-28 15:58:31,833 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_copper-plate_0_3 and electronic-circuit_output_copper-plate_0_4
-2025-01-28 15:58:31,836 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_iron-plate_0_3 and electronic-circuit_output_iron-plate_0_0
-2025-01-28 15:58:31,838 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_iron-plate_0_3 and electronic-circuit_output_iron-plate_0_1
-2025-01-28 15:58:31,840 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_iron-plate_0_3 and electronic-circuit_output_iron-plate_0_2
-2025-01-28 15:58:31,843 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_iron-plate_0_3 and electronic-circuit_output_iron-plate_0_3
-2025-01-28 15:58:31,847 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_iron-plate_0_3 and electronic-circuit_output_iron-plate_0_4
-2025-01-28 15:58:31,851 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_electronic-circuit_0_3 and electronic-circuit_output_electronic-circuit_0_0
-2025-01-28 15:58:31,854 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_electronic-circuit_0_3 and electronic-circuit_output_electronic-circuit_0_1
-2025-01-28 15:58:31,858 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_electronic-circuit_0_3 and electronic-circuit_output_electronic-circuit_0_2
-2025-01-28 15:58:31,861 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_electronic-circuit_0_3 and electronic-circuit_output_electronic-circuit_0_3
-2025-01-28 15:58:31,864 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_electronic-circuit_0_3 and electronic-circuit_output_electronic-circuit_0_4
-2025-01-28 15:58:31,867 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_copper-plate_0_4 and electronic-circuit_output_copper-plate_0_0
-2025-01-28 15:58:31,870 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_copper-plate_0_4 and electronic-circuit_output_copper-plate_0_1
-2025-01-28 15:58:31,873 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_copper-plate_0_4 and electronic-circuit_output_copper-plate_0_2
-2025-01-28 15:58:31,877 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_copper-plate_0_4 and electronic-circuit_output_copper-plate_0_3
-2025-01-28 15:58:31,880 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_copper-plate_0_4 and electronic-circuit_output_copper-plate_0_4
-2025-01-28 15:58:31,884 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_iron-plate_0_4 and electronic-circuit_output_iron-plate_0_0
-2025-01-28 15:58:31,888 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_iron-plate_0_4 and electronic-circuit_output_iron-plate_0_1
-2025-01-28 15:58:31,892 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_iron-plate_0_4 and electronic-circuit_output_iron-plate_0_2
-2025-01-28 15:58:31,895 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_iron-plate_0_4 and electronic-circuit_output_iron-plate_0_3
-2025-01-28 15:58:31,898 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_iron-plate_0_4 and electronic-circuit_output_iron-plate_0_4
-2025-01-28 15:58:31,902 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_electronic-circuit_0_4 and electronic-circuit_output_electronic-circuit_0_0
-2025-01-28 15:58:31,906 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_electronic-circuit_0_4 and electronic-circuit_output_electronic-circuit_0_1
-2025-01-28 15:58:31,910 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_electronic-circuit_0_4 and electronic-circuit_output_electronic-circuit_0_2
-2025-01-28 15:58:31,914 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_electronic-circuit_0_4 and electronic-circuit_output_electronic-circuit_0_3
-2025-01-28 15:58:31,918 - DEBUG - Added gate connection constraints between gates electronic-circuit_input_electronic-circuit_0_4 and electronic-circuit_output_electronic-circuit_0_4
-2025-01-28 15:58:31,918 - DEBUG - Minimized map size constraint added
-2025-01-28 15:58:31,921 - DEBUG - Minimized total gate connection distance constraint added
-2025-01-28 16:00:45,308 - INFO - Execution time for solve: 133.5677 seconds.
+2025-02-11 18:10:35,384 - INFO - FactoryZ3Solver
+2025-02-11 18:10:35,385 - DEBUG - block data: {'electronic-circuit': {'tree': <FactorioProductionTree.FactorioProductionTree object at 0x00000294A8F1AF60>, 'production_data': {'electronic-circuit': {'amount_per_minute': 100, 'assemblers': 1, 'input_inserters': [{'id': 'copper-cable', 'inserters': 3, 'amount': 3}, {'id': 'iron-plate', 'inserters': 1, 'amount': 1}], 'belts': 0, 'capacity': 0}, 'copper-cable': {'amount_per_minute': 300.0, 'capacity': 0}, 'iron-plate': {'amount_per_minute': 100.0, 'capacity': 0}}, 'num_factories': 5, 'png': "E:/Programmieren/Bachelor-Thesis/Modules/electronic-circuit_100_['iron-plate', 'copper-cable']_module.png"}, 'copper-cable': {'tree': <FactorioProductionTree.FactorioProductionTree object at 0x00000294AA089400>, 'production_data': {'copper-cable': {'amount_per_minute': 500, 'assemblers': 3, 'input_inserters': [{'id': 'copper-plate', 'inserters': 3, 'amount': 1}], 'belts': 1, 'capacity': 0}, 'copper-plate': {'amount_per_minute': 250.0, 'capacity': 0}}, 'num_factories': 3, 'png': 'E:/Programmieren/Bachelor-Thesis/Modules/copper-cable_500_[]_module.png'}}
+2025-02-11 18:10:35,389 - DEBUG - Solver and data structures initialized
+2025-02-11 18:10:35,389 - INFO - Building constraints
+2025-02-11 18:10:35,389 - INFO - Building blocks
+2025-02-11 18:10:35,389 - DEBUG - Processing block electronic-circuit
+2025-02-11 18:10:35,389 - DEBUG - Block electronic-circuit dimensions: width=15, height=15, num_factories=5
+2025-02-11 18:10:35,389 - DEBUG - Created Block with ID Block_electronic-circuit_0_0
+2025-02-11 18:10:35,389 - DEBUG - Added input gate electronic-circuit_input_iron-plate_0_0 for item iron-plate
+2025-02-11 18:10:35,389 - DEBUG - Added output gate electronic-circuit_output_iron-plate_0_0 for item iron-plate
+2025-02-11 18:10:35,389 - DEBUG - Added input gate electronic-circuit_input_copper-cable_0_0 for item copper-cable
+2025-02-11 18:10:35,389 - DEBUG - Added output gate electronic-circuit_output_copper-cable_0_0 for item copper-cable
+2025-02-11 18:10:35,390 - DEBUG - Added input gate electronic-circuit_input_electronic-circuit_0_0 for item electronic-circuit
+2025-02-11 18:10:35,390 - DEBUG - Added output gate electronic-circuit_output_electronic-circuit_0_0 for item electronic-circuit
+2025-02-11 18:10:35,390 - DEBUG - Block Block_electronic-circuit_0_0 added to blocks list
+2025-02-11 18:10:35,390 - DEBUG - Created Block with ID Block_electronic-circuit_0_1
+2025-02-11 18:10:35,390 - DEBUG - Added input gate electronic-circuit_input_iron-plate_0_1 for item iron-plate
+2025-02-11 18:10:35,390 - DEBUG - Added output gate electronic-circuit_output_iron-plate_0_1 for item iron-plate
+2025-02-11 18:10:35,390 - DEBUG - Added input gate electronic-circuit_input_copper-cable_0_1 for item copper-cable
+2025-02-11 18:10:35,390 - DEBUG - Added output gate electronic-circuit_output_copper-cable_0_1 for item copper-cable
+2025-02-11 18:10:35,390 - DEBUG - Added input gate electronic-circuit_input_electronic-circuit_0_1 for item electronic-circuit
+2025-02-11 18:10:35,390 - DEBUG - Added output gate electronic-circuit_output_electronic-circuit_0_1 for item electronic-circuit
+2025-02-11 18:10:35,390 - DEBUG - Block Block_electronic-circuit_0_1 added to blocks list
+2025-02-11 18:10:35,390 - DEBUG - Created Block with ID Block_electronic-circuit_0_2
+2025-02-11 18:10:35,391 - DEBUG - Added input gate electronic-circuit_input_iron-plate_0_2 for item iron-plate
+2025-02-11 18:10:35,391 - DEBUG - Added output gate electronic-circuit_output_iron-plate_0_2 for item iron-plate
+2025-02-11 18:10:35,391 - DEBUG - Added input gate electronic-circuit_input_copper-cable_0_2 for item copper-cable
+2025-02-11 18:10:35,391 - DEBUG - Added output gate electronic-circuit_output_copper-cable_0_2 for item copper-cable
+2025-02-11 18:10:35,391 - DEBUG - Added input gate electronic-circuit_input_electronic-circuit_0_2 for item electronic-circuit
+2025-02-11 18:10:35,391 - DEBUG - Added output gate electronic-circuit_output_electronic-circuit_0_2 for item electronic-circuit
+2025-02-11 18:10:35,391 - DEBUG - Block Block_electronic-circuit_0_2 added to blocks list
+2025-02-11 18:10:35,391 - DEBUG - Created Block with ID Block_electronic-circuit_0_3
+2025-02-11 18:10:35,391 - DEBUG - Added input gate electronic-circuit_input_iron-plate_0_3 for item iron-plate
+2025-02-11 18:10:35,391 - DEBUG - Added output gate electronic-circuit_output_iron-plate_0_3 for item iron-plate
+2025-02-11 18:10:35,391 - DEBUG - Added input gate electronic-circuit_input_copper-cable_0_3 for item copper-cable
+2025-02-11 18:10:35,391 - DEBUG - Added output gate electronic-circuit_output_copper-cable_0_3 for item copper-cable
+2025-02-11 18:10:35,392 - DEBUG - Added input gate electronic-circuit_input_electronic-circuit_0_3 for item electronic-circuit
+2025-02-11 18:10:35,392 - DEBUG - Added output gate electronic-circuit_output_electronic-circuit_0_3 for item electronic-circuit
+2025-02-11 18:10:35,392 - DEBUG - Block Block_electronic-circuit_0_3 added to blocks list
+2025-02-11 18:10:35,392 - DEBUG - Created Block with ID Block_electronic-circuit_0_4
+2025-02-11 18:10:35,392 - DEBUG - Added input gate electronic-circuit_input_iron-plate_0_4 for item iron-plate
+2025-02-11 18:10:35,392 - DEBUG - Added output gate electronic-circuit_output_iron-plate_0_4 for item iron-plate
+2025-02-11 18:10:35,392 - DEBUG - Added input gate electronic-circuit_input_copper-cable_0_4 for item copper-cable
+2025-02-11 18:10:35,392 - DEBUG - Added output gate electronic-circuit_output_copper-cable_0_4 for item copper-cable
+2025-02-11 18:10:35,392 - DEBUG - Added input gate electronic-circuit_input_electronic-circuit_0_4 for item electronic-circuit
+2025-02-11 18:10:35,392 - DEBUG - Added output gate electronic-circuit_output_electronic-circuit_0_4 for item electronic-circuit
+2025-02-11 18:10:35,392 - DEBUG - Block Block_electronic-circuit_0_4 added to blocks list
+2025-02-11 18:10:35,392 - DEBUG - Processing block copper-cable
+2025-02-11 18:10:35,392 - DEBUG - Block copper-cable dimensions: width=15, height=15, num_factories=3
+2025-02-11 18:10:35,392 - DEBUG - Created Block with ID Block_copper-cable_1_0
+2025-02-11 18:10:35,393 - DEBUG - Added input gate copper-cable_input_copper-plate_1_0 for item copper-plate
+2025-02-11 18:10:35,393 - DEBUG - Added output gate copper-cable_output_copper-plate_1_0 for item copper-plate
+2025-02-11 18:10:35,393 - DEBUG - Added input gate copper-cable_input_copper-cable_1_0 for item copper-cable
+2025-02-11 18:10:35,393 - DEBUG - Added output gate copper-cable_output_copper-cable_1_0 for item copper-cable
+2025-02-11 18:10:35,393 - DEBUG - Block Block_copper-cable_1_0 added to blocks list
+2025-02-11 18:10:35,393 - DEBUG - Created Block with ID Block_copper-cable_1_1
+2025-02-11 18:10:35,393 - DEBUG - Added input gate copper-cable_input_copper-plate_1_1 for item copper-plate
+2025-02-11 18:10:35,393 - DEBUG - Added output gate copper-cable_output_copper-plate_1_1 for item copper-plate
+2025-02-11 18:10:35,393 - DEBUG - Added input gate copper-cable_input_copper-cable_1_1 for item copper-cable
+2025-02-11 18:10:35,393 - DEBUG - Added output gate copper-cable_output_copper-cable_1_1 for item copper-cable
+2025-02-11 18:10:35,393 - DEBUG - Block Block_copper-cable_1_1 added to blocks list
+2025-02-11 18:10:35,393 - DEBUG - Created Block with ID Block_copper-cable_1_2
+2025-02-11 18:10:35,393 - DEBUG - Added input gate copper-cable_input_copper-plate_1_2 for item copper-plate
+2025-02-11 18:10:35,393 - DEBUG - Added output gate copper-cable_output_copper-plate_1_2 for item copper-plate
+2025-02-11 18:10:35,394 - DEBUG - Added input gate copper-cable_input_copper-cable_1_2 for item copper-cable
+2025-02-11 18:10:35,394 - DEBUG - Added output gate copper-cable_output_copper-cable_1_2 for item copper-cable
+2025-02-11 18:10:35,394 - DEBUG - Block Block_copper-cable_1_2 added to blocks list
+2025-02-11 18:10:35,394 - INFO - Adding bound constraints
+2025-02-11 18:10:35,396 - INFO - Adding overlap constraints
+2025-02-11 18:10:35,398 - DEBUG - Added non-overlapping constraints between blocks Block_electronic-circuit_0_0 and Block_electronic-circuit_0_1
+2025-02-11 18:10:35,398 - DEBUG - Added non-overlapping constraints between blocks Block_electronic-circuit_0_0 and Block_electronic-circuit_0_2
+2025-02-11 18:10:35,399 - DEBUG - Added non-overlapping constraints between blocks Block_electronic-circuit_0_0 and Block_electronic-circuit_0_3
+2025-02-11 18:10:35,399 - DEBUG - Added non-overlapping constraints between blocks Block_electronic-circuit_0_0 and Block_electronic-circuit_0_4
+2025-02-11 18:10:35,400 - DEBUG - Added non-overlapping constraints between blocks Block_electronic-circuit_0_0 and Block_copper-cable_1_0
+2025-02-11 18:10:35,400 - DEBUG - Added non-overlapping constraints between blocks Block_electronic-circuit_0_0 and Block_copper-cable_1_1
+2025-02-11 18:10:35,401 - DEBUG - Added non-overlapping constraints between blocks Block_electronic-circuit_0_0 and Block_copper-cable_1_2
+2025-02-11 18:10:35,401 - DEBUG - Added non-overlapping constraints between blocks Block_electronic-circuit_0_1 and Block_electronic-circuit_0_2
+2025-02-11 18:10:35,402 - DEBUG - Added non-overlapping constraints between blocks Block_electronic-circuit_0_1 and Block_electronic-circuit_0_3
+2025-02-11 18:10:35,402 - DEBUG - Added non-overlapping constraints between blocks Block_electronic-circuit_0_1 and Block_electronic-circuit_0_4
+2025-02-11 18:10:35,403 - DEBUG - Added non-overlapping constraints between blocks Block_electronic-circuit_0_1 and Block_copper-cable_1_0
+2025-02-11 18:10:35,403 - DEBUG - Added non-overlapping constraints between blocks Block_electronic-circuit_0_1 and Block_copper-cable_1_1
+2025-02-11 18:10:35,403 - DEBUG - Added non-overlapping constraints between blocks Block_electronic-circuit_0_1 and Block_copper-cable_1_2
+2025-02-11 18:10:35,404 - DEBUG - Added non-overlapping constraints between blocks Block_electronic-circuit_0_2 and Block_electronic-circuit_0_3
+2025-02-11 18:10:35,404 - DEBUG - Added non-overlapping constraints between blocks Block_electronic-circuit_0_2 and Block_electronic-circuit_0_4
+2025-02-11 18:10:35,405 - DEBUG - Added non-overlapping constraints between blocks Block_electronic-circuit_0_2 and Block_copper-cable_1_0
+2025-02-11 18:10:35,405 - DEBUG - Added non-overlapping constraints between blocks Block_electronic-circuit_0_2 and Block_copper-cable_1_1
+2025-02-11 18:10:35,405 - DEBUG - Added non-overlapping constraints between blocks Block_electronic-circuit_0_2 and Block_copper-cable_1_2
+2025-02-11 18:10:35,406 - DEBUG - Added non-overlapping constraints between blocks Block_electronic-circuit_0_3 and Block_electronic-circuit_0_4
+2025-02-11 18:10:35,406 - DEBUG - Added non-overlapping constraints between blocks Block_electronic-circuit_0_3 and Block_copper-cable_1_0
+2025-02-11 18:10:35,407 - DEBUG - Added non-overlapping constraints between blocks Block_electronic-circuit_0_3 and Block_copper-cable_1_1
+2025-02-11 18:10:35,407 - DEBUG - Added non-overlapping constraints between blocks Block_electronic-circuit_0_3 and Block_copper-cable_1_2
+2025-02-11 18:10:35,408 - DEBUG - Added non-overlapping constraints between blocks Block_electronic-circuit_0_4 and Block_copper-cable_1_0
+2025-02-11 18:10:35,408 - DEBUG - Added non-overlapping constraints between blocks Block_electronic-circuit_0_4 and Block_copper-cable_1_1
+2025-02-11 18:10:35,409 - DEBUG - Added non-overlapping constraints between blocks Block_electronic-circuit_0_4 and Block_copper-cable_1_2
+2025-02-11 18:10:35,409 - DEBUG - Added non-overlapping constraints between blocks Block_copper-cable_1_0 and Block_copper-cable_1_1
+2025-02-11 18:10:35,410 - DEBUG - Added non-overlapping constraints between blocks Block_copper-cable_1_0 and Block_copper-cable_1_2
+2025-02-11 18:10:35,410 - DEBUG - Added non-overlapping constraints between blocks Block_copper-cable_1_1 and Block_copper-cable_1_2
+2025-02-11 18:10:35,410 - INFO - Adding gate constraints
+2025-02-11 18:10:35,468 - INFO - Adding gate relative position constraints
+2025-02-11 18:10:35,468 - DEBUG - Added relative position constraints for input gate electronic-circuit_input_iron-plate_0_0 in block Block_electronic-circuit_0_0
+2025-02-11 18:10:35,468 - DEBUG - Added relative position constraints for input gate electronic-circuit_input_copper-cable_0_0 in block Block_electronic-circuit_0_0
+2025-02-11 18:10:35,469 - DEBUG - Added relative position constraints for input gate electronic-circuit_input_electronic-circuit_0_0 in block Block_electronic-circuit_0_0
+2025-02-11 18:10:35,469 - DEBUG - Added relative position constraints for output gate electronic-circuit_output_iron-plate_0_0 in block Block_electronic-circuit_0_0
+2025-02-11 18:10:35,469 - DEBUG - Added relative position constraints for output gate electronic-circuit_output_copper-cable_0_0 in block Block_electronic-circuit_0_0
+2025-02-11 18:10:35,469 - DEBUG - Added relative position constraints for output gate electronic-circuit_output_electronic-circuit_0_0 in block Block_electronic-circuit_0_0
+2025-02-11 18:10:35,470 - DEBUG - Added relative position constraints for input gate electronic-circuit_input_iron-plate_0_1 in block Block_electronic-circuit_0_1
+2025-02-11 18:10:35,470 - DEBUG - Added relative position constraints for input gate electronic-circuit_input_copper-cable_0_1 in block Block_electronic-circuit_0_1
+2025-02-11 18:10:35,470 - DEBUG - Added relative position constraints for input gate electronic-circuit_input_electronic-circuit_0_1 in block Block_electronic-circuit_0_1
+2025-02-11 18:10:35,470 - DEBUG - Added relative position constraints for output gate electronic-circuit_output_iron-plate_0_1 in block Block_electronic-circuit_0_1
+2025-02-11 18:10:35,471 - DEBUG - Added relative position constraints for output gate electronic-circuit_output_copper-cable_0_1 in block Block_electronic-circuit_0_1
+2025-02-11 18:10:35,471 - DEBUG - Added relative position constraints for output gate electronic-circuit_output_electronic-circuit_0_1 in block Block_electronic-circuit_0_1
+2025-02-11 18:10:35,471 - DEBUG - Added relative position constraints for input gate electronic-circuit_input_iron-plate_0_2 in block Block_electronic-circuit_0_2
+2025-02-11 18:10:35,471 - DEBUG - Added relative position constraints for input gate electronic-circuit_input_copper-cable_0_2 in block Block_electronic-circuit_0_2
+2025-02-11 18:10:35,472 - DEBUG - Added relative position constraints for input gate electronic-circuit_input_electronic-circuit_0_2 in block Block_electronic-circuit_0_2
+2025-02-11 18:10:35,472 - DEBUG - Added relative position constraints for output gate electronic-circuit_output_iron-plate_0_2 in block Block_electronic-circuit_0_2
+2025-02-11 18:10:35,472 - DEBUG - Added relative position constraints for output gate electronic-circuit_output_copper-cable_0_2 in block Block_electronic-circuit_0_2
+2025-02-11 18:10:35,472 - DEBUG - Added relative position constraints for output gate electronic-circuit_output_electronic-circuit_0_2 in block Block_electronic-circuit_0_2
+2025-02-11 18:10:35,473 - DEBUG - Added relative position constraints for input gate electronic-circuit_input_iron-plate_0_3 in block Block_electronic-circuit_0_3
+2025-02-11 18:10:35,473 - DEBUG - Added relative position constraints for input gate electronic-circuit_input_copper-cable_0_3 in block Block_electronic-circuit_0_3
+2025-02-11 18:10:35,473 - DEBUG - Added relative position constraints for input gate electronic-circuit_input_electronic-circuit_0_3 in block Block_electronic-circuit_0_3
+2025-02-11 18:10:35,473 - DEBUG - Added relative position constraints for output gate electronic-circuit_output_iron-plate_0_3 in block Block_electronic-circuit_0_3
+2025-02-11 18:10:35,474 - DEBUG - Added relative position constraints for output gate electronic-circuit_output_copper-cable_0_3 in block Block_electronic-circuit_0_3
+2025-02-11 18:10:35,474 - DEBUG - Added relative position constraints for output gate electronic-circuit_output_electronic-circuit_0_3 in block Block_electronic-circuit_0_3
+2025-02-11 18:10:35,474 - DEBUG - Added relative position constraints for input gate electronic-circuit_input_iron-plate_0_4 in block Block_electronic-circuit_0_4
+2025-02-11 18:10:35,475 - DEBUG - Added relative position constraints for input gate electronic-circuit_input_copper-cable_0_4 in block Block_electronic-circuit_0_4
+2025-02-11 18:10:35,475 - DEBUG - Added relative position constraints for input gate electronic-circuit_input_electronic-circuit_0_4 in block Block_electronic-circuit_0_4
+2025-02-11 18:10:35,475 - DEBUG - Added relative position constraints for output gate electronic-circuit_output_iron-plate_0_4 in block Block_electronic-circuit_0_4
+2025-02-11 18:10:35,475 - DEBUG - Added relative position constraints for output gate electronic-circuit_output_copper-cable_0_4 in block Block_electronic-circuit_0_4
+2025-02-11 18:10:35,476 - DEBUG - Added relative position constraints for output gate electronic-circuit_output_electronic-circuit_0_4 in block Block_electronic-circuit_0_4
+2025-02-11 18:10:35,476 - DEBUG - Added relative position constraints for input gate copper-cable_input_copper-plate_1_0 in block Block_copper-cable_1_0
+2025-02-11 18:10:35,477 - DEBUG - Added relative position constraints for input gate copper-cable_input_copper-cable_1_0 in block Block_copper-cable_1_0
+2025-02-11 18:10:35,477 - DEBUG - Added relative position constraints for output gate copper-cable_output_copper-plate_1_0 in block Block_copper-cable_1_0
+2025-02-11 18:10:35,477 - DEBUG - Added relative position constraints for output gate copper-cable_output_copper-cable_1_0 in block Block_copper-cable_1_0
+2025-02-11 18:10:35,477 - DEBUG - Added relative position constraints for input gate copper-cable_input_copper-plate_1_1 in block Block_copper-cable_1_1
+2025-02-11 18:10:35,478 - DEBUG - Added relative position constraints for input gate copper-cable_input_copper-cable_1_1 in block Block_copper-cable_1_1
+2025-02-11 18:10:35,478 - DEBUG - Added relative position constraints for output gate copper-cable_output_copper-plate_1_1 in block Block_copper-cable_1_1
+2025-02-11 18:10:35,478 - DEBUG - Added relative position constraints for output gate copper-cable_output_copper-cable_1_1 in block Block_copper-cable_1_1
+2025-02-11 18:10:35,478 - DEBUG - Added relative position constraints for input gate copper-cable_input_copper-plate_1_2 in block Block_copper-cable_1_2
+2025-02-11 18:10:35,479 - DEBUG - Added relative position constraints for input gate copper-cable_input_copper-cable_1_2 in block Block_copper-cable_1_2
+2025-02-11 18:10:35,479 - DEBUG - Added relative position constraints for output gate copper-cable_output_copper-plate_1_2 in block Block_copper-cable_1_2
+2025-02-11 18:10:35,479 - DEBUG - Added relative position constraints for output gate copper-cable_output_copper-cable_1_2 in block Block_copper-cable_1_2
+2025-02-11 18:10:35,479 - INFO - Minimizing unmerged gates
+2025-02-11 18:10:35,484 - DEBUG - Minimized unmerged gates constraint added

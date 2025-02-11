@@ -8,13 +8,21 @@ import os
 import time
 import logging
 import csv
+from math import ceil
+import tkinter as tk
+from tkinter import filedialog
 
-CELL_SIZE = 10
 
+# Define constants for colors
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+RED = (255, 0, 0)  # Color for input gates
+BLUE = (0, 0, 255)  # Color for output gates
+GREEN = (0, 255, 0)  # Color for blocks
 
 class FactoryBuilder:
     
-    def __init__(self,output_item,amount,max_assembler_per_blueprint,start_width,start_height) -> None:
+    def __init__(self,output_item,amount,max_assembler_per_blueprint,start_width,start_height,load_modules) -> None:
         
         self.output_item = output_item
         self.amount = amount
@@ -36,8 +44,9 @@ class FactoryBuilder:
         self.final_y = None
         self.final_blocks = None
         
-        self.block_size = 10
         self.images = {}
+        
+        self.load_modules = load_modules
         
         
 
@@ -119,8 +128,7 @@ class FactoryBuilder:
         factorioProductionTree = FactorioProductionTree(grid_width=self.start_width,grid_height=self.start_height)
         production_data  = factorioProductionTree.calculate_production(self.output_item , self.amount) 
         production_data = factorioProductionTree.set_capacities(production_data)
-        
-        
+            
         # Filter out basic input items and the output item
         selectable_items = {
             item: data
@@ -172,21 +180,45 @@ class FactoryBuilder:
             
         print(f"Selected items: {selected_items}")
         
-        # TODO Fix production data 
+        selected_items.add(self.output_item)
+        
+        if self.load_modules:
+            
+            for item in selected_items:
+                
+                # ask to select module for item
+                
+                # for every selected item pick an modules txt file to recreate the factorioProductionTree
+                file_path = self.select_module_for_item(item)
+                
+                if file_path and os.path.exists(file_path):
+                    factorioProductionTree = self.load_module(file_path)
+                    
+                    
+            
+                    num_factories = ceil(production_data[item]["amount_per_minute"] / factorioProductionTree.calculate_max_output())
+                    
+                    self.block_data[item] = {
+                    "tree": factorioProductionTree,
+                    "production_data": factorioProductionTree.production_data,
+                    "num_factories": num_factories,
+                    "png":file_path.replace(".json", ".png")
+                    }
+                
+            
+            return
+            
 
         factorioProductionTree = FactorioProductionTree(grid_width=self.start_width,grid_height=self.start_height)
         
         # Always include the output item
         input_items = self.get_input_items(self.output_item,list(selected_items)) + list(selected_items)
 
-        print(input_items)
 
         production_data  = factorioProductionTree.calculate_production(self.output_item , self.amount, input_items) 
         production_data = factorioProductionTree.set_capacities(production_data)
         
         production_data,num_factories = self.eval_split(production_data, list(selected_items))
-        
-
         
         factorioProductionTree.manual_Input(Title=f"Setting Manual Input for {self.output_item}")
         factorioProductionTree.manual_Output(Title=f"Setting Manual Output for {self.output_item}")
@@ -229,7 +261,6 @@ class FactoryBuilder:
             
             new_data,num_factories = self.eval_split(new_data,input_items)
             
-            
                  
             factorioProductionTree.manual_Input(Title=f"Setting Manual Input for {item}")
             factorioProductionTree.manual_Output(Title=f"Setting Manual Output for {item}")
@@ -240,10 +271,37 @@ class FactoryBuilder:
             self.block_data[item]["num_factories"]=num_factories
             
     
-            
+         
+         
+    # Example method to ask for the module file using tkinter
+    def select_module_for_item(self, item):
+        # Create a tkinter root window and immediately hide it (we only need the file dialog)
+        root = tk.Tk()
+        root.withdraw()  # Hide the root window
+
+        # Ask the user to select a file using the file picker dialog
+        file_path = filedialog.askopenfilename(
+            title=f"Select module for {item}",
+            filetypes=(("Json files", "*.json"),)
+        )
+
+        # Return the selected file path (it may be empty if the user cancels)
+        return file_path
+                
     
+    def load_module(self,file_path):
+        factorioProductionTree = FactorioProductionTree()
+        factorioProductionTree.load_data(file_path)
+        
+        return factorioProductionTree
+    
+
     
     def solve_small_blocks(self, visualize):
+        
+        if self.load_modules:
+            return
+        
         
         for item in self.block_data.keys():
             self.block_data[item]["tree"].solve(self.block_data[item]["production_data"],sequential=False)
@@ -287,19 +345,18 @@ class FactoryBuilder:
     def get_num_subfactories(self):
         return len(self.final_blocks)
     
-    def visualize_factory(self):
-        """Draw the factory using Pygame."""
-        # Initialize Pygame
+    
+    def visualize_simple(self, cell_size=20):
         pygame.init()
-        screen = pygame.display.set_mode(
-            (self.final_x * self.block_size, self.final_y * self.block_size)
-        )
+        
+        # Calculate window dimensions
+        window_width = self.final_x * cell_size
+        window_height = self.final_y * cell_size
+
+        # Create Pygame window
+        window = pygame.display.set_mode((window_width, window_height))
         pygame.display.set_caption('Factory Layout')
-
-        # Load images
-        self.load_images()
-
-        # Main loop
+        
         running = True
         while running:
             for event in pygame.event.get():
@@ -307,38 +364,116 @@ class FactoryBuilder:
                     running = False
 
             # Clear the screen
-            screen.fill((255, 255, 255))  # White background
+            window.fill(WHITE)
 
-            # Draw each block
+            # Draw grid
+            for row in range(self.final_x):
+                for col in range(self.final_y):
+                    rect = pygame.Rect(col * cell_size, row * cell_size, cell_size, cell_size)
+                    pygame.draw.rect(window, BLACK, rect, 1)
+
+            # Draw blocks and gates
             for block_id, block_info in self.final_blocks.items():
-                x = block_info["x"] * self.block_size
-                y = block_info["y"] * self.block_size
-                width = block_info["width"] * self.block_size
-                height = block_info["height"] * self.block_size
+                # Block position
+                block_x = block_info['x']
+                block_y = block_info['y']
+                block_width = block_info['width']
+                block_height = block_info['height']
 
-                # Draw the block (image or placeholder rectangle)
-                if block_id in self.images:
-                    # Scale the image to fit the block size
-                    image = pygame.transform.scale(self.images[block_id], (width, height))
-                    screen.blit(image, (x, y))
-                else:
-                    # Draw a placeholder rectangle if the image is not found
-                    pygame.draw.rect(screen, (0, 0, 0), (x, y, width, height))  # Black rectangle
+                # Draw block
+                block_rect = pygame.Rect(
+                    block_x * cell_size,
+                    block_y * cell_size,
+                    block_width * cell_size,
+                    block_height * cell_size
+                )
+                pygame.draw.rect(window, BLUE, block_rect)
+                pygame.draw.rect(window, BLACK, block_rect, 2)  # Border
 
-                # Draw input and output gates
-                for gate in block_info["input_points"]:
-                    gate_x = x + gate["x"] * self.block_size
-                    gate_y = y + gate["y"] * self.block_size
-                    pygame.draw.circle(screen, (0, 255, 0), (gate_x, gate_y), 5)  # Green circle for input gates
+                # Draw input gates
+                for gate in block_info['input_points']:
+                    gate_x = block_x + gate['x']
+                    gate_y = block_y + gate['y']
+                    gate_rect = pygame.Rect(
+                        gate_x * cell_size,
+                        gate_y * cell_size,
+                        cell_size,
+                        cell_size
+                    )
+                    pygame.draw.rect(window, RED, gate_rect)
 
-                for gate in block_info["output_points"]:
-                    gate_x = x + gate["x"] * self.block_size
-                    gate_y = y + gate["y"] * self.block_size
-                    pygame.draw.circle(screen, (255, 0, 0), (gate_x, gate_y), 5)  # Red circle for output gates
+                # Draw output gates
+                for gate in block_info['output_points']:
+                    gate_x = block_x + gate['x']
+                    gate_y = block_y + gate['y']
+                    gate_rect = pygame.Rect(
+                        gate_x * cell_size,
+                        gate_y * cell_size,
+                        cell_size,
+                        cell_size
+                    )
+                    pygame.draw.rect(window, GREEN, gate_rect)
 
             # Update the display
             pygame.display.flip()
+        
+        # Quit Pygame
+        pygame.quit()
+        
+    
+    def visualize_factory(self,cell_size=20,block_size=20):
+        """Draw the factory using Pygame."""
+        # Initialize Pygame
+        pygame.init()
+        
+        window_width  = self.final_x * cell_size
+        window_height = self.final_y * cell_size
 
+        window = pygame.display.set_mode((window_width, window_height))
+        pygame.display.set_caption('Factory Layout')
+        # Main loop
+ 
+            
+        block_images = {}
+        for block_id, block_info in self.block_data.items():
+            image_path = block_info['png']  # Assuming the path is stored under 'path'
+            image = pygame.image.load(image_path)
+            image = pygame.transform.scale(image, (block_size * cell_size, block_size * cell_size))
+            block_images[block_id] = image
+            
+            
+        running = True
+        while running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+
+            # Clear the screen
+            window.fill(WHITE)
+
+            # Draw grid
+            for row in range(self.final_x):
+                for col in range(self.final_y):
+                    rect = pygame.Rect(col * cell_size, row * cell_size, cell_size, cell_size)
+                    pygame.draw.rect(window, BLACK, rect, 1)
+
+            # Draw blocks
+            for block_id, block_info in self.final_blocks.items():
+                x = block_info['x']
+                y = block_info['y']
+                
+                parts = block_id.split("_")  # Split by underscores
+                if len(parts) >= 3:
+                    block_type = "_".join(parts[1:-2])  # Remove "Block_" and "_0_0"
+                else:
+                    block_type = parts[1]  # Fallback if there's no coordinate suffix
+                
+                if block_type in block_images:
+                    window.blit(block_images[block_type], ( x * cell_size, y * cell_size))
+  
+            # Update the display
+            pygame.display.flip()
+            
         # Quit Pygame
         pygame.quit()
     
@@ -346,20 +481,21 @@ class FactoryBuilder:
 def main():
     
     output_item = "electronic-circuit"
-    amount = 1500
+    amount = 500
     max_assembler_per_blueprint = 5
     
     start_width = 15
     start_height = 15
 
     
-    builder = FactoryBuilder(output_item,amount,max_assembler_per_blueprint,start_width,start_height)
+    builder = FactoryBuilder(output_item,amount,max_assembler_per_blueprint,start_width,start_height,load_modules=True)
     
     #num_factories, production_data = builder.eval_split()
     #print(f"Number of factories required: {num_factories}")
     
     builder.split_recipies()
-    print(builder.block_data)
+
+    
     builder.solve_small_blocks(visualize=False)
     
     start_time = time.perf_counter()       
@@ -371,8 +507,8 @@ def main():
     
     log_method_time(item=output_item,amount=amount,method_name="solve",assemblers_per_recipie=max_assembler_per_blueprint,num_subfactories=builder.get_num_subfactories(),start_time=start_time,end_time=end_time)
     
+    builder.visualize_simple()
     builder.visualize_factory()
-    
 
 
 
@@ -387,25 +523,9 @@ def log_method_time(item, amount, method_name,assemblers_per_recipie,num_subfact
             writer.writerow([item, amount, method_name,assemblers_per_recipie,num_subfactories,execution_time])
     except Exception as e:
         logging.error(f"Error logging execution time for {method_name}: {e}")
-    
-
-def visualize_test():
-    output_item = "electronic-circuit"
-    amount = 1500
-    max_assembler_per_blueprint = 5
-    
-    start_width = 15
-    start_height = 15
-
-    
-    builder = FactoryBuilder(output_item,amount,max_assembler_per_blueprint,start_width,start_height)
-    
-    builder.final_x=15
-    builder.final_y=75
-    builder.final_blocks = {'Block_electronic-circuit_0_0': {'x': 0, 'y': 15, 'width': 15, 'height': 15, 'input_points': [{'id': 'electronic-circuit_input_copper-plate_0_0', 'item': 'copper-plate', 'type': 'input', 'x': -194, 'y': -195}, {'id': 'electronic-circuit_input_iron-plate_0_0', 'item': 'iron-plate', 'type': 'input', 'x': -1, 'y': 522}, {'id': 'electronic-circuit_input_electronic-circuit_0_0', 'item': 'electronic-circuit', 'type': 'input', 'x': -234, 'y': -234}], 'output_points': [{'id': 'electronic-circuit_output_copper-plate_0_0', 'item': 'copper-plate', 'type': 'output', 'x': -215, 'y': -215}, {'id': 'electronic-circuit_output_iron-plate_0_0', 'item': 'iron-plate', 'type': 'output', 'x': -115, 'y': 467}, {'id': 'electronic-circuit_output_electronic-circuit_0_0', 'item': 'electronic-circuit', 'type': 'output', 'x': -236, 'y': -290}]}, 'Block_electronic-circuit_0_1': {'x': 0, 'y': 30, 'width': 15, 'height': 15, 'input_points': [{'id': 'electronic-circuit_input_copper-plate_0_1', 'item': 'copper-plate', 'type': 'input', 'x': -204, 'y': -199}, {'id': 'electronic-circuit_input_iron-plate_0_1', 'item': 'iron-plate', 'type': 'input', 'x': 9, 'y': 669}, {'id': 'electronic-circuit_input_electronic-circuit_0_1', 'item': 'electronic-circuit', 'type': 'input', 'x': -1, 'y': -1}], 'output_points': [{'id': 'electronic-circuit_output_copper-plate_0_1', 'item': 'copper-plate', 'type': 'output', 'x': -207, 'y': -207}, {'id': 'electronic-circuit_output_iron-plate_0_1', 'item': 'iron-plate', 'type': 'output', 'x': -100, 'y': -1}, {'id': 'electronic-circuit_output_electronic-circuit_0_1', 'item': 'electronic-circuit', 'type': 'output', 'x': -505, 'y': -498}]}, 'Block_electronic-circuit_0_2': {'x': 0, 'y': 45, 'width': 15, 'height': 15, 'input_points': [{'id': 'electronic-circuit_input_copper-plate_0_2', 'item': 'copper-plate', 'type': 'input', 'x': -160, 'y': -200}, {'id': 'electronic-circuit_input_iron-plate_0_2', 'item': 'iron-plate', 'type': 'input', 'x': -99, 'y': 468}, {'id': 'electronic-circuit_input_electronic-circuit_0_2', 'item': 'electronic-circuit', 'type': 'input', 'x': -178, 'y': -178}], 'output_points': [{'id': 'electronic-circuit_output_copper-plate_0_2', 'item': 'copper-plate', 'type': 'output', 'x': -198, 'y': -198}, {'id': 'electronic-circuit_output_iron-plate_0_2', 'item': 'iron-plate', 'type': 'output', 'x': -127, 'y': 451}, {'id': 'electronic-circuit_output_electronic-circuit_0_2', 'item': 'electronic-circuit', 'type': 'output', 'x': -273, 'y': -271}]}, 'Block_electronic-circuit_0_3': {'x': 0, 'y': 0, 'width': 15, 'height': 15, 'input_points': [{'id': 'electronic-circuit_input_copper-plate_0_3', 'item': 'copper-plate', 'type': 'input', 'x': -196, 'y': -196}, {'id': 'electronic-circuit_input_iron-plate_0_3', 'item': 'iron-plate', 'type': 'input', 'x': -105, 'y': 114}, {'id': 'electronic-circuit_input_electronic-circuit_0_3', 'item': 'electronic-circuit', 'type': 'input', 'x': 117, 'y': 117}], 'output_points': [{'id': 'electronic-circuit_output_copper-plate_0_3', 'item': 'copper-plate', 'type': 'output', 'x': -466, 'y': -466}, {'id': 'electronic-circuit_output_iron-plate_0_3', 'item': 'iron-plate', 'type': 'output', 'x': 8, 'y': 647}, {'id': 'electronic-circuit_output_electronic-circuit_0_3', 'item': 'electronic-circuit', 'type': 'output', 'x': 409, 'y': -507}]}, 'Block_electronic-circuit_0_4': {'x': 0, 'y': 60, 'width': 15, 'height': 15, 'input_points': [{'id': 'electronic-circuit_input_copper-plate_0_4', 'item': 'copper-plate', 'type': 'input', 'x': 50, 'y': -478}, {'id': 'electronic-circuit_input_iron-plate_0_4', 'item': 'iron-plate', 'type': 'input', 'x': -101, 'y': 662}, {'id': 'electronic-circuit_input_electronic-circuit_0_4', 'item': 'electronic-circuit', 'type': 'input', 'x': -250, 'y': -250}], 'output_points': [{'id': 'electronic-circuit_output_copper-plate_0_4', 'item': 'copper-plate', 'type': 'output', 'x': -479, 'y': -479}, {'id': 'electronic-circuit_output_iron-plate_0_4', 'item': 'iron-plate', 'type': 'output', 'x': -104, 'y': 407}, {'id': 'electronic-circuit_output_electronic-circuit_0_4', 'item': 'electronic-circuit', 'type': 'output', 'x': -292, 'y': -291}]}}
-    builder.visualize_factory()
-    
+        
         
 if __name__ == "__main__":
     main()
-    #visualize_test()
+   
+   

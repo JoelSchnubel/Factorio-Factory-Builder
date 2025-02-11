@@ -1,7 +1,7 @@
 #! .venv\Scripts\python.exe
 
 from z3 import *
-from z3 import Optimize , Context
+from z3 import Optimize 
 import logging
 
 
@@ -22,22 +22,24 @@ class Block:
         self.id = id
         self.x = Int(f'{id}_x')
         self.y = Int(f'{id}_y')
-        
-        
+
+    
         self.input_points = []
         self.output_points = []
 
         
 class Gate:
-    def __init__(self,id,x,y,item,type):
+    def __init__(self,id,relative_x,relative_y,item,type):
         self.id = id
-        self.x = Int(f'{id}_{x}')
-        self.y = Int(f'{id}_{y}')
+        self.x = Int(f'{id}_x')
+        self.y = Int(f'{id}_y')
+        self.relative_x = relative_x  # Relative x position within the block
+        self.relative_y = relative_y  # Relative y position within the block
         self.type = type # 'start' or 'end'
         self.item = item
+        self.merge = Bool(f'{id}_merge')  # Boolean to indicate if the gate is merged
 
-       
-        
+
         
 class FactoryZ3Solver:
     def __init__(self,block_data,output_point):
@@ -57,13 +59,21 @@ class FactoryZ3Solver:
         self.gate_connections = []
         self.obstacle_map= []
         
+        self.max_x = Int("max_x")
+        self.max_y = Int("max_y")
+        
         logging.debug("Solver and data structures initialized")
 
         
     def build_constraints(self):
         logging.info("Building constraints")
         self.build_blocks()
-        self.add_constraints()
+        self.add_bound_constraints()
+        self.add_overlap_constraints()
+        self.add_gate_constraints()
+        self.add_gate_relative_position_constraints()
+        self.minimize_unmerged_gates()
+        self.minimize_map()
         
         
     def build_blocks(self):
@@ -97,8 +107,8 @@ class FactoryZ3Solver:
                     if "input" in data:
                         input_gate = Gate(
                             id=f"{key}_input_{item}_{i}_{factory_index}",
-                            x=int(data["input"][0]),
-                            y=int(data["input"][1]),
+                            relative_x=int(data["input"][0]),
+                            relative_y=int(data["input"][1]),
                             item=item,
                             type="input"
                         )
@@ -108,8 +118,8 @@ class FactoryZ3Solver:
                     if "output" in data:
                         output_gate = Gate(
                             id=f"{key}_output_{item}_{i}_{factory_index}",
-                            x=int(data["output"][0]),
-                            y=int(data["output"][1]),
+                            relative_x=int(data["output"][0]),
+                            relative_y=int(data["output"][1]),
                             item=item,
                             type="output"
                         )
@@ -121,80 +131,91 @@ class FactoryZ3Solver:
                 self.blocks.append(block)
                 logging.debug(f"Block {block.id} added to blocks list")
     
-    def add_constraints(self):
-        
-        logging.info("Adding constraints to solver")
-        
-        max_x = Int("max_x")
-        max_y = Int("max_y")
-        
-        #self.solver.add(max_x <= )
-        #self.solver.add(max_y <= )
-
-        self.gate_connections = []  # Ensure this attribute is initialized
-
+    
+    
+    def add_bound_constraints(self):
+        logging.info("Adding bound constraints")
         # Boundary and non-overlapping constraints
+        
         for block in self.blocks:
             self.solver.add(block.x >= 0)
             self.solver.add(block.y >= 0)
-            self.solver.add(block.x + block.width <= max_x)
-            self.solver.add(block.y + block.height <= max_y)
-            
-            logging.debug(f"Added boundary constraints for block {block.id}")
-
+            self.solver.add(block.x + block.width <= self.max_x)
+            self.solver.add(block.y + block.height <= self.max_y)
+        
+        
+    
+    def add_overlap_constraints(self):
+        logging.info("Adding overlap constraints")
         for i, block1 in enumerate(self.blocks):
-            for j, block2 in enumerate(self.blocks):
-                if i >= j:
-                    continue
-                self.solver.add(
-                    Or(
-                        block1.x + block1.width <= block2.x,
-                        block2.x + block2.width <= block1.x,
-                        block1.y + block1.height <= block2.y,
-                        block2.y + block2.height <= block1.y
+                for j, block2 in enumerate(self.blocks):
+                    if i >= j:
+                        continue
+                    self.solver.add(
+                        Or(
+                            block1.x + block1.width <= block2.x,
+                            block2.x + block2.width <= block1.x,
+                            block1.y + block1.height <= block2.y,
+                            block2.y + block2.height <= block1.y
+                        )
                     )
-                )
-                logging.debug(f"Added non-overlapping constraints between blocks {block1.id} and {block2.id}")
+                    logging.debug(f"Added non-overlapping constraints between blocks {block1.id} and {block2.id}")
+    
+    
+    def add_gate_relative_position_constraints(self):
+        logging.info("Adding gate relative position constraints")
+        for block in self.blocks:
+            # Input gates
+            for gate in block.input_points:
+                self.solver.add(gate.x == block.x + gate.relative_x)
+                self.solver.add(gate.y == block.y + gate.relative_y)
+                logging.debug(f"Added relative position constraints for input gate {gate.id} in block {block.id}")
+            # Output gates
+            for gate in block.output_points:
+                self.solver.add(gate.x == block.x + gate.relative_x)
+                self.solver.add(gate.y == block.y + gate.relative_y)
+                logging.debug(f"Added relative position constraints for output gate {gate.id} in block {block.id}")
+                
+                
+    def add_gate_constraints(self):
+        logging.info("Adding gate constraints")
+        self.gate_connections = []  # Ensure this attribute is initialized
 
-        # Add gate connection constraints
         for block1 in self.blocks:
             for input_gate in block1.input_points:
                 for block2 in self.blocks:
                     for output_gate in block2.output_points:
                         if input_gate.item == output_gate.item:
-                            # Connection variable: 1 if connected, 0 otherwise
-                            
-                            
-                            connect_var = Int(f"connect_{input_gate.id}_{output_gate.id}")
-                            self.solver.add(Or(connect_var == 0, connect_var == 1))
-
-                            # Distance variable
-                            distance = Int(f"distance_{input_gate.id}_{output_gate.id}")
-                            self.solver.add(
-                                distance ==
-                                If(connect_var == 1,
-                                z3.Abs(input_gate.x - output_gate.x) + z3.Abs(input_gate.y - output_gate.y),
-                                0)
+                            adjacency_constraint = Or(
+                                (input_gate.x == output_gate.x - 1),
+                                (input_gate.x - 1 == output_gate.x),
+                                (input_gate.y == output_gate.y - 1),
+                                (input_gate.y - 1 == output_gate.y),
                             )
-
-                            # Ensure each gate is used only once
-                            self.solver.add(Sum([connect_var for connect_var, _ in self.gate_connections]) <= 1)
-
-                            # Store connection variables and distances for minimization
-                            self.gate_connections.append((connect_var, distance))
-                            logging.debug(f"Added gate connection constraints between gates {input_gate.id} and {output_gate.id}")
+                            self.solver.add(Implies(input_gate.merge, adjacency_constraint))
+                            self.gate_connections.append((input_gate, output_gate))
 
 
-        # Minimize map size
-        self.solver.minimize(max_x * max_y)
-        logging.debug("Minimized map size constraint added")
-        # Minimize total gate connection distance
-        total_distance = Sum([dist for _, dist in self.gate_connections])
+    def minimize_unmerged_gates(self):
+        logging.info("Minimizing unmerged gates")
+        # Collect all gate.merge variables (Z3 Boolean expressions)
+        merged_gates = []
+        for block in self.blocks:
+            for gate in block.input_points + block.output_points:
+                merged_gates.append(gate.merge)  # gate.merge is already a Z3 BoolRef
+
+        # Maximize the sum of merged gates
+        self.solver.maximize(Sum([If(merge, 1, 0) for merge in merged_gates]))
+        logging.debug("Minimized unmerged gates constraint added")
+
+       
         
         
-        self.solver.minimize(total_distance)
-        logging.debug("Minimized total gate connection distance constraint added")
 
+    def minimize_map(self):
+        self.solver.add(self.max_x < self.max_y)
+        self.solver.minimize(self.max_x * self.max_y)
+        
 
 
     def solve(self):

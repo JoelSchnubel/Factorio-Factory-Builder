@@ -1,9 +1,10 @@
 #! .venv\Scripts\python.exe
 
 from z3 import *
-from z3 import Optimize , Context
+from z3 import Optimize , Context 
 import numpy as np
 import logging
+
 
 set_param('parallel.enable',True)
 set_param('smt.threads', 8)
@@ -71,10 +72,9 @@ class Inserter:
         self.belt = belt
         self.item = item
         
-        self.direct_interaction = Bool(f"{id}_direct")
+        self.direct_interaction =False
 
-        self.is_merged = False
-    
+   
         
     def __str__(self) -> str:
         
@@ -146,7 +146,7 @@ class Z3Solver:
         
         self.add_space_for_output_of_assembler()
         
-        self.add_input_inserter_merge_user_belt_constraint()
+        #self.add_input_inserter_merge_user_belt_constraint()
         self.add_input_inserter_merge_assembler_constraint()
         
         
@@ -574,7 +574,7 @@ class Z3Solver:
                         #logging.debug(f"Inserter item {inserter.item} and other assembler item {other_assembler.item}")
                         
                         # if my input inserter and the other assembler produces/transports same item, set the belt on one of the edge positions of the assembler -> all but the middle
-                        if inserter.item == other_assembler.item and other_assembler.capacity > 0 and not inserter.is_merged:
+                        if inserter.item == other_assembler.item and other_assembler.capacity > 0 and not inserter.direct_interaction:
                             
                             logging.debug(f"------------------------")
                             logging.debug(  f"Assembler {assembler.id} and other assembler {other_assembler.id} "
@@ -594,7 +594,7 @@ class Z3Solver:
                                             ]
                             
                             
-                            belt = inserter.belt 
+                            
       
                             constraints = [
                                 And(inserter.belt.x == pos[0], inserter.belt.y == pos[1])
@@ -605,10 +605,10 @@ class Z3Solver:
                                 
                                 logging.debug(f"Adding constraints to position belt for inserter {inserter.id} and assembler {other_assembler.id} with capcity: {other_assembler.capacity}.")
                                 logging.debug(f"Adding 'Or' between valid positions for inserter {inserter.id} and reducing capacity of {other_assembler.id} to {other_assembler.capacity}")
-                                logging.debug(f"{inserter.id} merged is set to {inserter.is_merged}")
+                                logging.debug(f"{inserter.id} merged is set to {inserter.direct_interaction}")
 
                                 other_assembler.capacity -= 1
-                                inserter.is_merged = True
+                                inserter.direct_interaction = True
                                 assembler_constraints.append(Or(constraints))
                                 merge_constraints.append(Or(constraints))
                                 self.solver.add(merge_constraints)
@@ -628,7 +628,7 @@ class Z3Solver:
                                                 (other_assembler.x+2,other_assembler.y+2), # lower right
                                             ]
 
-                                belt = inserter.belt 
+                               
 
                                 constraints = [
                                 Not(Or(inserter.belt.x == pos[0], inserter.belt.y == pos[1]))
@@ -640,23 +640,7 @@ class Z3Solver:
 
                                 logging.debug(f"dissallow merge for inserter {inserter.id} and assembler {other_assembler.id} with capcity: {other_assembler.capacity}.")
                                 
-                    # If there are valid constraints for this inserter, combine them with 'Or' between different assemblers
-                    #if assembler_constraints:
-                    #    # reduce capacity by 1 
-                    #    other_assembler.capacity -= 1
-                    #    inserter.is_merged = True
-                        
-                        
-                    #    logging.debug(f"Adding 'Or' between valid positions for inserter {inserter.id} and reducing capacity of {other_assembler.id} to {other_assembler.capacity}")
-                    #    logging.debug(f"{inserter.id} merged is set to {inserter.is_merged}")
-                    #    merge_constraints.append(Or(assembler_constraints))  # This Or ensures multiple assemblers are considered
-                    #    self.solver.add(merge_constraints)
-                    
-                    #else:
-                    #    logging.debug(f"No valid merge positions found for inserter {inserter.id}.")
-                    
-        #if merge_constraints:
-        #    self.solver.add(Or(merge_constraints))  # This 'Or' handles multiple inserters' constraints
+           
                         
     
     
@@ -665,6 +649,7 @@ class Z3Solver:
         logging.info("Adding constraints to maximize overlaps of inserter belts with global belts and assemblers.")
 
         overlap_variables = []  # To track overlaps for optimization
+      
         inserter_belts = []
 
         # Collect all inserter belts
@@ -674,6 +659,8 @@ class Z3Solver:
                 
          # Check overlaps with global input/output belts
         global_belts = self.global_input_belts + self.global_output_belts
+            
+        
             
         for inserter_belt in inserter_belts:
             for global_belt in global_belts:
@@ -687,6 +674,9 @@ class Z3Solver:
                     overlap_var = Bool(f"overlap_{inserter_belt.id}_{global_belt.id}")
                     self.solver.add(Implies(overlap_var, is_overlapping))
                     overlap_variables.append(overlap_var)
+                    
+                    
+                    
                     
         
         # Check overlaps with other assemblers
@@ -712,22 +702,128 @@ class Z3Solver:
                 self.solver.add(Implies(overlap_var, is_overlapping))
                 overlap_variables.append(overlap_var)
         
-            
-        # Maximize the sum of all overlap variables
-        logging.info("Adding optimization goal to maximize belt overlaps.")
-        self.solver.maximize(Sum([If(var, 1, 0) for var in overlap_variables]))
+        if overlap_variables: 
+            # Maximize the sum of all overlap variables
+            logging.info("Adding optimization goal to maximize belt overlaps.")
+            self.solver.maximize(Sum([If(var, 1, 0) for var in overlap_variables]))
+        
+        
+    def find_non_overlapping_inserters(self):
+        """Finds inserters that do NOT overlap with a global belt but have a matching item."""
+        logging.info("=== Identifying Non-Overlapping Inserters ===")
+
+        non_overlapping_inserters = []
+
+        for assembler in self.assemblers:
+            for inserter in assembler.inserters:
+                belt = inserter.belt
+                same_item_belts = [gb for gb in self.global_input_belts + self.global_output_belts if gb.item == belt.item]
+
+                is_overlapping = any(
+                    self.model.evaluate(And(belt.x == gb.x, belt.y == gb.y)) for gb in same_item_belts
+                )
+
+                if not is_overlapping and same_item_belts:
+                    logging.info(f"Inserter {inserter.id} does not overlap but has matching item.")
                     
+                    non_overlapping_inserters.append((inserter, same_item_belts))
+                else:
+                    logging.info(f"Inserter {inserter.id} is locked (either overlaps or has no matching global belt).")
+
+        return non_overlapping_inserters
+
+
+    def lock_initial_solution(self, non_overlapping_inserters):
+        """Locks all positions except non-overlapping inserters."""
+        logging.info("=== Locking Initial Solution ===")
+        print("Locking positions for all but non-overlapping inserters...")
+
+        non_overlapping_set = {inserter for inserter, _ in non_overlapping_inserters}
+
+        # Keep assembler positions unchanged
+        for assembler in self.assemblers:
+            logging.info(f"Locking assembler {assembler.id} at ({assembler.x}, {assembler.y}).")
+            self.solver.add(assembler.x == self.model.evaluate(assembler.x))
+            self.solver.add(assembler.y == self.model.evaluate(assembler.y))
+
+            for inserter in assembler.inserters:
+                if inserter in non_overlapping_set:
+                    logging.info(f"Inserter {inserter.id} is free to move.")
+                   
+                    continue
+
+                logging.info(f"Locking inserter {inserter.id} at ({inserter.x}, {inserter.y}).")
+               
+                self.solver.add(inserter.x == self.model.evaluate(inserter.x))
+                self.solver.add(inserter.y == self.model.evaluate(inserter.y))
+
+                # Keep belt positions fixed
+                belt = inserter.belt
+                self.solver.add(belt.x == self.model.evaluate(belt.x))
+                self.solver.add(belt.y == self.model.evaluate(belt.y))
+   
+    def minimize_non_overlapping_inserters(self, non_overlapping_inserters):
+        """Minimizes distance for non-overlapping inserters to the closest global belt."""
+        logging.info("=== Minimizing Distance for Non-Overlapping Inserters ===")
+        
+
+        total_distance = Int("total_distance")
+        distance_constraints = []
+
+        for inserter, same_item_belts in non_overlapping_inserters:
+            belt = inserter.belt
+            min_distance = Int(f"min_dist_{belt.id}")
+
+            # Compute Manhattan distances
+            distances = [Abs(belt.x - gb.x) + Abs(belt.y - gb.y) for gb in same_item_belts]
+
+            # Log distance calculation
+            logging.info(f"Inserter {inserter.id} has distances to matching global belts.")
+           
+
+            # Minimize the distance to the closest matching global belt
+            self.solver.add(Or([min_distance == d for d in distances]))  # Ensure min_distance is one of the distances
+            self.solver.add(min_distance >= 0)  # Ensure non-negative distance
+            distance_constraints.append(min_distance)
+
+        if distance_constraints:
+            self.solver.add(total_distance == Sum(distance_constraints))
+            self.solver.minimize(total_distance)
+            logging.info("Added minimization constraint for total distance.")
+            
+            
+    
     
     def solve(self):
+            """Initial solving step."""
             result = self.solver.check()
-            print("model is:",result)
-            
             logging.info(f"Solver check result: {result}")
-            self.model = self.solver.model() 
+
+            if result == sat:
+                self.model = self.solver.model() 
+               
+                
+                # Identify non-overlapping inserters
+                non_overlapping_inserters = self.find_non_overlapping_inserters()
+                # Add constraints to preserve the solved setup
+                self.lock_initial_solution(non_overlapping_inserters)
+                
+                self.minimize_non_overlapping_inserters(non_overlapping_inserters)
+                
+                     # Solve again with the minimization constraint
+                final_result = self.solver.check()
+                self.model = self.solver.model() 
+                logging.info(f"Final solver check result:{final_result}")
+                self.build_map()
+                
+                
+                return 
+                
+        
             
-            self.build_map()
-            
-            return 
+            else:
+                logging.warning("Solver failed to find a solution.")
+                return result
 
         
     def get_init_map(self):
