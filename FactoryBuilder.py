@@ -507,7 +507,7 @@ def main():
     
     log_method_time(item=output_item,amount=amount,method_name="solve",assemblers_per_recipie=max_assembler_per_blueprint,num_subfactories=builder.get_num_subfactories(),start_time=start_time,end_time=end_time)
     
-    builder.visualize_simple()
+
     builder.visualize_factory()
 
 
