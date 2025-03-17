@@ -11,7 +11,9 @@ import csv
 from math import ceil
 import tkinter as tk
 from tkinter import filedialog
-
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 # Define constants for colors
 WHITE = (255, 255, 255)
@@ -316,6 +318,14 @@ class FactoryBuilder:
             
     def solve_factory(self):
         self.z3_solver = FactoryZ3Solver(self.block_data,self.output_point)
+        num_factories=0
+        for i, key in enumerate(self.block_data.keys()):
+            
+
+            num_factories += self.block_data[key]["num_factories"]
+            
+        print(f'total number of modules:{num_factories}')
+            
         self.z3_solver.build_constraints()
         
         self.final_blocks,self.final_x,self.final_y = self.z3_solver.solve()
@@ -346,88 +356,139 @@ class FactoryBuilder:
         return len(self.final_blocks)
     
     
-    def visualize_simple(self, cell_size=20):
+    def visualize_simple(self, cell_size=20, save_path=None):
         pygame.init()
         
+        # Load item images if not already loaded
+        if not hasattr(self, 'item_images'):
+            self.load_item_images()
+        
+        # Calculate maximum coordinates needed for all blocks and gates
+        max_x = 0
+        max_y = 0
+        for block_id, block_info in self.final_blocks.items():
+            block_x = block_info['x']
+            block_y = block_info['y']
+            block_width = block_info['width']
+            block_height = block_info['height']
+            max_x = max(max_x, block_x + block_width)
+            max_y = max(max_y, block_y + block_height)
+            
+            # Check gates
+            for gate in block_info['input_points'] + block_info['output_points']:
+                gate_x = block_x + gate['x']
+                gate_y = block_y + gate['y']
+                max_x = max(max_x, gate_x + 1)
+                max_y = max(max_y, gate_y + 1)
+        
         # Calculate window dimensions
-        window_width = self.final_x * cell_size
-        window_height = self.final_y * cell_size
+        window_width = max_x * cell_size
+        window_height = max_y * cell_size
 
         # Create Pygame window
         window = pygame.display.set_mode((window_width, window_height))
         pygame.display.set_caption('Factory Layout')
+
+        # Clear the screen
+        window.fill(WHITE)
+
+        # Draw grid
+        for row in range(max_x):
+            for col in range(max_y):
+                rect = pygame.Rect(col * cell_size, row * cell_size, cell_size, cell_size)
+                pygame.draw.rect(window, BLACK, rect, 1)
+
+        # Draw blocks and gates
+        for block_id, block_info in self.final_blocks.items():
+            block_x = block_info['x']
+            block_y = block_info['y']
+            block_width = block_info['width']
+            block_height = block_info['height']
+
+            # Draw block
+            block_rect = pygame.Rect(
+                block_x * cell_size,
+                block_y * cell_size,
+                block_width * cell_size,
+                block_height * cell_size
+            )
+            pygame.draw.rect(window, BLACK, block_rect, 2)
+
+            # Draw input gates with images
+            for gate in block_info['input_points']:
+                gate_x = block_x + gate['x']
+                gate_y = block_y + gate['y']
+                if gate['item'] in self.item_images:
+                    image = self.item_images[gate['item']]
+                    # Scale image to cell size
+                    scaled_image = pygame.transform.scale(image, (cell_size, cell_size))
+                    window.blit(scaled_image, (gate_x * cell_size, gate_y * cell_size))
+
+            # Draw output gates with images
+            for gate in block_info['output_points']:
+                gate_x = block_x + gate['x']
+                gate_y = block_y + gate['y']
+                if gate['item'] in self.item_images:
+                    image = self.item_images[gate['item']]
+                    # Scale image to cell size
+                    scaled_image = pygame.transform.scale(image, (cell_size, cell_size))
+                    window.blit(scaled_image, (gate_x * cell_size, gate_y * cell_size))
+
+        # Update the display
+        pygame.display.flip()
         
-        running = True
-        while running:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    running = False
-
-            # Clear the screen
-            window.fill(WHITE)
-
-            # Draw grid
-            for row in range(self.final_x):
-                for col in range(self.final_y):
-                    rect = pygame.Rect(col * cell_size, row * cell_size, cell_size, cell_size)
-                    pygame.draw.rect(window, BLACK, rect, 1)
-
-            # Draw blocks and gates
-            for block_id, block_info in self.final_blocks.items():
-                # Block position
-                block_x = block_info['x']
-                block_y = block_info['y']
-                block_width = block_info['width']
-                block_height = block_info['height']
-
-                # Draw block
-                block_rect = pygame.Rect(
-                    block_x * cell_size,
-                    block_y * cell_size,
-                    block_width * cell_size,
-                    block_height * cell_size
-                )
-                pygame.draw.rect(window, BLUE, block_rect)
-                pygame.draw.rect(window, BLACK, block_rect, 2)  # Border
-
-                # Draw input gates
-                for gate in block_info['input_points']:
-                    gate_x = block_x + gate['x']
-                    gate_y = block_y + gate['y']
-                    gate_rect = pygame.Rect(
-                        gate_x * cell_size,
-                        gate_y * cell_size,
-                        cell_size,
-                        cell_size
-                    )
-                    pygame.draw.rect(window, RED, gate_rect)
-
-                # Draw output gates
-                for gate in block_info['output_points']:
-                    gate_x = block_x + gate['x']
-                    gate_y = block_y + gate['y']
-                    gate_rect = pygame.Rect(
-                        gate_x * cell_size,
-                        gate_y * cell_size,
-                        cell_size,
-                        cell_size
-                    )
-                    pygame.draw.rect(window, GREEN, gate_rect)
-
-            # Update the display
-            pygame.display.flip()
+        # Save the image if a path is provided
+        if save_path:
+            pygame.image.save(window, save_path)
+        else:
+            # Wait for user to close the window
+            waiting = True
+            while waiting:
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        waiting = False
         
         # Quit Pygame
         pygame.quit()
         
-    
+    def load_item_images(self):
+        """Load and cache item images from the assets folder."""
+        self.item_images = {}
+        for block_info in self.final_blocks.values():
+            # Load images for input points
+            for gate in block_info['input_points']:
+                item = gate['item']
+                if item not in self.item_images:
+                    image_path = os.path.join('assets', f'{item}.png')
+                    if os.path.exists(image_path):
+                        self.item_images[item] = pygame.image.load(image_path)
+                        self.item_images[item] = pygame.transform.scale(
+                            self.item_images[item], 
+                            (20, 20)  # Default size, will be scaled by cell_size
+                        )
+                    else:
+                        print(f"Warning: Image not found for {item} at {image_path}")
+            
+            # Load images for output points
+            for gate in block_info['output_points']:
+                item = gate['item']
+                if item not in self.item_images:
+                    image_path = os.path.join('assets', f'{item}.png')
+                    if os.path.exists(image_path):
+                        self.item_images[item] = pygame.image.load(image_path)
+                        self.item_images[item] = pygame.transform.scale(
+                            self.item_images[item], 
+                            (20, 20)  # Default size, will be scaled by cell_size
+                        )
+                    else:
+                        print(f"Warning: Image not found for {item} at {image_path}")
     def visualize_factory(self,cell_size=20,block_size=20):
         """Draw the factory using Pygame."""
         # Initialize Pygame
         pygame.init()
         
-        window_width  = self.final_x * cell_size
-        window_height = self.final_y * cell_size
+        window_width  = self.final_x * cell_size *2
+        window_height = self.final_y * cell_size *1.5
 
         window = pygame.display.set_mode((window_width, window_height))
         pygame.display.set_caption('Factory Layout')
@@ -481,7 +542,7 @@ class FactoryBuilder:
 def main():
     
     output_item = "electronic-circuit"
-    amount = 500
+    amount = 200
     max_assembler_per_blueprint = 5
     
     start_width = 15
@@ -508,8 +569,8 @@ def main():
     log_method_time(item=output_item,amount=amount,method_name="solve",assemblers_per_recipie=max_assembler_per_blueprint,num_subfactories=builder.get_num_subfactories(),start_time=start_time,end_time=end_time)
     
 
-    builder.visualize_factory()
-
+    #builder.visualize_factory()
+    builder.visualize_simple()
 
 
 def log_method_time(item, amount, method_name,assemblers_per_recipie,num_subfactories,start_time, end_time):
@@ -520,12 +581,50 @@ def log_method_time(item, amount, method_name,assemblers_per_recipie,num_subfact
     try:
         with open("execution_times_big_factory.csv", "a", newline="") as file:
             writer = csv.writer(file)
-            writer.writerow([item, amount, method_name,assemblers_per_recipie,num_subfactories,execution_time])
+            writer.writerow([item+"_copper_cable", amount, method_name,assemblers_per_recipie,num_subfactories,execution_time])
     except Exception as e:
         logging.error(f"Error logging execution time for {method_name}: {e}")
         
+ 
+def plot_csv_data(file_path):
+
+    df = pd.read_csv(file_path, header=None, names=["item", "steps", "action", "param1", "param2", "solve_time"])
+
+    # Convert steps to categorical for better visualization
+    df["steps"] = (df["steps"]//100).astype(str)
+
+    # Define plot directory
+    plot_dir = "plots"
+    os.makedirs(plot_dir, exist_ok=True)
+
+    # Set the style
+    sns.set_style("whitegrid")
+
+    # Create the boxplot
+    plt.figure(figsize=(8, 6))
+    sns.boxplot(
+        x="steps",
+        y="solve_time",
+        hue="param1",  # Use param1 to differentiate if needed, or remove if not applicable
+        data=df,
+        palette = {5: "red", 0: "blue"}, 
+        legend=False,
+    )
+
+    # Labels and title
+    plt.title("Electronic Circuit - Solve Time (Boxplot)")
+    plt.xlabel("Number of Modules")
+    plt.ylabel("Execution Time (seconds)")
+    plt.grid(True)
+
+    # Save the boxplot
+    box_plot_path = os.path.join(plot_dir, "electronic_circuit_solve_box_plot.png")
+    plt.savefig(box_plot_path)
+    plt.close()  # Close the plot to prevent overlap with other subplots
+
+    print(f"Boxplot saved at: {box_plot_path}")
         
 if __name__ == "__main__":
+    #plot_csv_data("execution_times_big_factory.csv")
     main()
-   
    

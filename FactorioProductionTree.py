@@ -13,6 +13,7 @@ import matplotlib.pyplot as plt
 from z3 import And , Or
 from z3Solver  import Z3Solver
 from AStarPathFinderold import AStarPathFinderold
+import seaborn as sns
 
 from AStarPathFinder import AStarPathFinder
 
@@ -417,12 +418,12 @@ class FactorioProductionTree:
                         setting_input = True  # Reset to input when changing item
 
             # Fill the screen with black
-            window.fill(BLACK)
+            window.fill(WHITE)
             # Draw the grid and place images with background colors
             for row in range(self.grid_height):
                 for col in range(self.grid_width):
                     rect = pygame.Rect(side_panel_width + col * CELL_SIZE, row * CELL_SIZE, CELL_SIZE, CELL_SIZE)
-                    pygame.draw.rect(window, WHITE, rect, 1)  # Draw grid lines
+                    pygame.draw.rect(window, BLACK, rect, 1)  # Draw grid lines
 
                     # Check if this cell is assigned as an input or output for any item
                     for item_index, item in enumerate(input_information):
@@ -1199,75 +1200,51 @@ def plot_csv_data(file_path):
     items = df['Item'].unique()
     methods = df['Method'].unique()
 
-    # Create a figure with subplots, one for each item and method combination
-    fig, axes = plt.subplots(len(items), len(methods), figsize=(15, 10))
+    # Create directory for saving plots
+    output_dir = "Plots"
+    os.makedirs(output_dir, exist_ok=True)
 
     # Iterate over each item
-    for i, item in enumerate(items):
-        for j, method in enumerate(methods):
+    for item in items:
+        for method in methods:
             # Get the data for the current item and method
             item_method_data = df[(df['Item'] == item) & (df['Method'] == method)]
             
-            # Set color based on 'Minimizer' value (1 for red, otherwise blue)
-            colors = item_method_data['Minimizer'].apply(lambda x: 'red' if x == 1 else 'blue')
-            
-            # Select the axis for the current subplot
-            ax = axes[i, j] if len(items) > 1 else axes[j]
-            
-            # Plot the data using scatter (no connecting lines), with conditional color
-            ax.scatter(item_method_data['Assembler Count'], item_method_data['Execution Time (seconds)'], c=colors)
-            
-            # Set subplot title and labels
-            method_type = 'Building Belts' if method.lower() == 'build belts' else 'Solving'
-            ax.set_title(f'{item} - {method_type}')
-            ax.set_xlabel('Number of Assemblers')
-            ax.set_ylabel('Execution Time (seconds)')
-            ax.grid(True)
-
-        # Create directory for saving plots for each item
-        item_plot_dir = os.path.join("Plots", item)
-        os.makedirs(item_plot_dir, exist_ok=True)
-
-        # Save plot for each method
-        for method in methods:
-            item_method_data = df[(df['Item'] == item) & (df['Method'] == method)]
-
-            # Prepare the plot and save for each method
-            method_plot_dir = os.path.join(item_plot_dir, method)
+            # Create directory for saving plots for each item and method
+            method_plot_dir = os.path.join(output_dir, item, method)
             os.makedirs(method_plot_dir, exist_ok=True)
 
-            # Plot for the current method (Building Belts or Solving)
+            # Plot violin plot
             plt.figure(figsize=(8, 6))
-            colors = item_method_data['Minimizer'].apply(lambda x: 'red' if x == 1 else 'blue')
-            plt.scatter(item_method_data['Assembler Count'], item_method_data['Execution Time (seconds)'], c=colors)
-            method_type = 'Building Belts' if method.lower() == 'build belts' else 'Solving'
-            plt.title(f'{item} - {method_type}')
+            sns.violinplot(x='Assembler Count', y='Execution Time (seconds)', hue='Minimizer', data=item_method_data, palette={1: 'red', 0: 'blue'}, legend=False)
+            method_type = 'Building Belts' if method.lower() == 'build_belts' else 'Solving'
+            plt.title(f'{item} - {method_type} (Violin Plot)')
             plt.xlabel('Number of Assemblers')
             plt.ylabel('Execution Time (seconds)')
             plt.grid(True)
             
-            # Save the plot with item and method name
-            method_plot_path = os.path.join(method_plot_dir, f'{item}_{method}_plot.png')
-            plt.savefig(method_plot_path)
+            # Save the violin plot
+            violin_plot_path = os.path.join(method_plot_dir, f'{item}_{method}_violin_plot.png')
+            plt.savefig(violin_plot_path)
             plt.close()  # Close the plot to prevent overlap with other subplots
 
-    # Adjust layout for better spacing in the main plot
-    plt.tight_layout()
- 
-    # Ensure the 'Plots' directory exists for the main plot
-    output_dir = "Plots"
-    os.makedirs(output_dir, exist_ok=True)
+            # Plot boxplot
+            plt.figure(figsize=(8, 6))
+            sns.boxplot(x='Assembler Count', y='Execution Time (seconds)', hue='Minimizer', data=item_method_data, palette={1: 'red', 0: 'blue'}, legend=False)
+            plt.title(f'{item} - {method_type} (Boxplot)')
+            plt.xlabel('Number of Assemblers')
+            plt.ylabel('Execution Time (seconds)')
+            plt.grid(True)
+            
+            # Save the boxplot
+            box_plot_path = os.path.join(method_plot_dir, f'{item}_{method}_box_plot.png')
+            plt.savefig(box_plot_path)
+            plt.close()  # Close the plot to prevent overlap with other subplots
 
-    # Save the main plot to the 'Plots' folder
-    plot_path = os.path.join(output_dir, "plot.png")
-    plt.savefig(plot_path)
-
-  
-
- 
+    print(f"Plots saved in {output_dir}")
 
 
-    
+
 # Function to log method execution times with additional information
 def log_method_time(item, amount, minimizer, method_name, assembler_counts,start_time, end_time):
     execution_time = end_time - start_time
@@ -1287,9 +1264,8 @@ def main():
     Simple_Run()
     
     #Eval_Runs("big-electric-pole",start=50,end=500,step=50,rep_per_step=10)
-    
-
    
+
    
 def Simple_Run():
     # Set up logging for better output in the console
@@ -1435,5 +1411,6 @@ if __name__ == "__main__":
         except Exception as e:
             logging.error(f"Error initializing CSV file: {e}")
 
-    #plot_csv_data("execution_times.csv")
-    main()
+    plot_csv_data("execution_times.csv")
+    #main()
+

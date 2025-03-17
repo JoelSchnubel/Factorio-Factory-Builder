@@ -68,6 +68,7 @@ class FactoryZ3Solver:
     def build_constraints(self):
         logging.info("Building constraints")
         self.build_blocks()
+        self.fix_position()
         self.add_bound_constraints()
         self.add_overlap_constraints()
         self.add_gate_constraints()
@@ -75,6 +76,7 @@ class FactoryZ3Solver:
         self.minimize_unmerged_gates()
         self.minimize_map()
         
+    
         
     def build_blocks(self):
         logging.info("Building blocks")
@@ -132,6 +134,9 @@ class FactoryZ3Solver:
                 logging.debug(f"Block {block.id} added to blocks list")
     
     
+    def fix_position(self):
+        self.solver.add(self.blocks[0].x == 0)
+        self.solver.add(self.blocks[0].y == 0)
     
     def add_bound_constraints(self):
         logging.info("Adding bound constraints")
@@ -182,16 +187,24 @@ class FactoryZ3Solver:
         self.gate_connections = []  # Ensure this attribute is initialized
 
         for block1 in self.blocks:
+            # Skip input gates of the first block
+            if block1 == self.blocks[0]:
+                continue
+            
             for input_gate in block1.input_points:
                 for block2 in self.blocks:
+                    if block1 == block2:
+                        continue  # Skip same block
                     for output_gate in block2.output_points:
                         if input_gate.item == output_gate.item:
+                            
                             adjacency_constraint = Or(
-                                (input_gate.x == output_gate.x - 1),
-                                (input_gate.x - 1 == output_gate.x),
-                                (input_gate.y == output_gate.y - 1),
-                                (input_gate.y - 1 == output_gate.y),
+                            And(input_gate.x == output_gate.x + 1, input_gate.y == output_gate.y),
+                            And(input_gate.x == output_gate.x - 1, input_gate.y == output_gate.y),
+                            And(input_gate.x == output_gate.x, input_gate.y == output_gate.y + 1),
+                            And(input_gate.x == output_gate.x, input_gate.y == output_gate.y - 1)
                             )
+                            
                             self.solver.add(Implies(input_gate.merge, adjacency_constraint))
                             self.gate_connections.append((input_gate, output_gate))
 
@@ -209,14 +222,12 @@ class FactoryZ3Solver:
         logging.debug("Minimized unmerged gates constraint added")
 
        
-        
-        
+    
 
     def minimize_map(self):
         self.solver.add(self.max_x < self.max_y)
         self.solver.minimize(self.max_x * self.max_y)
         
-
 
     def solve(self):
         if self.solver.check() == sat:
