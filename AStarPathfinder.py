@@ -1,6 +1,8 @@
 import heapq
 import logging
 
+
+
 logging.basicConfig(
     level=logging.DEBUG,  # Use DEBUG level for detailed information, change to INFO for less verbosity
     format='%(asctime)s - %(levelname)s - %(message)s',
@@ -34,30 +36,38 @@ class AStarPathFinder:
         dx, dy = direction
         logging.debug(f"Checking jump possibility from {current} in direction {direction}")
         
-        # Go through each step up to the jump distance
+        # Check if the underground entrance point is valid
+        if not (0 <= x < len(grid[0]) and 0 <= y < len(grid)):
+            logging.debug(f"Underground entrance out of bounds: ({x}, {y})")
+            return False
         
+        if grid[y][x] != 0:
+            logging.debug(f"Underground entrance position not available: ({x}, {y})")
+            return False
+            
+        # Calculate underground exit point
+        exit_x = x + dx * (self.underground_length + 1)
+        exit_y = y + dy * (self.underground_length + 1)
+        
+        # Check if the exit point is valid
+        if not (0 <= exit_x < len(grid[0]) and 0 <= exit_y < len(grid)):
+            logging.debug(f"Underground exit out of bounds: ({exit_x}, {exit_y})")
+            return False
+            
+        if grid[exit_y][exit_x] != 0:
+            logging.debug(f"Underground exit position not available: ({exit_x}, {exit_y})")
+            return False
+        
+        # Check that all intermediate positions can be tunneled under
         for step in range(1, self.underground_length + 1):
             nx, ny = x + dx * step, y + dy * step
             
-            
-            # Log the current step coordinates
-            logging.debug(f"Step {step}: Checking node ({nx}, {ny})")
-            
-            # Check if the target position is within bounds
+            # Check if position is within bounds
             if not (0 <= nx < len(grid[0]) and 0 <= ny < len(grid)):
-                logging.debug(f"Out of bounds: ({nx}, {ny})")
+                logging.debug(f"Underground path out of bounds at: ({nx}, {ny})")
                 return False
-            
-            # Check for obstacles only if we have not reached the final step of the jump
-            if grid[ny][nx] != 0:
-                if step < self.underground_length:
-                    logging.debug(f"Obstacle found at ({nx}, {ny}), blocking the jump")
-                    return False
-                else:
-                    logging.debug(f"Obstacle found at ({nx}, {ny}), but this is the final jump position")
-
-        # If we successfully checked all steps and found no obstacles until the final jump
-        logging.debug(f"Jump possible to ({nx}, {ny})")
+        
+        logging.debug(f"Underground path possible from ({x}, {y}) to ({exit_x}, {exit_y})")
         return True
         
     
@@ -143,7 +153,6 @@ class AStarPathFinder:
         return jump_markers
     
     def find_path_for_item(self):
-        
         placed_inserter_information = []
         paths = {}
         grid = [row[:] for row in self.base_grid]  # Deep copy of the grid for each function call
@@ -154,51 +163,48 @@ class AStarPathFinder:
                 grid[y][x] = 0
             found_path = False
             
-            
-               # Calculate all possible pairs of start and destination points, sorted by distance
+            # Calculate all possible pairs of start and destination points, sorted by distance
             pairs = [
-                (start, dest, self.heuristic(start,dest))
+                (start, dest, self.heuristic(start, dest))
                 for start in points['start_points']
                 for dest in points['destination']
             ]
             pairs.sort(key=lambda x: x[2])  # Sort by distance (smallest first)
             
-            for start , dest ,_  in pairs:
-            
+            for start, dest, _ in pairs:
                 logging.info(f"Attempting path for {item} from {start} to {dest}")
                 print(f"Attempting path for {item} from {start} to {dest}")
 
-                path, direction_grid = self.astar(grid, start, dest)
-                
+                path, direction_grid, underground_paths = self.astar(grid, start, dest)
                 
                 if path:
-                    
                     # check if we need to add an inserter:
                     if points.get("inserter_mapping") is not None:
-
-                        (ix,iy) = points["inserter_mapping"][str(start)]
-                        placed_inserter_information.append([points['item'],ix,iy])
+                        (ix, iy) = points["inserter_mapping"][str(start)]
+                        placed_inserter_information.append([points['item'], ix, iy])
                         self.base_grid[ix][iy] = 12
                     
-                       
-                    
-                    jump_markers = self.get_jump_markers(path)
-                     
                     # Mark the path on the grid to prevent overlaps
                     for px, py in path:
-                        self.base_grid[py][px] = 9 
+                        self.base_grid[py][px] = 9
                     
-                    # add point information to the retirval points
+                    # Mark underground belt entrances and exits
+                    for entrance, exit_point, direction in underground_paths:
+                        # Mark entrance (10 could be the code for underground belt entrance)
+                        self.base_grid[entrance[1]][entrance[0]] = 10
+                        
+                        # Mark exit (11 could be the code for underground belt exit)
+                        self.base_grid[exit_point[1]][exit_point[0]] = 11
+                    
+                    # Add point information to the retrieval points
                     for updated_item, updated_points in self.points.items():
                         if updated_item != item and updated_points['item'] == points['item']:
-                            
-                            
                             self.points[updated_item]['destination'].extend(path)
                     
                     paths[item] = {
                         "path": path,
                         "direction_grid": direction_grid,
-                        "jump_markers": jump_markers
+                        "underground_paths": underground_paths
                     }
                     found_path = True
                     break
@@ -206,44 +212,7 @@ class AStarPathFinder:
             if found_path:
                 continue
             
-        return paths,placed_inserter_information
+        return paths, placed_inserter_information
     
     
-def main():
     
-    obstacle_map=  [[ 1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1],
-                    [ 1,  0, 33, 33, 33,  0,  0,  0,  0,  0,  0,  0,  0,  1],
-                    [99, 44, 33, 33, 33,  0,  0,  0,  0,  0,  0,  0,  0,  1],
-                    [ 1,  0, 33, 33, 33,  0,  0,  0,  0,  0,  0,  0,  0,  1],
-                    [ 1,  0, 44, 44, 44,  0,  0,  0,  0,  0,  0,  0,  0,  1],
-                    [ 1,  0, 33, 33, 33,  0,  0,  0,  0,  0,  0,  0,  0,  1],
-                    [ 1,  0, 33, 33, 33,  0,  0,  0,  0,  0,  0,  0,  0,  1],
-                    [ 1,  0, 33, 33, 33,  0,  0,  0,  0,  0,  0,  0,  0,  1],
-                    [ 1,  0, 44,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1],
-                    [ 1,  0, 99,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1],
-                    [ 1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1],
-                    [ 1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1],
-                    [ 1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1],
-                    [ 1,  0,  0,  0,  0,  0,  0,  0,  0, 22, 22, 22, 22, 22],]
-
-    retrieval_points ={'iron-plate_0': {'item': 'iron-plate', 'destination': [(13, 0), (13, 12), (13, 1), (13, 2), (13, 3), (13, 4), (13, 5), (13, 6), (13, 7), (13, 8), (13, 9), (13, 10), (13, 11)], 'start_points': [(2, 9)], 
-                                        'inserter_mapping': None}, 
-                       'electronic-circuit_0': {'item': 'electronic-circuit', 'destination': [(10, 13), (11, 13), (12, 13), (13, 13), (9, 13)], 'start_points': [(3, 9), (4, 9), (6, 5), (6, 6), (6, 7)], 
-                                                'inserter_mapping': {'(3, 9)': (3, 8), '(4, 9)': (4, 8), '(6, 5)': (5, 5), '(6, 6)': (5, 6), '(6, 7)': (5, 7)}}}
-    
-    astar_pathfinder = AStarPathFinder(obstacle_map,retrieval_points)
-    paths, placed_inserter_information = astar_pathfinder.find_path_for_item()
-    
-    print("Path results:")
-    for item, path_data in paths.items():
-        print(f"Item: {item}")
-        print("Path:", path_data["path"])
-        #print("Direction Grid" ,path_data["direction_grid"])
-        #print("Jump Markers:", path_data["jump_markers"])
-        
-    print(f"placed_inserter_information{placed_inserter_information}")
-        
-    
-   
-if __name__ == "__main__":
-    main()

@@ -577,11 +577,11 @@
         "iron-plate": {
             "input": [
                 14,
-                12
+                11
             ],
             "output": [
                 0,
-                12
+                11
             ],
             "grid": [
                 [
@@ -773,36 +773,36 @@
                 ],
                 [
                     0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
+                    2,
+                    2,
+                    2,
+                    2,
+                    2,
+                    2,
+                    2,
+                    2,
+                    2,
+                    2,
+                    2,
+                    2,
+                    2,
                     0
                 ],
                 [
                     0,
-                    2,
-                    2,
-                    2,
-                    2,
-                    2,
-                    2,
-                    2,
-                    2,
-                    2,
-                    2,
-                    2,
-                    2,
-                    2,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
                     0
                 ],
                 [
@@ -1030,36 +1030,36 @@
                 ],
                 [
                     null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
+                    "left",
+                    "left",
+                    "left",
+                    "left",
+                    "left",
+                    "left",
+                    "left",
+                    "left",
+                    "left",
+                    "left",
+                    "left",
+                    "left",
+                    "left",
                     null
                 ],
                 [
                     null,
-                    "left",
-                    "left",
-                    "left",
-                    "left",
-                    "left",
-                    "left",
-                    "left",
-                    "left",
-                    "left",
-                    "left",
-                    "left",
-                    "left",
-                    "left",
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
                     null
                 ],
                 [
@@ -1298,23 +1298,6 @@
                     0
                 ],
                 [
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0
-                ],
-                [
                     1,
                     1,
                     1,
@@ -1330,6 +1313,23 @@
                     1,
                     1,
                     1
+                ],
+                [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
                 ],
                 [
                     0,
@@ -1628,68 +1628,53 @@
     "inserter_information": [
         [
             "copper-cable",
-            5,
-            10
-        ],
-        [
-            "copper-cable",
-            5,
-            9
-        ],
-        [
-            "copper-cable",
-            5,
-            8
-        ],
-        [
-            "iron-plate",
-            9,
-            8
-        ],
-        [
-            "copper-cable",
-            5,
-            6
-        ],
-        [
-            "copper-cable",
-            5,
-            5
-        ],
-        [
-            "copper-cable",
-            5,
-            4
-        ],
-        [
-            "iron-plate",
-            9,
-            4
-        ],
-        [
-            "copper-plate",
-            1,
+            3,
             11
         ],
         [
-            "copper-plate",
-            1,
-            10
+            "copper-cable",
+            4,
+            11
         ],
         [
-            "copper-plate",
-            1,
-            8
-        ],
-        [
-            "copper-plate",
-            1,
+            "copper-cable",
+            4,
             7
         ],
         [
+            "iron-plate",
+            6,
+            8
+        ],
+        [
+            "copper-cable",
+            5,
+            4
+        ],
+        [
+            "copper-cable",
+            5,
+            2
+        ],
+        [
+            "copper-cable",
+            5,
+            3
+        ],
+        [
+            "iron-plate",
+            8,
+            5
+        ],
+        [
             "copper-plate",
             1,
-            5
+            13
+        ],
+        [
+            "copper-plate",
+            1,
+            12
         ],
         [
             "copper-plate",
@@ -1697,39 +1682,42 @@
             4
         ],
         [
+            "copper-plate",
+            1,
+            6
+        ],
+        [
+            "copper-plate",
+            1,
+            2
+        ],
+        [
+            "copper-plate",
+            1,
+            1
+        ],
+        [
             "electronic-circuit",
-            9,
+            6,
             9
         ],
         [
             "electronic-circuit",
-            9,
-            6
+            7,
+            5
         ]
     ],
     "belt_point_information": [
         [
             "copper-cable",
-            4,
-            10,
+            3,
+            12,
             "end"
         ],
         [
             "copper-cable",
             4,
-            9,
-            "end"
-        ],
-        [
-            "copper-cable",
-            4,
-            8,
-            "end"
-        ],
-        [
-            "iron-plate",
-            10,
-            8,
+            12,
             "end"
         ],
         [
@@ -1739,96 +1727,885 @@
             "end"
         ],
         [
-            "copper-cable",
-            4,
-            5,
-            "end"
-        ],
-        [
-            "copper-cable",
-            4,
-            4,
-            "end"
-        ],
-        [
             "iron-plate",
-            10,
-            4,
-            "end"
-        ],
-        [
-            "copper-plate",
-            0,
-            11,
-            "end"
-        ],
-        [
-            "copper-plate",
-            0,
-            10,
-            "end"
-        ],
-        [
-            "copper-plate",
-            0,
+            7,
             8,
             "end"
         ],
         [
-            "copper-plate",
-            0,
-            7,
+            "copper-cable",
+            4,
+            4,
+            "end"
+        ],
+        [
+            "copper-cable",
+            4,
+            2,
+            "end"
+        ],
+        [
+            "copper-cable",
+            4,
+            3,
+            "end"
+        ],
+        [
+            "iron-plate",
+            8,
+            6,
             "end"
         ],
         [
             "copper-plate",
             0,
-            5,
+            13,
+            "end"
+        ],
+        [
+            "copper-plate",
+            0,
+            12,
             "end"
         ],
         [
             "copper-plate",
             0,
             4,
+            "end"
+        ],
+        [
+            "copper-plate",
+            0,
+            6,
+            "end"
+        ],
+        [
+            "copper-plate",
+            0,
+            2,
+            "end"
+        ],
+        [
+            "copper-plate",
+            0,
+            1,
             "end"
         ]
     ],
     "assembler_information": [
         [
             "electronic-circuit",
-            6,
+            3,
             8
         ],
         [
             "electronic-circuit",
             6,
+            2
+        ],
+        [
+            "copper-cable",
+            2,
+            12
+        ],
+        [
+            "copper-cable",
+            2,
             4
         ],
         [
             "copper-cable",
             2,
-            9
+            1
+        ]
+    ],
+    "retrieval_points": {
+        "electronic-circuit_0": {
+            "item": "electronic-circuit",
+            "destination": [
+                [
+                    14,
+                    1
+                ],
+                [
+                    14,
+                    2
+                ],
+                [
+                    14,
+                    3
+                ],
+                [
+                    14,
+                    4
+                ],
+                [
+                    14,
+                    5
+                ],
+                [
+                    14,
+                    6
+                ],
+                [
+                    14,
+                    7
+                ],
+                [
+                    14,
+                    8
+                ],
+                [
+                    14,
+                    9
+                ],
+                [
+                    14,
+                    10
+                ],
+                [
+                    14,
+                    11
+                ],
+                [
+                    14,
+                    12
+                ],
+                [
+                    14,
+                    13
+                ],
+                [
+                    14,
+                    0
+                ],
+                [
+                    14,
+                    14
+                ],
+                [
+                    7,
+                    9
+                ],
+                [
+                    8,
+                    9
+                ],
+                [
+                    9,
+                    9
+                ],
+                [
+                    10,
+                    9
+                ],
+                [
+                    13,
+                    9
+                ],
+                [
+                    14,
+                    9
+                ],
+                [
+                    7,
+                    6
+                ],
+                [
+                    7,
+                    7
+                ],
+                [
+                    7,
+                    9
+                ]
+            ],
+            "start_points": [
+                [
+                    5,
+                    6
+                ],
+                [
+                    5,
+                    12
+                ],
+                [
+                    1,
+                    8
+                ],
+                [
+                    1,
+                    9
+                ],
+                [
+                    1,
+                    10
+                ],
+                [
+                    7,
+                    9
+                ],
+                [
+                    7,
+                    10
+                ]
+            ],
+            "inserter_mapping": {
+                "(5, 6)": [
+                    5,
+                    7
+                ],
+                "(5, 12)": [
+                    5,
+                    11
+                ],
+                "(1, 8)": [
+                    2,
+                    8
+                ],
+                "(1, 9)": [
+                    2,
+                    9
+                ],
+                "(1, 10)": [
+                    2,
+                    10
+                ],
+                "(7, 9)": [
+                    6,
+                    9
+                ],
+                "(7, 10)": [
+                    6,
+                    10
+                ]
+            }
+        },
+        "electronic-circuit_1": {
+            "item": "electronic-circuit",
+            "destination": [
+                [
+                    14,
+                    1
+                ],
+                [
+                    14,
+                    2
+                ],
+                [
+                    14,
+                    3
+                ],
+                [
+                    14,
+                    4
+                ],
+                [
+                    14,
+                    5
+                ],
+                [
+                    14,
+                    6
+                ],
+                [
+                    14,
+                    7
+                ],
+                [
+                    14,
+                    8
+                ],
+                [
+                    14,
+                    9
+                ],
+                [
+                    14,
+                    10
+                ],
+                [
+                    14,
+                    11
+                ],
+                [
+                    14,
+                    12
+                ],
+                [
+                    14,
+                    13
+                ],
+                [
+                    14,
+                    0
+                ],
+                [
+                    14,
+                    14
+                ],
+                [
+                    7,
+                    9
+                ],
+                [
+                    8,
+                    9
+                ],
+                [
+                    9,
+                    9
+                ],
+                [
+                    10,
+                    9
+                ],
+                [
+                    13,
+                    9
+                ],
+                [
+                    14,
+                    9
+                ],
+                [
+                    7,
+                    6
+                ],
+                [
+                    7,
+                    7
+                ],
+                [
+                    7,
+                    9
+                ]
+            ],
+            "start_points": [
+                [
+                    6,
+                    0
+                ],
+                [
+                    7,
+                    0
+                ],
+                [
+                    8,
+                    0
+                ],
+                [
+                    6,
+                    6
+                ],
+                [
+                    7,
+                    6
+                ],
+                [
+                    10,
+                    2
+                ],
+                [
+                    10,
+                    3
+                ],
+                [
+                    10,
+                    4
+                ]
+            ],
+            "inserter_mapping": {
+                "(6, 0)": [
+                    6,
+                    1
+                ],
+                "(7, 0)": [
+                    7,
+                    1
+                ],
+                "(8, 0)": [
+                    8,
+                    1
+                ],
+                "(6, 6)": [
+                    6,
+                    5
+                ],
+                "(7, 6)": [
+                    7,
+                    5
+                ],
+                "(10, 2)": [
+                    9,
+                    2
+                ],
+                "(10, 3)": [
+                    9,
+                    3
+                ],
+                "(10, 4)": [
+                    9,
+                    4
+                ]
+            }
+        },
+        "iron-plate_0": {
+            "item": "iron-plate",
+            "destination": [
+                [
+                    11,
+                    14
+                ],
+                [
+                    11,
+                    0
+                ],
+                [
+                    11,
+                    1
+                ],
+                [
+                    11,
+                    2
+                ],
+                [
+                    11,
+                    3
+                ],
+                [
+                    11,
+                    4
+                ],
+                [
+                    11,
+                    5
+                ],
+                [
+                    11,
+                    6
+                ],
+                [
+                    11,
+                    7
+                ],
+                [
+                    11,
+                    8
+                ],
+                [
+                    11,
+                    9
+                ],
+                [
+                    11,
+                    10
+                ],
+                [
+                    11,
+                    11
+                ],
+                [
+                    11,
+                    12
+                ],
+                [
+                    11,
+                    13
+                ],
+                [
+                    8,
+                    6
+                ],
+                [
+                    8,
+                    7
+                ],
+                [
+                    8,
+                    8
+                ]
+            ],
+            "start_points": [
+                [
+                    7,
+                    8
+                ]
+            ],
+            "inserter_mapping": null
+        },
+        "iron-plate_1": {
+            "item": "iron-plate",
+            "destination": [
+                [
+                    11,
+                    14
+                ],
+                [
+                    11,
+                    0
+                ],
+                [
+                    11,
+                    1
+                ],
+                [
+                    11,
+                    2
+                ],
+                [
+                    11,
+                    3
+                ],
+                [
+                    11,
+                    4
+                ],
+                [
+                    11,
+                    5
+                ],
+                [
+                    11,
+                    6
+                ],
+                [
+                    11,
+                    7
+                ],
+                [
+                    11,
+                    8
+                ],
+                [
+                    11,
+                    9
+                ],
+                [
+                    11,
+                    10
+                ],
+                [
+                    11,
+                    11
+                ],
+                [
+                    11,
+                    12
+                ],
+                [
+                    11,
+                    13
+                ],
+                [
+                    7,
+                    8
+                ],
+                [
+                    8,
+                    8
+                ],
+                [
+                    9,
+                    8
+                ],
+                [
+                    10,
+                    8
+                ],
+                [
+                    11,
+                    8
+                ]
+            ],
+            "start_points": [
+                [
+                    8,
+                    6
+                ]
+            ],
+            "inserter_mapping": null
+        }
+    },
+    "obstacle_map": [
+        [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
         ],
         [
-            "copper-cable",
-            2,
-            6
+            99,
+            44,
+            33,
+            33,
+            33,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
         ],
         [
-            "copper-cable",
-            2,
-            3
+            99,
+            44,
+            33,
+            33,
+            33,
+            44,
+            33,
+            33,
+            33,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        [
+            1,
+            0,
+            33,
+            33,
+            33,
+            44,
+            33,
+            33,
+            33,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        [
+            99,
+            44,
+            33,
+            33,
+            33,
+            44,
+            33,
+            33,
+            33,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        [
+            1,
+            0,
+            33,
+            33,
+            33,
+            0,
+            0,
+            0,
+            44,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        [
+            99,
+            44,
+            33,
+            33,
+            33,
+            0,
+            0,
+            9,
+            9,
+            12,
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        [
+            1,
+            0,
+            0,
+            0,
+            44,
+            12,
+            0,
+            9,
+            9,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        [
+            1,
+            0,
+            0,
+            33,
+            33,
+            33,
+            44,
+            0,
+            9,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        [
+            1,
+            0,
+            0,
+            33,
+            33,
+            33,
+            0,
+            9,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        [
+            1,
+            0,
+            0,
+            33,
+            33,
+            33,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        [
+            1,
+            0,
+            0,
+            44,
+            44,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        [
+            99,
+            44,
+            33,
+            33,
+            33,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        [
+            99,
+            44,
+            33,
+            33,
+            33,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        [
+            1,
+            0,
+            33,
+            33,
+            33,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
         ]
     ],
     "paths": {
         "electronic-circuit_0": {
             "path": [
                 [
+                    7,
+                    9
+                ],
+                [
+                    8,
+                    9
+                ],
+                [
+                    9,
+                    9
+                ],
+                [
                     10,
                     9
                 ],
                 [
-                    11,
+                    13,
                     9
                 ],
                 [
@@ -1947,6 +2724,23 @@
                     null,
                     null,
                     null,
+                    [
+                        0,
+                        -1
+                    ],
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ],
+                [
+                    null,
+                    null,
+                    null,
+                    null,
                     null,
                     null,
                     null,
@@ -1954,6 +2748,9 @@
                         0,
                         -1
                     ],
+                    null,
+                    null,
+                    null,
                     null,
                     null,
                     null,
@@ -1968,41 +2765,27 @@
                     null,
                     null,
                     null,
-                    null,
-                    null,
+                    [
+                        0,
+                        -1
+                    ],
+                    [
+                        0,
+                        -1
+                    ],
                     [
                         0,
                         -1
                     ],
                     null,
                     null,
-                    null,
-                    null
-                ],
-                [
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
                     [
                         0,
                         -1
                     ],
-                    null,
-                    null,
                     null
                 ],
                 [
-                    null,
-                    null,
-                    null,
                     null,
                     null,
                     null,
@@ -2018,7 +2801,19 @@
                         1,
                         0
                     ],
+                    [
+                        1,
+                        0
+                    ],
+                    [
+                        1,
+                        0
+                    ],
                     null,
+                    [
+                        1,
+                        0
+                    ],
                     [
                         1,
                         0
@@ -2036,9 +2831,14 @@
                     null,
                     null,
                     null,
-                    null,
-                    null,
-                    null,
+                    [
+                        0,
+                        1
+                    ],
+                    [
+                        0,
+                        1
+                    ],
                     [
                         0,
                         1
@@ -2049,6 +2849,10 @@
                     ],
                     null,
                     null,
+                    [
+                        0,
+                        1
+                    ],
                     null
                 ],
                 [
@@ -2123,11 +2927,11 @@
             "jump_markers": [
                 [
                     [
-                        11,
+                        10,
                         9
                     ],
                     [
-                        14,
+                        13,
                         9
                     ]
                 ]
@@ -2136,15 +2940,15 @@
         "electronic-circuit_1": {
             "path": [
                 [
-                    10,
+                    7,
                     6
                 ],
                 [
-                    10,
+                    7,
                     7
                 ],
                 [
-                    10,
+                    7,
                     9
                 ]
             ],
@@ -2242,9 +3046,6 @@
                     null,
                     null,
                     null,
-                    null,
-                    null,
-                    null,
                     [
                         0,
                         -1
@@ -2252,12 +3053,12 @@
                     null,
                     null,
                     null,
+                    null,
+                    null,
+                    null,
                     null
                 ],
                 [
-                    null,
-                    null,
-                    null,
                     null,
                     null,
                     null,
@@ -2269,18 +3070,18 @@
                         0
                     ],
                     null,
+                    null,
+                    null,
                     [
                         1,
                         0
                     ],
                     null,
                     null,
+                    null,
                     null
                 ],
                 [
-                    null,
-                    null,
-                    null,
                     null,
                     null,
                     null,
@@ -2301,20 +3102,6 @@
                     ],
                     null,
                     null,
-                    null
-                ],
-                [
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
                     null,
                     null,
                     null,
@@ -2324,6 +3111,20 @@
                     null,
                     null,
                     null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ],
+                [
                     null,
                     null,
                     null,
@@ -2338,12 +3139,12 @@
                     null,
                     null,
                     null,
+                    null,
+                    null,
+                    null,
                     null
                 ],
                 [
-                    null,
-                    null,
-                    null,
                     null,
                     null,
                     null,
@@ -2355,6 +3156,9 @@
                         0,
                         1
                     ],
+                    null,
+                    null,
+                    null,
                     null,
                     null,
                     null,
@@ -2432,11 +3236,11 @@
             "jump_markers": [
                 [
                     [
-                        10,
+                        7,
                         7
                     ],
                     [
-                        10,
+                        7,
                         9
                     ]
                 ]
@@ -2445,15 +3249,23 @@
         "iron-plate_0": {
             "path": [
                 [
+                    7,
+                    8
+                ],
+                [
+                    8,
+                    8
+                ],
+                [
+                    9,
+                    8
+                ],
+                [
                     10,
                     8
                 ],
                 [
                     11,
-                    8
-                ],
-                [
-                    12,
                     8
                 ]
             ],
@@ -2551,9 +3363,52 @@
                     null,
                     null,
                     null,
+                    [
+                        0,
+                        -1
+                    ],
                     null,
                     null,
                     null,
+                    null,
+                    null,
+                    null,
+                    null
+                ],
+                [
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ],
+                [
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    [
+                        0,
+                        -1
+                    ],
+                    [
+                        0,
+                        -1
+                    ],
                     [
                         0,
                         -1
@@ -2572,46 +3427,14 @@
                     null,
                     null,
                     null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null
-                ],
-                [
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
                     [
-                        0,
-                        -1
+                        1,
+                        0
                     ],
-                    null,
-                    null,
-                    null
-                ],
-                [
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
+                    [
+                        1,
+                        0
+                    ],
                     [
                         1,
                         0
@@ -2621,12 +3444,10 @@
                         0
                     ],
                     null,
+                    null,
                     null
                 ],
                 [
-                    null,
-                    null,
-                    null,
                     null,
                     null,
                     null,
@@ -2639,21 +3460,10 @@
                         0,
                         1
                     ],
-                    null,
-                    null,
-                    null
-                ],
-                [
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
+                    [
+                        0,
+                        1
+                    ],
                     [
                         0,
                         1
@@ -2671,6 +3481,23 @@
                     null,
                     null,
                     null,
+                    [
+                        0,
+                        1
+                    ],
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ],
+                [
+                    null,
+                    null,
+                    null,
+                    null,
                     null,
                     null,
                     null,
@@ -2678,6 +3505,9 @@
                         0,
                         1
                     ],
+                    null,
+                    null,
+                    null,
                     null,
                     null,
                     null,
@@ -2740,16 +3570,16 @@
         "iron-plate_1": {
             "path": [
                 [
-                    10,
-                    4
+                    8,
+                    6
                 ],
                 [
-                    11,
-                    4
+                    8,
+                    7
                 ],
                 [
-                    12,
-                    4
+                    8,
+                    8
                 ]
             ],
             "direction_grid": [
@@ -2815,14 +3645,8 @@
                     null,
                     null,
                     null,
-                    [
-                        0,
-                        -1
-                    ],
-                    [
-                        0,
-                        -1
-                    ],
+                    null,
+                    null,
                     null,
                     null,
                     null
@@ -2836,6 +3660,45 @@
                     null,
                     null,
                     null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ],
+                [
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ],
+                [
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    [
+                        -1,
+                        0
+                    ],
+                    [
+                        -1,
+                        0
+                    ],
                     null,
                     null,
                     null,
@@ -2848,11 +3711,36 @@
                         0
                     ],
                     null,
+                    null,
                     null
                 ],
                 [
                     null,
                     null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    [
+                        -1,
+                        0
+                    ],
+                    null,
+                    [
+                        0,
+                        1
+                    ],
+                    [
+                        1,
+                        0
+                    ],
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ],
+                [
                     null,
                     null,
                     null,
@@ -2865,58 +3753,6 @@
                         0,
                         1
                     ],
-                    [
-                        0,
-                        1
-                    ],
-                    null,
-                    null,
-                    null
-                ],
-                [
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null
-                ],
-                [
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null
-                ],
-                [
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
                     null,
                     null,
                     null,

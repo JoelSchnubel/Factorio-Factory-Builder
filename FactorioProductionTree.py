@@ -282,7 +282,7 @@ class FactorioProductionTree:
         return self.grid_height * self.grid_width + sum(row.count(2) for row in self.grid)
 
     
-    def manual_Output(self,Title="Manual Input"):
+    def manual_Output(self,Title="Manual Output"):
         side_panel_width = 300
         CELL_SIZE = 50  # Assuming a default cell size
         WHITE = (255, 255, 255)
@@ -497,7 +497,7 @@ class FactorioProductionTree:
         self.output_information = output_information
         pygame.quit()
     
-    def manual_Input(self,Title="Manuel Input"):
+    def manual_Input(self,Title="Manual Input"):
         
         side_panel_width = 300
         CELL_SIZE = 50  # Assuming a default cell size
@@ -913,28 +913,18 @@ class FactorioProductionTree:
         rearranged_dict = {**target_items, **other_items}
         return rearranged_dict
     # need to solve once before you can execute this
-    def build_belts(self,max_tries):
-        
-        
+    def build_belts(self, max_tries):
         for i in range(max_tries):
-            
             print(f'Try Number: {i}')
             
-            
-            self.obstacle_map,belt_point_information,assembler_information,_ = self.z3_solver.build_map()
-            
-            #print(belt_point_information)
-            
-            #print(f"assembler_information {assembler_information}")
+            self.obstacle_map, belt_point_information, assembler_information, _ = self.z3_solver.build_map()
             
             # get rid of belts that are already connected -> overlap with other input and output belts set by user or overlap with assembler -> direct insertion
             belt_point_information = [belt for belt in belt_point_information if not self.detect_belt_overlap(belt)]
-            belt_point_information = [belt for belt in belt_point_information if not self.detect_assembler_overlap(belt,assembler_information)]
-            
-            #print(f"belt_point_information {belt_point_information}")
+            belt_point_information = [belt for belt in belt_point_information if not self.detect_assembler_overlap(belt, assembler_information)]
+        
             
             retrieval_points = self.get_retrieval_points(belt_point_information,assembler_information)
-            #print(f" retrieval points :{retrieval_points}")
             
             # add output belt if needed to form all possible to all possible
             retrieval_points.update(self.add_out_point_information(self.output_item,assembler_information))
@@ -943,20 +933,20 @@ class FactorioProductionTree:
                 
                 # rearrange such that we first build paths for outputs
                 retrieval_points = self.rearrange_dict(retrieval_points, self.output_item)
+                self.retrieval_points = retrieval_points
                 
+    
                 
                 astar_pathfinder = AStarPathFinder(self.obstacle_map,retrieval_points)
                 paths , placed_inserter_information = astar_pathfinder.find_path_for_item()
-
-                #print(paths)
                 
-                return paths,placed_inserter_information
+                return paths, placed_inserter_information
             
-            except:
-                print(f"could not assign valid paths to that setup")
-                logging.warning(f"coould not assign valid paths to that setup")
+            except Exception as e:
+                print(f"could not assign valid paths to that setup: {e}")
+                logging.warning(f"could not assign valid paths to that setup: {e}")
                 
-                # restrict the assembler and inserter positions to occur in teh same setup -> belts are not needed as they are bound by the inserter
+                # restrict the assembler and inserter positions to occur in the same setup -> belts are not needed as they are bound by the inserter
                 self.z3_solver.restrict_current_setup()
                 self.z3_solver.solve()
                 
@@ -984,6 +974,8 @@ class FactorioProductionTree:
             self.inserter_information = data.get("inserter_information", [])
             self.belt_point_information = data.get("belt_point_information", [])
             self.assembler_information = data.get("assembler_information", [])
+            self.retrieval_points = data.get("retrieval_points", {})
+            self.obstacle_map = data.get("obstacle_map",[])
             self.paths = data.get("paths", [])
 
             print(f"Production tree data successfully loaded from {file_path}")
@@ -991,42 +983,108 @@ class FactorioProductionTree:
         except Exception as e:
             print(f"Failed to load production tree data: {e}")      
             
-    def store_data(self,file_path,paths,placed_inserter_information):
-        
-        _ ,belt_point_information,assembler_information,inserter_information = self.z3_solver.build_map()
-        
-
-
-        inserter_information = inserter_information + placed_inserter_information
-        
-        data = {
-        "output_item":self.output_item,
-        "max_ouput":self.calculate_max_output(),
-        "amount":self.amount,
-        "production_data":self.production_data,
-        "grid_width": self.grid_width,
-        "grid_height": self.grid_height,
-        "input_items": self.input_items,
-        "input_information": self.input_information,
-        "output_item": self.output_item,
-        "output_information": self.output_information,
-        "inserter_information":inserter_information,
-        "belt_point_information":belt_point_information,
-        "assembler_information":assembler_information,
-        "paths":paths
-        }
-        
-        # Ensure file path has a .json extension
-        if not file_path.endswith('.json'):
-            file_path += '.json'
-            
+    def store_data(self, file_path, paths, placed_inserter_information):
         try:
-        # Write data to the file as JSON
+            _, belt_point_information, assembler_information, inserter_information = self.z3_solver.build_map()
+            
+            inserter_information = inserter_information + placed_inserter_information
+            
+            # Make sure paths is JSON serializable
+            serializable_paths = {}
+            for key, path_data in paths.items():
+                serializable_paths[key] = {}
+                for inner_key, inner_value in path_data.items():
+                    if inner_key == "path":
+                        # Make sure path is a list of lists
+                        serializable_paths[key][inner_key] = [list(point) for point in inner_value]
+                    elif inner_key == "direction_grid":
+                        # Make sure direction_grid is a standard Python list
+                        serializable_paths[key][inner_key] = [[list(d) if d else None for d in row] for row in inner_value]
+                    elif inner_key == "underground_paths":
+                        # Make sure underground_paths is serializable
+                        serializable_underground = []
+                        for entry in inner_value:
+                            # Each entry might be (entrance, exit, direction)
+                            if len(entry) == 3:
+                                entrance, exit_point, direction = entry
+                                serializable_underground.append([
+                                    list(entrance), 
+                                    list(exit_point), 
+                                    list(direction) if direction else None
+                                ])
+                        serializable_paths[key][inner_key] = serializable_underground
+                    else:
+                        serializable_paths[key][inner_key] = inner_value
+          
+            # Create serializable retrieval points
+            serializable_retrieval_points = None
+            if hasattr(self, 'retrieval_points') and self.retrieval_points is not None:
+                # Deep copy to avoid modifying the original
+                serializable_retrieval_points = {}
+                for key, value in self.retrieval_points.items():
+                    serializable_retrieval_points[key] = {}
+                    for inner_key, inner_value in value.items():
+                        if isinstance(inner_value, list):
+                            # Ensure list items are serializable
+                            if inner_value and isinstance(inner_value[0], tuple):
+                                serializable_retrieval_points[key][inner_key] = [list(item) for item in inner_value]
+                            else:
+                                serializable_retrieval_points[key][inner_key] = inner_value.copy()
+                        elif isinstance(inner_value, dict):
+                            # Handle dictionary with potential tuple keys
+                            new_dict = {}
+                            for k, v in inner_value.items():
+                                if isinstance(v, tuple):
+                                    new_dict[k] = list(v)
+                                else:
+                                    new_dict[k] = v
+                            serializable_retrieval_points[key][inner_key] = new_dict
+                        else:
+                            serializable_retrieval_points[key][inner_key] = inner_value
+            
+            # Convert obstacle_map to a standard Python list if it's a NumPy array
+            serializable_obstacle_map = None
+            if self.obstacle_map is not None:
+                import numpy as np
+                if isinstance(self.obstacle_map, np.ndarray):
+                    serializable_obstacle_map = self.obstacle_map.tolist()
+                else:
+                    # If it's already a list or some other serializable type, use it directly
+                    serializable_obstacle_map = self.obstacle_map
+            
+            data = {
+                "output_item": self.output_item,
+                "max_ouput": self.calculate_max_output(),
+                "amount": self.amount,
+                "production_data": self.production_data,
+                "grid_width": self.grid_width,
+                "grid_height": self.grid_height,
+                "input_items": self.input_items,
+                "input_information": self.input_information,
+                "output_item": self.output_item,
+                "output_information": self.output_information,
+                "inserter_information": inserter_information,
+                "belt_point_information": belt_point_information,
+                "assembler_information": assembler_information,
+                "retrieval_points": serializable_retrieval_points,
+                "obstacle_map": serializable_obstacle_map,
+                "paths": serializable_paths
+            }
+            
+            # Ensure file path has a .json extension
+            if not file_path.endswith('.json'):
+                file_path += '.json'
+                
+            # Write data to the file as JSON
             with open(file_path, "w") as file:
                 json.dump(data, file, indent=4)
             print(f"Production tree data successfully stored to {file_path}")
         except Exception as e:
             print(f"Failed to store production tree data: {e}")
+            logging.error(f"Failed to store production tree data: {e}")
+            # Print the full traceback for debugging
+            import traceback
+            traceback.print_exc()
   
     
     def calculate_max_output(self):
@@ -1411,6 +1469,6 @@ if __name__ == "__main__":
         except Exception as e:
             logging.error(f"Error initializing CSV file: {e}")
 
-    plot_csv_data("execution_times.csv")
-    #main()
+    #plot_csv_data("execution_times.csv")
+    main()
 
