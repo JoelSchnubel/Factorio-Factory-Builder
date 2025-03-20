@@ -542,7 +542,7 @@ class FactoryBuilder:
 def main():
     
     output_item = "electronic-circuit"
-    amount = 200
+    amount = 900
     max_assembler_per_blueprint = 5
     
     start_width = 15
@@ -581,7 +581,7 @@ def log_method_time(item, amount, method_name,assemblers_per_recipie,num_subfact
     try:
         with open("execution_times_big_factory.csv", "a", newline="") as file:
             writer = csv.writer(file)
-            writer.writerow([item+"_copper_cable", amount, method_name,assemblers_per_recipie,num_subfactories,execution_time])
+            writer.writerow([item, amount, method_name,assemblers_per_recipie,num_subfactories,execution_time])
     except Exception as e:
         logging.error(f"Error logging execution time for {method_name}: {e}")
         
