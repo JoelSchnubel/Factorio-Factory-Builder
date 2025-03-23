@@ -1,4 +1,86 @@
-2025-03-20 18:31:42,666 - INFO - Loading production tree from Modules\electronic-circuit_100_module.json
-2025-03-20 18:31:42,667 - DEBUG - Retrieval points: {}
-2025-03-20 18:31:42,667 - DEBUG - Obstacle map: []
-2025-03-20 18:31:42,667 - INFO - Attempting path for electronic-circuit_0 from [7, 9] to [7, 9]
+2025-03-23 14:23:01,762 - DEBUG - production data: {'copper-cable': {'amount_per_minute': 100, 'assemblers': 1, 'input_inserters': [{'id': 'copper-plate', 'inserters': 1, 'amount': 1}], 'belts': 1, 'capacity': 0}, 'copper-plate': {'amount_per_minute': 50.0, 'capacity': 0}}
+2025-03-23 14:23:01,768 - INFO - Starting to add manual I/O constraints.
+2025-03-23 14:23:01,768 - DEBUG - Processing input item 'copper-plate' with data: {'input': (0, 0), 'output': (4, 0), 'grid': [[0, 2, 2, 2, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], 'direction_grid': [[None, 'right', 'right', 'right', None], [None, None, None, None, None], [None, None, None, None, None], [None, None, None, None, None], [None, None, None, None, None]]}
+2025-03-23 14:23:01,768 - INFO - Adding input belt for item 'copper-plate' at position (0, 0)
+2025-03-23 14:23:01,768 - INFO - Adding output belt for item 'copper-plate' at position (4, 0)
+2025-03-23 14:23:01,769 - DEBUG - Processing grid path for input item 'copper-plate'
+2025-03-23 14:23:01,769 - INFO - Adding belt path for 'copper-plate' at grid position (0, 1)
+2025-03-23 14:23:01,769 - INFO - Adding belt path for 'copper-plate' at grid position (0, 2)
+2025-03-23 14:23:01,770 - INFO - Adding belt path for 'copper-plate' at grid position (0, 3)
+2025-03-23 14:23:01,770 - DEBUG - Processing output item 'copper-cable' with data: {'input': (1, 4), 'output': (0, 4), 'grid': [[1, 1, 1, 1, 1], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], 'direction_grid': [[None, None, None, None, None], [None, None, None, None, None], [None, None, None, None, None], [None, None, None, None, None], [None, None, None, None, None]]}
+2025-03-23 14:23:01,770 - INFO - Adding input belt for output item 'copper-cable' at position (1, 4)
+2025-03-23 14:23:01,770 - INFO - Adding output belt for output item 'copper-cable' at position (0, 4)
+2025-03-23 14:23:01,771 - DEBUG - Processing grid path for output item 'copper-cable'
+2025-03-23 14:23:01,771 - INFO - Finished adding manual I/O constraints. Calling solver.
+2025-03-23 14:23:01,774 - INFO - Solver check result: sat
+2025-03-23 14:23:01,774 - INFO - === Identifying Non-Overlapping Inserters ===
+2025-03-23 14:23:01,774 - INFO - === Locking Initial Solution ===
+2025-03-23 14:23:01,774 - INFO - === Minimizing Distance for Non-Overlapping Inserters ===
+2025-03-23 14:23:01,776 - INFO - Final solver check result:sat
+2025-03-23 14:23:01,778 - INFO - Starting to create assemblers based on production data.
+2025-03-23 14:23:01,779 - DEBUG - Processing item 'copper-cable' with production data: {'amount_per_minute': 100, 'assemblers': 1, 'input_inserters': [{'id': 'copper-plate', 'inserters': 1, 'amount': 1}], 'belts': 1, 'capacity': 0}
+2025-03-23 14:23:01,779 - INFO - Creating assembler for item 'copper-cable', instance 0
+2025-03-23 14:23:01,779 - INFO - Creating input inserter for copper-plate at copper-plate_in_0_0_0
+2025-03-23 14:23:01,779 - DEBUG - Created assembler with ID: copper-cable_0_0 and input inserters: ['copper-plate_in_0_0_0']
+2025-03-23 14:23:01,779 - DEBUG - Created assembler with ID: copper-cable_0_0 with item = copper-cable
+2025-03-23 14:23:01,779 - DEBUG - Created assembler with ID: copper-cable_0_0 with capacity = 0
+2025-03-23 14:23:01,779 - DEBUG - Processing item 'copper-plate' with production data: {'amount_per_minute': 50.0, 'capacity': 0}
+2025-03-23 14:23:01,779 - INFO - Created 1 assemblers in total.
+2025-03-23 14:23:01,779 - INFO - Adding assembler overlap constraints to avoid global belts.
+2025-03-23 14:23:01,783 - INFO - Adding inserter overlap constraints to avoid global belts.
+2025-03-23 14:23:01,786 - INFO - Adding belt overlap constraints to avoid conflicts with global belts (different items only).
+2025-03-23 14:23:01,787 - INFO - Adding boundary constraints for assemblers.
+2025-03-23 14:23:01,787 - DEBUG - Setting boundary constraints for assembler ID copper-cable_0_0
+2025-03-23 14:23:01,788 - INFO - Adding boundary constraints for belts and inserters.
+2025-03-23 14:23:01,788 - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_0_0 and belt ID copper-plate_end_0_0_0
+2025-03-23 14:23:01,788 - INFO - Adding assembler overlap constraints to prevent assembler-assembler overlap.
+2025-03-23 14:23:01,789 - INFO - Adding assembler-inserter overlap constraints.
+2025-03-23 14:23:01,789 - INFO - Adding assembler-belt overlap constraints (excluding same-item belts).
+2025-03-23 14:23:01,789 - INFO - Adding inserter overlap constraints to prevent inserter-inserter overlap.
+2025-03-23 14:23:01,789 - INFO - Adding inserter-belt overlap constraints to prevent inserters from overlapping with belts.
+2025-03-23 14:23:01,789 - INFO - Adding belt overlap constraints to prevent belt-belt overlap (except same-item belts).
+2025-03-23 14:23:01,790 - INFO - Ensuring inserter copper-plate_in_0_0_0 is adjacent to assembler copper-cable_0_0
+2025-03-23 14:23:01,792 - INFO - Adding belt position constraint for inserter copper-plate_in_0_0_0 with belt copper-plate_end_0_0_0
+2025-03-23 14:23:01,841 - INFO - Adding output space constraints for assembler copper-cable_0_0
+2025-03-23 14:23:01,842 - DEBUG - Adding constraints to merge input inserters with assembler edges for items with matching types.
+2025-03-23 14:23:01,842 - INFO - Adding constraints to maximize overlaps of inserter belts with global belts and assemblers.
+2025-03-23 14:23:01,844 - INFO - Adding optimization goal to maximize belt overlaps.
+2025-03-23 14:23:01,866 - INFO - Solver check result: sat
+2025-03-23 14:23:01,866 - INFO - === Identifying Non-Overlapping Inserters ===
+2025-03-23 14:23:01,867 - INFO - Inserter copper-plate_in_0_0_0 is locked (either overlaps or has no matching global belt).
+2025-03-23 14:23:01,867 - INFO - === Locking Initial Solution ===
+2025-03-23 14:23:01,867 - INFO - Locking assembler copper-cable_0_0 at (copper-cable_0_0_x, copper-cable_0_0_y).
+2025-03-23 14:23:01,868 - INFO - Locking inserter copper-plate_in_0_0_0 at (copper-plate_in_0_0_0_x, copper-plate_in_0_0_0_y).
+2025-03-23 14:23:01,868 - INFO - === Minimizing Distance for Non-Overlapping Inserters ===
+2025-03-23 14:23:01,872 - INFO - Final solver check result:sat
+2025-03-23 14:23:01,878 - INFO - build output path infomation for copper-cable_0
+2025-03-23 14:23:01,878 - WARNING - could not assign valid paths to that setup: too many values to unpack (expected 2)
+2025-03-23 14:23:01,882 - INFO - Solver check result: unsat
+2025-03-23 14:23:01,883 - WARNING - Solver failed to find a solution.
+2025-03-23 14:23:01,884 - WARNING - could not assign valid paths to that setup: 'AStarPathfinder' object has no attribute 'find_path_for_item'
+2025-03-23 14:23:01,887 - INFO - Solver check result: unsat
+2025-03-23 14:23:01,887 - WARNING - Solver failed to find a solution.
+2025-03-23 14:23:01,889 - WARNING - could not assign valid paths to that setup: 'AStarPathfinder' object has no attribute 'find_path_for_item'
+2025-03-23 14:23:01,891 - INFO - Solver check result: unsat
+2025-03-23 14:23:01,892 - WARNING - Solver failed to find a solution.
+2025-03-23 14:23:01,893 - WARNING - could not assign valid paths to that setup: 'AStarPathfinder' object has no attribute 'find_path_for_item'
+2025-03-23 14:23:01,896 - INFO - Solver check result: unsat
+2025-03-23 14:23:01,896 - WARNING - Solver failed to find a solution.
+2025-03-23 14:23:01,897 - WARNING - could not assign valid paths to that setup: 'AStarPathfinder' object has no attribute 'find_path_for_item'
+2025-03-23 14:23:01,900 - INFO - Solver check result: unsat
+2025-03-23 14:23:01,900 - WARNING - Solver failed to find a solution.
+2025-03-23 14:23:01,901 - WARNING - could not assign valid paths to that setup: 'AStarPathfinder' object has no attribute 'find_path_for_item'
+2025-03-23 14:23:01,903 - INFO - Solver check result: unsat
+2025-03-23 14:23:01,904 - WARNING - Solver failed to find a solution.
+2025-03-23 14:23:01,905 - WARNING - could not assign valid paths to that setup: 'AStarPathfinder' object has no attribute 'find_path_for_item'
+2025-03-23 14:23:01,907 - INFO - Solver check result: unsat
+2025-03-23 14:23:01,907 - WARNING - Solver failed to find a solution.
+2025-03-23 14:23:01,908 - WARNING - could not assign valid paths to that setup: 'AStarPathfinder' object has no attribute 'find_path_for_item'
+2025-03-23 14:23:01,911 - INFO - Solver check result: unsat
+2025-03-23 14:23:01,911 - WARNING - Solver failed to find a solution.
+2025-03-23 14:23:01,912 - WARNING - could not assign valid paths to that setup: 'AStarPathfinder' object has no attribute 'find_path_for_item'
+2025-03-23 14:23:01,914 - INFO - Solver check result: unsat
+2025-03-23 14:23:01,914 - WARNING - Solver failed to find a solution.
+2025-03-23 14:23:01,916 - WARNING - could not assign valid paths to that setup: 'AStarPathfinder' object has no attribute 'find_path_for_item'
+2025-03-23 14:23:01,919 - INFO - Solver check result: unsat
+2025-03-23 14:23:01,919 - WARNING - Solver failed to find a solution.

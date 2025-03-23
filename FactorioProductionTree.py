@@ -15,7 +15,7 @@ from z3Solver  import Z3Solver
 from AStarPathFinderold import AStarPathFinderold
 import seaborn as sns
 
-from AStarPathFinder import AStarPathFinder
+from AStarPathFinder import AStarPathfinder
 
 # Define constants for colors
 WHITE = (255, 255, 255)
@@ -937,8 +937,10 @@ class FactorioProductionTree:
                 
     
                 
-                astar_pathfinder = AStarPathFinder(self.obstacle_map,retrieval_points)
+                astar_pathfinder = AStarPathfinder(self.obstacle_map,retrieval_points)
                 paths , placed_inserter_information = astar_pathfinder.find_path_for_item()
+                print(f"paths: {paths}")
+                print(f"placed_inserter_information: {placed_inserter_information}")
                 
                 return paths, placed_inserter_information
             
@@ -1332,14 +1334,14 @@ def Simple_Run():
     print("start")
     
     # Example item and amount
-    item_to_produce = "electronic-circuit"
+    item_to_produce = "copper-cable"
     amount_needed = 100
     
     
     input_items = []
     
     # init 
-    factorioProductionTree = FactorioProductionTree(15,15)
+    factorioProductionTree = FactorioProductionTree(5,5)
     factorioProductionTree.amount = amount_needed
     production_data  = factorioProductionTree.calculate_production(item_to_produce,amount_needed,input_items=input_items) #60
     factorioProductionTree.production_data = production_data
@@ -1373,7 +1375,7 @@ def Simple_Run():
     
     
     #start_time = time.perf_counter()
-    paths, placed_inserter_information = factorioProductionTree.build_belts(max_tries=2)
+    paths, placed_inserter_information = factorioProductionTree.build_belts(max_tries=10)
     #end_time = time.perf_counter()
     #log_method_time(item_to_produce, amount_needed, minimizer, "build_belts", start_time, end_time)
     
@@ -1471,4 +1473,3 @@ if __name__ == "__main__":
 
     #plot_csv_data("execution_times.csv")
     main()
-
