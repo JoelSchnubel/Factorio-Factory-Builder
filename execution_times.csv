@@ -322,3 +322,47 @@ big-electric-pole,100,1,build_belts,"{'big-electric-pole': 2, 'copper-plate': 0,
 big-electric-pole,100,1,solve,"{'big-electric-pole': 2, 'copper-plate': 0, 'steel-plate': 0}",25.59343159999844
 big-electric-pole,100,1,build_belts,"{'big-electric-pole': 2, 'copper-plate': 0, 'steel-plate': 0}",15.551814399994328
 
+copper-cable,1,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.27003530000001774
+copper-cable,1,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.024915900000451074
+copper-cable,1,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.3641803999998956
+copper-cable,1,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.029099200000018755
+copper-cable,1,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.3836524999996982
+copper-cable,1,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.029518100000132108
+copper-cable,1,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.34793640000043524
+copper-cable,1,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.03220599999986007
+copper-cable,1,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.3118157999997493
+copper-cable,1,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.03042210000057821
+copper-cable,1,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.3382676999990508
+copper-cable,1,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.033719000000928645
+copper-cable,1,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.3251564000001963
+copper-cable,1,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.03588820000004489
+copper-cable,1,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.3015419999992446
+copper-cable,1,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.031084600001122453
+copper-cable,1,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.37733400000070105
+copper-cable,1,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.03526210000018182
+copper-cable,1,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.4249244999991788
+copper-cable,1,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.03187109999998938
+copper-cable,1,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.33533129999887024
+copper-cable,1,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.030823099999906844
+copper-cable,1,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.33520120000139286
+copper-cable,1,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.032802399999127374
+copper-cable,1,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.3777044999987993
+copper-cable,1,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.029647499999555293
+copper-cable,1,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.38137319999987085
+copper-cable,1,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.030978200000390643
+copper-cable,1,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.3656946999999491
+copper-cable,1,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.03224620000037248
+copper-cable,1,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.35818140000083076
+copper-cable,1,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.03060849999928905
+copper-cable,1,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.3521223000007012
+copper-cable,1,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.030414499999096734
+copper-cable,1,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.36958729999969364
+copper-cable,1,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.031057299998792587
+copper-cable,1,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.37938259999828006
+copper-cable,1,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.0409114000012778
+copper-cable,1,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.3335509999997157
+copper-cable,1,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.029617300000609248
+copper-cable,1,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.3870277999994869
+copper-cable,1,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.03299189999961527
+copper-cable,1,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.3465905000011844
+copper-cable,1,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.03274099999907776
