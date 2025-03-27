@@ -602,7 +602,7 @@ def plot_csv_data(file_path):
 
     # Create the boxplot
     plt.figure(figsize=(8, 6))
-    sns.boxplot(
+    ax =sns.boxplot(
         x="steps",
         y="solve_time",
         hue="param1",  # Use param1 to differentiate if needed, or remove if not applicable
@@ -610,6 +610,7 @@ def plot_csv_data(file_path):
         palette = {5: "red", 0: "blue"}, 
         legend=False,
     )
+    ax.set_yscale('log')
 
     # Labels and title
     plt.title("Electronic Circuit - Solve Time (Boxplot)")
@@ -625,6 +626,6 @@ def plot_csv_data(file_path):
     print(f"Boxplot saved at: {box_plot_path}")
         
 if __name__ == "__main__":
-    #plot_csv_data("execution_times_big_factory.csv")
-    main()
+    plot_csv_data("execution_times_big_factory.csv")
+    #main()
    

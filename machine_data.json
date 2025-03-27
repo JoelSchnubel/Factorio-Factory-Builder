@@ -4,7 +4,7 @@
     "Dimensions": "1x1"
   },
   "inserters": {
-    "ItemsPerSecond": 2,
+    "ItemsPerSecond": 0.125,
     "Dimensions": "1x1"
   },
   "assemblers": {

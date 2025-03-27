@@ -15,7 +15,7 @@ from z3Solver  import Z3Solver
 from AStarPathFinderold import AStarPathFinderold
 import seaborn as sns
 
-from AStarPathFinder import AStarPathfinder
+from AStarPathfinder import AStarPathFinder
 
 # Define constants for colors
 WHITE = (255, 255, 255)
@@ -917,8 +917,10 @@ class FactorioProductionTree:
         for i in range(max_tries):
             print(f'Try Number: {i}')
             
-            self.obstacle_map, belt_point_information, assembler_information, _ = self.z3_solver.build_map()
             
+            self.obstacle_map,belt_point_information,assembler_information,_ = self.z3_solver.build_map()
+            
+             
             # get rid of belts that are already connected -> overlap with other input and output belts set by user or overlap with assembler -> direct insertion
             belt_point_information = [belt for belt in belt_point_information if not self.detect_belt_overlap(belt)]
             belt_point_information = [belt for belt in belt_point_information if not self.detect_assembler_overlap(belt, assembler_information)]
@@ -929,18 +931,16 @@ class FactorioProductionTree:
             # add output belt if needed to form all possible to all possible
             retrieval_points.update(self.add_out_point_information(self.output_item,assembler_information))
             
+            
+            
             try:
                 
                 # rearrange such that we first build paths for outputs
                 retrieval_points = self.rearrange_dict(retrieval_points, self.output_item)
-                self.retrieval_points = retrieval_points
-                
-    
-                
-                astar_pathfinder = AStarPathfinder(self.obstacle_map,retrieval_points)
+               
+                astar_pathfinder = AStarPathFinder(self.obstacle_map,retrieval_points,invert_paths=[self.output_item])
                 paths , placed_inserter_information = astar_pathfinder.find_path_for_item()
-                print(f"paths: {paths}")
-                print(f"placed_inserter_information: {placed_inserter_information}")
+
                 
                 return paths, placed_inserter_information
             
@@ -1110,14 +1110,97 @@ class FactorioProductionTree:
     def visualize_factory(self, paths=None, placed_inserter_information=None, cell_size=50, store=False, file_path=None):
         # Helper function to draw the factory layout
         
-        
-        
         def draw_factory(window, draw_paths=True):
             window.fill(WHITE)
+            # Draw grid lines and pre-configured input/output positions
             for row in range(self.grid_height):
                 for col in range(self.grid_width):
                     rect = pygame.Rect(col * cell_size, row * cell_size, cell_size, cell_size)
                     pygame.draw.rect(window, BLACK, rect, 1)  # Draw grid lines
+            
+            # Draw A* pathfinder paths first (below other elements)
+            if draw_paths and paths:
+                for item, path_info in paths.items():
+                    if not path_info:
+                        continue
+                        
+                    path = path_info.get('path', [])
+                    direction_grid = path_info.get('direction_grid', [])
+                    
+                    if not path or not direction_grid:
+                        continue
+                    
+   
+                    # Draw belts for each node in the path
+                    for i in range(len(path) - 1):  # For each segment of the path
+                        current = path[i]
+                        next_node = path[i + 1]
+                        
+                        # Calculate direction vector
+                        dx = next_node[0] - current[0]
+                        dy = next_node[1] - current[1]
+                        
+                        # Normalize direction to unit vector
+                        magnitude = abs(dx) + abs(dy)
+                        if magnitude > 0:
+                            dx = dx // magnitude
+                            dy = dy // magnitude
+                        
+                        # Draw the conveyor belt with correct direction
+                        direction = (dx, dy)
+                        if direction in [(0, 1), (1, 0), (0, -1), (-1, 0)]:  # Basic directions
+                            # Get the right rotation
+                            if direction == (0, 1):  # down
+                                angle = 180
+                            elif direction == (1, 0):  # right
+                                angle = 270
+                            elif direction == (0, -1):  # up
+                                angle = 0
+                            elif direction == (-1, 0):  # left
+                                angle = 90
+                            
+                            if item.split('_')[0]  != self.output_item:
+                                rotated_belt = pygame.transform.rotate(conveyor_image,  (angle + 180) % 360)
+                            else:
+                                rotated_belt = pygame.transform.rotate(conveyor_image, angle)
+                            window.blit(rotated_belt, (current[0] * cell_size, current[1] * cell_size))
+                    
+                    # Draw special markers for jumps (underground belts)
+                    jump_markers = path_info.get('jump_markers', [])
+                    for start, end in jump_markers:
+                        # Calculate direction
+                        dx = end[0] - start[0]
+                        dy = end[1] - start[1]
+                        magnitude = max(abs(dx), abs(dy))
+                        
+                        if magnitude > 0:
+                            dx = dx // magnitude
+                            dy = dy // magnitude
+                        
+                        # Rotate entrance belt
+                        entrance_angle = 0
+                        if (dx, dy) == (0, 1):
+                            entrance_angle = 180
+                        elif (dx, dy) == (1, 0):
+                            entrance_angle = 270
+                        elif (dx, dy) == (0, -1):
+                            entrance_angle = 0
+                        elif (dx, dy) == (-1, 0):
+                            entrance_angle = 90
+                        
+                        # Rotate exit belt (opposite direction)
+                        exit_angle = (entrance_angle + 180) % 360
+                        
+                        entrance_belt = pygame.transform.rotate(underground_image, entrance_angle)
+                        exit_belt = pygame.transform.rotate(underground_image, exit_angle)
+                        
+                        #window.blit(entrance_belt, (start[0] * cell_size, start[1] * cell_size))
+                        #window.blit(exit_belt, (end[0] * cell_size, end[1] * cell_size))
+            
+            # Draw input/output positions
+            for row in range(self.grid_height):
+                for col in range(self.grid_width):
+                    rect = pygame.Rect(col * cell_size, row * cell_size, cell_size, cell_size)
                     for item_index, item in enumerate(self.input_information):
                         if self.input_information[item]['input'] == (row, col):
                             pygame.draw.rect(window, GREEN, rect)
@@ -1132,40 +1215,42 @@ class FactorioProductionTree:
                         elif self.output_information[item]['output'] == (row, col):
                             pygame.draw.rect(window, RED, rect)
                             window.blit(item_images[item], rect)
-        
             
+            # Draw manually configured belts for input/output items
             for item, data in self.input_information.items():
-                grid = data['grid']
-                direction_grid = data['direction_grid']
-                if grid is not None:
+                grid = data.get('grid')
+                direction_grid = data.get('direction_grid')
+                if grid is not None and direction_grid is not None:
                     for row in range(self.grid_height):
                         for col in range(self.grid_width):
-                            if grid[col][row] == 2:
-                                direction = direction_grid[col][row]
+                            if 0 <= row < len(grid) and 0 <= col < len(grid[0]) and grid[row][col] == 2:
+                                direction = direction_grid[row][col]
                                 if direction in direction_angle_map:
-                                    rotated_belt_image = pygame.transform.rotate(conveyor_image, direction_angle_map[direction] + 90)
-                                    window.blit(rotated_belt_image, (col * cell_size, row * cell_size))
-            for item, data in self.output_information.items():
-                grid = data['grid']
-                direction_grid = data['direction_grid']
-                if grid is not None:
-                    for row in range(self.grid_height):
-                        for col in range(self.grid_width):
-                            if grid[col][row] == 2:
-                                direction = direction_grid[col][row]
-                                if direction in direction_angle_map:
-                                    rotated_belt_image = pygame.transform.rotate(conveyor_image, direction_angle_map[direction] + 90)
+                                    angle = direction_angle_map[direction]
+                                    rotated_belt_image = pygame.transform.rotate(conveyor_image, angle + 90)
                                     window.blit(rotated_belt_image, (col * cell_size, row * cell_size))
             
+            for item, data in self.output_information.items():
+                grid = data.get('grid')
+                direction_grid = data.get('direction_grid')
+                if grid is not None and direction_grid is not None:
+                    for row in range(self.grid_height):
+                        for col in range(self.grid_width):
+                            if 0 <= row < len(grid) and 0 <= col < len(grid[0]) and grid[row][col] == 2:
+                                direction = direction_grid[row][col]
+                                if direction in direction_angle_map:
+                                    angle = direction_angle_map[direction]
+                                    rotated_belt_image = pygame.transform.rotate(conveyor_image, angle + 90)
+                                    window.blit(rotated_belt_image, (col * cell_size, row * cell_size))
                 
-            # draw empty window
-            #pygame.image.save(window, "empty.png")
-           
+            # Draw assemblers
             for assembler_item, assembler_x, assembler_y in assembler_information:
                 pixel_x = assembler_x * cell_size
                 pixel_y = assembler_y * cell_size
                 window.blit(assembler_image, (pixel_x, pixel_y))
                 window.blit(item_images[assembler_item], (pixel_x, pixel_y))
+                
+            # Draw inserters
             for inserter_item, inserter_x, inserter_y in inserter_information:
                 pixel_x = inserter_x * cell_size
                 pixel_y = inserter_y * cell_size
@@ -1180,36 +1265,15 @@ class FactorioProductionTree:
                 corner_x = pixel_x + inserter_width - scaled_width
                 corner_y = pixel_y + inserter_height - scaled_height
                 window.blit(scaled_image, (corner_x, corner_y))
-            if draw_paths and paths:
-                for item, path_info in paths.items():
-                    path = path_info['path']
-                    direction_grid = path_info['direction_grid']
-                    jump_markers = path_info['jump_markers']
-                    match = re.match(r"^[^_]+", item)
-                    if match:
-                        item = match.group(0)
-                    for i, (x, y) in enumerate(path):
-                        center_pixel = (x * cell_size + cell_size // 2, y * cell_size + cell_size // 2)
-                        if direction_grid[y][x]:
-                            dx, dy = direction_grid[y][x]
-                            rotated_belt = conveyor_image_rotated[(dx, dy)]
-                            window.blit(rotated_belt, (center_pixel[0] - rotated_belt.get_width() // 2, center_pixel[1] - rotated_belt.get_height() // 2))
-                        item_image = item_images[item]
-                        if item_image:
-                            quarter_size = (item_image.get_width() // 2, item_image.get_height() // 2)
-                            scaled_image = pygame.transform.scale(item_image, quarter_size)
-                            window.blit(item_image, (center_pixel[0] + cell_size // 2 - item_image.get_width(), center_pixel[1] + cell_size // 2 - item_image.get_height()))
-                    for marker_pair in jump_markers:
-                        for marker in marker_pair:
-                            jump_pixel = (marker[0] * cell_size + cell_size // 2, marker[1] * cell_size + cell_size // 2)
-                            window.blit(underground_belt_image, (jump_pixel[0] - underground_belt_image.get_width() // 2, jump_pixel[1] - underground_belt_image.get_height() // 2))
 
+        # Initialize pygame and load assets
         _, belt_point_information, assembler_information, inserter_information = self.z3_solver.build_map()
-        inserter_information = inserter_information + placed_inserter_information
+        if placed_inserter_information:
+            inserter_information = inserter_information + placed_inserter_information
         direction_angle_map = {'right': 90, 'down': 180, 'left': 270, 'up': 0}
         pygame.init()
         window_width = self.grid_width * cell_size
-        window_height = self.grid_width * cell_size
+        window_height = self.grid_height * cell_size
         window = pygame.display.set_mode((window_width, window_height))
         pygame.display.set_caption('Factory Layout Visualization')
         clock = pygame.time.Clock()
@@ -1217,28 +1281,37 @@ class FactorioProductionTree:
         inserter_image = pygame.image.load('assets/inserter.png')
         conveyor_image = pygame.image.load('assets/conveyor.png')
         underground_image = pygame.image.load("assets/underground_belt.png")
+
         assembler_image = pygame.transform.scale(assembler_image, (3 * cell_size, 3 * cell_size))
         inserter_image = pygame.transform.scale(inserter_image, (cell_size, cell_size))
         conveyor_image = pygame.transform.scale(conveyor_image, (cell_size, cell_size))
-        underground_belt_image = pygame.transform.scale(underground_image, (cell_size, cell_size))
-        conveyor_image_rotated = {(0, 1): pygame.transform.rotate(conveyor_image, 0), (1, 0): pygame.transform.rotate(conveyor_image, 90), (0, -1): pygame.transform.rotate(conveyor_image, 180), (-1, 0): pygame.transform.rotate(conveyor_image, 270)}
+        underground_image = pygame.transform.scale(underground_image, (cell_size, cell_size))
+
+        
         item_images = {}
         assets_folder = 'assets'
-        excluded_images = {'assembler.png', 'inserter.png', 'conveyor.png', 'underground_belt.png'}
+        excluded_images = {'assembler.png', 'inserter.png', 'conveyor.png', 'underground_belt_entrance.png', 'underground_belt_exit.png'}
         for filename in os.listdir(assets_folder):
             if filename.endswith('.png') and filename not in excluded_images:
                 item_path = os.path.join(assets_folder, filename)
                 image = pygame.image.load(item_path)
                 item_images[filename[:-4]] = pygame.transform.scale(image, (cell_size, cell_size))
+                
+        # Draw the factory without paths
         draw_factory(window, draw_paths=False)
         if store and file_path:
             pygame.image.save(window, file_path.replace('.png', '_no_paths.png'))
+            
+        # Draw the factory with paths
         draw_factory(window, draw_paths=True)
         if store and file_path:
             pygame.image.save(window, file_path)
+            
+        # Draw the factory showing only input/output
         draw_factory(window, draw_paths=False)
         if store and file_path:
             pygame.image.save(window, file_path.replace('.png', '_input_output.png'))
+            
         pygame.quit()
 
  
@@ -1290,8 +1363,8 @@ def plot_csv_data(file_path):
 
             # Plot boxplot
             plt.figure(figsize=(8, 6))
-            sns.boxplot(x='Assembler Count', y='Execution Time (seconds)', hue='Minimizer', data=item_method_data, palette={1: 'red', 0: 'blue'}, legend=False)
-            plt.title(f'{item} - {method_type} (Boxplot)')
+            ax = sns.boxplot(x='Assembler Count', y='Execution Time (seconds)', hue='Minimizer', data=item_method_data, palette={1: 'red', 0: 'blue'}, legend=False)
+            ax.set_yscale('log')  # Set y-axis to log scale plt.title(f'{item} - {method_type} (Boxplot)')
             plt.xlabel('Number of Assemblers')
             plt.ylabel('Execution Time (seconds)')
             plt.grid(True)
@@ -1341,43 +1414,37 @@ def Simple_Run():
     input_items = []
     
     # init 
-    factorioProductionTree = FactorioProductionTree(5,5)
+    factorioProductionTree = FactorioProductionTree(6,6)
     factorioProductionTree.amount = amount_needed
     production_data  = factorioProductionTree.calculate_production(item_to_produce,amount_needed,input_items=input_items) #60
     factorioProductionTree.production_data = production_data
-    print(f"production data {production_data}")
-
-    print(factorioProductionTree.calculate_max_output())
-    
-    minimizer = 1
-    
-    
-    print(f"production data {production_data}")
 
     production_data = factorioProductionTree.set_capacities(production_data)
 
+    production_data["copper-cable"]["input_inserters"] = [{'id': 'copper-plate', 'inserters': 4, 'amount': 1}]
+    
     print(f"production data {production_data}")
 
-    print(factorioProductionTree.output_item)
+   
    
     # Manual input and output
     factorioProductionTree.manual_Input()
     factorioProductionTree.manual_Output()
     factorioProductionTree.add_manual_IO_constraints(production_data,sequential=False)
    
-
+    assembler_counts = factorioProductionTree.count_assemblers(production_data)
+        
     # Track time for solving the problem
-    #start_time = time.perf_counter()
+    start_time = time.perf_counter()
     factorioProductionTree.solve(production_data,sequential=False)
-    #end_time = time.perf_counter()
-    #log_method_time(item_to_produce, amount_needed, minimizer, "solve", start_time, end_time)
-
+    end_time = time.perf_counter()
+    log_method_time(item_to_produce, 1, 1, "solve", assembler_counts, start_time, end_time)
     
     
-    #start_time = time.perf_counter()
-    paths, placed_inserter_information = factorioProductionTree.build_belts(max_tries=10)
-    #end_time = time.perf_counter()
-    #log_method_time(item_to_produce, amount_needed, minimizer, "build_belts", start_time, end_time)
+    start_time = time.perf_counter()
+    paths, placed_inserter_information = factorioProductionTree.build_belts(max_tries=2)
+    end_time = time.perf_counter()
+    log_method_time(item_to_produce, 1, 1, "build_belts", assembler_counts, start_time, end_time)
     
     if(paths):
         factorioProductionTree.store_data(f'Modules/{item_to_produce}_{amount_needed}_{input_items}_module',paths,placed_inserter_information)

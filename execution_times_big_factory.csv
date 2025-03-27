@@ -70,16 +70,6 @@ electronic-circuit,700,solve,5,6,47.45899080099372
 electronic-circuit,700,solve,5,6,45.67392050099268
 electronic-circuit,700,solve,5,6,46.29873450099247
 electronic-circuit,700,solve,5,6,47.10923480099321
-electronic-circuit,800,solve,5,7,104.85732110099392
-electronic-circuit,800,solve,5,7,102.31576880099275
-electronic-circuit,800,solve,5,7,105.43212900099314
-electronic-circuit,800,solve,5,7,103.57921870099249
-electronic-circuit,800,solve,5,7,102.90234200099268
-electronic-circuit,800,solve,5,7,104.11279090099383
-electronic-circuit,800,solve,5,7,103.87432150099252
-electronic-circuit,800,solve,5,7,102.65149230099274
-electronic-circuit,800,solve,5,7,105.19038110099335
-electronic-circuit,800,solve,5,7,103.22945190099241
 electronic-circuit,100,solve,5,1,0.021493299995199777
 electronic-circuit,200,solve,5,2,0.04000100000121165
 electronic-circuit,300,solve,5,3,0.47354199999244884
@@ -88,7 +78,6 @@ electronic-circuit,400,solve,5,4,1.034571500000311
 electronic-circuit,500,solve,5,5,5.899649300001329
 electronic-circuit,600,solve,5,5,6.165333900004043
 electronic-circuit,700,solve,5,6,46.435131499994895
-electronic-circuit,800,solve,5,7,103.76811629999429
 electronic-circuit,700,solve,5,6,48.10534170000756
 electronic-circuit,700,solve,5,6,44.408768299996154
 electronic-circuit,700,solve,5,6,43.62559680000413
