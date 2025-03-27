@@ -333,7 +333,7 @@ class TestAStarPathFinder(unittest.TestCase):
             [0, 0, 0, 0, 0]
         ]
         points = {}
-        pathfinder = AStarPathFinder(grid, points, False)
+        pathfinder = AStarPathFinder(grid, points, False,use_splitters=True)
         
         # Test get_splitter_entrances for different directions
         # Right-facing splitter (splitter at 2,1)
@@ -385,7 +385,7 @@ class TestAStarPathFinder(unittest.TestCase):
             [0, 0, 0, 0, 0]
         ]
         points = {}
-        pathfinder = AStarPathFinder(grid, points, False)
+        pathfinder = AStarPathFinder(grid, points, False,use_splitters=True)
         
         # Should be able to place splitter in empty space
         self.assertTrue(pathfinder.can_place_splitter((2, 1), (1, 0), "iron_plate"), 
@@ -427,7 +427,7 @@ class TestAStarPathFinder(unittest.TestCase):
                 'destination': [(6, 3)]
             }
         }
-        pathfinder = AStarPathFinder(grid, points, False)
+        pathfinder = AStarPathFinder(grid, points, False,use_splitters=True)
         
         # Add a splitter in the middle that can merge the paths
         pathfinder.add_splitter("splitter1", (3, 1), (1, 0), "iron_plate")
@@ -472,7 +472,7 @@ class TestAStarPathFinder(unittest.TestCase):
                 'destination': [(6, 2)]
             }
         }
-        pathfinder = AStarPathFinder(grid, points, False)
+        pathfinder = AStarPathFinder(grid, points, False,use_splitters=True)
         
         # Find paths for items first (without splitters)
         paths, _ = pathfinder.find_path_for_item()
@@ -491,6 +491,170 @@ class TestAStarPathFinder(unittest.TestCase):
             self.assertTrue(pathfinder.can_place_splitter(position, direction, "iron_plate"),
                         f"Location {position} with direction {direction} should be valid for splitter")
     
-   
+    def test_realistic_scenario_and_visualization(self):
+        """Test the pathfinder with a realistic factory layout and verify visualization."""
+        # Create a realistic factory grid with obstacles, machine positions
+        # 0=empty, 1=obstacle, 9=path, 12=inserter, 13=splitter
+        grid = [
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0],
+            [0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0],
+            [0, 1, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0],
+            [0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0],
+            [0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0],
+            [0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0],
+            [0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0],
+            [0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        ]
+        
+        # Define multiple items with different start and destination points
+        points = {
+            'iron_ore': {
+                'item': 'iron_ore',
+                'start_points': [(0, 0), (1, 0)],
+                'destination': [(15, 9)]
+            },
+            'copper_ore': {
+                'item': 'copper_ore',
+                'start_points': [(0, 9)],
+                'destination': [(15, 5)]
+            },
+            'iron_plate': {
+                'item': 'iron_plate',
+                'start_points': [(0, 5)],
+                'destination': [(15, 0)]
+            },
+            'copper_plate': {
+                'item': 'copper_plate',
+                'start_points': [(5, 9)],
+                'destination': [(10, 0)]
+            }
+        }
+        
+        # Create temporary directory for visualization output
+        import tempfile
+        import os
+        import shutil
+        temp_dir = tempfile.mkdtemp()
+        
+        try:
+            # Initialize pathfinder with both underground belts and splitters enabled
+            pathfinder = AStarPathFinder(grid, points, False, 
+                                        underground_length=3, 
+                                        allow_jump=True, 
+                                        use_splitters=True)
+            
+            # Add some splitters for iron_ore and copper_ore
+            pathfinder.add_splitter("iron_splitter", (7, 5), (1, 0), "iron_ore")
+            pathfinder.add_splitter("copper_splitter", (12, 8), (1, 0), "copper_ore")
+            
+            # Find paths for all items
+            paths, inserters = pathfinder.find_path_for_item()
+            
+            # Verify paths were found for all items
+            self.assertEqual(len(paths), 4, "Should find paths for all 4 items")
+            for item in points:
+                self.assertIn(item, paths, f"Should find path for {item}")
+                self.assertIsNotNone(paths[item]['path'], f"Path for {item} should not be None")
+                
+                # Check if paths reach their destinations
+                start = points[item]['start_points'][0]  # Take first start point
+                dest = points[item]['destination'][0]    # Take first destination point
+                self.assertEqual(paths[item]['path'][0], start, f"{item} path should start at {start}")
+                self.assertEqual(paths[item]['path'][-1], dest, f"{item} path should end at {dest}")
+            
+            # Check for underground belt usage
+            underground_belts_used = 0
+            for item, path_info in paths.items():
+                if 'jump_markers' in path_info and path_info['jump_markers']:
+                    underground_belts_used += len(path_info['jump_markers'])
+            
+            self.assertTrue(underground_belts_used > 0, 
+                        "At least one underground belt should be used due to obstacles")
+            
+            # Check if splitters are used
+            splitters_used = 0
+            for item, path_info in paths.items():
+                if 'used_splitter' in path_info:
+                    splitters_used += 1
+            
+            self.assertTrue(splitters_used > 0, 
+                        "At least one splitter should be used")
+            
+            # Test grid visualization
+            full_grid_path = os.path.join(temp_dir, "full_grid.png")
+            visualization_success = pathfinder.visualize_grid(full_grid_path)
+            
+            self.assertTrue(visualization_success, "Grid visualization should succeed")
+            self.assertTrue(os.path.exists(full_grid_path), "Visualization file should be created")
+            self.assertTrue(os.path.getsize(full_grid_path) > 0, "Visualization file should not be empty")
+            
+            # Test path-specific visualization for each item
+            for item in paths:
+                item_path = os.path.join(temp_dir, f"{item}_path.png")
+                item_viz_success = pathfinder.visualize_path(item, item_path)
+                
+                self.assertTrue(item_viz_success, f"Visualization for {item} should succeed")
+                self.assertTrue(os.path.exists(item_path), f"Visualization file for {item} should be created")
+                self.assertTrue(os.path.getsize(item_path) > 0, f"Visualization file for {item} should not be empty")
+            
+            # Test the combined visualization with multiple paths
+            combined_path = os.path.join(temp_dir, "combined_paths.png")
+            
+            # Add a method to create a combined visualization of all paths
+            import PIL.Image as Image
+            import PIL.ImageDraw as ImageDraw
+            
+            # Create base grid visualization first
+            pathfinder.visualize_grid(combined_path)
+            
+            # Open image and draw all paths with different colors
+            img = Image.open(combined_path).convert("RGBA")
+            draw = ImageDraw.Draw(img)
+            
+            # Define colors for different items
+            colors = {
+                'iron_ore': (255, 0, 0, 180),     # Red
+                'copper_ore': (0, 0, 255, 180),   # Blue
+                'iron_plate': (0, 255, 0, 180),   # Green
+                'copper_plate': (255, 255, 0, 180)  # Yellow
+            }
+            
+            cell_size = 32  # Same as used in visualize_grid
+            
+            # Draw each path with its own color
+            for item, path_info in paths.items():
+                path = path_info['path']
+                color = colors.get(item, (255, 255, 255, 180))  # Default to white
+                
+                for i in range(len(path) - 1):
+                    x1, y1 = path[i]
+                    x2, y2 = path[i + 1]
+                    
+                    # Draw line connecting the points
+                    draw.line(
+                        (x1 * cell_size + cell_size//2, y1 * cell_size + cell_size//2,
+                        x2 * cell_size + cell_size//2, y2 * cell_size + cell_size//2),
+                        fill=color, width=3
+                    )
+            
+            # Save the combined visualization
+            img.save(combined_path)
+            
+            self.assertTrue(os.path.exists(combined_path), "Combined visualization should be created")
+            self.assertTrue(os.path.getsize(combined_path) > 0, "Combined visualization should not be empty")
+            
+        except Exception as e:
+            self.fail(f"Visualization test failed with error: {str(e)}")
+            
+        finally:
+            # Clean up temporary directory
+            try:
+                shutil.rmtree(temp_dir)
+            except:
+                pass
+
+
 if __name__ == '__main__':
     unittest.main()

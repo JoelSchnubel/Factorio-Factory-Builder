@@ -1,5 +1,7 @@
 import heapq
 import logging
+import os
+from PIL import Image, ImageDraw, ImageFont
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -14,7 +16,7 @@ DIRECTIONS = [(0, 1), (1, 0), (0, -1), (-1, 0)]
 DIRECTION_MAP = {(0, 1): 'right', (1, 0): 'down', (0, -1): 'left', (-1, 0): 'up'}
 
 class AStarPathFinder:
-    def __init__(self, grid, points, invert_paths, underground_length=3, allow_jump=True):
+    def __init__(self, grid, points, invert_paths, underground_length=3, allow_jump=True, use_splitters=False):
         self.base_grid = grid
         self.underground_length = underground_length
         self.allow_jump = allow_jump
@@ -22,6 +24,7 @@ class AStarPathFinder:
         self.paths = {}
         self.invert_paths = invert_paths
         self.splitters = {}  # Dictionary to store splitter information
+        self.use_splitters = use_splitters  # Flag to control splitter usage
   
     def heuristic(self, current, goal):
         return abs(current[0] - goal[0]) + abs(current[1] - goal[1])
@@ -63,20 +66,15 @@ class AStarPathFinder:
         if dx != actual_dx or dy != actual_dy:
             return False
         
-        # Check the path between start and end is clear of obstacles
-        for i in range(1, distance):
-            check_x = sx + dx * i
-            check_y = sy + dy * i
-            if (check_x, check_y) == end:
-                continue
-            if not (0 <= check_x < len(grid[0]) and 0 <= check_y < len(grid)):
-                return False
-            if grid[check_y][check_x] != 0 and grid[check_y][check_x] != 9:
-                return False
         
         return True
     
     def astar(self, grid, start, goal):
+        """
+        Find the shortest path from start to goal using A* algorithm.
+        
+        Supports optional splitter mechanics based on the use_splitters flag.
+        """
         open_list = []
         heapq.heappush(open_list, (0, start))
         came_from = {}
@@ -111,50 +109,51 @@ class AStarPathFinder:
                         direction_grid[neighbor[1]][neighbor[0]] = direction
                         logging.debug(f"Moving to {neighbor} with direction {DIRECTION_MAP[direction]}")
                 
-                # Check if this is a splitter entrance
-                cx, cy = current
-                for splitter_id, splitter_info in self.splitters.items():
-                    splitter_pos = splitter_info['position']
-                    splitter_dir = splitter_info['direction']
-                    entrance_positions = self.get_splitter_entrances(splitter_pos, splitter_dir)
-                    exit_position = self.get_splitter_exit(splitter_pos, splitter_dir)
-                    
-                    # If current position is an entrance to this splitter
-                    if (cx, cy) in entrance_positions:
-                        # Check if the exit is valid
-                        if self.is_valid(exit_position, grid):
-                            tentative_g_cost = g_costs[current] + 2  # Penalty for using splitter
-                            
-                            if exit_position not in g_costs or tentative_g_cost < g_costs[exit_position]:
-                                came_from[exit_position] = current
-                                g_costs[exit_position] = tentative_g_cost
-                                f_costs[exit_position] = tentative_g_cost + self.heuristic(exit_position, goal)
-                                heapq.heappush(open_list, (f_costs[exit_position], exit_position))
+                # Check for splitter entrance if splitters are enabled
+                if self.use_splitters:
+                    cx, cy = current
+                    for splitter_id, splitter_info in self.splitters.items():
+                        splitter_pos = splitter_info['position']
+                        splitter_dir = splitter_info['direction']
+                        entrance_positions = self.get_splitter_entrances(splitter_pos, splitter_dir)
+                        exit_position = self.get_splitter_exit(splitter_pos, splitter_dir)
+                        
+                        # If current position is an entrance to this splitter
+                        if (cx, cy) in entrance_positions:
+                            # Check if the exit is valid
+                            if self.is_valid(exit_position, grid):
+                                tentative_g_cost = g_costs[current] + 2  # Penalty for using splitter
                                 
-                                # Set direction to match the splitter's output direction
-                                direction_grid[exit_position[1]][exit_position[0]] = splitter_dir
-                                logging.debug(f"Using splitter from {current} to {exit_position}")
+                                if exit_position not in g_costs or tentative_g_cost < g_costs[exit_position]:
+                                    came_from[exit_position] = current
+                                    g_costs[exit_position] = tentative_g_cost
+                                    f_costs[exit_position] = tentative_g_cost + self.heuristic(exit_position, goal)
+                                    heapq.heappush(open_list, (f_costs[exit_position], exit_position))
+                                    
+                                    # Set direction to match the splitter's output direction
+                                    direction_grid[exit_position[1]][exit_position[0]] = splitter_dir
+                                    logging.debug(f"Using splitter from {current} to {exit_position}")
                 
-                    # Underground belt logic - unidirectional
-                    elif self.allow_jump:
-                        # Try all valid jump distances in this direction
-                        for jump_distance in range(2, self.underground_length + 2):  
-                            jump_target = (current[0] + dx * jump_distance, current[1] + dy * jump_distance)
+                # Underground belt logic - unidirectional
+                elif self.allow_jump:
+                    # Try all valid jump distances in this direction
+                    for jump_distance in range(2, self.underground_length + 2):  
+                        jump_target = (current[0] + dx * jump_distance, current[1] + dy * jump_distance)
+                        
+                        # Check if the jump is valid (including entrance/exit space requirements)
+                        if self.is_valid_jump(current, jump_target, direction, grid):
+                            # Underground belts have a higher cost to prefer regular belts when possible
+                            tentative_g_cost = g_costs[current] + jump_distance + 1.5  # Penalty for underground
                             
-                            # Check if the jump is valid (including entrance/exit space requirements)
-                            if self.is_valid_jump(current, jump_target, direction, grid):
-                                # Underground belts have a higher cost to prefer regular belts when possible
-                                tentative_g_cost = g_costs[current] + jump_distance + 1.5  # Penalty for underground
-                                
-                                if jump_target not in g_costs or tentative_g_cost < g_costs[jump_target]:
-                                    came_from[jump_target] = current
-                                    g_costs[jump_target] = tentative_g_cost
-                                    f_costs[jump_target] = tentative_g_cost + self.heuristic(jump_target, goal)
-                                    heapq.heappush(open_list, (f_costs[jump_target], jump_target))
-                                    direction_grid[jump_target[1]][jump_target[0]] = direction
-                                    logging.debug(f"Underground belt from {current} to {jump_target} in direction {DIRECTION_MAP[direction]}")
-                                
-                                # Also check the position behind the entrance
+                            if jump_target not in g_costs or tentative_g_cost < g_costs[jump_target]:
+                                came_from[jump_target] = current
+                                g_costs[jump_target] = tentative_g_cost
+                                f_costs[jump_target] = tentative_g_cost + self.heuristic(jump_target, goal)
+                                heapq.heappush(open_list, (f_costs[jump_target], jump_target))
+                                direction_grid[jump_target[1]][jump_target[0]] = direction
+                                logging.debug(f"Underground belt from {current} to {jump_target} in direction {DIRECTION_MAP[direction]}")
+                            
+                            # Also check the position behind the entrance
                                 behind_x = current[0] - dx
                                 behind_y = current[1] - dy
                                 behind_pos = (behind_x, behind_y)
@@ -173,7 +172,7 @@ class AStarPathFinder:
                                             direction_grid[behind_y][behind_x] = behind_direction
                                         
                                         logging.debug(f"Added position behind entrance: {behind_pos}")
-                            
+
                             break
         
         logging.info("No path found")
@@ -263,22 +262,24 @@ class AStarPathFinder:
         paths = {}
         grid = [row[:] for row in self.base_grid]  # Deep copy of the grid for each function call
         
-        # First place optimal splitters at destination points
-        for item_type in set(points['item'] for points in self.points.values()):
-            # Find potential splitter locations for this item type, prioritizing destinations
-            potential_locations = self.find_splitter_locations(item_type)
-            
-            # Place splitters at high-priority locations (near destinations)
-            splitters_added = 0
-            for location in potential_locations:
-                if location.get('priority') == 'high' and splitters_added < 3:  # Limit to 3 splitters per item type
-                    self.add_splitter(
-                        f"splitter_{item_type}_{splitters_added}", 
-                        location['position'], 
-                        location['direction'], 
-                        item_type
-                    )
-                    splitters_added += 1
+        # Place splitters only if they are enabled
+        if self.use_splitters:
+            # First place optimal splitters at destination points
+            for item_type in set(points['item'] for points in self.points.values()):
+                # Find potential splitter locations for this item type, prioritizing destinations
+                potential_locations = self.find_splitter_locations(item_type)
+                
+                # Place splitters at high-priority locations (near destinations)
+                splitters_added = 0
+                for location in potential_locations:
+                    if location.get('priority') == 'high' and splitters_added < 3:  # Limit to 3 splitters per item type
+                        self.add_splitter(
+                            f"splitter_{item_type}_{splitters_added}", 
+                            location['position'], 
+                            location['direction'], 
+                            item_type
+                        )
+                        splitters_added += 1
         
         # Clear starting and destination points on the grid
         for item, points in self.points.items():
@@ -307,67 +308,68 @@ class AStarPathFinder:
                         # Mark inserter position as obstacle in the pathfinding grid
                         grid[iy][ix] = 12
                 
-                # Check if this item can use existing splitters
-                item_type = points.get('item')
-                
-                # First, prioritize finding a path to a splitter entrance that's already connected
-                for splitter_id, splitter_info in self.splitters.items():
-                    if splitter_info['item_type'] == item_type:
-                        # If we're starting near a splitter entrance, we can use it
-                        for entrance in splitter_info['entrances']:
-                            if self.heuristic(start, entrance) <= 5:  # Increased search radius
-                                # Check if this splitter's exit is already connected to a destination
-                                exit_pos = splitter_info['exit']
-                                is_connected = False
-                                
-                                # Look through existing paths to see if any go from the splitter exit to a destination
-                                for existing_item, path_info in paths.items():
-                                    if self.points[existing_item]['item'] == item_type and path_info.get('used_splitter') == splitter_id:
-                                        existing_path = path_info['path']
-                                        # Find where the splitter exit is in the path
-                                        try:
-                                            exit_index = existing_path.index(exit_pos)
-                                            # Get the path from the splitter exit to the destination
-                                            exit_to_dest = existing_path[exit_index:]
-                                            is_connected = True
-                                            break
-                                        except ValueError:
-                                            continue
-                                
-                                # Add a path to this entrance
-                                entrance_path, entrance_dir_grid = self.astar(grid, start, entrance)
-                                if entrance_path:
-                                    if is_connected:
-                                        # Use the existing path from exit to destination
-                                        combined_path = entrance_path + exit_to_dest[1:]  # Skip the first element (splitter exit)
-                                    else:
-                                        # Find a new path from the splitter exit to the destination
-                                        exit_path, exit_dir_grid = self.astar(grid, exit_pos, dest)
-                                        if not exit_path:
-                                            continue  # Try next entrance if no path to destination
+                # Check if this item can use existing splitters (only if splitters are enabled)
+                if self.use_splitters:
+                    item_type = points.get('item')
+                    
+                    # First, prioritize finding a path to a splitter entrance that's already connected
+                    for splitter_id, splitter_info in self.splitters.items():
+                        if splitter_info['item_type'] == item_type:
+                            # If we're starting near a splitter entrance, we can use it
+                            for entrance in splitter_info['entrances']:
+                                if self.heuristic(start, entrance) <= 5:  # Increased search radius
+                                    # Check if this splitter's exit is already connected to a destination
+                                    exit_pos = splitter_info['exit']
+                                    is_connected = False
+                                    
+                                    # Look through existing paths to see if any go from the splitter exit to a destination
+                                    for existing_item, path_info in paths.items():
+                                        if self.points[existing_item]['item'] == item_type and path_info.get('used_splitter') == splitter_id:
+                                            existing_path = path_info['path']
+                                            # Find where the splitter exit is in the path
+                                            try:
+                                                exit_index = existing_path.index(exit_pos)
+                                                # Get the path from the splitter exit to the destination
+                                                exit_to_dest = existing_path[exit_index:]
+                                                is_connected = True
+                                                break
+                                            except ValueError:
+                                                continue
+                                    
+                                    # Add a path to this entrance
+                                    entrance_path, entrance_dir_grid = self.astar(grid, start, entrance)
+                                    if entrance_path:
+                                        if is_connected:
+                                            # Use the existing path from exit to destination
+                                            combined_path = entrance_path + exit_to_dest[1:]  # Skip the first element (splitter exit)
+                                        else:
+                                            # Find a new path from the splitter exit to the destination
+                                            exit_path, exit_dir_grid = self.astar(grid, exit_pos, dest)
+                                            if not exit_path:
+                                                continue  # Try next entrance if no path to destination
+                                            
+                                            combined_path = entrance_path + exit_path[1:]  # Skip the first element (splitter exit)
                                         
-                                        combined_path = entrance_path + exit_path[1:]  # Skip the first element (splitter exit)
-                                    
-                                    # Add splitter usage to the path information
-                                    paths[item] = {
-                                        "path": combined_path,
-                                        "direction_grid": entrance_dir_grid,  # Use the entrance grid for now
-                                        "jump_markers": self.get_jump_markers(combined_path),
-                                        "used_splitter": splitter_id
-                                    }
-                                    found_path = True
-                                    
-                                    # Mark the path on the grid
-                                    for px, py in combined_path:
-                                        self.base_grid[py][px] = 9
-                                        grid[py][px] = 9
-                                    
-                                    break  # Found a path using this splitter
-                        
-                        if found_path:
-                            break  # Found a path using some splitter
+                                        # Add splitter usage to the path information
+                                        paths[item] = {
+                                            "path": combined_path,
+                                            "direction_grid": entrance_dir_grid,  # Use the entrance grid for now
+                                            "jump_markers": self.get_jump_markers(combined_path),
+                                            "used_splitter": splitter_id
+                                        }
+                                        found_path = True
+                                        
+                                        # Mark the path on the grid
+                                        for px, py in combined_path:
+                                            self.base_grid[py][px] = 9
+                                            grid[py][px] = 9
+                                        
+                                        break  # Found a path using this splitter
+                            
+                            if found_path:
+                                break  # Found a path using some splitter
                 
-                # If we haven't found a path using splitters, try normal pathfinding
+                # If we haven't found a path using splitters (or if splitters are disabled), try normal pathfinding
                 if not found_path:
                     path, direction_grid = self.astar(grid, start, dest)
                     
@@ -474,20 +476,14 @@ class AStarPathFinder:
         
         return potential_locations
 
-    def can_place_splitter(self, position, direction, item_type, allow_path_overlap=False):
+    def can_place_splitter(self, position, direction, item_type, allow_path_overlap=True):
         """
         Check if a splitter can be placed at the given position and direction.
-        
-        Args:
-            position: Tuple of (x, y) for the splitter position
-            direction: Direction the splitter is facing (where output goes)
-            item_type: The type of item this splitter will handle
-            allow_path_overlap: If True, allow splitter to overlap with paths carrying the same item
         """
         x, y = position
         dx, dy = direction
         
-        # Check if the splitter position is valid
+        # Check if the main position is within bounds
         if not (0 <= x < len(self.base_grid[0]) and 0 <= y < len(self.base_grid)):
             return False
         
@@ -502,48 +498,30 @@ class AStarPathFinder:
         if not (0 <= second_x < len(self.base_grid[0]) and 0 <= second_y < len(self.base_grid)):
             return False
         
-        # Check if both tiles are either empty or can be overlapped
-        main_tile_valid = (
-            self.base_grid[y][x] == 0 or 
-            (allow_path_overlap and self.base_grid[y][x] == 9 and self.is_path_for_item(x, y, item_type))
-        )
-        
-        second_tile_valid = (
-            self.base_grid[second_y][second_x] == 0 or 
-            (allow_path_overlap and self.base_grid[second_y][second_x] == 9 and self.is_path_for_item(second_x, second_y, item_type))
-        )
+        # Check if both tiles are either empty or paths (9)
+        main_tile_valid = self.base_grid[y][x] == 0 or (allow_path_overlap and self.base_grid[y][x] == 9)
+        second_tile_valid = self.base_grid[second_y][second_x] == 0 or (allow_path_overlap and self.base_grid[second_y][second_x] == 9)
         
         if not (main_tile_valid and second_tile_valid):
             return False
         
-        # Check entrance positions
-        entrances = self.get_splitter_entrances((x, y), direction)
+        # Check entrance positions (opposite to the direction)
+        entrances = self.get_splitter_entrances(position, direction)
         for ex, ey in entrances:
             if not (0 <= ex < len(self.base_grid[0]) and 0 <= ey < len(self.base_grid)):
                 return False
             
-            # Entrances should be either empty, a path for the same item, or a destination point
-            entrance_valid = (
-                self.base_grid[ey][ex] == 0 or 
-                (self.base_grid[ey][ex] == 9 and self.is_path_for_item(ex, ey, item_type)) or
-                self.is_destination_for_item(ex, ey, item_type)
-            )
-            
-            if not entrance_valid:
+            # Entrances should be either empty or paths
+            if self.base_grid[ey][ex] != 0 and (not allow_path_overlap or self.base_grid[ey][ex] != 9):
                 return False
         
-        # Check exit position
-        exit_x, exit_y = self.get_splitter_exit((x, y), direction)
+        # Check exit position (in the direction)
+        exit_x, exit_y = self.get_splitter_exit(position, direction)
         if not (0 <= exit_x < len(self.base_grid[0]) and 0 <= exit_y < len(self.base_grid)):
             return False
         
-        # Exit should be empty or can be a path for the same item type
-        exit_valid = (
-            self.base_grid[exit_y][exit_x] == 0 or 
-            (allow_path_overlap and self.base_grid[exit_y][exit_x] == 9 and self.is_path_for_item(exit_x, exit_y, item_type))
-        )
-        
-        if not exit_valid:
+        # Exit should be empty or a path
+        if self.base_grid[exit_y][exit_x] != 0 and (not allow_path_overlap or self.base_grid[exit_y][exit_x] != 9):
             return False
         
         return True
@@ -564,3 +542,211 @@ class AStarPathFinder:
                 return True
         return False
 
+
+    def visualize_grid(self, output_path="grid_visualization.png", cell_size=32):
+        """
+        Create a visual representation of the grid with paths, underground belts, and splitters.
+        
+        Args:
+            output_path (str): Path to save the visualization image
+            cell_size (int): Size of each grid cell in pixels
+        """
+        try:
+            # Load assets
+            assets_folder = "assets"
+            conveyor_img = Image.open(os.path.join(assets_folder, "conveyor.png")).convert("RGBA").resize((cell_size, cell_size))
+            underground_img = Image.open(os.path.join(assets_folder, "underground.png")).convert("RGBA").resize((cell_size, cell_size))
+            splitter_img_raw = Image.open(os.path.join(assets_folder, "splitter.png")).convert("RGBA")
+            
+            # Create horizontal and vertical splitter images (2x1 or 1x2)
+            horizontal_splitter = Image.new("RGBA", (cell_size*2, cell_size), (0, 0, 0, 0))
+            horizontal_splitter.paste(splitter_img_raw.resize((cell_size*2, cell_size)), (0, 0))
+            
+            vertical_splitter = Image.new("RGBA", (cell_size, cell_size*2), (0, 0, 0, 0))
+            vertical_splitter.paste(splitter_img_raw.resize((cell_size, cell_size*2)).transpose(Image.ROTATE_90), (0, 0))
+            
+            # Determine grid dimensions
+            grid_height = len(self.base_grid)
+            grid_width = len(self.base_grid[0]) if grid_height > 0 else 0
+            
+            # Create an image for the grid
+            img_width = grid_width * cell_size
+            img_height = grid_height * cell_size
+            grid_img = Image.new("RGBA", (img_width, img_height), (50, 50, 50, 255))  # Dark gray background
+            draw = ImageDraw.Draw(grid_img)
+            
+            # Draw grid cells
+            for y in range(grid_height):
+                for x in range(grid_width):
+                    cell_value = self.base_grid[y][x]
+                    cell_pos = (x * cell_size, y * cell_size)
+                    
+                    # Draw different cell types
+                    if cell_value == 0:  # Empty cell
+                        draw.rectangle((cell_pos[0], cell_pos[1], 
+                                    cell_pos[0] + cell_size, cell_pos[1] + cell_size), 
+                                    fill=(30, 30, 30))
+                    elif cell_value == 1:  # Obstacle
+                        draw.rectangle((cell_pos[0], cell_pos[1], 
+                                    cell_pos[0] + cell_size, cell_pos[1] + cell_size), 
+                                    fill=(200, 50, 50))  # Red
+                    elif cell_value == 9:  # Path
+                        grid_img.paste(conveyor_img, cell_pos, conveyor_img)
+                    elif cell_value == 12:  # Inserter
+                        draw.rectangle((cell_pos[0], cell_pos[1], 
+                                    cell_pos[0] + cell_size, cell_pos[1] + cell_size), 
+                                    fill=(50, 150, 250))  # Blue
+                    elif cell_value == 13:  # Splitter
+                        # Don't draw splitter here - will handle separately
+                        pass
+            
+            # Draw underground belt jumps
+            for item, path_info in self.paths.items():
+                jumps = path_info.get('jump_markers', [])
+                for entrance, exit, direction in jumps:
+                    # Draw underground entrance
+                    entrance_x, entrance_y = entrance
+                    entrance_pos = (entrance_x * cell_size, entrance_y * cell_size)
+                    rotated_underground = self.rotate_image(underground_img, direction)
+                    grid_img.paste(rotated_underground, entrance_pos, rotated_underground)
+                    
+                    # Draw underground exit
+                    exit_x, exit_y = exit
+                    exit_pos = (exit_x * cell_size, exit_y * cell_size)
+                    # Rotate exit in opposite direction
+                    opposite_dir = (-direction[0], -direction[1])
+                    rotated_exit = self.rotate_image(underground_img, opposite_dir)
+                    grid_img.paste(rotated_exit, exit_pos, rotated_exit)
+            
+            # Draw splitters
+            for splitter_id, splitter_info in self.splitters.items():
+                pos = splitter_info['position']
+                direction = splitter_info['direction']
+                x, y = pos
+                
+                # Choose horizontal or vertical splitter based on direction
+                if direction[0] == 0:  # Vertical (up or down)
+                    splitter = vertical_splitter
+                    pos = (x * cell_size, y * cell_size)
+                    # Rotate based on direction
+                    if direction[1] > 0:  # Down
+                        splitter = self.rotate_image(vertical_splitter, (0, 1))
+                    else:  # Up
+                        splitter = self.rotate_image(vertical_splitter, (0, -1))
+                else:  # Horizontal (left or right)
+                    splitter = horizontal_splitter
+                    pos = (x * cell_size, y * cell_size)
+                    # Rotate based on direction
+                    if direction[0] > 0:  # Right
+                        splitter = self.rotate_image(horizontal_splitter, (1, 0))
+                    else:  # Left
+                        splitter = self.rotate_image(horizontal_splitter, (-1, 0))
+                
+                grid_img.paste(splitter, pos, splitter)
+            
+            # Draw start and destination points
+            for item, points in self.points.items():
+                # Draw start points
+                for x, y in points.get('start_points', []):
+                    pos = (x * cell_size, y * cell_size)
+                    draw.ellipse((pos[0] + cell_size//4, pos[1] + cell_size//4,
+                                pos[0] + 3*cell_size//4, pos[1] + 3*cell_size//4),
+                                fill=(0, 255, 0))  # Green circle
+                    
+                # Draw destination points
+                for x, y in points.get('destination', []):
+                    pos = (x * cell_size, y * cell_size)
+                    draw.ellipse((pos[0] + cell_size//4, pos[1] + cell_size//4,
+                                pos[0] + 3*cell_size//4, pos[1] + 3*cell_size//4),
+                                fill=(255, 150, 0))  # Orange circle
+            
+            # Save the image
+            grid_img.save(output_path)
+            print(f"Grid visualization saved to {output_path}")
+            
+            return True
+        except Exception as e:
+            print(f"Error creating visualization: {e}")
+            return False
+
+    def rotate_image(self, img, direction):
+        """Rotate an image based on direction vector."""
+        if direction == (1, 0):  # Right
+            return img
+        elif direction == (-1, 0):  # Left
+            return img.transpose(Image.ROTATE_180)
+        elif direction == (0, 1):  # Down
+            return img.transpose(Image.ROTATE_270)
+        elif direction == (0, -1):  # Up
+            return img.transpose(Image.ROTATE_90)
+        return img
+
+    def visualize_path(self, item, output_path=None, cell_size=32):
+        """
+        Create a visual representation of a specific path.
+        
+        Args:
+            item (str): The item identifier whose path to visualize
+            output_path (str): Path to save the visualization image (default: item_path.png)
+            cell_size (int): Size of each grid cell in pixels
+        """
+        if output_path is None:
+            output_path = f"{item}_path.png"
+        
+        if item not in self.paths:
+            print(f"No path found for item {item}")
+            return False
+        
+        path_info = self.paths[item]
+        path = path_info['path']
+        jumps = path_info.get('jump_markers', [])
+        used_splitter = path_info.get('used_splitter')
+        
+        # First create the base grid visualization
+        if not self.visualize_grid(output_path, cell_size):
+            return False
+        
+        # Load the base image and draw the specific path on top
+        try:
+            img = Image.open(output_path).convert("RGBA")
+            draw = ImageDraw.Draw(img)
+            
+            # Highlight the specific path
+            for i in range(len(path) - 1):
+                x1, y1 = path[i]
+                x2, y2 = path[i + 1]
+                
+                # Draw a line connecting the points
+                draw.line(
+                    (x1 * cell_size + cell_size//2, y1 * cell_size + cell_size//2,
+                    x2 * cell_size + cell_size//2, y2 * cell_size + cell_size//2),
+                    fill=(255, 255, 0, 180), width=3  # Yellow semi-transparent line
+                )
+            
+            # Highlight the points along the path
+            for x, y in path:
+                draw.ellipse(
+                    (x * cell_size + cell_size//3, y * cell_size + cell_size//3,
+                    x * cell_size + 2*cell_size//3, y * cell_size + 2*cell_size//3),
+                    outline=(255, 255, 0), width=2  # Yellow outline
+                )
+            
+            # Highlight splitter used if any
+            if used_splitter:
+                splitter_info = self.splitters.get(used_splitter)
+                if splitter_info:
+                    x, y = splitter_info['position']
+                    draw.rectangle(
+                        (x * cell_size, y * cell_size,
+                        x * cell_size + cell_size, y * cell_size + cell_size),
+                        outline=(0, 255, 255), width=3  # Cyan outline
+                    )
+            
+            # Save the enhanced image
+            img.save(output_path)
+            print(f"Path visualization for {item} saved to {output_path}")
+            return True
+        
+        except Exception as e:
+            print(f"Error creating path visualization: {e}")
+            return False
