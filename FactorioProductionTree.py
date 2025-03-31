@@ -7,22 +7,22 @@ import math
 import ast, os
 import csv
 import time
-import re
 import pandas as pd
 import matplotlib.pyplot as plt
 from z3 import And , Or
 from z3Solver  import Z3Solver
-from AStarPathFinderold import AStarPathFinderold
 import seaborn as sns
 
-from AStarPathfinder import AStarPathFinder
+from MultiAgentPathfinder import MultiAgentPathfinder
 
 # Define constants for colors
+side_panel_width = 300
+CELL_SIZE = 50  # Assuming a default cell size
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
+GREEN = (0, 255, 0)  
+RED = (255, 0, 0)  
 BLUE = (0, 0, 255)
-GREEN = (0, 255, 0)
-RED = (255, 0, 0)
 LIGHT_GREY = (211,211,211)
 
 
@@ -282,21 +282,13 @@ class FactorioProductionTree:
         return self.grid_height * self.grid_width + sum(row.count(2) for row in self.grid)
 
     
-    def manual_Output(self,Title="Manual Output"):
+    def manual_Output(self, Title="Manual Output"):
         side_panel_width = 300
         CELL_SIZE = 50  # Assuming a default cell size
         WHITE = (255, 255, 255)
         BLACK = (0, 0, 0)
         GREEN = (0, 255, 0)  # Green for input
         RED = (255, 0, 0)  # Red for output
-        
-        direction_angle_map = {
-            'right': 90,
-            'down': 180,
-            'left': 270,
-            'up': 0
-        }
-        
         
         output_image = pygame.image.load(f"assets/{self.output_item}.png")
         output_image = pygame.transform.scale(output_image, (CELL_SIZE, CELL_SIZE))
@@ -310,30 +302,34 @@ class FactorioProductionTree:
         # Resize images to fit in the grid cells
         item_images = {item: pygame.transform.scale(image, (CELL_SIZE, CELL_SIZE)) for item, image in item_images.items()}
         conveyor_image = pygame.transform.scale(conveyor_image, (CELL_SIZE, CELL_SIZE))
-    
 
-        output_information = {self.output_item:{'input': None, 'output': None,'grid': None, 'direction_grid': None}}
+        output_information = {self.output_item:{'input': None, 'output': None, 'paths': None}}
         setting_input = True
         # build obstacle map
-        grid_astar =[[0 for _ in range(self.grid_width)] for _ in range(self.grid_height)]
+        grid_astar = [[0 for _ in range(self.grid_width)] for _ in range(self.grid_height)]
                                         
+        # Mark existing paths from input_information as obstacles
         for item, data in input_information.items():
-            grid = data['grid']
-            if grid is not None:
-                for row in range(self.grid_height):
-                    for col in range(self.grid_width):
-                        if grid[col][row] == 2:  # Belt path marked with '2'
-                            grid_astar[col][row] = 1
+            if data['paths'] is not None and item in data['paths']:
+                for path_data in data['paths'][item]:
+                    path = path_data['path']
+                    
+                    # Mark path positions as obstacles
+                    for pos in path:
+                        # Important: in path, positions are (x, y)
+                        x, y = pos
+                        if 0 <= y < self.grid_height and 0 <= x < self.grid_width:
+                            grid_astar[y][x] = 1
+            
+            # Make sure to not cross existing belt start and end points
+            if data['input']:
+                y, x = data['input']  # y=row, x=col
+                grid_astar[y][x] = 1
 
-                # make sure to not cross existing belt start and end points
-                if data['input']:
-                    grid_astar[data['input'][1]][data['input'][0]]=1
+            if data['output']:
+                y, x = data['output']  # y=row, x=col
+                grid_astar[y][x] = 1
 
-                if data['output']:
-                    grid_astar[data['output'][1]][data['output'][0]]=1
-    
-
-    
         pygame.init()
 
         # Set up the window size
@@ -351,7 +347,6 @@ class FactorioProductionTree:
             items = list(output_information.keys()) 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    #pygame.quit()
                     running = False
 
                 # Handle mouse click to place or remove input/output
@@ -368,25 +363,41 @@ class FactorioProductionTree:
                             # Left click to place input/output
                             if event.button == 1:
                                 if setting_input and output_information[current_item]['input'] is None:
-                                    output_information[current_item]['input'] = (row, col)
+                                    output_information[current_item]['input'] = (row, col)  # Store as (row, col) for consistency
                                     setting_input = False  # Switch to setting output next
                                 elif not setting_input and output_information[current_item]['output'] is None:
-                                    output_information[current_item]['output'] = (row, col)
+                                    output_information[current_item]['output'] = (row, col)  # Store as (row, col) for consistency
                                     setting_input = True  # After setting output, switch to input for next item
 
                                     # Once both input and output are set, find the path and connect belts
                                     if output_information[current_item]['input'] and output_information[current_item]['output']:
-                                            
-                                        # Create an AStarPathfinder object for pathfinding
-                                        pairs = [(output_information[current_item]['input'], output_information[current_item]['output'])]
-                                        astar = AStarPathFinderold(grid_astar, pairs)
-                                        connected = astar.connect_belts()  # This updates the grid with belt paths
-
+                                        # Create points dictionary for MultiAgentPathfinder
+                                        # Note: MultiAgentPathfinder expects (x, y) format, so swap the coordinates
+                                        input_y, input_x = output_information[current_item]['input']
+                                        output_y, output_x = output_information[current_item]['output']
                                         
-                                        if connected:
-                                            output_information[current_item]['grid'] = astar.grid
-                                            output_information[current_item]['direction_grid'] = astar.direction_grid
-                                            
+                                        points = {
+                                            current_item: {
+                                                'item': current_item,
+                                                'destination': [(output_x, output_y)],  # Swap to (col, row) for pathfinder
+                                                'start_points': [(input_x, input_y)],  # Swap to (col, row) for pathfinder
+                                                'inserter_mapping': None
+                                            }
+                                        }
+                                        
+                                        # Create the pathfinder object
+                                        pathfinder = MultiAgentPathfinder(
+                                            grid_astar, 
+                                            points,
+                                            allow_underground=False
+                                        )
+                                        
+                                        # Find paths for all items
+                                        paths, inserters = pathfinder.find_paths_for_all_items()
+                                        
+                                        # Store path information directly
+                                        if current_item in paths and paths[current_item]:
+                                            output_information[current_item]['paths'] = paths
                                         else:
                                             print(f"No valid path found for {current_item}")
 
@@ -397,27 +408,23 @@ class FactorioProductionTree:
                                     output_information[current_item]['input'] = None
                                     setting_input = True  # Go back to setting input
                                     
-                                    output_information[current_item]['grid'] = None
-                                    output_information[current_item]['direction_grid'] = None
+                                    output_information[current_item]['paths'] = None
                                     
                                 elif output_information[current_item]['output'] is not None:
                                     # Undo output if output was set last
                                     output_information[current_item]['output'] = None
                                     setting_input = False  # Go back to setting output
                                     
-                                    output_information[current_item]['grid'] = None
-                                    output_information[current_item]['direction_grid'] = None
+                                    output_information[current_item]['paths'] = None
 
                 # Handle key press to change selected item
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_RIGHT:  # Right arrow to move to the next item
-                        current_item_index = (current_item_index + 1) % len(output_information)
                         setting_input = True  # Reset to input when changing item
                     elif event.key == pygame.K_LEFT:  # Left arrow to move to the previous item
-                        current_item_index = (current_item_index - 1) % len(output_information)
                         setting_input = True  # Reset to input when changing item
 
-            # Fill the screen with black
+            # Fill the screen with white
             window.fill(WHITE)
             # Draw the grid and place images with background colors
             for row in range(self.grid_height):
@@ -445,39 +452,69 @@ class FactorioProductionTree:
                             # Draw red background for output
                             pygame.draw.rect(window, RED, rect)
                             window.blit(output_image, rect)
-                    
-            # draw input items
-            for item, data in input_information.items():
-                grid = data['grid']
-                direction_grid = data['direction_grid']
-                if grid is not None:
-                    for row in range(self.grid_height):
-                        for col in range(self.grid_width):
-                            if grid[col][row] == 2:  # Belt path marked with '2'
-                                direction = direction_grid[col][row]
-                                if direction in direction_angle_map:
-                                    # Rotate the belt image based on direction
-                                    rotated_belt_image = pygame.transform.rotate(conveyor_image, direction_angle_map[direction]+90)
-                                            
-                                    # Draw the belt image at the correct position
-                                    window.blit(rotated_belt_image, (side_panel_width + col * CELL_SIZE, row * CELL_SIZE))
-            # draw output items                      
-            for item, data in output_information.items():
-                grid = data['grid']
-                direction_grid = data['direction_grid']
-                if grid is not None:
-                    for row in range(self.grid_height):
-                        for col in range(self.grid_width):
-                            if grid[col][row] == 2:  # Belt path marked with '2'
-                                direction = direction_grid[col][row]
-                                if direction in direction_angle_map:
-                                    # Rotate the belt image based on direction
-                                    rotated_belt_image = pygame.transform.rotate(conveyor_image, direction_angle_map[direction]+90)
-                                            
-                                    # Draw the belt image at the correct position
-                                    window.blit(rotated_belt_image, (side_panel_width + col * CELL_SIZE, row * CELL_SIZE))
-                
             
+            # Draw input paths
+            for item, data in input_information.items():
+                if data['paths'] is not None and item in data['paths']:
+                    for path_data in data['paths'][item]:
+                        path = path_data['path']
+                        
+                        # Draw belts for each segment of the path
+                        for i in range(len(path) - 2):
+                            current = path[i+1]
+                            next_node = path[i + 2]
+                            
+                            # Calculate direction vector
+                            dx = next_node[0] - current[0]
+                            dy = next_node[1] - current[1]
+                            
+                            # Calculate angle based on direction
+                            if dx == 1:
+                                angle = 270  # Right
+                            elif dx == -1:
+                                angle = 90   # Left
+                            elif dy == 1:
+                                angle = 180  # Down
+                            elif dy == -1:
+                                angle = 0    # Up
+                            else:
+                                continue  # Skip if not a direct connection
+                            
+                            # Draw belt with correct rotation
+                            rotated_belt = pygame.transform.rotate(conveyor_image, angle)
+                            window.blit(rotated_belt, (side_panel_width + current[0] * CELL_SIZE, current[1] * CELL_SIZE))
+            
+            # Draw output paths
+            for item, data in output_information.items():
+                if data['paths'] is not None and item in data['paths']:
+                    for path_data in data['paths'][item]:
+                        path = path_data['path']
+                        
+                        # Draw belts for each segment of the path
+                        for i in range(len(path) - 2):
+                            current = path[i+1]
+                            next_node = path[i + 2]
+                            
+                            # Calculate direction vector
+                            dx = next_node[0] - current[0]
+                            dy = next_node[1] - current[1]
+                            
+                            # Calculate angle based on direction
+                            if dx == 1:
+                                angle = 270  # Right
+                            elif dx == -1:
+                                angle = 90   # Left
+                            elif dy == 1:
+                                angle = 180  # Down
+                            elif dy == -1:
+                                angle = 0    # Up
+                            else:
+                                continue  # Skip if not a direct connection
+                            
+                            # Draw belt with correct rotation
+                            rotated_belt = pygame.transform.rotate(conveyor_image, angle)
+                            window.blit(rotated_belt, (side_panel_width + current[0] * CELL_SIZE, current[1] * CELL_SIZE))
+                
             # Draw the side panel
             pygame.draw.rect(window, BLACK, (0, 0, side_panel_width, window_height))  # Side panel background
             font = pygame.font.Font(None, 36)
@@ -497,8 +534,7 @@ class FactorioProductionTree:
         self.output_information = output_information
         pygame.quit()
     
-    def manual_Input(self,Title="Manual Input"):
-        
+    def manual_Input(self, Title="Manual Input"):
         side_panel_width = 300
         CELL_SIZE = 50  # Assuming a default cell size
         WHITE = (255, 255, 255)
@@ -507,16 +543,8 @@ class FactorioProductionTree:
         RED = (255, 0, 0)  # Red for output
 
         # Get all input items
-        #input_items = ['copper-plate', 'iron-plate']
-        
         input_items = self.input_items
         
-        direction_angle_map = {
-            'right': 90,
-            'down': 180,
-            'left': 270,
-            'up': 0
-        }
         # Load images for the items
         item_images = {item: pygame.image.load(f"assets/{item}.png") for item in input_items}
         conveyor_image = pygame.image.load("assets/conveyor.png")
@@ -525,10 +553,10 @@ class FactorioProductionTree:
         conveyor_image = pygame.transform.scale(conveyor_image, (CELL_SIZE, CELL_SIZE))
 
         # Track positions for inputs and outputs (item -> {'input': (row, col), 'output': (row, col)})
-        input_information = {item: {'input': None, 'output': None,'grid': None, 'direction_grid': None} for item in input_items}
+        input_information = {item: {'input': None, 'output': None, 'paths': None} for item in input_items}
         current_item_index = 0
         setting_input = True  # True when setting input position, False for output
-            
+        
         pygame.init()
 
         # Set up the window size
@@ -547,8 +575,6 @@ class FactorioProductionTree:
             items = list(input_information.keys()) 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    #pygame.quit()
-                    #sys.exit()
                     running = False
 
                 # Handle mouse click to place or remove input/output
@@ -565,6 +591,7 @@ class FactorioProductionTree:
                             # Left click to place input/output
                             if event.button == 1:
                                 if setting_input and input_information[current_item]['input'] is None:
+                                    # Store as (row, col) for consistency
                                     input_information[current_item]['input'] = (row, col)
                                     setting_input = False  # Switch to setting output next
                                 elif not setting_input and input_information[current_item]['output'] is None:
@@ -574,34 +601,56 @@ class FactorioProductionTree:
                                     # Once both input and output are set, find the path and connect belts
                                     if input_information[current_item]['input'] and input_information[current_item]['output']:
                                         
-                                        grid_astar =[[0 for _ in range(self.grid_width)] for _ in range(self.grid_height)]
+                                        grid_astar = [[0 for _ in range(self.grid_width)] for _ in range(self.grid_height)]
                                         
+                                        # Mark existing paths as obstacles
                                         for item, data in input_information.items():
-                                            
-                                            grid = data['grid']
-                                            if grid is not None:
-                                                for row in range(self.grid_height):
-                                                    for col in range(self.grid_width):
-                                                        if grid[col][row] == 2:  # Belt path marked with '2'
-                                                            grid_astar[col][row] = 1
-                                                            
-                                            # make sure to not cross existing belt start and end points
+                                            if data['paths'] is not None and item in data['paths']:
+                                                # Mark path positions as obstacles
+                                                for path_data in data['paths'][item]:
+                                                    path = path_data['path']
+                                                    for pos in path:
+                                                        # Important: in path, positions are (x, y) but we store as (row=y, col=x)
+                                                        x, y = pos
+                                                        if 0 <= y < self.grid_height and 0 <= x < self.grid_width:
+                                                            grid_astar[y][x] = 1
+                                                    
+                                            # Make sure to not cross existing belt start and end points
                                             if data['input']:
-                                                grid_astar[data['input'][1]][data['input'][0]]=1
+                                                y, x = data['input']  # y=row, x=col
+                                                grid_astar[y][x] = 1
                                                 
                                             if data['output']:
-                                                grid_astar[data['output'][1]][data['output'][0]]=1
-                                            
-                                        # Create an AStarPathfinder object for pathfinding
-                                        pairs = [(input_information[current_item]['input'], input_information[current_item]['output'])]
-                                        astar = AStarPathFinderold(grid_astar, pairs)
-                                        connected = astar.connect_belts()  # This updates the grid with belt paths
+                                                y, x = data['output']  # y=row, x=col
+                                                grid_astar[y][x] = 1
                                         
+                                        # Create points dictionary for MultiAgentPathfinder
+                                        # Note: MultiAgentPathfinder expects (x, y) format, so swap the coordinates
+                                        input_y, input_x = input_information[current_item]['input']
+                                        output_y, output_x = input_information[current_item]['output']
                                         
-                                        if connected:
-                                            input_information[current_item]['grid'] = astar.grid
-                                            input_information[current_item]['direction_grid'] = astar.direction_grid
-                                            
+                                        points = {
+                                            current_item: {
+                                                'item': current_item,
+                                                'destination': [(output_x, output_y)],  # Swap to (col, row) for pathfinder
+                                                'start_points': [(input_x, input_y)],  # Swap to (col, row) for pathfinder
+                                                'inserter_mapping': None
+                                            }
+                                        }
+                                        
+                                        # Create the pathfinder object
+                                        pathfinder = MultiAgentPathfinder(
+                                            grid_astar, 
+                                            points,
+                                            allow_underground=False
+                                        )
+                                        
+                                        # Find paths for all items
+                                        paths, inserters = pathfinder.find_paths_for_all_items()
+                                        
+                                        # Store path information directly
+                                        if current_item in paths and paths[current_item]:
+                                            input_information[current_item]['paths'] = paths
                                         else:
                                             print(f"No valid path found for {current_item}")
 
@@ -612,16 +661,14 @@ class FactorioProductionTree:
                                     input_information[current_item]['input'] = None
                                     setting_input = True  # Go back to setting input
                                     
-                                    input_information[current_item]['grid'] = None
-                                    input_information[current_item]['direction_grid'] = None
+                                    input_information[current_item]['paths'] = None
                                     
                                 elif input_information[current_item]['output'] is not None:
                                     # Undo output if output was set last
                                     input_information[current_item]['output'] = None
                                     setting_input = False  # Go back to setting output
                                     
-                                    input_information[current_item]['grid'] = None
-                                    input_information[current_item]['direction_grid'] = None
+                                    input_information[current_item]['paths'] = None
 
                 # Handle key press to change selected item
                 if event.type == pygame.KEYDOWN:
@@ -651,23 +698,36 @@ class FactorioProductionTree:
                             pygame.draw.rect(window, RED, rect)
                             window.blit(item_images[item], rect)
 
-                    
+            # Draw paths for each item using the path data directly
             for item, data in input_information.items():
-                grid = data['grid']
-                direction_grid = data['direction_grid']
-                if grid is not None:
-                    for row in range(self.grid_height):
-                        for col in range(self.grid_width):
-                            if grid[col][row] == 2:  # Belt path marked with '2'
-                                direction = direction_grid[col][row]
-                                if direction in direction_angle_map:
-                                    # Rotate the belt image based on direction
-                                    rotated_belt_image = pygame.transform.rotate(conveyor_image, direction_angle_map[direction]+90)
-                                            
-                                    # Draw the belt image at the correct position
-                                    window.blit(rotated_belt_image, (side_panel_width + col * CELL_SIZE, row * CELL_SIZE))
-
-                
+                if data['paths'] is not None and item in data['paths']:
+                    for path_data in data['paths'][item]:
+                        path = path_data['path']
+                        
+                        # Draw belts for each segment of the path
+                        for i in range(len(path) - 2):
+                            current = path[i+1]
+                            next_node = path[i + 2]
+                            
+                            # Calculate direction vector
+                            dx = next_node[0] - current[0]
+                            dy = next_node[1] - current[1]
+                            
+                            # Calculate angle based on direction
+                            if dx == 1:
+                                angle = 270  # Right
+                            elif dx == -1:
+                                angle = 90   # Left
+                            elif dy == 1:
+                                angle = 180  # Down
+                            elif dy == -1:
+                                angle = 0    # Up
+                            else:
+                                continue  # Skip if not a direct connection
+                            
+                            # Draw belt with correct rotation
+                            rotated_belt = pygame.transform.rotate(conveyor_image, angle)
+                            window.blit(rotated_belt, (side_panel_width + current[0] * CELL_SIZE, current[1] * CELL_SIZE))
             
             # Draw the side panel
             pygame.draw.rect(window, BLACK, (0, 0, side_panel_width, window_height))  # Side panel background
@@ -685,7 +745,7 @@ class FactorioProductionTree:
             # Cap the frame rate
             clock.tick(30)
             
-            # store input posiitons
+        # store input positions
         pygame.quit()
         self.input_information = input_information
 
@@ -704,10 +764,8 @@ class FactorioProductionTree:
         else:
             self.z3_solver.build_constraints()
             self.z3_solver.solve()
-
         
-        
-    def add_manual_IO_constraints(self,production_data,sequential):
+    def add_manual_IO_constraints(self,production_data):
         if self.z3_solver is None:
             self.z3_solver = Z3Solver(self.grid_width,self.grid_height, production_data)
         
@@ -715,28 +773,44 @@ class FactorioProductionTree:
         
         self.z3_solver.add_manuel_IO_constraints(self.input_information,self.output_information)
     
-    
-    def detect_belt_overlap(self,belt):
-        belt_coords = (belt[1], belt[2]) 
-        # Step 2: Extract input/output belt coordinates
+        
+    def detect_belt_overlap(self, belt):
+        belt_coords = (belt[1], belt[2])
+        # Extract input/output belt coordinates from paths
         input_coords = set()
         output_coords = set()
 
-        # Gather all coordinates in input/output grids where a belt (value 2) is present
+        # Gather all coordinates in input paths
         for material, data in self.input_information.items():
-            input_grid = data['grid']
-            for row in range(len(input_grid)):
-                for col in range(len(input_grid[0])):
-                    if input_grid[row][col] == 2:
-                        input_coords.add((row, col))
+            if data['paths'] is not None and material in data['paths']:
+                for path_data in data['paths'][material]:
+                    path = path_data['path']
+                    for pos in path:
+                        # Add each position in the path to our set of input coordinates
+                        input_coords.add((pos[1], pos[0]))  # Convert from (x,y) to (row,col)
+            
+            # Also add the input/output positions themselves
+            if data['input']:
+                input_coords.add(data['input'])
+            if data['output']:
+                input_coords.add(data['output'])
 
+        # Gather all coordinates in output paths
         for material, data in self.output_information.items():
-            output_grid = data['grid']
-            for row in range(len(output_grid)):
-                for col in range(len(output_grid[0])):
-                    if output_grid[row][col] == 2:
-                        output_coords.add((row, col))
+            if data['paths'] is not None and material in data['paths']:
+                for path_data in data['paths'][material]:
+                    path = path_data['path']
+                    for pos in path:
+                        # Add each position in the path to our set of output coordinates
+                        output_coords.add((pos[1], pos[0]))  # Convert from (x,y) to (row,col)
+            
+            # Also add the input/output positions themselves
+            if data['input']:
+                output_coords.add(data['input'])
+            if data['output']:
+                output_coords.add(data['output'])
         
+        # Check if the belt coordinates overlap with any input or output coordinates
         return belt_coords in input_coords or belt_coords in output_coords
 
     def detect_assembler_overlap(self,belt,assembler_information):
@@ -774,10 +848,9 @@ class FactorioProductionTree:
             'item': item,
             'destination': [],  # This is the destination point from belt_point_information
             'start_points': [(x,y)],  # List to store relevant start points
-            'inserter_mapping':None
+            'inserter_mapping': None
             }
             
-
             # Step 2: Check if item is in `input_information`
             if item in self.input_information:
                 # Get all positions with the matching item from `input_information`
@@ -790,12 +863,16 @@ class FactorioProductionTree:
                 retrieval_points[key]['destination'].append(input_point)
                 retrieval_points[key]['destination'].append(output_point)
                 
-                # Retrieve the grid for the item and locate all positions with '2' (indicating belt presence)
-                item_grid = self.input_information[item]['grid']
-                for row in range(len(item_grid)):
-                    for col in range(len(item_grid[0])):
-                        if item_grid[row][col] == 2:  # Belt presence for this item
-                            retrieval_points[key]["destination"].append((row, col))
+                # Process path data directly if it exists
+                if self.input_information[item]['paths'] is not None and item in self.input_information[item]['paths']:
+                    for path_data in self.input_information[item]['paths'][item]:
+                        path = path_data['path']
+                        
+                        # Add all points in the path as potential destinations
+                        for pos in path:
+                            # Convert from (x, y) to (col, row) for consistency
+                            retrieval_points[key]["destination"].append(pos)
+                
                 continue  # Move to the next belt item after checking input information
 
             # Step 2: Check assembler output points from `assembler_information`
@@ -827,82 +904,76 @@ class FactorioProductionTree:
         return retrieval_points
 
     
-    def add_out_point_information(self,output_item,assembler_information):
- 
+    def add_out_point_information(self, output_item, assembler_information):
         retrieval_points = {}
         
-        # get all the possible output positions from the output information set by the user
-        # same for all the output assemblers
+        # Get all the possible output positions from the output information set by the user
         output_coords = []
-        for material, data in self.output_information.items():
-            output_grid = data['grid']
-            for row in range(len(output_grid)):
-                for col in range(len(output_grid[0])):
-                    if output_grid[row][col] == 2:
-                        output_coords.append((row, col))
+        
+        # Process path data directly if it exists
+        if self.output_information[output_item]['paths'] is not None and output_item in self.output_information[output_item]['paths']:
+            for path_data in self.output_information[output_item]['paths'][output_item]:
+                path = path_data['path']
+                
+                # Add all points in the path as potential destinations
+                for pos in path:
+                    output_coords.append(pos)  # Positions are already in (x, y) format
                         
-                        
+        # Add input and output points
         input_point = self.output_information[output_item]['input']
         output_point = self.output_information[output_item]['output']         
                         
-        input_point = (input_point[1], input_point[0])  # Swap the coordinates
-        output_point = (output_point[1], output_point[0])  # Swap the coordinates
+        input_point = (input_point[1], input_point[0])  # Swap the coordinates (row, col) -> (x, y)
+        output_point = (output_point[1], output_point[0])  # Swap the coordinates (row, col) -> (x, y)
         
         output_coords.append(input_point)
         output_coords.append(output_point)
         
-        #retrieval_points[output_item]["destination"] = output_coords
-        
-        for i,(asm_item, assembler_x, assembler_y) in enumerate(assembler_information):
-                if asm_item == output_item:
-                    
-                    # for each output assembler build own representation    
-                    key = f"{output_item}_{i}"
-                    
-                    logging.info(f"build output path infomation for {key}")
-            
-                      
-                    # Define assembler output positions based on `output_positions` template
-                    output_positions = [
-                        [(assembler_x, assembler_y - 1), (assembler_x, assembler_y - 2)],  # Upper left
-                        [(assembler_x + 1, assembler_y - 1), (assembler_x + 1, assembler_y - 2)],  # Upper middle
-                        [(assembler_x + 2, assembler_y - 1), (assembler_x + 2, assembler_y - 2)],  # Upper right
-                        
-                        [(assembler_x, assembler_y + 3), (assembler_x, assembler_y + 4)],  # Bottom left
-                        [(assembler_x + 1, assembler_y + 3), (assembler_x + 1, assembler_y + 4)],  # Bottom middle
-                        [(assembler_x + 2, assembler_y + 3), (assembler_x + 2, assembler_y + 4)],  # Bottom right
-                        
-                        [(assembler_x - 1, assembler_y), (assembler_x - 2, assembler_y)],  # Left up
-                        [(assembler_x - 1, assembler_y + 1), (assembler_x - 2, assembler_y + 1)],  # Left middle
-                        [(assembler_x - 1, assembler_y + 2), (assembler_x - 2, assembler_y + 2)],  # Left bottom
-                        
-                        [(assembler_x + 3, assembler_y), (assembler_x + 4, assembler_y)],  # Right up
-                        [(assembler_x + 3, assembler_y + 1), (assembler_x + 4, assembler_y + 1)],  # Right middle
-                        [(assembler_x + 3, assembler_y + 2), (assembler_x + 4, assembler_y + 2)]  # Right bottom
-                    ]
-                    
+        for i, (asm_item, assembler_x, assembler_y) in enumerate(assembler_information):
+            if asm_item == output_item:
                 
+                # For each output assembler build own representation    
+                key = f"{output_item}_{i}"
+                
+                logging.info(f"build output path infomation for {key}")
+        
                     
-                    retrieval_points[key] = {
-                        'item':output_item,
-                        'destination':  output_coords,  # This is the destination point from belt_point_information
-                        'start_points': [],  # List to store relevant start points
-                        'inserter_mapping':{}      
-                    }
+                # Define assembler output positions based on `output_positions` template
+                output_positions = [
+                    [(assembler_x, assembler_y - 1), (assembler_x, assembler_y - 2)],  # Upper left
+                    [(assembler_x + 1, assembler_y - 1), (assembler_x + 1, assembler_y - 2)],  # Upper middle
+                    [(assembler_x + 2, assembler_y - 1), (assembler_x + 2, assembler_y - 2)],  # Upper right
+                    
+                    [(assembler_x, assembler_y + 3), (assembler_x, assembler_y + 4)],  # Bottom left
+                    [(assembler_x + 1, assembler_y + 3), (assembler_x + 1, assembler_y + 4)],  # Bottom middle
+                    [(assembler_x + 2, assembler_y + 3), (assembler_x + 2, assembler_y + 4)],  # Bottom right
+                    
+                    [(assembler_x - 1, assembler_y), (assembler_x - 2, assembler_y)],  # Left up
+                    [(assembler_x - 1, assembler_y + 1), (assembler_x - 2, assembler_y + 1)],  # Left middle
+                    [(assembler_x - 1, assembler_y + 2), (assembler_x - 2, assembler_y + 2)],  # Left bottom
+                    
+                    [(assembler_x + 3, assembler_y), (assembler_x + 4, assembler_y)],  # Right up
+                    [(assembler_x + 3, assembler_y + 1), (assembler_x + 4, assembler_y + 1)],  # Right middle
+                    [(assembler_x + 3, assembler_y + 2), (assembler_x + 4, assembler_y + 2)]  # Right bottom
+                ]
+                
+            
+                
+                retrieval_points[key] = {
+                    'item': output_item,
+                    'destination': output_coords,  # This is the destination point from belt_point_information
+                    'start_points': [],  # List to store relevant start points
+                    'inserter_mapping': {}      
+                }
 
-                    # Filter output positions to ensure no overlap with any existing structures
-                    for position_pair in output_positions:
-                            if self.is_position_available(position_pair[0]) and self.is_position_available(position_pair[1]):
-                                
-                                
-                                retrieval_points[key]["inserter_mapping"][str(position_pair[1])] = position_pair[0]
-                                
-                                retrieval_points[key]["start_points"].append(position_pair[1])
-                                
-                                
+                # Filter output positions to ensure no overlap with any existing structures
+                for position_pair in output_positions:
+                    if self.is_position_available(position_pair[0]) and self.is_position_available(position_pair[1]):
+                        retrieval_points[key]["inserter_mapping"][str(position_pair[1])] = position_pair[0]
+                        retrieval_points[key]["start_points"].append(position_pair[1])
                                 
         return retrieval_points
-    
+        
     
     def rearrange_dict(self,input_dict, target_item):
         # Separate items based on the 'item' value
@@ -912,6 +983,158 @@ class FactorioProductionTree:
         # Combine the dictionaries with target items first
         rearranged_dict = {**target_items, **other_items}
         return rearranged_dict
+    
+    def prepare_splitter_information(self):
+        """
+        Prepare splitter information from input/output positions.
+        Also enhances each path with orientation information.
+        
+        Returns:
+            dict: Dictionary mapping each item to a list of potential splitter positions
+        """
+        splitters = {}
+        
+        # Process input information
+        for item, data in self.input_information.items():
+            # Skip if no paths are available
+            if data['paths'] is None or item not in data['paths']:
+                continue
+                
+            # Initialize splitter list for this item if needed
+            if item not in splitters:
+                splitters[item] = []
+            
+            # Get input and output positions
+            input_pos = data['input']
+            output_pos = data['output']
+            
+            # Convert to (x, y) format for pathfinder compatibility
+            input_x, input_y = input_pos[1], input_pos[0]  # Convert from (row, col) to (x, y)
+            output_x, output_y = output_pos[1], output_pos[0]  # Convert from (row, col) to (x, y)
+            
+            # Add input position as potential splitter
+            splitters[item].append({
+                'pos': (input_x, input_y),
+                'orientation': (0, 1)  # Default orientation for input
+            })
+            
+            # Add output position as potential splitter
+            splitters[item].append({
+                'pos': (output_x, output_y),
+                'orientation': (0, -1)  # Default orientation for output
+            })
+            
+            # Add orientation information to each path
+            for path_data in data['paths'][item]:
+                path = path_data['path']
+                # Initialize or reset orientation data
+                path_data['orientation'] = {}
+                
+                # Calculate orientation for each segment of the path
+                for i in range(len(path) - 1):
+                    current = path[i]
+                    next_pos = path[i + 1]
+                    
+                    # Calculate direction vector
+                    dx = next_pos[0] - current[0]
+                    dy = next_pos[1] - current[1]
+                    
+                    # Normalize
+                    if dx != 0:
+                        dx = dx // abs(dx)
+                    if dy != 0:
+                        dy = dy // abs(dy)
+                    
+                    # Store orientation
+                    path_data['orientation'][current] = (dx, dy)
+                
+                # For the last point, use the same direction as the previous segment
+                if len(path) > 1:
+                    last = path[-1]
+                    second_last = path[-2]
+                    dx = last[0] - second_last[0]
+                    dy = last[1] - second_last[1]
+                    
+                    # Normalize
+                    if dx != 0:
+                        dx = dx // abs(dx)
+                    if dy != 0:
+                        dy = dy // abs(dy)
+                    
+                    path_data['orientation'][last] = (dx, dy)
+        
+        # Process output information using the same approach
+        for item, data in self.output_information.items():
+            # Skip if no paths are available
+            if data['paths'] is None or item not in data['paths']:
+                continue
+                
+            # Initialize splitter list for this item if needed
+            if item not in splitters:
+                splitters[item] = []
+            
+            # Get input and output positions
+            input_pos = data['input']
+            output_pos = data['output']
+            
+            # Convert to (x, y) format for pathfinder compatibility
+            input_x, input_y = input_pos[1], input_pos[0]  # Convert from (row, col) to (x, y)
+            output_x, output_y = output_pos[1], output_pos[0]  # Convert from (row, col) to (x, y)
+            
+            # Add input position as potential splitter
+            splitters[item].append({
+                'pos': (input_x, input_y),
+                'orientation': (0, 1)  # Default orientation for input
+            })
+            
+            # Add output position as potential splitter
+            splitters[item].append({
+                'pos': (output_x, output_y),
+                'orientation': (0, -1)  # Default orientation for output
+            })
+            
+            # Add orientation information to each path
+            for path_data in data['paths'][item]:
+                path = path_data['path']
+                # Initialize or reset orientation data
+                path_data['orientation'] = {}
+                
+                # Calculate orientation for each segment of the path
+                for i in range(len(path) - 1):
+                    current = path[i]
+                    next_pos = path[i + 1]
+                    
+                    # Calculate direction vector
+                    dx = next_pos[0] - current[0]
+                    dy = next_pos[1] - current[1]
+                    
+                    # Normalize
+                    if dx != 0:
+                        dx = dx // abs(dx)
+                    if dy != 0:
+                        dy = dy // abs(dy)
+                    
+                    # Store orientation
+                    path_data['orientation'][current] = (dx, dy)
+                
+                # For the last point, use the same direction as the previous segment
+                if len(path) > 1:
+                    last = path[-1]
+                    second_last = path[-2]
+                    dx = last[0] - second_last[0]
+                    dy = last[1] - second_last[1]
+                    
+                    # Normalize
+                    if dx != 0:
+                        dx = dx // abs(dx)
+                    if dy != 0:
+                        dy = dy // abs(dy)
+                    
+                    path_data['orientation'][last] = (dx, dy)
+        
+        return splitters
+    
+    
     # need to solve once before you can execute this
     def build_belts(self, max_tries):
         for i in range(max_tries):
@@ -919,7 +1142,7 @@ class FactorioProductionTree:
             
             
             self.obstacle_map,belt_point_information,assembler_information,_ = self.z3_solver.build_map()
-            
+          
              
             # get rid of belts that are already connected -> overlap with other input and output belts set by user or overlap with assembler -> direct insertion
             belt_point_information = [belt for belt in belt_point_information if not self.detect_belt_overlap(belt)]
@@ -937,12 +1160,18 @@ class FactorioProductionTree:
                 
                 # rearrange such that we first build paths for outputs
                 retrieval_points = self.rearrange_dict(retrieval_points, self.output_item)
-               
-                astar_pathfinder = AStarPathFinder(self.obstacle_map,retrieval_points,invert_paths=[self.output_item])
-                paths , placed_inserter_information = astar_pathfinder.find_path_for_item()
-
+                # Create the pathfinder
+                pathfinder = MultiAgentPathfinder(  self.obstacle_map, 
+                                                    retrieval_points,
+                                                    allow_underground=True,
+                                                    underground_length=3,
+                                                    allow_splitters=False,
+                                                    splitters=self.prepare_splitter_information())
                 
-                return paths, placed_inserter_information
+                # Find paths for all items
+                paths, inserters = pathfinder.find_paths_for_all_items()
+                
+                return paths, inserters
             
             except Exception as e:
                 print(f"could not assign valid paths to that setup: {e}")
@@ -1406,32 +1635,31 @@ def Simple_Run():
     
     print("start")
     
+    
     # Example item and amount
-    item_to_produce = "copper-cable"
-    amount_needed = 100
+    item_to_produce = "electronic-circuit"
+    amount_needed = 1
     
     
     input_items = []
     
     # init 
-    factorioProductionTree = FactorioProductionTree(6,6)
+    factorioProductionTree = FactorioProductionTree(15,15)
     factorioProductionTree.amount = amount_needed
     production_data  = factorioProductionTree.calculate_production(item_to_produce,amount_needed,input_items=input_items) #60
     factorioProductionTree.production_data = production_data
 
     production_data = factorioProductionTree.set_capacities(production_data)
-
-    production_data["copper-cable"]["input_inserters"] = [{'id': 'copper-plate', 'inserters': 4, 'amount': 1}]
-    
-    print(f"production data {production_data}")
-
-   
    
     # Manual input and output
     factorioProductionTree.manual_Input()
     factorioProductionTree.manual_Output()
-    factorioProductionTree.add_manual_IO_constraints(production_data,sequential=False)
-   
+    
+    print(factorioProductionTree.input_information)
+    print(factorioProductionTree.output_information)
+    return
+    factorioProductionTree.add_manual_IO_constraints(production_data)
+    
     assembler_counts = factorioProductionTree.count_assemblers(production_data)
         
     # Track time for solving the problem
@@ -1447,6 +1675,8 @@ def Simple_Run():
     log_method_time(item_to_produce, 1, 1, "build_belts", assembler_counts, start_time, end_time)
     
     if(paths):
+        
+        return
         factorioProductionTree.store_data(f'Modules/{item_to_produce}_{amount_needed}_{input_items}_module',paths,placed_inserter_information)
         
         factorioProductionTree.visualize_factory(paths,placed_inserter_information,store=True,file_path=f'Modules/{item_to_produce}_{amount_needed}_{input_items}_module.png')
@@ -1479,15 +1709,15 @@ def Eval_Runs(item_to_produce, start, end, step, rep_per_step):
         factorioProductionTree.add_manual_IO_constraints(production_data, sequential=False)
         
         # Solve the production problem for amount_needed = 1
-        start_time = time.perf_counter()
+        start_time = time.perf.counter()
         factorioProductionTree.solve(production_data, sequential=False)
-        end_time = time.perf_counter()
+        end_time = time.perf.counter()
         log_method_time(item_to_produce, 1, 1, "solve", assembler_counts, start_time, end_time)
         
         # Build belts and visualize for amount_needed = 1
-        start_time = time.perf_counter()
+        start_time = time.perf.counter()
         paths, placed_inserter_information = factorioProductionTree.build_belts(max_tries=2)
-        end_time = time.perf_counter()
+        end_time = time.perf.counter()
         log_method_time(item_to_produce, 1, 1, "build_belts", assembler_counts, start_time, end_time)
     
 
@@ -1509,23 +1739,19 @@ def Eval_Runs(item_to_produce, start, end, step, rep_per_step):
             factorioProductionTree.add_manual_IO_constraints(production_data, sequential=False)
             
             # Solve the production problem
-            start_time = time.perf_counter()
+            start_time = time.perf.counter()
             factorioProductionTree.solve(production_data, sequential=False)
-            end_time = time.perf_counter()
+            end_time = time.perf.counter()
             log_method_time(item_to_produce, amount_needed, 1, "solve", assembler_counts, start_time, end_time)
             
             # Build belts and optionally visualize the factory
-            start_time = time.perf_counter()
+            start_time = time.perf.counter()
             paths, placed_inserter_information = factorioProductionTree.build_belts(max_tries=2)
-            end_time = time.perf_counter()
+            end_time = time.perf.counter()
             log_method_time(item_to_produce, amount_needed, 1, "build_belts", assembler_counts, start_time, end_time)
             
            
         
-        
-    
-
-
    
 if __name__ == "__main__":
     

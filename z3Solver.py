@@ -161,52 +161,62 @@ class Z3Solver:
         for item, data in input_information.items():
             logging.debug(f"Processing input item '{item}' with data: {data}")
             
-            # Create and position the input belts
+            # Create and position the input belts (start point)
             belt = Belt(id=f"{item}_{data['input']}_input", type='input', item=item)
             logging.info(f"Adding input belt for item '{item}' at position {data['input']}")
             self.solver.add(And(belt.x == data["input"][1], belt.y == data["input"][0]))
             self.global_input_belts.append(belt)
             
+            # Create and position the output belts (end point)
             belt = Belt(id=f"{item}_{data['output']}_input", type='input', item=item)
             logging.info(f"Adding output belt for item '{item}' at position {data['output']}")
             self.solver.add(And(belt.x == data["output"][1], belt.y == data["output"][0]))
             self.global_input_belts.append(belt)
 
-            grid = data['grid']
-            if grid is not None:
-                logging.debug(f"Processing grid path for input item '{item}'")
-                for row in range(self.height):
-                    for col in range(self.width):
-                        if grid[col][row] == 2:  # Belt path marked with '2'
-                            logging.info(f"Adding belt path for '{item}' at grid position ({col}, {row})")
-                            belt = Belt(id=f"{item}_({col}, {row})_input", type='input', item=item, int_x=col, int_y=row)
-                            self.solver.add(And(belt.x == col, belt.y == row))
-                            self.global_input_belts.append(belt)
+            # Process path data directly if it exists
+            if data['paths'] is not None and item in data['paths']:
+                logging.debug(f"Processing path data for input item '{item}'")
+                
+                for path_data in data['paths'][item]:
+                    path = path_data['path']
+                    
+                    # Add all points in the path as belts (excluding start and end points)
+                    for pos in path[1:-1]:  # Skip first and last points as they're already added as input/output
+                        x, y = pos
+                        logging.info(f"Adding belt path for '{item}' at position ({x}, {y})")
+                        belt = Belt(id=f"{item}_({x}, {y})_input", type='input', item=item, int_x=x, int_y=y)
+                        self.solver.add(And(belt.x == x, belt.y == y))
+                        self.global_input_belts.append(belt)
 
         for item, data in output_information.items():
             logging.debug(f"Processing output item '{item}' with data: {data}")
 
-            # Create and position the output belts
+            # Create and position the input belts for output item (start point)
             belt = Belt(id=f"{item}_{data['input']}_output", type='output', item=item)
             logging.info(f"Adding input belt for output item '{item}' at position {data['input']}")
             self.solver.add(And(belt.x == data["input"][1], belt.y == data["input"][0]))
             self.global_output_belts.append(belt)
             
+            # Create and position the output belts (end point)
             belt = Belt(id=f"{item}_{data['output']}_output", type='output', item=item)
             logging.info(f"Adding output belt for output item '{item}' at position {data['output']}")
             self.solver.add(And(belt.x == data["output"][1], belt.y == data["output"][0]))
             self.global_output_belts.append(belt)
 
-            grid = data['grid']
-            if grid is not None:
-                logging.debug(f"Processing grid path for output item '{item}'")
-                for row in range(self.height):
-                    for col in range(self.width):
-                        if grid[col][row] == 2:  # Belt path marked with '2'
-                            logging.info(f"Adding belt path for '{item}' at grid position ({col}, {row})")
-                            belt = Belt(id=f"{item}_({col}, {row})_output", type='output', item=item, int_x=col, int_y=row)
-                            self.solver.add(And(belt.x == col, belt.y == row))
-                            self.global_output_belts.append(belt)
+            # Process path data directly if it exists
+            if data['paths'] is not None and item in data['paths']:
+                logging.debug(f"Processing path data for output item '{item}'")
+                
+                for path_data in data['paths'][item]:
+                    path = path_data['path']
+                    
+                    # Add all points in the path as belts (excluding start and end points)
+                    for pos in path[1:-1]:  # Skip first and last points as they're already added as input/output
+                        x, y = pos
+                        logging.info(f"Adding belt path for '{item}' at position ({x}, {y})")
+                        belt = Belt(id=f"{item}_({x}, {y})_output", type='output', item=item, int_x=x, int_y=y)
+                        self.solver.add(And(belt.x == x, belt.y == y))
+                        self.global_output_belts.append(belt)
 
         logging.info("Finished adding manual I/O constraints. Calling solver.")
         self.solve()
@@ -464,7 +474,7 @@ class Z3Solver:
                                 
                                 [(assembler.x, assembler.y + 3),(assembler.x, assembler.y + 4)], # bottom left       
                                 [(assembler.x + 1, assembler.y + 3),(assembler.x + 1, assembler.y + 4)], # bottom middle                                                                                               
-                                [(assembler.x + 2, assembler.y + 3),(assembler.x + 2, assembler.y + 4)], # bottom right       
+                                [(assembler.x + 2,assembler.y + 3),(assembler.x + 2, assembler.y + 4)], # bottom right       
                                 
                                 [(assembler.x-1, assembler.y),(assembler.x-2, assembler.y)], # left up
                                 [(assembler.x-1, assembler.y+1),(assembler.x-2, assembler.y+1)], # left middle
@@ -623,7 +633,7 @@ class Z3Solver:
                                                 (other_assembler.x,other_assembler.y+1  ), # middle left
                                                 # leave out middle
                                                 (other_assembler.x+2,other_assembler.y+1), # middle right
-                                                (other_assembler.x,other_assembler.y+2  ), # lower left
+                                                (other_assembler.x+2,other_assembler.y+2), # lower left
                                                 (other_assembler.x+1,other_assembler.y+2), # lower middle
                                                 (other_assembler.x+2,other_assembler.y+2), # lower right
                                             ]
@@ -736,7 +746,7 @@ class Z3Solver:
     def lock_initial_solution(self, non_overlapping_inserters):
         """Locks all positions except non-overlapping inserters."""
         logging.info("=== Locking Initial Solution ===")
-        print("Locking positions for all but non-overlapping inserters...")
+       
 
         non_overlapping_set = {inserter for inserter, _ in non_overlapping_inserters}
 
@@ -945,13 +955,3 @@ class Z3Solver:
             
             
         
-
-        
-# Example usage
-def main():
-    solver = Z3Solver(1,1,{})
-
-    solver
-    
-if __name__ == "__main__":
-    main()
