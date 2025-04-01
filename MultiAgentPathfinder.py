@@ -7,11 +7,15 @@ import matplotlib.pyplot as plt
 class Splitter:
     def __init__(self, item ,position, direction):
         self.item = item
-        self.position = position
+        self.position = position # belt point/ anchor point
+        self.next_position = None # point next to the belt point depending on orientation
         self.direction = direction
         self.inputs = []
         self.outputs = []
 
+        
+    def __str__(self):
+        return f"Splitter(item={self.item}, position={self.position}, direction={self.direction})"
 
 
 class MultiAgentPathfinder:
@@ -20,7 +24,7 @@ class MultiAgentPathfinder:
     from their respective start points to their destinations.
     """
     
-    def __init__(self, obstacle_map, points, allow_underground=False, underground_length=3,allow_splitters=False,splitters={}):
+    def __init__(self, obstacle_map, points, allow_underground=False, underground_length=3,allow_splitters=False,splitters={},find_optimal_paths=False):
         """
         Initialize the pathfinder with an obstacle map and points to connect.
         
@@ -37,6 +41,8 @@ class MultiAgentPathfinder:
         
         self.allow_splitters = allow_splitters
         self.splitters = splitters
+        
+        self.find_optimal_paths = find_optimal_paths
         
         # Working grid - initially a copy of the obstacle map
         self.working_grid = [row[:] for row in obstacle_map]
@@ -81,6 +87,10 @@ class MultiAgentPathfinder:
             list: List of positions [(x, y), ...] forming the path, or None if no path exists
             dict: Dictionary of underground segments {'start': (x, y), 'end': (x, y)} or empty if none used
         """
+        
+        logging.debug(f"Finding path from {start} to {goal}")
+        logging.debug(f"Working grid:\n{np.array(self.working_grid)}")
+        
         # If underground paths are not allowed, just use the standard A*
         if not self.allow_underground:
             path = self.find_path_astar(start, goal)
@@ -115,9 +125,36 @@ class MultiAgentPathfinder:
                     path.append(node)
                 path.reverse()
                 
+                # Validate the underground segments - ensure they connect to the path
+                valid_segments = []
+                for segment in current_segments:
+                    segment_start = segment['start']
+                    segment_end = segment['end']
+                    
+                    # Check if segment start and end are in the path or connect to another segment
+                    start_valid = segment_start in path
+                    end_valid = segment_end in path
+                    
+                    # If either endpoint isn't in the path, check if it connects to another segment
+                    if not start_valid:
+                        for other_segment in current_segments:
+                            if other_segment != segment and other_segment['end'] == segment_start:
+                                start_valid = True
+                                break
+                    
+                    if not end_valid:
+                        for other_segment in current_segments:
+                            if other_segment != segment and other_segment['start'] == segment_end:
+                                end_valid = True
+                                break
+                    
+                    # Only include segments where both endpoints are valid
+                    if start_valid and end_valid:
+                        valid_segments.append(segment)
+                
                 # Convert segments list to dictionary for easier processing
                 segment_dict = {}
-                for i, segment in enumerate(current_segments):
+                for i, segment in enumerate(valid_segments):
                     segment_dict[f"segment_{i}"] = segment
                     
                 return path, segment_dict
@@ -362,155 +399,7 @@ class MultiAgentPathfinder:
         for x, y in path:
             self.working_grid[y][x] = value
     
-    
-    def check_for_splitters(self, item_key):
-        """
-        Check if the item needs splitters at start or destination points.
-        Updates the working grid with splitter placements.
-        
-        Args:
-            item_key (str): The item key
-            item_data (dict): The item data containing start points, destinations
-        """
-        if not self.allow_splitters:
-            return
-            
-        # If splitters are in item_data, use those
-        item_splitters = []
-
-
-        # Also check for splitters in the class-level splitters dictionary
-        if self.splitters and item_key in self.splitters:
-            item_splitters.extend(self.splitters[item_key])
-        
-        # If no splitters for this item, nothing to do
-        if not item_splitters:
-            return
-        
-        # Store splitter information for this item
-        if item_key not in self.splitters:
-            self.splitters[item_key] = []
-        
-        # Place splitters on the grid and add them to the item's splitter list
-        for splitter in item_splitters:
-            pos = splitter['pos']
-            direction = splitter['direction']
-            
-            # Check if position is valid
-            if not (0 <= pos[0] < self.width and 0 <= pos[1] < self.height):
-                logging.warning(f"Splitter position {pos} is out of bounds for {item_key}")
-                continue
-            
-            # Calculate the positions of the splitter (2x1 structure)
-            positions = self.get_splitter_positions(pos, direction)
-            
-            # Check if all positions are valid
-            valid = True
-            for p in positions:
-                if not (0 <= p[0] < self.width and 0 <= p[1] < self.height):
-                    valid = False
-                    logging.warning(f"Splitter position {p} is out of bounds")
-                    break
-            
-            if not valid:
-                logging.warning(f"Splitter at {pos} with direction {direction} is not valid for {item_key}")
-                continue
-            
-            # Add splitter with positions to item's splitters if not already there
-            splitter_with_positions = {
-                'pos': pos,
-                'direction': direction,
-                'positions': positions
-            }
-            
-            # Check if this splitter is already added
-            already_added = False
-            for existing in self.splitters[item_key]:
-                if existing['pos'] == pos and existing['direction'] == direction:
-                    already_added = True
-                    break
-                    
-            if not already_added:
-                self.splitters[item_key].append(splitter_with_positions)
-            
-            # Mark splitter positions as temporarily free for pathfinding
-            for p in positions:
-                if 0 <= p[0] < self.width and 0 <= p[1] < self.height:
-                    # Mark as 0 (free) during pathfinding to allow paths through splitter
-                    self.working_grid[p[1]][p[0]] = 0
-                    
-
-    def get_splitter_positions(self, pos, direction):
-        """
-        Get all positions occupied by a splitter.
-        
-        Args:
-            pos (tuple): Base position of the splitter (x, y)
-            direction (tuple): Direction the splitter faces (dx, dy)
-        
-        Returns:
-            list: List of positions occupied by the splitter
-        """
-        x, y = pos
-        dx, dy = direction
-        
-        # Determine perpendicular direction for the width of the splitter
-        if dx != 0:  # Horizontal splitter
-            # Width is along y-axis
-            return [(x, y), (x, y+1)]
-        else:  # Vertical splitter
-            # Width is along x-axis
-            return [(x, y), (x+1, y)]
-
-    def get_splitter_inputs(self, splitter):
-        """
-        Get the input positions for a splitter.
-        
-        Args:
-            splitter (dict): Splitter information including position and direction
-        
-        Returns:
-            list: List of input positions
-        """
-        pos = splitter['pos']
-        direction = splitter['direction']
-        positions = splitter['positions']
-        
-        # Input is in the opposite direction from the splitter's direction
-        input_dx = -direction[0]
-        input_dy = -direction[1]
-        
-        inputs = []
-        for p in positions:
-            input_pos = (p[0] + input_dx, p[1] + input_dy)
-            inputs.append(input_pos)
-        
-        return inputs
-
-    def get_splitter_outputs(self, splitter):
-        """
-        Get the output positions for a splitter.
-        
-        Args:
-            splitter (dict): Splitter information including position and direction
-        
-        Returns:
-            list: List of output positions
-        """
-        pos = splitter['pos']
-        direction = splitter['direction']
-        positions = splitter['positions']
-        
-        # Output is in the direction the splitter faces
-        output_dx = direction[0]
-        output_dy = direction[1]
-        
-        outputs = []
-        for p in positions:
-            output_pos = (p[0] + output_dx, p[1] + output_dy)
-            outputs.append(output_pos)
-        
-        return outputs
+  
 
     def find_paths_for_all_items(self):
         """
@@ -520,47 +409,76 @@ class MultiAgentPathfinder:
         If that fails, tries other pairs in order of increasing heuristic distance.
         
         Returns:
-            tuple: (paths, inserters) where paths is a dictionary of paths for each item
-                  and inserters is a dictionary of inserters that need to be placed
+            tuple: (paths, inserters, used_splitters) where:
+                - paths: dictionary of paths for each item
+                - inserters: dictionary of inserters that need to be placed
+                - used_splitters: dictionary of splitters used as I/O points
         """
+        # Process all splitters first to determine positions and I/O points
+        if self.allow_splitters:
+            self.process_splitters()
+        
+       
         
         all_previous_paths = {}
+        # Track which splitters are used for I/O
+        used_splitters = {}
+        
         # Process items in order (could use a priority system in the future)
         for item_key, item_data in self.points.items():
             logging.info(f"Finding path for {item_key}")
-            
-            # Check for and process splitters for this item
-            if self.allow_splitters:
-                self.check_for_splitters(item_data)
             
             # Extract item information
             start_points = item_data['start_points'].copy()
             destinations = item_data['destination'].copy()
             inserter_mapping = item_data.get('inserter_mapping', None)
+        
+            # Extract base item name
+            item_name = item_key.split('_')[0] if '_' in item_key else item_key
             
-            # If splitters are enabled, add splitter inputs/outputs as valid start/destination points
-            if self.allow_splitters and item_key in self.splitters:
-                for splitter in self.splitters[item_key]:
-                    # Add splitter inputs as potential destinations (for merging)
-                    inputs = self.get_splitter_inputs(splitter)
-                    for input_pos in inputs:
-                        if input_pos not in destinations and self.is_valid_position(input_pos):
-                            destinations.append(input_pos)
+            
+            # Replace the incomplete section in find_paths_for_all_items
+            if self.allow_splitters and item_name in self.splitters:
+                # Find splitters that are relevant to our start/destination points
+                relevant_start_splitters = []
+                relevant_dest_splitters = []
+                
+                # Check each splitter to see if it's positioned at one of our start/destination points
+                for splitter in self.splitters[item_name]:
+                    # A splitter is relevant to start points if its position matches a start point
+                    for start_point in item_data['start_points']:
+                        if splitter.position == start_point:
+                            relevant_start_splitters.append(splitter)
+                            logging.info(f"Found splitter at start point {start_point}")
                     
-                    # Add splitter outputs as potential start points (for branching)
-                    outputs = self.get_splitter_outputs(splitter)
-                    for output_pos in outputs:
-                        if output_pos not in start_points and self.is_valid_position(output_pos):
-                            start_points.append(output_pos)
+                    # A splitter is relevant to destination points if its position matches a destination
+                    for dest_point in item_data['destination']:
+                        if splitter.position == dest_point:
+                            relevant_dest_splitters.append(splitter)
+                            logging.info(f"Found splitter at destination point {dest_point}")
+                
+                if len(relevant_start_splitters) > 0:
+                    start_points = []
+                
+                if len(relevant_dest_splitters) > 0:
+                    destinations = []
+                
+                # Add output points from start splitters as start points
+                for splitter in relevant_start_splitters:
+                    for output_point in splitter.outputs:
+                        if self.is_valid_position(output_point):
+                            start_points.append(output_point)
+                            logging.info(f"Added splitter output {output_point} as start point")
+                
+                # Add input points from destination splitters as destinations
+                for splitter in relevant_dest_splitters:
+                    for input_point in splitter.inputs:
+                        if self.is_valid_position(input_point):
+                            destinations.append(input_point)
+                            logging.info(f"Added splitter input {input_point} as destination")
+                                
             
-            # Add previously created paths as potential destinations for merging
-            for prev_item, prev_paths in all_previous_paths.items():
-                # Check if this is the same item type
-                if prev_item.split('_')[0] == item_key.split('_')[0]:
-                    # Add every point of the previous paths as a potential destination
-                    for prev_path in prev_paths:
-                        destinations.extend(prev_path['path'])
-                            
+            
             # Always mark start and destination points as valid (set to 0) temporarily
             for start in start_points:
                 x, y = start
@@ -583,21 +501,34 @@ class MultiAgentPathfinder:
                     # Skip out of bounds destinations
                     if not (0 <= dest[0] < self.width and 0 <= dest[1] < self.height):
                         continue
-                    
+           
                     # Check if this is a splitter start or destination
-                    is_splitter_start = start not in item_data['start_points']
-                    is_splitter_dest = dest not in item_data['destination']
+                    start_splitter = None
+                    dest_splitter = None
                     
-                    # Calculate heuristic distance (give bonus to splitter paths)
+                    # Check if start point is from a splitter's outputs
+                    if self.allow_splitters and item_name in self.splitters:
+                        for splitter in relevant_start_splitters:
+                            if start in splitter.outputs:
+                                start_splitter = splitter
+                                logging.info(f"Start point {start} is an output of splitter at {splitter.position}")
+                                break
+
+                        # Check if destination point is from a splitter's inputs
+                        for splitter in relevant_dest_splitters:
+                            if dest in splitter.inputs:
+                                dest_splitter = splitter
+                                logging.info(f"Destination point {dest} is an input of splitter at {splitter.position}")
+                                break
+                    
+                    # Calculate heuristic distance
                     h_distance = self.heuristic(start, dest)
                     
-                    # Slightly prefer paths that use splitters
-                    if is_splitter_start or is_splitter_dest:
-                        h_distance = h_distance * 0.95  # 5% bonus for splitter paths
                     
-                    all_pairs.append((h_distance, start, dest, is_splitter_start, is_splitter_dest))
-            
-            # Sort pairs by heuristic distance (ascending)
+                    all_pairs.append((h_distance, start, dest, start_splitter, dest_splitter))
+                    
+            #if not self.find_optimal_paths:
+                # Sort pairs by heuristic distance (ascending)
             all_pairs.sort()
             
             # Try to find a path for each pair in order of increasing heuristic distance
@@ -607,72 +538,142 @@ class MultiAgentPathfinder:
             best_dest = None
             best_inserter = None
             best_underground_segments = None
-            uses_splitter_start = False
-            uses_splitter_dest = False
+            best_start_splitter = None
+            best_dest_splitter = None
+            best_path_length = float('inf')  # Track the best path length
             
-            for h_distance, start, dest, is_splitter_start, is_splitter_dest in all_pairs:
+            logging.debug(f"All pairs sorted by heuristic distance: {all_pairs}")
+            
+            # Completely revise the way we handle marking and restoring splitter positions
+            for h_distance, start, dest, start_splitter, dest_splitter in all_pairs:
+                # Skip pairs with heuristic distance greater than our current best path
+                if self.find_optimal_paths and path_found and h_distance >= best_path_length:
+                    continue
+                
+                # Make a deep copy of the working grid for this iteration
+                # This ensures we start fresh for each path attempt
+                iteration_grid = [row[:] for row in self.working_grid]
+                
                 # Check if we need to place an inserter at this start point
                 inserter = None
-                if inserter_mapping and str(start) in inserter_mapping and not is_splitter_start:
+                if inserter_mapping and str(start) in inserter_mapping and not start_splitter:
                     inserter = inserter_mapping[str(start)]
                     # Temporarily mark inserter position as obstacle
                     ix, iy = inserter
-                    original_value = self.working_grid[iy][ix]
-                    self.working_grid[iy][ix] = 1
+                    iteration_grid[iy][ix] = 1
                 
-                # Try to find a path
+                # Mark all splitters for the current item as obstacles EXCEPT
+                # the specific I/O points we're trying to use
+                if self.allow_splitters and item_name in self.splitters:
+                    for splitter in self.splitters[item_name]:
+                        if splitter.position and splitter.next_position:
+                            pos_x, pos_y = splitter.position
+                            next_x, next_y = splitter.next_position
+                            
+                            # Mark main position as obstacle unless it's our current start/dest
+                            if (pos_x, pos_y) != start and (pos_x, pos_y) != dest:
+                                iteration_grid[pos_y][pos_x] = 1
+                            
+                            # Mark next position as obstacle unless it's our current start/dest
+                            if (next_x, next_y) != start and (next_x, next_y) != dest:
+                                iteration_grid[next_y][next_x] = 1
+                
+                # Always ensure the start and destination points are valid
+                if 0 <= start[0] < self.width and 0 <= start[1] < self.height:
+                    iteration_grid[start[1]][start[0]] = 0
+                
+                if 0 <= dest[0] < self.width and 0 <= dest[1] < self.height:
+                    iteration_grid[dest[1]][dest[0]] = 0
+                
+                # Temporarily replace the working grid with our iteration grid
+                original_working_grid = self.working_grid
+                self.working_grid = iteration_grid
+                
+                # Try to find a path with the modified grid
                 path, underground_segments = self.find_path(start, dest)
                 
-                # If we found a path, use it and stop looking
+                logging.debug(f"Path found: {path} with underground segments: {underground_segments}")
+                
+                # Restore the original working grid
+                self.working_grid = original_working_grid
+                
+                # If we found a path, check if it's better than our current best
                 if path:
-                    best_path = path
-                    best_start = start
-                    best_dest = dest
-                    best_inserter = inserter
-                    best_underground_segments = underground_segments
-                    uses_splitter_start = is_splitter_start
-                    uses_splitter_dest = is_splitter_dest
-                    path_found = True
+                    # Calculate actual path length
+                    path_length = len(path)
                     
-                    logging.info(f"Found path for {item_key} from {start} to {dest} with heuristic distance {h_distance}")
-                    break
-                else:
-                    # If the path failed, restore inserter position if needed
-                    if inserter:
-                        self.working_grid[iy][ix] = original_value
-            
-            # If we found a path, add it to our results
+                    
+                    # Update best path if this one is better (or if it's the first valid path)
+                    if not path_found or path_length < best_path_length:
+                        best_path = path
+                        best_start = start
+                        best_dest = dest
+                        best_inserter = inserter
+                        best_underground_segments = underground_segments
+                        best_start_splitter = start_splitter
+                        best_dest_splitter = dest_splitter
+                        best_path_length = path_length
+                        path_found = True
+                        
+                        logging.info(f"Found {'better ' if path_found else ''}path for {item_key} "
+                                    f"from {start} to {dest} with length {path_length}")
+                    
+                    # If we're not finding optimal paths, stop after the first valid path
+                    if not self.find_optimal_paths:
+                        break
+                    
+                logging.debug(f"path_found{path_found} for {item_key} from {start} to {dest}")
+                # If we found a path, add it to our results
             if path_found:
-                # Add the path to our results
-                if item_key not in self.paths:
-                    self.paths[item_key] = []
-                self.paths[item_key].append({
-                    'path': best_path,
-                    'start': best_start,
-                    'destination': best_dest,
-                    'underground_segments': best_underground_segments,
-                    'uses_splitter_start': uses_splitter_start,
-                    'uses_splitter_dest': uses_splitter_dest
-                })
-                
-                # Add inserter information if applicable
-                if best_inserter:
-                    if item_key not in self.inserters:
-                        self.inserters[item_key] = {}
-                    self.inserters[item_key][str(best_start)] = best_inserter
-                
-                # Mark the path on the working grid
-                self.mark_path_on_grid(best_path)
-                
-                # Add this path to all_previous_paths for future items to merge with
-                if item_key not in all_previous_paths:
-                    all_previous_paths[item_key] = []
-                all_previous_paths[item_key].append({'path': best_path})
                     
+                    logging.debug(f"Adding path for {item_key} from {best_start} to {best_dest}")
+                    
+                    # Add the path to our results
+                    if item_key not in self.paths:
+                        self.paths[item_key] = []
+                    
+                    # Track if this path uses splitters at start or destination
+                    uses_splitter_start = best_start_splitter is not None
+                    uses_splitter_dest = best_dest_splitter is not None
+                    
+                    # Add to used_splitters if splitters are used
+                    if uses_splitter_start or uses_splitter_dest:
+                        if item_name not in used_splitters:
+                            used_splitters[item_name] = []
+                        
+                        if uses_splitter_start and best_start_splitter not in used_splitters[item_name]:
+                            used_splitters[item_name].append(best_start_splitter)
+                        
+                        if uses_splitter_dest and best_dest_splitter not in used_splitters[item_name]:
+                            used_splitters[item_name].append(best_dest_splitter)
+                    
+                    self.paths[item_key].append({
+                        'path': best_path,
+                        'start': best_start,
+                        'destination': best_dest,
+                        'underground_segments': best_underground_segments,
+                        'start_splitter': best_start_splitter,
+                        'dest_splitter': best_dest_splitter
+                    })
+                    
+                    # Add inserter information if applicable
+                    if best_inserter:
+                        if item_key not in self.inserters:
+                            self.inserters[item_key] = {}
+                        self.inserters[item_key][str(best_start)] = best_inserter
+                    
+                    # Mark the path on the working grid
+                    self.mark_path_on_grid(best_path)
+                    
+                    # Add this path to all_previous_paths for future items to merge with
+                    if item_key not in all_previous_paths:
+                        all_previous_paths[item_key] = []
+                    all_previous_paths[item_key].append({'path': best_path})
+                        
             else:
-                # No path found for this item
-                logging.warning(f"No path found for {item_key} with any start-destination pair")
-        
+                    # No path found for this item
+                    logging.warning(f"No path found for {item_key} with any start-destination pair")
+            
         return self.paths, self.inserters
         
     def visualize_grid(self, filename='grid.png'):
@@ -681,6 +682,7 @@ class MultiAgentPathfinder:
         
         # Create a colormap (updated to avoid deprecation warning)
         import matplotlib as mpl
+        
         cmap = mpl.colormaps['viridis'].resampled(15)
         
         # Plot the grid
@@ -704,7 +706,7 @@ class MultiAgentPathfinder:
         return filename
 
     def visualize_paths(self, filename_template='path_{}.png'):
-        """Visualize each item's path separately."""
+        """Visualize each item's path separately with splitters."""
         for item_key, item_paths in self.paths.items():
             plt.figure(figsize=(10, 10))
             
@@ -723,6 +725,48 @@ class MultiAgentPathfinder:
             plt.gca().set_xticks(np.arange(-0.5, self.width, 1), minor=True)
             plt.gca().set_yticks(np.arange(-0.5, self.height, 1), minor=True)
             plt.gca().grid(which='minor', color='black', linestyle='-', linewidth=0.5, alpha=0.3)
+            
+            # Extract item name (without index)
+            item_name = item_key.split('_')[0] if '_' in item_key else item_key
+            
+            # Plot splitters for this item if any
+            if self.allow_splitters and item_name in self.splitters:
+                for splitter in self.splitters[item_name]:
+                    # Draw the splitter as a rectangle
+                    pos = splitter.position
+                    next_pos = splitter.next_position
+                    
+                    if next_pos:
+                        # Plot splitter main body as a rectangle
+                        min_x = min(pos[0], next_pos[0])
+                        max_x = max(pos[0], next_pos[0])
+                        min_y = min(pos[1], next_pos[1])
+                        max_y = max(pos[1], next_pos[1])
+                        
+                        # Create a rectangle patch
+                        from matplotlib.patches import Rectangle
+                        rect = Rectangle((min_x - 0.5, min_y - 0.5), max_x - min_x + 1, max_y - min_y + 1, 
+                                        linewidth=2, edgecolor='orange', facecolor='yellow', alpha=0.5)
+                        plt.gca().add_patch(rect)
+                        
+                        # Draw an arrow to show direction
+                        dx = splitter.direction[0] * 0.4
+                        dy = splitter.direction[1] * 0.4
+                        center_x = (pos[0] + next_pos[0]) / 2
+                        center_y = (pos[1] + next_pos[1]) / 2
+                        plt.arrow(center_x, center_y, dx, dy, head_width=0.2, head_length=0.3, 
+                                fc='black', ec='black', alpha=0.8)
+                        
+                        # Mark input points
+                        for input_pos in splitter.inputs:
+                            plt.plot(input_pos[0], input_pos[1], 'r>', markersize=8)  # Input as red right arrow
+                        
+                        # Mark output points
+                        for output_pos in splitter.outputs:
+                            plt.plot(output_pos[0], output_pos[1], 'g<', markersize=8)  # Output as green left arrow
+                    else:
+                        # If next_pos is not defined, just mark the position
+                        plt.plot(pos[0], pos[1], 'ys', markersize=10)  # Yellow square
             
             # Plot each path
             for path_data in item_paths:
@@ -744,6 +788,17 @@ class MultiAgentPathfinder:
                 plt.plot(path[0][0], path[0][1], 'go', markersize=10)  # Start
                 plt.plot(path[-1][0], path[-1][1], 'mo', markersize=10)  # Destination
                 
+                # Highlight splitter connections
+                if path_data.get('start_splitter'):
+                    start_pos = path[0]
+                    plt.plot(start_pos[0], start_pos[1], 'yo', markersize=12, alpha=0.7)  # Yellow circle
+                    plt.text(start_pos[0], start_pos[1], 'S', ha='center', va='center', color='black', fontweight='bold')
+                
+                if path_data.get('dest_splitter'):
+                    dest_pos = path[-1]
+                    plt.plot(dest_pos[0], dest_pos[1], 'yo', markersize=12, alpha=0.7)  # Yellow circle
+                    plt.text(dest_pos[0], dest_pos[1], 'D', ha='center', va='center', color='black', fontweight='bold')
+                
                 # Add inserter if applicable
                 item_inserters = self.inserters.get(item_key, {})
                 if str(path[0]) in item_inserters:
@@ -764,9 +819,260 @@ class MultiAgentPathfinder:
                         plt.plot(start_pos[0], start_pos[1], 'kv', markersize=8)  # Entry (down arrow)
                         plt.plot(end_pos[0], end_pos[1], 'k^', markersize=8)  # Exit (up arrow)
             
+            # Add a legend
+            handles = [
+                plt.Line2D([0], [0], color='r', linewidth=2, label='Path'),
+                plt.Line2D([0], [0], marker='o', color='w', markerfacecolor='g', markersize=10, label='Start'),
+                plt.Line2D([0], [0], marker='o', color='w', markerfacecolor='m', markersize=10, label='Destination'),
+                plt.Line2D([0], [0], marker='s', color='w', markerfacecolor='y', markersize=10, label='Splitter'),
+                plt.Line2D([0], [0], marker='>', color='w', markerfacecolor='r', markersize=8, label='Splitter Input'),
+                plt.Line2D([0], [0], marker='<', color='w', markerfacecolor='g', markersize=8, label='Splitter Output'),
+                plt.Line2D([0], [0], color='y', linewidth=4, alpha=0.6, label='Underground'),
+            ]
+            plt.legend(handles=handles, loc='upper right')
+            
             # Add a title
             plt.title(f"Paths for {item_key}")
             
             # Save the figure
             plt.savefig(filename_template.format(item_key.replace('/', '_')))
             plt.close()
+
+    def process_splitters(self):
+        """
+        Process all splitters to determine valid placements and I/O points.
+        For each splitter, determine if it can be positioned correctly with at least
+        one valid I/O point.
+        
+        Returns:
+            dict: Dictionary of valid splitters by item type
+        """
+        
+        logging.info("Processing all splitters")
+        
+        # Track valid splitter positions to avoid overlaps
+        occupied_positions = set()
+        valid_splitters = {}
+        
+        # First pass: Determine valid splitter placements
+        for item, splitter_list in self.splitters.items():
+            valid_splitters[item] = []
+            
+            for splitter in splitter_list:
+                pos = splitter.position  # Anchor position (where belt connects)
+                direction = splitter.direction  # Direction the splitter faces
+                
+                # Determine the next position based on direction
+                # For a splitter that's 2x1 with long side perpendicular to direction:
+                next_positions = []
+                if direction[0] != 0:  # Horizontal direction (left/right)
+                    # For horizontal splitters, check positions above and below
+                    next_positions = [(pos[0], pos[1] - 1), (pos[0], pos[1] + 1)]
+                else:  # Vertical direction (up/down)
+                    # For vertical splitters, check positions to left and right
+                    next_positions = [(pos[0] - 1, pos[1]), (pos[0] + 1, pos[1])]
+                
+                # Check each potential next position
+                for next_pos in next_positions:
+                    # Skip if next position is out of bounds
+                    if not (0 <= next_pos[0] < self.width and 0 <= next_pos[1] < self.height):
+                        continue
+                    
+                    # Skip if next position is already occupied
+                    if next_pos in occupied_positions or self.obstacle_map[next_pos[1]][next_pos[0]] != 0:
+                        continue
+                    
+                    # At this point, both anchor and next positions are valid
+                    # Let's compute potential input/output points
+                    
+                    # Compute input points (opposite of direction)
+                    input_dx = -direction[0]
+                    input_dy = -direction[1]
+                    
+                    input_points = []
+                    anchor_input = (pos[0] + input_dx, pos[1] + input_dy)
+                    next_input = (next_pos[0] + input_dx, next_pos[1] + input_dy)
+                    
+                    # Check if input points are valid
+                    if (0 <= anchor_input[0] < self.width and 
+                        0 <= anchor_input[1] < self.height and
+                        self.obstacle_map[anchor_input[1]][anchor_input[0]] == 0):
+                        input_points.append(anchor_input)
+                        
+                    if (0 <= next_input[0] < self.width and 
+                        0 <= next_input[1] < self.height and
+                        self.obstacle_map[next_input[1]][next_input[0]] == 0):
+                        input_points.append(next_input)
+                    
+                    # Compute output points (same as direction)
+                    output_dx = direction[0]
+                    output_dy = direction[1]
+                    
+                    output_points = []
+                    anchor_output = (pos[0] + output_dx, pos[1] + output_dy)
+                    next_output = (next_pos[0] + output_dx, next_pos[1] + output_dy)
+                    
+                    # Check if output points are valid
+                    if (0 <= anchor_output[0] < self.width and 
+                        0 <= anchor_output[1] < self.height and
+                        self.obstacle_map[anchor_output[1]][anchor_output[0]] == 0):
+                        output_points.append(anchor_output)
+                        
+                    if (0 <= next_output[0] < self.width and 
+                        0 <= next_output[1] < self.height and
+                        self.obstacle_map[next_output[1]][next_output[0]] == 0):
+                        output_points.append(next_output)
+                    
+                    # Only consider splitter valid if there's at least one valid input and output
+                    if input_points and output_points:
+                        # Create a new splitter object with this configuration
+                        new_splitter = Splitter(item=item, position=pos, direction=direction)
+                        new_splitter.next_position = next_pos
+                        new_splitter.inputs = input_points
+                        new_splitter.outputs = output_points
+                        
+                        # Mark positions as occupied
+                        occupied_positions.add(pos)
+                        occupied_positions.add(next_pos)
+                        
+                        # Add to valid splitters
+                        valid_splitters[item].append(new_splitter)
+                        
+                        logging.info(f"Valid splitter at {pos} with next position {next_pos}, facing {direction}")
+                        logging.info(f"  Inputs: {input_points}")
+                        logging.info(f"  Outputs: {output_points}")
+                        
+                        # We've found a valid next position for this splitter, no need to check others
+                        #break
+        
+        # Update splitters dictionary with only valid splitters
+        self.splitters = valid_splitters
+        return valid_splitters
+
+    def visualize_used_splitters(self, filename='used_splitters.png'):
+        """Visualize only the splitters used in generated paths."""
+        plt.figure(figsize=(10, 10))
+        
+        # Create a base grid with just obstacles
+        base_grid = np.array(self.obstacle_map)
+        
+        # Create a colormap
+        import matplotlib as mpl
+        cmap = mpl.colormaps['viridis'].resampled(15)
+        
+        # Plot the grid
+        plt.imshow(base_grid, cmap=cmap, interpolation='nearest')
+        
+        # Add grid lines
+        plt.grid(True, color='black', linewidth=0.5, alpha=0.3)
+        plt.gca().set_xticks(np.arange(-0.5, self.width, 1), minor=True)
+        plt.gca().set_yticks(np.arange(-0.5, self.height, 1), minor=True)
+        plt.gca().grid(which='minor', color='black', linestyle='-', linewidth=0.5, alpha=0.3)
+        
+        # Find splitters used in paths
+        used_splitters = {}
+        
+        for item_key, item_paths in self.paths.items():
+            item_name = item_key.split('_')[0] if '_' in item_key else item_key
+            
+            if item_name not in used_splitters:
+                used_splitters[item_name] = []
+            
+            for path_data in item_paths:
+                # Check for splitters used at start or destination
+                if path_data.get('start_splitter'):
+                    if path_data['start_splitter'] not in used_splitters[item_name]:
+                        used_splitters[item_name].append(path_data['start_splitter'])
+                
+                if path_data.get('dest_splitter'):
+                    if path_data['dest_splitter'] not in used_splitters[item_name]:
+                        used_splitters[item_name].append(path_data['dest_splitter'])
+        
+        # Plot only the splitters used in paths
+        from matplotlib.patches import Rectangle
+        
+        colors = ['yellow', 'orange', 'lime', 'cyan', 'magenta']  # Different colors for different items
+        item_count = 0
+        
+        # Track legend items
+        legend_items = []
+        
+        for item, splitter_list in used_splitters.items():
+            color = colors[item_count % len(colors)]
+            item_count += 1
+            
+            legend_items.append(plt.Line2D([0], [0], marker='s', color='w', 
+                                        markerfacecolor=color, markersize=10, label=item))
+            
+            for splitter in splitter_list:
+                pos = splitter.position
+                next_pos = splitter.next_position
+                
+                if next_pos:
+                    # Plot splitter main body as a rectangle
+                    min_x = min(pos[0], next_pos[0])
+                    max_x = max(pos[0], next_pos[0])
+                    min_y = min(pos[1], next_pos[1])
+                    max_y = max(pos[1], next_pos[1])
+                    
+                    # Create a rectangle patch
+                    rect = Rectangle((min_x - 0.5, min_y - 0.5), max_x - min_x + 1, max_y - min_y + 1, 
+                                    linewidth=2, edgecolor='black', facecolor=color, alpha=0.5)
+                    plt.gca().add_patch(rect)
+                    
+                    # Draw an arrow to show direction
+                    dx = splitter.direction[0] * 0.4
+                    dy = splitter.direction[1] * 0.4
+                    center_x = (pos[0] + next_pos[0]) / 2
+                    center_y = (pos[1] + next_pos[1]) / 2
+                    plt.arrow(center_x, center_y, dx, dy, head_width=0.2, head_length=0.3, 
+                            fc='black', ec='black', alpha=0.8)
+                    
+                    # Mark input points
+                    for input_pos in splitter.inputs:
+                        plt.plot(input_pos[0], input_pos[1], 'r>', markersize=8)
+                    
+                    # Mark output points
+                    for output_pos in splitter.outputs:
+                        plt.plot(output_pos[0], output_pos[1], 'g<', markersize=8)
+                    
+                    # Add text labels
+                    plt.text(center_x, center_y, item[:3], ha='center', va='center', 
+                            color='black', fontweight='bold', fontsize=8)
+                else:
+                    # If next_pos is not defined, just mark the position
+                    plt.plot(pos[0], pos[1], 's', color=color, markersize=10)
+        
+        # Also plot the paths to show how they connect to splitters
+        for item_key, item_paths in self.paths.items():
+            for path_data in item_paths:
+                path = path_data['path']
+                path_x = [pos[0] for pos in path]
+                path_y = [pos[1] for pos in path]
+                
+                # Plot the path with a thin line
+                plt.plot(path_x, path_y, 'b-', linewidth=1.5, alpha=0.6)
+                
+                # Mark start and destination
+                plt.plot(path[0][0], path[0][1], 'go', markersize=8)  # Start
+                plt.plot(path[-1][0], path[-1][1], 'mo', markersize=8)  # Destination
+        
+        # Add additional legend items
+        legend_items.append(plt.Line2D([0], [0], marker='>', color='w', markerfacecolor='r', markersize=8, label='Input'))
+        legend_items.append(plt.Line2D([0], [0], marker='<', color='w', markerfacecolor='g', markersize=8, label='Output'))
+        legend_items.append(plt.Line2D([0], [0], color='b', linewidth=1.5, alpha=0.6, label='Path'))
+        legend_items.append(plt.Line2D([0], [0], marker='o', color='w', markerfacecolor='g', markersize=8, label='Start'))
+        legend_items.append(plt.Line2D([0], [0], marker='o', color='w', markerfacecolor='m', markersize=8, label='Destination'))
+        
+        # Add the legend
+        plt.legend(handles=legend_items, loc='upper right')
+        
+        # Add a title
+        plt.title("Splitters Used in Paths")
+        
+        # Save the figure
+        plt.savefig(filename)
+        plt.close()
+        
+        return filename
+

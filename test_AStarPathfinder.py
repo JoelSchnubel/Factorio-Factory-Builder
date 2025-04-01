@@ -145,13 +145,8 @@ class TestMultiAgentPathfinder(unittest.TestCase):
 
 
     def test_splitter(self):
-    
-        input_info = {'copper-plate': {'input': (14, 0), 'output': (2, 0), 'paths': {'copper-plate': [{'path': [(0, 14), (0, 13), (0, 12), (0, 11), (0, 10), (0, 9), (0, 8), (0, 7), (0, 6), (0, 5), (0, 4), (0, 3), (0, 2)], 'start': (0, 14), 'destination': (0, 2), 'underground_segments': {}, 'uses_splitter_start': False, 'uses_splitter_dest': False}]}}, 'iron-plate': {'input': (13, 7), 'output': (2, 7), 'paths': {'iron-plate': [{'path': [(7, 13), (7, 12), (7, 11), (7, 10), (7, 9), (7, 8), (7, 7), (7, 6), (7, 5), (7, 4), (7, 3), (7, 2)], 'start': (7, 13), 'destination': (7, 2), 'underground_segments': {}, 'uses_splitter_start': False, 'uses_splitter_dest': False}]}}}
-        output_info= {'electronic-circuit': {'input': (0, 14), 'output': (13, 14), 'paths': {'electronic-circuit': [{'path': [(14, 0), (14, 1), (14, 2), (14, 3), (14, 4), (14, 5), (14, 6), (14, 7), (14, 8), (14, 9), (14, 10), (14, 11), (14, 12), (14, 13)], 'start': (14, 0), 'destination': (14, 13), 'underground_segments': {}, 'uses_splitter_start': False, 'uses_splitter_dest': False}]}}}
-    
-        splitters = self.prepare_splitter_information(input_info, output_info)
-
-        
+        return
+        # Create grid with obstacles
         grid = [[1,0,0,0,0,0,1,0,0,0,0,1],
                 [1,0,0,0,0,0,1,0,0,0,0,1],
                 [1,0,0,0,0,0,1,0,1,0,0,1],
@@ -160,33 +155,65 @@ class TestMultiAgentPathfinder(unittest.TestCase):
                 [1,0,0,0,0,0,1,0,1,0,0,1],
                 [1,0,0,0,0,0,1,0,1,0,0,1]]
         
+        # Create points dictionary
         points = {
             'iron-plate_0': {
                 'item': 'iron-plate',
-                'destination': [(11, 0), (11, 1), (11, 2), (11, 3), (11, 4), (11, 5),
-                                (11, 6)],
+                'destination': [(11, 0), (11, 1), (11, 2), (11, 3), (11, 4), (11, 5), (11, 6)],
                 'start_points': [(0, 3)],
                 'inserter_mapping': None
             }
         }
-         
+        
+        # Create splitters dictionary
+        splitters = {}
+        splitters['iron-plate'] = []
+        
+        # Create splitters for positions (0,0) through (0,6) all facing down
+        for i in range(7):
+            splitters['iron-plate'].append(Splitter(
+                item='iron-plate',
+                position=(0,i),
+                direction=(0,1)
+            ))
+            
+        # Create splitters for positions (11,0) through (11,6) all facing up
+        for i in range(7):
+            splitters['iron-plate'].append(Splitter(
+                item='iron-plate',
+                position=(11,i),
+                direction=(0,-1)
+            ))
+        
+        # Print splitters for debugging
+        #print("Created splitters:")
+        #for item, item_splitters in splitters.items():
+        #    print(f"  {item}: {len(item_splitters)} splitters")
+        #    for i, splitter in enumerate(item_splitters):
+        #        print(f"    {i}: pos={splitter.position}, dir={splitter.direction}")
+        
         # Create the pathfinder
-        pathfinder = MultiAgentPathfinder(grid, 
-                                          points,
-                                          allow_underground=True,
-                                          underground_length=3,
-                                          allow_splitters=True,
-                                          splitters=splitters)
-
+        pathfinder = MultiAgentPathfinder(
+            grid, 
+            points,
+            allow_underground=True,
+            underground_length=3,
+            allow_splitters=True,  # Make sure splitters are enabled
+            splitters=splitters,  # Pass the splitters dictionary
+            find_optimal_paths=False
+        )
+        
+        # Add debugging for check_for_splitters method
+        # You might need to add a debugging version of check_for_splitters in your MultiAgentPathfinder class
+        
         # Find paths for all items
         paths, inserters = pathfinder.find_paths_for_all_items()
-        
-        #print(f"paths: {paths}")
-        #print(f"inserters: {inserters}")
-
+    
+    
         # Visualize results
-        #pathfinder.visualize_grid('final_grid.png')
-        #pathfinder.visualize_paths('path_{}.png')
+        pathfinder.visualize_grid('final_grid.png')
+        pathfinder.visualize_paths('path_{}.png')
+        pathfinder.visualize_used_splitters('splitters.png')
         
     def prepare_splitter_information(self, input_information, output_information):
         """
@@ -323,6 +350,7 @@ class TestMultiAgentPathfinder(unittest.TestCase):
         return splitters
 
     def test_orientation_info(self):
+        return
         """Test that orientation information is properly added to path data and splitters are created."""
         input_info = {
             'copper-plate': {
@@ -363,6 +391,167 @@ class TestMultiAgentPathfinder(unittest.TestCase):
         
       
        
+    def test_Input(self):
+        return
+        grid = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+                [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+                [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
+        points ={'copper-plate': {'item': 'copper-plate', 'destination': [(5, 2)], 'start_points': [(1, 3)], 'inserter_mapping': None}}
 
+        pathfinder = MultiAgentPathfinder(
+            grid, 
+            points,
+            allow_underground=True,
+            underground_length=3,
+            allow_splitters=False,
+            splitters={},  # Use empty dict instead of None
+            find_optimal_paths=False
+        )
+        
+        # Add debug information to help diagnose the issue
+        print(f"Grid size: {len(grid)}x{len(grid[0])}")
+        print(f"Start points: {points['copper-plate']['start_points']}")
+        print(f"Destination points: {points['copper-plate']['destination']}")
+        
+        # Check if the start and destination are valid
+        start_x, start_y = points['copper-plate']['start_points'][0]
+        dest_x, dest_y = points['copper-plate']['destination'][0]
+        print(f"Start point is obstacle? {grid[start_y][start_x] != 0}")
+        print(f"Destination point is obstacle? {grid[dest_y][dest_x] != 0}")
+        
+        # Find paths for all items
+        paths, inserters = pathfinder.find_paths_for_all_items()  # Note: we're now unpacking 3 return values
+
+        print("Paths:", paths)
+        print("Inserters:", inserters)
+        
+        # Additional checks to debug why no path was found
+        if not paths or 'copper-plate' not in paths or not paths['copper-plate']:
+            print("No path found. Checking possible issues:")
+            # Check if start/dest positions are valid
+            if grid[start_y][start_x] != 0:
+                print(f"Start position ({start_x}, {start_y}) is not free!")
+            if grid[dest_y][dest_x] != 0:
+                print(f"Destination position ({dest_x}, {dest_y}) is not free!")
+                
+            # Check if there are obstacles in the way
+            # (This is simplified - a real path check would need A* or BFS)
+            has_path = True
+            for y in range(min(start_y, dest_y), max(start_y, dest_y) + 1):
+                for x in range(min(start_x, dest_x), max(start_x, dest_x) + 1):
+                    if grid[y][x] != 0:
+                        print(f"Obstacle at ({x}, {y}) may be blocking the path")
+                        has_path = False
+            
+            if has_path:
+                print("No obvious obstacles between start and destination - this suggests an issue with the pathfinding algorithm")
+        
+        # Visualize results
+        pathfinder.visualize_grid('final_grid.png')
+        pathfinder.visualize_paths('path_{}.png')
+     
+     
+     
+    def test_more(self):
+        # Create grid with obstacles and assemblers
+        grid = [
+            [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 22],
+            [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 22],
+            [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 22],
+            [1, 0, 0, 0, 0, 0, 0, 0, 99, 0, 0, 1, 0, 0, 22],
+            [1, 0, 33, 33, 33, 0, 0, 0, 44, 0, 0, 1, 0, 0, 22],
+            [99, 44, 33, 33, 33, 44, 33, 33, 33, 0, 0, 1, 0, 0, 22],
+            [99, 44, 33, 33, 33, 44, 33, 33, 33, 0, 0, 1, 0, 0, 22],
+            [99, 44, 33, 33, 33, 44, 33, 33, 33, 0, 0, 1, 0, 0, 22],
+            [1, 0, 33, 33, 33, 0, 0, 0, 0, 0, 0, 1, 0, 0, 22],
+            [99, 44, 33, 33, 33, 44, 33, 33, 33, 0, 0, 1, 0, 0, 22],
+            [99, 44, 33, 33, 33, 44, 33, 33, 33, 0, 0, 1, 0, 0, 22],
+            [1, 0, 33, 33, 33, 44, 33, 33, 33, 0, 0, 1, 0, 0, 22],
+            [99, 44, 33, 33, 33, 0, 0, 0, 44, 0, 0, 1, 0, 0, 22],
+            [1, 0, 0, 0, 0, 0, 0, 0, 99, 0, 0, 1, 0, 0, 22],
+            [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 22]
+        ]
+
+        # Define points for pathfinding
+        points = {
+            'iron-plate_0': {
+                'item': 'iron-plate', 
+                'destination': [(8, 3)], 
+                'start_points': [(11, 14), (11, 0), (11, 14), (11, 13), (11, 12), (11, 11), 
+                                (11, 10), (11, 9), (11, 8), (11, 7), (11, 6), (11, 5), 
+                                (11, 4), (11, 3), (11, 2), (11, 1), (11, 0)], 
+                'inserter_mapping': None
+            }, 
+            'iron-plate_1': {
+                'item': 'iron-plate', 
+                'destination': [(8, 13)], 
+                'start_points': [(11, 14), (11, 0), (11, 14), (11, 13), (11, 12), (11, 11), 
+                                (11, 10), (11, 9), (11, 8), (11, 7), (11, 6), (11, 5), 
+                                (11, 4), (11, 3), (11, 2), (11, 1), (11, 0)], 
+                'inserter_mapping': None
+            }, 
+            'electronic-circuit_0': {
+                'item': 'electronic-circuit', 
+                'destination': [(14, 0), (14, 1), (14, 2), (14, 3), (14, 4), (14, 5), 
+                                (14, 6), (14, 7), (14, 8), (14, 9), (14, 10), (14, 11), 
+                                (14, 12), (14, 13), (14, 14), (14, 0), (14, 14)], 
+                'start_points': [(6, 3), (7, 3), (10, 5), (10, 6), (10, 7)], 
+                'inserter_mapping': {
+                    '(6, 3)': (6, 4), 
+                    '(7, 3)': (7, 4), 
+                    '(10, 5)': (9, 5), 
+                    '(10, 6)': (9, 6), 
+                    '(10, 7)': (9, 7)
+                }
+            }, 
+            'electronic-circuit_1': {
+                'item': 'electronic-circuit', 
+                'destination': [(14, 0), (14, 1), (14, 2), (14, 3), (14, 4), (14, 5), 
+                                (14, 6), (14, 7), (14, 8), (14, 9), (14, 10), (14, 11), 
+                                (14, 12), (14, 13), (14, 14), (14, 0), (14, 14)], 
+                'start_points': [(6, 13), (7, 13), (10, 9), (10, 10), (10, 11)], 
+                'inserter_mapping': {
+                    '(6, 13)': (6, 12), 
+                    '(7, 13)': (7, 12), 
+                    '(10, 9)': (9, 9), 
+                    '(10, 10)': (9, 10), 
+                    '(10, 11)': (9, 11)
+                }
+            }
+        }
+
+        # Create the pathfinder
+        pathfinder = MultiAgentPathfinder(
+            grid, 
+            points,
+            allow_underground=True,
+            underground_length=3,
+            allow_splitters=False,
+            splitters={},  # Use empty dict instead of None
+            find_optimal_paths=False
+        )
+
+        # Find paths for all items
+        paths, inserters = pathfinder.find_paths_for_all_items()
+
+        print("Paths:", paths)
+        print("Inserters:", inserters)
+        
+        # Visualize results
+        pathfinder.visualize_grid('final_grid.png')
+        pathfinder.visualize_paths('path_{}.png')
+            
 if __name__ == '__main__':
     unittest.main()

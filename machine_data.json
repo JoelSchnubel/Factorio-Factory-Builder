@@ -4,11 +4,11 @@
     "Dimensions": "1x1"
   },
   "inserters": {
-    "ItemsPerSecond": 1,
+    "ItemsPerSecond": 2,
     "Dimensions": "1x1"
   },
   "assemblers": {
-    "crafting_speed": 1,
+    "crafting_speed": 0.5,
     "Dimensions": "3x3"
   }
 }
