@@ -771,9 +771,12 @@ class Z3Solver:
                 belt = inserter.belt
                 self.solver.add(belt.x == self.model.evaluate(belt.x))
                 self.solver.add(belt.y == self.model.evaluate(belt.y))
-   
+                
+                
     def minimize_non_overlapping_inserters(self, non_overlapping_inserters):
+       
         """Minimizes distance for non-overlapping inserters to the closest global belt."""
+        
         logging.info("=== Minimizing Distance for Non-Overlapping Inserters ===")
         
 
@@ -788,13 +791,14 @@ class Z3Solver:
             distances = [Abs(belt.x - gb.x) + Abs(belt.y - gb.y) for gb in same_item_belts]
 
             # Log distance calculation
-            logging.info(f"Inserter {inserter.id} has distances to matching global belts.")
+            logging.info(f"Inserter {inserter.id} has distances {distances} to matching global belts.")
            
 
             # Minimize the distance to the closest matching global belt
             self.solver.add(Or([min_distance == d for d in distances]))  # Ensure min_distance is one of the distances
             self.solver.add(min_distance >= 0)  # Ensure non-negative distance
             distance_constraints.append(min_distance)
+            
 
         if distance_constraints:
             self.solver.add(total_distance == Sum(distance_constraints))

@@ -46,6 +46,7 @@ class FactorioProductionTree:
         self.machines_data = self.load_json("machine_data.json")  # Machine speeds and capacities
         
         self.grid = [[0 for _ in range(grid_width)] for _ in range(grid_height)]
+
         self.grid_width = grid_width
         self.grid_height = grid_height
         
@@ -861,9 +862,10 @@ class FactorioProductionTree:
     def is_position_available(self, pos):
         x, y = pos
         # Check if position is within bounds of the obstacle_map and if it's free (0)
-        if 0 <= x < len(self.obstacle_map) and 0 <= y < len(self.obstacle_map[0]):
+        if 0 <= y < len(self.obstacle_map) and 0 <= x < len(self.obstacle_map[0]):
             return self.obstacle_map[y][x] == 0
         return False  # Out-of-bounds positions are considered unavailable
+    
 
     def get_retrieval_points(self, belt_point_information, assembler_information):
         retrieval_points = {}  # Dictionary to store all retrieval points for each item
@@ -1172,7 +1174,26 @@ class FactorioProductionTree:
                 print(self.obstacle_map)
                 print(retrieval_points)
                 
+                splitters = {}
+        
+                splitters['iron-plate'] = []
+                splitters['electronic-circuit'] = []
                 
+                for i in range(0,12):
+                    splitters['iron-plate'].append(Splitter(
+                        item='iron-plate',
+                        position=(12,i),
+                        direction=(0,-1)
+                    ))
+                    
+                # Create splitters for positions (11,0) through (11,6) all facing up
+                for i in range(0,12):
+                    splitters['electronic-circuit'].append(Splitter(
+                        item='iron-plate',
+                        position=(15,i),
+                        direction=(0,1)
+                    ))
+                    
                 # rearrange such that we first build paths for outputs
                 retrieval_points = self.rearrange_dict(retrieval_points, self.output_item)
                 # Create the pathfinder
@@ -1181,9 +1202,78 @@ class FactorioProductionTree:
                                                     allow_underground=True,
                                                     underground_length=3,
                                                     allow_splitters=True,
-                                                    splitters=self.prepare_splitter_information(self.input_information,self.output_information),
-                                                    find_optimal_paths=False)
+                                                    splitters=splitters, #self.prepare_splitter_information(self.input_information,self.output_information),
+                                                    find_optimal_paths=True)
                 
+                # Find paths for all items
+                paths, inserters = pathfinder.find_paths_for_all_items()
+                
+                    
+            
+                # Create grid with obstacles and assemblers
+                grid = [
+                    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 22],
+                    [99, 44, 33, 33, 33, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 22],
+                    [1, 0, 33, 33, 33, 44, 33, 33, 33, 44, 99, 0, 1, 0, 0, 22],
+                    [99, 44, 33, 33, 33, 44, 33, 33, 33, 0, 0, 0, 1, 0, 0, 22],
+                    [99, 44, 33, 33, 33, 44, 33, 33, 33, 0, 0, 0, 1, 0, 0, 22],
+                    [1, 0, 33, 33, 33, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 22],
+                    [99, 44, 33, 33, 33, 44, 33, 33, 33, 0, 0, 0, 1, 0, 0, 22],
+                    [1, 0, 33, 33, 33, 44, 33, 33, 33, 0, 0, 0, 1, 0, 0, 22],
+                    [99, 44, 33, 33, 33, 44, 33, 33, 33, 44, 99, 0, 1, 0, 0, 22],
+                    [99, 44, 33, 33, 33, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 22]
+                ]
+                
+                points = {
+                    'iron-plate_0': {
+                        'item': 'iron-plate', 
+                        'destination': [(10, 2)], 
+                        'start_points': [(12, 9), (12, 0), (12, 9), (12, 8), (12, 7), (12, 6), 
+                                        (12, 5), (12, 4), (12, 3), (12, 2), (12, 1), (12, 0)], 
+                        'inserter_mapping': None
+                    }, 
+                    'iron-plate_1': {
+                        'item': 'iron-plate', 
+                        'destination': [(10, 8)], 
+                        'start_points': [(12, 9), (12, 0), (12, 9), (12, 8), (12, 7), (12, 6), 
+                                        (12, 5), (12, 4), (12, 3), (12, 2), (12, 1), (12, 0)], 
+                        'inserter_mapping': None
+                    }, 
+                    'electronic-circuit_0': {
+                        'item': 'electronic-circuit', 
+                        'destination': [(15, 0), (15, 1), (15, 2), (15, 3), (15, 4), (15, 5), 
+                                        (15, 6), (15, 7), (15, 8), (15, 9), (15, 0), (15, 9)], 
+                        'start_points': [(6, 0), (7, 0), (8, 0), (10, 3), (10, 4)], 
+                        'inserter_mapping': {
+                            '(6, 0)': (6, 1), 
+                            '(7, 0)': (7, 1), 
+                            '(8, 0)': (8, 1), 
+                            '(10, 3)': (9, 3), 
+                            '(10, 4)': (9, 4)
+                        }
+                    }, 
+                    'electronic-circuit_1': {
+                        'item': 'electronic-circuit', 
+                        'destination': [(15, 0), (15, 1), (15, 2), (15, 3), (15, 4), (15, 5), 
+                                        (15, 6), (15, 7), (15, 8), (15, 9), (15, 0), (15, 9)], 
+                        'start_points': [(10, 6), (10, 7)], 
+                        'inserter_mapping': {
+                            '(10, 6)': (9, 6), 
+                            '(10, 7)': (9, 7)
+                        }
+                    }
+                }
+                # Create the pathfinder
+                pathfinder = MultiAgentPathfinder(
+                    grid, 
+                    points,
+                    allow_underground=True,
+                    underground_length=3,
+                    allow_splitters=True,
+                    splitters=splitters,  # Use empty dict instead of None
+                    find_optimal_paths=True
+                )
+
                 # Find paths for all items
                 paths, inserters = pathfinder.find_paths_for_all_items()
                 
@@ -1394,6 +1484,7 @@ class FactorioProductionTree:
         
         # Draw factory views
         # 1. Base view without paths
+            
         self._draw_factory_base(window, assembler_information, inserter_information, item_images, images, cell_size)
         self._draw_io_paths(window, images,item_images, cell_size)
         if store and file_path:
@@ -1782,6 +1873,7 @@ class FactorioProductionTree:
             
             
     def _draw_io_paths(self, window, images,item_images, cell_size):
+
         
         if self.input_information:
                 for row in range(self.grid_height):
@@ -1984,7 +2076,7 @@ def Simple_Run():
     input_items = []
     
     # init 
-    factorioProductionTree = FactorioProductionTree(15,15)
+    factorioProductionTree = FactorioProductionTree(16,10)
     factorioProductionTree.amount = amount_needed
     production_data  = factorioProductionTree.calculate_production(item_to_produce,amount_needed,input_items=input_items) #60
     factorioProductionTree.production_data = production_data
