@@ -854,14 +854,15 @@ class Z3Solver:
         return obstacle_map
     
     def build_map(self):
-        obstacle_map = np.zeros((self.height, self.width), dtype=int)
+        # Initialize with Python lists instead of NumPy array
+        obstacle_map = [[0 for _ in range(self.width)] for _ in range(self.height)]
 
         belt_point_information = []
         assembler_information = []
         inserter_information = []
         
         if self.solver.check() == sat:
-            # add input and output belts:
+            # Add input and output belts
             for belt in self.global_input_belts:
                 x = self.model.evaluate(belt.x).as_long()
                 y = self.model.evaluate(belt.y).as_long()
@@ -873,14 +874,12 @@ class Z3Solver:
                 y = self.model.evaluate(belt.y).as_long()
                 obstacle_map[y][x] = 22
             
-            #Mark assemblers in the obstacle map
+            # Mark assemblers in the obstacle map
             for assembler in self.assemblers:
                 x = self.model.evaluate(assembler.x).as_long()
                 y = self.model.evaluate(assembler.y).as_long()
                 
-                #print(str(assembler.id) + " x: "+str(x)+ "y: "+str(y))
-                
-                assembler_information.append([assembler.item,x,y])
+                assembler_information.append([assembler.item, x, y])
                 
                 # Mark 3x3 area around the assembler as occupied
                 for dx in range(3):
@@ -888,14 +887,12 @@ class Z3Solver:
                         if 0 <= x + dx < self.width and 0 <= y + dy < self.height:
                             obstacle_map[y + dy][x + dx] = 33
 
-                #Mark inserters in the obstacle map
+                # Mark inserters in the obstacle map
                 for inserter in assembler.inserters:
                     ix = self.model.evaluate(inserter.x).as_long()
                     iy = self.model.evaluate(inserter.y).as_long()
                     
-                    inserter_information.append([inserter.item,ix,iy])
-                    
-                    #print(str(inserter.id) + " x: "+str(ix)+ "y: "+str(iy))
+                    inserter_information.append([inserter.item, ix, iy])
                     
                     # Mark inserter position as occupied
                     if inserter.type == "input":
@@ -904,9 +901,6 @@ class Z3Solver:
                             
                     belt = inserter.belt
                     if belt is not None:
-                        
-                        #print(f"inserter_belt {belt}")
-                        
                         bx = self.model.evaluate(belt.x).as_long()
                         by = self.model.evaluate(belt.y).as_long()
 
@@ -925,8 +919,7 @@ class Z3Solver:
         else:
             print('not sat')
             
-            
-        return obstacle_map,belt_point_information,assembler_information,inserter_information
+        return obstacle_map, belt_point_information, assembler_information, inserter_information
 
         
     def restrict_current_setup(self):

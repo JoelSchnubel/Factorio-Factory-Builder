@@ -390,16 +390,66 @@ class MultiAgentPathfinder:
         
         # No path found
         return None
-    
-    def mark_path_on_grid(self, path, value=1):
-        """Mark a path on the working grid with the specified value."""
+    def mark_path_on_grid(self, path, value=1, underground_segments=None, start_splitter=None, dest_splitter=None,inserter=None):
+        """
+        Mark a path and its associated components on the working grid with the specified value.
+        
+        Args:
+            path (list): List of (x, y) positions in the path
+            value (int): Value to mark on the grid (default: 1 for obstacle)
+            underground_segments (dict): Dictionary of underground segments to mark
+            start_splitter (Splitter): Starting splitter object if any
+            dest_splitter (Splitter): Destination splitter object if any
+        """
         if path is None:
             return
-            
+        
+        # Mark the entire path
         for x, y in path:
             self.working_grid[y][x] = value
+        
+        # Mark underground segments
+        if underground_segments:
+            for _, segment in underground_segments.items():
+                start_x, start_y = segment['start']
+                end_x, end_y = segment['end']
+                
+                # Mark the entrance and exit
+                self.working_grid[start_y][start_x] = value
+                self.working_grid[end_y][end_x] = value
+                
+                # Mark the path between entrance and exit
+                dir_x = 0 if start_x == end_x else (end_x - start_x) // abs(end_x - start_x)
+                dir_y = 0 if start_y == end_y else (end_y - start_y) // abs(end_y - start_y)
+                
+                curr_x, curr_y = start_x, start_y
+                while (curr_x, curr_y) != (end_x, end_y):
+                    curr_x += dir_x
+                    curr_y += dir_y
+                    if (curr_x, curr_y) != (end_x, end_y):  # Don't mark the end point twice
+                        self.working_grid[curr_y][curr_x] = value
+        
+        # Mark splitter positions
+        if start_splitter:
+            pos_x, pos_y = start_splitter.position
+            self.working_grid[pos_y][pos_x] = value
+            
+            if start_splitter.next_position:
+                next_x, next_y = start_splitter.next_position
+                self.working_grid[next_y][next_x] = value
+        
+        if dest_splitter:
+            pos_x, pos_y = dest_splitter.position
+            self.working_grid[pos_y][pos_x] = value
+            
+            if dest_splitter.next_position:
+                next_x, next_y = dest_splitter.next_position
+                self.working_grid[next_y][next_x] = value
+                
+        if inserter:
+            inserter_x, inserter_y = inserter
+            self.working_grid[inserter_y][inserter_x] = value
     
-  
 
     def find_paths_for_all_items(self):
         """
@@ -443,6 +493,8 @@ class MultiAgentPathfinder:
                 relevant_start_splitters = []
                 relevant_dest_splitters = []
                 
+                
+                
                 # Check each splitter to see if it's positioned at one of our start/destination points
                 for splitter in self.splitters[item_name]:
                     # A splitter is relevant to start points if its position matches a start point
@@ -463,6 +515,23 @@ class MultiAgentPathfinder:
                 if len(relevant_dest_splitters) > 0:
                     destinations = []
                 
+                
+                # TODO add existing belts to I/O pool
+                # This allows for sharing belts across different branches of the same resource
+                for other_key in self.paths:
+                    other_name = other_key.split('_')[0] if '_' in other_key else other_key
+                    # Only connect to paths of the same material type but different instance
+                    if other_name == item_name and other_key != item_key:
+                        for other_path_data in self.paths[other_key]:
+                            other_path = other_path_data.get('path')
+                            if other_path:
+                                # Add all belt positions from related item paths as potential connections
+                                for pos in other_path:
+                                    if pos not in start_points and self.is_valid_position(pos):
+                                        start_points.append(pos)
+                                        logging.info(f"Added shared belt position {pos} from {other_key} as start point for {item_key}")
+
+                                
                 # Add output points from start splitters as start points
                 for splitter in relevant_start_splitters:
                     for output_point in splitter.outputs:
@@ -662,8 +731,10 @@ class MultiAgentPathfinder:
                             self.inserters[item_key] = {}
                         self.inserters[item_key][str(best_start)] = best_inserter
                     
-                    # Mark the path on the working grid
-                    self.mark_path_on_grid(best_path)
+                  
+                   # Mark the path on the working grid along with underground segments and splitters
+                    self.mark_path_on_grid(best_path, value=1, underground_segments=best_underground_segments, 
+                       start_splitter=best_start_splitter, dest_splitter=best_dest_splitter,inserter=best_inserter)
                     
                     # Add this path to all_previous_paths for future items to merge with
                     if item_key not in all_previous_paths:

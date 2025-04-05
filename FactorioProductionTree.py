@@ -12,6 +12,7 @@ import matplotlib.pyplot as plt
 from z3 import And , Or
 from z3Solver  import Z3Solver
 import seaborn as sns
+import numpy as np
 
 from MultiAgentPathfinder import MultiAgentPathfinder,Splitter
 
@@ -913,7 +914,7 @@ class FactorioProductionTree:
                     output_positions = [
                         [(assembler_x, assembler_y - 1), (assembler_x, assembler_y - 2)],  # Upper left
                         [(assembler_x + 1, assembler_y - 1), (assembler_x + 1, assembler_y - 2)],  # Upper middle
-                        [(assembler_x + 2, assembler_y - 1), (assembler_x + 2, assembler_y - 2)],  # Upper right
+                        [(assembler_x + 2, assembler_y - 1), (assembler_x + 2,assembler_y - 2)],  # Upper right
                         [(assembler_x, assembler_y + 3), (assembler_x, assembler_y + 4)],  # Bottom left
                         [(assembler_x + 1, assembler_y + 3), (assembler_x + 1, assembler_y + 4)],  # Bottom middle
                         [(assembler_x + 2, assembler_y + 3), (assembler_x + 2, assembler_y + 4)],  # Bottom right
@@ -1161,112 +1162,24 @@ class FactorioProductionTree:
             # get rid of belts that are already connected -> overlap with other input and output belts set by user or overlap with assembler -> direct insertion
             belt_point_information = [belt for belt in belt_point_information if not self.detect_belt_overlap(belt)]
             belt_point_information = [belt for belt in belt_point_information if not self.detect_assembler_overlap(belt, assembler_information)]
-        
+
             
             retrieval_points = self.get_retrieval_points(belt_point_information,assembler_information)
             
             # add output belt if needed to form all possible to all possible
             retrieval_points.update(self.add_out_point_information(self.output_item,assembler_information))
             
-            
+            # rearrange such that we first build paths for outputs
+            self.retrieval_points = self.rearrange_dict(retrieval_points, self.output_item)
             
             try:
-                print(self.obstacle_map)
-                print(retrieval_points)
                 
-                splitters = {}
-        
-                splitters['iron-plate'] = []
-                splitters['electronic-circuit'] = []
-                
-                for i in range(0,12):
-                    splitters['iron-plate'].append(Splitter(
-                        item='iron-plate',
-                        position=(12,i),
-                        direction=(0,-1)
-                    ))
+                splitters = self.prepare_splitter_information(self.input_information,self.output_information)
                     
-                # Create splitters for positions (11,0) through (11,6) all facing up
-                for i in range(0,12):
-                    splitters['electronic-circuit'].append(Splitter(
-                        item='iron-plate',
-                        position=(15,i),
-                        direction=(0,1)
-                    ))
-                    
-                # rearrange such that we first build paths for outputs
-                retrieval_points = self.rearrange_dict(retrieval_points, self.output_item)
-                # Create the pathfinder
-                pathfinder = MultiAgentPathfinder(  self.obstacle_map, 
-                                                    retrieval_points,
-                                                    allow_underground=True,
-                                                    underground_length=3,
-                                                    allow_splitters=True,
-                                                    splitters=splitters, #self.prepare_splitter_information(self.input_information,self.output_information),
-                                                    find_optimal_paths=True)
-                
-                # Find paths for all items
-                paths, inserters = pathfinder.find_paths_for_all_items()
-                
-                    
-            
-                # Create grid with obstacles and assemblers
-                grid = [
-                    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 22],
-                    [99, 44, 33, 33, 33, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 22],
-                    [1, 0, 33, 33, 33, 44, 33, 33, 33, 44, 99, 0, 1, 0, 0, 22],
-                    [99, 44, 33, 33, 33, 44, 33, 33, 33, 0, 0, 0, 1, 0, 0, 22],
-                    [99, 44, 33, 33, 33, 44, 33, 33, 33, 0, 0, 0, 1, 0, 0, 22],
-                    [1, 0, 33, 33, 33, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 22],
-                    [99, 44, 33, 33, 33, 44, 33, 33, 33, 0, 0, 0, 1, 0, 0, 22],
-                    [1, 0, 33, 33, 33, 44, 33, 33, 33, 0, 0, 0, 1, 0, 0, 22],
-                    [99, 44, 33, 33, 33, 44, 33, 33, 33, 44, 99, 0, 1, 0, 0, 22],
-                    [99, 44, 33, 33, 33, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 22]
-                ]
-                
-                points = {
-                    'iron-plate_0': {
-                        'item': 'iron-plate', 
-                        'destination': [(10, 2)], 
-                        'start_points': [(12, 9), (12, 0), (12, 9), (12, 8), (12, 7), (12, 6), 
-                                        (12, 5), (12, 4), (12, 3), (12, 2), (12, 1), (12, 0)], 
-                        'inserter_mapping': None
-                    }, 
-                    'iron-plate_1': {
-                        'item': 'iron-plate', 
-                        'destination': [(10, 8)], 
-                        'start_points': [(12, 9), (12, 0), (12, 9), (12, 8), (12, 7), (12, 6), 
-                                        (12, 5), (12, 4), (12, 3), (12, 2), (12, 1), (12, 0)], 
-                        'inserter_mapping': None
-                    }, 
-                    'electronic-circuit_0': {
-                        'item': 'electronic-circuit', 
-                        'destination': [(15, 0), (15, 1), (15, 2), (15, 3), (15, 4), (15, 5), 
-                                        (15, 6), (15, 7), (15, 8), (15, 9), (15, 0), (15, 9)], 
-                        'start_points': [(6, 0), (7, 0), (8, 0), (10, 3), (10, 4)], 
-                        'inserter_mapping': {
-                            '(6, 0)': (6, 1), 
-                            '(7, 0)': (7, 1), 
-                            '(8, 0)': (8, 1), 
-                            '(10, 3)': (9, 3), 
-                            '(10, 4)': (9, 4)
-                        }
-                    }, 
-                    'electronic-circuit_1': {
-                        'item': 'electronic-circuit', 
-                        'destination': [(15, 0), (15, 1), (15, 2), (15, 3), (15, 4), (15, 5), 
-                                        (15, 6), (15, 7), (15, 8), (15, 9), (15, 0), (15, 9)], 
-                        'start_points': [(10, 6), (10, 7)], 
-                        'inserter_mapping': {
-                            '(10, 6)': (9, 6), 
-                            '(10, 7)': (9, 7)
-                        }
-                    }
-                }
                 # Create the pathfinder
                 pathfinder = MultiAgentPathfinder(
-                    grid, 
-                    points,
+                    self.obstacle_map, 
+                    retrieval_points,
                     allow_underground=True,
                     underground_length=3,
                     allow_splitters=True,
@@ -1307,90 +1220,232 @@ class FactorioProductionTree:
             self.grid_width = data.get("grid_width")
             self.grid_height = data.get("grid_height")
             self.input_items = data.get("input_items")
-            self.input_information = data.get("input_information")
-            self.output_item = data.get("output_item")
-            self.output_information = data.get("output_information")
+            
+            # Load complex data structures
+            
+            # Handle input_information (with special handling for orientation dictionary)
+            self.input_information = data.get("input_information", {})
+            for item, item_data in self.input_information.items():
+                if "paths" in item_data:
+                    for path_item, paths_list in item_data["paths"].items():
+                        for path_data in paths_list:
+                            # Convert string keys back to tuples in orientation dictionary
+                            if "orientation" in path_data:
+                                converted_orientation = {}
+                                for pos_str, direction in path_data["orientation"].items():
+                                    # Convert from string to tuple
+                                    pos_tuple = ast.literal_eval(pos_str)
+                                    converted_orientation[pos_tuple] = tuple(direction)
+                                path_data["orientation"] = converted_orientation
+            
+            # Handle output_information (similar to input_information)
+            self.output_information = data.get("output_information", {})
+            for item, item_data in self.output_information.items():
+                if "paths" in item_data:
+                    for path_item, paths_list in item_data["paths"].items():
+                        for path_data in paths_list:
+                            # Convert string keys back to tuples in orientation dictionary
+                            if "orientation" in path_data:
+                                converted_orientation = {}
+                                for pos_str, direction in path_data["orientation"].items():
+                                    # Convert from string to tuple
+                                    pos_tuple = ast.literal_eval(pos_str)
+                                    converted_orientation[pos_tuple] = tuple(direction)
+                                path_data["orientation"] = converted_orientation
+            
+            # Load lists containing tuples
             self.inserter_information = data.get("inserter_information", [])
             self.belt_point_information = data.get("belt_point_information", [])
             self.assembler_information = data.get("assembler_information", [])
+            
+            # Handle retrieval_points with inserter_mapping
             self.retrieval_points = data.get("retrieval_points", {})
-            self.obstacle_map = data.get("obstacle_map",[])
-            self.paths = data.get("paths", [])
+            for key, point_data in self.retrieval_points.items():
+                if "inserter_mapping" in point_data and point_data["inserter_mapping"]:
+                    # Convert string keys back to tuples
+                    converted_mapping = {}
+                    for pos_str, pos_value in point_data["inserter_mapping"].items():
+                        if isinstance(pos_value, list):
+                            converted_mapping[pos_str] = tuple(pos_value)
+                        else:
+                            converted_mapping[pos_str] = pos_value
+                    point_data["inserter_mapping"] = converted_mapping
+            
+            self.obstacle_map = data.get("obstacle_map", [])
+            self.paths = data.get("paths", {})
 
             print(f"Production tree data successfully loaded from {file_path}")
+            return True
 
         except Exception as e:
-            print(f"Failed to load production tree data: {e}")      
+            print(f"Failed to load production tree data: {e}")
+            import traceback
+            traceback.print_exc()
+            return False
+            
             
     def store_data(self, file_path, paths, placed_inserter_information):
         try:
-            _, belt_point_information, assembler_information, inserter_information = self.z3_solver.build_map()
+            obstacle_map, belt_point_information, assembler_information, inserter_information = self.z3_solver.build_map()
             
-            inserter_information = inserter_information + placed_inserter_information
-            
-            # Make sure paths is JSON serializable
-            serializable_paths = {}
-            for key, path_data in paths.items():
-                serializable_paths[key] = {}
-                for inner_key, inner_value in path_data.items():
-                    if inner_key == "path":
-                        # Make sure path is a list of lists
-                        serializable_paths[key][inner_key] = [list(point) for point in inner_value]
-                    elif inner_key == "direction_grid":
-                        # Make sure direction_grid is a standard Python list
-                        serializable_paths[key][inner_key] = [[list(d) if d else None for d in row] for row in inner_value]
-                    elif inner_key == "underground_paths":
-                        # Make sure underground_paths is serializable
-                        serializable_underground = []
-                        for entry in inner_value:
-                            # Each entry might be (entrance, exit, direction)
-                            if len(entry) == 3:
-                                entrance, exit_point, direction = entry
-                                serializable_underground.append([
-                                    list(entrance), 
-                                    list(exit_point), 
-                                    list(direction) if direction else None
-                                ])
-                        serializable_paths[key][inner_key] = serializable_underground
+            # Convert NumPy array to list if needed
+            serializable_obstacle_map = []
+            if isinstance(obstacle_map, np.ndarray):
+                serializable_obstacle_map = obstacle_map.tolist()  # Convert NumPy array to list
+            else:
+                # Handle regular lists of lists
+                serializable_obstacle_map = []
+                for row in obstacle_map:
+                    if isinstance(row, np.ndarray):
+                        serializable_obstacle_map.append(row.tolist())
                     else:
-                        serializable_paths[key][inner_key] = inner_value
-          
-            # Create serializable retrieval points
-            serializable_retrieval_points = None
-            if hasattr(self, 'retrieval_points') and self.retrieval_points is not None:
-                # Deep copy to avoid modifying the original
-                serializable_retrieval_points = {}
-                for key, value in self.retrieval_points.items():
-                    serializable_retrieval_points[key] = {}
-                    for inner_key, inner_value in value.items():
-                        if isinstance(inner_value, list):
-                            # Ensure list items are serializable
-                            if inner_value and isinstance(inner_value[0], tuple):
-                                serializable_retrieval_points[key][inner_key] = [list(item) for item in inner_value]
-                            else:
-                                serializable_retrieval_points[key][inner_key] = inner_value.copy()
-                        elif isinstance(inner_value, dict):
-                            # Handle dictionary with potential tuple keys
-                            new_dict = {}
-                            for k, v in inner_value.items():
-                                if isinstance(v, tuple):
-                                    new_dict[k] = list(v)
-                                else:
-                                    new_dict[k] = v
-                            serializable_retrieval_points[key][inner_key] = new_dict
-                        else:
-                            serializable_retrieval_points[key][inner_key] = inner_value
+                        serializable_obstacle_map.append(list(row))
+            # Create serializable versions of complex objects
+            serializable_input_info = {}
+            if self.input_information:
+                for item, data in self.input_information.items():
+                    serializable_item_data = {
+                        "input": data.get("input"),
+                        "output": data.get("output"),
+                        "paths": {}
+                    }
+                    
+                    # Handle paths data
+                    if data.get("paths"):
+                        for path_item, paths_list in data["paths"].items():
+                            serializable_item_data["paths"][path_item] = []
+                            
+                            for path_data in paths_list:
+                                # Create serializable path data
+                                serializable_path = {
+                                    "path": path_data.get("path", []),
+                                    "start": path_data.get("start"),
+                                    "destination": path_data.get("destination"),
+                                    "underground_segments": path_data.get("underground_segments", {}),
+                                    "start_splitter": path_data.get("start_splitter") is not None,
+                                    "dest_splitter": path_data.get("dest_splitter") is not None
+                                }
+                                
+                                # Handle orientation dictionary (convert tuple keys to strings)
+                                if "orientation" in path_data:
+                                    serializable_orientation = {}
+                                    for pos_tuple, direction in path_data["orientation"].items():
+                                        # Convert tuple key to string representation
+                                        pos_key = str(pos_tuple)
+                                        serializable_orientation[pos_key] = direction
+                                    serializable_path["orientation"] = serializable_orientation
+                                    
+                                serializable_item_data["paths"][path_item].append(serializable_path)
+                                    
+                    serializable_input_info[item] = serializable_item_data
             
-            # Convert obstacle_map to a standard Python list if it's a NumPy array
-            serializable_obstacle_map = None
-            if self.obstacle_map is not None:
-                import numpy as np
-                if isinstance(self.obstacle_map, np.ndarray):
-                    serializable_obstacle_map = self.obstacle_map.tolist()
-                else:
-                    # If it's already a list or some other serializable type, use it directly
-                    serializable_obstacle_map = self.obstacle_map
+            # Create serializable versions of output information
+            serializable_output_info = {}
+            if self.output_information:
+                for item, data in self.output_information.items():
+                    serializable_item_data = {
+                        "input": data.get("input"),
+                        "output": data.get("output"),
+                        "paths": {}
+                    }
+                    
+                    # Handle paths data
+                    if data.get("paths"):
+                        for path_item, paths_list in data["paths"].items():
+                            serializable_item_data["paths"][path_item] = []
+                            
+                            for path_data in paths_list:
+                                # Create serializable path data
+                                serializable_path = {
+                                    "path": path_data.get("path", []),
+                                    "start": path_data.get("start"),
+                                    "destination": path_data.get("destination"),
+                                    "underground_segments": path_data.get("underground_segments", {}),
+                                    "start_splitter": path_data.get("start_splitter") is not None,
+                                    "dest_splitter": path_data.get("dest_splitter") is not None
+                                }
+                                
+                                # Handle orientation dictionary (convert tuple keys to strings)
+                                if "orientation" in path_data:
+                                    serializable_orientation = {}
+                                    for pos_tuple, direction in path_data["orientation"].items():
+                                        # Convert tuple key to string representation
+                                        pos_key = str(pos_tuple)
+                                        serializable_orientation[pos_key] = direction
+                                    serializable_path["orientation"] = serializable_orientation
+                                    
+                                serializable_item_data["paths"][path_item].append(serializable_path)
+                                    
+                    serializable_output_info[item] = serializable_item_data
             
+            # Create serializable versions of paths data
+            serializable_paths = {}
+            for item_key, item_paths in paths.items():
+                serializable_paths[item_key] = []
+                
+                for path_data in item_paths:
+                    # Create a copy of the path data without problematic objects
+                    serializable_path = {
+                        "path": path_data.get("path", []),
+                        "start": path_data.get("start"),
+                        "destination": path_data.get("destination"),
+                        "underground_segments": path_data.get("underground_segments", {}),
+                        "start_splitter": path_data.get("start_splitter") is not None,
+                        "dest_splitter": path_data.get("dest_splitter") is not None
+                    }
+                    
+                    # Handle orientation dictionary (convert tuple keys to strings)
+                    if "orientation" in path_data:
+                        serializable_orientation = {}
+                        for pos_tuple, direction in path_data["orientation"].items():
+                            # Convert tuple key to string representation
+                            pos_key = str(pos_tuple)
+                            serializable_orientation[pos_key] = direction
+                        serializable_path["orientation"] = serializable_orientation
+                    
+                    serializable_paths[item_key].append(serializable_path)
+            
+            # Create serializable versions of simple lists with tuples
+            serializable_belt_points = []
+            for belt in belt_point_information:
+                serializable_belt_points.append(list(belt))
+                
+            serializable_assemblers = []
+            for assembler in assembler_information:
+                serializable_assemblers.append(list(assembler))
+                
+            serializable_inserters = []
+            for inserter in inserter_information:
+                serializable_inserters.append(list(inserter))
+            
+            # Process retrieval_points to make it serializable
+            serializable_retrieval_points = {}
+            if hasattr(self, 'retrieval_points') and self.retrieval_points:
+                for key, data in self.retrieval_points.items():
+                    serializable_retrieval_points[key] = {
+                        "item": data.get("item"),
+                        "destination": data.get("destination", []),
+                        "start_points": data.get("start_points", [])
+                    }
+                    
+                    # Handle inserter_mapping (convert tuple keys to strings)
+                    if "inserter_mapping" in data and data["inserter_mapping"] is not None:
+                        serializable_mapping = {}
+                        for pos_str, pos_tuple in data["inserter_mapping"].items():
+                            serializable_mapping[pos_str] = list(pos_tuple) if isinstance(pos_tuple, tuple) else pos_tuple
+                        serializable_retrieval_points[key]["inserter_mapping"] = serializable_mapping
+                    else:
+                        serializable_retrieval_points[key]["inserter_mapping"] = None
+            
+            # Create serializable version of placed_inserter_information
+            serializable_placed_inserters = {}
+            if placed_inserter_information:
+                for item_key, inserters in placed_inserter_information.items():
+                    serializable_placed_inserters[item_key] = {}
+                    for pos_str, pos_tuple in inserters.items():
+                        serializable_placed_inserters[item_key][pos_str] = list(pos_tuple)
+            
+            # Create the data dictionary with all fields
             data = {
                 "output_item": self.output_item,
                 "max_ouput": self.calculate_max_output(),
@@ -1399,15 +1454,15 @@ class FactorioProductionTree:
                 "grid_width": self.grid_width,
                 "grid_height": self.grid_height,
                 "input_items": self.input_items,
-                "input_information": self.input_information,
-                "output_item": self.output_item,
-                "output_information": self.output_information,
-                "inserter_information": inserter_information,
-                "belt_point_information": belt_point_information,
-                "assembler_information": assembler_information,
+                "input_information": serializable_input_info,
+                "output_information": serializable_output_info,
+                "inserter_information": serializable_inserters,
+                "belt_point_information": serializable_belt_points,
+                "assembler_information": serializable_assemblers,
                 "retrieval_points": serializable_retrieval_points,
                 "obstacle_map": serializable_obstacle_map,
-                "paths": serializable_paths
+                "paths": serializable_paths,
+                "placed_inserter_information": serializable_placed_inserters
             }
             
             # Ensure file path has a .json extension
@@ -1417,13 +1472,14 @@ class FactorioProductionTree:
             # Write data to the file as JSON
             with open(file_path, "w") as file:
                 json.dump(data, file, indent=4)
+            
             print(f"Production tree data successfully stored to {file_path}")
+        
         except Exception as e:
             print(f"Failed to store production tree data: {e}")
-            logging.error(f"Failed to store production tree data: {e}")
-            # Print the full traceback for debugging
             import traceback
             traceback.print_exc()
+    
   
     
     def calculate_max_output(self):
@@ -1974,7 +2030,6 @@ class FactorioProductionTree:
                             rotated_belt = pygame.transform.rotate(images['conveyor'], angle)
                             window.blit(rotated_belt, (current[0] * cell_size, current[1] * cell_size))
                             
-    
 
 def plot_csv_data(file_path):
     # Read the CSV file
@@ -2073,7 +2128,7 @@ def Simple_Run():
     amount_needed = 120
     
     
-    input_items = []
+    input_items = ["iron-plate", "copper-cable"]  # Using explicit input items
     
     # init 
     factorioProductionTree = FactorioProductionTree(16,10)
@@ -2082,13 +2137,14 @@ def Simple_Run():
     factorioProductionTree.production_data = production_data
 
     production_data = factorioProductionTree.set_capacities(production_data)
-    print(production_data)
+    
     
     # Manual input and output
     factorioProductionTree.manual_Input()
     factorioProductionTree.manual_Output()
 
-   
+
+    
     factorioProductionTree.add_manual_IO_constraints(production_data)
     
     assembler_counts = factorioProductionTree.count_assemblers(production_data)
@@ -2106,11 +2162,11 @@ def Simple_Run():
     log_method_time(item_to_produce, 1, 1, "build_belts", assembler_counts, start_time, end_time)
     
     print(f'paths: {paths}')
-    print(f'placed_inserter_information: {placed_inserter_information}')
+  
     
     if(paths):
-        
-        #factorioProductionTree.store_data(f'Modules/{item_to_produce}_{amount_needed}_{input_items}_module',paths,placed_inserter_information)
+        print("saving data")
+        factorioProductionTree.store_data(f'Modules/{item_to_produce}_{amount_needed}_{input_items}_module',paths,placed_inserter_information)
         
         factorioProductionTree.visualize_factory(paths,placed_inserter_information,store=True,file_path=f'Modules/{item_to_produce}_{amount_needed}_{input_items}_module.png')
         pass
@@ -2186,16 +2242,142 @@ def Eval_Runs(item_to_produce, start, end, step, rep_per_step):
            
         
    
+   
+   
+def test_build_belts():
+    """Test function for the build_belts method of FactorioProductionTree."""
+    # Set up logging for better output in the console
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
+    
+    print("Starting build_belts test")
+    
+    # Create a small test instance
+    item_to_produce = "electronic-circuit"
+    amount_needed = 120
+    input_items = ["iron-plate", "copper-plate"]  # Using explicit input items
+
+    
+    # Initialize with a small grid for faster testing
+    factorio_tree =  FactorioProductionTree(16,10)
+    
+    
+    # Calculate production data
+    production_data = factorio_tree.calculate_production(item_to_produce, amount_needed, input_items=input_items)
+    factorio_tree.production_data = production_data
+    production_data = factorio_tree.set_capacities(production_data)
+    
+    print("Production data:", production_data)
+    
+   
+    # Setup minimal I/O points manually instead of using the GUI
+    # This creates a simple test case with fixed input/output positions
+    input_information = {
+        "iron-plate": {
+            "input": (0, 9),
+            "output": (0, 0),
+            "paths": {"iron-plate": [{
+                "path": [(0, 9), (0, 8), (0, 7), (0, 6), (0, 5), (0, 4), (0, 3), (0, 2), (0, 1), (0, 0)],
+                "underground_segments": {},
+                "start_splitter": None,
+                "dest_splitter": None
+            }]}
+        },
+        "copper-plate": {
+            "input": (12, 9),
+            "output": (12, 0),
+            "paths": {"copper-plate": [{
+                "path": [(12, 9), (12, 8), (12, 7), (12, 6), (12, 5), (12, 4), (12, 3), (12, 2), (12, 1), (12, 0)],
+                "underground_segments": {},
+                "start_splitter": None,
+                "dest_splitter": None
+            }]}
+        }
+    }
+
+    output_information = {
+        "electronic-circuit": {
+            "input": (15, 0),
+            "output": (15, 9),
+            "paths": {"electronic-circuit": [{
+                "path": [(15, 0), (15, 1), (15, 2), (15, 3), (15, 4), (15, 5), (15, 6), (15, 7), (15, 8), (15, 9)],
+                "underground_segments": {},
+                "start_splitter": None,
+                "dest_splitter": None
+            }]}
+        }
+    }
+    
+    # Set the input and output information
+    factorio_tree.input_information = input_information
+    factorio_tree.output_information = output_information
+    factorio_tree.input_items = input_items
+    factorio_tree.output_item = item_to_produce
+    
+    # Add manual IO constraints
+    factorio_tree.add_manual_IO_constraints(production_data)
+    
+    # Solve the initial layout problem
+    factorio_tree.solve(production_data, sequential=False)
+    
+    # Test each component of build_belts separately for debugging
+    print("\nTesting build_map...")
+    obstacle_map, belt_point_information, assembler_information, _ = factorio_tree.z3_solver.build_map()
+    print(f"Obstacle map shape: {len(obstacle_map)}x{len(obstacle_map[0])}")
+    print(f"Belt points count: {len(belt_point_information)}")
+    print(f"Assembler count: {len(assembler_information)}")
+    
+    print("\nTesting belt overlap detection...")
+    filtered_belts = [belt for belt in belt_point_information if not factorio_tree.detect_belt_overlap(belt)]
+    print(f"Belts after overlap filter: {len(filtered_belts)}")
+    
+    print("\nTesting assembler overlap detection...")
+    filtered_belts = [belt for belt in filtered_belts if not factorio_tree.detect_assembler_overlap(belt, assembler_information)]
+    print(f"Belts after assembler overlap filter: {len(filtered_belts)}")
+    
+    print("\nTesting retrieval points calculation...")
+    retrieval_points = factorio_tree.get_retrieval_points(filtered_belts, assembler_information)
+    print(f"Retrieval points count: {len(retrieval_points)}")
+    
+    print("\nTesting output point information...")
+    retrieval_points.update(factorio_tree.add_out_point_information(item_to_produce, assembler_information))
+    print(f"Total retrieval points after adding output: {len(retrieval_points)}")
+    
+    print("\nTesting dictionary rearrangement...")
+    rearranged_points = factorio_tree.rearrange_dict(retrieval_points, item_to_produce)
+    print(f"Rearranged retrieval points count: {len(rearranged_points)}")
+    
+    print("\nNow running the full build_belts method...")
+    try:
+        paths, inserters = factorio_tree.build_belts(max_tries=1)
+        print("\nBuild belts completed successfully!")
+        print(f"Paths: {paths}")
+        print(f"Inserters: {inserters}")
+        
+        # Visualize the result if successful
+        if paths:
+            factorio_tree.visualize_factory(paths, inserters, store=True, file_path="test_build_belts_result.png")
+            print("Visualization saved to test_build_belts_result.png")
+        
+        return True
+    except Exception as e:
+        print(f"ERROR in build_belts: {e}")
+        import traceback
+        traceback.print_exc()
+        return False
+
+# Run the test
+
 if __name__ == "__main__":
+    #test_build_belts()
     
     # Prepare CSV file header if not exists
-    if not os.path.exists("execution_times.csv"):
-        try:
-            with open("execution_times.csv", "w", newline="") as file:
-                writer = csv.writer(file)
-                writer.writerow(["Item", "Amount", "Minimizer", "Method","Assemblers", "Execution Time (seconds)"])
-        except Exception as e:
-            logging.error(f"Error initializing CSV file: {e}")
+    #if not os.path.exists("execution_times.csv"):
+    #    try:
+    #        with open("execution_times.csv", "w", newline="") as file:
+    #            writer = csv.writer(file)
+    #            writer.writerow(["Item", "Amount", "Minimizer", "Method","Assemblers", "Execution Time (seconds)"])
+    #    except Exception as e:
+    #        logging.error(f"Error initializing CSV file: {e}")
 
     #plot_csv_data("execution_times.csv")
     main()
