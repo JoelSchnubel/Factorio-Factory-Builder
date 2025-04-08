@@ -310,6 +310,7 @@ class Z3Solver:
                     Or(belt.x < assembler.x, belt.x > assembler.x + 2),
                     Or(belt.y < assembler.y, belt.y > assembler.y + 2)
                 ))
+                
     # user input/putput belts are not allowed to overlap with inserter
     def add_global_belt_overlap_inserter_constraint(self):
         logging.info("Adding inserter overlap constraints to avoid global belts.")
@@ -319,9 +320,10 @@ class Z3Solver:
                 for belt in belts:
                     #logging.debug(f"Preventing overlap between inserter ID {inserter.id} and belt ID {belt.id}")
                     self.solver.add(Or(
-                        Or(belt.x < inserter.x, belt.x > inserter.x + 2),
-                        Or(belt.y < inserter.y, belt.y > inserter.y + 2)
+                            belt.x != inserter.x,
+                            belt.y != inserter.y
                     ))
+                       
     # user input/putput belts are allowed to overlap with belts that have the same item
     def add_global_belt_overlap_belt_constraint(self):
         logging.info("Adding belt overlap constraints to avoid conflicts with global belts (different items only).")
@@ -333,10 +335,10 @@ class Z3Solver:
                     if belt.item != inserter_belt.item:
                         #logging.debug(f"Preventing overlap between belt ID {belt.id} and inserter belt ID {inserter_belt.id}")
                         self.solver.add(Or(
-                            Or(belt.x < inserter_belt.x, belt.x > inserter_belt.x + 2),
-                            Or(belt.y < inserter_belt.y, belt.y > inserter_belt.y + 2)
+                            belt.x != inserter_belt.x,
+                            belt.y != inserter_belt.y
                         ))
-                        
+                                                
     # assembler are not allowed to overlap with other assemblers
     def add_assembler_overlap_assembler_constraint(self):
         logging.info("Adding assembler overlap constraints to prevent assembler-assembler overlap.")
@@ -384,17 +386,19 @@ class Z3Solver:
                 for other_inserter in assembler.inserters:
                     if inserter.id != other_inserter.id:
                         self.solver.add(Or(
-                                Or(inserter.x < other_inserter.x, inserter.x > other_inserter.x),
-                                Or(inserter.y < other_inserter.y, inserter.y > other_inserter.y)
-                            ))
+                            inserter.x != other_inserter.x,
+                            inserter.y != other_inserter.y
+                        ))
+                        
+                      
                 
                 for other_assembler in self.assemblers:
                     if assembler.id != other_assembler.id:
                         for other_inserter in other_assembler.inserters:
                             #logging.debug(f"Preventing overlap between inserter ID {inserter.id} and inserter ID {other_inserter.id}")
                             self.solver.add(Or(
-                                Or(inserter.x < other_inserter.x, inserter.x > other_inserter.x),
-                                Or(inserter.y < other_inserter.y, inserter.y > other_inserter.y)
+                                inserter.x != other_inserter.x,
+                                inserter.y != other_inserter.y
                             ))
                             
     # inserter and belts ar not allowed to overlap
@@ -408,9 +412,10 @@ class Z3Solver:
                             other_belt = other_inserter.belt
                             #logging.debug(f"Preventing overlap between inserter ID {inserter.id} and belt ID {other_belt.id}")
                             self.solver.add(Or(
-                                Or(inserter.x < other_belt.x, inserter.x > other_belt.x),
-                                Or(inserter.y < other_belt.y, inserter.y > other_belt.y)
+                                inserter.x != other_belt.x,
+                                inserter.y != other_belt.y
                             ))
+                        
                             
     # belts are allowed to overlap if they have the same item
     def add_belt_overlap_belt_constraint(self):
@@ -424,11 +429,12 @@ class Z3Solver:
                             other_belt = other_inserter.belt
                             if belt.item != other_belt.item:
                                 #logging.debug(f"Preventing overlap between belt ID {belt.id} and other belt ID {other_belt.id}")
+                                
                                 self.solver.add(Or(
-                                    Or(belt.x < other_belt.x, belt.x > other_belt.x),
-                                    Or(belt.y < other_belt.y, belt.y > other_belt.y)
+                                    belt.x != other_belt.x,
+                                    belt.y != other_belt.y
                                 ))
-                
+                            
         
     # inserter needs to be adjacent to assembler
     def add_inserter_adjacent_to_assembler(self):
@@ -656,10 +662,9 @@ class Z3Solver:
     
     # minimizes the number of non merged belts 
     def add_minimize_belts(self):
-        logging.info("Adding constraints to maximize overlaps of inserter belts with global belts and assemblers.")
-
+        logging.info("===== Adding constraints to maximize belt overlaps =====")
+        
         overlap_variables = []  # To track overlaps for optimization
-      
         inserter_belts = []
 
         # Collect all inserter belts
@@ -685,10 +690,8 @@ class Z3Solver:
                     self.solver.add(Implies(overlap_var, is_overlapping))
                     overlap_variables.append(overlap_var)
                     
-                    
-                    
-                    
-        
+ 
+ 
         # Check overlaps with other assemblers
         for assembler in self.assemblers:
             assembler_edges = [

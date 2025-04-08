@@ -1176,6 +1176,19 @@ class FactorioProductionTree:
                 
                 splitters = self.prepare_splitter_information(self.input_information,self.output_information)
                     
+                    
+                print("retrieval_points")
+                print(retrieval_points)
+                
+                print("obstacle_map")
+                print(self.obstacle_map)
+                
+                print("input_information")
+                print(self.input_information)
+                
+                print("output_information")
+                print(self.output_information)
+                
                 # Create the pathfinder
                 pathfinder = MultiAgentPathfinder(
                     self.obstacle_map, 

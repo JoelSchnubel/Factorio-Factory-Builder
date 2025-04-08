@@ -1,3 +1,5 @@
+#! .venv\Scripts\python.exe
+
 import unittest
 from MultiAgentPathfinder import MultiAgentPathfinder , Splitter
 
@@ -466,79 +468,21 @@ class TestMultiAgentPathfinder(unittest.TestCase):
      
     def test_more(self):
         
-        splitters = {}
-        
-        splitters['iron-plate'] = []
-        splitters['electronic-circuit'] = []
-        
-        for i in range(0,12):
-            splitters['iron-plate'].append(Splitter(
-                item='iron-plate',
-                position=(12,i),
-                direction=(0,-1)
-            ))
-            
-        # Create splitters for positions (11,0) through (11,6) all facing up
-        for i in range(10):
-            splitters['electronic-circuit'].append(Splitter(
-                item='iron-plate',
-                position=(15,i),
-                direction=(0,1)
-            ))
-        
-        # Create grid with obstacles and assemblers
-        grid = [
-            [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 22],
-            [99, 44, 33, 33, 33, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 22],
-            [1, 0, 33, 33, 33, 44, 33, 33, 33, 44, 99, 0, 1, 0, 0, 22],
-            [99, 44, 33, 33, 33, 44, 33, 33, 33, 0, 0, 0, 1, 0, 0, 22],
-            [99, 44, 33, 33, 33, 44, 33, 33, 33, 0, 0, 0, 1, 0, 0, 22],
-            [1, 0, 33, 33, 33, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 22],
-            [99, 44, 33, 33, 33, 44, 33, 33, 33, 0, 0, 0, 1, 0, 0, 22],
-            [1, 0, 33, 33, 33, 44, 33, 33, 33, 0, 0, 0, 1, 0, 0, 22],
-            [99, 44, 33, 33, 33, 44, 33, 33, 33, 44, 99, 0, 1, 0, 0, 22],
-            [99, 44, 33, 33, 33, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 22]
-        ]
-        
-        points = {
-            'iron-plate_0': {
-                'item': 'iron-plate', 
-                'destination': [(10, 2)], 
-                'start_points': [(12, 9), (12, 0), (12, 9), (12, 8), (12, 7), (12, 6), 
-                                (12, 5), (12, 4), (12, 3), (12, 2), (12, 1), (12, 0)], 
-                'inserter_mapping': None
-            }, 
-            'iron-plate_1': {
-                'item': 'iron-plate', 
-                'destination': [(10, 8)], 
-                'start_points': [(12, 9), (12, 0), (12, 9), (12, 8), (12, 7), (12, 6), 
-                                (12, 5), (12, 4), (12, 3), (12, 2), (12, 1), (12, 0)], 
-                'inserter_mapping': None
-            }, 
-            'electronic-circuit_0': {
-                'item': 'electronic-circuit', 
-                'destination': [(15, 0), (15, 1), (15, 2), (15, 3), (15, 4), (15, 5), 
-                                (15, 6), (15, 7), (15, 8), (15, 9), (15, 0), (15, 9)], 
-                'start_points': [(6, 0), (7, 0), (8, 0), (10, 3), (10, 4)], 
-                'inserter_mapping': {
-                    '(6, 0)': (6, 1), 
-                    '(7, 0)': (7, 1), 
-                    '(8, 0)': (8, 1), 
-                    '(10, 3)': (9, 3), 
-                    '(10, 4)': (9, 4)
-                }
-            }, 
-            'electronic-circuit_1': {
-                'item': 'electronic-circuit', 
-                'destination': [(15, 0), (15, 1), (15, 2), (15, 3), (15, 4), (15, 5), 
-                                (15, 6), (15, 7), (15, 8), (15, 9), (15, 0), (15, 9)], 
-                'start_points': [(10, 6), (10, 7)], 
-                'inserter_mapping': {
-                    '(10, 6)': (9, 6), 
-                    '(10, 7)': (9, 7)
-                }
-            }
-        }
+       
+        grid =[[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 22], [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 22], [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 22], [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 22], [1, 0, 0, 0, 0, 0, 99, 44, 33, 33, 33, 44, 99, 0, 0, 22], [1, 0, 0, 0, 0, 0, 0, 0, 33, 33, 33, 44, 99, 0, 0, 22], [1, 0, 0, 0, 0, 0, 0, 0, 33, 33, 33, 44, 99, 0, 0, 22], [1, 0, 0, 0, 0, 0, 99, 44, 33, 33, 33, 44, 99, 0, 0, 22], [1, 0, 0, 0, 0, 0, 0, 0, 33, 33, 33, 44, 99, 0, 0, 22], [1, 0, 0, 0, 0, 0, 0, 0, 33, 33, 33, 44, 99, 0, 0, 22]]
+       
+        points ={
+            'iron-plate_0': {'item': 'iron-plate', 'destination': [(6, 7)], 'start_points': [(0, 9), (0, 0), (0, 9), (0, 8), (0, 7), (0, 6), (0, 5), (0, 4), (0, 3), (0, 2), (0, 1), (0, 0)], 'inserter_mapping': None}, 
+            'iron-plate_1': {'item': 'iron-plate', 'destination': [(6, 4)], 'start_points': [(0, 9), (0, 0), (0, 9), (0, 8), (0, 7), (0, 6), (0, 5), (0, 4), (0, 3), (0, 2), (0, 1), (0, 0)], 'inserter_mapping': None}, 
+            'electronic-circuit_0': {'item': 'electronic-circuit', 'destination': [(15, 0), (15, 1), (15, 2), (15, 3), (15, 4), (15, 5), (15, 6), (15, 7), (15, 8), (15, 9), (15, 0), (15, 9)], 'start_points': [(6, 8), (6, 9)], 'inserter_mapping': {'(6, 8)': (7, 8), '(6, 9)': (7, 9)}}, 
+            }#'electronic-circuit_1': {'item': 'electronic-circuit', 'destination': [(15, 0), (15, 1), (15, 2), (15, 3), (15, 4), (15, 5), (15, 6), (15, 7), (15, 8), (15, 9), (15, 0), (15, 9)], 'start_points': [(8, 2), (9, 2), (10, 2), (6, 5), (6, 6)], 'inserter_mapping': {'(8, 2)': (8, 3), '(9, 2)': (9, 3), '(10, 2)': (10, 3), '(6, 5)': (7, 5), '(6, 6)': (7, 6)}}}
+       
+        input_information ={'iron-plate': {'input': (9, 0), 'output': (0, 0), 'paths': {'iron-plate': [{'path': [(0, 9), (0, 8), (0, 7), (0, 6), (0, 5), (0, 4), (0, 3), (0, 2), (0, 1), (0, 0)], 'start': (0, 9), 'destination': (0, 0), 'underground_segments': {}, 'start_splitter': None, 'dest_splitter': None, 'orientation': {(0, 9): (0, -1), (0, 8): (0, -1), (0, 7): (0, -1), (0, 6): (0, -1), (0, 5): (0, -1), (0, 4): (0, -1), (0, 3): (0, -1), (0, 2): (0, -1), (0, 1): (0, -1), (0, 0): (0, -1)}}]}}, 'copper-cable': {'input': (9, 12), 'output': (0, 12), 'paths': {'copper-cable': [{'path': [(12, 9), (12, 8), (12, 7), (12, 6), (12, 5), (12, 4), (12, 3), (12, 2), (12, 1), (12, 0)], 'start': (12, 9), 'destination': (12, 0), 'underground_segments': {}, 'start_splitter': None, 'dest_splitter': None, 'orientation': {(12, 9): (0, -1), (12, 8): (0, -1), (12, 7): (0, -1), (12, 6): (0, -1), (12, 5): (0, -1), (12, 4): (0, -1), (12, 3): (0, -1), (12, 2): (0, -1), (12, 1): (0, -1), (12, 0): (0, -1)}}]}}}
+       
+        output_information ={'electronic-circuit': {'input': (0, 15), 'output': (9, 15), 'paths': {'electronic-circuit': [{'path': [(15, 0), (15, 1), (15, 2), (15, 3), (15, 4), (15, 5), (15, 6), (15, 7), (15, 8), (15, 9)], 'start': (15, 0), 'destination': (15, 9), 'underground_segments': {}, 'start_splitter': None, 'dest_splitter': None, 'orientation': {(15, 0): (0, 1), (15, 1): (0, 1), (15, 2): (0, 1), (15, 3): (0, 1), (15, 4): (0, 1), (15, 5): (0, 1), (15, 6): (0, 1), (15, 7): (0, 1), (15, 8): (0, 1), (15, 9): (0, 1)}}]}}}
+       
+       
+        splitters = self.prepare_splitter_information(input_information,output_information)
         # Create the pathfinder
         pathfinder = MultiAgentPathfinder(
             grid, 
@@ -547,7 +491,8 @@ class TestMultiAgentPathfinder(unittest.TestCase):
             underground_length=3,
             allow_splitters=True,
             splitters=splitters,  # Use empty dict instead of None
-            find_optimal_paths=False
+            find_optimal_paths=True,
+            output_item = 'electronic-circuit'
         )
 
         # Find paths for all items
