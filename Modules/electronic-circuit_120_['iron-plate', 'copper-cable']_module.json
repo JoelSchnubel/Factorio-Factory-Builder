@@ -534,10 +534,6 @@
                 [
                     6,
                     8
-                ],
-                [
-                    6,
-                    9
                 ]
             ],
             "inserter_mapping": {
@@ -605,24 +601,8 @@
             ],
             "start_points": [
                 [
-                    8,
-                    2
-                ],
-                [
-                    9,
-                    2
-                ],
-                [
                     10,
                     2
-                ],
-                [
-                    6,
-                    5
-                ],
-                [
-                    6,
-                    6
                 ]
             ],
             "inserter_mapping": {
@@ -952,6 +932,94 @@
         ]
     ],
     "paths": {
+        "electronic-circuit_0": [
+            {
+                "path": [
+                    [
+                        6,
+                        8
+                    ],
+                    [
+                        5,
+                        8
+                    ],
+                    [
+                        5,
+                        7
+                    ],
+                    [
+                        5,
+                        6
+                    ],
+                    [
+                        5,
+                        5
+                    ],
+                    [
+                        5,
+                        4
+                    ],
+                    [
+                        5,
+                        3
+                    ],
+                    [
+                        5,
+                        2
+                    ],
+                    [
+                        6,
+                        2
+                    ],
+                    [
+                        7,
+                        2
+                    ],
+                    [
+                        8,
+                        2
+                    ],
+                    [
+                        9,
+                        2
+                    ],
+                    [
+                        10,
+                        2
+                    ],
+                    [
+                        13,
+                        2
+                    ],
+                    [
+                        14,
+                        2
+                    ]
+                ],
+                "start": [
+                    6,
+                    8
+                ],
+                "destination": [
+                    14,
+                    2
+                ],
+                "underground_segments": {
+                    "segment_0": {
+                        "start": [
+                            10,
+                            2
+                        ],
+                        "end": [
+                            13,
+                            2
+                        ]
+                    }
+                },
+                "start_splitter": false,
+                "dest_splitter": true
+            }
+        ],
         "iron-plate_0": [
             {
                 "path": [
@@ -968,14 +1036,6 @@
                         7
                     ],
                     [
-                        4,
-                        7
-                    ],
-                    [
-                        5,
-                        7
-                    ],
-                    [
                         6,
                         7
                     ]
@@ -988,7 +1048,18 @@
                     6,
                     7
                 ],
-                "underground_segments": {},
+                "underground_segments": {
+                    "segment_0": {
+                        "start": [
+                            3,
+                            7
+                        ],
+                        "end": [
+                            6,
+                            7
+                        ]
+                    }
+                },
                 "start_splitter": true,
                 "dest_splitter": false
             }
@@ -997,16 +1068,16 @@
             {
                 "path": [
                     [
-                        6,
-                        7
+                        1,
+                        4
                     ],
                     [
-                        6,
-                        6
+                        2,
+                        4
                     ],
                     [
-                        6,
-                        5
+                        3,
+                        4
                     ],
                     [
                         6,
@@ -1014,131 +1085,27 @@
                     ]
                 ],
                 "start": [
-                    6,
-                    7
+                    1,
+                    4
                 ],
                 "destination": [
                     6,
                     4
                 ],
-                "underground_segments": {},
-                "start_splitter": false,
-                "dest_splitter": false
-            }
-        ],
-        "electronic-circuit_0": [
-            {
-                "path": [
-                    [
-                        6,
-                        8
-                    ],
-                    [
-                        5,
-                        8
-                    ],
-                    [
-                        5,
-                        6
-                    ],
-                    [
-                        5,
-                        5
-                    ],
-                    [
-                        5,
-                        4
-                    ],
-                    [
-                        5,
-                        3
-                    ],
-                    [
-                        6,
-                        3
-                    ],
-                    [
-                        7,
-                        3
-                    ],
-                    [
-                        8,
-                        3
-                    ],
-                    [
-                        9,
-                        3
-                    ],
-                    [
-                        10,
-                        3
-                    ],
-                    [
-                        13,
-                        3
-                    ],
-                    [
-                        14,
-                        3
-                    ]
-                ],
-                "start": [
-                    6,
-                    8
-                ],
-                "destination": [
-                    14,
-                    3
-                ],
                 "underground_segments": {
                     "segment_0": {
                         "start": [
-                            7,
-                            6
+                            3,
+                            4
                         ],
                         "end": [
-                            7,
-                            3
-                        ]
-                    },
-                    "segment_1": {
-                        "start": [
-                            10,
-                            3
-                        ],
-                        "end": [
-                            13,
-                            3
+                            6,
+                            4
                         ]
                     }
                 },
-                "start_splitter": false,
-                "dest_splitter": true
-            }
-        ],
-        "electronic-circuit_1": [
-            {
-                "path": [
-                    [
-                        14,
-                        3
-                    ],
-                    [
-                        14,
-                        2
-                    ]
-                ],
-                "start": [
-                    14,
-                    3
-                ],
-                "destination": [
-                    14,
-                    2
-                ],
-                "underground_segments": {},
-                "start_splitter": false,
-                "dest_splitter": true
+                "start_splitter": true,
+                "dest_splitter": false
             }
         ]
     },
@@ -1147,6 +1114,12 @@
             "(6, 8)": [
                 7,
                 8
+            ]
+        },
+        "electronic-circuit_1": {
+            "(6, 8)": [
+                10,
+                3
             ]
         }
     }

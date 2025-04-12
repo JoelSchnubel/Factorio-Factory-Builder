@@ -1,4 +1,3 @@
-
 #! .venv\Scripts\python.exe
 import heapq
 import logging
@@ -228,10 +227,8 @@ class MultiAgentPathfinder:
         x, y = position
         entry = (x, y)  # The entry position is the current position
         
-        
         # Don't allow diagonal movement for undergrounds
         if dx != 0 and dy != 0:
-    
             return False, None, None
         
         # Check if the current position was just used as an underground exit in the same direction
@@ -255,7 +252,7 @@ class MultiAgentPathfinder:
                             
                             # If the direction is the same, don't allow another underground
                             if prev_dx == dx and prev_dy == dy:
-                                                return False, None, None
+                                return False, None, None
         
         # Track segment ends to avoid placing segments right next to each other
         # This avoids case where segment_1 ends at position A and segment_2 starts at position A
@@ -268,7 +265,7 @@ class MultiAgentPathfinder:
                         
         # Don't start a new underground from a position that's already an end point
         if position in segment_ends:
-             return False, None, None
+            return False, None, None
         
         # Check if there's at least one obstacle in the path that needs to be crossed
         has_obstacle = False
@@ -282,11 +279,31 @@ class MultiAgentPathfinder:
             following_x = exit_x + dx
             following_y = exit_y + dy
             
-            
             # Check if exit is in bounds
             if not (0 <= exit_x < self.width and 0 <= exit_y < self.height):
                 continue
                 
+            # Special case: If the exit is the goal itself, we don't need to check the following position
+            if exit_pos == goal:
+                # We still need to check for obstacles between current and goal
+                for i in range(1, length):
+                    check_x = x + dx * i
+                    check_y = y + dy * i
+                    
+                    # Check if this position is an obstacle
+                    if 0 <= check_x < self.width and 0 <= check_y < self.height:
+                        cell_value = self.working_grid[check_y][check_x]
+                        if cell_value != 0:
+                            has_obstacle = True
+                            break
+                
+                # If there's at least one obstacle, this is a valid underground to the goal
+                if has_obstacle:
+                    logging.debug(f"Found valid underground path directly to goal from {entry} to {exit_pos}")
+                    return True, entry, exit_pos
+                continue
+            
+            # Normal case: Check the position following the exit
             # Check if following position is in bounds (needed for underground belt)
             if not (0 <= following_x < self.width and 0 <= following_y < self.height):
                 continue
@@ -297,7 +314,7 @@ class MultiAgentPathfinder:
                 
             # Check if following position is free
             if self.working_grid[following_y][following_x] != 0:
-                 continue
+                continue
             
             # Check if there's at least one obstacle between the current position and the exit
             # that would require an underground path
@@ -319,7 +336,6 @@ class MultiAgentPathfinder:
             # Check if this exit is closer to the goal (to avoid backtracking)
             current_distance = self.heuristic(position, goal)
             exit_distance = self.heuristic(exit_pos, goal)
-            
             
             if exit_distance < current_distance:
                 # Ensure exit point isn't already an entry point for another segment
@@ -628,6 +644,7 @@ class MultiAgentPathfinder:
         
         # Process items in order (could use a priority system in the future)
        
+       
         
         for item_key in sorted_keys:
             
@@ -644,7 +661,9 @@ class MultiAgentPathfinder:
             start_points = item_data['start_points'].copy()
             destinations = item_data['destination'].copy()
             inserter_mapping = item_data.get('inserter_mapping', None)
-        
+
+
+            
             # Extract base item name
             item_name = item_data['item']
             
@@ -694,9 +713,19 @@ class MultiAgentPathfinder:
                         
                         for other_path_data in other_paths:  # Iterate through each path data in the list
                             if other_item_key != item_key and other_path_data['item'] == item_name:
-                                start_points.extend([other_path_data['destination']])
-                                logging.info(f"Added start points from other item {other_item_key}")
-                
+                                # point is not allowed to be a undground segment
+                                underground_segments = other_path_data.get('underground_segments', None)
+
+                                flag = True
+                                for segment in underground_segments.values():
+                                    if segment['end'] == other_path_data['destination']:
+                                       flag = False
+                                       break
+        
+                                if flag:
+                                    start_points.extend([other_path_data['destination']])
+                                    logging.info(f"Added start points from other item {other_item_key}")
+                    
                                 
                 # Add output points from start splitters as start points
                 for splitter in relevant_start_splitters:
@@ -711,7 +740,39 @@ class MultiAgentPathfinder:
                         if self.is_valid_position(input_point):
                             destinations.append(input_point)
                             logging.info(f"Added splitter input {input_point} as destination")
+            
                                 
+            # check if start points and destination points have the same coordinates
+            # -> skip then
+            finished = False
+            for point in start_points:
+                if point in destinations:
+                    finished = True
+                    logging.debug(f"Start point {point} is also a destination, skipping pathfinding for this item")
+                    
+                    # check if we need to place an inserter aswell
+                    if inserter_mapping and str(point) in inserter_mapping:
+                        inserter = inserter_mapping[str(point)]
+                        logging.info(f"Found inserter at {inserter} for start/destination point {point}")
+                        
+                        
+                        # Check if inserter position is in bounds
+                        ix, iy = inserter
+                        if 0 <= ix < self.width and 0 <= iy < self.height:
+                            # Mark inserter position as obstacle
+                            prev_value = self.working_grid[iy][ix]
+                            self.working_grid[iy][ix] = 1
+                            if item_key not in self.inserters:
+                                self.inserters[item_key] = {}
+                            
+                            self.inserters[item_key][str(best_start)] = inserter
+                            logging.info(f"Marked inserter at {inserter} as obstacle (previous value: {prev_value})")
+                    
+                    break
+            
+            
+            if finished:
+                continue
             
             
             # Always mark start and destination points as valid (set to 0) temporarily

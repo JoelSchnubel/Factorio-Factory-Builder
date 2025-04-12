@@ -317,6 +317,12 @@ class FactoryBuilder:
         
             
     def solve_factory(self):
+        print("solving factory")
+        
+        
+        print("block data:")
+        print(self.block_data)
+        
         self.z3_solver = FactoryZ3Solver(self.block_data,self.output_point)
         num_factories=0
         for i, key in enumerate(self.block_data.keys()):
@@ -542,7 +548,7 @@ class FactoryBuilder:
 def main():
     
     output_item = "electronic-circuit"
-    amount = 900
+    amount = 200
     max_assembler_per_blueprint = 5
     
     start_width = 15
@@ -626,6 +632,6 @@ def plot_csv_data(file_path):
     print(f"Boxplot saved at: {box_plot_path}")
         
 if __name__ == "__main__":
-    plot_csv_data("execution_times_big_factory.csv")
-    #main()
+    #plot_csv_data("execution_times_big_factory.csv")
+    main()
    

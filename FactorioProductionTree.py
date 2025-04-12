@@ -1175,20 +1175,8 @@ class FactorioProductionTree:
             try:
                 
                 splitters = self.prepare_splitter_information(self.input_information,self.output_information)
-                    
-                    
-                print("retrieval_points")
-                print(retrieval_points)
-                
-                print("obstacle_map")
-                print(self.obstacle_map)
-                
-                print("input_information")
-                print(self.input_information)
-                
-                print("output_information")
-                print(self.output_information)
-                
+ 
+         
                 # Create the pathfinder
                 pathfinder = MultiAgentPathfinder(
                     self.obstacle_map, 
@@ -1196,15 +1184,16 @@ class FactorioProductionTree:
                     allow_underground=True,
                     underground_length=3,
                     allow_splitters=True,
-                    splitters=splitters,  # Use empty dict instead of None
-                    find_optimal_paths=True
+                    splitters=splitters,  
+                    find_optimal_paths=True,
+                    output_item=self.output_item,
                 )
 
                 # Find paths for all items
                 paths, inserters = pathfinder.find_paths_for_all_items()
                 
                 
-                print(f'found paths')
+              
                 return paths, inserters
             
             except Exception as e:

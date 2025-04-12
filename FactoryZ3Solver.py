@@ -93,7 +93,6 @@ class FactoryZ3Solver:
             logging.debug(f"Block {key} dimensions: width={width}, height={height}, num_factories={num_factories}")
             
            
-            
             # Combine input and output information into one structure
             gate_info = {}
             gate_info.update(self.block_data[key]["tree"].input_information)
