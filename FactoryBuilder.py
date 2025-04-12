@@ -2,6 +2,7 @@
 
 from FactorioProductionTree import FactorioProductionTree
 from FactoryZ3Solver import FactoryZ3Solver
+from MultiAgentPathfinder import MultiAgentPathfinder
 import pygame
 import json
 import os
@@ -45,6 +46,9 @@ class FactoryBuilder:
         self.final_x = None
         self.final_y = None
         self.final_blocks = None
+        self.gate_connections = None
+        self.inter_block_paths = None
+  
         
         self.images = {}
         
@@ -319,29 +323,185 @@ class FactoryBuilder:
     def solve_factory(self):
         print("solving factory")
         
-        
         print("block data:")
         print(self.block_data)
         
-        self.z3_solver = FactoryZ3Solver(self.block_data,self.output_point)
-        num_factories=0
+        self.z3_solver = FactoryZ3Solver(self.block_data, self.output_point)
+        num_factories = 0
         for i, key in enumerate(self.block_data.keys()):
-            
-
             num_factories += self.block_data[key]["num_factories"]
             
-        print(f'total number of modules:{num_factories}')
+        print(f'total number of modules: {num_factories}')
             
         self.z3_solver.build_constraints()
         
-        self.final_blocks,self.final_x,self.final_y = self.z3_solver.solve()
-    
-        print(self.final_blocks)
-        print(self.final_x)
-        print(self.final_y)
+        # Store gate connections along with block positions
+        self.final_blocks, self.final_x, self.final_y, self.gate_connections = self.z3_solver.solve()
+        
+        # Plan paths between connected gates
+        if self.final_blocks:
+            self.plan_inter_block_paths()
+        
+        print(f"Factory dimensions: {self.final_x} x {self.final_y}")
 
+    def determine_gate_connections(self):
+        """Determine which gates should be connected between blocks"""
+        connections = []
         
+        # Group gates by item type
+        gates_by_item = {}
+        for block_id, block_info in self.final_blocks.items():
+            # Process output gates
+            for gate in block_info['output_points']:
+                item = gate['item']
+                if item not in gates_by_item:
+                    gates_by_item[item] = {"input": [], "output": []}
+                
+                gate_data = {
+                    "block_id": block_id,
+                    "gate_id": gate['id'],
+                    "item": item,
+                    "x": block_info['x'] + gate['x'],
+                    "y": block_info['y'] + gate['y']
+                }
+                gates_by_item[item]['output'].append(gate_data)
+            
+            # Process input gates
+            for gate in block_info['input_points']:
+                item = gate['item']
+                if item not in gates_by_item:
+                    gates_by_item[item] = {"input": [], "output": []}
+                
+                gate_data = {
+                    "block_id": block_id,
+                    "gate_id": gate['id'],
+                    "item": item,
+                    "x": block_info['x'] + gate['x'],
+                    "y": block_info['y'] + gate['y']
+                }
+                gates_by_item[item]['input'].append(gate_data)
         
+        # For each item type, connect output gates to input gates using nearest neighbor
+        for item, item_gates in gates_by_item.items():
+            outputs = item_gates["output"]
+            inputs = item_gates["input"]
+            
+            # Skip if no outputs or no inputs
+            if not outputs or not inputs:
+                continue
+                
+            # Find nearest connections (greedy approach)
+            for output in outputs:
+                # Filter inputs to only include those from different blocks
+                valid_inputs = [
+                    input_gate for input_gate in inputs 
+                    if input_gate["block_id"] != output["block_id"]
+                ]
+                
+                # Skip if no valid inputs from different blocks
+                if not valid_inputs:
+                    continue
+                    
+                # Find closest input gate from a different block
+                best_distance = float('inf')
+                best_input = None
+                
+                for input_gate in valid_inputs:
+                    dist = manhattan_distance(
+                        (output["x"], output["y"]),
+                        (input_gate["x"], input_gate["y"])
+                    )
+                    if dist < best_distance:
+                        best_distance = dist
+                        best_input = input_gate
+                
+                if best_input:
+                    connections.append((output, best_input))
+                    # Remove the selected input from the list to avoid duplicate connections
+                    inputs = [i for i in inputs if i != best_input]
+        
+        logging.info(f"Found {len(connections)} connections between different blocks")
+        return connections
+
+    def plan_inter_block_paths(self):
+        """Plan paths between connected gates from different blocks."""
+        # Get connections between gates
+        connections = self.determine_gate_connections()
+        
+        # Create an obstacle grid based on block positions
+        grid = [[0 for _ in range(self.final_x + 1)] for _ in range(self.final_y + 1)]
+        
+        # Mark blocks as obstacles
+        for block_id, block in self.final_blocks.items():
+            x_start = block['x']
+            y_start = block['y']
+            for dx in range(block['width']):
+                for dy in range(block['height']):
+                    x = x_start + dx
+                    y = y_start + dy
+                    
+                    # Skip gate positions (they should remain open)
+                    is_gate = False
+                    for gate in block['input_points'] + block['output_points']:
+                        gate_x = x_start + gate['x']
+                        gate_y = y_start + gate['y']
+                        if x == gate_x and y == gate_y:
+                            is_gate = True
+                            break
+                    
+                    if not is_gate:
+                        grid[y][x] = 1  # Mark as obstacle
+        
+        # Filter connections to exclude points at factory edges
+        filtered_connections = []
+        for output_gate, input_gate in connections:
+            # Check if either point is at the edge of the factory
+            output_at_edge = (output_gate['x'] == 0 or output_gate['x'] == self.final_x or 
+                              output_gate['y'] == 0 or output_gate['y'] == self.final_y)
+            input_at_edge = (input_gate['x'] == 0 or input_gate['x'] == self.final_x or 
+                             input_gate['y'] == 0 or input_gate['y'] == self.final_y)
+            
+            # Only include connections where neither point is at the edge
+            if not (output_at_edge or input_at_edge):
+                filtered_connections.append((output_gate, input_gate))
+        
+        logging.info(f"Filtered out {len(connections) - len(filtered_connections)} edge connections")
+        connections = filtered_connections
+        
+        # Prepare input for MultiAgentPathfinder
+        points = {}
+        for i, (output_gate, input_gate) in enumerate(connections):
+            item = output_gate['item']
+            
+            points[f"{item}_{i}"] = {
+                "item": item,
+                "start_points": [(output_gate['x'], output_gate['y'])],
+                "destination": [(input_gate['x'], input_gate['y'])]
+            }
+        
+        if not points:
+            logging.info("No paths to plan between blocks")
+            self.inter_block_paths = {}
+            return
+        
+        print(points)
+        print(grid)
+        
+        # Initialize path finder
+        pathfinder = MultiAgentPathfinder(
+            points=points,
+            obstacle_map=grid,
+            allow_underground=True,
+            underground_length=3
+        )
+        
+        # Find paths
+        self.inter_block_paths, _ = pathfinder.find_paths_for_all_items()
+        
+        print(self.inter_block_paths)
+        
+        logging.info(f"Planned {len(self.inter_block_paths)} paths between blocks")
+
     def load_images(self):
         """Load images from the assets folder based on block names."""
         for block_key in self.final_blocks.keys():
@@ -361,101 +521,6 @@ class FactoryBuilder:
     def get_num_subfactories(self):
         return len(self.final_blocks)
     
-    
-    def visualize_simple(self, cell_size=20, save_path=None):
-        pygame.init()
-        
-        # Load item images if not already loaded
-        if not hasattr(self, 'item_images'):
-            self.load_item_images()
-        
-        # Calculate maximum coordinates needed for all blocks and gates
-        max_x = 0
-        max_y = 0
-        for block_id, block_info in self.final_blocks.items():
-            block_x = block_info['x']
-            block_y = block_info['y']
-            block_width = block_info['width']
-            block_height = block_info['height']
-            max_x = max(max_x, block_x + block_width)
-            max_y = max(max_y, block_y + block_height)
-            
-            # Check gates
-            for gate in block_info['input_points'] + block_info['output_points']:
-                gate_x = block_x + gate['x']
-                gate_y = block_y + gate['y']
-                max_x = max(max_x, gate_x + 1)
-                max_y = max(max_y, gate_y + 1)
-        
-        # Calculate window dimensions
-        window_width = max_x * cell_size
-        window_height = max_y * cell_size
-
-        # Create Pygame window
-        window = pygame.display.set_mode((window_width, window_height))
-        pygame.display.set_caption('Factory Layout')
-
-        # Clear the screen
-        window.fill(WHITE)
-
-        # Draw grid
-        for row in range(max_x):
-            for col in range(max_y):
-                rect = pygame.Rect(col * cell_size, row * cell_size, cell_size, cell_size)
-                pygame.draw.rect(window, BLACK, rect, 1)
-
-        # Draw blocks and gates
-        for block_id, block_info in self.final_blocks.items():
-            block_x = block_info['x']
-            block_y = block_info['y']
-            block_width = block_info['width']
-            block_height = block_info['height']
-
-            # Draw block
-            block_rect = pygame.Rect(
-                block_x * cell_size,
-                block_y * cell_size,
-                block_width * cell_size,
-                block_height * cell_size
-            )
-            pygame.draw.rect(window, BLACK, block_rect, 2)
-
-            # Draw input gates with images
-            for gate in block_info['input_points']:
-                gate_x = block_x + gate['x']
-                gate_y = block_y + gate['y']
-                if gate['item'] in self.item_images:
-                    image = self.item_images[gate['item']]
-                    # Scale image to cell size
-                    scaled_image = pygame.transform.scale(image, (cell_size, cell_size))
-                    window.blit(scaled_image, (gate_x * cell_size, gate_y * cell_size))
-
-            # Draw output gates with images
-            for gate in block_info['output_points']:
-                gate_x = block_x + gate['x']
-                gate_y = block_y + gate['y']
-                if gate['item'] in self.item_images:
-                    image = self.item_images[gate['item']]
-                    # Scale image to cell size
-                    scaled_image = pygame.transform.scale(image, (cell_size, cell_size))
-                    window.blit(scaled_image, (gate_x * cell_size, gate_y * cell_size))
-
-        # Update the display
-        pygame.display.flip()
-        
-        # Save the image if a path is provided
-        if save_path:
-            pygame.image.save(window, save_path)
-        else:
-            # Wait for user to close the window
-            waiting = True
-            while waiting:
-                for event in pygame.event.get():
-                    if event.type == pygame.QUIT:
-                        waiting = False
-        
-        # Quit Pygame
-        pygame.quit()
         
     def load_item_images(self):
         """Load and cache item images from the assets folder."""
@@ -488,67 +553,236 @@ class FactoryBuilder:
                         )
                     else:
                         print(f"Warning: Image not found for {item} at {image_path}")
-    def visualize_factory(self,cell_size=20,block_size=20):
-        """Draw the factory using Pygame."""
-        # Initialize Pygame
+                        
+                        
+    def visualize_factory(self, cell_size=20, save_path=None):
+        """Visualize the factory layout with blocks and inter-block paths"""
         pygame.init()
         
-        window_width  = self.final_x * cell_size *2
-        window_height = self.final_y * cell_size *1.5
-
+        # Calculate window size with padding
+        window_width = (self.final_x + 2) * cell_size
+        window_height = (self.final_y + 2) * cell_size
+        
+        # Create Pygame window
         window = pygame.display.set_mode((window_width, window_height))
-        pygame.display.set_caption('Factory Layout')
-        # Main loop
- 
-            
+        pygame.display.set_caption('Factory Layout with Paths')
+        
+        # Load block images
         block_images = {}
-        for block_id, block_info in self.block_data.items():
-            image_path = block_info['png']  # Assuming the path is stored under 'path'
-            image = pygame.image.load(image_path)
-            image = pygame.transform.scale(image, (block_size * cell_size, block_size * cell_size))
-            block_images[block_id] = image
+        for block_id, block_info in self.final_blocks.items():
+            # Extract the base item name from block_id
+            parts = block_id.split("_")
+            if len(parts) >= 3:
+                block_type = parts[1]  # Extract the item name
+            else:
+                block_type = block_id
             
+            # Try to find image in the block data
+            if block_type in self.block_data and 'png' in self.block_data[block_type]:
+                image_path = self.block_data[block_type]['png']
+                if os.path.exists(image_path):
+                    image = pygame.image.load(image_path)
+                    # Scale image to block size
+                    image = pygame.transform.scale(
+                        image,
+                        (block_info['width'] * cell_size, block_info['height'] * cell_size)
+                    )
+                    block_images[block_id] = image
+        
+        # Load item images for gates
+        self.load_item_images()
+        
+        # Define colors for belt paths
+        BELT_COLOR = (255, 165, 0)  # Orange
+        UNDERGROUND_COLOR = (139, 69, 19)  # Brown
+        
+        # Clear the screen
+        window.fill(WHITE)
+        
+        # Draw grid lines
+        for x in range(0, (self.final_x + 1) * cell_size, cell_size):
+            pygame.draw.line(window, (200, 200, 200), (x, 0), (x, window_height))
+        for y in range(0, (self.final_y + 1) * cell_size, cell_size):
+            pygame.draw.line(window, (200, 200, 200), (0, y), (window_width, y))
+        
+        # Draw inter-block paths first so they appear behind blocks
+        for item_key, path_data_list in self.inter_block_paths.items():
+            for path_data in path_data_list:
+                path = path_data.get('path', [])
+                underground_segments = path_data.get('underground_segments', {})
+                
+                # Draw regular path segments
+                for i in range(len(path) - 1):
+                    start_x, start_y = path[i]
+                    end_x, end_y = path[i + 1]
+                    
+                    # Skip if part of underground segment
+                    is_underground = False
+                    for segment_id, segment in underground_segments.items():
+                        segment_path = segment['path']
+                        if (start_x, start_y) in segment_path and (end_x, end_y) in segment_path:
+                            idx1 = segment_path.index((start_x, start_y))
+                            idx2 = segment_path.index((end_x, end_y))
+                            if abs(idx1 - idx2) == 1:  # Adjacent in segment
+                                is_underground = True
+                                break
+                    
+                    if not is_underground:
+                        start_pos = (start_x * cell_size + cell_size // 2, start_y * cell_size + cell_size // 2)
+                        end_pos = (end_x * cell_size + cell_size // 2, end_y * cell_size + cell_size // 2)
+                        pygame.draw.line(window, BELT_COLOR, start_pos, end_pos, 3)
+                
+                # Draw underground segments
+                for segment_id, segment in underground_segments.items():
+                    start = segment['start']
+                    end = segment['end']
+                    
+                    # Draw underground entry
+                    entry_rect = pygame.Rect(
+                        start[0] * cell_size + cell_size // 4,
+                        start[1] * cell_size + cell_size // 4,
+                        cell_size // 2,
+                        cell_size // 2
+                    )
+                    pygame.draw.rect(window, UNDERGROUND_COLOR, entry_rect)
+                    
+                    # Draw underground exit
+                    exit_rect = pygame.Rect(
+                        end[0] * cell_size + cell_size // 4,
+                        end[1] * cell_size + cell_size // 4,
+                        cell_size // 2,
+                        cell_size // 2
+                    )
+                    pygame.draw.rect(window, UNDERGROUND_COLOR, exit_rect)
+                    
+                    # Draw dotted line connecting entry to exit
+                    start_pos = (start[0] * cell_size + cell_size // 2, start[1] * cell_size + cell_size // 2)
+                    end_pos = (end[0] * cell_size + cell_size // 2, end[1] * cell_size + cell_size // 2)
+                    
+                    # Draw dashed line
+                    dash_length = 5
+                    dash_gap = 5
+                    dx = end_pos[0] - start_pos[0]
+                    dy = end_pos[1] - start_pos[1]
+                    dist = max(1, abs(dx) + abs(dy))  # Prevent division by zero
+                    dx, dy = dx/dist, dy/dist
+                    
+                    # Draw dashed line
+                    pos = start_pos
+                    dash_on = True
+                    distance = 0
+                    while distance < dist:
+                        end = (pos[0] + dash_length * dx, pos[1] + dash_length * dy)
+                        if dash_on:
+                            pygame.draw.line(window, UNDERGROUND_COLOR, pos, end, 2)
+                        pos = end
+                        distance += dash_length
+                        dash_on = not dash_on
+        
+        # Draw blocks
+        for block_id, block_info in self.final_blocks.items():
+            block_x = block_info['x']
+            block_y = block_info['y']
+            block_width = block_info['width']
+            block_height = block_info['height']
             
-        running = True
-        while running:
+            # Draw block with image if available
+            if block_id in block_images:
+                window.blit(block_images[block_id], (block_x * cell_size, block_y * cell_size))
+            else:
+                # Draw block as rectangle
+                block_rect = pygame.Rect(
+                    block_x * cell_size,
+                    block_y * cell_size,
+                    block_width * cell_size,
+                    block_height * cell_size
+                )
+                pygame.draw.rect(window, GREEN, block_rect)
+                pygame.draw.rect(window, BLACK, block_rect, 2)  # Border
+                
+                # Draw block ID text
+                font = pygame.font.Font(None, 24)
+                parts = block_id.split("_")
+                if len(parts) >= 3:
+                    display_text = parts[1]  # Extract item name
+                else:
+                    display_text = block_id
+                text = font.render(display_text, True, BLACK)
+                text_rect = text.get_rect(center=(
+                    block_x * cell_size + (block_width * cell_size) // 2,
+                    block_y * cell_size + (block_height * cell_size) // 2
+                ))
+                window.blit(text, text_rect)
+            
+            # Draw gates
+            for gate in block_info['input_points']:
+                gate_x = block_x + gate['x']
+                gate_y = block_y + gate['y']
+                
+                gate_rect = pygame.Rect(
+                    gate_x * cell_size,
+                    gate_y * cell_size,
+                    cell_size,
+                    cell_size
+                )
+                pygame.draw.rect(window, RED, gate_rect)
+                
+                # Draw item image if available
+                if gate['item'] in self.item_images:
+                    scaled_image = pygame.transform.scale(
+                        self.item_images[gate['item']], 
+                        (cell_size, cell_size)
+                    )
+                    window.blit(scaled_image, (gate_x * cell_size, gate_y * cell_size))
+            
+            for gate in block_info['output_points']:
+                gate_x = block_x + gate['x']
+                gate_y = block_y + gate['y']
+                
+                gate_rect = pygame.Rect(
+                    gate_x * cell_size,
+                    gate_y * cell_size,
+                    cell_size,
+                    cell_size
+                )
+                pygame.draw.rect(window, BLUE, gate_rect)
+                
+                # Draw item image if available
+                if gate['item'] in self.item_images:
+                    scaled_image = pygame.transform.scale(
+                        self.item_images[gate['item']], 
+                        (cell_size, cell_size)
+                    )
+                    window.blit(scaled_image, (gate_x * cell_size, gate_y * cell_size))
+        
+        # Update the display
+        pygame.display.flip()
+        
+        # Save the image if requested
+        if save_path:
+            pygame.image.save(window, save_path)
+            print(f"Factory visualization saved to {save_path}")
+        
+        # Wait for user to close the window or run for a limited time
+        waiting = True
+        clock = pygame.time.Clock()
+        while waiting:
+            clock.tick(60)  # 60 FPS
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    running = False
-
-            # Clear the screen
-            window.fill(WHITE)
-
-            # Draw grid
-            for row in range(self.final_x):
-                for col in range(self.final_y):
-                    rect = pygame.Rect(col * cell_size, row * cell_size, cell_size, cell_size)
-                    pygame.draw.rect(window, BLACK, rect, 1)
-
-            # Draw blocks
-            for block_id, block_info in self.final_blocks.items():
-                x = block_info['x']
-                y = block_info['y']
-                
-                parts = block_id.split("_")  # Split by underscores
-                if len(parts) >= 3:
-                    block_type = "_".join(parts[1:-2])  # Remove "Block_" and "_0_0"
-                else:
-                    block_type = parts[1]  # Fallback if there's no coordinate suffix
-                
-                if block_type in block_images:
-                    window.blit(block_images[block_type], ( x * cell_size, y * cell_size))
-  
-            # Update the display
-            pygame.display.flip()
-            
-        # Quit Pygame
+                    waiting = False
+        
         pygame.quit()
-    
+
+def manhattan_distance(p1, p2):
+    """Calculate the Manhattan distance between two points."""
+    return abs(p1[0] - p2[0]) + abs(p1[1] - p2[1])
+
         
 def main():
     
     output_item = "electronic-circuit"
-    amount = 200
+    amount = 400
     max_assembler_per_blueprint = 5
     
     start_width = 15
@@ -575,8 +809,8 @@ def main():
     log_method_time(item=output_item,amount=amount,method_name="solve",assemblers_per_recipie=max_assembler_per_blueprint,num_subfactories=builder.get_num_subfactories(),start_time=start_time,end_time=end_time)
     
 
-    #builder.visualize_factory()
-    builder.visualize_simple()
+    builder.visualize_factory()
+
 
 
 def log_method_time(item, amount, method_name,assemblers_per_recipie,num_subfactories,start_time, end_time):
@@ -634,4 +868,3 @@ def plot_csv_data(file_path):
 if __name__ == "__main__":
     #plot_csv_data("execution_times_big_factory.csv")
     main()
-   

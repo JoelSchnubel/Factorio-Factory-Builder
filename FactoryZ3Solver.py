@@ -37,72 +37,57 @@ class Gate:
         self.relative_y = relative_y  # Relative y position within the block
         self.type = type # 'start' or 'end'
         self.item = item
-        self.merge = Bool(f'{id}_merge')  # Boolean to indicate if the gate is merged
 
 
-        
 class FactoryZ3Solver:
-    def __init__(self,block_data,output_point):
-        
+    def __init__(self, block_data, output_point):
         logging.info(f"FactoryZ3Solver")
         logging.debug(f"block data: {block_data}")
         
         self.block_data = block_data
-        
         self.output_point = output_point
-
-       
         self.solver = Optimize()
-        # Create variables for assemblers, input inserters, output inserters, and belts
         
         self.blocks = []
-        self.gate_connections = []
-        self.obstacle_map= []
-        
+        self.gates = []  # Store all gates in a flat list for easier post-processing
         self.max_x = Int("max_x")
         self.max_y = Int("max_y")
         
         logging.debug("Solver and data structures initialized")
 
-        
     def build_constraints(self):
         logging.info("Building constraints")
         self.build_blocks()
         self.fix_position()
         self.add_bound_constraints()
         self.add_overlap_constraints()
-        self.add_gate_constraints()
         self.add_gate_relative_position_constraints()
-        self.minimize_unmerged_gates()
+        self.add_layout_guidance_constraints()  # Add this line
+        self.add_gate_proximity_optimization()
         self.minimize_map()
-        
-    
-        
+
     def build_blocks(self):
         logging.info("Building blocks")
         for i, key in enumerate(self.block_data.keys()):
-            
             logging.debug(f"Processing block {key}")
             
             # Retrieve block dimensions
             width = self.block_data[key]["tree"].grid_width
             height = self.block_data[key]["tree"].grid_height
-            
             num_factories = self.block_data[key]["num_factories"]
             
             logging.debug(f"Block {key} dimensions: width={width}, height={height}, num_factories={num_factories}")
             
-           
             # Combine input and output information into one structure
             gate_info = {}
             gate_info.update(self.block_data[key]["tree"].input_information)
             gate_info.update(self.block_data[key]["tree"].output_information)
 
             for factory_index in range(num_factories):
-                
                 # Create the block
                 block = Block(f"Block_{key}_{i}_{factory_index}", width, height)
                 logging.debug(f"Created Block with ID {block.id}")
+                
                 # Create gates based on type
                 for item, data in gate_info.items():
                     if "input" in data:
@@ -114,8 +99,9 @@ class FactoryZ3Solver:
                             type="input"
                         )
                         block.input_points.append(input_gate)
-                        
+                        self.gates.append(input_gate)  # Add to flat list of all gates
                         logging.debug(f"Added input gate {input_gate.id} for item {item}")
+                        
                     if "output" in data:
                         output_gate = Gate(
                             id=f"{key}_output_{item}_{i}_{factory_index}",
@@ -125,13 +111,12 @@ class FactoryZ3Solver:
                             type="output"
                         )
                         block.output_points.append(output_gate)
+                        self.gates.append(output_gate)  # Add to flat list of all gates
                         logging.debug(f"Added output gate {output_gate.id} for item {item}")
-
 
                 # Append block to the list of blocks
                 self.blocks.append(block)
                 logging.debug(f"Block {block.id} added to blocks list")
-    
     
     def fix_position(self):
         self.solver.add(self.blocks[0].x == 0)
@@ -180,54 +165,139 @@ class FactoryZ3Solver:
                 self.solver.add(gate.y == block.y + gate.relative_y)
                 logging.debug(f"Added relative position constraints for output gate {gate.id} in block {block.id}")
                 
-                
-    def add_gate_constraints(self):
-        logging.info("Adding gate constraints")
-        self.gate_connections = []  # Ensure this attribute is initialized
-
-        for block1 in self.blocks:
-            # Skip input gates of the first block
-            if block1 == self.blocks[0]:
+    def add_gate_proximity_optimization(self):
+        """
+        Add optimization constraints to minimize distances between gates of the same item type
+        that need to be connected between different blocks.
+        """
+        logging.info("Adding gate proximity optimization constraints")
+        
+        # Group gates by item type
+        gates_by_item = {}
+        for gate in self.gates:
+            item = gate.item
+            if item not in gates_by_item:
+                gates_by_item[item] = {"input": [], "output": []}
+            
+            gates_by_item[item][gate.type].append(gate)
+        
+        # Create distance variables for each potential connection
+        gate_distances = []
+        
+        for item, item_gates in gates_by_item.items():
+            outputs = item_gates["output"]
+            inputs = item_gates["input"]
+            
+            # Skip if no outputs or no inputs for this item
+            if not outputs or not inputs:
                 continue
             
-            for input_gate in block1.input_points:
-                for block2 in self.blocks:
-                    if block1 == block2:
-                        continue  # Skip same block
-                    for output_gate in block2.output_points:
-                        if input_gate.item == output_gate.item:
-                            
-                            adjacency_constraint = Or(
-                            And(input_gate.x == output_gate.x + 1, input_gate.y == output_gate.y),
-                            And(input_gate.x == output_gate.x - 1, input_gate.y == output_gate.y),
-                            And(input_gate.x == output_gate.x, input_gate.y == output_gate.y + 1),
-                            And(input_gate.x == output_gate.x, input_gate.y == output_gate.y - 1)
-                            )
-                            
-                            self.solver.add(Implies(input_gate.merge, adjacency_constraint))
-                            self.gate_connections.append((input_gate, output_gate))
+            # For each output gate, create distance variables to all input gates of the same item type
+            for output_gate in outputs:
+                for input_gate in inputs:
+                    # Skip gates within the same block (no need to connect them)
+                    if self.get_block_for_gate(output_gate) == self.get_block_for_gate(input_gate):
+                        continue
+                    
+                    # Create variables for Manhattan distance components
+                    distance_x = Int(f"dist_x_{output_gate.id}_{input_gate.id}")
+                    distance_y = Int(f"dist_y_{output_gate.id}_{input_gate.id}")
+                    total_distance = Int(f"dist_{output_gate.id}_{input_gate.id}")
+                    
+                    # Add constraints to calculate absolute differences
+                    self.solver.add(
+                        distance_x == If(output_gate.x > input_gate.x, 
+                                       output_gate.x - input_gate.x, 
+                                       input_gate.x - output_gate.x)
+                    )
+                    self.solver.add(
+                        distance_y == If(output_gate.y > input_gate.y, 
+                                       output_gate.y - input_gate.y, 
+                                       input_gate.y - output_gate.y)
+                    )
+                    
+                    # Total Manhattan distance
+                    self.solver.add(total_distance == distance_x + distance_y)
+                    
+                    # Add this distance to our collection
+                    gate_distances.append(total_distance)
+        
+        # Create a single variable representing the sum of all gate distances
+        if gate_distances:
+            self.total_gate_distance = Int("total_gate_distance")
+            self.solver.add(self.total_gate_distance == Sum(gate_distances))
+            logging.debug(f"Created {len(gate_distances)} gate distance variables")
 
-
-    def minimize_unmerged_gates(self):
-        logging.info("Minimizing unmerged gates")
-        # Collect all gate.merge variables (Z3 Boolean expressions)
-        merged_gates = []
+    def get_block_for_gate(self, gate):
+        """Helper method to determine which block a gate belongs to"""
         for block in self.blocks:
-            for gate in block.input_points + block.output_points:
-                merged_gates.append(gate.merge)  # gate.merge is already a Z3 BoolRef
+            if gate in block.input_points or gate in block.output_points:
+                return block
+        return None
 
-        # Maximize the sum of merged gates
-        self.solver.maximize(Sum([If(merge, 1, 0) for merge in merged_gates]))
-        logging.debug("Minimized unmerged gates constraint added")
-
-       
-    
+    def add_layout_guidance_constraints(self):
+        """Add constraints to guide the layout toward a vertical arrangement"""
+        logging.info("Adding vertical layout guidance constraints")
+        
+        # Group blocks by type to encourage blocks of the same type to form columns
+        blocks_by_type = {}
+        for block in self.blocks:
+            # Extract block type from ID
+            parts = block.id.split('_')
+            if len(parts) >= 2:
+                block_type = parts[1]
+                if block_type not in blocks_by_type:
+                    blocks_by_type[block_type] = []
+                blocks_by_type[block_type].append(block)
+        
+        # For each block type with multiple instances, encourage vertical alignment
+        for block_type, blocks in blocks_by_type.items():
+            if len(blocks) <= 1:
+                continue
+            
+            # Add soft constraints to encourage blocks of same type to align vertically
+            for i in range(len(blocks)):
+                for j in range(i+1, len(blocks)):
+                    block1 = blocks[i]
+                    block2 = blocks[j]
+                    
+                    # Create vertical alignment variable
+                    align_v = Bool(f"align_v_{block1.id}_{block2.id}")
+                    
+                    # Add constraint for vertical alignment (same x coordinate)
+                    self.solver.add(Implies(align_v, block1.x == block2.x))
+                    
+                    # Add soft constraint to strongly encourage vertical alignment
+                    self.solver.add_soft(align_v, weight=1000)
+                    
+                    # Add constraint to encourage sequential vertical placement
+                    # This makes block2's y coordinate equal to block1's y + block1's height
+                    # when blocks are vertically aligned
+                    seq_placement = Bool(f"seq_v_{block1.id}_{block2.id}")
+                    self.solver.add(Implies(
+                        And(align_v, seq_placement),
+                        block2.y == block1.y + block1.height
+                    ))
+                    self.solver.add_soft(seq_placement, weight=500)
+        
+        # Generally encourage vertical factory shape (height > width)
+        self.vertical_shape = Bool("vertical_factory_shape")
+        self.solver.add(Implies(self.vertical_shape, self.max_y > self.max_x))
+        self.solver.add_soft(self.vertical_shape, weight=2000)
 
     def minimize_map(self):
-        self.solver.add(self.max_x < self.max_y)
-        self.solver.minimize(self.max_x * self.max_y)
+        # Prioritize minimizing width over height to encourage vertical layouts
+        width_weight = 2.0  # Higher weight for width to encourage narrow layouts
+        height_weight = 0.5  # Lower weight for height to allow taller layouts
         
-
+        self.solver.minimize(width_weight * self.max_x + height_weight * self.max_y)
+        
+        # Minimize the total distance between connected gates
+        if hasattr(self, 'total_gate_distance'):
+            gate_distance_weight = 1.5  # Weight for gate distances
+            self.solver.minimize(gate_distance_weight * self.total_gate_distance)
+            logging.info(f"Minimizing width more than height, plus gate distances")
+    
     def solve(self):
         if self.solver.check() == sat:
             model = self.solver.model()
@@ -251,8 +321,8 @@ class FactoryZ3Solver:
                             "id": gate.id,
                             "item": gate.item,
                             "type": gate.type,
-                            "x": model[gate.x].as_long(),  # Relative to block position
-                            "y": model[gate.y].as_long()  # Relative to block position
+                            "x": model[gate.x].as_long(),
+                            "y": model[gate.y].as_long()
                         }
                         for gate in block.input_points
                     ],
@@ -261,20 +331,98 @@ class FactoryZ3Solver:
                             "id": gate.id,
                             "item": gate.item,
                             "type": gate.type,
-                            "x": model[gate.x].as_long(),  # Relative to block position
-                            "y": model[gate.y].as_long()   # Relative to block position
+                            "x": model[gate.x].as_long(),
+                            "y": model[gate.y].as_long()
                         }
                         for gate in block.output_points
                     ]
                 }
             
             # Extract the maximum dimensions of the factory
-            max_x = model[Int("max_x")].as_long()
-            max_y = model[Int("max_y")].as_long()
+            max_x = model[self.max_x].as_long()
+            max_y = model[self.max_y].as_long()
             
-            return final_blocks, max_x, max_y
+            # After solving for block positions, determine gate connections
+            gate_connections = self.determine_gate_connections(model)
+            
+            return final_blocks, max_x, max_y, gate_connections
         else:
-            return None, None, None
+            return None, None, None, None
+            
+    def determine_gate_connections(self, model):
+        """
+        Determine which gates should be connected after block positions are fixed.
         
+        Args:
+            model: Z3 model with solved positions
+            
+        Returns:
+            List of gate connections (pairs of gates that should be connected)
+        """
+        connections = []
         
+        # Group gates by item type
+        gates_by_item = {}
+        for gate in self.gates:
+            item = gate.item
+            if item not in gates_by_item:
+                gates_by_item[item] = {"input": [], "output": []}
+                
+            actual_x = model[gate.x].as_long()
+            actual_y = model[gate.y].as_long()
+            
+            gate_data = {
+                "gate": gate,
+                "id": gate.id,
+                "x": actual_x,
+                "y": actual_y
+            }
+            
+            gates_by_item[item][gate.type].append(gate_data)
         
+        # For each item type, connect output gates to input gates
+        for item, item_gates in gates_by_item.items():
+            outputs = item_gates["output"]
+            inputs = item_gates["input"]
+            
+            # Skip if no outputs or no inputs
+            if not outputs or not inputs:
+                continue
+                
+            # Find nearest connections (greedy approach)
+            remaining_inputs = inputs.copy()
+            
+            for output in outputs:
+                if not remaining_inputs:
+                    break
+                
+                # Find closest input gate
+                best_distance = float('inf')
+                best_input = None
+                best_index = -1
+                
+                for i, input_gate in enumerate(remaining_inputs):
+                    dist = manhattan_distance(
+                        (output["x"], output["y"]),
+                        (input_gate["x"], input_gate["y"])
+                    )
+                    if dist < best_distance:
+                        best_distance = dist
+                        best_input = input_gate
+                        best_index = i
+                
+                if best_input:
+                    connections.append((output["gate"], best_input["gate"]))
+                    remaining_inputs.pop(best_index)
+        
+        return connections
+
+def manhattan_distance(p1, p2):
+    """Calculate the Manhattan distance between two points."""
+    return abs(p1[0] - p2[0]) + abs(p1[1] - p2[1])
+
+
+
+
+
+
