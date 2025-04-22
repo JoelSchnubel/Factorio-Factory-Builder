@@ -54,6 +54,7 @@ class FactoryBuilder:
         
         self.load_modules = load_modules
         
+        self.external_io = None
         
 
 
@@ -323,6 +324,9 @@ class FactoryBuilder:
     def solve_factory(self):
         print("solving factory")
         
+        # Define external I/O points before creating the solver
+        self.define_factory_io_points()
+        
         print("block data:")
         print(self.block_data)
         
@@ -332,6 +336,9 @@ class FactoryBuilder:
             num_factories += self.block_data[key]["num_factories"]
             
         print(f'total number of modules: {num_factories}')
+        
+        # Apply I/O constraints to solver
+        self.apply_io_constraints_to_solver()
             
         self.z3_solver.build_constraints()
         
@@ -381,28 +388,18 @@ class FactoryBuilder:
                 }
                 gates_by_item[item]['input'].append(gate_data)
         
-        # For each item type, connect output gates to input gates using nearest neighbor
+        # For each item type, connect output gates to input gates
         for item, item_gates in gates_by_item.items():
             outputs = item_gates["output"]
             inputs = item_gates["input"]
             
-            # Skip if no outputs or no inputs
-            if not outputs or not inputs:
-                continue
-                
-            # Find nearest connections (greedy approach)
+            # Find nearest connections using greedy approach
             for output in outputs:
-                # Filter inputs to only include those from different blocks
-                valid_inputs = [
-                    input_gate for input_gate in inputs 
-                    if input_gate["block_id"] != output["block_id"]
-                ]
+                # Only connect to inputs from different blocks
+                valid_inputs = [input_gate for input_gate in inputs 
+                            if input_gate["block_id"] != output["block_id"]]
                 
-                # Skip if no valid inputs from different blocks
-                if not valid_inputs:
-                    continue
-                    
-                # Find closest input gate from a different block
+                # Find closest valid input gate
                 best_distance = float('inf')
                 best_input = None
                 
@@ -417,7 +414,6 @@ class FactoryBuilder:
                 
                 if best_input:
                     connections.append((output, best_input))
-                    # Remove the selected input from the list to avoid duplicate connections
                     inputs = [i for i in inputs if i != best_input]
         
         logging.info(f"Found {len(connections)} connections between different blocks")
@@ -451,22 +447,6 @@ class FactoryBuilder:
                     
                     if not is_gate:
                         grid[y][x] = 1  # Mark as obstacle
-        
-        # Filter connections to exclude points at factory edges
-        filtered_connections = []
-        for output_gate, input_gate in connections:
-            # Check if either point is at the edge of the factory
-            output_at_edge = (output_gate['x'] == 0 or output_gate['x'] == self.final_x or 
-                              output_gate['y'] == 0 or output_gate['y'] == self.final_y)
-            input_at_edge = (input_gate['x'] == 0 or input_gate['x'] == self.final_x or 
-                             input_gate['y'] == 0 or input_gate['y'] == self.final_y)
-            
-            # Only include connections where neither point is at the edge
-            if not (output_at_edge or input_at_edge):
-                filtered_connections.append((output_gate, input_gate))
-        
-        logging.info(f"Filtered out {len(connections) - len(filtered_connections)} edge connections")
-        connections = filtered_connections
         
         # Prepare input for MultiAgentPathfinder
         points = {}
@@ -774,6 +754,436 @@ class FactoryBuilder:
         
         pygame.quit()
 
+    def define_factory_io_points(self):
+        """
+        Define external input/output points for the factory on the edges.
+        This determines which items need external connections and where they should be placed.
+        """
+        logging.info("Defining factory I/O points")
+        
+        # Collect all unique items that need external I/O
+        external_inputs = set()  # Items that need to be imported from outside
+        external_outputs = set()  # Items that need to be exported outside
+        internal_items = set()    # Items that are produced and consumed internally
+        
+        # Analyze all blocks to determine which items are purely internal vs external
+        all_produced_items = set()  # Items produced by any block
+        all_consumed_items = set()  # Items consumed by any block
+        
+        for block_key, block_data in self.block_data.items():
+            # Check output information - these are produced items
+            for item, data in block_data["tree"].output_information.items():
+                all_produced_items.add(item)
+                
+            # Check input information - these are consumed items  
+            for item, data in block_data["tree"].input_information.items():
+                all_consumed_items.add(item)
+        
+        # Items produced but not consumed are external outputs
+        external_outputs = all_produced_items - all_consumed_items
+        
+        # Items consumed but not produced are external inputs
+        external_inputs = all_consumed_items - all_produced_items
+        
+        # Items both produced and consumed are internal
+        internal_items = all_produced_items.intersection(all_consumed_items)
+        
+        logging.info(f"External inputs: {external_inputs}")
+        logging.info(f"External outputs: {external_outputs}")
+        logging.info(f"Internal items: {internal_items}")
+        
+        # Now create I/O points for external items
+        self.external_io = {
+            "input_gates": [],    # List of fixed input gate objects
+            "output_gates": []    # List of fixed output gate objects
+        }
+        
+        # Let the user choose edge placement for each external I/O
+        self._choose_io_placement(external_inputs, "input")
+        self._choose_io_placement(external_outputs, "output")
+        
+        return self.external_io
+
+    def _choose_io_placement(self, items, io_type):
+        """
+        Allow the user to choose edge placement for I/O points using a scrollable 1D interface:
+        1. Select a factory edge
+        2. Select a position along that edge using a scrollable line interface
+        
+        Args:
+            items (set): Set of items to place
+            io_type (str): Either "input" or "output"
+        """
+        if not items:
+            return
+        
+        pygame.init()
+        screen_width, screen_height = 800, 800
+        screen = pygame.display.set_mode((screen_width, screen_height))
+        pygame.display.set_caption(f"Select {io_type.capitalize()} Placement")
+        
+        font = pygame.font.Font(None, 36)
+        small_font = pygame.font.Font(None, 24)
+        tiny_font = pygame.font.Font(None, 18)
+        
+        # Dictionary to store item placements
+        placements = {}
+        
+        # Initial grid size estimate (will be adjusted in Z3 solver)
+        grid_width = 30  # Larger initial grid to allow more flexibility
+        grid_height = 30
+        cell_size = 20
+        
+        # Factory display parameters
+        factory_x = 100
+        factory_y = 100
+        factory_width = grid_width * cell_size
+        factory_height = grid_height * cell_size
+        
+        # Edge thickness for selection
+        edge_thickness = 15
+        
+        # Process one item at a time
+        for item in items:
+            # STEP 1: Select which edge to place the item on
+            selected_edge = None
+            
+            while selected_edge is None:
+                # Draw screen showing factory outline
+                screen.fill((240, 240, 240))
+                
+                # Draw factory outline
+                factory_rect = pygame.Rect(factory_x, factory_y, factory_width, factory_height)
+                pygame.draw.rect(screen, (200, 200, 200), factory_rect)
+                pygame.draw.rect(screen, (100, 100, 100), factory_rect, 2)
+                
+                # Draw instructions
+                instructions1 = font.render(f"Step 1: Select an edge for {item} {io_type}", True, (0, 0, 0))
+                instructions2 = small_font.render("Click on any edge of the factory", True, (0, 0, 0))
+                screen.blit(instructions1, (100, 50))
+                screen.blit(instructions2, (100, 80))
+                
+                # Draw item image if available
+                image_path = os.path.join('assets', f'{item}.png')
+                if os.path.exists(image_path):
+                    item_image = pygame.image.load(image_path)
+                    item_image = pygame.transform.scale(item_image, (32, 32))
+                    screen.blit(item_image, (50, 50))
+                
+                # Define and draw the four edges with different colors
+                north_edge = pygame.Rect(factory_x, factory_y, factory_width, edge_thickness)
+                east_edge = pygame.Rect(factory_x + factory_width - edge_thickness, factory_y, 
+                                      edge_thickness, factory_height)
+                south_edge = pygame.Rect(factory_x, factory_y + factory_height - edge_thickness, 
+                                       factory_width, edge_thickness)
+                west_edge = pygame.Rect(factory_x, factory_y, edge_thickness, factory_height)
+                
+                # Draw edges with different colors and labels
+                edge_colors = {
+                    "North": (0, 150, 0),    # Green
+                    "East": (0, 0, 150),     # Blue
+                    "South": (150, 150, 0),  # Yellow
+                    "West": (150, 0, 0)      # Red
+                }
+                
+                pygame.draw.rect(screen, edge_colors["North"], north_edge)
+                pygame.draw.rect(screen, edge_colors["East"], east_edge)
+                pygame.draw.rect(screen, edge_colors["South"], south_edge)
+                pygame.draw.rect(screen, edge_colors["West"], west_edge)
+                
+                # Add edge labels
+                label_north = small_font.render("North", True, (255, 255, 255))
+                label_east = small_font.render("East", True, (255, 255, 255))
+                label_south = small_font.render("South", True, (255, 255, 255))
+                label_west = small_font.render("West", True, (255, 255, 255))
+                
+                # Rotate east and west labels
+                label_east = pygame.transform.rotate(label_east, 270)
+                label_west = pygame.transform.rotate(label_west, 90)
+                
+                # Position labels
+                screen.blit(label_north, (factory_x + factory_width//2 - label_north.get_width()//2, factory_y + 2))
+                screen.blit(label_east, (factory_x + factory_width - edge_thickness + 2, 
+                                        factory_y + factory_height//2 - label_east.get_height()//2))
+                screen.blit(label_south, (factory_x + factory_width//2 - label_south.get_width()//2, 
+                                         factory_y + factory_height - label_south.get_height() - 2))
+                screen.blit(label_west, (factory_x + 2, factory_y + factory_height//2 - label_west.get_height()//2))
+                
+                # Draw existing I/O points on edges
+                for existing_item, placement in placements.items():
+                    pos = placement["position"]
+                    edge = placement["edge"]
+                    
+                    # Determine display position based on edge
+                    if edge == "North":
+                        pt_x = factory_x + pos[0] * cell_size + cell_size // 2
+                        pt_y = factory_y + edge_thickness // 2
+                    elif edge == "East":
+                        pt_x = factory_x + factory_width - edge_thickness // 2
+                        pt_y = factory_y + pos[1] * cell_size + cell_size // 2
+                    elif edge == "South":
+                        pt_x = factory_x + pos[0] * cell_size + cell_size // 2
+                        pt_y = factory_y + factory_height - edge_thickness // 2
+                    elif edge == "West":
+                        pt_x = factory_x + edge_thickness // 2
+                        pt_y = factory_y + pos[1] * cell_size + cell_size // 2
+                    
+                    # Draw a marker for each existing point
+                    pygame.draw.circle(screen, (255, 255, 255), (pt_x, pt_y), 4)
+                    
+                    # Draw item name in tiny font
+                    item_label = tiny_font.render(existing_item, True, (255, 255, 255))
+                    
+                    if edge == "North":
+                        screen.blit(item_label, (pt_x - item_label.get_width()//2, pt_y - 15))
+                    elif edge == "East":
+                        screen.blit(item_label, (pt_x + 7, pt_y - item_label.get_height()//2))
+                    elif edge == "South":
+                        screen.blit(item_label, (pt_x - item_label.get_width()//2, pt_y + 7))
+                    elif edge == "West":
+                        screen.blit(item_label, (pt_x - item_label.get_width() - 7, pt_y - item_label.get_height()//2))
+                
+                pygame.display.flip()
+                
+                # Wait for user to select an edge
+                waiting_for_edge = True
+                while waiting_for_edge:
+                    for event in pygame.event.get():
+                        if event.type == pygame.QUIT:
+                            pygame.quit()
+                            return
+                        
+                        if event.type == pygame.MOUSEBUTTONDOWN:
+                            mouse_pos = event.pos
+                            
+                            if north_edge.collidepoint(mouse_pos):
+                                selected_edge = "North"
+                                waiting_for_edge = False
+                            elif east_edge.collidepoint(mouse_pos):
+                                selected_edge = "East"
+                                waiting_for_edge = False
+                            elif south_edge.collidepoint(mouse_pos):
+                                selected_edge = "South"
+                                waiting_for_edge = False
+                            elif west_edge.collidepoint(mouse_pos):
+                                selected_edge = "West"
+                                waiting_for_edge = False
+            
+            # STEP 2: New scrollable 1D interface for positioning
+            # Create a new pygame window for the precise position selection
+            position_screen = pygame.display.set_mode((screen_width, screen_height))
+            pygame.display.set_caption(f"Select Position for {item} on {selected_edge} Edge")
+            
+            # Define scrollable line parameters
+            visible_cells = 15  # Number of cells visible at once
+            cell_size = 40      # Size of each cell
+            
+            # Center coordinate will be (0,0)
+            center_index = 0
+            offset = 0          # Offset for scrolling
+            
+            # Define scroll speed and limits
+            scroll_speed = 1
+            min_offset = -50    # Allow scrolling far enough in each direction
+            max_offset = 50
+            
+            # Get existing positions on this edge
+            existing_positions = []
+            for existing_item, placement in placements.items():
+                if placement["edge"] == selected_edge:
+                    if selected_edge in ["North", "South"]:
+                        existing_positions.append((placement["position"][0], existing_item))
+                    else:  # East, West
+                        existing_positions.append((placement["position"][1], existing_item))
+            
+            selected_position = None
+            
+            while selected_position is None:
+                position_screen.fill((240, 240, 240))
+                
+                # Draw instructions
+                instructions = font.render(f"Select position for {item} on {selected_edge} edge", True, (0, 0, 0))
+                scroll_info = small_font.render("Use arrow keys to scroll, click to select position", True, (0, 0, 0))
+                position_screen.blit(instructions, (20, 20))
+                position_screen.blit(scroll_info, (20, 60))
+                
+                # Draw item image if available
+                if os.path.exists(image_path):
+                    position_screen.blit(item_image, (20, 80))
+                
+                # Draw the scrollable line
+                line_y = 150
+                if selected_edge in ["North", "South"]:
+                    # Horizontal line
+                    pygame.draw.line(position_screen, (100, 100, 100), (50, line_y), (750, line_y), 2)
+                    
+                    # Draw cell marks with indices
+                    for i in range(visible_cells):
+                        cell_index = i - visible_cells//2 + offset
+                        cell_x = 400 + (i - visible_cells//2) * cell_size
+                        
+                        # Draw cell
+                        cell_rect = pygame.Rect(cell_x - cell_size//2, line_y - cell_size//2, cell_size, cell_size)
+                        
+                        # Highlight center cell (0 position)
+                        if cell_index == 0:
+                            pygame.draw.rect(position_screen, (200, 200, 255), cell_rect)
+                        else:
+                            pygame.draw.rect(position_screen, (220, 220, 220), cell_rect)
+                            
+                        pygame.draw.rect(position_screen, (100, 100, 100), cell_rect, 1)
+                        
+                        # Draw index
+                        index_text = small_font.render(str(cell_index), True, (0, 0, 0))
+                        position_screen.blit(index_text, (cell_x - index_text.get_width()//2, line_y + cell_size//2 + 5))
+                        
+                        # Draw existing items at their positions
+                        for pos, existing in existing_positions:
+                            if pos == cell_index:
+                                pygame.draw.circle(position_screen, (255, 0, 0), (cell_x, line_y), 8)
+                                item_label = tiny_font.render(existing, True, (0, 0, 0))
+                                position_screen.blit(item_label, (cell_x - item_label.get_width()//2, line_y - 25))
+                else:
+                    # Vertical line
+                    pygame.draw.line(position_screen, (100, 100, 100), (400, 100), (400, 250), 2)
+                    
+                    # Draw cell marks with indices
+                    for i in range(visible_cells):
+                        cell_index = i - visible_cells//2 + offset
+                        cell_y = 175 + (i - visible_cells//2) * cell_size // 2  # Use smaller spacing for vertical
+                        
+                        # Draw cell
+                        cell_rect = pygame.Rect(400 - cell_size//2, cell_y - cell_size//2, cell_size, cell_size)
+                        
+                        # Highlight center cell (0 position)
+                        if cell_index == 0:
+                            pygame.draw.rect(position_screen, (200, 200, 255), cell_rect)
+                        else:
+                            pygame.draw.rect(position_screen, (220, 220, 220), cell_rect)
+                            
+                        pygame.draw.rect(position_screen, (100, 100, 100), cell_rect, 1)
+                        
+                        # Draw index
+                        index_text = small_font.render(str(cell_index), True, (0, 0, 0))
+                        position_screen.blit(index_text, (400 + cell_size//2 + 5, cell_y - index_text.get_height()//2))
+                        
+                        # Draw existing items at their positions
+                        for pos, existing in existing_positions:
+                            if pos == cell_index:
+                                pygame.draw.circle(position_screen, (255, 0, 0), (400, cell_y), 8)
+                                item_label = tiny_font.render(existing, True, (0, 0, 0))
+                                position_screen.blit(item_label, (400 - item_label.get_width() - 10, cell_y - 8))
+                
+                pygame.display.flip()
+                
+                # Handle events
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        pygame.quit()
+                        return
+                    
+                    if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_LEFT or event.key == pygame.K_UP:
+                            offset = max(min_offset, offset - scroll_speed)
+                        elif event.key == pygame.K_RIGHT or event.key == pygame.K_DOWN:
+                            offset = min(max_offset, offset + scroll_speed)
+                    
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        mouse_x, mouse_y = event.pos
+                        
+                        # Determine which cell was clicked
+                        if selected_edge in ["North", "South"]:
+                            for i in range(visible_cells):
+                                cell_index = i - visible_cells//2 + offset
+                                cell_x = 400 + (i - visible_cells//2) * cell_size
+                                cell_rect = pygame.Rect(cell_x - cell_size//2, line_y - cell_size//2, cell_size, cell_size)
+                                
+                                if cell_rect.collidepoint(mouse_x, mouse_y):
+                                    if selected_edge == "North":
+                                        selected_position = (cell_index, 0)
+                                    else:  # South
+                                        selected_position = (cell_index, grid_height - 1)
+                                    break
+                        else:
+                            for i in range(visible_cells):
+                                cell_index = i - visible_cells//2 + offset
+                                cell_y = 175 + (i - visible_cells//2) * cell_size // 2
+                                cell_rect = pygame.Rect(400 - cell_size//2, cell_y - cell_size//2, cell_size, cell_size)
+                                
+                                if cell_rect.collidepoint(mouse_x, mouse_y):
+                                    if selected_edge == "East":
+                                        selected_position = (grid_width - 1, cell_index)
+                                    else:  # West
+                                        selected_position = (0, cell_index)
+                                    break
+            
+            # Store the placement info
+            placements[item] = {"edge": selected_edge, "position": selected_position}
+            logging.debug(f"Selected {selected_edge} at position {selected_position} for {item}")
+        
+        pygame.quit()
+        
+        # Create fixed gate objects for each placement
+        for item, placement in placements.items():
+            gate_id = f"external_{io_type}_{item}"
+            position = placement["position"]
+            
+            # Create a gate object with fixed position
+            fixed_gate = {
+                "id": gate_id,
+                "item": item,
+                "type": io_type,
+                "position": position,
+                "edge": placement["edge"]
+            }
+            
+            # Add to the appropriate list
+            if io_type == "input":
+                self.external_io["input_gates"].append(fixed_gate)
+            else:
+                self.external_io["output_gates"].append(fixed_gate)
+            
+            logging.info(f"Created fixed {io_type} gate for {item} at position {position} on {placement['edge']} edge")
+
+    def apply_io_constraints_to_solver(self):
+        """
+        Apply the external I/O constraints to the factory Z3 solver.
+        Instead of constraining existing gates, this adds fixed I/O gates to the solver.
+        """
+        if not hasattr(self, 'external_io') or not self.external_io:
+            logging.warning("No external I/O defined, skipping I/O constraints")
+            return
+        
+        if not hasattr(self, 'z3_solver') or not self.z3_solver:
+            logging.error("Z3 solver not initialized, cannot apply I/O constraints")
+            return
+        
+        # Add fixed external input gates
+        for input_gate in self.external_io["input_gates"]:
+            # Create a Z3 fixed gate
+            fixed_gate = self.z3_solver.add_fixed_gate(
+                gate_id=input_gate["id"],
+                item=input_gate["item"],
+                position=input_gate["position"],
+                gate_type="input",
+                edge=input_gate["edge"]
+            )
+            
+            logging.info(f"Added fixed input gate {input_gate['id']} at position {input_gate['position']}")
+        
+        # Add fixed external output gates
+        for output_gate in self.external_io["output_gates"]:
+            # Create a Z3 fixed gate
+            fixed_gate = self.z3_solver.add_fixed_gate(
+                gate_id=output_gate["id"],
+                item=output_gate["item"],
+                position=output_gate["position"],
+                gate_type="output",
+                edge=input_gate["edge"]
+            )
+            
+            logging.info(f"Added fixed output gate {output_gate['id']} at position {output_gate['position']}")
+
 def manhattan_distance(p1, p2):
     """Calculate the Manhattan distance between two points."""
     return abs(p1[0] - p2[0]) + abs(p1[1] - p2[1])
@@ -782,7 +1192,7 @@ def manhattan_distance(p1, p2):
 def main():
     
     output_item = "electronic-circuit"
-    amount = 400
+    amount = 200
     max_assembler_per_blueprint = 5
     
     start_width = 15
@@ -809,7 +1219,7 @@ def main():
     log_method_time(item=output_item,amount=amount,method_name="solve",assemblers_per_recipie=max_assembler_per_blueprint,num_subfactories=builder.get_num_subfactories(),start_time=start_time,end_time=end_time)
     
 
-    builder.visualize_factory()
+    builder.visualize_factory(save_path=f"Factorys/{output_item}_factory.png")
 
 
 

@@ -581,3 +581,5 @@ electronic-circuit,1,1,solve,"{'electronic-circuit': 2, 'copper-cable': 0, 'iron
 electronic-circuit,1,1,build_belts,"{'electronic-circuit': 2, 'copper-cable': 0, 'iron-plate': 0}",0.2678464000018721
 electronic-circuit,1,1,solve,"{'electronic-circuit': 2, 'copper-cable': 0, 'iron-plate': 0}",1.970934799999668
 electronic-circuit,1,1,build_belts,"{'electronic-circuit': 2, 'copper-cable': 0, 'iron-plate': 0}",0.24347280000074534
+copper-cable,1,1,solve,"{'copper-cable': 3, 'copper-plate': 0}",1.817751099995803
+copper-cable,1,1,build_belts,"{'copper-cable': 3, 'copper-plate': 0}",0.03389610000158427

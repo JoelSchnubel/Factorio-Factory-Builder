@@ -1,80 +1,150 @@
-2025-04-12 15:05:46,562 - INFO - FactoryZ3Solver
-2025-04-12 15:05:46,562 - DEBUG - block data: {'electronic-circuit': {'tree': <FactorioProductionTree.FactorioProductionTree object at 0x000001C9E115D250>, 'production_data': {'electronic-circuit': {'amount_per_minute': 120, 'assemblers': 2, 'input_inserters': [{'id': 'copper-cable', 'inserters': 3, 'amount': 3}, {'id': 'iron-plate', 'inserters': 1, 'amount': 1}], 'belts': 2, 'capacity': 0}, 'copper-cable': {'amount_per_minute': 360.0, 'assemblers': 3, 'input_inserters': [{'id': 'copper-plate', 'inserters': 2, 'amount': 1}], 'belts': 1, 'capacity': 2}, 'copper-plate': {'amount_per_minute': 180.0, 'capacity': 0}, 'iron-plate': {'amount_per_minute': 120.0, 'capacity': 0}}, 'num_factories': 4, 'png': 'E:/Programmieren/Bachelor-Thesis/Modules/electronic-circuit_120_[]_module.png'}}
-2025-04-12 15:05:46,567 - DEBUG - Solver and data structures initialized
-2025-04-12 15:05:46,567 - INFO - Building constraints
-2025-04-12 15:05:46,567 - INFO - Building blocks
-2025-04-12 15:05:46,567 - DEBUG - Processing block electronic-circuit
-2025-04-12 15:05:46,567 - DEBUG - Block electronic-circuit dimensions: width=16, height=10, num_factories=4
-2025-04-12 15:05:46,567 - DEBUG - Created Block with ID Block_electronic-circuit_0_0
-2025-04-12 15:05:46,567 - DEBUG - Added input gate electronic-circuit_input_copper-plate_0_0 for item copper-plate
-2025-04-12 15:05:46,567 - DEBUG - Added output gate electronic-circuit_output_copper-plate_0_0 for item copper-plate
-2025-04-12 15:05:46,567 - DEBUG - Added input gate electronic-circuit_input_iron-plate_0_0 for item iron-plate
-2025-04-12 15:05:46,567 - DEBUG - Added output gate electronic-circuit_output_iron-plate_0_0 for item iron-plate
-2025-04-12 15:05:46,568 - DEBUG - Added input gate electronic-circuit_input_electronic-circuit_0_0 for item electronic-circuit
-2025-04-12 15:05:46,568 - DEBUG - Added output gate electronic-circuit_output_electronic-circuit_0_0 for item electronic-circuit
-2025-04-12 15:05:46,568 - DEBUG - Block Block_electronic-circuit_0_0 added to blocks list
-2025-04-12 15:05:46,568 - DEBUG - Created Block with ID Block_electronic-circuit_0_1
-2025-04-12 15:05:46,568 - DEBUG - Added input gate electronic-circuit_input_copper-plate_0_1 for item copper-plate
-2025-04-12 15:05:46,568 - DEBUG - Added output gate electronic-circuit_output_copper-plate_0_1 for item copper-plate
-2025-04-12 15:05:46,568 - DEBUG - Added input gate electronic-circuit_input_iron-plate_0_1 for item iron-plate
-2025-04-12 15:05:46,568 - DEBUG - Added output gate electronic-circuit_output_iron-plate_0_1 for item iron-plate
-2025-04-12 15:05:46,568 - DEBUG - Added input gate electronic-circuit_input_electronic-circuit_0_1 for item electronic-circuit
-2025-04-12 15:05:46,568 - DEBUG - Added output gate electronic-circuit_output_electronic-circuit_0_1 for item electronic-circuit
-2025-04-12 15:05:46,568 - DEBUG - Block Block_electronic-circuit_0_1 added to blocks list
-2025-04-12 15:05:46,568 - DEBUG - Created Block with ID Block_electronic-circuit_0_2
-2025-04-12 15:05:46,568 - DEBUG - Added input gate electronic-circuit_input_copper-plate_0_2 for item copper-plate
-2025-04-12 15:05:46,568 - DEBUG - Added output gate electronic-circuit_output_copper-plate_0_2 for item copper-plate
-2025-04-12 15:05:46,569 - DEBUG - Added input gate electronic-circuit_input_iron-plate_0_2 for item iron-plate
-2025-04-12 15:05:46,569 - DEBUG - Added output gate electronic-circuit_output_iron-plate_0_2 for item iron-plate
-2025-04-12 15:05:46,569 - DEBUG - Added input gate electronic-circuit_input_electronic-circuit_0_2 for item electronic-circuit
-2025-04-12 15:05:46,569 - DEBUG - Added output gate electronic-circuit_output_electronic-circuit_0_2 for item electronic-circuit
-2025-04-12 15:05:46,569 - DEBUG - Block Block_electronic-circuit_0_2 added to blocks list
-2025-04-12 15:05:46,569 - DEBUG - Created Block with ID Block_electronic-circuit_0_3
-2025-04-12 15:05:46,569 - DEBUG - Added input gate electronic-circuit_input_copper-plate_0_3 for item copper-plate
-2025-04-12 15:05:46,569 - DEBUG - Added output gate electronic-circuit_output_copper-plate_0_3 for item copper-plate
-2025-04-12 15:05:46,569 - DEBUG - Added input gate electronic-circuit_input_iron-plate_0_3 for item iron-plate
-2025-04-12 15:05:46,569 - DEBUG - Added output gate electronic-circuit_output_iron-plate_0_3 for item iron-plate
-2025-04-12 15:05:46,569 - DEBUG - Added input gate electronic-circuit_input_electronic-circuit_0_3 for item electronic-circuit
-2025-04-12 15:05:46,569 - DEBUG - Added output gate electronic-circuit_output_electronic-circuit_0_3 for item electronic-circuit
-2025-04-12 15:05:46,570 - DEBUG - Block Block_electronic-circuit_0_3 added to blocks list
-2025-04-12 15:05:46,570 - INFO - Adding bound constraints
-2025-04-12 15:05:46,571 - INFO - Adding overlap constraints
-2025-04-12 15:05:46,572 - DEBUG - Added non-overlapping constraints between blocks Block_electronic-circuit_0_0 and Block_electronic-circuit_0_1
-2025-04-12 15:05:46,572 - DEBUG - Added non-overlapping constraints between blocks Block_electronic-circuit_0_0 and Block_electronic-circuit_0_2
-2025-04-12 15:05:46,573 - DEBUG - Added non-overlapping constraints between blocks Block_electronic-circuit_0_0 and Block_electronic-circuit_0_3
-2025-04-12 15:05:46,573 - DEBUG - Added non-overlapping constraints between blocks Block_electronic-circuit_0_1 and Block_electronic-circuit_0_2
-2025-04-12 15:05:46,574 - DEBUG - Added non-overlapping constraints between blocks Block_electronic-circuit_0_1 and Block_electronic-circuit_0_3
-2025-04-12 15:05:46,574 - DEBUG - Added non-overlapping constraints between blocks Block_electronic-circuit_0_2 and Block_electronic-circuit_0_3
-2025-04-12 15:05:46,574 - INFO - Adding gate relative position constraints
-2025-04-12 15:05:46,575 - DEBUG - Added relative position constraints for input gate electronic-circuit_input_copper-plate_0_0 in block Block_electronic-circuit_0_0
-2025-04-12 15:05:46,575 - DEBUG - Added relative position constraints for input gate electronic-circuit_input_iron-plate_0_0 in block Block_electronic-circuit_0_0
-2025-04-12 15:05:46,575 - DEBUG - Added relative position constraints for input gate electronic-circuit_input_electronic-circuit_0_0 in block Block_electronic-circuit_0_0
-2025-04-12 15:05:46,575 - DEBUG - Added relative position constraints for output gate electronic-circuit_output_copper-plate_0_0 in block Block_electronic-circuit_0_0
-2025-04-12 15:05:46,576 - DEBUG - Added relative position constraints for output gate electronic-circuit_output_iron-plate_0_0 in block Block_electronic-circuit_0_0
-2025-04-12 15:05:46,576 - DEBUG - Added relative position constraints for output gate electronic-circuit_output_electronic-circuit_0_0 in block Block_electronic-circuit_0_0
-2025-04-12 15:05:46,576 - DEBUG - Added relative position constraints for input gate electronic-circuit_input_copper-plate_0_1 in block Block_electronic-circuit_0_1
-2025-04-12 15:05:46,576 - DEBUG - Added relative position constraints for input gate electronic-circuit_input_iron-plate_0_1 in block Block_electronic-circuit_0_1
-2025-04-12 15:05:46,577 - DEBUG - Added relative position constraints for input gate electronic-circuit_input_electronic-circuit_0_1 in block Block_electronic-circuit_0_1
-2025-04-12 15:05:46,577 - DEBUG - Added relative position constraints for output gate electronic-circuit_output_copper-plate_0_1 in block Block_electronic-circuit_0_1
-2025-04-12 15:05:46,577 - DEBUG - Added relative position constraints for output gate electronic-circuit_output_iron-plate_0_1 in block Block_electronic-circuit_0_1
-2025-04-12 15:05:46,578 - DEBUG - Added relative position constraints for output gate electronic-circuit_output_electronic-circuit_0_1 in block Block_electronic-circuit_0_1
-2025-04-12 15:05:46,578 - DEBUG - Added relative position constraints for input gate electronic-circuit_input_copper-plate_0_2 in block Block_electronic-circuit_0_2
-2025-04-12 15:05:46,579 - DEBUG - Added relative position constraints for input gate electronic-circuit_input_iron-plate_0_2 in block Block_electronic-circuit_0_2
-2025-04-12 15:05:46,579 - DEBUG - Added relative position constraints for input gate electronic-circuit_input_electronic-circuit_0_2 in block Block_electronic-circuit_0_2
-2025-04-12 15:05:46,579 - DEBUG - Added relative position constraints for output gate electronic-circuit_output_copper-plate_0_2 in block Block_electronic-circuit_0_2
-2025-04-12 15:05:46,579 - DEBUG - Added relative position constraints for output gate electronic-circuit_output_iron-plate_0_2 in block Block_electronic-circuit_0_2
-2025-04-12 15:05:46,580 - DEBUG - Added relative position constraints for output gate electronic-circuit_output_electronic-circuit_0_2 in block Block_electronic-circuit_0_2
-2025-04-12 15:05:46,580 - DEBUG - Added relative position constraints for input gate electronic-circuit_input_copper-plate_0_3 in block Block_electronic-circuit_0_3
-2025-04-12 15:05:46,580 - DEBUG - Added relative position constraints for input gate electronic-circuit_input_iron-plate_0_3 in block Block_electronic-circuit_0_3
-2025-04-12 15:05:46,581 - DEBUG - Added relative position constraints for input gate electronic-circuit_input_electronic-circuit_0_3 in block Block_electronic-circuit_0_3
-2025-04-12 15:05:46,581 - DEBUG - Added relative position constraints for output gate electronic-circuit_output_copper-plate_0_3 in block Block_electronic-circuit_0_3
-2025-04-12 15:05:46,581 - DEBUG - Added relative position constraints for output gate electronic-circuit_output_iron-plate_0_3 in block Block_electronic-circuit_0_3
-2025-04-12 15:05:46,581 - DEBUG - Added relative position constraints for output gate electronic-circuit_output_electronic-circuit_0_3 in block Block_electronic-circuit_0_3
-2025-04-12 15:05:46,581 - INFO - Adding vertical layout guidance constraints
-2025-04-12 15:05:46,584 - INFO - Adding gate proximity optimization constraints
-2025-04-12 15:05:46,610 - DEBUG - Created 36 gate distance variables
-2025-04-12 15:05:46,610 - INFO - Minimizing width more than height, plus gate distances
-2025-04-12 15:05:46,789 - INFO - Found 12 connections between different blocks
-2025-04-12 15:05:46,790 - INFO - Filtered out 12 edge connections
-2025-04-12 15:05:46,790 - INFO - No paths to plan between blocks
-2025-04-12 15:05:46,790 - INFO - Execution time for solve: 0.2281 seconds.
+2025-04-22 17:54:18,241 - INFO - Defining factory I/O points
+2025-04-22 17:54:18,241 - INFO - External inputs: {'iron-plate', 'copper-plate'}
+2025-04-22 17:54:18,241 - INFO - External outputs: {'electronic-circuit'}
+2025-04-22 17:54:18,241 - INFO - Internal items: set()
+2025-04-22 17:54:20,399 - DEBUG - Selected South at position (0, 29) for iron-plate
+2025-04-22 17:54:21,733 - DEBUG - Selected South at position (2, 29) for copper-plate
+2025-04-22 17:54:21,788 - INFO - Created fixed input gate for iron-plate at position (0, 29) on South edge
+2025-04-22 17:54:21,788 - INFO - Created fixed input gate for copper-plate at position (2, 29) on South edge
+2025-04-22 17:54:23,093 - DEBUG - Selected South at position (6, 29) for electronic-circuit
+2025-04-22 17:54:23,150 - INFO - Created fixed output gate for electronic-circuit at position (6, 29) on South edge
+2025-04-22 17:54:23,150 - INFO - FactoryZ3Solver
+2025-04-22 17:54:23,150 - DEBUG - block data: {'electronic-circuit': {'tree': <FactorioProductionTree.FactorioProductionTree object at 0x0000020B3284FBC0>, 'production_data': {'electronic-circuit': {'amount_per_minute': 120, 'assemblers': 2, 'input_inserters': [{'id': 'copper-cable', 'inserters': 3, 'amount': 3}, {'id': 'iron-plate', 'inserters': 1, 'amount': 1}], 'belts': 2, 'capacity': 0}, 'copper-cable': {'amount_per_minute': 360.0, 'assemblers': 3, 'input_inserters': [{'id': 'copper-plate', 'inserters': 2, 'amount': 1}], 'belts': 1, 'capacity': 2}, 'copper-plate': {'amount_per_minute': 180.0, 'capacity': 0}, 'iron-plate': {'amount_per_minute': 120.0, 'capacity': 0}}, 'num_factories': 2, 'png': 'E:/Programmieren/Bachelor-Thesis/Modules/electronic-circuit_120_[]_module.png'}}
+2025-04-22 17:54:23,154 - DEBUG - Solver and data structures initialized
+2025-04-22 17:54:23,155 - INFO - Added fixed input gate for iron-plate at (0, 29)
+2025-04-22 17:54:23,155 - INFO - Added fixed input gate external_input_iron-plate at position (0, 29)
+2025-04-22 17:54:23,156 - INFO - Added fixed input gate for copper-plate at (2, 29)
+2025-04-22 17:54:23,156 - INFO - Added fixed input gate external_input_copper-plate at position (2, 29)
+2025-04-22 17:54:23,156 - INFO - Added fixed output gate for electronic-circuit at (6, 29)
+2025-04-22 17:54:23,156 - INFO - Added fixed output gate external_output_electronic-circuit at position (6, 29)
+2025-04-22 17:54:23,156 - INFO - Building constraints
+2025-04-22 17:54:23,157 - INFO - Building blocks
+2025-04-22 17:54:23,157 - DEBUG - Processing block electronic-circuit
+2025-04-22 17:54:23,157 - DEBUG - Block electronic-circuit dimensions: width=16, height=10, num_factories=2
+2025-04-22 17:54:23,157 - DEBUG - Created Block with ID Block_electronic-circuit_0_0
+2025-04-22 17:54:23,157 - DEBUG - Added input gate electronic-circuit_input_copper-plate_0_0 for item copper-plate
+2025-04-22 17:54:23,157 - DEBUG - Added output gate electronic-circuit_output_copper-plate_0_0 for item copper-plate
+2025-04-22 17:54:23,157 - DEBUG - Added input gate electronic-circuit_input_iron-plate_0_0 for item iron-plate
+2025-04-22 17:54:23,157 - DEBUG - Added output gate electronic-circuit_output_iron-plate_0_0 for item iron-plate
+2025-04-22 17:54:23,157 - DEBUG - Added input gate electronic-circuit_input_electronic-circuit_0_0 for item electronic-circuit
+2025-04-22 17:54:23,157 - DEBUG - Added output gate electronic-circuit_output_electronic-circuit_0_0 for item electronic-circuit
+2025-04-22 17:54:23,157 - DEBUG - Block Block_electronic-circuit_0_0 added to blocks list
+2025-04-22 17:54:23,157 - DEBUG - Created Block with ID Block_electronic-circuit_0_1
+2025-04-22 17:54:23,158 - DEBUG - Added input gate electronic-circuit_input_copper-plate_0_1 for item copper-plate
+2025-04-22 17:54:23,158 - DEBUG - Added output gate electronic-circuit_output_copper-plate_0_1 for item copper-plate
+2025-04-22 17:54:23,158 - DEBUG - Added input gate electronic-circuit_input_iron-plate_0_1 for item iron-plate
+2025-04-22 17:54:23,158 - DEBUG - Added output gate electronic-circuit_output_iron-plate_0_1 for item iron-plate
+2025-04-22 17:54:23,158 - DEBUG - Added input gate electronic-circuit_input_electronic-circuit_0_1 for item electronic-circuit
+2025-04-22 17:54:23,158 - DEBUG - Added output gate electronic-circuit_output_electronic-circuit_0_1 for item electronic-circuit
+2025-04-22 17:54:23,158 - DEBUG - Block Block_electronic-circuit_0_1 added to blocks list
+2025-04-22 17:54:23,158 - INFO - Adding bound constraints
+2025-04-22 17:54:23,162 - DEBUG - Added bound constraints for all blocks
+2025-04-22 17:54:23,162 - INFO - Adding overlap constraints
+2025-04-22 17:54:23,163 - DEBUG - Added non-overlapping constraints between blocks fixed_block_external_input_iron-plate and fixed_block_external_input_copper-plate
+2025-04-22 17:54:23,163 - DEBUG - Added non-overlapping constraints between blocks fixed_block_external_input_iron-plate and fixed_block_external_output_electronic-circuit
+2025-04-22 17:54:23,164 - DEBUG - Added non-overlapping constraints between blocks fixed_block_external_input_iron-plate and Block_electronic-circuit_0_0
+2025-04-22 17:54:23,164 - DEBUG - Added non-overlapping constraints between blocks fixed_block_external_input_iron-plate and Block_electronic-circuit_0_1
+2025-04-22 17:54:23,165 - DEBUG - Added non-overlapping constraints between blocks fixed_block_external_input_copper-plate and fixed_block_external_output_electronic-circuit
+2025-04-22 17:54:23,166 - DEBUG - Added non-overlapping constraints between blocks fixed_block_external_input_copper-plate and Block_electronic-circuit_0_0
+2025-04-22 17:54:23,167 - DEBUG - Added non-overlapping constraints between blocks fixed_block_external_input_copper-plate and Block_electronic-circuit_0_1
+2025-04-22 17:54:23,167 - DEBUG - Added non-overlapping constraints between blocks fixed_block_external_output_electronic-circuit and Block_electronic-circuit_0_0
+2025-04-22 17:54:23,168 - DEBUG - Added non-overlapping constraints between blocks fixed_block_external_output_electronic-circuit and Block_electronic-circuit_0_1
+2025-04-22 17:54:23,169 - DEBUG - Added non-overlapping constraints between blocks Block_electronic-circuit_0_0 and Block_electronic-circuit_0_1
+2025-04-22 17:54:23,169 - INFO - Adding gate relative position constraints
+2025-04-22 17:54:23,169 - DEBUG - Added relative position constraints for input gate external_input_iron-plate in block fixed_block_external_input_iron-plate
+2025-04-22 17:54:23,169 - DEBUG - Added relative position constraints for input gate external_input_copper-plate in block fixed_block_external_input_copper-plate
+2025-04-22 17:54:23,169 - DEBUG - Added relative position constraints for output gate external_output_electronic-circuit in block fixed_block_external_output_electronic-circuit
+2025-04-22 17:54:23,170 - DEBUG - Added relative position constraints for input gate electronic-circuit_input_copper-plate_0_0 in block Block_electronic-circuit_0_0
+2025-04-22 17:54:23,170 - DEBUG - Added relative position constraints for input gate electronic-circuit_input_iron-plate_0_0 in block Block_electronic-circuit_0_0
+2025-04-22 17:54:23,170 - DEBUG - Added relative position constraints for input gate electronic-circuit_input_electronic-circuit_0_0 in block Block_electronic-circuit_0_0
+2025-04-22 17:54:23,171 - DEBUG - Added relative position constraints for output gate electronic-circuit_output_copper-plate_0_0 in block Block_electronic-circuit_0_0
+2025-04-22 17:54:23,171 - DEBUG - Added relative position constraints for output gate electronic-circuit_output_iron-plate_0_0 in block Block_electronic-circuit_0_0
+2025-04-22 17:54:23,171 - DEBUG - Added relative position constraints for output gate electronic-circuit_output_electronic-circuit_0_0 in block Block_electronic-circuit_0_0
+2025-04-22 17:54:23,171 - DEBUG - Added relative position constraints for input gate electronic-circuit_input_copper-plate_0_1 in block Block_electronic-circuit_0_1
+2025-04-22 17:54:23,172 - DEBUG - Added relative position constraints for input gate electronic-circuit_input_iron-plate_0_1 in block Block_electronic-circuit_0_1
+2025-04-22 17:54:23,172 - DEBUG - Added relative position constraints for input gate electronic-circuit_input_electronic-circuit_0_1 in block Block_electronic-circuit_0_1
+2025-04-22 17:54:23,172 - DEBUG - Added relative position constraints for output gate electronic-circuit_output_copper-plate_0_1 in block Block_electronic-circuit_0_1
+2025-04-22 17:54:23,173 - DEBUG - Added relative position constraints for output gate electronic-circuit_output_iron-plate_0_1 in block Block_electronic-circuit_0_1
+2025-04-22 17:54:23,173 - DEBUG - Added relative position constraints for output gate electronic-circuit_output_electronic-circuit_0_1 in block Block_electronic-circuit_0_1
+2025-04-22 17:54:23,173 - INFO - Adding adaptive block spacing constraints
+2025-04-22 17:54:23,173 - DEBUG - Grouped gates by 3 item types
+2025-04-22 17:54:23,173 - DEBUG - Item iron-plate: 2 output gates, 3 input gates
+2025-04-22 17:54:23,173 - DEBUG - Block pair ('Block_electronic-circuit_0_0', 'fixed_block_external_input_iron-plate'): Aligned gate found (electronic-circuit_output_iron-plate_0_0 -> external_input_iron-plate)
+2025-04-22 17:54:23,173 - DEBUG - Block pair ('Block_electronic-circuit_0_0', 'Block_electronic-circuit_0_1'): Misaligned gate found (electronic-circuit_output_iron-plate_0_0 -> electronic-circuit_input_iron-plate_0_1)
+2025-04-22 17:54:23,173 - DEBUG - Block pair ('Block_electronic-circuit_0_1', 'fixed_block_external_input_iron-plate'): Aligned gate found (electronic-circuit_output_iron-plate_0_1 -> external_input_iron-plate)
+2025-04-22 17:54:23,173 - DEBUG - Block pair ('Block_electronic-circuit_0_0', 'Block_electronic-circuit_0_1'): Misaligned gate found (electronic-circuit_output_iron-plate_0_1 -> electronic-circuit_input_iron-plate_0_0)
+2025-04-22 17:54:23,173 - DEBUG - Item copper-plate: 2 output gates, 3 input gates
+2025-04-22 17:54:23,173 - DEBUG - Block pair ('Block_electronic-circuit_0_0', 'fixed_block_external_input_copper-plate'): Aligned gate found (electronic-circuit_output_copper-plate_0_0 -> external_input_copper-plate)
+2025-04-22 17:54:23,173 - DEBUG - Block pair ('Block_electronic-circuit_0_0', 'Block_electronic-circuit_0_1'): Misaligned gate found (electronic-circuit_output_copper-plate_0_0 -> electronic-circuit_input_copper-plate_0_1)
+2025-04-22 17:54:23,173 - DEBUG - Block pair ('Block_electronic-circuit_0_1', 'fixed_block_external_input_copper-plate'): Aligned gate found (electronic-circuit_output_copper-plate_0_1 -> external_input_copper-plate)
+2025-04-22 17:54:23,173 - DEBUG - Block pair ('Block_electronic-circuit_0_0', 'Block_electronic-circuit_0_1'): Misaligned gate found (electronic-circuit_output_copper-plate_0_1 -> electronic-circuit_input_copper-plate_0_0)
+2025-04-22 17:54:23,173 - DEBUG - Item electronic-circuit: 3 output gates, 2 input gates
+2025-04-22 17:54:23,174 - DEBUG - Block pair ('Block_electronic-circuit_0_0', 'fixed_block_external_output_electronic-circuit'): Aligned gate found (external_output_electronic-circuit -> electronic-circuit_input_electronic-circuit_0_0)
+2025-04-22 17:54:23,174 - DEBUG - Block pair ('Block_electronic-circuit_0_1', 'fixed_block_external_output_electronic-circuit'): Aligned gate found (external_output_electronic-circuit -> electronic-circuit_input_electronic-circuit_0_1)
+2025-04-22 17:54:23,174 - DEBUG - Block pair ('Block_electronic-circuit_0_0', 'Block_electronic-circuit_0_1'): Misaligned gate found (electronic-circuit_output_electronic-circuit_0_0 -> electronic-circuit_input_electronic-circuit_0_1)
+2025-04-22 17:54:23,174 - DEBUG - Block pair ('Block_electronic-circuit_0_0', 'Block_electronic-circuit_0_1'): Misaligned gate found (electronic-circuit_output_electronic-circuit_0_1 -> electronic-circuit_input_electronic-circuit_0_0)
+2025-04-22 17:54:23,174 - INFO - Processing block pair ('Block_electronic-circuit_0_0', 'fixed_block_external_input_iron-plate'):
+2025-04-22 17:54:23,174 - INFO -   - Aligned gates: 1
+2025-04-22 17:54:23,174 - INFO -   - Misaligned gates: 0
+2025-04-22 17:54:23,174 - INFO -   - Involves I/O block: False
+2025-04-22 17:54:23,174 - DEBUG -   - Added vertical alignment constraint with weight 4000
+2025-04-22 17:54:23,174 - INFO - Blocks Block_electronic-circuit_0_0 and fixed_block_external_input_iron-plate have perfectly aligned gates - enforcing ZERO spacing
+2025-04-22 17:54:23,175 - INFO -   - Added HARD constraint to enforce ZERO spacing
+2025-04-22 17:54:23,175 - INFO - Processing block pair ('Block_electronic-circuit_0_0', 'Block_electronic-circuit_0_1'):
+2025-04-22 17:54:23,175 - INFO -   - Aligned gates: 0
+2025-04-22 17:54:23,175 - INFO -   - Misaligned gates: 6
+2025-04-22 17:54:23,175 - INFO -   - Involves I/O block: False
+2025-04-22 17:54:23,176 - DEBUG -   - Added vertical alignment constraint with weight 4000
+2025-04-22 17:54:23,176 - INFO - Blocks Block_electronic-circuit_0_0 and Block_electronic-circuit_0_1 have 6 misaligned gates - enforcing spacing of 6
+2025-04-22 17:54:23,176 - INFO -   - Added HARD constraint to enforce EXACT spacing of 6
+2025-04-22 17:54:23,176 - INFO - Processing block pair ('Block_electronic-circuit_0_1', 'fixed_block_external_input_iron-plate'):
+2025-04-22 17:54:23,176 - INFO -   - Aligned gates: 1
+2025-04-22 17:54:23,176 - INFO -   - Misaligned gates: 0
+2025-04-22 17:54:23,177 - INFO -   - Involves I/O block: False
+2025-04-22 17:54:23,177 - DEBUG -   - Added vertical alignment constraint with weight 4000
+2025-04-22 17:54:23,177 - INFO - Blocks Block_electronic-circuit_0_1 and fixed_block_external_input_iron-plate have perfectly aligned gates - enforcing ZERO spacing
+2025-04-22 17:54:23,177 - INFO -   - Added HARD constraint to enforce ZERO spacing
+2025-04-22 17:54:23,177 - INFO - Processing block pair ('Block_electronic-circuit_0_0', 'fixed_block_external_input_copper-plate'):
+2025-04-22 17:54:23,177 - INFO -   - Aligned gates: 1
+2025-04-22 17:54:23,178 - INFO -   - Misaligned gates: 0
+2025-04-22 17:54:23,178 - INFO -   - Involves I/O block: False
+2025-04-22 17:54:23,178 - DEBUG -   - Added vertical alignment constraint with weight 4000
+2025-04-22 17:54:23,178 - INFO - Blocks Block_electronic-circuit_0_0 and fixed_block_external_input_copper-plate have perfectly aligned gates - enforcing ZERO spacing
+2025-04-22 17:54:23,178 - INFO -   - Added HARD constraint to enforce ZERO spacing
+2025-04-22 17:54:23,179 - INFO - Processing block pair ('Block_electronic-circuit_0_1', 'fixed_block_external_input_copper-plate'):
+2025-04-22 17:54:23,179 - INFO -   - Aligned gates: 1
+2025-04-22 17:54:23,179 - INFO -   - Misaligned gates: 0
+2025-04-22 17:54:23,179 - INFO -   - Involves I/O block: False
+2025-04-22 17:54:23,179 - DEBUG -   - Added vertical alignment constraint with weight 4000
+2025-04-22 17:54:23,179 - INFO - Blocks Block_electronic-circuit_0_1 and fixed_block_external_input_copper-plate have perfectly aligned gates - enforcing ZERO spacing
+2025-04-22 17:54:23,180 - INFO -   - Added HARD constraint to enforce ZERO spacing
+2025-04-22 17:54:23,180 - INFO - Processing block pair ('Block_electronic-circuit_0_0', 'fixed_block_external_output_electronic-circuit'):
+2025-04-22 17:54:23,180 - INFO -   - Aligned gates: 1
+2025-04-22 17:54:23,180 - INFO -   - Misaligned gates: 0
+2025-04-22 17:54:23,180 - INFO -   - Involves I/O block: False
+2025-04-22 17:54:23,180 - DEBUG -   - Added vertical alignment constraint with weight 4000
+2025-04-22 17:54:23,180 - INFO - Blocks Block_electronic-circuit_0_0 and fixed_block_external_output_electronic-circuit have perfectly aligned gates - enforcing ZERO spacing
+2025-04-22 17:54:23,181 - INFO -   - Added HARD constraint to enforce ZERO spacing
+2025-04-22 17:54:23,181 - INFO - Processing block pair ('Block_electronic-circuit_0_1', 'fixed_block_external_output_electronic-circuit'):
+2025-04-22 17:54:23,181 - INFO -   - Aligned gates: 1
+2025-04-22 17:54:23,181 - INFO -   - Misaligned gates: 0
+2025-04-22 17:54:23,181 - INFO -   - Involves I/O block: False
+2025-04-22 17:54:23,181 - DEBUG -   - Added vertical alignment constraint with weight 4000
+2025-04-22 17:54:23,181 - INFO - Blocks Block_electronic-circuit_0_1 and fixed_block_external_output_electronic-circuit have perfectly aligned gates - enforcing ZERO spacing
+2025-04-22 17:54:23,182 - INFO -   - Added HARD constraint to enforce ZERO spacing
+2025-04-22 17:54:23,182 - INFO - Added adaptive spacing constraints for 7 block pairs
+2025-04-22 17:54:23,182 - INFO - === Block Spacing Information ===
+2025-04-22 17:54:23,182 - INFO - Block fixed_block_external_input_iron-plate spacing:
+2025-04-22 17:54:23,182 - INFO - Block fixed_block_external_input_copper-plate spacing:
+2025-04-22 17:54:23,182 - INFO - Block fixed_block_external_output_electronic-circuit spacing:
+2025-04-22 17:54:23,182 - INFO - Block Block_electronic-circuit_0_0 spacing:
+2025-04-22 17:54:23,182 - INFO -   - With Block_electronic-circuit_0_1: south:6
+2025-04-22 17:54:23,182 - INFO - Block Block_electronic-circuit_0_1 spacing:
+2025-04-22 17:54:23,182 - INFO -   - With Block_electronic-circuit_0_0: north:6
+2025-04-22 17:54:23,182 - INFO - Adding vertical layout guidance constraints
+2025-04-22 17:54:23,184 - INFO - Adding gate proximity optimization constraints
+2025-04-22 17:54:23,193 - DEBUG - Created 12 gate distance variables
+2025-04-22 17:54:23,194 - INFO - Adding I/O gate constraints
+2025-04-22 17:54:23,198 - DEBUG - Added I/O gate constraints for all edges
+2025-04-22 17:54:23,198 - INFO - Minimizing width more than height, plus gate distances
+2025-04-22 17:54:23,198 - INFO - Solving factory layout with Z3...

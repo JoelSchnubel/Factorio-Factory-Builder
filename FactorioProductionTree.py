@@ -228,8 +228,6 @@ class FactorioProductionTree:
                 data['capacity'] = 0
         return production_data
 
-
-
     # Calculate how many assemblers are needed to produce the required amount per minute.
     def _calculate_assemblers(self, time_per_unit, recipe_runs_needed_per_minute):
         crafting_speed = self.machines_data["assemblers"]["crafting_speed"]
@@ -781,7 +779,7 @@ class FactorioProductionTree:
         
         self.z3_solver.add_manuel_IO_constraints(self.input_information,self.output_information)
     
-    # TODO
+
     def detect_belt_overlap(self, belt):
         """
         Check if a belt position overlaps with any input/output belts or paths.
@@ -2033,6 +2031,291 @@ class FactorioProductionTree:
                             window.blit(rotated_belt, (current[0] * cell_size, current[1] * cell_size))
                             
 
+    def reconfigure_io_belts(self):
+        """
+        Allow the user to reconfigure I/O belts after the initial layout is generated.
+        This can help minimize the final blueprint size by placing I/O points more optimally.
+        """
+        logging.info("Starting I/O belt reconfiguration")
+        
+        # Store the original I/O information in case we need to revert
+        original_input_info = self.input_information.copy() if self.input_information else {}
+        original_output_info = self.output_information.copy() if self.output_information else {}
+        
+        # Get the current factory bounds from the solved layout
+        if hasattr(self, 'z3_solver') and self.z3_solver:
+            max_x = self.z3_solver.max_x.as_long()
+            max_y = self.z3_solver.max_y.as_long()
+        else:
+            logging.error("Cannot reconfigure I/O belts: factory layout not yet solved")
+            return False
+        
+        # Create obstacle map based on blocks' positions
+        obstacle_map, _, assembler_information, _ = self.z3_solver.build_map()
+        
+        # Display the current layout and allow user to place new I/O belts
+        pygame.init()
+        
+        # Set up the window size based on actual factory dimensions
+        cell_size = 50
+        window_width = max(self.grid_width, max_x + 5) * cell_size
+        window_height = max(self.grid_height, max_y + 5) * cell_size
+        window = pygame.display.set_mode((window_width, window_height))
+        pygame.display.set_caption("Reconfigure I/O Belts")
+        
+        # Load images
+        images = self._load_factory_images(cell_size)
+        item_images = self._load_item_images(cell_size)
+        
+        # Show current factory layout with option to reconfigure I/O belts
+        reconfigured = False
+        need_reconfiguration = self._show_reconfiguration_dialog()
+        
+        if need_reconfiguration:
+            # Clear existing I/O paths but keep the items
+            input_items = list(self.input_information.keys()) if self.input_information else []
+            output_items = list(self.output_information.keys()) if self.output_information else []
+            
+            # Initialize new I/O information structures
+            self.input_information = {item: {'input': None, 'output': None, 'paths': None} for item in input_items}
+            self.output_information = {item: {'input': None, 'output': None, 'paths': None} for item in output_items}
+            
+            # First reconfigure input belts
+            logging.info("Reconfiguring input belts")
+            self._reconfigure_io_belts("input", obstacle_map, window, images, item_images, cell_size)
+            
+            # Then reconfigure output belts
+            logging.info("Reconfiguring output belts")
+            self._reconfigure_io_belts("output", obstacle_map, window, images, item_images, cell_size)
+            
+            reconfigured = True
+            
+        pygame.quit()
+        
+        if reconfigured:
+            # Re-run path planning with the new I/O configurations
+            return True
+        else:
+            # Restore original I/O information
+            self.input_information = original_input_info
+            self.output_information = original_output_info
+            return False
+
+    def _show_reconfiguration_dialog(self):
+        """Show dialog asking if user wants to reconfigure I/O belts"""
+        dialog_width, dialog_height = 400, 200
+        screen_width, screen_height = pygame.display.Info().current_w, pygame.display.Info().current_h
+        
+        dialog = pygame.Surface((dialog_width, dialog_height))
+        dialog.fill((240, 240, 240))
+        pygame.draw.rect(dialog, (0, 0, 0), dialog.get_rect(), 2)
+        
+        font = pygame.font.Font(None, 30)
+        title = font.render("Reconfigure I/O Belts?", True, (0, 0, 0))
+        text1 = font.render("Would you like to reconfigure", True, (0, 0, 0))
+        text2 = font.render("the input/output belt positions?", True, (0, 0, 0))
+        
+        yes_button = pygame.Rect(50, 140, 100, 40)
+        no_button = pygame.Rect(250, 140, 100, 40)
+        
+        pygame.draw.rect(dialog, (100, 200, 100), yes_button)
+        pygame.draw.rect(dialog, (200, 100, 100), no_button)
+        
+        yes_text = font.render("Yes", True, (255, 255, 255))
+        no_text = font.render("No", True, (255, 255, 255))
+        
+        dialog.blit(title, (100, 20))
+        dialog.blit(text1, (50, 60))
+        dialog.blit(text2, (50, 90))
+        dialog.blit(yes_text, (75, 150))
+        dialog.blit(no_text, (280, 150))
+        
+        screen = pygame.display.get_surface()
+        dialog_x = (screen_width - dialog_width) // 2
+        dialog_y = (screen_height - dialog_height) // 2
+        
+        screen.blit(dialog, (dialog_x, dialog_y))
+        pygame.display.flip()
+        
+        waiting = True
+        result = False
+        
+        while waiting:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    return False
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    mouse_pos = pygame.mouse.get_pos()
+                    relative_pos = (mouse_pos[0] - dialog_x, mouse_pos[1] - dialog_y)
+                    
+                    if yes_button.collidepoint(relative_pos):
+                        waiting = False
+                        result = True
+                    elif no_button.collidepoint(relative_pos):
+                        waiting = False
+                        result = False
+        
+        return result
+
+    def _reconfigure_io_belts(self, io_type, obstacle_map, window, images, item_images, cell_size):
+        """
+        Reconfigure input or output belts interactively.
+        
+        Args:
+            io_type: Either "input" or "output"
+            obstacle_map: 2D array of factory obstacles
+            window: Pygame window
+            images: Dictionary of factory element images
+            item_images: Dictionary of item images
+            cell_size: Size of each grid cell in pixels
+        """
+        # Determine which items we're working with
+        if io_type == "input":
+            items = list(self.input_information.keys())
+            info_dict = self.input_information
+        else:
+            items = list(self.output_information.keys())
+            info_dict = self.output_information
+        
+        # For each item, let the user reconfigure its I/O points
+        for item in items:
+            # First point: entry point
+            entry_point = self._place_io_point(window, obstacle_map, item, "entry", images, item_images, cell_size)
+            if entry_point is None:
+                continue  # Skip this item if user cancels
+            
+            # Second point: exit point
+            exit_point = self._place_io_point(window, obstacle_map, item, "exit", images, item_images, cell_size)
+            if exit_point is None:
+                continue  # Skip this item if user cancels
+            
+            # Store points in grid coordinates (row, col)
+            row_entry, col_entry = entry_point[1] // cell_size, entry_point[0] // cell_size
+            row_exit, col_exit = exit_point[1] // cell_size, exit_point[0] // cell_size
+            
+            # Update the information dictionary
+            info_dict[item]['input'] = (row_entry, col_entry)
+            info_dict[item]['output'] = (row_exit, col_exit)
+            
+            # Create a path between the two points
+            self._create_path_between_points(item, (col_entry, row_entry), (col_exit, row_exit), obstacle_map, io_type)
+
+    def _place_io_point(self, window, obstacle_map, item, point_type, images, item_images, cell_size):
+        """
+        Let the user place a single I/O point interactively.
+        
+        Args:
+            window: Pygame window
+            obstacle_map: 2D array of factory obstacles
+            item: The item being placed
+            point_type: Either "entry" or "exit"
+            images: Dictionary of factory element images
+            item_images: Dictionary of item images
+            cell_size: Size of each grid cell in pixels
+            
+        Returns:
+            Tuple (x, y) of pixel coordinates for the placed point, or None if cancelled
+        """
+        font = pygame.font.Font(None, 36)
+        
+        # Show instruction
+        instruction = font.render(f"Place {point_type} point for {item} (Right-click to cancel)", True, (0, 0, 0))
+        instruction_rect = instruction.get_rect(topleft=(10, 10))
+        
+        # Draw the current layout
+        self._draw_factory_base(window, [], [], item_images, images, cell_size)
+        
+        # Draw obstacles
+        for y in range(len(obstacle_map)):
+            for x in range(len(obstacle_map[0])):
+                if obstacle_map[y][x] == 1:
+                    pygame.draw.rect(window, (200, 200, 200), 
+                                    (x * cell_size, y * cell_size, cell_size, cell_size))
+        
+        # Display instruction
+        window.blit(instruction, instruction_rect)
+        pygame.display.flip()
+        
+        # Wait for user to place the point
+        waiting = True
+        position = None
+        
+        while waiting:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    return None
+                
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if event.button == 1:  # Left click
+                        mouse_pos = pygame.mouse.get_pos()
+                        grid_x = mouse_pos[0] // cell_size
+                        grid_y = mouse_pos[1] // cell_size
+                        
+                        # Check if position is valid (not on an obstacle)
+                        if (0 <= grid_y < len(obstacle_map) and 
+                            0 <= grid_x < len(obstacle_map[0]) and 
+                            obstacle_map[grid_y][grid_x] == 0):
+                            
+                            position = (mouse_pos[0], mouse_pos[1])
+                            waiting = False
+                        else:
+                            # Flash red to indicate invalid position
+                            pygame.draw.rect(window, (255, 0, 0), 
+                                            (grid_x * cell_size, grid_y * cell_size, 
+                                             cell_size, cell_size))
+                            pygame.display.flip()
+                            pygame.time.wait(200)  # Flash for 200ms
+                            
+                            # Redraw to remove the flash
+                            self._draw_factory_base(window, [], [], item_images, images, cell_size)
+                            window.blit(instruction, instruction_rect)
+                            pygame.display.flip()
+                            
+                    elif event.button == 3:  # Right click to cancel
+                        return None
+        
+        return position
+
+    def _create_path_between_points(self, item, start, end, obstacle_map, io_type):
+        """
+        Create a path between two points on the grid.
+        
+        Args:
+            item: The item for this path
+            start: Starting point (x, y) in grid coordinates
+            end: Ending point (x, y) in grid coordinates
+            obstacle_map: 2D array of factory obstacles
+            io_type: Either "input" or "output"
+        """
+        # Prepare input for the pathfinder
+        points = {
+            item: {
+                'item': item,
+                'start_points': [start],
+                'destination': [end],
+                'inserter_mapping': None
+            }
+        }
+        
+        # Create a pathfinder
+        pathfinder = MultiAgentPathfinder(
+            obstacle_map,
+            points,
+            allow_underground=True,
+            underground_length=3,
+            allow_splitters=False
+        )
+        
+        # Find the path
+        paths, _ = pathfinder.find_paths_for_all_items()
+        
+        # Store the path in the appropriate information dictionary
+        if io_type == "input":
+            self.input_information[item]['paths'] = paths
+        else:
+            self.output_information[item]['paths'] = paths
+
+
 def plot_csv_data(file_path):
     # Read the CSV file
     df = pd.read_csv(file_path)
@@ -2126,11 +2409,11 @@ def Simple_Run():
     
     
     # Example item and amount
-    item_to_produce = "electronic-circuit"
-    amount_needed = 120
+    item_to_produce = "copper-cable"
+    amount_needed = 300
     
     
-    input_items = ["iron-plate", "copper-cable"]  # Using explicit input items
+    input_items = ["copper-plate"]  # Using explicit input items
     
     # init 
     factorioProductionTree = FactorioProductionTree(16,10)
