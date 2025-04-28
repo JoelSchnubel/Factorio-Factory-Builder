@@ -13,6 +13,11 @@ from z3 import And , Or
 from z3Solver  import Z3Solver
 import seaborn as sns
 import numpy as np
+from draftsman.blueprintable import Blueprint
+from draftsman.constants import Direction
+from draftsman.entity import Inserter, AssemblingMachine, TransportBelt, UndergroundBelt
+
+from draftsman.entity import Splitter as BlueprintSplitter
 
 from MultiAgentPathfinder import MultiAgentPathfinder,Splitter
 
@@ -1220,6 +1225,7 @@ class FactorioProductionTree:
             self.grid_width = data.get("grid_width")
             self.grid_height = data.get("grid_height")
             self.input_items = data.get("input_items")
+            self.placed_inserter_information = data.get("placed_inserter_information", [])
             
             # Load complex data structures
             
@@ -1361,8 +1367,8 @@ class FactorioProductionTree:
                                     "start": path_data.get("start"),
                                     "destination": path_data.get("destination"),
                                     "underground_segments": path_data.get("underground_segments", {}),
-                                    "start_splitter": path_data.get("start_splitter") is not None,
-                                    "dest_splitter": path_data.get("dest_splitter") is not None
+                                    "start_splitter": path_data.get("start_splitter").to_dict() if path_data.get("start_splitter") else None,
+                                    "dest_splitter": path_data.get("dest_splitter").to_dict() if path_data.get("dest_splitter") else None
                                 }
                                 
                                 # Handle orientation dictionary (convert tuple keys to strings)
@@ -1390,8 +1396,8 @@ class FactorioProductionTree:
                         "start": path_data.get("start"),
                         "destination": path_data.get("destination"),
                         "underground_segments": path_data.get("underground_segments", {}),
-                        "start_splitter": path_data.get("start_splitter") is not None,
-                        "dest_splitter": path_data.get("dest_splitter") is not None
+                        "start_splitter": path_data.get("start_splitter").to_dict() if path_data.get("start_splitter") else None,
+                        "dest_splitter": path_data.get("dest_splitter").to_dict() if path_data.get("dest_splitter") else None
                     }
                     
                     # Handle orientation dictionary (convert tuple keys to strings)
@@ -1480,26 +1486,7 @@ class FactorioProductionTree:
             import traceback
             traceback.print_exc()
     
-  
-    
-    def calculate_max_output(self):
-        cycles_per_minute = 60 / self.item_lookup[self.output_item]["recipe"]["time"]
-        return self.production_data[self.output_item]['assemblers']* self.machines_data["assemblers"]["crafting_speed"]* cycles_per_minute *self.item_lookup[self.output_item]["recipe"]["yield"]
-    
-    
-    
-    def count_assemblers(self,production_data):
-        assembler_counts = {}
-    
-        for item, data in production_data.items():
-            # Check if the item has an 'assemblers' field
-            if 'assemblers' in data:
-                assembler_counts[item] = data['assemblers']
-            else:
-                assembler_counts[item] = 0  # Assume 0 assemblers if the field is not present
-        
-        return assembler_counts
-        
+
     def visualize_factory(self, paths=None, placed_inserter_information=None, cell_size=50, store=False, file_path=None):
         """
         Visualize the factory layout with paths, splitters, and underground belts.
@@ -1616,7 +1603,7 @@ class FactorioProductionTree:
                 window.blit(item_images[assembler_item], (pixel_x, pixel_y))
         
         # Draw inserters
-        for inserter_item, inserter_x, inserter_y in inserter_information:
+        for inserter_item, inserter_x, inserter_y , direction in inserter_information:
             pixel_x = inserter_x * cell_size
             pixel_y = inserter_y * cell_size
             window.blit(images['inserter'], (pixel_x, pixel_y))
@@ -1638,9 +1625,6 @@ class FactorioProductionTree:
 
     def _draw_factory_paths(self, window, paths, images, item_images, cell_size):
         """Draw paths on top of the base factory layout."""
-        
-
-    
         
         if not paths:
             return
@@ -1930,7 +1914,7 @@ class FactorioProductionTree:
             
     def _draw_io_paths(self, window, images,item_images, cell_size):
 
-        
+
         if self.input_information:
                 for row in range(self.grid_height):
                     for col in range(self.grid_width):
@@ -2029,291 +2013,475 @@ class FactorioProductionTree:
                             # For output paths, use the standard direction (not reversed)
                             rotated_belt = pygame.transform.rotate(images['conveyor'], angle)
                             window.blit(rotated_belt, (current[0] * cell_size, current[1] * cell_size))
-                            
-
-    def reconfigure_io_belts(self):
+    
+    def calculate_max_output(self):
+        cycles_per_minute = 60 / self.item_lookup[self.output_item]["recipe"]["time"]
+        return self.production_data[self.output_item]['assemblers']* self.machines_data["assemblers"]["crafting_speed"]* cycles_per_minute *self.item_lookup[self.output_item]["recipe"]["yield"]
+    
+ 
+    
+    def count_assemblers(self,production_data):
+        assembler_counts = {}
+    
+        for item, data in production_data.items():
+            # Check if the item has an 'assemblers' field
+            if 'assemblers' in data:
+                assembler_counts[item] = data['assemblers']
+            else:
+                assembler_counts[item] = 0  # Assume 0 assemblers if the field is not present
+        
+        return assembler_counts
+    
+    
+    
+    
+  
+    def create_blueprint(self, json_path, output_path):
         """
-        Allow the user to reconfigure I/O belts after the initial layout is generated.
-        This can help minimize the final blueprint size by placing I/O points more optimally.
+        Create a Factorio blueprint from saved factory data using Draftsman.
+        Takes into account that assemblers are 3x3 and centered on their placed position.
+        Properly handles splitters and prevents excessive inserters.
         """
-        logging.info("Starting I/O belt reconfiguration")
-        
-        # Store the original I/O information in case we need to revert
-        original_input_info = self.input_information.copy() if self.input_information else {}
-        original_output_info = self.output_information.copy() if self.output_information else {}
-        
-        # Get the current factory bounds from the solved layout
-        if hasattr(self, 'z3_solver') and self.z3_solver:
-            max_x = self.z3_solver.max_x.as_long()
-            max_y = self.z3_solver.max_y.as_long()
-        else:
-            logging.error("Cannot reconfigure I/O belts: factory layout not yet solved")
-            return False
-        
-        # Create obstacle map based on blocks' positions
-        obstacle_map, _, assembler_information, _ = self.z3_solver.build_map()
-        
-        # Display the current layout and allow user to place new I/O belts
-        pygame.init()
-        
-        # Set up the window size based on actual factory dimensions
-        cell_size = 50
-        window_width = max(self.grid_width, max_x + 5) * cell_size
-        window_height = max(self.grid_height, max_y + 5) * cell_size
-        window = pygame.display.set_mode((window_width, window_height))
-        pygame.display.set_caption("Reconfigure I/O Belts")
-        
-        # Load images
-        images = self._load_factory_images(cell_size)
-        item_images = self._load_item_images(cell_size)
-        
-        # Show current factory layout with option to reconfigure I/O belts
-        reconfigured = False
-        need_reconfiguration = self._show_reconfiguration_dialog()
-        
-        if need_reconfiguration:
-            # Clear existing I/O paths but keep the items
-            input_items = list(self.input_information.keys()) if self.input_information else []
-            output_items = list(self.output_information.keys()) if self.output_information else []
-            
-            # Initialize new I/O information structures
-            self.input_information = {item: {'input': None, 'output': None, 'paths': None} for item in input_items}
-            self.output_information = {item: {'input': None, 'output': None, 'paths': None} for item in output_items}
-            
-            # First reconfigure input belts
-            logging.info("Reconfiguring input belts")
-            self._reconfigure_io_belts("input", obstacle_map, window, images, item_images, cell_size)
-            
-            # Then reconfigure output belts
-            logging.info("Reconfiguring output belts")
-            self._reconfigure_io_belts("output", obstacle_map, window, images, item_images, cell_size)
-            
-            reconfigured = True
-            
-        pygame.quit()
-        
-        if reconfigured:
-            # Re-run path planning with the new I/O configurations
-            return True
-        else:
-            # Restore original I/O information
-            self.input_information = original_input_info
-            self.output_information = original_output_info
-            return False
-
-    def _show_reconfiguration_dialog(self):
-        """Show dialog asking if user wants to reconfigure I/O belts"""
-        dialog_width, dialog_height = 400, 200
-        screen_width, screen_height = pygame.display.Info().current_w, pygame.display.Info().current_h
-        
-        dialog = pygame.Surface((dialog_width, dialog_height))
-        dialog.fill((240, 240, 240))
-        pygame.draw.rect(dialog, (0, 0, 0), dialog.get_rect(), 2)
-        
-        font = pygame.font.Font(None, 30)
-        title = font.render("Reconfigure I/O Belts?", True, (0, 0, 0))
-        text1 = font.render("Would you like to reconfigure", True, (0, 0, 0))
-        text2 = font.render("the input/output belt positions?", True, (0, 0, 0))
-        
-        yes_button = pygame.Rect(50, 140, 100, 40)
-        no_button = pygame.Rect(250, 140, 100, 40)
-        
-        pygame.draw.rect(dialog, (100, 200, 100), yes_button)
-        pygame.draw.rect(dialog, (200, 100, 100), no_button)
-        
-        yes_text = font.render("Yes", True, (255, 255, 255))
-        no_text = font.render("No", True, (255, 255, 255))
-        
-        dialog.blit(title, (100, 20))
-        dialog.blit(text1, (50, 60))
-        dialog.blit(text2, (50, 90))
-        dialog.blit(yes_text, (75, 150))
-        dialog.blit(no_text, (280, 150))
-        
-        screen = pygame.display.get_surface()
-        dialog_x = (screen_width - dialog_width) // 2
-        dialog_y = (screen_height - dialog_height) // 2
-        
-        screen.blit(dialog, (dialog_x, dialog_y))
-        pygame.display.flip()
-        
-        waiting = True
-        result = False
-        
-        while waiting:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    return False
-                elif event.type == pygame.MOUSEBUTTONDOWN:
-                    mouse_pos = pygame.mouse.get_pos()
-                    relative_pos = (mouse_pos[0] - dialog_x, mouse_pos[1] - dialog_y)
-                    
-                    if yes_button.collidepoint(relative_pos):
-                        waiting = False
-                        result = True
-                    elif no_button.collidepoint(relative_pos):
-                        waiting = False
-                        result = False
-        
-        return result
-
-    def _reconfigure_io_belts(self, io_type, obstacle_map, window, images, item_images, cell_size):
-        """
-        Reconfigure input or output belts interactively.
-        
-        Args:
-            io_type: Either "input" or "output"
-            obstacle_map: 2D array of factory obstacles
-            window: Pygame window
-            images: Dictionary of factory element images
-            item_images: Dictionary of item images
-            cell_size: Size of each grid cell in pixels
-        """
-        # Determine which items we're working with
-        if io_type == "input":
-            items = list(self.input_information.keys())
-            info_dict = self.input_information
-        else:
-            items = list(self.output_information.keys())
-            info_dict = self.output_information
-        
-        # For each item, let the user reconfigure its I/O points
-        for item in items:
-            # First point: entry point
-            entry_point = self._place_io_point(window, obstacle_map, item, "entry", images, item_images, cell_size)
-            if entry_point is None:
-                continue  # Skip this item if user cancels
-            
-            # Second point: exit point
-            exit_point = self._place_io_point(window, obstacle_map, item, "exit", images, item_images, cell_size)
-            if exit_point is None:
-                continue  # Skip this item if user cancels
-            
-            # Store points in grid coordinates (row, col)
-            row_entry, col_entry = entry_point[1] // cell_size, entry_point[0] // cell_size
-            row_exit, col_exit = exit_point[1] // cell_size, exit_point[0] // cell_size
-            
-            # Update the information dictionary
-            info_dict[item]['input'] = (row_entry, col_entry)
-            info_dict[item]['output'] = (row_exit, col_exit)
-            
-            # Create a path between the two points
-            self._create_path_between_points(item, (col_entry, row_entry), (col_exit, row_exit), obstacle_map, io_type)
-
-    def _place_io_point(self, window, obstacle_map, item, point_type, images, item_images, cell_size):
-        """
-        Let the user place a single I/O point interactively.
-        
-        Args:
-            window: Pygame window
-            obstacle_map: 2D array of factory obstacles
-            item: The item being placed
-            point_type: Either "entry" or "exit"
-            images: Dictionary of factory element images
-            item_images: Dictionary of item images
-            cell_size: Size of each grid cell in pixels
-            
-        Returns:
-            Tuple (x, y) of pixel coordinates for the placed point, or None if cancelled
-        """
-        font = pygame.font.Font(None, 36)
-        
-        # Show instruction
-        instruction = font.render(f"Place {point_type} point for {item} (Right-click to cancel)", True, (0, 0, 0))
-        instruction_rect = instruction.get_rect(topleft=(10, 10))
-        
-        # Draw the current layout
-        self._draw_factory_base(window, [], [], item_images, images, cell_size)
-        
-        # Draw obstacles
-        for y in range(len(obstacle_map)):
-            for x in range(len(obstacle_map[0])):
-                if obstacle_map[y][x] == 1:
-                    pygame.draw.rect(window, (200, 200, 200), 
-                                    (x * cell_size, y * cell_size, cell_size, cell_size))
-        
-        # Display instruction
-        window.blit(instruction, instruction_rect)
-        pygame.display.flip()
-        
-        # Wait for user to place the point
-        waiting = True
-        position = None
-        
-        while waiting:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    return None
+        try:
+            # Load the saved factory data
+            if not self.load_data(json_path):
+                logging.error(f"Failed to load factory data from {json_path}")
+                return False
                 
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    if event.button == 1:  # Left click
-                        mouse_pos = pygame.mouse.get_pos()
-                        grid_x = mouse_pos[0] // cell_size
-                        grid_y = mouse_pos[1] // cell_size
-                        
-                        # Check if position is valid (not on an obstacle)
-                        if (0 <= grid_y < len(obstacle_map) and 
-                            0 <= grid_x < len(obstacle_map[0]) and 
-                            obstacle_map[grid_y][grid_x] == 0):
-                            
-                            position = (mouse_pos[0], mouse_pos[1])
-                            waiting = False
+            logging.info(f"Creating blueprint from {json_path}")
+            
+            # Create a new blueprint with a name based on output item and amount
+            blueprint = Blueprint()
+            
+            # Track occupied positions to avoid overlap
+            occupied_positions = set()
+            
+            # Track assembler positions for orienting inserters
+            assembler_positions = {}  # Maps (x, y) to assembler object
+            
+            print("1. Placing assembling machines...")
+            # Place assembling machines from assembler_information
+            if hasattr(self, 'assembler_information'):
+                for item, x, y in self.assembler_information:
+                    # Create assembling machine
+                    center_x = x + 1
+                    center_y = y + 1
+                    
+                    print(f"  - Placing assembler for {item} at ({center_x},{center_y})")
+                    
+                    assembler = AssemblingMachine(
+                        name="assembling-machine-1", 
+                        position=(center_x, center_y),
+                        recipe=item  # Set the recipe to the item it produces
+                    )
+                    blueprint.entities.append(assembler)
+                    
+                    # Store the assembler in our mapping
+                    for dx in range(3):
+                        for dy in range(3):
+                            assembler_positions[(x + dx, y + dy)] = (item, (x, y), (center_x, center_y))
+                    
+                    # Mark the 3x3 area as occupied
+                    for dx in range(3):
+                        for dy in range(3):
+                            occupied_positions.add((x + dx, y + dy))
+            
+            print("2. Placing inserters...")
+            # Place inserters from inserter_information - check for overlaps and orient properly
+            if hasattr(self, 'inserter_information'):
+                for item, x, y , direction in self.inserter_information:
+                    # Skip if position is occupied by an assembler
+                    if (x, y) in occupied_positions:
+                        print(f"  - Skipping inserter at ({x},{y}) due to overlap with assembler")
+                        continue
+                    
+                    print(direction)
+                    
+                    # Convert direction string to draftsman Direction constant # rotate by 180 degress
+                    if direction == "north":
+                        blueprint_direction = Direction.SOUTH
+                    elif direction == "east":
+                        blueprint_direction = Direction.WEST
+                    elif direction == "south":
+                        blueprint_direction = Direction.NORTH
+                    elif direction == "west":
+                        blueprint_direction = Direction.EAST
+                    else:
+                        blueprint_direction = Direction.NORTH  # Default
+                    
+                    # Create inserter
+                    print(f"  - Placing inserter for {item} at ({x},{y}) facing {blueprint_direction}")
+                    inserter = Inserter(
+                        name="inserter",
+                        position=(x, y),
+                        direction=blueprint_direction
+                    )
+                    blueprint.entities.append(inserter)
+                    occupied_positions.add((x, y))
+                    
+                    
+            print("3. Adding additional inserters...")
+            # Add placed output inserters from the blueprint data
+            if hasattr(self, 'placed_inserter_information') and self.placed_inserter_information:
+                print("  - Adding placed output inserters...")
+                for item_key, inserter_positions in self.placed_inserter_information.items():
+                    print(f"    - Processing output inserters for {item_key}")
+                    for dest_str, src_pos in inserter_positions.items():
+                        # Parse dest_pos if it's a string
+                        if isinstance(dest_str, str):
+                            try:
+                                dest_pos = ast.literal_eval(dest_str)
+                            except (ValueError, SyntaxError):
+                                print(f"    - Skipping inserter due to invalid destination: {dest_str}")
+                                continue
                         else:
-                            # Flash red to indicate invalid position
-                            pygame.draw.rect(window, (255, 0, 0), 
-                                            (grid_x * cell_size, grid_y * cell_size, 
-                                             cell_size, cell_size))
-                            pygame.display.flip()
-                            pygame.time.wait(200)  # Flash for 200ms
-                            
-                            # Redraw to remove the flash
-                            self._draw_factory_base(window, [], [], item_images, images, cell_size)
-                            window.blit(instruction, instruction_rect)
-                            pygame.display.flip()
-                            
-                    elif event.button == 3:  # Right click to cancel
-                        return None
+                            dest_pos = dest_str
+                        
+                        # Skip if position is occupied
+                        src_tuple = tuple(src_pos) if isinstance(src_pos, list) else src_pos
+                        if src_tuple in occupied_positions:
+                            print(f"    - Skipping output inserter at {src_pos} due to overlap")
+                            continue
+                        
+                        # Calculate direction from source to destination
+                        dx = dest_pos[0] - src_pos[0]
+                        dy = dest_pos[1] - src_pos[1]
+                        
+                        # Normalize direction
+                        if dx != 0:
+                            dx = dx // abs(dx)
+                        if dy != 0:
+                            dy = dy // abs(dy)
+                        
+                        # Determine inserter direction
+                        
+                        if dx == 1:
+                            direction = Direction.WEST
+                        elif dx == -1:
+                            direction = Direction.EAST
+                        elif dy == 1:
+                            direction = Direction.NORTH
+                        else:
+                            direction = Direction.SOUTH
+                        
+                        # Create and place inserter
+                        print(f"    - Placing output inserter for {item_key} at {src_pos} facing {direction}")
+                        inserter = Inserter(
+                            name="inserter",
+                            position=src_pos,
+                            direction=direction
+                        )
+                        blueprint.entities.append(inserter)
+                        occupied_positions.add(src_tuple)
+            
+           
+           
+            # Place belts from paths generated by the pathfinder
+            print("4. Adding path belts...")
+            self._add_path_belts_to_blueprint(blueprint, occupied_positions)
+           
+            # Place belts for I/O paths with more detailed logging
+            print("5. Adding I/O belts...")
+            self._add_io_belts_to_blueprint(blueprint, occupied_positions)
+            
+            # Export the blueprint to a file
+            print("6. Exporting blueprint...")
+            with open(output_path, "w") as f:
+                f.write(blueprint.to_string())
+                
+            logging.info(f"Blueprint successfully exported to {output_path}")
+            return True
+            
+        except Exception as e:
+            logging.error(f"Error creating blueprint: {e}")
+            import traceback
+            traceback.print_exc()
+            return False
+    
+    def _add_belt_path_to_blueprint(self, blueprint, path_data, item, occupied_positions):
+        """Add a specific belt path to the blueprint, avoiding overlaps"""
+        path = path_data.get('path', [])
+        if not path or len(path) < 2:
+            return
         
-        return position
+        print(f"  - Processing belt path for {item} with {len(path)} points")
+        
+        # Get orientation information
+        has_orientation = 'orientation' in path_data and path_data['orientation']
+        
+        # Handle splitters - check if they exist either as objects or boolean values
+        start_splitter = path_data.get('start_splitter')
+        dest_splitter = path_data.get('dest_splitter')
+        
+        blueprint_direction_start = None
+        blueprint_direction_dest = None
+        
+        # Skip positions where splitters will be placed
+        splitter_positions = set()
+        
+        # Track splitter information for later placement
+        if start_splitter is not None:
+            # Check if start_splitter is a dictionary/object with position info or just a boolean
+            if isinstance(start_splitter, dict) and 'position' in start_splitter:
+                splitter_pos = start_splitter['position']
+                direction = start_splitter['direction']
+                
+                splitter_tuple = tuple(splitter_pos) if isinstance(splitter_pos, list) else splitter_pos
+                splitter_positions.add(splitter_tuple)
+            
+                dx, dy = direction
+                if dx == 1 and dy == 0:  # Right
+                    blueprint_direction_start = Direction.EAST
+                elif dx == -1 and dy == 0:  # Left
+                    blueprint_direction_start = Direction.WEST
+                elif dx == 0 and dy == 1:  # Down
+                    blueprint_direction_start = Direction.SOUTH
+                elif dx == 0 and dy == -1:  # Up
+                    blueprint_direction_start = Direction.NORTH
+                else:
+                    # Default to EAST if we can't determine direction
+                    blueprint_direction_start = Direction.EAST
 
-    def _create_path_between_points(self, item, start, end, obstacle_map, io_type):
-        """
-        Create a path between two points on the grid.
+                # place the splitter in the blueprint
+                print(f"  - Adding start splitter for {item} at {splitter_pos} facing {direction}")
+                start_splitter = BlueprintSplitter(
+                    name="splitter",
+                    position=splitter_pos,
+                    direction=blueprint_direction_start
+                )
+                blueprint.entities.append(start_splitter)
+                occupied_positions.add(splitter_tuple)
         
-        Args:
-            item: The item for this path
-            start: Starting point (x, y) in grid coordinates
-            end: Ending point (x, y) in grid coordinates
-            obstacle_map: 2D array of factory obstacles
-            io_type: Either "input" or "output"
-        """
-        # Prepare input for the pathfinder
-        points = {
-            item: {
-                'item': item,
-                'start_points': [start],
-                'destination': [end],
-                'inserter_mapping': None
-            }
-        }
+                
+        if dest_splitter is not None:
+            # Check if dest_splitter is a dictionary/object with position info or just a boolean
+            if isinstance(dest_splitter, dict) and 'position' in dest_splitter:
+                splitter_pos = dest_splitter['position']
+                direction = dest_splitter['direction']
+                
+                splitter_tuple = tuple(splitter_pos) if isinstance(splitter_pos, list) else splitter_pos
+                splitter_positions.add(splitter_tuple)
+                
+                dx, dy = direction
+                if dx == 1 and dy == 0:  # Right
+                    blueprint_direction_dest = Direction.EAST
+                elif dx == -1 and dy == 0:  # Left
+                    blueprint_direction_dest = Direction.WEST
+                elif dx == 0 and dy == 1:  # Down
+                    blueprint_direction_dest = Direction.SOUTH
+                elif dx == 0 and dy == -1:  # Up
+                    blueprint_direction_dest = Direction.NORTH
+                else:
+                    # Default to EAST if we can't determine direction
+                    blueprint_direction_dest = Direction.EAST
+           
+               
+                # place the splitter in the blueprint
+                print(f"  - Adding destination splitter for {item} at {splitter_pos} facing {direction}")
+                dest_splitter = BlueprintSplitter(
+                    name="splitter",
+                    position=splitter_pos,
+                    direction=blueprint_direction_dest
+                )
+                blueprint.entities.append(dest_splitter)
+                
+                occupied_positions.add(splitter_tuple)
         
-        # Create a pathfinder
-        pathfinder = MultiAgentPathfinder(
-            obstacle_map,
-            points,
-            allow_underground=True,
-            underground_length=3,
-            allow_splitters=False
-        )
+        # Process underground segments
+        underground_positions = set()
+        if 'underground_segments' in path_data and path_data['underground_segments']:
+            print(f"  - Found {len(path_data['underground_segments'])} underground segments")
+            for segment_id, segment in path_data['underground_segments'].items():
+                start_pos = segment['start']
+                end_pos = segment['end']
+                
+                # Skip if positions are occupied or are splitter positions
+                start_tuple = tuple(start_pos) if isinstance(start_pos, list) else tuple(start_pos)
+                end_tuple = tuple(end_pos) if isinstance(end_pos, list) else tuple(end_pos)
+                
+                
+                #self._remove_entity_at_position(blueprint, start_tuple)
+                #self._remove_entity_at_position(blueprint, end_tuple)
         
-        # Find the path
-        paths, _ = pathfinder.find_paths_for_all_items()
+                # Calculate direction
+                dx = end_pos[0] - start_pos[0]
+                dy = end_pos[1] - start_pos[1]
+                
+                # Determine primary direction
+                if abs(dx) > abs(dy):
+                    direction = Direction.EAST if dx > 0 else Direction.WEST
+                else:
+                    direction = Direction.SOUTH if dy > 0 else Direction.NORTH
+                
+                print(f"  - Adding underground belt segment from {start_pos} to {end_pos} facing {direction}")
+                
+                # Create and place underground belt entrance
+                entrance = UndergroundBelt(
+                    name="underground-belt",
+                    position=start_pos,
+                    direction=direction,
+                    type="input"  # This is the entrance
+                )
+                blueprint.entities.append(entrance)
+                occupied_positions.add(start_tuple)
+                underground_positions.add(start_tuple)
+                
+                # Create and place underground belt exit
+                exit_belt = UndergroundBelt(
+                    name="underground-belt",
+                    position=end_pos,
+                    direction=direction,
+                    type="output"  # This is the exit
+                )
+                blueprint.entities.append(exit_belt)
+                occupied_positions.add(end_tuple)
+                underground_positions.add(end_tuple)
         
-        # Store the path in the appropriate information dictionary
-        if io_type == "input":
-            self.input_information[item]['paths'] = paths
+        # Process regular belt segments
+        for i in range(len(path) - 1):
+            current = path[i]
+            next_pos = path[i + 1]
+            
+            # Skip if this position is part of underground belt or a splitter
+            current_tuple = tuple(current) if isinstance(current, list) else tuple(current)
+            if current_tuple in underground_positions or current_tuple in splitter_positions:
+                continue
+            
+            # Skip if position is occupied
+            if current_tuple in occupied_positions:
+                print(f"  - Skipping belt at {current} due to overlap")
+                continue
+            
+            # Calculate direction
+            if has_orientation and path_data['orientation']:
+                # Convert current position to tuple if it's a list (to make it hashable)
+                current_key = str(tuple(current)) if isinstance(current, list) else str(current)
+                
+                # Check if this position has an orientation
+                if current_key in path_data['orientation']:
+                    direction = self._get_belt_direction(path_data['orientation'][current_key])
+                else:
+                    # Calculate direction from current to next position
+                    dx = next_pos[0] - current[0]
+                    dy = next_pos[1] - current[1]
+                    direction = self._get_belt_direction((dx, dy))
+            else:
+                # Calculate direction from current to next position
+                dx = next_pos[0] - current[0]
+                dy = next_pos[1] - current[1]
+                direction = self._get_belt_direction((dx, dy))
+            
+            # Create and place transport belt
+            print(f"  - Adding transport belt at {current} facing {direction}")
+            belt = TransportBelt(
+                name="transport-belt",
+                position=current,
+                direction=direction
+            )
+            blueprint.entities.append(belt)
+            occupied_positions.add(current_tuple)
+        
+        
+        # Process the last belt in the path if it's not an underground belt or splitter
+        if len(path) > 1:
+            last_pos = path[-1]
+            last_tuple = tuple(last_pos) if isinstance(last_pos, list) else tuple(last_pos)
+            
+            if last_tuple not in underground_positions and last_tuple not in splitter_positions and last_tuple not in occupied_positions:
+                # Special case: If we have a destination splitter with a direction,
+                # orient the last belt to match the splitter's input direction
+                if blueprint_direction_dest is not None:
+                    # Reverse the direction to have belt feed into splitter
+                    direction = blueprint_direction_dest
+                    
+                    print(f"  - Adding last transport belt at {last_pos} facing toward destination splitter")
+                else:
+                    # Normal case: calculate direction based on path
+                    second_last = path[-2]
+                    
+                    # Calculate direction for last belt
+                    if has_orientation and path_data['orientation']:
+                        # Convert last position to tuple if it's a list
+                        last_pos_key = str(tuple(last_pos)) if isinstance(last_pos, list) else str(last_pos)
+                        
+                        if last_pos_key in path_data['orientation']:
+                            direction = self._get_belt_direction(path_data['orientation'][last_pos_key])
+                        else:
+                            # Calculate direction from second-last to last
+                            dx = last_pos[0] - second_last[0]
+                            dy = last_pos[1] - second_last[1]
+                            direction = self._get_belt_direction((dx, dy))
+                    else:
+                        # Calculate direction from second-last to last
+                        dx = last_pos[0] - second_last[0]
+                        dy = last_pos[1] - second_last[1]
+                        direction = self._get_belt_direction((dx, dy))
+                
+                # Create and place last transport belt
+                print(f"  - Adding last transport belt at {last_pos} facing {direction}")
+                belt = TransportBelt(
+                    name="transport-belt",
+                    position=last_pos,
+                    direction=direction
+                )
+                blueprint.entities.append(belt)
+                occupied_positions.add(last_tuple)
+
+    def _add_io_belts_to_blueprint(self, blueprint, occupied_positions):
+        """Add user-defined I/O belts to the blueprint, avoiding overlaps"""
+        # Process input belts
+        if self.input_information:
+            print(f"  - Processing {len(self.input_information)} input belt routes")
+            for item, data in self.input_information.items():
+                if data['paths'] is not None and item in data['paths']:
+                    for path_data in data['paths'][item]:
+                        self._add_belt_path_to_blueprint(blueprint, path_data, item, occupied_positions)
         else:
-            self.output_information[item]['paths'] = paths
+            print("  - No input belt routes found")
+        
+        # Process output belts
+        if self.output_information:
+            print(f"  - Processing {len(self.output_information)} output belt routes")
+            for item, data in self.output_information.items():
+                if data['paths'] is not None and item in data['paths']:
+                    for path_data in data['paths'][item]:
+                        self._add_belt_path_to_blueprint(blueprint, path_data, item, occupied_positions)
+        else:
+            print("  - No output belt routes found")
+
+    def _add_path_belts_to_blueprint(self, blueprint, occupied_positions):
+        """Add pathfinder-generated belts to the blueprint, avoiding overlaps"""
+        if not hasattr(self, 'paths'):
+            print("  - No path data found")
+            return
+        
+        path_count = sum(len(item_paths) for item_paths in self.paths.values())
+        print(f"  - Processing {path_count} pathfinder-generated belt paths for {len(self.paths)} items")
+        
+        for item_key, item_paths in self.paths.items():
+            # Extract base item name
+            item_name = item_key.split('_')[0] if '_' in item_key else item_key
+            print(f"  - Processing {len(item_paths)} paths for {item_name}")
+            
+            for path_data in item_paths:
+                self._add_belt_path_to_blueprint(blueprint, path_data, item_name, occupied_positions)
+
+
+    def _get_belt_direction(self, orientation):
+        """Convert orientation tuple to Draftsman direction constant"""
+        dx, dy = orientation
+        
+        if dx == 0 and dy == -1:  # Up
+            return Direction.NORTH
+        elif dx == 1 and dy == 0:  # Right
+            return Direction.EAST
+        elif dx == 0 and dy == 1:  # Down
+            return Direction.SOUTH
+        elif dx == -1 and dy == 0:  # Left
+            return Direction.WEST
+        else:
+            # Default direction if orientation is invalid
+            return Direction.NORTH
 
 
 def plot_csv_data(file_path):
@@ -2394,6 +2562,10 @@ def log_method_time(item, amount, minimizer, method_name, assembler_counts,start
         
         
 def main():
+    factory = FactorioProductionTree(16,10)
+    factory.create_blueprint("Modules/electronic-circuit_120_[]_module.json", "electronic-circuit_120_[]_module.txt")
+    
+    
     
     Simple_Run()
     
@@ -2409,11 +2581,11 @@ def Simple_Run():
     
     
     # Example item and amount
-    item_to_produce = "copper-cable"
-    amount_needed = 300
+    item_to_produce = "electronic-circuit"
+    amount_needed = 120
     
     
-    input_items = ["copper-plate"]  # Using explicit input items
+    input_items = []  # Using explicit input items
     
     # init 
     factorioProductionTree = FactorioProductionTree(16,10)
@@ -2452,6 +2624,8 @@ def Simple_Run():
     if(paths):
         print("saving data")
         factorioProductionTree.store_data(f'Modules/{item_to_produce}_{amount_needed}_{input_items}_module',paths,placed_inserter_information)
+        
+        factorioProductionTree.create_blueprint(f'Modules/{item_to_produce}_{amount_needed}_{input_items}_module.json',f'Blueprints/{item_to_produce}_{amount_needed}_{input_items}_module.txt')
         
         factorioProductionTree.visualize_factory(paths,placed_inserter_information,store=True,file_path=f'Modules/{item_to_produce}_{amount_needed}_{input_items}_module.png')
         pass
@@ -2526,131 +2700,8 @@ def Eval_Runs(item_to_produce, start, end, step, rep_per_step):
             
            
         
-   
-   
-   
-def test_build_belts():
-    """Test function for the build_belts method of FactorioProductionTree."""
-    # Set up logging for better output in the console
-    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
-    
-    print("Starting build_belts test")
-    
-    # Create a small test instance
-    item_to_produce = "electronic-circuit"
-    amount_needed = 120
-    input_items = ["iron-plate", "copper-plate"]  # Using explicit input items
+ 
 
-    
-    # Initialize with a small grid for faster testing
-    factorio_tree =  FactorioProductionTree(16,10)
-    
-    
-    # Calculate production data
-    production_data = factorio_tree.calculate_production(item_to_produce, amount_needed, input_items=input_items)
-    factorio_tree.production_data = production_data
-    production_data = factorio_tree.set_capacities(production_data)
-    
-    print("Production data:", production_data)
-    
-   
-    # Setup minimal I/O points manually instead of using the GUI
-    # This creates a simple test case with fixed input/output positions
-    input_information = {
-        "iron-plate": {
-            "input": (0, 9),
-            "output": (0, 0),
-            "paths": {"iron-plate": [{
-                "path": [(0, 9), (0, 8), (0, 7), (0, 6), (0, 5), (0, 4), (0, 3), (0, 2), (0, 1), (0, 0)],
-                "underground_segments": {},
-                "start_splitter": None,
-                "dest_splitter": None
-            }]}
-        },
-        "copper-plate": {
-            "input": (12, 9),
-            "output": (12, 0),
-            "paths": {"copper-plate": [{
-                "path": [(12, 9), (12, 8), (12, 7), (12, 6), (12, 5), (12, 4), (12, 3), (12, 2), (12, 1), (12, 0)],
-                "underground_segments": {},
-                "start_splitter": None,
-                "dest_splitter": None
-            }]}
-        }
-    }
-
-    output_information = {
-        "electronic-circuit": {
-            "input": (15, 0),
-            "output": (15, 9),
-            "paths": {"electronic-circuit": [{
-                "path": [(15, 0), (15, 1), (15, 2), (15, 3), (15, 4), (15, 5), (15, 6), (15, 7), (15, 8), (15, 9)],
-                "underground_segments": {},
-                "start_splitter": None,
-                "dest_splitter": None
-            }]}
-        }
-    }
-    
-    # Set the input and output information
-    factorio_tree.input_information = input_information
-    factorio_tree.output_information = output_information
-    factorio_tree.input_items = input_items
-    factorio_tree.output_item = item_to_produce
-    
-    # Add manual IO constraints
-    factorio_tree.add_manual_IO_constraints(production_data)
-    
-    # Solve the initial layout problem
-    factorio_tree.solve(production_data, sequential=False)
-    
-    # Test each component of build_belts separately for debugging
-    print("\nTesting build_map...")
-    obstacle_map, belt_point_information, assembler_information, _ = factorio_tree.z3_solver.build_map()
-    print(f"Obstacle map shape: {len(obstacle_map)}x{len(obstacle_map[0])}")
-    print(f"Belt points count: {len(belt_point_information)}")
-    print(f"Assembler count: {len(assembler_information)}")
-    
-    print("\nTesting belt overlap detection...")
-    filtered_belts = [belt for belt in belt_point_information if not factorio_tree.detect_belt_overlap(belt)]
-    print(f"Belts after overlap filter: {len(filtered_belts)}")
-    
-    print("\nTesting assembler overlap detection...")
-    filtered_belts = [belt for belt in filtered_belts if not factorio_tree.detect_assembler_overlap(belt, assembler_information)]
-    print(f"Belts after assembler overlap filter: {len(filtered_belts)}")
-    
-    print("\nTesting retrieval points calculation...")
-    retrieval_points = factorio_tree.get_retrieval_points(filtered_belts, assembler_information)
-    print(f"Retrieval points count: {len(retrieval_points)}")
-    
-    print("\nTesting output point information...")
-    retrieval_points.update(factorio_tree.add_out_point_information(item_to_produce, assembler_information))
-    print(f"Total retrieval points after adding output: {len(retrieval_points)}")
-    
-    print("\nTesting dictionary rearrangement...")
-    rearranged_points = factorio_tree.rearrange_dict(retrieval_points, item_to_produce)
-    print(f"Rearranged retrieval points count: {len(rearranged_points)}")
-    
-    print("\nNow running the full build_belts method...")
-    try:
-        paths, inserters = factorio_tree.build_belts(max_tries=1)
-        print("\nBuild belts completed successfully!")
-        print(f"Paths: {paths}")
-        print(f"Inserters: {inserters}")
-        
-        # Visualize the result if successful
-        if paths:
-            factorio_tree.visualize_factory(paths, inserters, store=True, file_path="test_build_belts_result.png")
-            print("Visualization saved to test_build_belts_result.png")
-        
-        return True
-    except Exception as e:
-        print(f"ERROR in build_belts: {e}")
-        import traceback
-        traceback.print_exc()
-        return False
-
-# Run the test
 
 if __name__ == "__main__":
     #test_build_belts()

@@ -895,7 +895,24 @@ class Z3Solver:
                     ix = self.model.evaluate(inserter.x).as_long()
                     iy = self.model.evaluate(inserter.y).as_long()
                     
-                    inserter_information.append([inserter.item, ix, iy])
+                    direction = "north"
+                    
+                    # Check if inserter is above the assembler
+                    if iy == y - 1 and ix >= x and ix <= x + 2:
+                        direction = "south"  # Facing down toward the assembler
+                    # Check if inserter is below the assembler
+                    elif iy == y + 3 and ix >= x and ix <= x + 2:
+                        direction = "north"  # Facing up toward the assembler
+                    # Check if inserter is to the left of the assembler
+                    elif ix == x - 1 and iy >= y and iy <= y + 2:
+                        direction = "east"   # Facing right toward the assembler
+                    # Check if inserter is to the right of the assembler
+                    elif ix == x + 3 and iy >= y and iy <= y + 2:
+                        direction = "west"   # Facing left toward the assembler
+                    
+                    
+                    
+                    inserter_information.append([inserter.item, ix, iy, direction])
                     
                     # Mark inserter position as occupied
                     if inserter.type == "input":

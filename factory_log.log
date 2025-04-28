@@ -1,150 +1,1003 @@
-2025-04-22 17:54:18,241 - INFO - Defining factory I/O points
-2025-04-22 17:54:18,241 - INFO - External inputs: {'iron-plate', 'copper-plate'}
-2025-04-22 17:54:18,241 - INFO - External outputs: {'electronic-circuit'}
-2025-04-22 17:54:18,241 - INFO - Internal items: set()
-2025-04-22 17:54:20,399 - DEBUG - Selected South at position (0, 29) for iron-plate
-2025-04-22 17:54:21,733 - DEBUG - Selected South at position (2, 29) for copper-plate
-2025-04-22 17:54:21,788 - INFO - Created fixed input gate for iron-plate at position (0, 29) on South edge
-2025-04-22 17:54:21,788 - INFO - Created fixed input gate for copper-plate at position (2, 29) on South edge
-2025-04-22 17:54:23,093 - DEBUG - Selected South at position (6, 29) for electronic-circuit
-2025-04-22 17:54:23,150 - INFO - Created fixed output gate for electronic-circuit at position (6, 29) on South edge
-2025-04-22 17:54:23,150 - INFO - FactoryZ3Solver
-2025-04-22 17:54:23,150 - DEBUG - block data: {'electronic-circuit': {'tree': <FactorioProductionTree.FactorioProductionTree object at 0x0000020B3284FBC0>, 'production_data': {'electronic-circuit': {'amount_per_minute': 120, 'assemblers': 2, 'input_inserters': [{'id': 'copper-cable', 'inserters': 3, 'amount': 3}, {'id': 'iron-plate', 'inserters': 1, 'amount': 1}], 'belts': 2, 'capacity': 0}, 'copper-cable': {'amount_per_minute': 360.0, 'assemblers': 3, 'input_inserters': [{'id': 'copper-plate', 'inserters': 2, 'amount': 1}], 'belts': 1, 'capacity': 2}, 'copper-plate': {'amount_per_minute': 180.0, 'capacity': 0}, 'iron-plate': {'amount_per_minute': 120.0, 'capacity': 0}}, 'num_factories': 2, 'png': 'E:/Programmieren/Bachelor-Thesis/Modules/electronic-circuit_120_[]_module.png'}}
-2025-04-22 17:54:23,154 - DEBUG - Solver and data structures initialized
-2025-04-22 17:54:23,155 - INFO - Added fixed input gate for iron-plate at (0, 29)
-2025-04-22 17:54:23,155 - INFO - Added fixed input gate external_input_iron-plate at position (0, 29)
-2025-04-22 17:54:23,156 - INFO - Added fixed input gate for copper-plate at (2, 29)
-2025-04-22 17:54:23,156 - INFO - Added fixed input gate external_input_copper-plate at position (2, 29)
-2025-04-22 17:54:23,156 - INFO - Added fixed output gate for electronic-circuit at (6, 29)
-2025-04-22 17:54:23,156 - INFO - Added fixed output gate external_output_electronic-circuit at position (6, 29)
-2025-04-22 17:54:23,156 - INFO - Building constraints
-2025-04-22 17:54:23,157 - INFO - Building blocks
-2025-04-22 17:54:23,157 - DEBUG - Processing block electronic-circuit
-2025-04-22 17:54:23,157 - DEBUG - Block electronic-circuit dimensions: width=16, height=10, num_factories=2
-2025-04-22 17:54:23,157 - DEBUG - Created Block with ID Block_electronic-circuit_0_0
-2025-04-22 17:54:23,157 - DEBUG - Added input gate electronic-circuit_input_copper-plate_0_0 for item copper-plate
-2025-04-22 17:54:23,157 - DEBUG - Added output gate electronic-circuit_output_copper-plate_0_0 for item copper-plate
-2025-04-22 17:54:23,157 - DEBUG - Added input gate electronic-circuit_input_iron-plate_0_0 for item iron-plate
-2025-04-22 17:54:23,157 - DEBUG - Added output gate electronic-circuit_output_iron-plate_0_0 for item iron-plate
-2025-04-22 17:54:23,157 - DEBUG - Added input gate electronic-circuit_input_electronic-circuit_0_0 for item electronic-circuit
-2025-04-22 17:54:23,157 - DEBUG - Added output gate electronic-circuit_output_electronic-circuit_0_0 for item electronic-circuit
-2025-04-22 17:54:23,157 - DEBUG - Block Block_electronic-circuit_0_0 added to blocks list
-2025-04-22 17:54:23,157 - DEBUG - Created Block with ID Block_electronic-circuit_0_1
-2025-04-22 17:54:23,158 - DEBUG - Added input gate electronic-circuit_input_copper-plate_0_1 for item copper-plate
-2025-04-22 17:54:23,158 - DEBUG - Added output gate electronic-circuit_output_copper-plate_0_1 for item copper-plate
-2025-04-22 17:54:23,158 - DEBUG - Added input gate electronic-circuit_input_iron-plate_0_1 for item iron-plate
-2025-04-22 17:54:23,158 - DEBUG - Added output gate electronic-circuit_output_iron-plate_0_1 for item iron-plate
-2025-04-22 17:54:23,158 - DEBUG - Added input gate electronic-circuit_input_electronic-circuit_0_1 for item electronic-circuit
-2025-04-22 17:54:23,158 - DEBUG - Added output gate electronic-circuit_output_electronic-circuit_0_1 for item electronic-circuit
-2025-04-22 17:54:23,158 - DEBUG - Block Block_electronic-circuit_0_1 added to blocks list
-2025-04-22 17:54:23,158 - INFO - Adding bound constraints
-2025-04-22 17:54:23,162 - DEBUG - Added bound constraints for all blocks
-2025-04-22 17:54:23,162 - INFO - Adding overlap constraints
-2025-04-22 17:54:23,163 - DEBUG - Added non-overlapping constraints between blocks fixed_block_external_input_iron-plate and fixed_block_external_input_copper-plate
-2025-04-22 17:54:23,163 - DEBUG - Added non-overlapping constraints between blocks fixed_block_external_input_iron-plate and fixed_block_external_output_electronic-circuit
-2025-04-22 17:54:23,164 - DEBUG - Added non-overlapping constraints between blocks fixed_block_external_input_iron-plate and Block_electronic-circuit_0_0
-2025-04-22 17:54:23,164 - DEBUG - Added non-overlapping constraints between blocks fixed_block_external_input_iron-plate and Block_electronic-circuit_0_1
-2025-04-22 17:54:23,165 - DEBUG - Added non-overlapping constraints between blocks fixed_block_external_input_copper-plate and fixed_block_external_output_electronic-circuit
-2025-04-22 17:54:23,166 - DEBUG - Added non-overlapping constraints between blocks fixed_block_external_input_copper-plate and Block_electronic-circuit_0_0
-2025-04-22 17:54:23,167 - DEBUG - Added non-overlapping constraints between blocks fixed_block_external_input_copper-plate and Block_electronic-circuit_0_1
-2025-04-22 17:54:23,167 - DEBUG - Added non-overlapping constraints between blocks fixed_block_external_output_electronic-circuit and Block_electronic-circuit_0_0
-2025-04-22 17:54:23,168 - DEBUG - Added non-overlapping constraints between blocks fixed_block_external_output_electronic-circuit and Block_electronic-circuit_0_1
-2025-04-22 17:54:23,169 - DEBUG - Added non-overlapping constraints between blocks Block_electronic-circuit_0_0 and Block_electronic-circuit_0_1
-2025-04-22 17:54:23,169 - INFO - Adding gate relative position constraints
-2025-04-22 17:54:23,169 - DEBUG - Added relative position constraints for input gate external_input_iron-plate in block fixed_block_external_input_iron-plate
-2025-04-22 17:54:23,169 - DEBUG - Added relative position constraints for input gate external_input_copper-plate in block fixed_block_external_input_copper-plate
-2025-04-22 17:54:23,169 - DEBUG - Added relative position constraints for output gate external_output_electronic-circuit in block fixed_block_external_output_electronic-circuit
-2025-04-22 17:54:23,170 - DEBUG - Added relative position constraints for input gate electronic-circuit_input_copper-plate_0_0 in block Block_electronic-circuit_0_0
-2025-04-22 17:54:23,170 - DEBUG - Added relative position constraints for input gate electronic-circuit_input_iron-plate_0_0 in block Block_electronic-circuit_0_0
-2025-04-22 17:54:23,170 - DEBUG - Added relative position constraints for input gate electronic-circuit_input_electronic-circuit_0_0 in block Block_electronic-circuit_0_0
-2025-04-22 17:54:23,171 - DEBUG - Added relative position constraints for output gate electronic-circuit_output_copper-plate_0_0 in block Block_electronic-circuit_0_0
-2025-04-22 17:54:23,171 - DEBUG - Added relative position constraints for output gate electronic-circuit_output_iron-plate_0_0 in block Block_electronic-circuit_0_0
-2025-04-22 17:54:23,171 - DEBUG - Added relative position constraints for output gate electronic-circuit_output_electronic-circuit_0_0 in block Block_electronic-circuit_0_0
-2025-04-22 17:54:23,171 - DEBUG - Added relative position constraints for input gate electronic-circuit_input_copper-plate_0_1 in block Block_electronic-circuit_0_1
-2025-04-22 17:54:23,172 - DEBUG - Added relative position constraints for input gate electronic-circuit_input_iron-plate_0_1 in block Block_electronic-circuit_0_1
-2025-04-22 17:54:23,172 - DEBUG - Added relative position constraints for input gate electronic-circuit_input_electronic-circuit_0_1 in block Block_electronic-circuit_0_1
-2025-04-22 17:54:23,172 - DEBUG - Added relative position constraints for output gate electronic-circuit_output_copper-plate_0_1 in block Block_electronic-circuit_0_1
-2025-04-22 17:54:23,173 - DEBUG - Added relative position constraints for output gate electronic-circuit_output_iron-plate_0_1 in block Block_electronic-circuit_0_1
-2025-04-22 17:54:23,173 - DEBUG - Added relative position constraints for output gate electronic-circuit_output_electronic-circuit_0_1 in block Block_electronic-circuit_0_1
-2025-04-22 17:54:23,173 - INFO - Adding adaptive block spacing constraints
-2025-04-22 17:54:23,173 - DEBUG - Grouped gates by 3 item types
-2025-04-22 17:54:23,173 - DEBUG - Item iron-plate: 2 output gates, 3 input gates
-2025-04-22 17:54:23,173 - DEBUG - Block pair ('Block_electronic-circuit_0_0', 'fixed_block_external_input_iron-plate'): Aligned gate found (electronic-circuit_output_iron-plate_0_0 -> external_input_iron-plate)
-2025-04-22 17:54:23,173 - DEBUG - Block pair ('Block_electronic-circuit_0_0', 'Block_electronic-circuit_0_1'): Misaligned gate found (electronic-circuit_output_iron-plate_0_0 -> electronic-circuit_input_iron-plate_0_1)
-2025-04-22 17:54:23,173 - DEBUG - Block pair ('Block_electronic-circuit_0_1', 'fixed_block_external_input_iron-plate'): Aligned gate found (electronic-circuit_output_iron-plate_0_1 -> external_input_iron-plate)
-2025-04-22 17:54:23,173 - DEBUG - Block pair ('Block_electronic-circuit_0_0', 'Block_electronic-circuit_0_1'): Misaligned gate found (electronic-circuit_output_iron-plate_0_1 -> electronic-circuit_input_iron-plate_0_0)
-2025-04-22 17:54:23,173 - DEBUG - Item copper-plate: 2 output gates, 3 input gates
-2025-04-22 17:54:23,173 - DEBUG - Block pair ('Block_electronic-circuit_0_0', 'fixed_block_external_input_copper-plate'): Aligned gate found (electronic-circuit_output_copper-plate_0_0 -> external_input_copper-plate)
-2025-04-22 17:54:23,173 - DEBUG - Block pair ('Block_electronic-circuit_0_0', 'Block_electronic-circuit_0_1'): Misaligned gate found (electronic-circuit_output_copper-plate_0_0 -> electronic-circuit_input_copper-plate_0_1)
-2025-04-22 17:54:23,173 - DEBUG - Block pair ('Block_electronic-circuit_0_1', 'fixed_block_external_input_copper-plate'): Aligned gate found (electronic-circuit_output_copper-plate_0_1 -> external_input_copper-plate)
-2025-04-22 17:54:23,173 - DEBUG - Block pair ('Block_electronic-circuit_0_0', 'Block_electronic-circuit_0_1'): Misaligned gate found (electronic-circuit_output_copper-plate_0_1 -> electronic-circuit_input_copper-plate_0_0)
-2025-04-22 17:54:23,173 - DEBUG - Item electronic-circuit: 3 output gates, 2 input gates
-2025-04-22 17:54:23,174 - DEBUG - Block pair ('Block_electronic-circuit_0_0', 'fixed_block_external_output_electronic-circuit'): Aligned gate found (external_output_electronic-circuit -> electronic-circuit_input_electronic-circuit_0_0)
-2025-04-22 17:54:23,174 - DEBUG - Block pair ('Block_electronic-circuit_0_1', 'fixed_block_external_output_electronic-circuit'): Aligned gate found (external_output_electronic-circuit -> electronic-circuit_input_electronic-circuit_0_1)
-2025-04-22 17:54:23,174 - DEBUG - Block pair ('Block_electronic-circuit_0_0', 'Block_electronic-circuit_0_1'): Misaligned gate found (electronic-circuit_output_electronic-circuit_0_0 -> electronic-circuit_input_electronic-circuit_0_1)
-2025-04-22 17:54:23,174 - DEBUG - Block pair ('Block_electronic-circuit_0_0', 'Block_electronic-circuit_0_1'): Misaligned gate found (electronic-circuit_output_electronic-circuit_0_1 -> electronic-circuit_input_electronic-circuit_0_0)
-2025-04-22 17:54:23,174 - INFO - Processing block pair ('Block_electronic-circuit_0_0', 'fixed_block_external_input_iron-plate'):
-2025-04-22 17:54:23,174 - INFO -   - Aligned gates: 1
-2025-04-22 17:54:23,174 - INFO -   - Misaligned gates: 0
-2025-04-22 17:54:23,174 - INFO -   - Involves I/O block: False
-2025-04-22 17:54:23,174 - DEBUG -   - Added vertical alignment constraint with weight 4000
-2025-04-22 17:54:23,174 - INFO - Blocks Block_electronic-circuit_0_0 and fixed_block_external_input_iron-plate have perfectly aligned gates - enforcing ZERO spacing
-2025-04-22 17:54:23,175 - INFO -   - Added HARD constraint to enforce ZERO spacing
-2025-04-22 17:54:23,175 - INFO - Processing block pair ('Block_electronic-circuit_0_0', 'Block_electronic-circuit_0_1'):
-2025-04-22 17:54:23,175 - INFO -   - Aligned gates: 0
-2025-04-22 17:54:23,175 - INFO -   - Misaligned gates: 6
-2025-04-22 17:54:23,175 - INFO -   - Involves I/O block: False
-2025-04-22 17:54:23,176 - DEBUG -   - Added vertical alignment constraint with weight 4000
-2025-04-22 17:54:23,176 - INFO - Blocks Block_electronic-circuit_0_0 and Block_electronic-circuit_0_1 have 6 misaligned gates - enforcing spacing of 6
-2025-04-22 17:54:23,176 - INFO -   - Added HARD constraint to enforce EXACT spacing of 6
-2025-04-22 17:54:23,176 - INFO - Processing block pair ('Block_electronic-circuit_0_1', 'fixed_block_external_input_iron-plate'):
-2025-04-22 17:54:23,176 - INFO -   - Aligned gates: 1
-2025-04-22 17:54:23,176 - INFO -   - Misaligned gates: 0
-2025-04-22 17:54:23,177 - INFO -   - Involves I/O block: False
-2025-04-22 17:54:23,177 - DEBUG -   - Added vertical alignment constraint with weight 4000
-2025-04-22 17:54:23,177 - INFO - Blocks Block_electronic-circuit_0_1 and fixed_block_external_input_iron-plate have perfectly aligned gates - enforcing ZERO spacing
-2025-04-22 17:54:23,177 - INFO -   - Added HARD constraint to enforce ZERO spacing
-2025-04-22 17:54:23,177 - INFO - Processing block pair ('Block_electronic-circuit_0_0', 'fixed_block_external_input_copper-plate'):
-2025-04-22 17:54:23,177 - INFO -   - Aligned gates: 1
-2025-04-22 17:54:23,178 - INFO -   - Misaligned gates: 0
-2025-04-22 17:54:23,178 - INFO -   - Involves I/O block: False
-2025-04-22 17:54:23,178 - DEBUG -   - Added vertical alignment constraint with weight 4000
-2025-04-22 17:54:23,178 - INFO - Blocks Block_electronic-circuit_0_0 and fixed_block_external_input_copper-plate have perfectly aligned gates - enforcing ZERO spacing
-2025-04-22 17:54:23,178 - INFO -   - Added HARD constraint to enforce ZERO spacing
-2025-04-22 17:54:23,179 - INFO - Processing block pair ('Block_electronic-circuit_0_1', 'fixed_block_external_input_copper-plate'):
-2025-04-22 17:54:23,179 - INFO -   - Aligned gates: 1
-2025-04-22 17:54:23,179 - INFO -   - Misaligned gates: 0
-2025-04-22 17:54:23,179 - INFO -   - Involves I/O block: False
-2025-04-22 17:54:23,179 - DEBUG -   - Added vertical alignment constraint with weight 4000
-2025-04-22 17:54:23,179 - INFO - Blocks Block_electronic-circuit_0_1 and fixed_block_external_input_copper-plate have perfectly aligned gates - enforcing ZERO spacing
-2025-04-22 17:54:23,180 - INFO -   - Added HARD constraint to enforce ZERO spacing
-2025-04-22 17:54:23,180 - INFO - Processing block pair ('Block_electronic-circuit_0_0', 'fixed_block_external_output_electronic-circuit'):
-2025-04-22 17:54:23,180 - INFO -   - Aligned gates: 1
-2025-04-22 17:54:23,180 - INFO -   - Misaligned gates: 0
-2025-04-22 17:54:23,180 - INFO -   - Involves I/O block: False
-2025-04-22 17:54:23,180 - DEBUG -   - Added vertical alignment constraint with weight 4000
-2025-04-22 17:54:23,180 - INFO - Blocks Block_electronic-circuit_0_0 and fixed_block_external_output_electronic-circuit have perfectly aligned gates - enforcing ZERO spacing
-2025-04-22 17:54:23,181 - INFO -   - Added HARD constraint to enforce ZERO spacing
-2025-04-22 17:54:23,181 - INFO - Processing block pair ('Block_electronic-circuit_0_1', 'fixed_block_external_output_electronic-circuit'):
-2025-04-22 17:54:23,181 - INFO -   - Aligned gates: 1
-2025-04-22 17:54:23,181 - INFO -   - Misaligned gates: 0
-2025-04-22 17:54:23,181 - INFO -   - Involves I/O block: False
-2025-04-22 17:54:23,181 - DEBUG -   - Added vertical alignment constraint with weight 4000
-2025-04-22 17:54:23,181 - INFO - Blocks Block_electronic-circuit_0_1 and fixed_block_external_output_electronic-circuit have perfectly aligned gates - enforcing ZERO spacing
-2025-04-22 17:54:23,182 - INFO -   - Added HARD constraint to enforce ZERO spacing
-2025-04-22 17:54:23,182 - INFO - Added adaptive spacing constraints for 7 block pairs
-2025-04-22 17:54:23,182 - INFO - === Block Spacing Information ===
-2025-04-22 17:54:23,182 - INFO - Block fixed_block_external_input_iron-plate spacing:
-2025-04-22 17:54:23,182 - INFO - Block fixed_block_external_input_copper-plate spacing:
-2025-04-22 17:54:23,182 - INFO - Block fixed_block_external_output_electronic-circuit spacing:
-2025-04-22 17:54:23,182 - INFO - Block Block_electronic-circuit_0_0 spacing:
-2025-04-22 17:54:23,182 - INFO -   - With Block_electronic-circuit_0_1: south:6
-2025-04-22 17:54:23,182 - INFO - Block Block_electronic-circuit_0_1 spacing:
-2025-04-22 17:54:23,182 - INFO -   - With Block_electronic-circuit_0_0: north:6
-2025-04-22 17:54:23,182 - INFO - Adding vertical layout guidance constraints
-2025-04-22 17:54:23,184 - INFO - Adding gate proximity optimization constraints
-2025-04-22 17:54:23,193 - DEBUG - Created 12 gate distance variables
-2025-04-22 17:54:23,194 - INFO - Adding I/O gate constraints
-2025-04-22 17:54:23,198 - DEBUG - Added I/O gate constraints for all edges
-2025-04-22 17:54:23,198 - INFO - Minimizing width more than height, plus gate distances
-2025-04-22 17:54:23,198 - INFO - Solving factory layout with Z3...
+2025-04-28 14:49:48,396 - DEBUG - Popen(['git', 'version'], cwd=e:\Programmieren\Bachelor-Thesis, stdin=None, shell=False, universal_newlines=False)
+2025-04-28 14:49:48,443 - DEBUG - Popen(['git', 'version'], cwd=e:\Programmieren\Bachelor-Thesis, stdin=None, shell=False, universal_newlines=False)
+2025-04-28 14:49:49,225 - INFO - Creating blueprint from Modules/electronic-circuit_120_[]_module.json
+2025-04-28 14:49:49,275 - INFO - Blueprint successfully exported to electronic-circuit_120_[]_module.txt
+2025-04-28 14:49:52,104 - INFO - Processing items in order: ['copper-plate']
+2025-04-28 14:49:52,104 - DEBUG - All pairs sorted by heuristic distance: [(9, (0, 9), (0, 0), None, None)]
+2025-04-28 14:49:52,104 - DEBUG - Path found: [(0, 9), (0, 8), (0, 7), (0, 6), (0, 5), (0, 4), (0, 3), (0, 2), (0, 1), (0, 0)] with underground segments: {}
+2025-04-28 14:49:52,104 - INFO - Found better path for copper-plate from (0, 9) to (0, 0) with length 10
+2025-04-28 14:49:52,104 - DEBUG - Adding path for copper-plate from (0, 9) to (0, 0)
+2025-04-28 14:49:52,104 - DEBUG - ======================================================
+2025-04-28 14:49:52,104 - DEBUG - Marking path on grid for copper-plate from (0, 9) to (0, 0)
+2025-04-28 14:49:52,105 - DEBUG - BEFORE :Working grid:
+[[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]]
+2025-04-28 14:49:52,105 - DEBUG - AFTER: Working grid:
+[[1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]]
+2025-04-28 14:49:52,105 - DEBUG - ======================================================
+2025-04-28 14:49:53,409 - INFO - Processing items in order: ['iron-plate']
+2025-04-28 14:49:53,409 - DEBUG - All pairs sorted by heuristic distance: [(9, (12, 9), (12, 0), None, None)]
+2025-04-28 14:49:53,409 - DEBUG - Path found: [(12, 9), (12, 8), (12, 7), (12, 6), (12, 5), (12, 4), (12, 3), (12, 2), (12, 1), (12, 0)] with underground segments: {}
+2025-04-28 14:49:53,409 - INFO - Found better path for iron-plate from (12, 9) to (12, 0) with length 10
+2025-04-28 14:49:53,409 - DEBUG - Adding path for iron-plate from (12, 9) to (12, 0)
+2025-04-28 14:49:53,409 - DEBUG - ======================================================
+2025-04-28 14:49:53,410 - DEBUG - Marking path on grid for iron-plate from (12, 9) to (12, 0)
+2025-04-28 14:49:53,410 - DEBUG - BEFORE :Working grid:
+[[1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]]
+2025-04-28 14:49:53,411 - DEBUG - AFTER: Working grid:
+[[1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]]
+2025-04-28 14:49:53,411 - DEBUG - ======================================================
+2025-04-28 14:49:55,214 - INFO - Processing items in order: ['electronic-circuit']
+2025-04-28 14:49:55,215 - DEBUG - All pairs sorted by heuristic distance: [(9, (15, 0), (15, 9), None, None)]
+2025-04-28 14:49:55,215 - DEBUG - Path found: [(15, 0), (15, 1), (15, 2), (15, 3), (15, 4), (15, 5), (15, 6), (15, 7), (15, 8), (15, 9)] with underground segments: {}
+2025-04-28 14:49:55,215 - INFO - Found better path for electronic-circuit from (15, 0) to (15, 9) with length 10
+2025-04-28 14:49:55,215 - DEBUG - Adding path for electronic-circuit from (15, 0) to (15, 9)
+2025-04-28 14:49:55,215 - DEBUG - ======================================================
+2025-04-28 14:49:55,215 - DEBUG - Marking path on grid for electronic-circuit from (15, 0) to (15, 9)
+2025-04-28 14:49:55,216 - DEBUG - BEFORE :Working grid:
+[[1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]]
+2025-04-28 14:49:55,216 - DEBUG - AFTER: Working grid:
+[[1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]]
+2025-04-28 14:49:55,216 - DEBUG - ======================================================
+2025-04-28 14:49:55,923 - DEBUG - production data: {'electronic-circuit': {'amount_per_minute': 120, 'assemblers': 2, 'input_inserters': [{'id': 'copper-cable', 'inserters': 3, 'amount': 3}, {'id': 'iron-plate', 'inserters': 1, 'amount': 1}], 'belts': 2, 'capacity': 0}, 'copper-cable': {'amount_per_minute': 360.0, 'assemblers': 3, 'input_inserters': [{'id': 'copper-plate', 'inserters': 2, 'amount': 1}], 'belts': 1, 'capacity': 2}, 'copper-plate': {'amount_per_minute': 180.0, 'capacity': 0}, 'iron-plate': {'amount_per_minute': 120.0, 'capacity': 0}}
+2025-04-28 14:49:55,928 - INFO - Starting to add manual I/O constraints.
+2025-04-28 14:49:55,928 - DEBUG - Processing input item 'copper-plate' with data: {'input': (9, 0), 'output': (0, 0), 'paths': {'copper-plate': [{'item': 'copper-plate', 'path': [(0, 9), (0, 8), (0, 7), (0, 6), (0, 5), (0, 4), (0, 3), (0, 2), (0, 1), (0, 0)], 'start': (0, 9), 'destination': (0, 0), 'underground_segments': {}, 'start_splitter': None, 'dest_splitter': None}]}}
+2025-04-28 14:49:55,928 - INFO - Adding input belt for item 'copper-plate' at position (9, 0)
+2025-04-28 14:49:55,928 - INFO - Adding output belt for item 'copper-plate' at position (0, 0)
+2025-04-28 14:49:55,929 - DEBUG - Processing path data for input item 'copper-plate'
+2025-04-28 14:49:55,929 - INFO - Adding belt path for 'copper-plate' at position (0, 8)
+2025-04-28 14:49:55,929 - INFO - Adding belt path for 'copper-plate' at position (0, 7)
+2025-04-28 14:49:55,929 - INFO - Adding belt path for 'copper-plate' at position (0, 6)
+2025-04-28 14:49:55,931 - INFO - Adding belt path for 'copper-plate' at position (0, 5)
+2025-04-28 14:49:55,931 - INFO - Adding belt path for 'copper-plate' at position (0, 4)
+2025-04-28 14:49:55,931 - INFO - Adding belt path for 'copper-plate' at position (0, 3)
+2025-04-28 14:49:55,931 - INFO - Adding belt path for 'copper-plate' at position (0, 2)
+2025-04-28 14:49:55,931 - INFO - Adding belt path for 'copper-plate' at position (0, 1)
+2025-04-28 14:49:55,931 - DEBUG - Processing input item 'iron-plate' with data: {'input': (9, 12), 'output': (0, 12), 'paths': {'iron-plate': [{'item': 'iron-plate', 'path': [(12, 9), (12, 8), (12, 7), (12, 6), (12, 5), (12, 4), (12, 3), (12, 2), (12, 1), (12, 0)], 'start': (12, 9), 'destination': (12, 0), 'underground_segments': {}, 'start_splitter': None, 'dest_splitter': None}]}}
+2025-04-28 14:49:55,932 - INFO - Adding input belt for item 'iron-plate' at position (9, 12)
+2025-04-28 14:49:55,932 - INFO - Adding output belt for item 'iron-plate' at position (0, 12)
+2025-04-28 14:49:55,932 - DEBUG - Processing path data for input item 'iron-plate'
+2025-04-28 14:49:55,932 - INFO - Adding belt path for 'iron-plate' at position (12, 8)
+2025-04-28 14:49:55,933 - INFO - Adding belt path for 'iron-plate' at position (12, 7)
+2025-04-28 14:49:55,933 - INFO - Adding belt path for 'iron-plate' at position (12, 6)
+2025-04-28 14:49:55,933 - INFO - Adding belt path for 'iron-plate' at position (12, 5)
+2025-04-28 14:49:55,934 - INFO - Adding belt path for 'iron-plate' at position (12, 4)
+2025-04-28 14:49:55,934 - INFO - Adding belt path for 'iron-plate' at position (12, 3)
+2025-04-28 14:49:55,934 - INFO - Adding belt path for 'iron-plate' at position (12, 2)
+2025-04-28 14:49:55,934 - INFO - Adding belt path for 'iron-plate' at position (12, 1)
+2025-04-28 14:49:55,935 - DEBUG - Processing output item 'electronic-circuit' with data: {'input': (0, 15), 'output': (9, 15), 'paths': {'electronic-circuit': [{'item': 'electronic-circuit', 'path': [(15, 0), (15, 1), (15, 2), (15, 3), (15, 4), (15, 5), (15, 6), (15, 7), (15, 8), (15, 9)], 'start': (15, 0), 'destination': (15, 9), 'underground_segments': {}, 'start_splitter': None, 'dest_splitter': None}]}}
+2025-04-28 14:49:55,935 - INFO - Adding input belt for output item 'electronic-circuit' at position (0, 15)
+2025-04-28 14:49:55,935 - INFO - Adding output belt for output item 'electronic-circuit' at position (9, 15)
+2025-04-28 14:49:55,935 - DEBUG - Processing path data for output item 'electronic-circuit'
+2025-04-28 14:49:55,935 - INFO - Adding belt path for 'electronic-circuit' at position (15, 1)
+2025-04-28 14:49:55,936 - INFO - Adding belt path for 'electronic-circuit' at position (15, 2)
+2025-04-28 14:49:55,936 - INFO - Adding belt path for 'electronic-circuit' at position (15, 3)
+2025-04-28 14:49:55,936 - INFO - Adding belt path for 'electronic-circuit' at position (15, 4)
+2025-04-28 14:49:55,936 - INFO - Adding belt path for 'electronic-circuit' at position (15, 5)
+2025-04-28 14:49:55,937 - INFO - Adding belt path for 'electronic-circuit' at position (15, 6)
+2025-04-28 14:49:55,937 - INFO - Adding belt path for 'electronic-circuit' at position (15, 7)
+2025-04-28 14:49:55,937 - INFO - Adding belt path for 'electronic-circuit' at position (15, 8)
+2025-04-28 14:49:55,937 - INFO - Finished adding manual I/O constraints. Calling solver.
+2025-04-28 14:49:55,940 - INFO - Solver check result: sat
+2025-04-28 14:49:55,940 - INFO - === Identifying Non-Overlapping Inserters ===
+2025-04-28 14:49:55,940 - INFO - === Locking Initial Solution ===
+2025-04-28 14:49:55,940 - INFO - === Minimizing Distance for Non-Overlapping Inserters ===
+2025-04-28 14:49:55,942 - INFO - Final solver check result:sat
+2025-04-28 14:49:55,946 - INFO - Starting to create assemblers based on production data.
+2025-04-28 14:49:55,946 - DEBUG - Processing item 'electronic-circuit' with production data: {'amount_per_minute': 120, 'assemblers': 2, 'input_inserters': [{'id': 'copper-cable', 'inserters': 3, 'amount': 3}, {'id': 'iron-plate', 'inserters': 1, 'amount': 1}], 'belts': 2, 'capacity': 0}
+2025-04-28 14:49:55,946 - INFO - Creating assembler for item 'electronic-circuit', instance 0
+2025-04-28 14:49:55,946 - INFO - Creating input inserter for copper-cable at copper-cable_in_0_0_0
+2025-04-28 14:49:55,946 - INFO - Creating input inserter for copper-cable at copper-cable_in_0_0_1
+2025-04-28 14:49:55,946 - INFO - Creating input inserter for copper-cable at copper-cable_in_0_0_2
+2025-04-28 14:49:55,946 - INFO - Creating input inserter for iron-plate at iron-plate_in_0_0_0
+2025-04-28 14:49:55,947 - DEBUG - Created assembler with ID: electronic-circuit_0_0 and input inserters: ['copper-cable_in_0_0_0', 'copper-cable_in_0_0_1', 'copper-cable_in_0_0_2', 'iron-plate_in_0_0_0']
+2025-04-28 14:49:55,947 - DEBUG - Created assembler with ID: electronic-circuit_0_0 with item = electronic-circuit
+2025-04-28 14:49:55,947 - DEBUG - Created assembler with ID: electronic-circuit_0_0 with capacity = 0
+2025-04-28 14:49:55,947 - INFO - Creating assembler for item 'electronic-circuit', instance 1
+2025-04-28 14:49:55,947 - INFO - Creating input inserter for copper-cable at copper-cable_in_0_1_0
+2025-04-28 14:49:55,947 - INFO - Creating input inserter for copper-cable at copper-cable_in_0_1_1
+2025-04-28 14:49:55,947 - INFO - Creating input inserter for copper-cable at copper-cable_in_0_1_2
+2025-04-28 14:49:55,947 - INFO - Creating input inserter for iron-plate at iron-plate_in_0_1_0
+2025-04-28 14:49:55,948 - DEBUG - Created assembler with ID: electronic-circuit_0_1 and input inserters: ['copper-cable_in_0_1_0', 'copper-cable_in_0_1_1', 'copper-cable_in_0_1_2', 'iron-plate_in_0_1_0']
+2025-04-28 14:49:55,948 - DEBUG - Created assembler with ID: electronic-circuit_0_1 with item = electronic-circuit
+2025-04-28 14:49:55,948 - DEBUG - Created assembler with ID: electronic-circuit_0_1 with capacity = 0
+2025-04-28 14:49:55,948 - DEBUG - Processing item 'copper-cable' with production data: {'amount_per_minute': 360.0, 'assemblers': 3, 'input_inserters': [{'id': 'copper-plate', 'inserters': 2, 'amount': 1}], 'belts': 1, 'capacity': 2}
+2025-04-28 14:49:55,948 - INFO - Creating assembler for item 'copper-cable', instance 0
+2025-04-28 14:49:55,948 - INFO - Creating input inserter for copper-plate at copper-plate_in_1_0_0
+2025-04-28 14:49:55,948 - INFO - Creating input inserter for copper-plate at copper-plate_in_1_0_1
+2025-04-28 14:49:55,948 - DEBUG - Created assembler with ID: copper-cable_1_0 and input inserters: ['copper-plate_in_1_0_0', 'copper-plate_in_1_0_1']
+2025-04-28 14:49:55,948 - DEBUG - Created assembler with ID: copper-cable_1_0 with item = copper-cable
+2025-04-28 14:49:55,948 - DEBUG - Created assembler with ID: copper-cable_1_0 with capacity = 2
+2025-04-28 14:49:55,948 - INFO - Creating assembler for item 'copper-cable', instance 1
+2025-04-28 14:49:55,948 - INFO - Creating input inserter for copper-plate at copper-plate_in_1_1_0
+2025-04-28 14:49:55,949 - INFO - Creating input inserter for copper-plate at copper-plate_in_1_1_1
+2025-04-28 14:49:55,949 - DEBUG - Created assembler with ID: copper-cable_1_1 and input inserters: ['copper-plate_in_1_1_0', 'copper-plate_in_1_1_1']
+2025-04-28 14:49:55,949 - DEBUG - Created assembler with ID: copper-cable_1_1 with item = copper-cable
+2025-04-28 14:49:55,949 - DEBUG - Created assembler with ID: copper-cable_1_1 with capacity = 2
+2025-04-28 14:49:55,949 - INFO - Creating assembler for item 'copper-cable', instance 2
+2025-04-28 14:49:55,949 - INFO - Creating input inserter for copper-plate at copper-plate_in_1_2_0
+2025-04-28 14:49:55,949 - INFO - Creating input inserter for copper-plate at copper-plate_in_1_2_1
+2025-04-28 14:49:55,949 - DEBUG - Created assembler with ID: copper-cable_1_2 and input inserters: ['copper-plate_in_1_2_0', 'copper-plate_in_1_2_1']
+2025-04-28 14:49:55,949 - DEBUG - Created assembler with ID: copper-cable_1_2 with item = copper-cable
+2025-04-28 14:49:55,949 - DEBUG - Created assembler with ID: copper-cable_1_2 with capacity = 2
+2025-04-28 14:49:55,949 - DEBUG - Processing item 'copper-plate' with production data: {'amount_per_minute': 180.0, 'capacity': 0}
+2025-04-28 14:49:55,949 - DEBUG - Processing item 'iron-plate' with production data: {'amount_per_minute': 120.0, 'capacity': 0}
+2025-04-28 14:49:55,949 - INFO - Created 5 assemblers in total.
+2025-04-28 14:49:55,949 - INFO - Adding assembler overlap constraints to avoid global belts.
+2025-04-28 14:49:56,017 - INFO - Adding inserter overlap constraints to avoid global belts.
+2025-04-28 14:49:56,090 - INFO - Adding belt overlap constraints to avoid conflicts with global belts (different items only).
+2025-04-28 14:49:56,157 - INFO - Adding boundary constraints for assemblers.
+2025-04-28 14:49:56,157 - DEBUG - Setting boundary constraints for assembler ID electronic-circuit_0_0
+2025-04-28 14:49:56,157 - DEBUG - Setting boundary constraints for assembler ID electronic-circuit_0_1
+2025-04-28 14:49:56,158 - DEBUG - Setting boundary constraints for assembler ID copper-cable_1_0
+2025-04-28 14:49:56,158 - DEBUG - Setting boundary constraints for assembler ID copper-cable_1_1
+2025-04-28 14:49:56,158 - DEBUG - Setting boundary constraints for assembler ID copper-cable_1_2
+2025-04-28 14:49:56,159 - INFO - Adding boundary constraints for belts and inserters.
+2025-04-28 14:49:56,159 - DEBUG - Setting boundary constraints for inserter ID copper-cable_in_0_0_0 and belt ID copper-cable_end_0_0_0
+2025-04-28 14:49:56,160 - DEBUG - Setting boundary constraints for inserter ID copper-cable_in_0_0_1 and belt ID copper-cable_end_0_0_1
+2025-04-28 14:49:56,161 - DEBUG - Setting boundary constraints for inserter ID copper-cable_in_0_0_2 and belt ID copper-cable_end_0_0_2
+2025-04-28 14:49:56,161 - DEBUG - Setting boundary constraints for inserter ID iron-plate_in_0_0_0 and belt ID iron-plate_end_0_0_0
+2025-04-28 14:49:56,162 - DEBUG - Setting boundary constraints for inserter ID copper-cable_in_0_1_0 and belt ID copper-cable_end_0_1_0
+2025-04-28 14:49:56,163 - DEBUG - Setting boundary constraints for inserter ID copper-cable_in_0_1_1 and belt ID copper-cable_end_0_1_1
+2025-04-28 14:49:56,163 - DEBUG - Setting boundary constraints for inserter ID copper-cable_in_0_1_2 and belt ID copper-cable_end_0_1_2
+2025-04-28 14:49:56,164 - DEBUG - Setting boundary constraints for inserter ID iron-plate_in_0_1_0 and belt ID iron-plate_end_0_1_0
+2025-04-28 14:49:56,165 - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_1_0_0 and belt ID copper-plate_end_1_0_0
+2025-04-28 14:49:56,165 - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_1_0_1 and belt ID copper-plate_end_1_0_1
+2025-04-28 14:49:56,166 - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_1_1_0 and belt ID copper-plate_end_1_1_0
+2025-04-28 14:49:56,168 - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_1_1_1 and belt ID copper-plate_end_1_1_1
+2025-04-28 14:49:56,169 - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_1_2_0 and belt ID copper-plate_end_1_2_0
+2025-04-28 14:49:56,170 - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_1_2_1 and belt ID copper-plate_end_1_2_1
+2025-04-28 14:49:56,171 - INFO - Adding assembler overlap constraints to prevent assembler-assembler overlap.
+2025-04-28 14:49:56,179 - INFO - Adding assembler-inserter overlap constraints.
+2025-04-28 14:49:56,204 - INFO - Adding assembler-belt overlap constraints (excluding same-item belts).
+2025-04-28 14:49:56,221 - INFO - Adding inserter overlap constraints to prevent inserter-inserter overlap.
+2025-04-28 14:49:56,251 - INFO - Adding inserter-belt overlap constraints to prevent inserters from overlapping with belts.
+2025-04-28 14:49:56,277 - INFO - Adding belt overlap constraints to prevent belt-belt overlap (except same-item belts).
+2025-04-28 14:49:56,298 - INFO - Ensuring inserter copper-cable_in_0_0_0 is adjacent to assembler electronic-circuit_0_0
+2025-04-28 14:49:56,302 - INFO - Adding belt position constraint for inserter copper-cable_in_0_0_0 with belt copper-cable_end_0_0_0
+2025-04-28 14:49:56,305 - INFO - Ensuring inserter copper-cable_in_0_0_1 is adjacent to assembler electronic-circuit_0_0
+2025-04-28 14:49:56,311 - INFO - Adding belt position constraint for inserter copper-cable_in_0_0_1 with belt copper-cable_end_0_0_1
+2025-04-28 14:49:56,314 - INFO - Ensuring inserter copper-cable_in_0_0_2 is adjacent to assembler electronic-circuit_0_0
+2025-04-28 14:49:56,318 - INFO - Adding belt position constraint for inserter copper-cable_in_0_0_2 with belt copper-cable_end_0_0_2
+2025-04-28 14:49:56,321 - INFO - Ensuring inserter iron-plate_in_0_0_0 is adjacent to assembler electronic-circuit_0_0
+2025-04-28 14:49:56,325 - INFO - Adding belt position constraint for inserter iron-plate_in_0_0_0 with belt iron-plate_end_0_0_0
+2025-04-28 14:49:56,331 - INFO - Ensuring inserter copper-cable_in_0_1_0 is adjacent to assembler electronic-circuit_0_1
+2025-04-28 14:49:56,334 - INFO - Adding belt position constraint for inserter copper-cable_in_0_1_0 with belt copper-cable_end_0_1_0
+2025-04-28 14:49:56,337 - INFO - Ensuring inserter copper-cable_in_0_1_1 is adjacent to assembler electronic-circuit_0_1
+2025-04-28 14:49:56,342 - INFO - Adding belt position constraint for inserter copper-cable_in_0_1_1 with belt copper-cable_end_0_1_1
+2025-04-28 14:49:56,345 - INFO - Ensuring inserter copper-cable_in_0_1_2 is adjacent to assembler electronic-circuit_0_1
+2025-04-28 14:49:56,349 - INFO - Adding belt position constraint for inserter copper-cable_in_0_1_2 with belt copper-cable_end_0_1_2
+2025-04-28 14:49:56,351 - INFO - Ensuring inserter iron-plate_in_0_1_0 is adjacent to assembler electronic-circuit_0_1
+2025-04-28 14:49:56,356 - INFO - Adding belt position constraint for inserter iron-plate_in_0_1_0 with belt iron-plate_end_0_1_0
+2025-04-28 14:49:56,361 - INFO - Ensuring inserter copper-plate_in_1_0_0 is adjacent to assembler copper-cable_1_0
+2025-04-28 14:49:56,364 - INFO - Adding belt position constraint for inserter copper-plate_in_1_0_0 with belt copper-plate_end_1_0_0
+2025-04-28 14:49:56,367 - INFO - Ensuring inserter copper-plate_in_1_0_1 is adjacent to assembler copper-cable_1_0
+2025-04-28 14:49:56,372 - INFO - Adding belt position constraint for inserter copper-plate_in_1_0_1 with belt copper-plate_end_1_0_1
+2025-04-28 14:49:56,376 - INFO - Ensuring inserter copper-plate_in_1_1_0 is adjacent to assembler copper-cable_1_1
+2025-04-28 14:49:56,380 - INFO - Adding belt position constraint for inserter copper-plate_in_1_1_0 with belt copper-plate_end_1_1_0
+2025-04-28 14:49:56,383 - INFO - Ensuring inserter copper-plate_in_1_1_1 is adjacent to assembler copper-cable_1_1
+2025-04-28 14:49:56,387 - INFO - Adding belt position constraint for inserter copper-plate_in_1_1_1 with belt copper-plate_end_1_1_1
+2025-04-28 14:49:56,392 - INFO - Ensuring inserter copper-plate_in_1_2_0 is adjacent to assembler copper-cable_1_2
+2025-04-28 14:49:56,397 - INFO - Adding belt position constraint for inserter copper-plate_in_1_2_0 with belt copper-plate_end_1_2_0
+2025-04-28 14:49:56,400 - INFO - Ensuring inserter copper-plate_in_1_2_1 is adjacent to assembler copper-cable_1_2
+2025-04-28 14:49:56,404 - INFO - Adding belt position constraint for inserter copper-plate_in_1_2_1 with belt copper-plate_end_1_2_1
+2025-04-28 14:49:56,777 - INFO - Adding output space constraints for assembler electronic-circuit_0_0
+2025-04-28 14:49:57,086 - INFO - Adding output space constraints for assembler electronic-circuit_0_1
+2025-04-28 14:49:57,382 - INFO - Adding output space constraints for assembler copper-cable_1_0
+2025-04-28 14:49:57,681 - INFO - Adding output space constraints for assembler copper-cable_1_1
+2025-04-28 14:49:57,967 - INFO - Adding output space constraints for assembler copper-cable_1_2
+2025-04-28 14:49:57,967 - DEBUG - Adding constraints to merge input inserters with assembler edges for items with matching types.
+2025-04-28 14:49:57,970 - DEBUG - dissallow merge for inserter copper-cable_in_0_0_0 and assembler electronic-circuit_0_1 with capcity: 0.
+2025-04-28 14:49:57,970 - DEBUG - ------------------------
+2025-04-28 14:49:57,970 - DEBUG - Assembler electronic-circuit_0_0 and other assembler copper-cable_1_0 have matching items: copper-cable
+2025-04-28 14:49:57,971 - DEBUG - Adding constraints to position belt for inserter copper-cable_in_0_0_0 and assembler copper-cable_1_0 with capcity: 2.
+2025-04-28 14:49:57,972 - DEBUG - Adding 'Or' between valid positions for inserter copper-cable_in_0_0_0 and reducing capacity of copper-cable_1_0 to 2
+2025-04-28 14:49:57,972 - DEBUG - copper-cable_in_0_0_0 merged is set to False
+2025-04-28 14:49:57,974 - DEBUG - dissallow merge for inserter copper-cable_in_0_0_0 and assembler copper-cable_1_1 with capcity: 2.
+2025-04-28 14:49:57,976 - DEBUG - dissallow merge for inserter copper-cable_in_0_0_0 and assembler copper-cable_1_2 with capcity: 2.
+2025-04-28 14:49:57,978 - DEBUG - dissallow merge for inserter copper-cable_in_0_0_1 and assembler electronic-circuit_0_1 with capcity: 0.
+2025-04-28 14:49:57,978 - DEBUG - ------------------------
+2025-04-28 14:49:57,978 - DEBUG - Assembler electronic-circuit_0_0 and other assembler copper-cable_1_0 have matching items: copper-cable
+2025-04-28 14:49:57,979 - DEBUG - Adding constraints to position belt for inserter copper-cable_in_0_0_1 and assembler copper-cable_1_0 with capcity: 1.
+2025-04-28 14:49:57,979 - DEBUG - Adding 'Or' between valid positions for inserter copper-cable_in_0_0_1 and reducing capacity of copper-cable_1_0 to 1
+2025-04-28 14:49:57,979 - DEBUG - copper-cable_in_0_0_1 merged is set to False
+2025-04-28 14:49:57,982 - DEBUG - dissallow merge for inserter copper-cable_in_0_0_1 and assembler copper-cable_1_1 with capcity: 2.
+2025-04-28 14:49:57,983 - DEBUG - dissallow merge for inserter copper-cable_in_0_0_1 and assembler copper-cable_1_2 with capcity: 2.
+2025-04-28 14:49:57,986 - DEBUG - dissallow merge for inserter copper-cable_in_0_0_2 and assembler electronic-circuit_0_1 with capcity: 0.
+2025-04-28 14:49:57,987 - DEBUG - dissallow merge for inserter copper-cable_in_0_0_2 and assembler copper-cable_1_0 with capcity: 0.
+2025-04-28 14:49:57,988 - DEBUG - ------------------------
+2025-04-28 14:49:57,988 - DEBUG - Assembler electronic-circuit_0_0 and other assembler copper-cable_1_1 have matching items: copper-cable
+2025-04-28 14:49:57,990 - DEBUG - Adding constraints to position belt for inserter copper-cable_in_0_0_2 and assembler copper-cable_1_1 with capcity: 2.
+2025-04-28 14:49:57,990 - DEBUG - Adding 'Or' between valid positions for inserter copper-cable_in_0_0_2 and reducing capacity of copper-cable_1_1 to 2
+2025-04-28 14:49:57,990 - DEBUG - copper-cable_in_0_0_2 merged is set to False
+2025-04-28 14:49:57,992 - DEBUG - dissallow merge for inserter copper-cable_in_0_0_2 and assembler copper-cable_1_2 with capcity: 2.
+2025-04-28 14:49:57,994 - DEBUG - dissallow merge for inserter iron-plate_in_0_0_0 and assembler electronic-circuit_0_1 with capcity: 0.
+2025-04-28 14:49:57,996 - DEBUG - dissallow merge for inserter iron-plate_in_0_0_0 and assembler copper-cable_1_0 with capcity: 0.
+2025-04-28 14:49:57,998 - DEBUG - dissallow merge for inserter iron-plate_in_0_0_0 and assembler copper-cable_1_1 with capcity: 1.
+2025-04-28 14:49:58,000 - DEBUG - dissallow merge for inserter iron-plate_in_0_0_0 and assembler copper-cable_1_2 with capcity: 2.
+2025-04-28 14:49:58,001 - DEBUG - dissallow merge for inserter copper-cable_in_0_1_0 and assembler electronic-circuit_0_0 with capcity: 0.
+2025-04-28 14:49:58,004 - DEBUG - dissallow merge for inserter copper-cable_in_0_1_0 and assembler copper-cable_1_0 with capcity: 0.
+2025-04-28 14:49:58,004 - DEBUG - ------------------------
+2025-04-28 14:49:58,004 - DEBUG - Assembler electronic-circuit_0_1 and other assembler copper-cable_1_1 have matching items: copper-cable
+2025-04-28 14:49:58,006 - DEBUG - Adding constraints to position belt for inserter copper-cable_in_0_1_0 and assembler copper-cable_1_1 with capcity: 1.
+2025-04-28 14:49:58,006 - DEBUG - Adding 'Or' between valid positions for inserter copper-cable_in_0_1_0 and reducing capacity of copper-cable_1_1 to 1
+2025-04-28 14:49:58,006 - DEBUG - copper-cable_in_0_1_0 merged is set to False
+2025-04-28 14:49:58,008 - DEBUG - dissallow merge for inserter copper-cable_in_0_1_0 and assembler copper-cable_1_2 with capcity: 2.
+2025-04-28 14:49:58,010 - DEBUG - dissallow merge for inserter copper-cable_in_0_1_1 and assembler electronic-circuit_0_0 with capcity: 0.
+2025-04-28 14:49:58,012 - DEBUG - dissallow merge for inserter copper-cable_in_0_1_1 and assembler copper-cable_1_0 with capcity: 0.
+2025-04-28 14:49:58,014 - DEBUG - dissallow merge for inserter copper-cable_in_0_1_1 and assembler copper-cable_1_1 with capcity: 0.
+2025-04-28 14:49:58,014 - DEBUG - ------------------------
+2025-04-28 14:49:58,014 - DEBUG - Assembler electronic-circuit_0_1 and other assembler copper-cable_1_2 have matching items: copper-cable
+2025-04-28 14:49:58,015 - DEBUG - Adding constraints to position belt for inserter copper-cable_in_0_1_1 and assembler copper-cable_1_2 with capcity: 2.
+2025-04-28 14:49:58,016 - DEBUG - Adding 'Or' between valid positions for inserter copper-cable_in_0_1_1 and reducing capacity of copper-cable_1_2 to 2
+2025-04-28 14:49:58,016 - DEBUG - copper-cable_in_0_1_1 merged is set to False
+2025-04-28 14:49:58,018 - DEBUG - dissallow merge for inserter copper-cable_in_0_1_2 and assembler electronic-circuit_0_0 with capcity: 0.
+2025-04-28 14:49:58,021 - DEBUG - dissallow merge for inserter copper-cable_in_0_1_2 and assembler copper-cable_1_0 with capcity: 0.
+2025-04-28 14:49:58,023 - DEBUG - dissallow merge for inserter copper-cable_in_0_1_2 and assembler copper-cable_1_1 with capcity: 0.
+2025-04-28 14:49:58,023 - DEBUG - ------------------------
+2025-04-28 14:49:58,023 - DEBUG - Assembler electronic-circuit_0_1 and other assembler copper-cable_1_2 have matching items: copper-cable
+2025-04-28 14:49:58,024 - DEBUG - Adding constraints to position belt for inserter copper-cable_in_0_1_2 and assembler copper-cable_1_2 with capcity: 1.
+2025-04-28 14:49:58,025 - DEBUG - Adding 'Or' between valid positions for inserter copper-cable_in_0_1_2 and reducing capacity of copper-cable_1_2 to 1
+2025-04-28 14:49:58,025 - DEBUG - copper-cable_in_0_1_2 merged is set to False
+2025-04-28 14:49:58,027 - DEBUG - dissallow merge for inserter iron-plate_in_0_1_0 and assembler electronic-circuit_0_0 with capcity: 0.
+2025-04-28 14:49:58,029 - DEBUG - dissallow merge for inserter iron-plate_in_0_1_0 and assembler copper-cable_1_0 with capcity: 0.
+2025-04-28 14:49:58,031 - DEBUG - dissallow merge for inserter iron-plate_in_0_1_0 and assembler copper-cable_1_1 with capcity: 0.
+2025-04-28 14:49:58,033 - DEBUG - dissallow merge for inserter iron-plate_in_0_1_0 and assembler copper-cable_1_2 with capcity: 0.
+2025-04-28 14:49:58,035 - DEBUG - dissallow merge for inserter copper-plate_in_1_0_0 and assembler electronic-circuit_0_0 with capcity: 0.
+2025-04-28 14:49:58,037 - DEBUG - dissallow merge for inserter copper-plate_in_1_0_0 and assembler electronic-circuit_0_1 with capcity: 0.
+2025-04-28 14:49:58,039 - DEBUG - dissallow merge for inserter copper-plate_in_1_0_0 and assembler copper-cable_1_1 with capcity: 0.
+2025-04-28 14:49:58,041 - DEBUG - dissallow merge for inserter copper-plate_in_1_0_0 and assembler copper-cable_1_2 with capcity: 0.
+2025-04-28 14:49:58,043 - DEBUG - dissallow merge for inserter copper-plate_in_1_0_1 and assembler electronic-circuit_0_0 with capcity: 0.
+2025-04-28 14:49:58,045 - DEBUG - dissallow merge for inserter copper-plate_in_1_0_1 and assembler electronic-circuit_0_1 with capcity: 0.
+2025-04-28 14:49:58,047 - DEBUG - dissallow merge for inserter copper-plate_in_1_0_1 and assembler copper-cable_1_1 with capcity: 0.
+2025-04-28 14:49:58,049 - DEBUG - dissallow merge for inserter copper-plate_in_1_0_1 and assembler copper-cable_1_2 with capcity: 0.
+2025-04-28 14:49:58,052 - DEBUG - dissallow merge for inserter copper-plate_in_1_1_0 and assembler electronic-circuit_0_0 with capcity: 0.
+2025-04-28 14:49:58,054 - DEBUG - dissallow merge for inserter copper-plate_in_1_1_0 and assembler electronic-circuit_0_1 with capcity: 0.
+2025-04-28 14:49:58,056 - DEBUG - dissallow merge for inserter copper-plate_in_1_1_0 and assembler copper-cable_1_0 with capcity: 0.
+2025-04-28 14:49:58,057 - DEBUG - dissallow merge for inserter copper-plate_in_1_1_0 and assembler copper-cable_1_2 with capcity: 0.
+2025-04-28 14:49:58,059 - DEBUG - dissallow merge for inserter copper-plate_in_1_1_1 and assembler electronic-circuit_0_0 with capcity: 0.
+2025-04-28 14:49:58,061 - DEBUG - dissallow merge for inserter copper-plate_in_1_1_1 and assembler electronic-circuit_0_1 with capcity: 0.
+2025-04-28 14:49:58,063 - DEBUG - dissallow merge for inserter copper-plate_in_1_1_1 and assembler copper-cable_1_0 with capcity: 0.
+2025-04-28 14:49:58,066 - DEBUG - dissallow merge for inserter copper-plate_in_1_1_1 and assembler copper-cable_1_2 with capcity: 0.
+2025-04-28 14:49:58,068 - DEBUG - dissallow merge for inserter copper-plate_in_1_2_0 and assembler electronic-circuit_0_0 with capcity: 0.
+2025-04-28 14:49:58,070 - DEBUG - dissallow merge for inserter copper-plate_in_1_2_0 and assembler electronic-circuit_0_1 with capcity: 0.
+2025-04-28 14:49:58,072 - DEBUG - dissallow merge for inserter copper-plate_in_1_2_0 and assembler copper-cable_1_0 with capcity: 0.
+2025-04-28 14:49:58,074 - DEBUG - dissallow merge for inserter copper-plate_in_1_2_0 and assembler copper-cable_1_1 with capcity: 0.
+2025-04-28 14:49:58,076 - DEBUG - dissallow merge for inserter copper-plate_in_1_2_1 and assembler electronic-circuit_0_0 with capcity: 0.
+2025-04-28 14:49:58,078 - DEBUG - dissallow merge for inserter copper-plate_in_1_2_1 and assembler electronic-circuit_0_1 with capcity: 0.
+2025-04-28 14:49:58,080 - DEBUG - dissallow merge for inserter copper-plate_in_1_2_1 and assembler copper-cable_1_0 with capcity: 0.
+2025-04-28 14:49:58,082 - DEBUG - dissallow merge for inserter copper-plate_in_1_2_1 and assembler copper-cable_1_1 with capcity: 0.
+2025-04-28 14:49:58,082 - INFO - ===== Adding constraints to maximize belt overlaps =====
+2025-04-28 14:49:58,110 - INFO - Adding optimization goal to maximize belt overlaps.
+2025-04-28 14:50:04,085 - INFO - Solver check result: sat
+2025-04-28 14:50:04,086 - INFO - === Identifying Non-Overlapping Inserters ===
+2025-04-28 14:50:04,086 - INFO - Inserter copper-cable_in_0_0_0 is locked (either overlaps or has no matching global belt).
+2025-04-28 14:50:04,086 - INFO - Inserter copper-cable_in_0_0_1 is locked (either overlaps or has no matching global belt).
+2025-04-28 14:50:04,086 - INFO - Inserter copper-cable_in_0_0_2 is locked (either overlaps or has no matching global belt).
+2025-04-28 14:50:04,088 - INFO - Inserter iron-plate_in_0_0_0 does not overlap but has matching item.
+2025-04-28 14:50:04,088 - INFO - Inserter copper-cable_in_0_1_0 is locked (either overlaps or has no matching global belt).
+2025-04-28 14:50:04,088 - INFO - Inserter copper-cable_in_0_1_1 is locked (either overlaps or has no matching global belt).
+2025-04-28 14:50:04,088 - INFO - Inserter copper-cable_in_0_1_2 is locked (either overlaps or has no matching global belt).
+2025-04-28 14:50:04,091 - INFO - Inserter iron-plate_in_0_1_0 does not overlap but has matching item.
+2025-04-28 14:50:04,092 - INFO - Inserter copper-plate_in_1_0_0 is locked (either overlaps or has no matching global belt).
+2025-04-28 14:50:04,094 - INFO - Inserter copper-plate_in_1_0_1 is locked (either overlaps or has no matching global belt).
+2025-04-28 14:50:04,095 - INFO - Inserter copper-plate_in_1_1_0 is locked (either overlaps or has no matching global belt).
+2025-04-28 14:50:04,096 - INFO - Inserter copper-plate_in_1_1_1 is locked (either overlaps or has no matching global belt).
+2025-04-28 14:50:04,097 - INFO - Inserter copper-plate_in_1_2_0 is locked (either overlaps or has no matching global belt).
+2025-04-28 14:50:04,097 - INFO - Inserter copper-plate_in_1_2_1 is locked (either overlaps or has no matching global belt).
+2025-04-28 14:50:04,097 - INFO - === Locking Initial Solution ===
+2025-04-28 14:50:04,097 - INFO - Locking assembler electronic-circuit_0_0 at (electronic-circuit_0_0_x, electronic-circuit_0_0_y).
+2025-04-28 14:50:04,098 - INFO - Locking inserter copper-cable_in_0_0_0 at (copper-cable_in_0_0_0_x, copper-cable_in_0_0_0_y).
+2025-04-28 14:50:04,098 - INFO - Locking inserter copper-cable_in_0_0_1 at (copper-cable_in_0_0_1_x, copper-cable_in_0_0_1_y).
+2025-04-28 14:50:04,099 - INFO - Locking inserter copper-cable_in_0_0_2 at (copper-cable_in_0_0_2_x, copper-cable_in_0_0_2_y).
+2025-04-28 14:50:04,099 - INFO - Inserter iron-plate_in_0_0_0 is free to move.
+2025-04-28 14:50:04,099 - INFO - Locking assembler electronic-circuit_0_1 at (electronic-circuit_0_1_x, electronic-circuit_0_1_y).
+2025-04-28 14:50:04,099 - INFO - Locking inserter copper-cable_in_0_1_0 at (copper-cable_in_0_1_0_x, copper-cable_in_0_1_0_y).
+2025-04-28 14:50:04,100 - INFO - Locking inserter copper-cable_in_0_1_1 at (copper-cable_in_0_1_1_x, copper-cable_in_0_1_1_y).
+2025-04-28 14:50:04,100 - INFO - Locking inserter copper-cable_in_0_1_2 at (copper-cable_in_0_1_2_x, copper-cable_in_0_1_2_y).
+2025-04-28 14:50:04,101 - INFO - Inserter iron-plate_in_0_1_0 is free to move.
+2025-04-28 14:50:04,101 - INFO - Locking assembler copper-cable_1_0 at (copper-cable_1_0_x, copper-cable_1_0_y).
+2025-04-28 14:50:04,101 - INFO - Locking inserter copper-plate_in_1_0_0 at (copper-plate_in_1_0_0_x, copper-plate_in_1_0_0_y).
+2025-04-28 14:50:04,102 - INFO - Locking inserter copper-plate_in_1_0_1 at (copper-plate_in_1_0_1_x, copper-plate_in_1_0_1_y).
+2025-04-28 14:50:04,102 - INFO - Locking assembler copper-cable_1_1 at (copper-cable_1_1_x, copper-cable_1_1_y).
+2025-04-28 14:50:04,102 - INFO - Locking inserter copper-plate_in_1_1_0 at (copper-plate_in_1_1_0_x, copper-plate_in_1_1_0_y).
+2025-04-28 14:50:04,103 - INFO - Locking inserter copper-plate_in_1_1_1 at (copper-plate_in_1_1_1_x, copper-plate_in_1_1_1_y).
+2025-04-28 14:50:04,103 - INFO - Locking assembler copper-cable_1_2 at (copper-cable_1_2_x, copper-cable_1_2_y).
+2025-04-28 14:50:04,104 - INFO - Locking inserter copper-plate_in_1_2_0 at (copper-plate_in_1_2_0_x, copper-plate_in_1_2_0_y).
+2025-04-28 14:50:04,104 - INFO - Locking inserter copper-plate_in_1_2_1 at (copper-plate_in_1_2_1_x, copper-plate_in_1_2_1_y).
+2025-04-28 14:50:04,105 - INFO - === Minimizing Distance for Non-Overlapping Inserters ===
+2025-04-28 14:50:04,134 - INFO - Inserter iron-plate_in_0_0_0 has distances [If(iron-plate_end_0_0_0_x - iron-plate_(9, 12)_input_x > 0,
+   iron-plate_end_0_0_0_x - iron-plate_(9, 12)_input_x,
+   -(iron-plate_end_0_0_0_x - iron-plate_(9, 12)_input_x)) +
+If(iron-plate_end_0_0_0_y - iron-plate_(9, 12)_input_y > 0,
+   iron-plate_end_0_0_0_y - iron-plate_(9, 12)_input_y,
+   -(iron-plate_end_0_0_0_y - iron-plate_(9, 12)_input_y)), If(iron-plate_end_0_0_0_x - iron-plate_(0, 12)_input_x > 0,
+   iron-plate_end_0_0_0_x - iron-plate_(0, 12)_input_x,
+   -(iron-plate_end_0_0_0_x - iron-plate_(0, 12)_input_x)) +
+If(iron-plate_end_0_0_0_y - iron-plate_(0, 12)_input_y > 0,
+   iron-plate_end_0_0_0_y - iron-plate_(0, 12)_input_y,
+   -(iron-plate_end_0_0_0_y - iron-plate_(0, 12)_input_y)), If(iron-plate_end_0_0_0_x - iron-plate_(12, 8)_input_x > 0,
+   iron-plate_end_0_0_0_x - iron-plate_(12, 8)_input_x,
+   -(iron-plate_end_0_0_0_x - iron-plate_(12, 8)_input_x)) +
+If(iron-plate_end_0_0_0_y - iron-plate_(12, 8)_input_y > 0,
+   iron-plate_end_0_0_0_y - iron-plate_(12, 8)_input_y,
+   -(iron-plate_end_0_0_0_y - iron-plate_(12, 8)_input_y)), If(iron-plate_end_0_0_0_x - iron-plate_(12, 7)_input_x > 0,
+   iron-plate_end_0_0_0_x - iron-plate_(12, 7)_input_x,
+   -(iron-plate_end_0_0_0_x - iron-plate_(12, 7)_input_x)) +
+If(iron-plate_end_0_0_0_y - iron-plate_(12, 7)_input_y > 0,
+   iron-plate_end_0_0_0_y - iron-plate_(12, 7)_input_y,
+   -(iron-plate_end_0_0_0_y - iron-plate_(12, 7)_input_y)), If(iron-plate_end_0_0_0_x - iron-plate_(12, 6)_input_x > 0,
+   iron-plate_end_0_0_0_x - iron-plate_(12, 6)_input_x,
+   -(iron-plate_end_0_0_0_x - iron-plate_(12, 6)_input_x)) +
+If(iron-plate_end_0_0_0_y - iron-plate_(12, 6)_input_y > 0,
+   iron-plate_end_0_0_0_y - iron-plate_(12, 6)_input_y,
+   -(iron-plate_end_0_0_0_y - iron-plate_(12, 6)_input_y)), If(iron-plate_end_0_0_0_x - iron-plate_(12, 5)_input_x > 0,
+   iron-plate_end_0_0_0_x - iron-plate_(12, 5)_input_x,
+   -(iron-plate_end_0_0_0_x - iron-plate_(12, 5)_input_x)) +
+If(iron-plate_end_0_0_0_y - iron-plate_(12, 5)_input_y > 0,
+   iron-plate_end_0_0_0_y - iron-plate_(12, 5)_input_y,
+   -(iron-plate_end_0_0_0_y - iron-plate_(12, 5)_input_y)), If(iron-plate_end_0_0_0_x - iron-plate_(12, 4)_input_x > 0,
+   iron-plate_end_0_0_0_x - iron-plate_(12, 4)_input_x,
+   -(iron-plate_end_0_0_0_x - iron-plate_(12, 4)_input_x)) +
+If(iron-plate_end_0_0_0_y - iron-plate_(12, 4)_input_y > 0,
+   iron-plate_end_0_0_0_y - iron-plate_(12, 4)_input_y,
+   -(iron-plate_end_0_0_0_y - iron-plate_(12, 4)_input_y)), If(iron-plate_end_0_0_0_x - iron-plate_(12, 3)_input_x > 0,
+   iron-plate_end_0_0_0_x - iron-plate_(12, 3)_input_x,
+   -(iron-plate_end_0_0_0_x - iron-plate_(12, 3)_input_x)) +
+If(iron-plate_end_0_0_0_y - iron-plate_(12, 3)_input_y > 0,
+   iron-plate_end_0_0_0_y - iron-plate_(12, 3)_input_y,
+   -(iron-plate_end_0_0_0_y - iron-plate_(12, 3)_input_y)), If(iron-plate_end_0_0_0_x - iron-plate_(12, 2)_input_x > 0,
+   iron-plate_end_0_0_0_x - iron-plate_(12, 2)_input_x,
+   -(iron-plate_end_0_0_0_x - iron-plate_(12, 2)_input_x)) +
+If(iron-plate_end_0_0_0_y - iron-plate_(12, 2)_input_y > 0,
+   iron-plate_end_0_0_0_y - iron-plate_(12, 2)_input_y,
+   -(iron-plate_end_0_0_0_y - iron-plate_(12, 2)_input_y)), If(iron-plate_end_0_0_0_x - iron-plate_(12, 1)_input_x > 0,
+   iron-plate_end_0_0_0_x - iron-plate_(12, 1)_input_x,
+   -(iron-plate_end_0_0_0_x - iron-plate_(12, 1)_input_x)) +
+If(iron-plate_end_0_0_0_y - iron-plate_(12, 1)_input_y > 0,
+   iron-plate_end_0_0_0_y - iron-plate_(12, 1)_input_y,
+   -(iron-plate_end_0_0_0_y - iron-plate_(12, 1)_input_y))] to matching global belts.
+2025-04-28 14:50:04,163 - INFO - Inserter iron-plate_in_0_1_0 has distances [If(iron-plate_end_0_1_0_x - iron-plate_(9, 12)_input_x > 0,
+   iron-plate_end_0_1_0_x - iron-plate_(9, 12)_input_x,
+   -(iron-plate_end_0_1_0_x - iron-plate_(9, 12)_input_x)) +
+If(iron-plate_end_0_1_0_y - iron-plate_(9, 12)_input_y > 0,
+   iron-plate_end_0_1_0_y - iron-plate_(9, 12)_input_y,
+   -(iron-plate_end_0_1_0_y - iron-plate_(9, 12)_input_y)), If(iron-plate_end_0_1_0_x - iron-plate_(0, 12)_input_x > 0,
+   iron-plate_end_0_1_0_x - iron-plate_(0, 12)_input_x,
+   -(iron-plate_end_0_1_0_x - iron-plate_(0, 12)_input_x)) +
+If(iron-plate_end_0_1_0_y - iron-plate_(0, 12)_input_y > 0,
+   iron-plate_end_0_1_0_y - iron-plate_(0, 12)_input_y,
+   -(iron-plate_end_0_1_0_y - iron-plate_(0, 12)_input_y)), If(iron-plate_end_0_1_0_x - iron-plate_(12, 8)_input_x > 0,
+   iron-plate_end_0_1_0_x - iron-plate_(12, 8)_input_x,
+   -(iron-plate_end_0_1_0_x - iron-plate_(12, 8)_input_x)) +
+If(iron-plate_end_0_1_0_y - iron-plate_(12, 8)_input_y > 0,
+   iron-plate_end_0_1_0_y - iron-plate_(12, 8)_input_y,
+   -(iron-plate_end_0_1_0_y - iron-plate_(12, 8)_input_y)), If(iron-plate_end_0_1_0_x - iron-plate_(12, 7)_input_x > 0,
+   iron-plate_end_0_1_0_x - iron-plate_(12, 7)_input_x,
+   -(iron-plate_end_0_1_0_x - iron-plate_(12, 7)_input_x)) +
+If(iron-plate_end_0_1_0_y - iron-plate_(12, 7)_input_y > 0,
+   iron-plate_end_0_1_0_y - iron-plate_(12, 7)_input_y,
+   -(iron-plate_end_0_1_0_y - iron-plate_(12, 7)_input_y)), If(iron-plate_end_0_1_0_x - iron-plate_(12, 6)_input_x > 0,
+   iron-plate_end_0_1_0_x - iron-plate_(12, 6)_input_x,
+   -(iron-plate_end_0_1_0_x - iron-plate_(12, 6)_input_x)) +
+If(iron-plate_end_0_1_0_y - iron-plate_(12, 6)_input_y > 0,
+   iron-plate_end_0_1_0_y - iron-plate_(12, 6)_input_y,
+   -(iron-plate_end_0_1_0_y - iron-plate_(12, 6)_input_y)), If(iron-plate_end_0_1_0_x - iron-plate_(12, 5)_input_x > 0,
+   iron-plate_end_0_1_0_x - iron-plate_(12, 5)_input_x,
+   -(iron-plate_end_0_1_0_x - iron-plate_(12, 5)_input_x)) +
+If(iron-plate_end_0_1_0_y - iron-plate_(12, 5)_input_y > 0,
+   iron-plate_end_0_1_0_y - iron-plate_(12, 5)_input_y,
+   -(iron-plate_end_0_1_0_y - iron-plate_(12, 5)_input_y)), If(iron-plate_end_0_1_0_x - iron-plate_(12, 4)_input_x > 0,
+   iron-plate_end_0_1_0_x - iron-plate_(12, 4)_input_x,
+   -(iron-plate_end_0_1_0_x - iron-plate_(12, 4)_input_x)) +
+If(iron-plate_end_0_1_0_y - iron-plate_(12, 4)_input_y > 0,
+   iron-plate_end_0_1_0_y - iron-plate_(12, 4)_input_y,
+   -(iron-plate_end_0_1_0_y - iron-plate_(12, 4)_input_y)), If(iron-plate_end_0_1_0_x - iron-plate_(12, 3)_input_x > 0,
+   iron-plate_end_0_1_0_x - iron-plate_(12, 3)_input_x,
+   -(iron-plate_end_0_1_0_x - iron-plate_(12, 3)_input_x)) +
+If(iron-plate_end_0_1_0_y - iron-plate_(12, 3)_input_y > 0,
+   iron-plate_end_0_1_0_y - iron-plate_(12, 3)_input_y,
+   -(iron-plate_end_0_1_0_y - iron-plate_(12, 3)_input_y)), If(iron-plate_end_0_1_0_x - iron-plate_(12, 2)_input_x > 0,
+   iron-plate_end_0_1_0_x - iron-plate_(12, 2)_input_x,
+   -(iron-plate_end_0_1_0_x - iron-plate_(12, 2)_input_x)) +
+If(iron-plate_end_0_1_0_y - iron-plate_(12, 2)_input_y > 0,
+   iron-plate_end_0_1_0_y - iron-plate_(12, 2)_input_y,
+   -(iron-plate_end_0_1_0_y - iron-plate_(12, 2)_input_y)), If(iron-plate_end_0_1_0_x - iron-plate_(12, 1)_input_x > 0,
+   iron-plate_end_0_1_0_x - iron-plate_(12, 1)_input_x,
+   -(iron-plate_end_0_1_0_x - iron-plate_(12, 1)_input_x)) +
+If(iron-plate_end_0_1_0_y - iron-plate_(12, 1)_input_y > 0,
+   iron-plate_end_0_1_0_y - iron-plate_(12, 1)_input_y,
+   -(iron-plate_end_0_1_0_y - iron-plate_(12, 1)_input_y))] to matching global belts.
+2025-04-28 14:50:04,164 - INFO - Added minimization constraint for total distance.
+2025-04-28 14:50:04,435 - INFO - Final solver check result:sat
+2025-04-28 14:50:04,776 - INFO - Execution time for solve: 8.8302 seconds.
+2025-04-28 14:50:05,134 - INFO - build output path infomation for electronic-circuit_0
+2025-04-28 14:50:05,134 - INFO - build output path infomation for electronic-circuit_1
+2025-04-28 14:50:05,135 - INFO - Processing items in order: ['electronic-circuit_0', 'electronic-circuit_1', 'iron-plate_0', 'iron-plate_1']
+2025-04-28 14:50:05,135 - INFO - Placing output inserter for item electronic-circuit
+2025-04-28 14:50:05,135 - DEBUG - Total points in self.points: 4
+2025-04-28 14:50:05,135 - DEBUG - Keys in self.points: ['iron-plate_0', 'iron-plate_1', 'electronic-circuit_0', 'electronic-circuit_1']
+2025-04-28 14:50:05,135 - DEBUG - Checking item_key: iron-plate_0, item type: iron-plate
+2025-04-28 14:50:05,136 - DEBUG - Skipping iron-plate_0 as it's not the output item electronic-circuit
+2025-04-28 14:50:05,136 - DEBUG - Checking item_key: iron-plate_1, item type: iron-plate
+2025-04-28 14:50:05,136 - DEBUG - Skipping iron-plate_1 as it's not the output item electronic-circuit
+2025-04-28 14:50:05,136 - DEBUG - Checking item_key: electronic-circuit_0, item type: electronic-circuit
+2025-04-28 14:50:05,136 - INFO - Found output item match: electronic-circuit_0
+2025-04-28 14:50:05,136 - DEBUG - Start points for electronic-circuit_0: [(6, 0), (7, 0), (8, 0), (10, 2), (10, 3)]
+2025-04-28 14:50:05,136 - DEBUG - Destination points for electronic-circuit_0: [(15, 0), (15, 1), (15, 2), (15, 3), (15, 4), (15, 5), (15, 6), (15, 7), (15, 8), (15, 9), (15, 0), (15, 9)]
+2025-04-28 14:50:05,136 - DEBUG - Processing start point: (6, 0)
+2025-04-28 14:50:05,136 - DEBUG - Processing destination point: (15, 0)
+2025-04-28 14:50:05,136 - DEBUG - Heuristic distance from (6, 0) to (15, 0): 9
+2025-04-28 14:50:05,136 - DEBUG - Processing destination point: (15, 1)
+2025-04-28 14:50:05,136 - DEBUG - Heuristic distance from (6, 0) to (15, 1): 10
+2025-04-28 14:50:05,136 - DEBUG - Processing destination point: (15, 2)
+2025-04-28 14:50:05,136 - DEBUG - Heuristic distance from (6, 0) to (15, 2): 11
+2025-04-28 14:50:05,137 - DEBUG - Processing destination point: (15, 3)
+2025-04-28 14:50:05,137 - DEBUG - Heuristic distance from (6, 0) to (15, 3): 12
+2025-04-28 14:50:05,137 - DEBUG - Processing destination point: (15, 4)
+2025-04-28 14:50:05,137 - DEBUG - Heuristic distance from (6, 0) to (15, 4): 13
+2025-04-28 14:50:05,137 - DEBUG - Processing destination point: (15, 5)
+2025-04-28 14:50:05,137 - DEBUG - Heuristic distance from (6, 0) to (15, 5): 14
+2025-04-28 14:50:05,137 - DEBUG - Processing destination point: (15, 6)
+2025-04-28 14:50:05,137 - DEBUG - Heuristic distance from (6, 0) to (15, 6): 15
+2025-04-28 14:50:05,137 - DEBUG - Processing destination point: (15, 7)
+2025-04-28 14:50:05,137 - DEBUG - Heuristic distance from (6, 0) to (15, 7): 16
+2025-04-28 14:50:05,137 - DEBUG - Processing destination point: (15, 8)
+2025-04-28 14:50:05,137 - DEBUG - Heuristic distance from (6, 0) to (15, 8): 17
+2025-04-28 14:50:05,137 - DEBUG - Processing destination point: (15, 9)
+2025-04-28 14:50:05,137 - DEBUG - Heuristic distance from (6, 0) to (15, 9): 18
+2025-04-28 14:50:05,137 - DEBUG - Processing destination point: (15, 0)
+2025-04-28 14:50:05,138 - DEBUG - Heuristic distance from (6, 0) to (15, 0): 9
+2025-04-28 14:50:05,138 - DEBUG - Processing destination point: (15, 9)
+2025-04-28 14:50:05,138 - DEBUG - Heuristic distance from (6, 0) to (15, 9): 18
+2025-04-28 14:50:05,138 - DEBUG - Processing start point: (7, 0)
+2025-04-28 14:50:05,138 - DEBUG - Processing destination point: (15, 0)
+2025-04-28 14:50:05,138 - DEBUG - Heuristic distance from (7, 0) to (15, 0): 8
+2025-04-28 14:50:05,138 - DEBUG - Processing destination point: (15, 1)
+2025-04-28 14:50:05,138 - DEBUG - Heuristic distance from (7, 0) to (15, 1): 9
+2025-04-28 14:50:05,138 - DEBUG - Processing destination point: (15, 2)
+2025-04-28 14:50:05,138 - DEBUG - Heuristic distance from (7, 0) to (15, 2): 10
+2025-04-28 14:50:05,138 - DEBUG - Processing destination point: (15, 3)
+2025-04-28 14:50:05,138 - DEBUG - Heuristic distance from (7, 0) to (15, 3): 11
+2025-04-28 14:50:05,138 - DEBUG - Processing destination point: (15, 4)
+2025-04-28 14:50:05,138 - DEBUG - Heuristic distance from (7, 0) to (15, 4): 12
+2025-04-28 14:50:05,138 - DEBUG - Processing destination point: (15, 5)
+2025-04-28 14:50:05,138 - DEBUG - Heuristic distance from (7, 0) to (15, 5): 13
+2025-04-28 14:50:05,138 - DEBUG - Processing destination point: (15, 6)
+2025-04-28 14:50:05,138 - DEBUG - Heuristic distance from (7, 0) to (15, 6): 14
+2025-04-28 14:50:05,138 - DEBUG - Processing destination point: (15, 7)
+2025-04-28 14:50:05,138 - DEBUG - Heuristic distance from (7, 0) to (15, 7): 15
+2025-04-28 14:50:05,138 - DEBUG - Processing destination point: (15, 8)
+2025-04-28 14:50:05,138 - DEBUG - Heuristic distance from (7, 0) to (15, 8): 16
+2025-04-28 14:50:05,138 - DEBUG - Processing destination point: (15, 9)
+2025-04-28 14:50:05,138 - DEBUG - Heuristic distance from (7, 0) to (15, 9): 17
+2025-04-28 14:50:05,138 - DEBUG - Processing destination point: (15, 0)
+2025-04-28 14:50:05,138 - DEBUG - Heuristic distance from (7, 0) to (15, 0): 8
+2025-04-28 14:50:05,138 - DEBUG - Processing destination point: (15, 9)
+2025-04-28 14:50:05,138 - DEBUG - Heuristic distance from (7, 0) to (15, 9): 17
+2025-04-28 14:50:05,138 - DEBUG - Processing start point: (8, 0)
+2025-04-28 14:50:05,138 - DEBUG - Processing destination point: (15, 0)
+2025-04-28 14:50:05,139 - DEBUG - Heuristic distance from (8, 0) to (15, 0): 7
+2025-04-28 14:50:05,139 - DEBUG - Processing destination point: (15, 1)
+2025-04-28 14:50:05,139 - DEBUG - Heuristic distance from (8, 0) to (15, 1): 8
+2025-04-28 14:50:05,139 - DEBUG - Processing destination point: (15, 2)
+2025-04-28 14:50:05,139 - DEBUG - Heuristic distance from (8, 0) to (15, 2): 9
+2025-04-28 14:50:05,139 - DEBUG - Processing destination point: (15, 3)
+2025-04-28 14:50:05,139 - DEBUG - Heuristic distance from (8, 0) to (15, 3): 10
+2025-04-28 14:50:05,139 - DEBUG - Processing destination point: (15, 4)
+2025-04-28 14:50:05,139 - DEBUG - Heuristic distance from (8, 0) to (15, 4): 11
+2025-04-28 14:50:05,139 - DEBUG - Processing destination point: (15, 5)
+2025-04-28 14:50:05,139 - DEBUG - Heuristic distance from (8, 0) to (15, 5): 12
+2025-04-28 14:50:05,139 - DEBUG - Processing destination point: (15, 6)
+2025-04-28 14:50:05,139 - DEBUG - Heuristic distance from (8, 0) to (15, 6): 13
+2025-04-28 14:50:05,139 - DEBUG - Processing destination point: (15, 7)
+2025-04-28 14:50:05,139 - DEBUG - Heuristic distance from (8, 0) to (15, 7): 14
+2025-04-28 14:50:05,139 - DEBUG - Processing destination point: (15, 8)
+2025-04-28 14:50:05,139 - DEBUG - Heuristic distance from (8, 0) to (15, 8): 15
+2025-04-28 14:50:05,139 - DEBUG - Processing destination point: (15, 9)
+2025-04-28 14:50:05,139 - DEBUG - Heuristic distance from (8, 0) to (15, 9): 16
+2025-04-28 14:50:05,139 - DEBUG - Processing destination point: (15, 0)
+2025-04-28 14:50:05,139 - DEBUG - Heuristic distance from (8, 0) to (15, 0): 7
+2025-04-28 14:50:05,139 - DEBUG - Processing destination point: (15, 9)
+2025-04-28 14:50:05,139 - DEBUG - Heuristic distance from (8, 0) to (15, 9): 16
+2025-04-28 14:50:05,141 - DEBUG - Processing start point: (10, 2)
+2025-04-28 14:50:05,141 - DEBUG - Processing destination point: (15, 0)
+2025-04-28 14:50:05,141 - DEBUG - Heuristic distance from (10, 2) to (15, 0): 7
+2025-04-28 14:50:05,141 - DEBUG - Processing destination point: (15, 1)
+2025-04-28 14:50:05,141 - DEBUG - Heuristic distance from (10, 2) to (15, 1): 6
+2025-04-28 14:50:05,141 - DEBUG - Processing destination point: (15, 2)
+2025-04-28 14:50:05,141 - DEBUG - Heuristic distance from (10, 2) to (15, 2): 5
+2025-04-28 14:50:05,141 - DEBUG - Processing destination point: (15, 3)
+2025-04-28 14:50:05,141 - DEBUG - Heuristic distance from (10, 2) to (15, 3): 6
+2025-04-28 14:50:05,141 - DEBUG - Processing destination point: (15, 4)
+2025-04-28 14:50:05,141 - DEBUG - Heuristic distance from (10, 2) to (15, 4): 7
+2025-04-28 14:50:05,141 - DEBUG - Processing destination point: (15, 5)
+2025-04-28 14:50:05,142 - DEBUG - Heuristic distance from (10, 2) to (15, 5): 8
+2025-04-28 14:50:05,142 - DEBUG - Processing destination point: (15, 6)
+2025-04-28 14:50:05,142 - DEBUG - Heuristic distance from (10, 2) to (15, 6): 9
+2025-04-28 14:50:05,142 - DEBUG - Processing destination point: (15, 7)
+2025-04-28 14:50:05,142 - DEBUG - Heuristic distance from (10, 2) to (15, 7): 10
+2025-04-28 14:50:05,142 - DEBUG - Processing destination point: (15, 8)
+2025-04-28 14:50:05,142 - DEBUG - Heuristic distance from (10, 2) to (15, 8): 11
+2025-04-28 14:50:05,142 - DEBUG - Processing destination point: (15, 9)
+2025-04-28 14:50:05,142 - DEBUG - Heuristic distance from (10, 2) to (15, 9): 12
+2025-04-28 14:50:05,142 - DEBUG - Processing destination point: (15, 0)
+2025-04-28 14:50:05,142 - DEBUG - Heuristic distance from (10, 2) to (15, 0): 7
+2025-04-28 14:50:05,142 - DEBUG - Processing destination point: (15, 9)
+2025-04-28 14:50:05,142 - DEBUG - Heuristic distance from (10, 2) to (15, 9): 12
+2025-04-28 14:50:05,142 - DEBUG - Processing start point: (10, 3)
+2025-04-28 14:50:05,143 - DEBUG - Processing destination point: (15, 0)
+2025-04-28 14:50:05,143 - DEBUG - Heuristic distance from (10, 3) to (15, 0): 8
+2025-04-28 14:50:05,143 - DEBUG - Processing destination point: (15, 1)
+2025-04-28 14:50:05,143 - DEBUG - Heuristic distance from (10, 3) to (15, 1): 7
+2025-04-28 14:50:05,143 - DEBUG - Processing destination point: (15, 2)
+2025-04-28 14:50:05,143 - DEBUG - Heuristic distance from (10, 3) to (15, 2): 6
+2025-04-28 14:50:05,143 - DEBUG - Processing destination point: (15, 3)
+2025-04-28 14:50:05,143 - DEBUG - Heuristic distance from (10, 3) to (15, 3): 5
+2025-04-28 14:50:05,143 - DEBUG - Processing destination point: (15, 4)
+2025-04-28 14:50:05,143 - DEBUG - Heuristic distance from (10, 3) to (15, 4): 6
+2025-04-28 14:50:05,143 - DEBUG - Processing destination point: (15, 5)
+2025-04-28 14:50:05,143 - DEBUG - Heuristic distance from (10, 3) to (15, 5): 7
+2025-04-28 14:50:05,143 - DEBUG - Processing destination point: (15, 6)
+2025-04-28 14:50:05,143 - DEBUG - Heuristic distance from (10, 3) to (15, 6): 8
+2025-04-28 14:50:05,143 - DEBUG - Processing destination point: (15, 7)
+2025-04-28 14:50:05,144 - DEBUG - Heuristic distance from (10, 3) to (15, 7): 9
+2025-04-28 14:50:05,144 - DEBUG - Processing destination point: (15, 8)
+2025-04-28 14:50:05,144 - DEBUG - Heuristic distance from (10, 3) to (15, 8): 10
+2025-04-28 14:50:05,144 - DEBUG - Processing destination point: (15, 9)
+2025-04-28 14:50:05,144 - DEBUG - Heuristic distance from (10, 3) to (15, 9): 11
+2025-04-28 14:50:05,144 - DEBUG - Processing destination point: (15, 0)
+2025-04-28 14:50:05,144 - DEBUG - Heuristic distance from (10, 3) to (15, 0): 8
+2025-04-28 14:50:05,144 - DEBUG - Processing destination point: (15, 9)
+2025-04-28 14:50:05,144 - DEBUG - Heuristic distance from (10, 3) to (15, 9): 11
+2025-04-28 14:50:05,144 - DEBUG - Generated 60 start-destination pairs
+2025-04-28 14:50:05,144 - DEBUG - Sorted pairs (first 5): [(5, (10, 2), (15, 2)), (5, (10, 3), (15, 3)), (6, (10, 2), (15, 1)), (6, (10, 2), (15, 3)), (6, (10, 3), (15, 2))]
+2025-04-28 14:50:05,144 - DEBUG - Inserter mapping for electronic-circuit_0: {'(6, 0)': (6, 1), '(7, 0)': (7, 1), '(8, 0)': (8, 1), '(10, 2)': (9, 2), '(10, 3)': (9, 3)}
+2025-04-28 14:50:05,145 - DEBUG - Best start position: (10, 2)
+2025-04-28 14:50:05,145 - INFO - Found inserter at (9, 2) for start position (10, 2)
+2025-04-28 14:50:05,145 - INFO - Marked inserter at (9, 2) as obstacle (previous value: 0)
+2025-04-28 14:50:05,145 - INFO - Updated start_points for electronic-circuit_0 from [(6, 0), (7, 0), (8, 0), (10, 2), (10, 3)] to [(10, 2)]
+2025-04-28 14:50:05,145 - DEBUG - Checking item_key: electronic-circuit_1, item type: electronic-circuit
+2025-04-28 14:50:05,145 - INFO - Found output item match: electronic-circuit_1
+2025-04-28 14:50:05,145 - DEBUG - Start points for electronic-circuit_1: [(10, 7), (10, 8)]
+2025-04-28 14:50:05,145 - DEBUG - Destination points for electronic-circuit_1: [(15, 0), (15, 1), (15, 2), (15, 3), (15, 4), (15, 5), (15, 6), (15, 7), (15, 8), (15, 9), (15, 0), (15, 9)]
+2025-04-28 14:50:05,145 - DEBUG - Processing start point: (10, 7)
+2025-04-28 14:50:05,145 - DEBUG - Processing destination point: (15, 0)
+2025-04-28 14:50:05,145 - DEBUG - Heuristic distance from (10, 7) to (15, 0): 12
+2025-04-28 14:50:05,145 - DEBUG - Processing destination point: (15, 1)
+2025-04-28 14:50:05,145 - DEBUG - Heuristic distance from (10, 7) to (15, 1): 11
+2025-04-28 14:50:05,145 - DEBUG - Processing destination point: (15, 2)
+2025-04-28 14:50:05,146 - DEBUG - Heuristic distance from (10, 7) to (15, 2): 10
+2025-04-28 14:50:05,146 - DEBUG - Processing destination point: (15, 3)
+2025-04-28 14:50:05,146 - DEBUG - Heuristic distance from (10, 7) to (15, 3): 9
+2025-04-28 14:50:05,146 - DEBUG - Processing destination point: (15, 4)
+2025-04-28 14:50:05,146 - DEBUG - Heuristic distance from (10, 7) to (15, 4): 8
+2025-04-28 14:50:05,146 - DEBUG - Processing destination point: (15, 5)
+2025-04-28 14:50:05,146 - DEBUG - Heuristic distance from (10, 7) to (15, 5): 7
+2025-04-28 14:50:05,146 - DEBUG - Processing destination point: (15, 6)
+2025-04-28 14:50:05,146 - DEBUG - Heuristic distance from (10, 7) to (15, 6): 6
+2025-04-28 14:50:05,146 - DEBUG - Processing destination point: (15, 7)
+2025-04-28 14:50:05,146 - DEBUG - Heuristic distance from (10, 7) to (15, 7): 5
+2025-04-28 14:50:05,146 - DEBUG - Processing destination point: (15, 8)
+2025-04-28 14:50:05,146 - DEBUG - Heuristic distance from (10, 7) to (15, 8): 6
+2025-04-28 14:50:05,146 - DEBUG - Processing destination point: (15, 9)
+2025-04-28 14:50:05,147 - DEBUG - Heuristic distance from (10, 7) to (15, 9): 7
+2025-04-28 14:50:05,147 - DEBUG - Processing destination point: (15, 0)
+2025-04-28 14:50:05,147 - DEBUG - Heuristic distance from (10, 7) to (15, 0): 12
+2025-04-28 14:50:05,147 - DEBUG - Processing destination point: (15, 9)
+2025-04-28 14:50:05,147 - DEBUG - Heuristic distance from (10, 7) to (15, 9): 7
+2025-04-28 14:50:05,147 - DEBUG - Processing start point: (10, 8)
+2025-04-28 14:50:05,147 - DEBUG - Processing destination point: (15, 0)
+2025-04-28 14:50:05,147 - DEBUG - Heuristic distance from (10, 8) to (15, 0): 13
+2025-04-28 14:50:05,147 - DEBUG - Processing destination point: (15, 1)
+2025-04-28 14:50:05,147 - DEBUG - Heuristic distance from (10, 8) to (15, 1): 12
+2025-04-28 14:50:05,147 - DEBUG - Processing destination point: (15, 2)
+2025-04-28 14:50:05,147 - DEBUG - Heuristic distance from (10, 8) to (15, 2): 11
+2025-04-28 14:50:05,147 - DEBUG - Processing destination point: (15, 3)
+2025-04-28 14:50:05,147 - DEBUG - Heuristic distance from (10, 8) to (15, 3): 10
+2025-04-28 14:50:05,147 - DEBUG - Processing destination point: (15, 4)
+2025-04-28 14:50:05,147 - DEBUG - Heuristic distance from (10, 8) to (15, 4): 9
+2025-04-28 14:50:05,147 - DEBUG - Processing destination point: (15, 5)
+2025-04-28 14:50:05,147 - DEBUG - Heuristic distance from (10, 8) to (15, 5): 8
+2025-04-28 14:50:05,147 - DEBUG - Processing destination point: (15, 6)
+2025-04-28 14:50:05,147 - DEBUG - Heuristic distance from (10, 8) to (15, 6): 7
+2025-04-28 14:50:05,147 - DEBUG - Processing destination point: (15, 7)
+2025-04-28 14:50:05,147 - DEBUG - Heuristic distance from (10, 8) to (15, 7): 6
+2025-04-28 14:50:05,147 - DEBUG - Processing destination point: (15, 8)
+2025-04-28 14:50:05,148 - DEBUG - Heuristic distance from (10, 8) to (15, 8): 5
+2025-04-28 14:50:05,148 - DEBUG - Processing destination point: (15, 9)
+2025-04-28 14:50:05,148 - DEBUG - Heuristic distance from (10, 8) to (15, 9): 6
+2025-04-28 14:50:05,148 - DEBUG - Processing destination point: (15, 0)
+2025-04-28 14:50:05,148 - DEBUG - Heuristic distance from (10, 8) to (15, 0): 13
+2025-04-28 14:50:05,148 - DEBUG - Processing destination point: (15, 9)
+2025-04-28 14:50:05,148 - DEBUG - Heuristic distance from (10, 8) to (15, 9): 6
+2025-04-28 14:50:05,148 - DEBUG - Generated 24 start-destination pairs
+2025-04-28 14:50:05,148 - DEBUG - Sorted pairs (first 5): [(5, (10, 7), (15, 7)), (5, (10, 8), (15, 8)), (6, (10, 7), (15, 6)), (6, (10, 7), (15, 8)), (6, (10, 8), (15, 7))]
+2025-04-28 14:50:05,148 - DEBUG - Inserter mapping for electronic-circuit_1: {'(10, 7)': (9, 7), '(10, 8)': (9, 8)}
+2025-04-28 14:50:05,148 - DEBUG - Best start position: (10, 7)
+2025-04-28 14:50:05,148 - INFO - Found inserter at (9, 7) for start position (10, 7)
+2025-04-28 14:50:05,148 - INFO - Marked inserter at (9, 7) as obstacle (previous value: 0)
+2025-04-28 14:50:05,148 - INFO - Updated start_points for electronic-circuit_1 from [(10, 7), (10, 8)] to [(10, 7)]
+2025-04-28 14:50:05,148 - WARNING - Failed to place output inserter for any output item instance
+2025-04-28 14:50:05,148 - INFO - Processing all splitters
+2025-04-28 14:50:05,148 - INFO - Valid splitter at (12, 8) with next position (11, 8), facing (0, -1)
+2025-04-28 14:50:05,148 - INFO -   Inputs: [(11, 9)]
+2025-04-28 14:50:05,148 - INFO -   Outputs: [(11, 7)]
+2025-04-28 14:50:05,148 - INFO - Valid splitter at (12, 8) with next position (13, 8), facing (0, -1)
+2025-04-28 14:50:05,148 - INFO -   Inputs: [(13, 9)]
+2025-04-28 14:50:05,148 - INFO -   Outputs: [(13, 7)]
+2025-04-28 14:50:05,148 - INFO - Valid splitter at (12, 7) with next position (11, 7), facing (0, -1)
+2025-04-28 14:50:05,148 - INFO -   Inputs: [(11, 8)]
+2025-04-28 14:50:05,148 - INFO -   Outputs: [(11, 6)]
+2025-04-28 14:50:05,148 - INFO - Valid splitter at (12, 7) with next position (13, 7), facing (0, -1)
+2025-04-28 14:50:05,148 - INFO -   Inputs: [(13, 8)]
+2025-04-28 14:50:05,148 - INFO -   Outputs: [(13, 6)]
+2025-04-28 14:50:05,148 - INFO - Valid splitter at (12, 6) with next position (11, 6), facing (0, -1)
+2025-04-28 14:50:05,148 - INFO -   Inputs: [(11, 7)]
+2025-04-28 14:50:05,149 - INFO -   Outputs: [(11, 5)]
+2025-04-28 14:50:05,149 - INFO - Valid splitter at (12, 6) with next position (13, 6), facing (0, -1)
+2025-04-28 14:50:05,149 - INFO -   Inputs: [(13, 7)]
+2025-04-28 14:50:05,149 - INFO -   Outputs: [(13, 5)]
+2025-04-28 14:50:05,149 - INFO - Valid splitter at (12, 5) with next position (11, 5), facing (0, -1)
+2025-04-28 14:50:05,149 - INFO -   Inputs: [(11, 6)]
+2025-04-28 14:50:05,149 - INFO -   Outputs: [(11, 4)]
+2025-04-28 14:50:05,149 - INFO - Valid splitter at (12, 5) with next position (13, 5), facing (0, -1)
+2025-04-28 14:50:05,149 - INFO -   Inputs: [(13, 6)]
+2025-04-28 14:50:05,149 - INFO -   Outputs: [(13, 4)]
+2025-04-28 14:50:05,149 - INFO - Valid splitter at (12, 4) with next position (11, 4), facing (0, -1)
+2025-04-28 14:50:05,149 - INFO -   Inputs: [(11, 5)]
+2025-04-28 14:50:05,149 - INFO -   Outputs: [(11, 3)]
+2025-04-28 14:50:05,149 - INFO - Valid splitter at (12, 4) with next position (13, 4), facing (0, -1)
+2025-04-28 14:50:05,149 - INFO -   Inputs: [(13, 5)]
+2025-04-28 14:50:05,149 - INFO -   Outputs: [(13, 3)]
+2025-04-28 14:50:05,149 - INFO - Valid splitter at (12, 3) with next position (11, 3), facing (0, -1)
+2025-04-28 14:50:05,149 - INFO -   Inputs: [(11, 4)]
+2025-04-28 14:50:05,149 - INFO -   Outputs: [(11, 2)]
+2025-04-28 14:50:05,149 - INFO - Valid splitter at (12, 3) with next position (13, 3), facing (0, -1)
+2025-04-28 14:50:05,149 - INFO -   Inputs: [(13, 4)]
+2025-04-28 14:50:05,150 - INFO -   Outputs: [(13, 2)]
+2025-04-28 14:50:05,150 - INFO - Valid splitter at (12, 2) with next position (11, 2), facing (0, -1)
+2025-04-28 14:50:05,150 - INFO -   Inputs: [(11, 3)]
+2025-04-28 14:50:05,150 - INFO -   Outputs: [(11, 1)]
+2025-04-28 14:50:05,150 - INFO - Valid splitter at (12, 2) with next position (13, 2), facing (0, -1)
+2025-04-28 14:50:05,150 - INFO -   Inputs: [(13, 3)]
+2025-04-28 14:50:05,150 - INFO -   Outputs: [(13, 1)]
+2025-04-28 14:50:05,150 - INFO - Valid splitter at (12, 1) with next position (11, 1), facing (0, -1)
+2025-04-28 14:50:05,150 - INFO -   Inputs: [(11, 2)]
+2025-04-28 14:50:05,150 - INFO -   Outputs: [(11, 0)]
+2025-04-28 14:50:05,150 - INFO - Valid splitter at (12, 1) with next position (13, 1), facing (0, -1)
+2025-04-28 14:50:05,150 - INFO -   Inputs: [(13, 2)]
+2025-04-28 14:50:05,150 - INFO -   Outputs: [(13, 0)]
+2025-04-28 14:50:05,150 - INFO - Valid splitter at (15, 1) with next position (14, 1), facing (0, 1)
+2025-04-28 14:50:05,150 - INFO -   Inputs: [(14, 0)]
+2025-04-28 14:50:05,150 - INFO -   Outputs: [(14, 2)]
+2025-04-28 14:50:05,151 - INFO - Valid splitter at (15, 2) with next position (14, 2), facing (0, 1)
+2025-04-28 14:50:05,151 - INFO -   Inputs: [(14, 1)]
+2025-04-28 14:50:05,151 - INFO -   Outputs: [(14, 3)]
+2025-04-28 14:50:05,151 - INFO - Valid splitter at (15, 3) with next position (14, 3), facing (0, 1)
+2025-04-28 14:50:05,151 - INFO -   Inputs: [(14, 2)]
+2025-04-28 14:50:05,151 - INFO -   Outputs: [(14, 4)]
+2025-04-28 14:50:05,151 - INFO - Valid splitter at (15, 4) with next position (14, 4), facing (0, 1)
+2025-04-28 14:50:05,151 - INFO -   Inputs: [(14, 3)]
+2025-04-28 14:50:05,151 - INFO -   Outputs: [(14, 5)]
+2025-04-28 14:50:05,151 - INFO - Valid splitter at (15, 5) with next position (14, 5), facing (0, 1)
+2025-04-28 14:50:05,151 - INFO -   Inputs: [(14, 4)]
+2025-04-28 14:50:05,151 - INFO -   Outputs: [(14, 6)]
+2025-04-28 14:50:05,151 - INFO - Valid splitter at (15, 6) with next position (14, 6), facing (0, 1)
+2025-04-28 14:50:05,151 - INFO -   Inputs: [(14, 5)]
+2025-04-28 14:50:05,151 - INFO -   Outputs: [(14, 7)]
+2025-04-28 14:50:05,151 - INFO - Valid splitter at (15, 7) with next position (14, 7), facing (0, 1)
+2025-04-28 14:50:05,151 - INFO -   Inputs: [(14, 6)]
+2025-04-28 14:50:05,151 - INFO -   Outputs: [(14, 8)]
+2025-04-28 14:50:05,151 - INFO - Valid splitter at (15, 8) with next position (14, 8), facing (0, 1)
+2025-04-28 14:50:05,151 - INFO -   Inputs: [(14, 7)]
+2025-04-28 14:50:05,151 - INFO -   Outputs: [(14, 9)]
+2025-04-28 14:50:05,151 - INFO - Found splitter at destination point (15, 1)
+2025-04-28 14:50:05,152 - INFO - Found splitter at destination point (15, 2)
+2025-04-28 14:50:05,152 - INFO - Found splitter at destination point (15, 3)
+2025-04-28 14:50:05,152 - INFO - Found splitter at destination point (15, 4)
+2025-04-28 14:50:05,152 - INFO - Found splitter at destination point (15, 5)
+2025-04-28 14:50:05,152 - INFO - Found splitter at destination point (15, 6)
+2025-04-28 14:50:05,152 - INFO - Found splitter at destination point (15, 7)
+2025-04-28 14:50:05,152 - INFO - Found splitter at destination point (15, 8)
+2025-04-28 14:50:05,152 - INFO - Added splitter input (14, 0) as destination
+2025-04-28 14:50:05,152 - INFO - Added splitter input (14, 1) as destination
+2025-04-28 14:50:05,152 - INFO - Added splitter input (14, 2) as destination
+2025-04-28 14:50:05,152 - INFO - Added splitter input (14, 3) as destination
+2025-04-28 14:50:05,152 - INFO - Added splitter input (14, 4) as destination
+2025-04-28 14:50:05,152 - INFO - Added splitter input (14, 5) as destination
+2025-04-28 14:50:05,152 - INFO - Added splitter input (14, 6) as destination
+2025-04-28 14:50:05,152 - INFO - Added splitter input (14, 7) as destination
+2025-04-28 14:50:05,152 - INFO - Destination point (14, 0) is an input of splitter at (15, 1)
+2025-04-28 14:50:05,152 - INFO - Destination point (14, 1) is an input of splitter at (15, 2)
+2025-04-28 14:50:05,152 - INFO - Destination point (14, 2) is an input of splitter at (15, 3)
+2025-04-28 14:50:05,153 - INFO - Destination point (14, 3) is an input of splitter at (15, 4)
+2025-04-28 14:50:05,153 - INFO - Destination point (14, 4) is an input of splitter at (15, 5)
+2025-04-28 14:50:05,153 - INFO - Destination point (14, 5) is an input of splitter at (15, 6)
+2025-04-28 14:50:05,153 - INFO - Destination point (14, 6) is an input of splitter at (15, 7)
+2025-04-28 14:50:05,153 - INFO - Destination point (14, 7) is an input of splitter at (15, 8)
+2025-04-28 14:50:05,153 - DEBUG - All pairs sorted by heuristic distance: [(4, (10, 2), (14, 2), None, <MultiAgentPathfinder.Splitter object at 0x0000028CAEBEE2A0>), (5, (10, 2), (14, 1), None, <MultiAgentPathfinder.Splitter object at 0x0000028CAEBEE780>), (5, (10, 2), (14, 3), None, <MultiAgentPathfinder.Splitter object at 0x0000028CAEBEF800>), (6, (10, 2), (14, 0), None, <MultiAgentPathfinder.Splitter object at 0x0000028CAEBEDAC0>), (6, (10, 2), (14, 4), None, <MultiAgentPathfinder.Splitter object at 0x0000028CAEBEF2F0>), (7, (10, 2), (14, 5), None, <MultiAgentPathfinder.Splitter object at 0x0000028CAEBEDA90>), (8, (10, 2), (14, 6), None, <MultiAgentPathfinder.Splitter object at 0x0000028CAEBEDDF0>), (9, (10, 2), (14, 7), None, <MultiAgentPathfinder.Splitter object at 0x0000028CAEBEDFA0>)]
+2025-04-28 14:50:05,153 - DEBUG - Found valid underground path from (10, 2) to (13, 2) with obstacle? True
+2025-04-28 14:50:05,153 - DEBUG - Found valid underground path from (11, 2) to (13, 2) with obstacle? True
+2025-04-28 14:50:05,153 - DEBUG - Exit (11, 2) rejected because it doesn't get closer to goal
+2025-04-28 14:50:05,154 - DEBUG - Path found: [(10, 2), (13, 2), (14, 2)] with underground segments: {'segment_0': {'start': (10, 2), 'end': (13, 2)}}
+2025-04-28 14:50:05,154 - INFO - Found better path for electronic-circuit_0 from (10, 2) to (14, 2) with length 3
+2025-04-28 14:50:05,154 - DEBUG - path_foundTrue for electronic-circuit_0 from (10, 2) to (14, 2)
+2025-04-28 14:50:05,154 - DEBUG - Adding path for electronic-circuit_0 from (10, 2) to (14, 2)
+2025-04-28 14:50:05,154 - DEBUG - ======================================================
+2025-04-28 14:50:05,154 - DEBUG - Marking path on grid for electronic-circuit_0 from (10, 2) to (14, 2)
+2025-04-28 14:50:05,154 - DEBUG - BEFORE :Working grid:
+[[ 1  0  0  0  0  0  0  0  0  0  0  0  1  0  0 22]
+ [99 44 33 33 33  0  0  0  0  0  0  0  1  0  0 22]
+ [ 1  0 33 33 33 44 33 33 33  1  0  0  1  0  0 22]
+ [99 44 33 33 33 44 33 33 33  0  0  0  1  0  0 22]
+ [99 44 33 33 33 44 33 33 33 44 99  0  1  0  0 22]
+ [ 1  0 33 33 33  0  0  0  0  0  0  0  1  0  0 22]
+ [99 44 33 33 33 44 33 33 33 44 99  0  1  0  0 22]
+ [ 1  0 33 33 33 44 33 33 33  1  0  0  1  0  0 22]
+ [99 44 33 33 33 44 33 33 33  0  0  0  1  0  0 22]
+ [99 44 33 33 33  0  0  0  0  0  0  0  1  0  0 22]]
+2025-04-28 14:50:05,155 - DEBUG - AFTER: Working grid:
+[[ 1  0  0  0  0  0  0  0  0  0  0  0  1  0  0 22]
+ [99 44 33 33 33  0  0  0  0  0  0  0  1  0  0 22]
+ [ 1  0 33 33 33 44 33 33 33  1  1  1  1  1  1 22]
+ [99 44 33 33 33 44 33 33 33  0  0  0  1  0  1  1]
+ [99 44 33 33 33 44 33 33 33 44 99  0  1  0  0 22]
+ [ 1  0 33 33 33  0  0  0  0  0  0  0  1  0  0 22]
+ [99 44 33 33 33 44 33 33 33 44 99  0  1  0  0 22]
+ [ 1  0 33 33 33 44 33 33 33  1  0  0  1  0  0 22]
+ [99 44 33 33 33 44 33 33 33  0  0  0  1  0  0 22]
+ [99 44 33 33 33  0  0  0  0  0  0  0  1  0  0 22]]
+2025-04-28 14:50:05,155 - DEBUG - ======================================================
+2025-04-28 14:50:05,155 - INFO - Found splitter at destination point (15, 1)
+2025-04-28 14:50:05,155 - INFO - Found splitter at destination point (15, 2)
+2025-04-28 14:50:05,155 - INFO - Found splitter at destination point (15, 3)
+2025-04-28 14:50:05,155 - INFO - Found splitter at destination point (15, 4)
+2025-04-28 14:50:05,155 - INFO - Found splitter at destination point (15, 5)
+2025-04-28 14:50:05,156 - INFO - Found splitter at destination point (15, 6)
+2025-04-28 14:50:05,156 - INFO - Found splitter at destination point (15, 7)
+2025-04-28 14:50:05,156 - INFO - Found splitter at destination point (15, 8)
+2025-04-28 14:50:05,156 - INFO - Added destination points from other item electronic-circuit_0
+2025-04-28 14:50:05,156 - INFO - Added splitter input (14, 0) as destination
+2025-04-28 14:50:05,156 - INFO - Added splitter input (14, 1) as destination
+2025-04-28 14:50:05,156 - INFO - Added splitter input (14, 4) as destination
+2025-04-28 14:50:05,156 - INFO - Added splitter input (14, 5) as destination
+2025-04-28 14:50:05,156 - INFO - Added splitter input (14, 6) as destination
+2025-04-28 14:50:05,156 - INFO - Added splitter input (14, 7) as destination
+2025-04-28 14:50:05,156 - INFO - Destination point (14, 2) is an input of splitter at (15, 3)
+2025-04-28 14:50:05,156 - INFO - Destination point (14, 0) is an input of splitter at (15, 1)
+2025-04-28 14:50:05,156 - INFO - Destination point (14, 1) is an input of splitter at (15, 2)
+2025-04-28 14:50:05,156 - INFO - Destination point (14, 4) is an input of splitter at (15, 5)
+2025-04-28 14:50:05,156 - INFO - Destination point (14, 5) is an input of splitter at (15, 6)
+2025-04-28 14:50:05,157 - INFO - Destination point (14, 6) is an input of splitter at (15, 7)
+2025-04-28 14:50:05,157 - INFO - Destination point (14, 7) is an input of splitter at (15, 8)
+2025-04-28 14:50:05,157 - DEBUG - All pairs sorted by heuristic distance: [(4, (10, 7), (14, 7), None, <MultiAgentPathfinder.Splitter object at 0x0000028CAEBEDFA0>), (5, (10, 7), (10, 2), None, None), (5, (10, 7), (14, 6), None, <MultiAgentPathfinder.Splitter object at 0x0000028CAEBEDDF0>), (6, (10, 7), (14, 5), None, <MultiAgentPathfinder.Splitter object at 0x0000028CAEBEDA90>), (7, (10, 7), (14, 4), None, <MultiAgentPathfinder.Splitter object at 0x0000028CAEBEF2F0>), (8, (10, 7), (13, 2), None, None), (9, (10, 7), (14, 2), None, <MultiAgentPathfinder.Splitter object at 0x0000028CAEBEE2A0>), (10, (10, 7), (14, 1), None, <MultiAgentPathfinder.Splitter object at 0x0000028CAEBEE780>), (11, (10, 7), (14, 0), None, <MultiAgentPathfinder.Splitter object at 0x0000028CAEBEDAC0>)]
+2025-04-28 14:50:05,157 - DEBUG - Found valid underground path from (10, 7) to (13, 7) with obstacle? True
+2025-04-28 14:50:05,157 - DEBUG - Found valid underground path from (11, 7) to (13, 7) with obstacle? True
+2025-04-28 14:50:05,157 - DEBUG - Exit (11, 7) rejected because it doesn't get closer to goal
+2025-04-28 14:50:05,157 - DEBUG - Path found: [(10, 7), (13, 7), (14, 7)] with underground segments: {'segment_0': {'start': (10, 7), 'end': (13, 7)}}
+2025-04-28 14:50:05,157 - INFO - Found better path for electronic-circuit_1 from (10, 7) to (14, 7) with length 3
+2025-04-28 14:50:05,157 - DEBUG - path_foundTrue for electronic-circuit_1 from (10, 7) to (14, 7)
+2025-04-28 14:50:05,157 - DEBUG - Adding path for electronic-circuit_1 from (10, 7) to (14, 7)
+2025-04-28 14:50:05,157 - DEBUG - ======================================================
+2025-04-28 14:50:05,157 - DEBUG - Marking path on grid for electronic-circuit_1 from (10, 7) to (14, 7)
+2025-04-28 14:50:05,157 - DEBUG - BEFORE :Working grid:
+[[ 1  0  0  0  0  0  0  0  0  0  0  0  1  0  0 22]
+ [99 44 33 33 33  0  0  0  0  0  0  0  1  0  0 22]
+ [ 1  0 33 33 33 44 33 33 33  1  0  1  1  0  0 22]
+ [99 44 33 33 33 44 33 33 33  0  0  0  1  0  1  1]
+ [99 44 33 33 33 44 33 33 33 44 99  0  1  0  0 22]
+ [ 1  0 33 33 33  0  0  0  0  0  0  0  1  0  0 22]
+ [99 44 33 33 33 44 33 33 33 44 99  0  1  0  0 22]
+ [ 1  0 33 33 33 44 33 33 33  1  0  0  1  0  0 22]
+ [99 44 33 33 33 44 33 33 33  0  0  0  1  0  0 22]
+ [99 44 33 33 33  0  0  0  0  0  0  0  1  0  0 22]]
+2025-04-28 14:50:05,159 - DEBUG - AFTER: Working grid:
+[[ 1  0  0  0  0  0  0  0  0  0  0  0  1  0  0 22]
+ [99 44 33 33 33  0  0  0  0  0  0  0  1  0  0 22]
+ [ 1  0 33 33 33 44 33 33 33  1  0  1  1  0  0 22]
+ [99 44 33 33 33 44 33 33 33  0  0  0  1  0  1  1]
+ [99 44 33 33 33 44 33 33 33 44 99  0  1  0  0 22]
+ [ 1  0 33 33 33  0  0  0  0  0  0  0  1  0  0 22]
+ [99 44 33 33 33 44 33 33 33 44 99  0  1  0  0 22]
+ [ 1  0 33 33 33 44 33 33 33  1  1  1  1  1  1 22]
+ [99 44 33 33 33 44 33 33 33  0  0  0  1  0  1  1]
+ [99 44 33 33 33  0  0  0  0  0  0  0  1  0  0 22]]
+2025-04-28 14:50:05,159 - DEBUG - ======================================================
+2025-04-28 14:50:05,159 - INFO - Found splitter at start point (12, 8)
+2025-04-28 14:50:05,159 - INFO - Found splitter at start point (12, 8)
+2025-04-28 14:50:05,159 - INFO - Found splitter at start point (12, 7)
+2025-04-28 14:50:05,159 - INFO - Found splitter at start point (12, 7)
+2025-04-28 14:50:05,159 - INFO - Found splitter at start point (12, 6)
+2025-04-28 14:50:05,159 - INFO - Found splitter at start point (12, 6)
+2025-04-28 14:50:05,159 - INFO - Found splitter at start point (12, 5)
+2025-04-28 14:50:05,159 - INFO - Found splitter at start point (12, 5)
+2025-04-28 14:50:05,160 - INFO - Found splitter at start point (12, 4)
+2025-04-28 14:50:05,160 - INFO - Found splitter at start point (12, 4)
+2025-04-28 14:50:05,160 - INFO - Found splitter at start point (12, 3)
+2025-04-28 14:50:05,160 - INFO - Found splitter at start point (12, 3)
+2025-04-28 14:50:05,160 - INFO - Found splitter at start point (12, 2)
+2025-04-28 14:50:05,160 - INFO - Found splitter at start point (12, 2)
+2025-04-28 14:50:05,160 - INFO - Found splitter at start point (12, 1)
+2025-04-28 14:50:05,160 - INFO - Found splitter at start point (12, 1)
+2025-04-28 14:50:05,160 - INFO - Added splitter output (11, 6) as start point
+2025-04-28 14:50:05,160 - INFO - Added splitter output (13, 6) as start point
+2025-04-28 14:50:05,160 - INFO - Added splitter output (11, 5) as start point
+2025-04-28 14:50:05,160 - INFO - Added splitter output (13, 5) as start point
+2025-04-28 14:50:05,160 - INFO - Added splitter output (11, 4) as start point
+2025-04-28 14:50:05,160 - INFO - Added splitter output (13, 4) as start point
+2025-04-28 14:50:05,160 - INFO - Added splitter output (11, 3) as start point
+2025-04-28 14:50:05,160 - INFO - Added splitter output (13, 3) as start point
+2025-04-28 14:50:05,160 - INFO - Added splitter output (13, 2) as start point
+2025-04-28 14:50:05,160 - INFO - Added splitter output (11, 1) as start point
+2025-04-28 14:50:05,160 - INFO - Added splitter output (13, 1) as start point
+2025-04-28 14:50:05,160 - INFO - Added splitter output (11, 0) as start point
+2025-04-28 14:50:05,160 - INFO - Added splitter output (13, 0) as start point
+2025-04-28 14:50:05,160 - INFO - Start point (11, 6) is an output of splitter at (12, 7)
+2025-04-28 14:50:05,161 - INFO - Start point (13, 6) is an output of splitter at (12, 7)
+2025-04-28 14:50:05,161 - INFO - Start point (11, 5) is an output of splitter at (12, 6)
+2025-04-28 14:50:05,161 - INFO - Start point (13, 5) is an output of splitter at (12, 6)
+2025-04-28 14:50:05,161 - INFO - Start point (11, 4) is an output of splitter at (12, 5)
+2025-04-28 14:50:05,161 - INFO - Start point (13, 4) is an output of splitter at (12, 5)
+2025-04-28 14:50:05,161 - INFO - Start point (11, 3) is an output of splitter at (12, 4)
+2025-04-28 14:50:05,161 - INFO - Start point (13, 3) is an output of splitter at (12, 4)
+2025-04-28 14:50:05,161 - INFO - Start point (13, 2) is an output of splitter at (12, 3)
+2025-04-28 14:50:05,161 - INFO - Start point (11, 1) is an output of splitter at (12, 2)
+2025-04-28 14:50:05,161 - INFO - Start point (13, 1) is an output of splitter at (12, 2)
+2025-04-28 14:50:05,161 - INFO - Start point (11, 0) is an output of splitter at (12, 1)
+2025-04-28 14:50:05,161 - INFO - Start point (13, 0) is an output of splitter at (12, 1)
+2025-04-28 14:50:05,161 - DEBUG - All pairs sorted by heuristic distance: [(1, (11, 4), (10, 4), <MultiAgentPathfinder.Splitter object at 0x0000028CAEBEE0C0>, None), (2, (11, 3), (10, 4), <MultiAgentPathfinder.Splitter object at 0x0000028CAEBEF680>, None), (2, (11, 5), (10, 4), <MultiAgentPathfinder.Splitter object at 0x0000028CAEBEDE20>, None), (3, (11, 6), (10, 4), <MultiAgentPathfinder.Splitter object at 0x0000028CAEBEF830>, None), (3, (13, 4), (10, 4), <MultiAgentPathfinder.Splitter object at 0x0000028CAEBED730>, None), (4, (11, 1), (10, 4), <MultiAgentPathfinder.Splitter object at 0x0000028CAEBEF3B0>, None), (4, (13, 3), (10, 4), <MultiAgentPathfinder.Splitter object at 0x0000028CAEBEF8F0>, None), (4, (13, 5), (10, 4), <MultiAgentPathfinder.Splitter object at 0x0000028CAEBEE8A0>, None), (5, (11, 0), (10, 4), <MultiAgentPathfinder.Splitter object at 0x0000028CAEBEF860>, None), (5, (13, 2), (10, 4), <MultiAgentPathfinder.Splitter object at 0x0000028CAEBEE300>, None), (5, (13, 6), (10, 4), <MultiAgentPathfinder.Splitter object at 0x0000028CAEBEE090>, None), (6, (13, 1), (10, 4), <MultiAgentPathfinder.Splitter object at 0x0000028CAEBEEED0>, None), (7, (13, 0), (10, 4), <MultiAgentPathfinder.Splitter object at 0x0000028CAEBEEA50>, None)]
+2025-04-28 14:50:05,161 - DEBUG - Path found: [(11, 4), (10, 4)] with underground segments: {}
+2025-04-28 14:50:05,161 - INFO - Found better path for iron-plate_0 from (11, 4) to (10, 4) with length 2
+2025-04-28 14:50:05,161 - DEBUG - path_foundTrue for iron-plate_0 from (11, 4) to (10, 4)
+2025-04-28 14:50:05,161 - DEBUG - Adding path for iron-plate_0 from (11, 4) to (10, 4)
+2025-04-28 14:50:05,162 - DEBUG - ======================================================
+2025-04-28 14:50:05,162 - DEBUG - Marking path on grid for iron-plate_0 from (11, 4) to (10, 4)
+2025-04-28 14:50:05,162 - DEBUG - BEFORE :Working grid:
+[[ 1  0  0  0  0  0  0  0  0  0  0  0  1  0  0 22]
+ [99 44 33 33 33  0  0  0  0  0  0  0  1  0  0 22]
+ [ 1  0 33 33 33 44 33 33 33  1  0  1  1  0  0 22]
+ [99 44 33 33 33 44 33 33 33  0  0  0  1  0  1  1]
+ [99 44 33 33 33 44 33 33 33 44  0  0  1  0  0 22]
+ [ 1  0 33 33 33  0  0  0  0  0  0  0  1  0  0 22]
+ [99 44 33 33 33 44 33 33 33 44 99  0  1  0  0 22]
+ [ 1  0 33 33 33 44 33 33 33  1  1  1  1  1  1 22]
+ [99 44 33 33 33 44 33 33 33  0  0  0  1  0  1  1]
+ [99 44 33 33 33  0  0  0  0  0  0  0  1  0  0 22]]
+2025-04-28 14:50:05,163 - DEBUG - AFTER: Working grid:
+[[ 1  0  0  0  0  0  0  0  0  0  0  0  1  0  0 22]
+ [99 44 33 33 33  0  0  0  0  0  0  0  1  0  0 22]
+ [ 1  0 33 33 33 44 33 33 33  1  0  1  1  0  0 22]
+ [99 44 33 33 33 44 33 33 33  0  0  0  1  0  1  1]
+ [99 44 33 33 33 44 33 33 33 44  1  1  1  0  0 22]
+ [ 1  0 33 33 33  0  0  0  0  0  0  1  1  0  0 22]
+ [99 44 33 33 33 44 33 33 33 44 99  0  1  0  0 22]
+ [ 1  0 33 33 33 44 33 33 33  1  1  1  1  1  1 22]
+ [99 44 33 33 33 44 33 33 33  0  0  0  1  0  1  1]
+ [99 44 33 33 33  0  0  0  0  0  0  0  1  0  0 22]]
+2025-04-28 14:50:05,163 - DEBUG - ======================================================
+2025-04-28 14:50:05,163 - INFO - Found splitter at start point (12, 8)
+2025-04-28 14:50:05,163 - INFO - Found splitter at start point (12, 8)
+2025-04-28 14:50:05,163 - INFO - Found splitter at start point (12, 7)
+2025-04-28 14:50:05,163 - INFO - Found splitter at start point (12, 7)
+2025-04-28 14:50:05,163 - INFO - Found splitter at start point (12, 6)
+2025-04-28 14:50:05,163 - INFO - Found splitter at start point (12, 6)
+2025-04-28 14:50:05,163 - INFO - Found splitter at start point (12, 5)
+2025-04-28 14:50:05,163 - INFO - Found splitter at start point (12, 5)
+2025-04-28 14:50:05,163 - INFO - Found splitter at start point (12, 4)
+2025-04-28 14:50:05,163 - INFO - Found splitter at start point (12, 4)
+2025-04-28 14:50:05,163 - INFO - Found splitter at start point (12, 3)
+2025-04-28 14:50:05,163 - INFO - Found splitter at start point (12, 3)
+2025-04-28 14:50:05,163 - INFO - Found splitter at start point (12, 2)
+2025-04-28 14:50:05,163 - INFO - Found splitter at start point (12, 2)
+2025-04-28 14:50:05,163 - INFO - Found splitter at start point (12, 1)
+2025-04-28 14:50:05,163 - INFO - Found splitter at start point (12, 1)
+2025-04-28 14:50:05,164 - INFO - Added start points from other item iron-plate_0
+2025-04-28 14:50:05,164 - INFO - Added splitter output (11, 6) as start point
+2025-04-28 14:50:05,164 - INFO - Added splitter output (13, 6) as start point
+2025-04-28 14:50:05,164 - INFO - Added splitter output (13, 5) as start point
+2025-04-28 14:50:05,164 - INFO - Added splitter output (13, 4) as start point
+2025-04-28 14:50:05,164 - INFO - Added splitter output (11, 3) as start point
+2025-04-28 14:50:05,164 - INFO - Added splitter output (13, 3) as start point
+2025-04-28 14:50:05,164 - INFO - Added splitter output (13, 2) as start point
+2025-04-28 14:50:05,164 - INFO - Added splitter output (11, 1) as start point
+2025-04-28 14:50:05,164 - INFO - Added splitter output (13, 1) as start point
+2025-04-28 14:50:05,164 - INFO - Added splitter output (11, 0) as start point
+2025-04-28 14:50:05,164 - INFO - Added splitter output (13, 0) as start point
+2025-04-28 14:50:05,164 - INFO - Start point (11, 6) is an output of splitter at (12, 7)
+2025-04-28 14:50:05,164 - INFO - Start point (13, 6) is an output of splitter at (12, 7)
+2025-04-28 14:50:05,164 - INFO - Start point (13, 5) is an output of splitter at (12, 6)
+2025-04-28 14:50:05,164 - INFO - Start point (13, 4) is an output of splitter at (12, 5)
+2025-04-28 14:50:05,164 - INFO - Start point (11, 3) is an output of splitter at (12, 4)
+2025-04-28 14:50:05,164 - INFO - Start point (13, 3) is an output of splitter at (12, 4)
+2025-04-28 14:50:05,164 - INFO - Start point (13, 2) is an output of splitter at (12, 3)
+2025-04-28 14:50:05,164 - INFO - Start point (11, 1) is an output of splitter at (12, 2)
+2025-04-28 14:50:05,164 - INFO - Start point (13, 1) is an output of splitter at (12, 2)
+2025-04-28 14:50:05,164 - INFO - Start point (11, 0) is an output of splitter at (12, 1)
+2025-04-28 14:50:05,165 - INFO - Start point (13, 0) is an output of splitter at (12, 1)
+2025-04-28 14:50:05,165 - DEBUG - All pairs sorted by heuristic distance: [(1, (11, 6), (10, 6), <MultiAgentPathfinder.Splitter object at 0x0000028CAEBEF830>, None), (2, (10, 4), (10, 6), None, None), (3, (13, 6), (10, 6), <MultiAgentPathfinder.Splitter object at 0x0000028CAEBEE090>, None), (4, (11, 3), (10, 6), <MultiAgentPathfinder.Splitter object at 0x0000028CAEBEF680>, None), (4, (13, 5), (10, 6), <MultiAgentPathfinder.Splitter object at 0x0000028CAEBEE8A0>, None), (5, (13, 4), (10, 6), <MultiAgentPathfinder.Splitter object at 0x0000028CAEBED730>, None), (6, (11, 1), (10, 6), <MultiAgentPathfinder.Splitter object at 0x0000028CAEBEF3B0>, None), (6, (13, 3), (10, 6), <MultiAgentPathfinder.Splitter object at 0x0000028CAEBEF8F0>, None), (7, (11, 0), (10, 6), <MultiAgentPathfinder.Splitter object at 0x0000028CAEBEF860>, None), (7, (13, 2), (10, 6), <MultiAgentPathfinder.Splitter object at 0x0000028CAEBEE300>, None), (8, (13, 1), (10, 6), <MultiAgentPathfinder.Splitter object at 0x0000028CAEBEEED0>, None), (9, (13, 0), (10, 6), <MultiAgentPathfinder.Splitter object at 0x0000028CAEBEEA50>, None)]
+2025-04-28 14:50:05,165 - DEBUG - Path found: [(11, 6), (10, 6)] with underground segments: {}
+2025-04-28 14:50:05,165 - INFO - Found better path for iron-plate_1 from (11, 6) to (10, 6) with length 2
+2025-04-28 14:50:05,165 - DEBUG - path_foundTrue for iron-plate_1 from (11, 6) to (10, 6)
+2025-04-28 14:50:05,165 - DEBUG - Adding path for iron-plate_1 from (11, 6) to (10, 6)
+2025-04-28 14:50:05,165 - DEBUG - ======================================================
+2025-04-28 14:50:05,165 - DEBUG - Marking path on grid for iron-plate_1 from (11, 6) to (10, 6)
+2025-04-28 14:50:05,166 - DEBUG - BEFORE :Working grid:
+[[ 1  0  0  0  0  0  0  0  0  0  0  0  1  0  0 22]
+ [99 44 33 33 33  0  0  0  0  0  0  0  1  0  0 22]
+ [ 1  0 33 33 33 44 33 33 33  1  0  1  1  0  0 22]
+ [99 44 33 33 33 44 33 33 33  0  0  0  1  0  1  1]
+ [99 44 33 33 33 44 33 33 33 44  0  1  1  0  0 22]
+ [ 1  0 33 33 33  0  0  0  0  0  0  1  1  0  0 22]
+ [99 44 33 33 33 44 33 33 33 44  0  0  1  0  0 22]
+ [ 1  0 33 33 33 44 33 33 33  1  1  1  1  1  1 22]
+ [99 44 33 33 33 44 33 33 33  0  0  0  1  0  1  1]
+ [99 44 33 33 33  0  0  0  0  0  0  0  1  0  0 22]]
+2025-04-28 14:50:05,166 - DEBUG - AFTER: Working grid:
+[[ 1  0  0  0  0  0  0  0  0  0  0  0  1  0  0 22]
+ [99 44 33 33 33  0  0  0  0  0  0  0  1  0  0 22]
+ [ 1  0 33 33 33 44 33 33 33  1  0  1  1  0  0 22]
+ [99 44 33 33 33 44 33 33 33  0  0  0  1  0  1  1]
+ [99 44 33 33 33 44 33 33 33 44  0  1  1  0  0 22]
+ [ 1  0 33 33 33  0  0  0  0  0  0  1  1  0  0 22]
+ [99 44 33 33 33 44 33 33 33 44  1  1  1  0  0 22]
+ [ 1  0 33 33 33 44 33 33 33  1  1  1  1  1  1 22]
+ [99 44 33 33 33 44 33 33 33  0  0  0  1  0  1  1]
+ [99 44 33 33 33  0  0  0  0  0  0  0  1  0  0 22]]
+2025-04-28 14:50:05,166 - DEBUG - ======================================================
+2025-04-28 14:50:05,166 - INFO - Execution time for build_belts: 0.3892 seconds.
+2025-04-28 14:50:05,498 - INFO - Creating blueprint from Modules/electronic-circuit_120_[]_module.json
+2025-04-28 14:50:05,542 - INFO - Blueprint successfully exported to Blueprints/electronic-circuit_120_[]_module.txt

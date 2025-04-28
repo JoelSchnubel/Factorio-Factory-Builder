@@ -337,8 +337,8 @@
                             9
                         ],
                         "underground_segments": {},
-                        "start_splitter": false,
-                        "dest_splitter": false,
+                        "start_splitter": null,
+                        "dest_splitter": null,
                         "orientation": {
                             "(15, 0)": [
                                 0,
@@ -390,72 +390,86 @@
         [
             "copper-cable",
             5,
-            2
+            2,
+            "east"
         ],
         [
             "copper-cable",
             5,
-            3
+            3,
+            "east"
         ],
         [
             "copper-cable",
             5,
-            4
+            4,
+            "east"
         ],
         [
             "iron-plate",
             9,
-            2
+            4,
+            "west"
         ],
         [
             "copper-cable",
             5,
-            6
+            6,
+            "east"
         ],
         [
             "copper-cable",
             5,
-            7
+            8,
+            "east"
         ],
         [
             "copper-cable",
             5,
-            8
+            7,
+            "east"
         ],
         [
             "iron-plate",
             9,
-            8
+            6,
+            "west"
         ],
         [
             "copper-plate",
             1,
-            1
+            1,
+            "east"
         ],
         [
             "copper-plate",
             1,
-            3
+            3,
+            "east"
         ],
         [
             "copper-plate",
             1,
-            4
+            4,
+            "east"
         ],
         [
             "copper-plate",
             1,
-            6
+            6,
+            "east"
         ],
         [
             "copper-plate",
             1,
-            9
+            8,
+            "east"
         ],
         [
             "copper-plate",
             1,
-            8
+            9,
+            "east"
         ]
     ],
     "belt_point_information": [
@@ -480,7 +494,7 @@
         [
             "iron-plate",
             10,
-            2,
+            4,
             "end"
         ],
         [
@@ -492,19 +506,19 @@
         [
             "copper-cable",
             4,
-            7,
+            8,
             "end"
         ],
         [
             "copper-cable",
             4,
-            8,
+            7,
             "end"
         ],
         [
             "iron-plate",
             10,
-            8,
+            6,
             "end"
         ],
         [
@@ -534,13 +548,13 @@
         [
             "copper-plate",
             0,
-            9,
+            8,
             "end"
         ],
         [
             "copper-plate",
             0,
-            8,
+            9,
             "end"
         ]
     ],
@@ -626,24 +640,8 @@
             ],
             "start_points": [
                 [
-                    6,
-                    0
-                ],
-                [
-                    7,
-                    0
-                ],
-                [
-                    8,
-                    0
-                ],
-                [
                     10,
-                    3
-                ],
-                [
-                    10,
-                    4
+                    2
                 ]
             ],
             "inserter_mapping": {
@@ -659,13 +657,13 @@
                     8,
                     1
                 ],
+                "(10, 2)": [
+                    9,
+                    2
+                ],
                 "(10, 3)": [
                     9,
                     3
-                ],
-                "(10, 4)": [
-                    9,
-                    4
                 ]
             }
         },
@@ -724,21 +722,17 @@
             "start_points": [
                 [
                     10,
-                    6
-                ],
-                [
-                    10,
                     7
                 ]
             ],
             "inserter_mapping": {
-                "(10, 6)": [
-                    9,
-                    6
-                ],
                 "(10, 7)": [
                     9,
                     7
+                ],
+                "(10, 8)": [
+                    9,
+                    8
                 ]
             }
         },
@@ -747,7 +741,7 @@
             "destination": [
                 [
                     10,
-                    2
+                    4
                 ]
             ],
             "start_points": [
@@ -807,7 +801,7 @@
             "destination": [
                 [
                     10,
-                    8
+                    6
                 ]
             ],
             "start_points": [
@@ -910,24 +904,6 @@
             33,
             33,
             33,
-            44,
-            99,
-            0,
-            1,
-            0,
-            0,
-            22
-        ],
-        [
-            99,
-            44,
-            33,
-            33,
-            33,
-            44,
-            33,
-            33,
-            33,
             0,
             0,
             0,
@@ -955,6 +931,24 @@
             22
         ],
         [
+            99,
+            44,
+            33,
+            33,
+            33,
+            44,
+            33,
+            33,
+            33,
+            44,
+            99,
+            0,
+            1,
+            0,
+            0,
+            22
+        ],
+        [
             1,
             0,
             33,
@@ -982,8 +976,8 @@
             33,
             33,
             33,
-            0,
-            0,
+            44,
+            99,
             0,
             1,
             0,
@@ -1018,8 +1012,8 @@
             33,
             33,
             33,
-            44,
-            99,
+            0,
+            0,
             0,
             1,
             0,
@@ -1046,98 +1040,70 @@
         ]
     ],
     "paths": {
-        "iron-plate_0": [
-            {
-                "path": [
-                    [
-                        11,
-                        2
-                    ],
-                    [
-                        10,
-                        2
-                    ]
-                ],
-                "start": [
-                    11,
-                    2
-                ],
-                "destination": [
-                    10,
-                    2
-                ],
-                "underground_segments": {},
-                "start_splitter": true,
-                "dest_splitter": false
-            }
-        ],
-        "iron-plate_1": [
-            {
-                "path": [
-                    [
-                        11,
-                        7
-                    ],
-                    [
-                        10,
-                        7
-                    ],
-                    [
-                        10,
-                        8
-                    ]
-                ],
-                "start": [
-                    11,
-                    7
-                ],
-                "destination": [
-                    10,
-                    8
-                ],
-                "underground_segments": {},
-                "start_splitter": true,
-                "dest_splitter": false
-            }
-        ],
         "electronic-circuit_0": [
             {
                 "path": [
                     [
                         10,
-                        3
+                        2
                     ],
                     [
                         13,
-                        3
+                        2
                     ],
                     [
                         14,
-                        3
+                        2
                     ]
                 ],
                 "start": [
                     10,
-                    3
+                    2
                 ],
                 "destination": [
                     14,
-                    3
+                    2
                 ],
                 "underground_segments": {
                     "segment_0": {
                         "start": [
                             10,
-                            3
+                            2
                         ],
                         "end": [
                             13,
-                            3
+                            2
                         ]
                     }
                 },
-                "start_splitter": false,
-                "dest_splitter": true
+                "start_splitter": null,
+                "dest_splitter": {
+                    "item": "electronic-circuit",
+                    "position": [
+                        15,
+                        3
+                    ],
+                    "next_position": [
+                        14,
+                        3
+                    ],
+                    "direction": [
+                        0,
+                        1
+                    ],
+                    "inputs": [
+                        [
+                            14,
+                            2
+                        ]
+                    ],
+                    "outputs": [
+                        [
+                            14,
+                            4
+                        ]
+                    ]
+                }
             }
         ],
         "electronic-circuit_1": [
@@ -1145,53 +1111,181 @@
                 "path": [
                     [
                         10,
-                        6
+                        7
                     ],
                     [
                         13,
-                        6
+                        7
                     ],
                     [
                         14,
-                        6
+                        7
                     ]
                 ],
                 "start": [
                     10,
-                    6
+                    7
                 ],
                 "destination": [
                     14,
-                    6
+                    7
                 ],
                 "underground_segments": {
                     "segment_0": {
                         "start": [
                             10,
-                            6
+                            7
                         ],
                         "end": [
                             13,
-                            6
+                            7
                         ]
                     }
                 },
-                "start_splitter": false,
-                "dest_splitter": true
+                "start_splitter": null,
+                "dest_splitter": {
+                    "item": "electronic-circuit",
+                    "position": [
+                        15,
+                        8
+                    ],
+                    "next_position": [
+                        14,
+                        8
+                    ],
+                    "direction": [
+                        0,
+                        1
+                    ],
+                    "inputs": [
+                        [
+                            14,
+                            7
+                        ]
+                    ],
+                    "outputs": [
+                        [
+                            14,
+                            9
+                        ]
+                    ]
+                }
+            }
+        ],
+        "iron-plate_0": [
+            {
+                "path": [
+                    [
+                        11,
+                        4
+                    ],
+                    [
+                        10,
+                        4
+                    ]
+                ],
+                "start": [
+                    11,
+                    4
+                ],
+                "destination": [
+                    10,
+                    4
+                ],
+                "underground_segments": {},
+                "start_splitter": {
+                    "item": "iron-plate",
+                    "position": [
+                        12,
+                        5
+                    ],
+                    "next_position": [
+                        11,
+                        5
+                    ],
+                    "direction": [
+                        0,
+                        -1
+                    ],
+                    "inputs": [
+                        [
+                            11,
+                            6
+                        ]
+                    ],
+                    "outputs": [
+                        [
+                            11,
+                            4
+                        ]
+                    ]
+                },
+                "dest_splitter": null
+            }
+        ],
+        "iron-plate_1": [
+            {
+                "path": [
+                    [
+                        11,
+                        6
+                    ],
+                    [
+                        10,
+                        6
+                    ]
+                ],
+                "start": [
+                    11,
+                    6
+                ],
+                "destination": [
+                    10,
+                    6
+                ],
+                "underground_segments": {},
+                "start_splitter": {
+                    "item": "iron-plate",
+                    "position": [
+                        12,
+                        7
+                    ],
+                    "next_position": [
+                        11,
+                        7
+                    ],
+                    "direction": [
+                        0,
+                        -1
+                    ],
+                    "inputs": [
+                        [
+                            11,
+                            8
+                        ]
+                    ],
+                    "outputs": [
+                        [
+                            11,
+                            6
+                        ]
+                    ]
+                },
+                "dest_splitter": null
             }
         ]
     },
     "placed_inserter_information": {
         "electronic-circuit_0": {
-            "(10, 3)": [
+            "(10, 2)": [
                 9,
-                3
+                2
             ]
         },
         "electronic-circuit_1": {
-            "(10, 6)": [
+            "(10, 7)": [
                 9,
-                6
+                7
             ]
         }
     }

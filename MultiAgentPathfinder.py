@@ -17,7 +17,30 @@ class Splitter:
         
     def __str__(self):
         return f"Splitter(item={self.item}, position={self.position}, direction={self.direction})"
+    
+    def to_dict(self):
+        return {
+            'item': self.item,
+            'position': self.position,
+            'next_position': self.next_position,
+            'direction': self.direction,
+            'inputs': self.inputs,
+            'outputs': self.outputs
+        }
 
+    @classmethod
+    def from_dict(cls, data):
+      
+        splitter = cls(
+            item=data['item'],
+            position=data['position'],
+            direction=data['direction']
+        )
+        splitter.next_position = data.get('next_position')
+        splitter.inputs = data.get('inputs', [])
+        splitter.outputs = data.get('outputs', [])
+        return splitter
+    
 
 class MultiAgentPathfinder:
     """

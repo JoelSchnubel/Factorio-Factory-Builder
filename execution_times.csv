@@ -583,3 +583,9 @@ electronic-circuit,1,1,solve,"{'electronic-circuit': 2, 'copper-cable': 0, 'iron
 electronic-circuit,1,1,build_belts,"{'electronic-circuit': 2, 'copper-cable': 0, 'iron-plate': 0}",0.24347280000074534
 copper-cable,1,1,solve,"{'copper-cable': 3, 'copper-plate': 0}",1.817751099995803
 copper-cable,1,1,build_belts,"{'copper-cable': 3, 'copper-plate': 0}",0.03389610000158427
+electronic-circuit,1,1,solve,"{'electronic-circuit': 2, 'copper-cable': 3, 'copper-plate': 0, 'iron-plate': 0}",8.819822700002987
+electronic-circuit,1,1,build_belts,"{'electronic-circuit': 2, 'copper-cable': 3, 'copper-plate': 0, 'iron-plate': 0}",0.3568879000013112
+electronic-circuit,1,1,solve,"{'electronic-circuit': 2, 'copper-cable': 3, 'copper-plate': 0, 'iron-plate': 0}",8.692970700001752
+electronic-circuit,1,1,build_belts,"{'electronic-circuit': 2, 'copper-cable': 3, 'copper-plate': 0, 'iron-plate': 0}",0.3297632000030717
+electronic-circuit,1,1,solve,"{'electronic-circuit': 2, 'copper-cable': 3, 'copper-plate': 0, 'iron-plate': 0}",8.830232700005581
+electronic-circuit,1,1,build_belts,"{'electronic-circuit': 2, 'copper-cable': 3, 'copper-plate': 0, 'iron-plate': 0}",0.3892259999993257
