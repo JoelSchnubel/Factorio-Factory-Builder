@@ -1,0 +1,1186 @@
+{
+  "factory_dimensions": {
+    "width": 17,
+    "height": 31
+  },
+  "blocks": {
+    "fixed_block_external_input_iron-plate": {
+      "type": "block",
+      "position": [
+        0,
+        29
+      ],
+      "dimensions": [
+        1,
+        1
+      ]
+    },
+    "fixed_block_external_input_copper-plate": {
+      "type": "block",
+      "position": [
+        2,
+        29
+      ],
+      "dimensions": [
+        1,
+        1
+      ]
+    },
+    "fixed_block_external_output_electronic-circuit": {
+      "type": "block",
+      "position": [
+        5,
+        29
+      ],
+      "dimensions": [
+        1,
+        1
+      ]
+    },
+    "Block_electronic-circuit_0_0": {
+      "type": "electronic-circuit",
+      "position": [
+        0,
+        13
+      ],
+      "dimensions": [
+        16,
+        10
+      ]
+    },
+    "Block_electronic-circuit_0_1": {
+      "type": "electronic-circuit",
+      "position": [
+        0,
+        0
+      ],
+      "dimensions": [
+        16,
+        10
+      ]
+    }
+  },
+  "entities": {
+    "assemblers": [
+      {
+        "item": "electronic-circuit",
+        "position": [
+          6,
+          20
+        ],
+        "block_id": "Block_electronic-circuit_0_0"
+      },
+      {
+        "item": "electronic-circuit",
+        "position": [
+          6,
+          16
+        ],
+        "block_id": "Block_electronic-circuit_0_0"
+      },
+      {
+        "item": "copper-cable",
+        "position": [
+          2,
+          21
+        ],
+        "block_id": "Block_electronic-circuit_0_0"
+      },
+      {
+        "item": "copper-cable",
+        "position": [
+          2,
+          18
+        ],
+        "block_id": "Block_electronic-circuit_0_0"
+      },
+      {
+        "item": "copper-cable",
+        "position": [
+          2,
+          15
+        ],
+        "block_id": "Block_electronic-circuit_0_0"
+      },
+      {
+        "item": "electronic-circuit",
+        "position": [
+          6,
+          7
+        ],
+        "block_id": "Block_electronic-circuit_0_1"
+      },
+      {
+        "item": "electronic-circuit",
+        "position": [
+          6,
+          3
+        ],
+        "block_id": "Block_electronic-circuit_0_1"
+      },
+      {
+        "item": "copper-cable",
+        "position": [
+          2,
+          8
+        ],
+        "block_id": "Block_electronic-circuit_0_1"
+      },
+      {
+        "item": "copper-cable",
+        "position": [
+          2,
+          5
+        ],
+        "block_id": "Block_electronic-circuit_0_1"
+      },
+      {
+        "item": "copper-cable",
+        "position": [
+          2,
+          2
+        ],
+        "block_id": "Block_electronic-circuit_0_1"
+      }
+    ],
+    "inserters": [
+      {
+        "item": "copper-cable",
+        "position": [
+          5,
+          20
+        ],
+        "direction": "east",
+        "block_id": "Block_electronic-circuit_0_0"
+      },
+      {
+        "item": "copper-cable",
+        "position": [
+          5,
+          19
+        ],
+        "direction": "east",
+        "block_id": "Block_electronic-circuit_0_0"
+      },
+      {
+        "item": "copper-cable",
+        "position": [
+          5,
+          18
+        ],
+        "direction": "east",
+        "block_id": "Block_electronic-circuit_0_0"
+      },
+      {
+        "item": "iron-plate",
+        "position": [
+          9,
+          18
+        ],
+        "direction": "west",
+        "block_id": "Block_electronic-circuit_0_0"
+      },
+      {
+        "item": "copper-cable",
+        "position": [
+          5,
+          16
+        ],
+        "direction": "east",
+        "block_id": "Block_electronic-circuit_0_0"
+      },
+      {
+        "item": "copper-cable",
+        "position": [
+          5,
+          14
+        ],
+        "direction": "east",
+        "block_id": "Block_electronic-circuit_0_0"
+      },
+      {
+        "item": "copper-cable",
+        "position": [
+          5,
+          15
+        ],
+        "direction": "east",
+        "block_id": "Block_electronic-circuit_0_0"
+      },
+      {
+        "item": "iron-plate",
+        "position": [
+          9,
+          16
+        ],
+        "direction": "west",
+        "block_id": "Block_electronic-circuit_0_0"
+      },
+      {
+        "item": "copper-plate",
+        "position": [
+          1,
+          21
+        ],
+        "direction": "east",
+        "block_id": "Block_electronic-circuit_0_0"
+      },
+      {
+        "item": "copper-plate",
+        "position": [
+          1,
+          19
+        ],
+        "direction": "east",
+        "block_id": "Block_electronic-circuit_0_0"
+      },
+      {
+        "item": "copper-plate",
+        "position": [
+          1,
+          18
+        ],
+        "direction": "east",
+        "block_id": "Block_electronic-circuit_0_0"
+      },
+      {
+        "item": "copper-plate",
+        "position": [
+          1,
+          16
+        ],
+        "direction": "east",
+        "block_id": "Block_electronic-circuit_0_0"
+      },
+      {
+        "item": "copper-plate",
+        "position": [
+          1,
+          14
+        ],
+        "direction": "east",
+        "block_id": "Block_electronic-circuit_0_0"
+      },
+      {
+        "item": "copper-plate",
+        "position": [
+          1,
+          13
+        ],
+        "direction": "east",
+        "block_id": "Block_electronic-circuit_0_0"
+      },
+      {
+        "item": "copper-cable",
+        "position": [
+          5,
+          7
+        ],
+        "direction": "east",
+        "block_id": "Block_electronic-circuit_0_1"
+      },
+      {
+        "item": "copper-cable",
+        "position": [
+          5,
+          6
+        ],
+        "direction": "east",
+        "block_id": "Block_electronic-circuit_0_1"
+      },
+      {
+        "item": "copper-cable",
+        "position": [
+          5,
+          5
+        ],
+        "direction": "east",
+        "block_id": "Block_electronic-circuit_0_1"
+      },
+      {
+        "item": "iron-plate",
+        "position": [
+          9,
+          5
+        ],
+        "direction": "west",
+        "block_id": "Block_electronic-circuit_0_1"
+      },
+      {
+        "item": "copper-cable",
+        "position": [
+          5,
+          3
+        ],
+        "direction": "east",
+        "block_id": "Block_electronic-circuit_0_1"
+      },
+      {
+        "item": "copper-cable",
+        "position": [
+          5,
+          1
+        ],
+        "direction": "east",
+        "block_id": "Block_electronic-circuit_0_1"
+      },
+      {
+        "item": "copper-cable",
+        "position": [
+          5,
+          2
+        ],
+        "direction": "east",
+        "block_id": "Block_electronic-circuit_0_1"
+      },
+      {
+        "item": "iron-plate",
+        "position": [
+          9,
+          3
+        ],
+        "direction": "west",
+        "block_id": "Block_electronic-circuit_0_1"
+      },
+      {
+        "item": "copper-plate",
+        "position": [
+          1,
+          8
+        ],
+        "direction": "east",
+        "block_id": "Block_electronic-circuit_0_1"
+      },
+      {
+        "item": "copper-plate",
+        "position": [
+          1,
+          6
+        ],
+        "direction": "east",
+        "block_id": "Block_electronic-circuit_0_1"
+      },
+      {
+        "item": "copper-plate",
+        "position": [
+          1,
+          5
+        ],
+        "direction": "east",
+        "block_id": "Block_electronic-circuit_0_1"
+      },
+      {
+        "item": "copper-plate",
+        "position": [
+          1,
+          3
+        ],
+        "direction": "east",
+        "block_id": "Block_electronic-circuit_0_1"
+      },
+      {
+        "item": "copper-plate",
+        "position": [
+          1,
+          1
+        ],
+        "direction": "east",
+        "block_id": "Block_electronic-circuit_0_1"
+      },
+      {
+        "item": "copper-plate",
+        "position": [
+          1,
+          0
+        ],
+        "direction": "east",
+        "block_id": "Block_electronic-circuit_0_1"
+      }
+    ],
+    "belts": [
+      {
+        "item": "copper-cable",
+        "position": [
+          4,
+          20
+        ],
+        "type": "end",
+        "block_id": "Block_electronic-circuit_0_0"
+      },
+      {
+        "item": "copper-cable",
+        "position": [
+          4,
+          19
+        ],
+        "type": "end",
+        "block_id": "Block_electronic-circuit_0_0"
+      },
+      {
+        "item": "copper-cable",
+        "position": [
+          4,
+          18
+        ],
+        "type": "end",
+        "block_id": "Block_electronic-circuit_0_0"
+      },
+      {
+        "item": "iron-plate",
+        "position": [
+          10,
+          18
+        ],
+        "type": "end",
+        "block_id": "Block_electronic-circuit_0_0"
+      },
+      {
+        "item": "copper-cable",
+        "position": [
+          4,
+          16
+        ],
+        "type": "end",
+        "block_id": "Block_electronic-circuit_0_0"
+      },
+      {
+        "item": "copper-cable",
+        "position": [
+          4,
+          14
+        ],
+        "type": "end",
+        "block_id": "Block_electronic-circuit_0_0"
+      },
+      {
+        "item": "copper-cable",
+        "position": [
+          4,
+          15
+        ],
+        "type": "end",
+        "block_id": "Block_electronic-circuit_0_0"
+      },
+      {
+        "item": "iron-plate",
+        "position": [
+          10,
+          16
+        ],
+        "type": "end",
+        "block_id": "Block_electronic-circuit_0_0"
+      },
+      {
+        "item": "copper-plate",
+        "position": [
+          0,
+          21
+        ],
+        "type": "end",
+        "block_id": "Block_electronic-circuit_0_0"
+      },
+      {
+        "item": "copper-plate",
+        "position": [
+          0,
+          19
+        ],
+        "type": "end",
+        "block_id": "Block_electronic-circuit_0_0"
+      },
+      {
+        "item": "copper-plate",
+        "position": [
+          0,
+          18
+        ],
+        "type": "end",
+        "block_id": "Block_electronic-circuit_0_0"
+      },
+      {
+        "item": "copper-plate",
+        "position": [
+          0,
+          16
+        ],
+        "type": "end",
+        "block_id": "Block_electronic-circuit_0_0"
+      },
+      {
+        "item": "copper-plate",
+        "position": [
+          0,
+          14
+        ],
+        "type": "end",
+        "block_id": "Block_electronic-circuit_0_0"
+      },
+      {
+        "item": "copper-plate",
+        "position": [
+          0,
+          13
+        ],
+        "type": "end",
+        "block_id": "Block_electronic-circuit_0_0"
+      },
+      {
+        "item": "electronic-circuit",
+        "position": [
+          10,
+          20
+        ],
+        "direction": "right",
+        "block_id": "Block_electronic-circuit_0_0"
+      },
+      {
+        "item": "electronic-circuit",
+        "position": [
+          13,
+          20
+        ],
+        "direction": "right",
+        "block_id": "Block_electronic-circuit_0_0"
+      },
+      {
+        "item": "electronic-circuit",
+        "position": [
+          10,
+          15
+        ],
+        "direction": "right",
+        "block_id": "Block_electronic-circuit_0_0"
+      },
+      {
+        "item": "electronic-circuit",
+        "position": [
+          13,
+          15
+        ],
+        "direction": "right",
+        "block_id": "Block_electronic-circuit_0_0"
+      },
+      {
+        "item": "iron-plate",
+        "position": [
+          11,
+          18
+        ],
+        "direction": "left",
+        "block_id": "Block_electronic-circuit_0_0"
+      },
+      {
+        "item": "iron-plate",
+        "position": [
+          11,
+          16
+        ],
+        "direction": "left",
+        "block_id": "Block_electronic-circuit_0_0"
+      },
+      {
+        "item": "copper-cable",
+        "position": [
+          4,
+          7
+        ],
+        "type": "end",
+        "block_id": "Block_electronic-circuit_0_1"
+      },
+      {
+        "item": "copper-cable",
+        "position": [
+          4,
+          6
+        ],
+        "type": "end",
+        "block_id": "Block_electronic-circuit_0_1"
+      },
+      {
+        "item": "copper-cable",
+        "position": [
+          4,
+          5
+        ],
+        "type": "end",
+        "block_id": "Block_electronic-circuit_0_1"
+      },
+      {
+        "item": "iron-plate",
+        "position": [
+          10,
+          5
+        ],
+        "type": "end",
+        "block_id": "Block_electronic-circuit_0_1"
+      },
+      {
+        "item": "copper-cable",
+        "position": [
+          4,
+          3
+        ],
+        "type": "end",
+        "block_id": "Block_electronic-circuit_0_1"
+      },
+      {
+        "item": "copper-cable",
+        "position": [
+          4,
+          1
+        ],
+        "type": "end",
+        "block_id": "Block_electronic-circuit_0_1"
+      },
+      {
+        "item": "copper-cable",
+        "position": [
+          4,
+          2
+        ],
+        "type": "end",
+        "block_id": "Block_electronic-circuit_0_1"
+      },
+      {
+        "item": "iron-plate",
+        "position": [
+          10,
+          3
+        ],
+        "type": "end",
+        "block_id": "Block_electronic-circuit_0_1"
+      },
+      {
+        "item": "copper-plate",
+        "position": [
+          0,
+          8
+        ],
+        "type": "end",
+        "block_id": "Block_electronic-circuit_0_1"
+      },
+      {
+        "item": "copper-plate",
+        "position": [
+          0,
+          6
+        ],
+        "type": "end",
+        "block_id": "Block_electronic-circuit_0_1"
+      },
+      {
+        "item": "copper-plate",
+        "position": [
+          0,
+          5
+        ],
+        "type": "end",
+        "block_id": "Block_electronic-circuit_0_1"
+      },
+      {
+        "item": "copper-plate",
+        "position": [
+          0,
+          3
+        ],
+        "type": "end",
+        "block_id": "Block_electronic-circuit_0_1"
+      },
+      {
+        "item": "copper-plate",
+        "position": [
+          0,
+          1
+        ],
+        "type": "end",
+        "block_id": "Block_electronic-circuit_0_1"
+      },
+      {
+        "item": "copper-plate",
+        "position": [
+          0,
+          0
+        ],
+        "type": "end",
+        "block_id": "Block_electronic-circuit_0_1"
+      },
+      {
+        "item": "electronic-circuit",
+        "position": [
+          10,
+          7
+        ],
+        "direction": "right",
+        "block_id": "Block_electronic-circuit_0_1"
+      },
+      {
+        "item": "electronic-circuit",
+        "position": [
+          13,
+          7
+        ],
+        "direction": "right",
+        "block_id": "Block_electronic-circuit_0_1"
+      },
+      {
+        "item": "electronic-circuit",
+        "position": [
+          10,
+          2
+        ],
+        "direction": "right",
+        "block_id": "Block_electronic-circuit_0_1"
+      },
+      {
+        "item": "electronic-circuit",
+        "position": [
+          13,
+          2
+        ],
+        "direction": "right",
+        "block_id": "Block_electronic-circuit_0_1"
+      },
+      {
+        "item": "iron-plate",
+        "position": [
+          11,
+          5
+        ],
+        "direction": "left",
+        "block_id": "Block_electronic-circuit_0_1"
+      },
+      {
+        "item": "iron-plate",
+        "position": [
+          11,
+          3
+        ],
+        "direction": "left",
+        "block_id": "Block_electronic-circuit_0_1"
+      }
+    ],
+    "underground_belts": [
+      {
+        "item": "electronic-circuit",
+        "position": [
+          10,
+          20
+        ],
+        "type": "entrance",
+        "direction": "right",
+        "block_id": "Block_electronic-circuit_0_0"
+      },
+      {
+        "item": "electronic-circuit",
+        "position": [
+          13,
+          20
+        ],
+        "type": "exit",
+        "direction": "right",
+        "block_id": "Block_electronic-circuit_0_0"
+      },
+      {
+        "item": "electronic-circuit",
+        "position": [
+          10,
+          15
+        ],
+        "type": "entrance",
+        "direction": "right",
+        "block_id": "Block_electronic-circuit_0_0"
+      },
+      {
+        "item": "electronic-circuit",
+        "position": [
+          13,
+          15
+        ],
+        "type": "exit",
+        "direction": "right",
+        "block_id": "Block_electronic-circuit_0_0"
+      },
+      {
+        "item": "electronic-circuit",
+        "position": [
+          10,
+          7
+        ],
+        "type": "entrance",
+        "direction": "right",
+        "block_id": "Block_electronic-circuit_0_1"
+      },
+      {
+        "item": "electronic-circuit",
+        "position": [
+          13,
+          7
+        ],
+        "type": "exit",
+        "direction": "right",
+        "block_id": "Block_electronic-circuit_0_1"
+      },
+      {
+        "item": "electronic-circuit",
+        "position": [
+          10,
+          2
+        ],
+        "type": "entrance",
+        "direction": "right",
+        "block_id": "Block_electronic-circuit_0_1"
+      },
+      {
+        "item": "electronic-circuit",
+        "position": [
+          13,
+          2
+        ],
+        "type": "exit",
+        "direction": "right",
+        "block_id": "Block_electronic-circuit_0_1"
+      }
+    ],
+    "splitters": [
+      {
+        "item": "electronic-circuit",
+        "position": [
+          15,
+          19
+        ],
+        "direction": "down",
+        "block_id": "Block_electronic-circuit_0_0"
+      },
+      {
+        "item": "electronic-circuit",
+        "position": [
+          15,
+          14
+        ],
+        "direction": "down",
+        "block_id": "Block_electronic-circuit_0_0"
+      },
+      {
+        "item": "iron-plate",
+        "position": [
+          12,
+          17
+        ],
+        "direction": "up",
+        "block_id": "Block_electronic-circuit_0_0"
+      },
+      {
+        "item": "iron-plate",
+        "position": [
+          12,
+          15
+        ],
+        "direction": "up",
+        "block_id": "Block_electronic-circuit_0_0"
+      },
+      {
+        "item": "electronic-circuit",
+        "position": [
+          15,
+          6
+        ],
+        "direction": "down",
+        "block_id": "Block_electronic-circuit_0_1"
+      },
+      {
+        "item": "electronic-circuit",
+        "position": [
+          15,
+          1
+        ],
+        "direction": "down",
+        "block_id": "Block_electronic-circuit_0_1"
+      },
+      {
+        "item": "iron-plate",
+        "position": [
+          12,
+          4
+        ],
+        "direction": "up",
+        "block_id": "Block_electronic-circuit_0_1"
+      },
+      {
+        "item": "iron-plate",
+        "position": [
+          12,
+          2
+        ],
+        "direction": "up",
+        "block_id": "Block_electronic-circuit_0_1"
+      }
+    ]
+  },
+  "io_points": {
+    "inputs": [
+      {
+        "item": "copper-plate",
+        "position": [
+          9,
+          13
+        ],
+        "block_id": "Block_electronic-circuit_0_0",
+        "gate_id": "electronic-circuit_input_copper-plate_0_0"
+      },
+      {
+        "item": "iron-plate",
+        "position": [
+          9,
+          25
+        ],
+        "block_id": "Block_electronic-circuit_0_0",
+        "gate_id": "electronic-circuit_input_iron-plate_0_0"
+      },
+      {
+        "item": "electronic-circuit",
+        "position": [
+          0,
+          28
+        ],
+        "block_id": "Block_electronic-circuit_0_0",
+        "gate_id": "electronic-circuit_input_electronic-circuit_0_0"
+      },
+      {
+        "item": "copper-plate",
+        "position": [
+          9,
+          0
+        ],
+        "block_id": "Block_electronic-circuit_0_1",
+        "gate_id": "electronic-circuit_input_copper-plate_0_1"
+      },
+      {
+        "item": "iron-plate",
+        "position": [
+          9,
+          12
+        ],
+        "block_id": "Block_electronic-circuit_0_1",
+        "gate_id": "electronic-circuit_input_iron-plate_0_1"
+      },
+      {
+        "item": "electronic-circuit",
+        "position": [
+          0,
+          15
+        ],
+        "block_id": "Block_electronic-circuit_0_1",
+        "gate_id": "electronic-circuit_input_electronic-circuit_0_1"
+      },
+      {
+        "item": "iron-plate",
+        "position": [
+          0,
+          29
+        ],
+        "edge": "South",
+        "gate_id": "external_input_iron-plate",
+        "external": true
+      },
+      {
+        "item": "copper-plate",
+        "position": [
+          2,
+          29
+        ],
+        "edge": "South",
+        "gate_id": "external_input_copper-plate",
+        "external": true
+      }
+    ],
+    "outputs": [
+      {
+        "item": "copper-plate",
+        "position": [
+          0,
+          13
+        ],
+        "block_id": "Block_electronic-circuit_0_0",
+        "gate_id": "electronic-circuit_output_copper-plate_0_0"
+      },
+      {
+        "item": "iron-plate",
+        "position": [
+          0,
+          25
+        ],
+        "block_id": "Block_electronic-circuit_0_0",
+        "gate_id": "electronic-circuit_output_iron-plate_0_0"
+      },
+      {
+        "item": "electronic-circuit",
+        "position": [
+          9,
+          28
+        ],
+        "block_id": "Block_electronic-circuit_0_0",
+        "gate_id": "electronic-circuit_output_electronic-circuit_0_0"
+      },
+      {
+        "item": "copper-plate",
+        "position": [
+          0,
+          0
+        ],
+        "block_id": "Block_electronic-circuit_0_1",
+        "gate_id": "electronic-circuit_output_copper-plate_0_1"
+      },
+      {
+        "item": "iron-plate",
+        "position": [
+          0,
+          12
+        ],
+        "block_id": "Block_electronic-circuit_0_1",
+        "gate_id": "electronic-circuit_output_iron-plate_0_1"
+      },
+      {
+        "item": "electronic-circuit",
+        "position": [
+          9,
+          15
+        ],
+        "block_id": "Block_electronic-circuit_0_1",
+        "gate_id": "electronic-circuit_output_electronic-circuit_0_1"
+      },
+      {
+        "item": "electronic-circuit",
+        "position": [
+          5,
+          29
+        ],
+        "edge": "South",
+        "gate_id": "external_output_electronic-circuit",
+        "external": true
+      }
+    ]
+  },
+  "connections": [
+    {
+      "source": {
+        "block_id": "<FactoryZ3Solver.Gate object at 0x000001994500A0C0>",
+        "gate_id": "<FactoryZ3Solver.Gate object at 0x000001994500A0C0>",
+        "position": [
+          0,
+          0
+        ],
+        "item": ""
+      },
+      "target": {
+        "block_id": "<FactoryZ3Solver.Gate object at 0x000001994500AC30>",
+        "gate_id": "<FactoryZ3Solver.Gate object at 0x000001994500AC30>",
+        "position": [
+          0,
+          0
+        ],
+        "item": ""
+      }
+    },
+    {
+      "source": {
+        "block_id": "<FactoryZ3Solver.Gate object at 0x000001994500A570>",
+        "gate_id": "<FactoryZ3Solver.Gate object at 0x000001994500A570>",
+        "position": [
+          0,
+          0
+        ],
+        "item": ""
+      },
+      "target": {
+        "block_id": "<FactoryZ3Solver.Gate object at 0x000001994500A720>",
+        "gate_id": "<FactoryZ3Solver.Gate object at 0x000001994500A720>",
+        "position": [
+          0,
+          0
+        ],
+        "item": ""
+      }
+    },
+    {
+      "source": {
+        "block_id": "<FactoryZ3Solver.Gate object at 0x000001994500A360>",
+        "gate_id": "<FactoryZ3Solver.Gate object at 0x000001994500A360>",
+        "position": [
+          0,
+          0
+        ],
+        "item": ""
+      },
+      "target": {
+        "block_id": "<FactoryZ3Solver.Gate object at 0x000001994500A450>",
+        "gate_id": "<FactoryZ3Solver.Gate object at 0x000001994500A450>",
+        "position": [
+          0,
+          0
+        ],
+        "item": ""
+      }
+    },
+    {
+      "source": {
+        "block_id": "<FactoryZ3Solver.Gate object at 0x000001994500A810>",
+        "gate_id": "<FactoryZ3Solver.Gate object at 0x000001994500A810>",
+        "position": [
+          0,
+          0
+        ],
+        "item": ""
+      },
+      "target": {
+        "block_id": "<FactoryZ3Solver.Gate object at 0x000001994500A7E0>",
+        "gate_id": "<FactoryZ3Solver.Gate object at 0x000001994500A7E0>",
+        "position": [
+          0,
+          0
+        ],
+        "item": ""
+      }
+    },
+    {
+      "source": {
+        "block_id": "<FactoryZ3Solver.Gate object at 0x000001994500A000>",
+        "gate_id": "<FactoryZ3Solver.Gate object at 0x000001994500A000>",
+        "position": [
+          0,
+          0
+        ],
+        "item": ""
+      },
+      "target": {
+        "block_id": "<FactoryZ3Solver.Gate object at 0x000001994500A0F0>",
+        "gate_id": "<FactoryZ3Solver.Gate object at 0x000001994500A0F0>",
+        "position": [
+          0,
+          0
+        ],
+        "item": ""
+      }
+    },
+    {
+      "source": {
+        "block_id": "<FactoryZ3Solver.Gate object at 0x0000019945008770>",
+        "gate_id": "<FactoryZ3Solver.Gate object at 0x0000019945008770>",
+        "position": [
+          0,
+          0
+        ],
+        "item": ""
+      },
+      "target": {
+        "block_id": "<FactoryZ3Solver.Gate object at 0x0000019945008650>",
+        "gate_id": "<FactoryZ3Solver.Gate object at 0x0000019945008650>",
+        "position": [
+          0,
+          0
+        ],
+        "item": ""
+      }
+    }
+  ],
+  "inter_block_paths": []
+}
