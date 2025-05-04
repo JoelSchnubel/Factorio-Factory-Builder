@@ -358,8 +358,9 @@ class FactoryBuilder:
         
         # Plan paths between connected gates
         if self.final_blocks:
-            self.inter_block_paths, inserters = self.plan_inter_block_paths()
-            self.create_json()
+            factory_data,json_path = self.create_json()
+            inter_block_paths , _ = self.plan_inter_block_paths(factory_data)
+            self.add_paths_to_json(json_path,inter_block_paths)
             
         
         print(f"Factory dimensions: {self.final_x} x {self.final_y}")
@@ -367,16 +368,11 @@ class FactoryBuilder:
         print(f"Gate connections: {self.gate_connections}")
 
 
+    def add_paths_to_json(self, json_path,inter_block_paths):
+        pass 
+    
+    # create realtive positons foe all modules and add them to the json file
     def create_json(self, path=None):
-        """
-        Create a comprehensive factory JSON file by extracting and combining data from all module JSON files.
-        Adjusts positions to account for:
-        1. Final blocks are positioned by upper left corner
-        2. Module JSONs use (0,0) as lower left corner
-        
-        Args:
-            path (str): Path where to save the JSON file
-        """
         if not self.final_blocks:
             logging.error("Cannot create JSON: No final blocks available")
             return
@@ -384,8 +380,8 @@ class FactoryBuilder:
         # Initialize the factory data structure
         factory_data = {
             "factory_dimensions": {
-                "width": self.final_x + 1,
-                "height": self.final_y + 1
+                "width": self.final_x,
+                "height": self.final_y
             },
             "blocks": {},
             "entities": {
@@ -412,7 +408,7 @@ class FactoryBuilder:
             block_type = block_info.get('block_type')
             
             if not block_type:
-                # Extract type from block_id if not explicitly provided
+                # Extract type from block_id 
                 block_parts = block_id.split("_")
                 block_type = block_parts[1] if len(block_parts) >= 3 else block_id
             
@@ -430,22 +426,10 @@ class FactoryBuilder:
             if not module_json_path and block_type in self.block_data:
                 module_json_path = self.block_data[block_type].get('json')
             
-            # If still no JSON path, try to find the file based on naming patterns
-            if not module_json_path:
-                possible_paths = [
-                    f"Modules/{block_type}_module.json",
-                    f"Modules/{block_type}_120_[]_module.json",
-                    f"Modules/{block_type}_{self.amount}_[]_module.json"
-                ]
-                for possible_path in possible_paths:
-                    if os.path.exists(possible_path):
-                        module_json_path = possible_path
-                        break
-            
             # Skip this block if we can't find its module JSON
             if not module_json_path or not os.path.exists(module_json_path):
                 logging.warning(f"Module JSON not found for {block_id} (type: {block_type}), skipping")
-                continue
+                raise Exception(f"Module JSON not found for {block_id} (type: {block_type}), skipping")
                 
             # Load module JSON
             try:
@@ -457,12 +441,11 @@ class FactoryBuilder:
                 # Process assemblers
                 if "assembler_information" in module_data:
                     for assembler in module_data["assembler_information"]:
-                        if len(assembler) >= 3:  # Ensure we have enough data
+                        
                             item, rel_x, rel_y = assembler[0], assembler[1], assembler[2]
-                            # Convert module coordinates (0,0 at bottom left) to factory coordinates (0,0 at top left)
-                            # y-coordinates need to be flipped relative to the block's height
+                            # Convert coordinates
                             abs_x = block_x + rel_x
-                            abs_y = block_y + (block_height - 1) - rel_y
+                            abs_y = block_y + rel_y
                             
                             factory_data["entities"]["assemblers"].append({
                                 "item": item,
@@ -473,11 +456,11 @@ class FactoryBuilder:
                 # Process inserters
                 if "inserter_information" in module_data:
                     for inserter in module_data["inserter_information"]:
-                        if len(inserter) >= 4:  # Ensure we have enough data
+                
                             item, rel_x, rel_y, direction = inserter[0], inserter[1], inserter[2], inserter[3]
                             # Convert coordinates
                             abs_x = block_x + rel_x
-                            abs_y = block_y + (block_height - 1) - rel_y
+                            abs_y = block_y + rel_y
                             
                             factory_data["entities"]["inserters"].append({
                                 "item": item,
@@ -485,22 +468,182 @@ class FactoryBuilder:
                                 "direction": direction,
                                 "block_id": block_id
                             })
-                
-                # Process belt points
-                if "belt_point_information" in module_data:
-                    for belt_point in module_data["belt_point_information"]:
-                        if len(belt_point) >= 4:  # Ensure we have enough data
-                            item, rel_x, rel_y, point_type = belt_point[0], belt_point[1], belt_point[2], belt_point[3]
-                            # Convert coordinates
-                            abs_x = block_x + rel_x
-                            abs_y = block_y + (block_height - 1) - rel_y
                             
-                            factory_data["entities"]["belts"].append({
+                if "placed_inserter_information" in module_data:
+                  for item_id, inserters in module_data["placed_inserter_information"].items():
+                        # Extract the item name from the ID (e.g., "electronic-circuit_0" -> "electronic-circuit")
+                        item = item_id.split('_')[0]
+                    
+                        for pos_str, target_pos in inserters.items():
+                            # Parse the source position string "(10, 2)" -> [10, 2]
+                            pos_str = pos_str.strip('()')
+                            source_x, source_y = map(int, pos_str.split(','))
+                            
+                            # Get the target position
+                            target_x, target_y = target_pos
+                            
+                            # Determine direction based on relative positions
+                            dx = target_x - source_x
+                            dy = target_y - source_y
+                            
+                            direction = "east"  # default
+                            if abs(dx) > abs(dy):
+                                direction = "east" if dx > 0 else "west"
+                            else:
+                                direction = "south" if dy > 0 else "north"
+                            
+                            # Convert to absolute coordinates
+                            abs_source_x = block_x + source_x
+                            abs_source_y = block_y + source_y
+                            
+                            # Add to corrected entities
+                            factory_data["entities"]["inserters"].append({
                                 "item": item,
-                                "position": [abs_x, abs_y],
-                                "type": point_type,
+                                "position": [abs_source_x, abs_source_y],
+                                "direction": direction,
                                 "block_id": block_id
                             })
+                            
+                            print(f"Added placed inserter for {item} at {[abs_source_x, abs_source_y]} facing {direction}")
+
+                # add I/O paths to the json file
+                if "input_information" in module_data:
+                    for item, data in module_data["input_information"].items():
+                        if 'paths' in data and data['paths'] is not None and item in data['paths']:
+                            for path_data in data['paths'][item]:
+                                if "path" in path_data:
+                                    path = path_data["path"]
+                                    
+                                    for i in range(len(path)):
+                                        current = path[i]
+                                        
+                                        # Convert to tuple if it's a list
+                                        current = tuple(current) if isinstance(current, list) else current
+                                        
+                                        # Determine direction based on next position
+                                        direction = None
+                                        if i < len(path) - 1:
+                                            next_pos = path[i + 1]
+                                            next_pos = tuple(next_pos) if isinstance(next_pos, list) else next_pos
+                                            
+                                            dx = next_pos[0] - current[0]
+                                            dy = next_pos[1] - current[1]
+                                            
+                                            if dx > 0:
+                                                direction = "right"
+                                            elif dx < 0:
+                                                direction = "left"
+                                            elif dy > 0:
+                                                direction = "down"
+                                            elif dy < 0:
+                                                direction = "up"
+                                        elif i > 0:
+                                            # Use the same direction as the previous segment for the last point
+                                            prev_pos = path[i - 1]
+                                            prev_pos = tuple(prev_pos) if isinstance(prev_pos, list) else prev_pos
+                                            
+                                            dx = current[0] - prev_pos[0]
+                                            dy = current[1] - prev_pos[1]
+                                            
+                                            if dx > 0:
+                                                direction = "right"
+                                            elif dx < 0:
+                                                direction = "left"
+                                            elif dy > 0:
+                                                direction = "down"
+                                            elif dy < 0:
+                                                direction = "up"
+                                        
+                                        # Convert coordinates
+                                        abs_x = block_x + current[0]
+                                        abs_y = block_y + current[1]
+                                        
+                                        # Add to belts if not already added (avoid duplicates)
+                                        position_exists = False
+                                        for belt in factory_data["entities"]["belts"]:
+                                            if belt["position"][0] == abs_x and belt["position"][1] == abs_y:
+                                                position_exists = True
+                                                break
+                                        
+                                        if not position_exists and direction:
+                                            factory_data["entities"]["belts"].append({
+                                                "item": item,
+                                                "position": [abs_x, abs_y],
+                                                "direction": direction,
+                                                "block_id": block_id
+                                            })
+                else:
+                    print("  - No input belt routes found")
+
+                # Process output information paths similarly
+                if "output_information" in module_data:
+                    for item, data in module_data["output_information"].items():
+                        if 'paths' in data and data['paths'] is not None and item in data['paths']:
+                            for path_data in data['paths'][item]:
+                                if "path" in path_data:
+                                    path = path_data["path"]
+                                    
+                                    for i in range(len(path)):
+                                        current = path[i]
+                                        
+                                        # Convert to tuple if it's a list
+                                        current = tuple(current) if isinstance(current, list) else current
+                                        
+                                        # Determine direction based on next position
+                                        direction = None
+                                        if i < len(path) - 1:
+                                            next_pos = path[i + 1]
+                                            next_pos = tuple(next_pos) if isinstance(next_pos, list) else next_pos
+                                            
+                                            dx = next_pos[0] - current[0]
+                                            dy = next_pos[1] - current[1]
+                                            
+                                            if dx > 0:
+                                                direction = "right"
+                                            elif dx < 0:
+                                                direction = "left"
+                                            elif dy > 0:
+                                                direction = "down"
+                                            elif dy < 0:
+                                                direction = "up"
+                                        elif i > 0:
+                                            # Use the same direction as the previous segment for the last point
+                                            prev_pos = path[i - 1]
+                                            prev_pos = tuple(prev_pos) if isinstance(prev_pos, list) else prev_pos
+                                            
+                                            dx = current[0] - prev_pos[0]
+                                            dy = current[1] - prev_pos[1]
+                                            
+                                            if dx > 0:
+                                                direction = "right"
+                                            elif dx < 0:
+                                                direction = "left"
+                                            elif dy > 0:
+                                                direction = "down"
+                                            elif dy < 0:
+                                                direction = "up"
+                                        
+                                        # Convert coordinates
+                                        abs_x = block_x + current[0]
+                                        abs_y = block_y + current[1]
+                                        
+                                        # Add to belts if not already added (avoid duplicates)
+                                        position_exists = False
+                                        for belt in factory_data["entities"]["belts"]:
+                                            if belt["position"][0] == abs_x and belt["position"][1] == abs_y:
+                                                position_exists = True
+                                                break
+                                        
+                                        if not position_exists and direction:
+                                            factory_data["entities"]["belts"].append({
+                                                "item": item,
+                                                "position": [abs_x, abs_y],
+                                                "direction": direction,
+                                                "block_id": block_id
+                                            })
+                else:
+                    print("  - No output belt routes found")
+                            
                 
                 # Process paths which include underground belts and splitters
                 if "paths" in module_data:
@@ -514,7 +657,7 @@ class FactoryBuilder:
                                 for i, (rel_x, rel_y) in enumerate(path):
                                     # Convert coordinates
                                     abs_x = block_x + rel_x
-                                    abs_y = block_y + (block_height - 1) - rel_y
+                                    abs_y = block_y + rel_y
                                     
                                     # Determine belt direction
                                     direction = None
@@ -558,9 +701,9 @@ class FactoryBuilder:
                                         
                                         # Convert coordinates
                                         start_abs_x = block_x + start_rel_x
-                                        start_abs_y = block_y + (block_height - 1) - start_rel_y
+                                        start_abs_y = block_y +  start_rel_y
                                         end_abs_x = block_x + end_rel_x
-                                        end_abs_y = block_y + (block_height - 1) - end_rel_y
+                                        end_abs_y = block_y + end_rel_y
                                         
                                         # Determine direction
                                         dx = end_rel_x - start_rel_x
@@ -599,7 +742,7 @@ class FactoryBuilder:
                                         
                                         # Convert coordinates
                                         abs_x = block_x + rel_x
-                                        abs_y = block_y + (block_height - 1) - rel_y
+                                        abs_y = block_y + rel_y
                                         
                                         # Determine direction
                                         direction = "right"  # Default
@@ -646,129 +789,7 @@ class FactoryBuilder:
                         "gate_id": gate["id"]
                     })
                         
-                # Add inter-block paths if available
-                if hasattr(self, 'inter_block_paths') and self.inter_block_paths:
-                    for path_id, path_data_list in self.inter_block_paths.items():
-                        item = path_id.split("_")[0]  # Extract item name from path ID
-                        
-                        for i, path_data in enumerate(path_data_list):
-                            # Basic path data
-                            path = path_data.get('path', [])
-                            
-                            # Prepare path entry
-                            path_entry = {
-                                "id": f"{path_id}_{i}",
-                                "item": item,
-                                "path": path,
-                                "belts": []
-                            }
-                            
-                            # Process regular belt segments
-                            for j in range(len(path) - 1):
-                                start_point = path[j]
-                                end_point = path[j + 1]
-                                
-                                # Calculate direction
-                                dx = end_point[0] - start_point[0]
-                                dy = end_point[1] - start_point[1]
-                                
-                                direction = None
-                                if dx > 0:
-                                    direction = "right"
-                                elif dx < 0:
-                                    direction = "left"
-                                elif dy > 0:
-                                    direction = "down"
-                                elif dy < 0:
-                                    direction = "up"
-                                
-                                # Check if this segment is part of an underground
-                                is_underground = False
-                                if 'underground_segments' in path_data:
-                                    for segment_id, segment in path_data['underground_segments'].items():
-                                        segment_path = segment.get('path', [])
-                                        if start_point in segment_path and end_point in segment_path:
-                                            idx1 = segment_path.index(start_point)
-                                            idx2 = segment_path.index(end_point)
-                                            if abs(idx1 - idx2) == 1:
-                                                is_underground = True
-                                                break
-                                
-                                # Add belt if not underground
-                                if not is_underground and direction:
-                                    path_entry["belts"].append({
-                                        "position": start_point,
-                                        "direction": direction
-                                    })
-                            
-                            # Process underground segments
-                            if 'underground_segments' in path_data:
-                                path_entry["underground_belts"] = []
-                                
-                                for segment_id, segment in path_data['underground_segments'].items():
-                                    start = segment.get('start', None)
-                                    end = segment.get('end', None)
-                                    
-                                    if start and end:
-                                        # Calculate direction
-                                        dx = end[0] - start[0]
-                                        dy = end[1] - start[1]
-                                        
-                                        direction = None
-                                        if abs(dx) > abs(dy):  # Horizontal
-                                            direction = "right" if dx > 0 else "left"
-                                        else:  # Vertical
-                                            direction = "down" if dy > 0 else "up"
-                                        
-                                        # Add entrance
-                                        path_entry["underground_belts"].append({
-                                            "position": start,
-                                            "type": "entrance",
-                                            "direction": direction
-                                        })
-                                        
-                                        # Add exit
-                                        path_entry["underground_belts"].append({
-                                            "position": end,
-                                            "type": "exit",
-                                            "direction": direction
-                                        })
-                            
-                            # Process splitters
-                            if ('start_splitter' in path_data and path_data['start_splitter']) or \
-                            ('dest_splitter' in path_data and path_data['dest_splitter']):
-                                path_entry["splitters"] = []
-                                
-                                for splitter_type in ["start_splitter", "dest_splitter"]:
-                                    if splitter_type in path_data and path_data[splitter_type]:
-                                        splitter_data = path_data[splitter_type]
-                                        position = splitter_data.get('position', None)
-                                        
-                                        if position:
-                                            # Get direction
-                                            direction = "right"  # Default
-                                            if 'direction' in splitter_data:
-                                                dx, dy = splitter_data['direction']
-                                                if dx > 0:
-                                                    direction = "right"
-                                                elif dx < 0:
-                                                    direction = "left"
-                                                elif dy > 0:
-                                                    direction = "down"
-                                                elif dy < 0:
-                                                    direction = "up"
-                                            
-                                            # Add splitter
-                                            path_entry["splitters"].append({
-                                                "position": position,
-                                                "direction": direction,
-                                                "type": splitter_type
-                                            })
-                            
-                            # Add the complete path entry
-                            factory_data["inter_block_paths"].append(path_entry)     
-                    
-                    
+
             except Exception as e:
                 logging.error(f"Error processing module JSON for {block_id}: {e}")
                 import traceback
@@ -861,8 +882,6 @@ class FactoryBuilder:
                     logging.error(f"Error processing gate connection: {e}")
                     continue
         
-        print(path)
-        
         # If no path specified, use default
         if not path:
             path = f"Factorys/{self.output_item}_factory.json"
@@ -883,7 +902,7 @@ class FactoryBuilder:
         
         logging.info(f"Factory JSON data saved to {path}")
         
-        return factory_data
+        return factory_data, path
     
     def determine_gate_connections(self):
         """Determine which gates should be connected between blocks"""
@@ -1660,40 +1679,92 @@ class FactoryBuilder:
             
             logging.info(f"Added fixed output gate {output_gate['id']} at position {output_gate['position']}")
 
-    def plan_inter_block_paths(self):
+    def plan_inter_block_paths(self, factory_data):
         """
-        Plan paths between connected gates using the MultiAgentPathfinder.
+        Plan paths between connected gates using the MultiAgentPathfinder and detailed factory data.
         
-        1. Create an obstacle map marking all blocks and entities
-        2. Identify connection points between blocks
-        3. Use MultiAgentPathfinder to create paths between connected gates
+        Args:
+            factory_data (dict): The factory JSON data containing entity positions
+            
+        Returns:
+            tuple: (paths, inserters) - dictionaries of paths and inserters
         """
-        logging.info("Planning inter-block paths...")
+        logging.info("Planning inter-block paths with detailed obstacles...")
         
         if not self.final_blocks or not self.gate_connections:
             logging.error("Cannot plan paths: No blocks or gate connections available")
             return {}, {}
         
         # Calculate the overall grid size based on final_x and final_y
-        grid_width = self.final_x + 1
-        grid_height = self.final_y + 1
+        grid_width = factory_data["factory_dimensions"]["width"]
+        grid_height = factory_data["factory_dimensions"]["height"]
         
         # Create an obstacle map (0 = free, 1 = obstacle)
         obstacle_map = [[0 for _ in range(grid_width)] for _ in range(grid_height)]
         
-        # Mark all blocks as obstacles
-        for block_id, block_info in self.final_blocks.items():
-            block_x = block_info['x']
-            block_y = block_info['y']
-            block_width = block_info['width']
-            block_height = block_info['height']
+        # Mark all entities in the factory data as obstacles
+        if "entities" in factory_data:
+            # Mark assemblers (3x3 entities)
+            for assembler in factory_data["entities"].get("assemblers", []):
+                pos_x, pos_y = assembler["position"]
+                # Assemblers are 3x3
+                for dy in range(3):
+                    for dx in range(3):
+                        x, y = pos_x + dx, pos_y + dy
+                        if 0 <= x < grid_width and 0 <= y < grid_height:
+                            obstacle_map[y][x] = 1
             
-            # Mark the entire block area as obstacles
-            for y in range(block_y, block_y + block_height):
-                for x in range(block_x, block_x + block_width):
-                    # Make sure we're within the grid bounds
-                    if 0 <= x < grid_width and 0 <= y < grid_height:
-                        obstacle_map[y][x] = 1
+            # Mark transport belts
+            for belt in factory_data["entities"].get("belts", []):
+                pos_x, pos_y = belt["position"]
+                if 0 <= pos_x < grid_width and 0 <= pos_y < grid_height:
+                    obstacle_map[pos_y][pos_x] = 1
+            
+            # Mark inserters
+            for inserter in factory_data["entities"].get("inserters", []):
+                pos_x, pos_y = inserter["position"]
+                if 0 <= pos_x < grid_width and 0 <= pos_y < grid_height:
+                    obstacle_map[pos_y][pos_x] = 1
+            
+            # Mark underground belts
+            for ug_belt in factory_data["entities"].get("underground_belts", []):
+                pos_x, pos_y = ug_belt["position"]
+                if 0 <= pos_x < grid_width and 0 <= pos_y < grid_height:
+                    obstacle_map[pos_y][pos_x] = 1
+            
+            # Mark splitters (2x1 or 1x2 entities)
+            for splitter in factory_data["entities"].get("splitters", []):
+                pos_x, pos_y = splitter["position"]
+                direction = splitter.get("direction", "north")
+                
+                # Mark the primary position
+                if 0 <= pos_x < grid_width and 0 <= pos_y < grid_height:
+                    obstacle_map[pos_y][pos_x] = 1
+                
+                # Mark the secondary position based on direction
+                if direction in ["north", "south", "up", "down"]:
+                    # Horizontal splitter (2 tiles wide)
+                    second_x, second_y = pos_x + 1, pos_y
+                else:
+                    # Vertical splitter (2 tiles tall)
+                    second_x, second_y = pos_x, pos_y + 1
+                
+                if 0 <= second_x < grid_width and 0 <= second_y < grid_height:
+                    obstacle_map[second_y][second_x] = 1
+        
+        # Create a visualization of the obstacle map for debugging
+        try:
+            import matplotlib.pyplot as plt
+            plt.figure(figsize=(10, 10))
+            plt.imshow(obstacle_map, cmap='binary', interpolation='none')
+            plt.title("Factory Layout - Detailed Obstacle Map")
+            plt.colorbar(label="Obstacle (1) vs Free (0)")
+            plt.grid(True, alpha=0.3)
+            plt.savefig("factory_detailed_obstacle_map.png")
+            plt.close()
+            logging.info("Saved detailed obstacle map visualization")
+        except Exception as e:
+            logging.warning(f"Could not create obstacle map visualization: {e}")
         
         # Prepare connection points for the pathfinder
         connection_points = {}
@@ -1704,33 +1775,27 @@ class FactoryBuilder:
             if isinstance(connection, tuple) and len(connection) == 2:
                 source_gate, target_gate = connection
                 
-                # Both source and target should be dictionary-like objects at this point
-                # Extract necessary data with appropriate error handling
                 try:
-                    # Source gate data
+                    # Extract source gate data
                     if isinstance(source_gate, dict):
-                        source_x = source_gate['x']
-                        source_y = source_gate['y']
+                        source_x = int(source_gate['x'])
+                        source_y = int(source_gate['y'])
                         item = source_gate['item']
+                        source_id = source_gate.get('gate_id', f'unknown_source_{i}')
                     else:
                         logging.error(f"Source gate is not a dictionary: {source_gate}")
                         continue
                     
-                    # Target gate data
+                    # Extract target gate data
                     if isinstance(target_gate, dict):
-                        target_x = target_gate['x']
-                        target_y = target_gate['y']
+                        target_x = int(target_gate['x'])
+                        target_y = int(target_gate['y'])
+                        target_id = target_gate.get('gate_id', f'unknown_target_{i}')
                     else:
                         logging.error(f"Target gate is not a dictionary: {target_gate}")
                         continue
                     
-                    # Ensure we have concrete integer values
-                    source_x = int(source_x)
-                    source_y = int(source_y)
-                    target_x = int(target_x)
-                    target_y = int(target_y)
-                    
-                    # Connection identifier
+                    # Create connection ID
                     connection_id = f"{item}_{i}"
                     
                     # Clear gate positions in the obstacle map for pathfinding
@@ -1740,14 +1805,17 @@ class FactoryBuilder:
                     if 0 <= target_x < grid_width and 0 <= target_y < grid_height:
                         obstacle_map[target_y][target_x] = 0
                     
-                    # Prepare connection information for pathfinder
+                    # Create a path request with start/end points
                     connection_points[connection_id] = {
                         'item': item,
                         'start_points': [(source_x, source_y)],
-                        'destination': [(target_x, target_y)]
+                        'destination': [(target_x, target_y)],
+                        'source_id': source_id,
+                        'target_id': target_id
                     }
                     
-                    logging.debug(f"Added connection {connection_id}: {item} from ({source_x}, {source_y}) to ({target_x}, {target_y})")
+                    logging.debug(f"Added connection {connection_id}: {item} from {source_id} at ({source_x}, {source_y}) " +
+                                  f"to {target_id} at ({target_x}, {target_y})")
                     
                 except (TypeError, KeyError) as e:
                     logging.error(f"Error processing connection {i}: {e}")
@@ -1755,16 +1823,20 @@ class FactoryBuilder:
             else:
                 logging.warning(f"Invalid connection format at index {i}: {connection}")
         
-        # Process external I/O points if available
-        if hasattr(self, 'external_io') and self.external_io:
-            # Similar processing for external I/O points...
-            pass
+        # Process external I/O points
+        if "io_points" in factory_data:
+            # Clear I/O points in the obstacle map
+            for io_type in ["inputs", "outputs"]:
+                for point in factory_data["io_points"].get(io_type, []):
+                    pos_x, pos_y = point["position"]
+                    if 0 <= pos_x < grid_width and 0 <= pos_y < grid_height:
+                        obstacle_map[pos_y][pos_x] = 0
         
         if not connection_points:
             logging.warning("No valid connections to route!")
             return {}, {}
         
-        # Create the MultiAgentPathfinder
+        # Create and run the MultiAgentPathfinder
         try:
             pathfinder = MultiAgentPathfinder(
                 obstacle_map=obstacle_map,
@@ -1777,16 +1849,16 @@ class FactoryBuilder:
             
             # Find paths for all connections
             paths, inserters = pathfinder.find_paths_for_all_items()
-            logging.info(f"Found paths for {len(paths)} connections")
+            logging.info(f"Found paths for {len(paths)} connections out of {len(connection_points)} requested")
             
             # Save the paths for later use
             self.inter_block_paths = paths
             self.inter_block_inserters = inserters
             
-            # Visualize paths for debugging
+            # Generate path visualizations
             try:
-                pathfinder.visualize_grid(filename="factory_obstacle_map.png")
-                pathfinder.visualize_paths(filename_template="inter_block_path_{}.png")
+                pathfinder.visualize_grid(filename="factory_detailed_obstacle_map_with_paths.png")
+                pathfinder.visualize_paths(filename_template="inter_block_path_detailed_{}.png")
                 logging.info("Path visualizations saved to disk")
             except Exception as e:
                 logging.error(f"Failed to visualize paths: {e}")
@@ -1887,7 +1959,594 @@ def plot_csv_data(file_path):
     plt.close()  # Close the plot to prevent overlap with other subplots
 
     print(f"Boxplot saved at: {box_plot_path}")
+      
+      
+      
+      
+def create_blueprint_from_json(json_path, output_path=None):
+    """
+    Create a Factorio blueprint directly from a factory JSON file.
+    
+    Args:
+        json_path (str): Path to the factory JSON file
+        output_path (str, optional): Path where to save the blueprint file. If None, will use same name as input with .txt extension
+    
+    Returns:
+        bool: True if successful, False otherwise
+    """
+    try:
+        import json
+        import os
+        from draftsman.blueprintable import Blueprint
+        from draftsman.constants import Direction
+        from draftsman.entity import Inserter, AssemblingMachine, TransportBelt, UndergroundBelt
+        from draftsman.entity import Splitter as BlueprintSplitter
+        import logging
         
+        # Load the JSON file
+        with open(json_path, 'r') as f:
+            factory_data = json.load(f)
+        
+        logging.info(f"Creating blueprint from {json_path}")
+        
+        # Set output path if not provided
+        if output_path is None:
+            output_path = os.path.splitext(json_path)[0] + ".txt"
+        
+        # Create a new blueprint
+        blueprint = Blueprint()
+        
+        # Track occupied positions to avoid overlap
+        occupied_positions = set()
+        
+        # Track assembler positions for orienting inserters
+        assembler_positions = {}  # Maps (x, y) to assembler object
+        
+        print("1. Placing assembling machines...")
+        # Place assembling machines from the JSON data
+        if "entities" in factory_data and "assemblers" in factory_data["entities"]:
+            for assembler_data in factory_data["entities"]["assemblers"]:
+                item = assembler_data["item"]
+                position = assembler_data["position"]
+                
+                # Assemblers are 3x3 and centered on their position in Factorio
+                # In JSON, position is top-left corner, we need to offset by (1,1) for center
+                center_x = position[0] + 1
+                center_y = position[1] + 1
+                
+                print(f"  - Placing assembler for {item} at ({center_x},{center_y})")
+                
+                # Create assembler entity
+                assembler = AssemblingMachine(
+                    name="assembling-machine-1",
+                    position=(center_x, center_y),
+                    recipe=item  # Set the recipe to the item it produces
+                )
+                blueprint.entities.append(assembler)
+                
+                # Store the assembler in our mapping and mark the 3x3 area as occupied
+                for dx in range(3):
+                    for dy in range(3):
+                        pos = (position[0] + dx, position[1] + dy)
+                        assembler_positions[pos] = assembler
+                        occupied_positions.add(pos)
+        
+        print("2. Placing inserters...")
+        # Place inserters from the JSON data
+        if "entities" in factory_data and "inserters" in factory_data["entities"]:
+            for inserter_data in factory_data["entities"]["inserters"]:
+                item = inserter_data["item"]
+                position = tuple(inserter_data["position"])
+                direction = inserter_data.get("direction", "north")  # Default to north if not specified
+                
+                # Skip if position is occupied
+                if position in occupied_positions:
+                    print(f"  - Skipping inserter at {position} due to overlap")
+                    continue
+                
+                # Convert direction string to draftsman Direction constant
+                # Rotate by 180 degrees as Factorio and the JSON use different conventions
+                if direction == "north":
+                    blueprint_direction = Direction.SOUTH
+                elif direction == "east":
+                    blueprint_direction = Direction.WEST
+                elif direction == "south":
+                    blueprint_direction = Direction.NORTH
+                elif direction == "west":
+                    blueprint_direction = Direction.EAST
+                else:
+                    # Handle common direction names
+                    direction_map = {
+                        "up": Direction.NORTH,
+                        "right": Direction.EAST,
+                        "down": Direction.SOUTH,
+                        "left": Direction.WEST
+                    }
+                    blueprint_direction = direction_map.get(direction, Direction.NORTH)
+                
+                # Create inserter entity
+                print(f"  - Placing inserter for {item} at {position} facing {blueprint_direction}")
+                inserter = Inserter(
+                    name="inserter",
+                    position=position,
+                    direction=blueprint_direction
+                )
+                blueprint.entities.append(inserter)
+                occupied_positions.add(position)
+        
+        print("3. Placing transport belts...")
+        # Place regular belts from the JSON data
+        if "entities" in factory_data and "belts" in factory_data["entities"]:
+            for belt_data in factory_data["entities"]["belts"]:
+                item = belt_data["item"]
+                position = tuple(belt_data["position"])
+                direction = belt_data.get("direction", "north")  # Default to north if not specified
+                
+                # Skip if position is occupied
+                if position in occupied_positions:
+                    print(f"  - Skipping belt at {position} due to overlap")
+                    continue
+                
+                # Convert direction string to draftsman Direction constant
+                direction_map = {
+                    "up": Direction.NORTH,
+                    "right": Direction.EAST,
+                    "down": Direction.SOUTH,
+                    "left": Direction.WEST,
+                    "north": Direction.NORTH,
+                    "east": Direction.EAST,
+                    "south": Direction.SOUTH,
+                    "west": Direction.WEST
+                }
+                blueprint_direction = direction_map.get(direction, Direction.NORTH)
+                
+                # Create transport belt entity
+                print(f"  - Placing transport belt for {item} at {position} facing {blueprint_direction}")
+                belt = TransportBelt(
+                    name="transport-belt",
+                    position=position,
+                    direction=blueprint_direction
+                )
+                blueprint.entities.append(belt)
+                occupied_positions.add(position)
+        
+        print("4. Placing underground belts...")
+        # Place underground belts from the JSON data
+        if "entities" in factory_data and "underground_belts" in factory_data["entities"]:
+            for ug_data in factory_data["entities"]["underground_belts"]:
+                item = ug_data["item"]
+                position = tuple(ug_data["position"])
+                belt_type = ug_data["type"]  # "entrance" or "exit"
+                direction = ug_data.get("direction", "north")  # Default to north if not specified
+                
+                # Skip if position is occupied
+                if position in occupied_positions:
+                    print(f"  - Skipping underground belt at {position} due to overlap")
+                    continue
+                
+                # Convert direction string to draftsman Direction constant
+                direction_map = {
+                    "up": Direction.NORTH,
+                    "right": Direction.EAST,
+                    "down": Direction.SOUTH,
+                    "left": Direction.WEST,
+                    "north": Direction.NORTH,
+                    "east": Direction.EAST,
+                    "south": Direction.SOUTH,
+                    "west": Direction.WEST
+                }
+                blueprint_direction = direction_map.get(direction, Direction.NORTH)
+                
+                # Determine underground belt type
+                ug_type = "input" if belt_type == "entrance" else "output"
+                
+                # Create underground belt entity
+                print(f"  - Placing underground belt for {item} at {position} facing {blueprint_direction}, type: {ug_type}")
+                ug_belt = UndergroundBelt(
+                    name="underground-belt",
+                    position=position,
+                    direction=blueprint_direction,
+                    type=ug_type
+                )
+                blueprint.entities.append(ug_belt)
+                occupied_positions.add(position)
+        
+        print("5. Placing splitters...")
+        # Place splitters from the JSON data
+        if "entities" in factory_data and "splitters" in factory_data["entities"]:
+            for splitter_data in factory_data["entities"]["splitters"]:
+                item = splitter_data["item"]
+                position = tuple(splitter_data["position"])
+                direction = splitter_data.get("direction", "north")  # Default to north if not specified
+                
+                # Skip if position is occupied
+                if position in occupied_positions:
+                    print(f"  - Skipping splitter at {position} due to overlap")
+                    continue
+                
+                # Convert direction string to draftsman Direction constant
+                direction_map = {
+                    "up": Direction.NORTH,
+                    "right": Direction.EAST,
+                    "down": Direction.SOUTH,
+                    "left": Direction.WEST,
+                    "north": Direction.NORTH,
+                    "east": Direction.EAST,
+                    "south": Direction.SOUTH,
+                    "west": Direction.WEST
+                }
+                blueprint_direction = direction_map.get(direction, Direction.NORTH)
+                
+                # Create splitter entity
+                print(f"  - Placing splitter for {item} at {position} facing {blueprint_direction}")
+                splitter = BlueprintSplitter(
+                    name="splitter",
+                    position=position,
+                    direction=blueprint_direction
+                )
+                blueprint.entities.append(splitter)
+                occupied_positions.add(position)
+                
+                # Splitters are 2x1, so mark the second tile as occupied too
+                # The orientation depends on the direction
+                if blueprint_direction in [Direction.NORTH, Direction.SOUTH]:
+                    # Horizontal splitter (takes up two horizontal tiles)
+                    occupied_positions.add((position[0] + 1, position[1]))
+                else:
+                    # Vertical splitter (takes up two vertical tiles)
+                    occupied_positions.add((position[0], position[1] + 1))
+        
+        # Export the blueprint to a file
+        print(f"6. Exporting blueprint to {output_path}...")
+        with open(output_path, "w") as f:
+            f.write(blueprint.to_string())
+            
+        logging.info(f"Blueprint successfully exported to {output_path}")
+        return True
+            
+    except Exception as e:
+        print(f"Error creating blueprint: {e}")
+        import traceback
+        traceback.print_exc()
+        return False  
+    
+
+
+def visualize_json(json_path, cell_size=20, save_path=None):
+    """
+    Visualize a factory JSON file using Pygame
+    
+    Args:
+        json_path (str): Path to the factory JSON file
+        cell_size (int): Size of each grid cell in pixels
+        save_path (str, optional): Path to save the visualization image
+    """
+    import json
+    import os
+    import pygame
+    
+    # Define colors
+    WHITE = (255, 255, 255)
+    BLACK = (0, 0, 0)
+    BLOCK_COLOR = (200, 230, 200)  # Light green for blocks
+    BLOCK_BORDER = (0, 100, 0)     # Dark green for block borders
+    ASSEMBLER_COLOR = (150, 150, 200)  # Light blue for assemblers
+    BELT_COLOR = (255, 165, 0)     # Orange for belts
+    INSERTER_COLOR = (255, 100, 100)  # Pink for inserters
+    UNDERGROUND_IN_COLOR = (139, 69, 19)  # Brown for underground belt entrances
+    UNDERGROUND_OUT_COLOR = (160, 82, 45)  # Sienna for underground belt exits
+    SPLITTER_COLOR = (255, 215, 0)  # Gold for splitters
+    INPUT_COLOR = (200, 0, 0)     # Red for input points
+    OUTPUT_COLOR = (0, 0, 200)    # Blue for output points
+    
+    try:
+        # Load the JSON file
+        with open(json_path, 'r') as f:
+            data = json.load(f)
+        
+        # Initialize Pygame
+        pygame.init()
+        
+        # Get factory dimensions
+        width = data["factory_dimensions"]["width"]
+        height = data["factory_dimensions"]["height"]
+        
+        # Create the display surface
+        screen_width = width * cell_size + 200  # Extra space for legend
+        screen_height = height * cell_size
+        screen = pygame.display.set_mode((screen_width, screen_height))
+        pygame.display.set_caption(f"Factory Visualization: {os.path.basename(json_path)}")
+        
+        # Fill the background
+        screen.fill(WHITE)
+        
+        # Draw grid
+        for x in range(0, width * cell_size, cell_size):
+            pygame.draw.line(screen, (220, 220, 220), (x, 0), (x, height * cell_size))
+        for y in range(0, height * cell_size, cell_size):
+            pygame.draw.line(screen, (220, 220, 220), (0, y), (width * cell_size, y))
+        
+        # Draw blocks
+        for block_id, block in data["blocks"].items():
+            x = block["position"][0] * cell_size
+            y = block["position"][1] * cell_size
+            w = block["dimensions"][0] * cell_size
+            h = block["dimensions"][1] * cell_size
+            
+            # Draw block background
+            pygame.draw.rect(screen, BLOCK_COLOR, (x, y, w, h))
+            pygame.draw.rect(screen, BLOCK_BORDER, (x, y, w, h), 2)
+            
+            # Draw block label
+            font = pygame.font.SysFont(None, 24)
+            text = font.render(block["type"], True, BLACK)
+            text_rect = text.get_rect(center=(x + w/2, y + h/2))
+            screen.blit(text, text_rect)
+        
+        # Draw entities
+        if "entities" in data:
+            # Draw assemblers
+            for assembler in data["entities"].get("assemblers", []):
+                x = assembler["position"][0] * cell_size
+                y = assembler["position"][1] * cell_size
+                pygame.draw.rect(screen, ASSEMBLER_COLOR, (x, y, cell_size*3, cell_size*3))
+                pygame.draw.rect(screen, BLACK, (x, y, cell_size*3, cell_size*3), 1)
+                
+                # Label with item
+                small_font = pygame.font.SysFont(None, 18)
+                text = small_font.render(assembler["item"], True, BLACK)
+                screen.blit(text, (x + 5, y + 5))
+            
+            # Draw belts
+            for belt in data["entities"].get("belts", []):
+                x = belt["position"][0] * cell_size
+                y = belt["position"][1] * cell_size
+                
+                direction = belt.get("direction", "north")
+                arrow_points = []
+                
+                # Calculate arrow points based on direction
+                if direction == "north" or direction == "up":
+                    arrow_points = [
+                        (x + cell_size/2, y + cell_size/4),
+                        (x + cell_size/4, y + 3*cell_size/4),
+                        (x + 3*cell_size/4, y + 3*cell_size/4)
+                    ]
+                elif direction == "east" or direction == "right":
+                    arrow_points = [
+                        (x + 3*cell_size/4, y + cell_size/2),
+                        (x + cell_size/4, y + cell_size/4),
+                        (x + cell_size/4, y + 3*cell_size/4)
+                    ]
+                elif direction == "south" or direction == "down":
+                    arrow_points = [
+                        (x + cell_size/2, y + 3*cell_size/4),
+                        (x + cell_size/4, y + cell_size/4),
+                        (x + 3*cell_size/4, y + cell_size/4)
+                    ]
+                elif direction == "west" or direction == "left":
+                    arrow_points = [
+                        (x + cell_size/4, y + cell_size/2),
+                        (x + 3*cell_size/4, y + cell_size/4),
+                        (x + 3*cell_size/4, y + 3*cell_size/4)
+                    ]
+                
+                # Draw belt background and arrow
+                pygame.draw.rect(screen, BELT_COLOR, (x, y, cell_size, cell_size))
+                pygame.draw.polygon(screen, BLACK, arrow_points)
+            
+            # Draw inserters
+            for inserter in data["entities"].get("inserters", []):
+                x = inserter["position"][0] * cell_size
+                y = inserter["position"][1] * cell_size
+                direction = inserter.get("direction", "north")
+                
+                # Draw inserter base
+                pygame.draw.rect(screen, INSERTER_COLOR, (x, y, cell_size, cell_size))
+                
+                # Draw arrow indicating direction
+                if direction == "north" or direction == "up":
+                    pygame.draw.line(screen, BLACK, (x + cell_size/2, y + 3*cell_size/4), 
+                                     (x + cell_size/2, y + cell_size/4), 2)
+                    pygame.draw.polygon(screen, BLACK, [(x + cell_size/2, y + cell_size/4), 
+                                                      (x + cell_size/3, y + cell_size/2), 
+                                                      (x + 2*cell_size/3, y + cell_size/2)])
+                elif direction == "east" or direction == "right":
+                    pygame.draw.line(screen, BLACK, (x + cell_size/4, y + cell_size/2), 
+                                     (x + 3*cell_size/4, y + cell_size/2), 2)
+                    pygame.draw.polygon(screen, BLACK, [(x + 3*cell_size/4, y + cell_size/2), 
+                                                      (x + cell_size/2, y + cell_size/3), 
+                                                      (x + cell_size/2, y + 2*cell_size/3)])
+                elif direction == "south" or direction == "down":
+                    pygame.draw.line(screen, BLACK, (x + cell_size/2, y + cell_size/4), 
+                                     (x + cell_size/2, y + 3*cell_size/4), 2)
+                    pygame.draw.polygon(screen, BLACK, [(x + cell_size/2, y + 3*cell_size/4), 
+                                                      (x + cell_size/3, y + cell_size/2), 
+                                                      (x + 2*cell_size/3, y + cell_size/2)])
+                elif direction == "west" or direction == "left":
+                    pygame.draw.line(screen, BLACK, (x + 3*cell_size/4, y + cell_size/2), 
+                                     (x + cell_size/4, y + cell_size/2), 2)
+                    pygame.draw.polygon(screen, BLACK, [(x + cell_size/4, y + cell_size/2), 
+                                                      (x + cell_size/2, y + cell_size/3), 
+                                                      (x + cell_size/2, y + 2*cell_size/3)])
+            
+            # Draw underground belts
+            for ug in data["entities"].get("underground_belts", []):
+                x = ug["position"][0] * cell_size
+                y = ug["position"][1] * cell_size
+                belt_type = ug["type"]
+                color = UNDERGROUND_IN_COLOR if belt_type == "entrance" else UNDERGROUND_OUT_COLOR
+                
+                # Draw underground belt
+                pygame.draw.rect(screen, color, (x, y, cell_size, cell_size))
+                
+                # Draw symbol based on type
+                if belt_type == "entrance":
+                    pygame.draw.rect(screen, BLACK, (x + cell_size/4, y + cell_size/4, cell_size/2, cell_size/2), 1)
+                    pygame.draw.line(screen, BLACK, (x + cell_size/4, y + cell_size/2), 
+                                     (x + 3*cell_size/4, y + cell_size/2), 2)
+                else:  # exit
+                    pygame.draw.rect(screen, BLACK, (x + cell_size/4, y + cell_size/4, cell_size/2, cell_size/2), 1)
+                    pygame.draw.circle(screen, BLACK, (x + cell_size/2, y + cell_size/2), cell_size/6)
+            
+            # Draw splitters
+            for splitter in data["entities"].get("splitters", []):
+                x = splitter["position"][0] * cell_size
+                y = splitter["position"][1] * cell_size
+                direction = splitter.get("direction", "north")
+                
+                # Splitters are 2x1 or 1x2 based on orientation
+                if direction in ["north", "south", "up", "down"]:
+                    # Horizontal splitter (takes up two horizontal tiles)
+                    pygame.draw.rect(screen, SPLITTER_COLOR, (x, y, cell_size*2, cell_size))
+                    pygame.draw.rect(screen, BLACK, (x, y, cell_size*2, cell_size), 1)
+                    # Draw splitter divider line
+                    pygame.draw.line(screen, BLACK, (x + cell_size, y), (x + cell_size, y + cell_size), 1)
+                else:
+                    # Vertical splitter (takes up two vertical tiles)
+                    pygame.draw.rect(screen, SPLITTER_COLOR, (x, y, cell_size, cell_size*2))
+                    pygame.draw.rect(screen, BLACK, (x, y, cell_size, cell_size*2), 1)
+                    # Draw splitter divider line
+                    pygame.draw.line(screen, BLACK, (x, y + cell_size), (x + cell_size, y + cell_size), 1)
+        
+        # Draw I/O points
+        if "io_points" in data:
+            # Draw inputs
+            for input_point in data["io_points"].get("inputs", []):
+                x = input_point["position"][0] * cell_size
+                y = input_point["position"][1] * cell_size
+                pygame.draw.rect(screen, INPUT_COLOR, (x, y, cell_size, cell_size))
+                
+                # Draw small item label
+                tiny_font = pygame.font.SysFont(None, 16)
+                text = tiny_font.render(input_point["item"], True, WHITE)
+                screen.blit(text, (x + 2, y + 2))
+            
+            # Draw outputs
+            for output_point in data["io_points"].get("outputs", []):
+                x = output_point["position"][0] * cell_size
+                y = output_point["position"][1] * cell_size
+                pygame.draw.rect(screen, OUTPUT_COLOR, (x, y, cell_size, cell_size))
+                
+                # Draw small item label
+                tiny_font = pygame.font.SysFont(None, 16)
+                text = tiny_font.render(output_point["item"], True, WHITE)
+                screen.blit(text, (x + 2, y + 2))
+        
+        # Draw connections between I/O points
+        if "connections" in data:
+            for conn in data["connections"]:
+                source = conn["source"]["position"]
+                target = conn["target"]["position"]
+                
+                # Calculate pixel positions (center of cells)
+                start_x = source[0] * cell_size + cell_size/2
+                start_y = source[1] * cell_size + cell_size/2
+                end_x = target[0] * cell_size + cell_size/2
+                end_y = target[1] * cell_size + cell_size/2
+                
+                # Draw dotted line for connection
+                dash_length = 5
+                space_length = 5
+                dx = end_x - start_x
+                dy = end_y - start_y
+                steps = max(1, int((abs(dx) + abs(dy)) / (dash_length + space_length)))
+                
+                for i in range(steps):
+                    t1 = i / steps
+                    t2 = min(1, (i + 0.5) / steps)
+                    
+                    x1 = start_x + dx * t1
+                    y1 = start_y + dy * t1
+                    x2 = start_x + dx * t2
+                    y2 = start_y + dy * t2
+                    
+                    pygame.draw.line(screen, BLACK, (x1, y1), (x2, y2), 1)
+        
+        # Draw legend
+        legend_x = width * cell_size + 20
+        legend_y = 20
+        legend_font = pygame.font.SysFont(None, 24)
+        
+        # Legend title
+        title = legend_font.render("Legend", True, BLACK)
+        screen.blit(title, (legend_x, legend_y))
+        legend_y += 30
+        
+        # Block
+        pygame.draw.rect(screen, BLOCK_COLOR, (legend_x, legend_y, cell_size*2, cell_size))
+        pygame.draw.rect(screen, BLOCK_BORDER, (legend_x, legend_y, cell_size*2, cell_size), 2)
+        text = legend_font.render("Block", True, BLACK)
+        screen.blit(text, (legend_x + cell_size*2 + 10, legend_y))
+        legend_y += 30
+        
+        # Assembler
+        pygame.draw.rect(screen, ASSEMBLER_COLOR, (legend_x, legend_y, cell_size*2, cell_size))
+        text = legend_font.render("Assembler", True, BLACK)
+        screen.blit(text, (legend_x + cell_size*2 + 10, legend_y))
+        legend_y += 30
+        
+        # Belt
+        pygame.draw.rect(screen, BELT_COLOR, (legend_x, legend_y, cell_size*2, cell_size))
+        text = legend_font.render("Belt", True, BLACK)
+        screen.blit(text, (legend_x + cell_size*2 + 10, legend_y))
+        legend_y += 30
+        
+        # Inserter
+        pygame.draw.rect(screen, INSERTER_COLOR, (legend_x, legend_y, cell_size*2, cell_size))
+        text = legend_font.render("Inserter", True, BLACK)
+        screen.blit(text, (legend_x + cell_size*2 + 10, legend_y))
+        legend_y += 30
+        
+        # Underground Belt
+        pygame.draw.rect(screen, UNDERGROUND_IN_COLOR, (legend_x, legend_y, cell_size, cell_size))
+        pygame.draw.rect(screen, UNDERGROUND_OUT_COLOR, (legend_x + cell_size, legend_y, cell_size, cell_size))
+        text = legend_font.render("Underground", True, BLACK)
+        screen.blit(text, (legend_x + cell_size*2 + 10, legend_y))
+        legend_y += 30
+        
+        # Splitter
+        pygame.draw.rect(screen, SPLITTER_COLOR, (legend_x, legend_y, cell_size*2, cell_size))
+        text = legend_font.render("Splitter", True, BLACK)
+        screen.blit(text, (legend_x + cell_size*2 + 10, legend_y))
+        legend_y += 30
+        
+        # I/O Points
+        pygame.draw.rect(screen, INPUT_COLOR, (legend_x, legend_y, cell_size, cell_size))
+        pygame.draw.rect(screen, OUTPUT_COLOR, (legend_x + cell_size, legend_y, cell_size, cell_size))
+        text = legend_font.render("I/O Points", True, BLACK)
+        screen.blit(text, (legend_x + cell_size*2 + 10, legend_y))
+        
+        # Save if requested
+        if save_path:
+            pygame.image.save(screen, save_path)
+            print(f"Visualization saved to {save_path}")
+        
+        # Main loop to display the visualization
+        running = True
+        while running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+            pygame.display.flip()
+        
+        pygame.quit()
+        return True
+        
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        print(f"Error visualizing JSON: {e}")
+        return False
+
+
 if __name__ == "__main__":
     #plot_csv_data("execution_times_big_factory.csv")
     main()
+    
+    json_file_path = "BigFactory.json"
+    output_file_path = "Blueprints/BigFactory_blueprint.txt"
+    save_image_path = "Factorys/Factory_visualization.png"
+    create_blueprint_from_json(json_file_path, output_file_path)
+    visualize_json(json_file_path, cell_size=30, save_path=save_image_path)
+
