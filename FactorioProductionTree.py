@@ -1,7 +1,6 @@
 #! .venv\Scripts\python.exe
 
 import json
-import logging
 import pygame
 import math
 import ast, os
@@ -20,6 +19,9 @@ from draftsman.entity import Inserter, AssemblingMachine, TransportBelt, Undergr
 from draftsman.entity import Splitter as BlueprintSplitter
 
 from MultiAgentPathfinder import MultiAgentPathfinder,Splitter
+from logging_config import setup_logger
+
+logger = setup_logger("FactorioProductionTree")
 
 # Define constants for colors
 side_panel_width = 300
@@ -46,7 +48,6 @@ BELT_COLOR_MAP = {
 class FactorioProductionTree:
     def __init__(self,grid_width=15,grid_height=15) -> None:
         # Load the data from JSON
-        self.setup_logging("FactorioProductionTree")
         items_data = self.load_json("recipes.json")
         
         self.machines_data = self.load_json("machine_data.json")  # Machine speeds and capacities
@@ -82,19 +83,6 @@ class FactorioProductionTree:
                 recipes = json.load(file)
                 return recipes
             
-            
-    def setup_logging(self, file_name):
-        # Configure the logging
-
-        # Clear the log file at the start
-        open(file_name, "w").close()  # Truncate the file
-
-        logging.basicConfig(
-            filename=file_name,
-            level=logging.INFO,
-            format="%(asctime)s - %(levelname)s - %(message)s",
-        )
-
     
     def destroy_solver(self):
         self.z3_solver = None
@@ -969,7 +957,7 @@ class FactorioProductionTree:
                 # For each output assembler build own representation    
                 key = f"{output_item}_{i}"
                 
-                logging.info(f"build output path infomation for {key}")
+                logger.info(f"build output path infomation for {key}")
         
                     
                 # Define assembler output positions based on `output_positions` template
@@ -1201,7 +1189,7 @@ class FactorioProductionTree:
             
             except Exception as e:
                 print(f"could not assign valid paths to that setup: {e}")
-                logging.warning(f"could not assign valid paths to that setup: {e}")
+                logger.warning(f"could not assign valid paths to that setup: {e}")
                 
                 # restrict the assembler and inserter positions to occur in the same setup -> belts are not needed as they are bound by the inserter
                 self.z3_solver.restrict_current_setup()
@@ -2045,10 +2033,10 @@ class FactorioProductionTree:
         try:
             # Load the saved factory data
             if not self.load_data(json_path):
-                logging.error(f"Failed to load factory data from {json_path}")
+                logger.error(f"Failed to load factory data from {json_path}")
                 return False
                 
-            logging.info(f"Creating blueprint from {json_path}")
+            logger.info(f"Creating blueprint from {json_path}")
             
             # Create a new blueprint with a name based on output item and amount
             blueprint = Blueprint()
@@ -2059,7 +2047,7 @@ class FactorioProductionTree:
             # Track assembler positions for orienting inserters
             assembler_positions = {}  # Maps (x, y) to assembler object
             
-            print("1. Placing assembling machines...")
+            logger.info("1. Placing assembling machines...")
             # Place assembling machines from assembler_information
             if hasattr(self, 'assembler_information'):
                 for item, x, y in self.assembler_information:
@@ -2067,7 +2055,7 @@ class FactorioProductionTree:
                     center_x = x + 1
                     center_y = y + 1
                     
-                    print(f"  - Placing assembler for {item} at ({center_x},{center_y})")
+                    logger.info(f"  - Placing assembler for {item} at ({center_x},{center_y})")
                     
                     assembler = AssemblingMachine(
                         name="assembling-machine-1", 
@@ -2180,7 +2168,7 @@ class FactorioProductionTree:
             print("4. Adding path belts...")
             self._add_path_belts_to_blueprint(blueprint, occupied_positions)
            
-            # Place belts for I/O paths with more detailed logging
+            # Place belts for I/O paths with more detailed logger
             print("5. Adding I/O belts...")
             self._add_io_belts_to_blueprint(blueprint, occupied_positions)
             
@@ -2189,11 +2177,11 @@ class FactorioProductionTree:
             with open(output_path, "w") as f:
                 f.write(blueprint.to_string())
                 
-            logging.info(f"Blueprint successfully exported to {output_path}")
+            logger.info(f"Blueprint successfully exported to {output_path}")
             return True
             
         except Exception as e:
-            logging.error(f"Error creating blueprint: {e}")
+            logger.error(f"Error creating blueprint: {e}")
             import traceback
             traceback.print_exc()
             return False
@@ -2550,7 +2538,7 @@ def plot_csv_data(file_path):
 # Function to log method execution times with additional information
 def log_method_time(item, amount, minimizer, method_name, assembler_counts,start_time, end_time):
     execution_time = end_time - start_time
-    logging.info(f"Execution time for {method_name}: {execution_time:.4f} seconds.")
+    logger.info(f"Execution time for {method_name}: {execution_time:.4f} seconds.")
     
     # Open the CSV file and append the data
     try:
@@ -2558,12 +2546,12 @@ def log_method_time(item, amount, minimizer, method_name, assembler_counts,start
             writer = csv.writer(file)
             writer.writerow([item, amount, minimizer, method_name,assembler_counts,execution_time])
     except Exception as e:
-        logging.error(f"Error logging execution time for {method_name}: {e}")
+        logger.error(f"Error logger execution time for {method_name}: {e}")
         
         
 def main():
-    factory = FactorioProductionTree(16,10)
-    factory.create_blueprint("Modules/electronic-circuit_120_[]_module.json", "electronic-circuit_120_[]_module.txt")
+    #factory = FactorioProductionTree(16,10)
+    #factory.create_blueprint("Modules/electronic-circuit_120_[]_module.json", "electronic-circuit_120_[]_module.txt")
     
     
     
@@ -2574,8 +2562,8 @@ def main():
 
    
 def Simple_Run():
-    # Set up logging for better output in the console
-    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
+    # Set up logger for better output in the console
+    logger.basicConfig(level=logger.INFO, format='%(asctime)s - %(message)s')
     
     print("start")
     
@@ -2627,7 +2615,7 @@ def Simple_Run():
         
         factorioProductionTree.create_blueprint(f'Modules/{item_to_produce}_{amount_needed}_{input_items}_module.json',f'Blueprints/{item_to_produce}_{amount_needed}_{input_items}_module.txt')
         
-        factorioProductionTree.visualize_factory(paths,placed_inserter_information,store=True,file_path=f'Modules/{item_to_produce}_{amount_needed}_{input_items}_module.png')
+        #factorioProductionTree.visualize_factory(paths,placed_inserter_information,store=True,file_path=f'Modules/{item_to_produce}_{amount_needed}_{input_items}_module.png')
         pass
 
    
@@ -2713,7 +2701,7 @@ if __name__ == "__main__":
     #            writer = csv.writer(file)
     #            writer.writerow(["Item", "Amount", "Minimizer", "Method","Assemblers", "Execution Time (seconds)"])
     #    except Exception as e:
-    #        logging.error(f"Error initializing CSV file: {e}")
+    #        logger.error(f"Error initializing CSV file: {e}")
 
     #plot_csv_data("execution_times.csv")
     main()

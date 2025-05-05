@@ -2,16 +2,9 @@
 
 from z3 import *
 from z3 import Optimize 
-import logging, time , json
-
-
-logging.basicConfig(
-    level=logging.DEBUG,  # Use DEBUG level for detailed information, change to INFO for less verbosity
-    format='%(asctime)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.FileHandler("factory_log.log", mode='w'),  # Specify the log file name
-    ]
-)
+import time , json
+from logging_config import setup_logger
+logger = setup_logger("FactoryZ3Solver")
 
 
 class Block:
@@ -37,9 +30,7 @@ class Block:
         
         #Connection compatibility with other blocks
         self.compatible_blocks = {}  # {block_id: {"aligned": bool, "items": [items]}}
-        
-        
-        
+      
         # Track spacing with other blocks
         # Format: {other_block_id: {"north": distance, "south": distance, "east": distance, "west": distance}}
         self.spacing = {}
@@ -63,35 +54,35 @@ class Gate:
 
 class FactoryZ3Solver:
     def __init__(self, block_data, output_point):
-        logging.info(f"FactoryZ3Solver")
-        logging.debug(f"block data: {block_data}")
+        logger.info(f"FactoryZ3Solver")
+        logger.debug(f"block data: {block_data}")
         
         self.block_data = block_data
         self.output_point = output_point
         self.solver = Optimize()
         
         self.blocks = []
-        self.gates = []  # Store all gates in a flat list for easier post-processing
+        self.gates = []  
         self.max_x = Int("max_x")
         self.max_y = Int("max_y")
         
         self.item_complexity = self.calculate_item_complexity(self.load_recipe_data())
         
-        logging.debug("Solver and data structures initialized")
+        logger.debug("Solver and data structures initialized")
 
     
     def load_recipe_data(self):
         try:
             with open('recipes.json', 'r') as file:
                 data = json.load(file)
-                logging.info("Loaded recipe data successfully")
+                logger.info("Loaded recipe data successfully")
                 return data
         except Exception as e:
-            logging.error(f"Error loading recipe data: {e}")
+            logger.error(f"Error loading recipe data: {e}")
             return []
     
     def build_constraints(self):
-        logging.info("Building constraints")
+        logger.info("Building constraints")
         self.build_blocks()
         #self.fix_position()
         self.add_bound_constraints()
@@ -101,22 +92,22 @@ class FactoryZ3Solver:
         self.add_simplified_block_alignment_constraints()
         
         # Only add I/O constraints if we have fixed gates
-        if hasattr(self, 'fixed_gates') and self.fixed_gates:
-            self.add_io_gate_constraints()
+        #if hasattr(self, 'fixed_gates') and self.fixed_gates:
+        #    self.add_io_gate_constraints()
         
         self.minimize_map()
 
     def build_blocks(self):
-        logging.info("Building blocks")
+        logger.info("Building blocks")
         for i, key in enumerate(self.block_data.keys()):
-            logging.debug(f"Processing block {key}")
+            logger.debug(f"Processing block {key}")
             
             # Retrieve block dimensions
             width = self.block_data[key]["tree"].grid_width
             height = self.block_data[key]["tree"].grid_height
             num_factories = self.block_data[key]["num_factories"]
             
-            logging.debug(f"Block {key} dimensions: width={width}, height={height}, num_factories={num_factories}")
+            logger.debug(f"Block {key} dimensions: width={width}, height={height}, num_factories={num_factories}")
             
             # Combine input and output information into one structure
             gate_info = {}
@@ -126,7 +117,7 @@ class FactoryZ3Solver:
             for factory_index in range(num_factories):
                 # Create the block
                 block = Block(f"Block_{key}_{i}_{factory_index}", width, height)
-                logging.debug(f"Created Block with ID {block.id}")
+                logger.debug(f"Created Block with ID {block.id}")
                 
                 # Create gates based on type
                 for item, data in gate_info.items():
@@ -134,7 +125,7 @@ class FactoryZ3Solver:
                         
                         if item not in block.input_interfaces:
                             block.input_interfaces[item] = []
-                        block.input_interfaces[item].append(int(data["input"][0]))
+                        block.input_interfaces[item].append(int(data["input"][1]))
                         block.input_items.add(item)
                         
                         input_gate = Gate(
@@ -147,14 +138,14 @@ class FactoryZ3Solver:
                         
                         block.input_points.append(input_gate)
                         self.gates.append(input_gate)  # Add to flat list of all gates
-                        logging.debug(f"Added input gate {input_gate.id} for item {item}")
+                        logger.debug(f"Added input gate {input_gate.id} for item {item}")
                         
                     if "output" in data:
                         
                          # Add to interface tracking
                         if item not in block.output_interfaces:
                             block.output_interfaces[item] = []
-                        block.output_interfaces[item].append(int(data["output"][0]))
+                        block.output_interfaces[item].append(int(data["output"][1]))
                         block.output_items.add(item)
                         
                         output_gate = Gate(
@@ -167,11 +158,11 @@ class FactoryZ3Solver:
                         )
                         block.output_points.append(output_gate)
                         self.gates.append(output_gate)  # Add to flat list of all gates
-                        logging.debug(f"Added output gate {output_gate.id} for item {item}")
+                        logger.debug(f"Added output gate {output_gate.id} for item {item}")
 
                 # Append block to the list of blocks
                 self.blocks.append(block)
-                logging.debug(f"Block {block.id} added to blocks list")
+                logger.debug(f"Block {block.id} added to blocks list")
         self._analyze_block_compatibility()
             
     def _analyze_block_compatibility(self):
@@ -179,7 +170,9 @@ class FactoryZ3Solver:
         Pre-analyze which blocks should be connected based on their input/output patterns.
         This allows us to drastically reduce the number of constraints.
         """
-        logging.info("Analyzing block compatibility")
+        logger.info("Analyzing block compatibility")
+        
+        analyzed_pairs = set()
         
         for producer in self.blocks:
             for consumer in self.blocks:
@@ -192,22 +185,61 @@ class FactoryZ3Solver:
                 if not shared_items:
                     continue
                     
+                # Create a unique pair identifier (sorted to ensure consistency)
+                block_pair = tuple(sorted([producer.id, consumer.id]))
+                
+                # Skip if we've already analyzed this pair
+                if block_pair in analyzed_pairs:
+                    logger.debug(f"Skipping already analyzed pair: {block_pair}")
+                    continue
+                
+                analyzed_pairs.add(block_pair)
+                
                 # For each shared item, check if there are aligned interfaces
                 aligned_items = []
                 misaligned_items = []
                 
+                # Count how many gates are aligned for each item
+                aligned_gate_count = 0
+                
                 for item in shared_items:
-                    # Check if any output x-position from producer matches any input x-position from consumer
-                    has_aligned_gates = any(
-                        out_x == in_x
-                        for out_x in producer.output_interfaces.get(item, [])
-                        for in_x in consumer.input_interfaces.get(item, [])
-                    )
+                    # Check for each output of producer if there's a matching input on consumer
+                    is_aligned = False
+                    producer_outputs = producer.output_interfaces.get(item, [])
+                    consumer_inputs = consumer.input_interfaces.get(item, [])
+
+                    logger.debug(f"  Item {item}:")
+                    logger.debug(f"    Producer {producer.id} output x-positions: {producer_outputs}")
+                    logger.debug(f"    Consumer {consumer.id} input x-positions: {consumer_inputs}")
                     
-                    if has_aligned_gates:
+                    item_alignments = []
+                    # Compare all producer outputs with all consumer inputs to find alignments
+                    for p_out_x in producer_outputs:
+                        for c_in_x in consumer_inputs:
+                            # Check if they have the same relative position
+                            if p_out_x == c_in_x:
+                                alignment_match = f"Aligned: output_x={p_out_x} == input_x={c_in_x}"
+                                item_alignments.append(alignment_match)
+                                aligned_gate_count += 1
+                                is_aligned = True
+                            else:
+                                alignment_mismatch = f"Misaligned: output_x={p_out_x} != input_x={c_in_x}"
+                                item_alignments.append(alignment_mismatch)
+                    
+                    # Log all alignment checks for this item
+                    for align_detail in item_alignments:
+                        logger.debug(f"    {align_detail}")
+                    
+                    if is_aligned:
                         aligned_items.append(item)
+                        logger.debug(f"    ✓ Item {item} is ALIGNED")
                     else:
                         misaligned_items.append(item)
+                        logger.debug(f"    ✗ Item {item} is MISALIGNED")
+                
+                # Calculate required spacing (number of misaligned items minus aligned gates)
+                # but ensure it's at least 0
+                spacing_needed = max(0, len(misaligned_items) - aligned_gate_count)
                 
                 # Create compatibility info
                 if aligned_items or misaligned_items:
@@ -216,29 +248,29 @@ class FactoryZ3Solver:
                         "perfect_alignment": len(misaligned_items) == 0 and len(aligned_items) > 0,
                         "aligned_items": aligned_items,
                         "misaligned_items": misaligned_items,
-                        "spacing_needed": len(misaligned_items)
+                        "spacing_needed": spacing_needed,
+                        "aligned_gate_count": aligned_gate_count
                     }
                     
                     # Set the spacing value in the block's spacing dictionary
-                    spacing_value = len(misaligned_items) if misaligned_items else 0
                     producer.spacing[consumer.id] = {
-                            "north": spacing_value,
-                            "south": spacing_value,
-                            "east": spacing_value,
-                            "west": spacing_value
+                        "north": spacing_needed,
+                        "south": spacing_needed,
+                        "east": spacing_needed,
+                        "west": spacing_needed
                     }
                     
-                    logging.debug(f"Block {producer.id} can connect to {consumer.id}:")
-                    logging.debug(f"  - Aligned items: {aligned_items}")
-                    logging.debug(f"  - Misaligned items: {misaligned_items}")
-                    logging.debug(f"  - Spacing needed: {len(misaligned_items)}")   
-    
+                    logger.debug(f"Block {producer.id} can connect to {consumer.id}:")
+                    logger.debug(f"  - Aligned items: {aligned_items}")
+                    logger.debug(f"  - Misaligned items: {misaligned_items}")
+                    logger.debug(f"  - Aligned gates: {aligned_gate_count}")
+                    logger.debug(f"  - Spacing needed: {spacing_needed}")
     
     def add_simplified_block_alignment_constraints(self):
         """
         Add constraints to align compatible blocks vertically with appropriate spacing.
         """
-        logging.info("Adding simplified block alignment constraints")
+        logger.info("Adding simplified block alignment constraints")
         
         alignment_pairs = []
         
@@ -276,6 +308,10 @@ class FactoryZ3Solver:
                 # Force one of them to be true (one block must be above the other)
                 self.solver.add(Or(block_above, other_above))
                 
+         
+                 # Get required spacing from the compatibility info or spacing dictionary
+                required_spacing = compatibility.get("spacing_needed", 0)
+                
                 # Add positioning constraints based on calculated spacing
                 if compatibility["perfect_alignment"]:
                     # Perfect alignment - no spacing needed
@@ -292,10 +328,10 @@ class FactoryZ3Solver:
                     self.solver.add_soft(And(vertical_align, Or(block_above, other_above)), weight=2000)
                 else:
                     # Get required spacing from the spacing dictionary or use default
-                    if other_id in block.spacing:
-                        required_spacing = block.spacing[other_id]["south"]  # Use south spacing for vertical alignment
-                    else:
-                        required_spacing = block.default_spacing
+                    #if other_id in block.spacing:
+                    #    required_spacing = block.spacing[other_id]["south"]  # Use south spacing for vertical alignment
+                    #else:
+                    #    required_spacing = block.default_spacing
                         
                     # Add spacing constraints for blocks with misaligned gates
                     self.solver.add(Implies(
@@ -307,7 +343,7 @@ class FactoryZ3Solver:
                         other_block.y + other_block.height + required_spacing == block.y
                      ))
         
-        logging.info(f"Added alignment constraints for {len(alignment_pairs)} block pairs")
+        logger.info(f"Added alignment constraints for {len(alignment_pairs)} block pairs")
     
     
     def fix_position(self):
@@ -316,7 +352,7 @@ class FactoryZ3Solver:
     
     def add_bound_constraints(self):
         """Add constraints to ensure blocks are within bounds and above y=0"""
-        logging.info("Adding bound constraints")
+        logger.info("Adding bound constraints")
         
         # Calculate the maximum possible coordinates
         for block in self.blocks:
@@ -343,12 +379,12 @@ class FactoryZ3Solver:
         self.solver.add(self.max_x >= 0)
         self.solver.add(self.max_y >= 0)
         
-        logging.debug("Added bound constraints for all blocks")
+        logger.debug("Added bound constraints for all blocks")
         
         
     
     def add_overlap_constraints(self):
-        logging.info("Adding overlap constraints")
+        logger.info("Adding overlap constraints")
         for i, block1 in enumerate(self.blocks):
                 for j, block2 in enumerate(self.blocks):
                     if i >= j:
@@ -361,22 +397,22 @@ class FactoryZ3Solver:
                             block2.y + block2.height <= block1.y
                         )
                     )
-                    logging.debug(f"Added non-overlapping constraints between blocks {block1.id} and {block2.id}")
+                    logger.debug(f"Added non-overlapping constraints between blocks {block1.id} and {block2.id}")
     
     
     def add_gate_relative_position_constraints(self):
-        logging.info("Adding gate relative position constraints")
+        logger.info("Adding gate relative position constraints")
         for block in self.blocks:
             # Input gates
             for gate in block.input_points:
                 self.solver.add(gate.x == block.x + gate.relative_x)
                 self.solver.add(gate.y == block.y + gate.relative_y)
-                logging.debug(f"Added relative position constraints for input gate {gate.id} in block {block.id}")
+                logger.debug(f"Added relative position constraints for input gate {gate.id} in block {block.id}")
             # Output gates
             for gate in block.output_points:
                 self.solver.add(gate.x == block.x + gate.relative_x)
                 self.solver.add(gate.y == block.y + gate.relative_y)
-                logging.debug(f"Added relative position constraints for output gate {gate.id} in block {block.id}")
+                logger.debug(f"Added relative position constraints for output gate {gate.id} in block {block.id}")
 
     def minimize_map(self):
         # Prioritize minimizing width over height to encourage vertical layouts
@@ -387,12 +423,12 @@ class FactoryZ3Solver:
 
         
     def solve(self):
-        logging.info("Solving factory layout with Z3 using simplified constraints...")
+        logger.info("Solving factory layout with Z3 using simplified constraints...")
         start_time = time.perf_counter()
         
         result = self.solver.check()
         solve_time = time.perf_counter() - start_time
-        logging.info(f"Z3 solver finished in {solve_time:.2f} seconds with result: {result}")
+        logger.info(f"Z3 solver finished in {solve_time:.2f} seconds with result: {result}")
         
         if result == sat:
             model = self.solver.model()
@@ -409,7 +445,7 @@ class FactoryZ3Solver:
             
             return final_blocks, max_x_val, max_y_val, gate_connections
         else:
-            logging.error("Z3 solver could not find a solution!")
+            logger.error("Z3 solver could not find a solution!")
             return None, None, None, None
         
     def _extract_block_positions(self, model):
@@ -464,7 +500,7 @@ class FactoryZ3Solver:
                 "block_type": block_type  # Store the base item type for easier reference
             }
             
-            logging.debug(f"Block {block.id} position: ({x}, {y}), size: {block.width}x{block.height}")
+            logger.debug(f"Block {block.id} position: ({x}, {y}), size: {block.width}x{block.height}")
         
         return final_blocks  
         
@@ -475,7 +511,7 @@ class FactoryZ3Solver:
         This is the post-processing step that finds the best gate-to-gate connections,
         prioritizing connections based on item complexity.
         """
-        logging.info("Post-processing: Determining optimal gate connections with complexity prioritization")
+        logger.info("Post-processing: Determining optimal gate connections with complexity prioritization")
         
         connections = []
         
@@ -507,7 +543,7 @@ class FactoryZ3Solver:
             key=lambda item: self.item_complexity.get(item, float('inf'))
         )
         
-        logging.info(f"Connection priority order based on complexity: {items_sorted_by_complexity}")
+        logger.info(f"Connection priority order based on complexity: {items_sorted_by_complexity}")
         
         # Process items in order of complexity (lowest first)
         for item in items_sorted_by_complexity:
@@ -519,7 +555,7 @@ class FactoryZ3Solver:
                 continue
             
             complexity = self.item_complexity.get(item, "unknown")
-            logging.debug(f"Connecting item '{item}' (complexity: {complexity})")
+            logger.debug(f"Connecting item '{item}' (complexity: {complexity})")
             
             # Sort outputs and inputs by y-coordinate (top to bottom)
             outputs.sort(key=lambda g: g["y"])
@@ -539,7 +575,7 @@ class FactoryZ3Solver:
                                     key=lambda inp: abs(inp["y"] - output["y"]))
                     connections.append((output["gate"], best_input["gate"]))
                     inputs.remove(best_input)
-                    logging.debug(f"Connected aligned gates: {output['id']} → {best_input['id']}")
+                    logger.debug(f"Connected aligned gates: {output['id']} → {best_input['id']}")
                 else:
                     # If no aligned inputs, find closest by Manhattan distance
                     best_input = min(inputs, 
@@ -549,9 +585,9 @@ class FactoryZ3Solver:
                                     ))
                     connections.append((output["gate"], best_input["gate"]))
                     inputs.remove(best_input)
-                    logging.debug(f"Connected nearest gates: {output['id']} → {best_input['id']}")
+                    logger.debug(f"Connected nearest gates: {output['id']} → {best_input['id']}")
         
-        logging.info(f"Determined {len(connections)} optimal gate connections")
+        logger.info(f"Determined {len(connections)} optimal gate connections")
         return connections
     
     
@@ -691,17 +727,17 @@ class FactoryZ3Solver:
             self.fixed_blocks = []
         self.fixed_blocks.append(block)
         
-        logging.info(f"Added fixed {gate_type} gate for {item} at ({x}, {y})")
+        logger.info(f"Added fixed {gate_type} gate for {item} at ({x}, {y})")
         
         return gate
 
     def add_io_gate_constraints(self):
         """Add constraints to ensure blocks respect the positioning of I/O gates"""
-        logging.info("Adding I/O gate constraints with complexity-aware positioning")
+        logger.info("Adding I/O gate constraints with complexity-aware positioning")
         
         # Check if we have fixed gates
         if not hasattr(self, 'fixed_gates') or not self.fixed_gates:
-            logging.warning("No fixed gates found, skipping I/O gate constraints")
+            logger.warning("No fixed gates found, skipping I/O gate constraints")
             return
         
         # For fixed blocks, mark them so we can identify them
@@ -718,7 +754,7 @@ class FactoryZ3Solver:
             
             # Add item complexity information
             complexity = self.item_complexity.get(item, "unknown")
-            logging.info(f"Fixed gate for item '{item}' (complexity: {complexity})")
+            logger.info(f"Fixed gate for item '{item}' (complexity: {complexity})")
         
         # For each fixed gate, ensure that no block overlaps with it
         for gate in self.fixed_gates:
@@ -745,7 +781,7 @@ class FactoryZ3Solver:
         for gate in self.fixed_gates:
             # Skip if the gate doesn't have edge information
             if not hasattr(gate, 'edge'):
-                logging.warning(f"Gate {gate.id} does not have edge information, skipping edge-specific constraints")
+                logger.warning(f"Gate {gate.id} does not have edge information, skipping edge-specific constraints")
                 continue
                 
             # Apply constraints based on the edge position
@@ -769,7 +805,7 @@ class FactoryZ3Solver:
                 for block in non_fixed_blocks:
                     self.solver.add(block.x >= 1)
         
-        logging.debug("Added I/O gate constraints for all edges with complexity awareness")
+        logger.debug("Added I/O gate constraints for all edges with complexity awareness")
                 
                 
     def calculate_item_complexity(self, recipe_data):
@@ -783,7 +819,7 @@ class FactoryZ3Solver:
         Returns:
             Dictionary mapping item IDs to their complexity rank
         """
-        logging.info("Calculating item complexity rankings")
+        logger.info("Calculating item complexity rankings")
         
         # Create a dictionary of recipes for easy lookup
         recipes = {item['id']: item for item in recipe_data if 'id' in item}
@@ -832,7 +868,7 @@ class FactoryZ3Solver:
         for item_id in recipes.keys():
             item_complexity[item_id] = get_complexity(item_id)
         
-        logging.info(f"Calculated complexity for {len(item_complexity)} items")
+        logger.info(f"Calculated complexity for {len(item_complexity)} items")
         return item_complexity
 
 def manhattan_distance(p1, p2):

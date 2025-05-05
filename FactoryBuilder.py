@@ -7,7 +7,6 @@ import pygame
 import json
 import os
 import time
-import logging
 import csv
 from math import ceil
 import tkinter as tk
@@ -15,16 +14,13 @@ from tkinter import filedialog
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
+from draftsman.blueprintable import Blueprint
+from draftsman.constants import Direction
+from draftsman.entity import Inserter, AssemblingMachine, TransportBelt, UndergroundBelt,ConstantCombinator
+from draftsman.entity import Splitter as BlueprintSplitter
+from logging_config import setup_logger
+logger = setup_logger("FactoryBuilder")
 
-
-# Configure logging to handle Unicode characters
-logging.basicConfig(
-    level=logging.DEBUG,  # Use DEBUG level for detailed information, change to INFO for less verbosity
-    format='%(asctime)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.FileHandler("factoryBuilder_log.log", mode='w'),  # Specify the log file name
-    ]
-)
 
 # Define constants for colors
 WHITE = (255, 255, 255)
@@ -358,9 +354,13 @@ class FactoryBuilder:
         
         # Plan paths between connected gates
         if self.final_blocks:
-            factory_data,json_path = self.create_json()
+            path = f"Factorys/factory_{self.output_item}_{self.amount}.json"
+            factory_data,_ = self.create_json(output_json_path=path)
             inter_block_paths , _ = self.plan_inter_block_paths(factory_data)
-            self.add_paths_to_json(json_path,inter_block_paths)
+            self.add_paths_to_json(path,inter_block_paths)
+            
+            blueprint_path= f"Blueprints/blueprint_{self.output_item}_{self.amount}.txt"
+            create_blueprint_from_json(path, output_path=blueprint_path)
             
         
         print(f"Factory dimensions: {self.final_x} x {self.final_y}")
@@ -369,12 +369,66 @@ class FactoryBuilder:
 
 
     def add_paths_to_json(self, json_path,inter_block_paths):
-        pass 
+        """
+        Add the inter-block paths to an existing factory JSON file.
+        
+        Args:
+            json_path (str): Path to the existing factory JSON file
+            inter_block_paths (dict): Dictionary of paths between blocks
+            
+        Returns:
+            bool: True if successful, False otherwise
+        """
+        try:
+            # Load the existing JSON file
+            with open(json_path, 'r') as f:
+                factory_data = json.load(f)
+            
+            logger.info(f"Adding {len(inter_block_paths)} inter-block paths to {json_path}")
+            
+            # Add the inter-block paths to the JSON data
+            factory_data["inter_block_paths"] = []
+            
+            # Process each path and format it for the JSON
+            for item_key, paths_data_list in inter_block_paths.items():
+                for path_data in paths_data_list:
+                    # Create a copy of path_data to avoid modifying the original
+                    path_entry = {
+                        "item": item_key.split('_')[0],  # Extract the base item name
+                        "connection_id": item_key,
+                        "path": path_data.get("path", []),
+                    }
+                    
+                    # Add underground segments if present
+                    if "underground_segments" in path_data:
+                        path_entry["underground_segments"] = path_data["underground_segments"]
+                    
+                    # Add source and target gate information if available
+                    if "source_id" in path_data:
+                        path_entry["source_gate"] = path_data["source_id"]
+                    if "target_id" in path_data:
+                        path_entry["target_gate"] = path_data["target_id"]
+                    
+                    factory_data["inter_block_paths"].append(path_entry)
+            
+            # Save the updated JSON back to the file
+            with open(json_path, 'w') as f:
+                json.dump(factory_data, f, indent=2)
+            
+            logger.info(f"Successfully added {len(factory_data['inter_block_paths'])} inter-block paths to {json_path}")
+            return True
+            
+        except Exception as e:
+            logger.error(f"Error adding paths to JSON: {e}")
+            import traceback
+            traceback.print_exc()
+            return False
+    
     
     # create realtive positons foe all modules and add them to the json file
-    def create_json(self, path=None):
+    def create_json(self, output_json_path=None):
         if not self.final_blocks:
-            logging.error("Cannot create JSON: No final blocks available")
+            logger.error("Cannot create JSON: No final blocks available")
             return
         
         # Initialize the factory data structure
@@ -395,8 +449,8 @@ class FactoryBuilder:
                 "inputs": [],
                 "outputs": []
             },
-            "connections": [],
-            "inter_block_paths": []
+            "inter_block_paths": [],
+            "external_io": []
         }
         
         # Process each block
@@ -428,15 +482,15 @@ class FactoryBuilder:
             
             # Skip this block if we can't find its module JSON
             if not module_json_path or not os.path.exists(module_json_path):
-                logging.warning(f"Module JSON not found for {block_id} (type: {block_type}), skipping")
-                raise Exception(f"Module JSON not found for {block_id} (type: {block_type}), skipping")
+                logger.warning(f"Module JSON not found for {block_id} (type: {block_type}), skipping")
+                #raise Exception(f"Module JSON not found for {block_id} (type: {block_type}), skipping")
                 
             # Load module JSON
             try:
                 with open(module_json_path, 'r') as f:
                     module_data = json.load(f)
                 
-                logging.info(f"Processing module data from {module_json_path} for block {block_id}")
+                logger.info(f"Processing module data from {module_json_path} for block {block_id}")
                 
                 # Process assemblers
                 if "assembler_information" in module_data:
@@ -445,13 +499,15 @@ class FactoryBuilder:
                             item, rel_x, rel_y = assembler[0], assembler[1], assembler[2]
                             # Convert coordinates
                             abs_x = block_x + rel_x
-                            abs_y = block_y + rel_y
+                            abs_y = block_y + rel_y 
                             
                             factory_data["entities"]["assemblers"].append({
                                 "item": item,
                                 "position": [abs_x, abs_y],
                                 "block_id": block_id
                             })
+                            
+                            logger.info(f"Added assembler {item} at {[abs_x, abs_y]} for block {block_id}")
                 
                 # Process inserters
                 if "inserter_information" in module_data:
@@ -468,6 +524,7 @@ class FactoryBuilder:
                                 "direction": direction,
                                 "block_id": block_id
                             })
+                            logger.info(f"Added inserter {item} at {[abs_x, abs_y]} facing {direction} for block {block_id}")
                             
                 if "placed_inserter_information" in module_data:
                   for item_id, inserters in module_data["placed_inserter_information"].items():
@@ -483,8 +540,8 @@ class FactoryBuilder:
                             target_x, target_y = target_pos
                             
                             # Determine direction based on relative positions
-                            dx = target_x - source_x
-                            dy = target_y - source_y
+                            dx = source_x - target_x  # Reversed
+                            dy = source_y - target_y  # Reversed
                             
                             direction = "east"  # default
                             if abs(dx) > abs(dy):
@@ -493,18 +550,19 @@ class FactoryBuilder:
                                 direction = "south" if dy > 0 else "north"
                             
                             # Convert to absolute coordinates
-                            abs_source_x = block_x + source_x
-                            abs_source_y = block_y + source_y
+                            abs_x = block_x + target_x
+                            abs_y = block_y + target_y
+            
                             
                             # Add to corrected entities
                             factory_data["entities"]["inserters"].append({
                                 "item": item,
-                                "position": [abs_source_x, abs_source_y],
+                                "position": [abs_x, abs_y],
                                 "direction": direction,
                                 "block_id": block_id
                             })
                             
-                            print(f"Added placed inserter for {item} at {[abs_source_x, abs_source_y]} facing {direction}")
+                            logger.info(f"Added placed inserter for {item} at {[abs_x, abs_y]} facing {direction}")
 
                 # add I/O paths to the json file
                 if "input_information" in module_data:
@@ -528,15 +586,14 @@ class FactoryBuilder:
                                             
                                             dx = next_pos[0] - current[0]
                                             dy = next_pos[1] - current[1]
-                                            
                                             if dx > 0:
-                                                direction = "right"
+                                                direction = "east"
                                             elif dx < 0:
-                                                direction = "left"
+                                                direction = "west"
                                             elif dy > 0:
-                                                direction = "down"
+                                                direction = "south"
                                             elif dy < 0:
-                                                direction = "up"
+                                                direction = "north"
                                         elif i > 0:
                                             # Use the same direction as the previous segment for the last point
                                             prev_pos = path[i - 1]
@@ -546,13 +603,13 @@ class FactoryBuilder:
                                             dy = current[1] - prev_pos[1]
                                             
                                             if dx > 0:
-                                                direction = "right"
+                                                direction = "east"
                                             elif dx < 0:
-                                                direction = "left"
+                                                direction = "west"
                                             elif dy > 0:
-                                                direction = "down"
+                                                direction = "south"
                                             elif dy < 0:
-                                                direction = "up"
+                                                direction = "north"
                                         
                                         # Convert coordinates
                                         abs_x = block_x + current[0]
@@ -572,8 +629,9 @@ class FactoryBuilder:
                                                 "direction": direction,
                                                 "block_id": block_id
                                             })
+                            logger.info(f"Added input belt route for {item} at {[abs_x, abs_y]} facing {direction}")
                 else:
-                    print("  - No input belt routes found")
+                    logger.info("  - No input belt routes found")
 
                 # Process output information paths similarly
                 if "output_information" in module_data:
@@ -599,13 +657,13 @@ class FactoryBuilder:
                                             dy = next_pos[1] - current[1]
                                             
                                             if dx > 0:
-                                                direction = "right"
+                                                direction = "east"
                                             elif dx < 0:
-                                                direction = "left"
+                                                direction = "west"
                                             elif dy > 0:
-                                                direction = "down"
+                                                direction = "south"
                                             elif dy < 0:
-                                                direction = "up"
+                                                direction = "north"
                                         elif i > 0:
                                             # Use the same direction as the previous segment for the last point
                                             prev_pos = path[i - 1]
@@ -615,13 +673,13 @@ class FactoryBuilder:
                                             dy = current[1] - prev_pos[1]
                                             
                                             if dx > 0:
-                                                direction = "right"
+                                                direction = "east"
                                             elif dx < 0:
-                                                direction = "left"
+                                                direction = "west"
                                             elif dy > 0:
-                                                direction = "down"
+                                                direction = "south"
                                             elif dy < 0:
-                                                direction = "up"
+                                                direction = "north"
                                         
                                         # Convert coordinates
                                         abs_x = block_x + current[0]
@@ -641,8 +699,9 @@ class FactoryBuilder:
                                                 "direction": direction,
                                                 "block_id": block_id
                                             })
+                            logger.info(f"Added output belt route for {item} at {[abs_x, abs_y]} facing {direction}")
                 else:
-                    print("  - No output belt routes found")
+                    logger.info("  - No output belt routes found")
                             
                 
                 # Process paths which include underground belts and splitters
@@ -654,6 +713,24 @@ class FactoryBuilder:
                             # Process regular belts
                             if "path" in path_data:
                                 path = path_data["path"]
+                                has_dest_splitter = False
+                                splitter_direction = None
+                                
+                                
+                                if "dest_splitter" in path_data and path_data["dest_splitter"] and "direction" in path_data["dest_splitter"]:
+                                    has_dest_splitter = True
+                                    dx, dy = path_data["dest_splitter"]["direction"]
+                                
+                                    if dx > 0:
+                                        splitter_direction = "east"
+                                    elif dx < 0:
+                                        splitter_direction = "west" 
+                                    elif dy > 0:
+                                        splitter_direction = "south"
+                                    elif dy < 0:
+                                        splitter_direction = "north"
+                                    
+                                    
                                 for i, (rel_x, rel_y) in enumerate(path):
                                     # Convert coordinates
                                     abs_x = block_x + rel_x
@@ -662,22 +739,41 @@ class FactoryBuilder:
                                     # Determine belt direction
                                     direction = None
                                     if i < len(path) - 1:
+                                        # For all belts except the last one, get direction from next position
                                         next_x, next_y = path[i+1]
                                         dx = next_x - rel_x
                                         dy = next_y - rel_y
                                         
-                                        # Get orientation
+                                        # Convert to compass directions
                                         if dx > 0:
-                                            direction = "right"
+                                            direction = "east"
                                         elif dx < 0:
-                                            direction = "left"
+                                            direction = "west"
                                         elif dy > 0:
-                                            direction = "down"
+                                            direction = "south"
                                         elif dy < 0:
-                                            direction = "up"
-                                    
+                                            direction = "north"
+                                    elif i > 0:
+                                        # For the last belt, use the same direction as the previous belt
+                                        prev_x, prev_y = path[i-1]
+                                        dx = rel_x - prev_x
+                                        dy = rel_y - prev_y
+                                        
+                                        # Convert to compass directions
+                                        if dx > 0:
+                                            direction = "east"
+                                        elif dx < 0:
+                                            direction = "west"
+                                        elif dy > 0:
+                                            direction = "south"
+                                        elif dy < 0:
+                                            direction = "north"
+
+                                        if has_dest_splitter:
+                                            # If there's a destination splitter, set the direction to that
+                                            direction = splitter_direction
+                                        
                                     # Add to belts if not already added (avoid duplicates)
-                                    belt_pos_str = f"{abs_x},{abs_y}"
                                     position_exists = False
                                     for belt in factory_data["entities"]["belts"]:
                                         if belt["position"][0] == abs_x and belt["position"][1] == abs_y:
@@ -691,6 +787,7 @@ class FactoryBuilder:
                                             "direction": direction,
                                             "block_id": block_id
                                         })
+                                        logger.info(f"Added belt {item_name} at {[abs_x, abs_y]} facing {direction} for block {block_id}")
                             
                             # Process underground belts
                             if "underground_segments" in path_data:
@@ -709,10 +806,14 @@ class FactoryBuilder:
                                         dx = end_rel_x - start_rel_x
                                         dy = end_rel_y - start_rel_y
                                         
-                                        if abs(dx) > abs(dy):  # Horizontal
-                                            direction = "right" if dx > 0 else "left"
-                                        else:  # Vertical
-                                            direction = "down" if dy > 0 else "up"
+                                        if dx > 0:
+                                            direction = "east"
+                                        elif dx < 0:
+                                            direction = "west"
+                                        elif dy > 0:
+                                            direction = "south"
+                                        elif dy < 0:
+                                            direction = "north"
                                         
                                         # Add entrance
                                         factory_data["entities"]["underground_belts"].append({
@@ -731,6 +832,7 @@ class FactoryBuilder:
                                             "direction": direction,
                                             "block_id": block_id
                                         })
+                                        logger.info(f"Added underground belt segment {item_name} from {[start_abs_x, start_abs_y]} to {[end_abs_x, end_abs_y]} for block {block_id}")
                             
                             # Process splitters
                             for splitter_type in ["start_splitter", "dest_splitter"]:
@@ -749,13 +851,13 @@ class FactoryBuilder:
                                         if "direction" in splitter_data:
                                             dx, dy = splitter_data["direction"]
                                             if dx > 0:
-                                                direction = "right"
+                                                direction = "east"
                                             elif dx < 0:
-                                                direction = "left"
+                                                direction = "west"
                                             elif dy > 0:
-                                                direction = "down"
+                                                direction = "south"
                                             elif dy < 0:
-                                                direction = "up"
+                                                direction = "north"
                                         
                                         factory_data["entities"]["splitters"].append({
                                             "item": item_name,
@@ -763,35 +865,10 @@ class FactoryBuilder:
                                             "direction": direction,
                                             "block_id": block_id
                                         })
+                                        logger.info(f"Added splitter {item_name} at {[abs_x, abs_y]} facing {direction} for block {block_id}")
                 
-                # Process I/O points
-                # Input points
-                for gate in block_info["input_points"]:
-                    gate_x = gate["x"]
-                    gate_y = gate["y"]
-                    
-                    factory_data["io_points"]["inputs"].append({
-                        "item": gate["item"],
-                        "position": [gate_x, gate_y],
-                        "block_id": block_id,
-                        "gate_id": gate["id"]
-                    })
-                
-                # Output points
-                for gate in block_info["output_points"]:
-                    gate_x = gate["x"]
-                    gate_y = gate["y"]
-                    
-                    factory_data["io_points"]["outputs"].append({
-                        "item": gate["item"],
-                        "position": [gate_x, gate_y],
-                        "block_id": block_id,
-                        "gate_id": gate["id"]
-                    })
-                        
-
             except Exception as e:
-                logging.error(f"Error processing module JSON for {block_id}: {e}")
+                logger.error(f"Error processing module JSON for {block_id}: {e}")
                 import traceback
                 traceback.print_exc()
         
@@ -805,6 +882,7 @@ class FactoryBuilder:
                     "gate_id": input_gate["id"],
                     "external": True
                 })
+                logger.info(f"Added external input gate {input_gate['item']} at {input_gate['position']}")
             
             for output_gate in self.external_io.get("output_gates", []):
                 factory_data["io_points"]["outputs"].append({
@@ -814,95 +892,20 @@ class FactoryBuilder:
                     "gate_id": output_gate["id"],
                     "external": True
                 })
+                logger.info(f"Added external output gate {output_gate['item']} at {output_gate['position']}")
         
-        # Add gate connections from Z3 solver
-        if self.gate_connections:
-            for connection in self.gate_connections:
-                source_gate, target_gate = connection
-                
-                # Handle different gate object types
-                try:
-                    # Check if source_gate is a dictionary, a Gate object, or another type
-                    if isinstance(source_gate, dict):
-                        source_data = {
-                            "block_id": source_gate.get("block_id", ""),
-                            "gate_id": source_gate.get("gate_id", ""),
-                            "position": [source_gate.get("x", 0), source_gate.get("y", 0)],
-                            "item": source_gate.get("item", "")
-                        }
-                    elif hasattr(source_gate, "block_id") and hasattr(source_gate, "gate_id"):
-                        # It's a Gate object with attributes
-                        source_data = {
-                            "block_id": getattr(source_gate, "block_id", ""),
-                            "gate_id": getattr(source_gate, "gate_id", ""),
-                            "position": [getattr(source_gate, "x", 0), getattr(source_gate, "y", 0)],
-                            "item": getattr(source_gate, "item", "")
-                        }
-                    else:
-                        # Fallback with minimal information
-                        logging.warning(f"Unknown source gate format: {type(source_gate)}")
-                        source_data = {
-                            "block_id": str(source_gate),
-                            "gate_id": str(source_gate),
-                            "position": [0, 0],
-                            "item": ""
-                        }
-                    
-                    # Same check for target_gate
-                    if isinstance(target_gate, dict):
-                        target_data = {
-                            "block_id": target_gate.get("block_id", ""),
-                            "gate_id": target_gate.get("gate_id", ""),
-                            "position": [target_gate.get("x", 0), target_gate.get("y", 0)],
-                            "item": target_gate.get("item", "")
-                        }
-                    elif hasattr(target_gate, "block_id") and hasattr(target_gate, "gate_id"):
-                        # It's a Gate object with attributes
-                        target_data = {
-                            "block_id": getattr(target_gate, "block_id", ""),
-                            "gate_id": getattr(target_gate, "gate_id", ""),
-                            "position": [getattr(target_gate, "x", 0), getattr(target_gate, "y", 0)],
-                            "item": getattr(target_gate, "item", "")
-                        }
-                    else:
-                        # Fallback with minimal information
-                        logging.warning(f"Unknown target gate format: {type(target_gate)}")
-                        target_data = {
-                            "block_id": str(target_gate),
-                            "gate_id": str(target_gate),
-                            "position": [0, 0],
-                            "item": ""
-                        }
-                    
-                    factory_data["connections"].append({
-                        "source": source_data,
-                        "target": target_data
-                    })
-                except Exception as e:
-                    logging.error(f"Error processing gate connection: {e}")
-                    continue
-        
+
         # If no path specified, use default
-        if not path:
-            path = f"Factorys/{self.output_item}_factory.json"
-        
-        # Fix the path if it's a list
-        if isinstance(path, list):
-            path = str(path[0]) if path else f"Factorys/{self.output_item}_factory.json"
-            
-                
-                # Ensure directory exists
-        directory = os.path.dirname(path)
-        if directory:
-            os.makedirs(directory, exist_ok=True)
+        if not output_json_path:
+            output_json_path = f"Factorys/factory_{self.output_item}_{self.amount}.json"
         
         # Save to file
-        with open(path, 'w') as f:
+        with open(output_json_path, 'w') as f:
             json.dump(factory_data, f, indent=2)
         
-        logging.info(f"Factory JSON data saved to {path}")
+        logger.info(f"Factory JSON data saved to {output_json_path}")
         
-        return factory_data, path
+        return factory_data, output_json_path
     
     def determine_gate_connections(self):
         """Determine which gates should be connected between blocks"""
@@ -969,7 +972,7 @@ class FactoryBuilder:
                     connections.append((output, best_input))
                     inputs = [i for i in inputs if i != best_input]
         
-        logging.info(f"Found {len(connections)} connections between different blocks")
+        logger.info(f"Found {len(connections)} connections between different blocks")
         return connections
 
 
@@ -981,8 +984,7 @@ class FactoryBuilder:
             base_name = block_key.split('_')[1]
             image_path = os.path.join('assets', f'{base_name}.png')
             
-            
-            print(image_path)
+          
             if os.path.exists(image_path):
                 self.images[block_key] = pygame.image.load(image_path)
             else:
@@ -1234,7 +1236,7 @@ class FactoryBuilder:
         # Save the image if requested
         if save_path:
             pygame.image.save(window, save_path)
-            print(f"Factory visualization saved to {save_path}")
+            logger.info(f"Factory visualization saved to {save_path}")
         
         # Wait for user to close the window or run for a limited time
         waiting = True
@@ -1252,7 +1254,7 @@ class FactoryBuilder:
         Define external input/output points for the factory on the edges.
         This determines which items need external connections and where they should be placed.
         """
-        logging.info("Defining factory I/O points")
+        logger.info("Defining factory I/O points")
         
         # Collect all unique items that need external I/O
         external_inputs = set()  # Items that need to be imported from outside
@@ -1281,9 +1283,9 @@ class FactoryBuilder:
         # Items both produced and consumed are internal
         internal_items = all_produced_items.intersection(all_consumed_items)
         
-        logging.info(f"External inputs: {external_inputs}")
-        logging.info(f"External outputs: {external_outputs}")
-        logging.info(f"Internal items: {internal_items}")
+        logger.info(f"External inputs: {external_inputs}")
+        logger.info(f"External outputs: {external_outputs}")
+        logger.info(f"Internal items: {internal_items}")
         
         # Now create I/O points for external items
         self.external_io = {
@@ -1614,7 +1616,7 @@ class FactoryBuilder:
             
             # Store the placement info
             placements[item] = {"edge": selected_edge, "position": selected_position}
-            logging.debug(f"Selected {selected_edge} at position {selected_position} for {item}")
+            logger.debug(f"Selected {selected_edge} at position {selected_position} for {item}")
         
         pygame.quit()
         
@@ -1638,7 +1640,7 @@ class FactoryBuilder:
             else:
                 self.external_io["output_gates"].append(fixed_gate)
             
-            logging.info(f"Created fixed {io_type} gate for {item} at position {position} on {placement['edge']} edge")
+            logger.info(f"Created fixed {io_type} gate for {item} at position {position} on {placement['edge']} edge")
 
     def apply_io_constraints_to_solver(self):
         """
@@ -1646,11 +1648,11 @@ class FactoryBuilder:
         Instead of constraining existing gates, this adds fixed I/O gates to the solver.
         """
         if not hasattr(self, 'external_io') or not self.external_io:
-            logging.warning("No external I/O defined, skipping I/O constraints")
+            logger.warning("No external I/O defined, skipping I/O constraints")
             return
         
         if not hasattr(self, 'z3_solver') or not self.z3_solver:
-            logging.error("Z3 solver not initialized, cannot apply I/O constraints")
+            logger.error("Z3 solver not initialized, cannot apply I/O constraints")
             return
         
         # Add fixed external input gates
@@ -1664,7 +1666,7 @@ class FactoryBuilder:
                 edge=input_gate["edge"]
             )
             
-            logging.info(f"Added fixed input gate {input_gate['id']} at position {input_gate['position']}")
+            logger.info(f"Added fixed input gate {input_gate['id']} at position {input_gate['position']}")
         
         # Add fixed external output gates
         for output_gate in self.external_io["output_gates"]:
@@ -1677,7 +1679,7 @@ class FactoryBuilder:
                 edge=input_gate["edge"]
             )
             
-            logging.info(f"Added fixed output gate {output_gate['id']} at position {output_gate['position']}")
+            logger.info(f"Added fixed output gate {output_gate['id']} at position {output_gate['position']}")
 
     def plan_inter_block_paths(self, factory_data):
         """
@@ -1689,10 +1691,10 @@ class FactoryBuilder:
         Returns:
             tuple: (paths, inserters) - dictionaries of paths and inserters
         """
-        logging.info("Planning inter-block paths with detailed obstacles...")
+        logger.info("Planning inter-block paths with detailed obstacles...")
         
         if not self.final_blocks or not self.gate_connections:
-            logging.error("Cannot plan paths: No blocks or gate connections available")
+            logger.error("Cannot plan paths: No blocks or gate connections available")
             return {}, {}
         
         # Calculate the overall grid size based on final_x and final_y
@@ -1762,37 +1764,52 @@ class FactoryBuilder:
             plt.grid(True, alpha=0.3)
             plt.savefig("factory_detailed_obstacle_map.png")
             plt.close()
-            logging.info("Saved detailed obstacle map visualization")
+            logger.info("Saved detailed obstacle map visualization")
         except Exception as e:
-            logging.warning(f"Could not create obstacle map visualization: {e}")
+            logger.warning(f"Could not create obstacle map visualization: {e}")
         
         # Prepare connection points for the pathfinder
         connection_points = {}
         
         # Process all gate connections
         for i, connection in enumerate(self.gate_connections):
+            
+            logger.debug(f"Processing connection {i}: {connection}")
+            
             # Ensure we have a valid connection tuple
             if isinstance(connection, tuple) and len(connection) == 2:
                 source_gate, target_gate = connection
                 
                 try:
-                    # Extract source gate data
-                    if isinstance(source_gate, dict):
+                    # Handle both dictionary and Gate object formats
+                    if hasattr(source_gate, 'x') and hasattr(source_gate, 'y'):  # Gate object
+                        # Extract from Z3 solver model
+                        source_x = self.final_blocks[source_gate.id.split("_output")[0]]["x"] + source_gate.relative_x
+                        source_y = self.final_blocks[source_gate.id.split("_output")[0]]["y"] + source_gate.relative_y
+                    
+                        item = source_gate.item
+                        source_id = source_gate.id
+                    elif isinstance(source_gate, dict):  # Dictionary
                         source_x = int(source_gate['x'])
                         source_y = int(source_gate['y'])
                         item = source_gate['item']
                         source_id = source_gate.get('gate_id', f'unknown_source_{i}')
                     else:
-                        logging.error(f"Source gate is not a dictionary: {source_gate}")
+                        logger.error(f"Source gate has unsupported type: {type(source_gate)}")
                         continue
                     
-                    # Extract target gate data
-                    if isinstance(target_gate, dict):
+                    # Handle both dictionary and Gate object formats for target
+                    if hasattr(target_gate, 'x') and hasattr(target_gate, 'y'):  # Gate object
+                        # Extract from Z3 solver model
+                        target_x = self.final_blocks[target_gate.id.split("_input")[0]]["x"] + target_gate.relative_x
+                        target_y = self.final_blocks[target_gate.id.split("_input")[0]]["y"] + target_gate.relative_y
+                        target_id = target_gate.id
+                    elif isinstance(target_gate, dict):  # Dictionary
                         target_x = int(target_gate['x'])
                         target_y = int(target_gate['y'])
                         target_id = target_gate.get('gate_id', f'unknown_target_{i}')
                     else:
-                        logging.error(f"Target gate is not a dictionary: {target_gate}")
+                        logger.error(f"Target gate has unsupported type: {type(target_gate)}")
                         continue
                     
                     # Create connection ID
@@ -1814,14 +1831,14 @@ class FactoryBuilder:
                         'target_id': target_id
                     }
                     
-                    logging.debug(f"Added connection {connection_id}: {item} from {source_id} at ({source_x}, {source_y}) " +
-                                  f"to {target_id} at ({target_x}, {target_y})")
+                    logger.debug(f"Added connection {connection_id}: {item} from {source_id} at ({source_x}, {source_y}) " +
+                                f"to {target_id} at ({target_x}, {target_y})")
                     
-                except (TypeError, KeyError) as e:
-                    logging.error(f"Error processing connection {i}: {e}")
+                except (TypeError, KeyError, AttributeError) as e:
+                    logger.error(f"Error processing connection {i}: {e}")
                     continue
             else:
-                logging.warning(f"Invalid connection format at index {i}: {connection}")
+                logger.warning(f"Invalid connection format at index {i}: {connection}")
         
         # Process external I/O points
         if "io_points" in factory_data:
@@ -1833,7 +1850,7 @@ class FactoryBuilder:
                         obstacle_map[pos_y][pos_x] = 0
         
         if not connection_points:
-            logging.warning("No valid connections to route!")
+            logger.warning("No valid connections to route!")
             return {}, {}
         
         # Create and run the MultiAgentPathfinder
@@ -1849,7 +1866,7 @@ class FactoryBuilder:
             
             # Find paths for all connections
             paths, inserters = pathfinder.find_paths_for_all_items()
-            logging.info(f"Found paths for {len(paths)} connections out of {len(connection_points)} requested")
+            logger.info(f"Found paths for {len(paths)} connections out of {len(connection_points)} requested")
             
             # Save the paths for later use
             self.inter_block_paths = paths
@@ -1859,14 +1876,14 @@ class FactoryBuilder:
             try:
                 pathfinder.visualize_grid(filename="factory_detailed_obstacle_map_with_paths.png")
                 pathfinder.visualize_paths(filename_template="inter_block_path_detailed_{}.png")
-                logging.info("Path visualizations saved to disk")
+                logger.info("Path visualizations saved to disk")
             except Exception as e:
-                logging.error(f"Failed to visualize paths: {e}")
+                logger.error(f"Failed to visualize paths: {e}")
             
             return paths, inserters
             
         except Exception as e:
-            logging.error(f"Error in pathfinding: {e}")
+            logger.error(f"Error in pathfinding: {e}")
             import traceback
             traceback.print_exc()
             return {}, {}
@@ -1903,14 +1920,14 @@ def main():
     log_method_time(item=output_item,amount=amount,method_name="solve",assemblers_per_recipie=max_assembler_per_blueprint,num_subfactories=builder.get_num_subfactories(),start_time=start_time,end_time=end_time)
     
 
-    builder.visualize_factory(save_path=f"Factorys/{output_item}_factory.png")
+    #builder.visualize_factory(save_path=f"Factorys/{output_item}_factory.png")
 
     
 
 
 def log_method_time(item, amount, method_name,assemblers_per_recipie,num_subfactories,start_time, end_time):
     execution_time = end_time - start_time
-    logging.info(f"Execution time for {method_name}: {execution_time:.4f} seconds.")
+    logger.info(f"Execution time for {method_name}: {execution_time:.4f} seconds.")
     
     # Open the CSV file and append the data
     try:
@@ -1918,7 +1935,7 @@ def log_method_time(item, amount, method_name,assemblers_per_recipie,num_subfact
             writer = csv.writer(file)
             writer.writerow([item, amount, method_name,assemblers_per_recipie,num_subfactories,execution_time])
     except Exception as e:
-        logging.error(f"Error logging execution time for {method_name}: {e}")
+        logger.error(f"Error logger execution time for {method_name}: {e}")
         
  
 def plot_csv_data(file_path):
@@ -1975,19 +1992,11 @@ def create_blueprint_from_json(json_path, output_path=None):
         bool: True if successful, False otherwise
     """
     try:
-        import json
-        import os
-        from draftsman.blueprintable import Blueprint
-        from draftsman.constants import Direction
-        from draftsman.entity import Inserter, AssemblingMachine, TransportBelt, UndergroundBelt
-        from draftsman.entity import Splitter as BlueprintSplitter
-        import logging
-        
         # Load the JSON file
         with open(json_path, 'r') as f:
             factory_data = json.load(f)
         
-        logging.info(f"Creating blueprint from {json_path}")
+        logger.info(f"Creating blueprint from {json_path}")
         
         # Set output path if not provided
         if output_path is None:
@@ -2074,43 +2083,9 @@ def create_blueprint_from_json(json_path, output_path=None):
                 blueprint.entities.append(inserter)
                 occupied_positions.add(position)
         
-        print("3. Placing transport belts...")
-        # Place regular belts from the JSON data
-        if "entities" in factory_data and "belts" in factory_data["entities"]:
-            for belt_data in factory_data["entities"]["belts"]:
-                item = belt_data["item"]
-                position = tuple(belt_data["position"])
-                direction = belt_data.get("direction", "north")  # Default to north if not specified
-                
-                # Skip if position is occupied
-                if position in occupied_positions:
-                    print(f"  - Skipping belt at {position} due to overlap")
-                    continue
-                
-                # Convert direction string to draftsman Direction constant
-                direction_map = {
-                    "up": Direction.NORTH,
-                    "right": Direction.EAST,
-                    "down": Direction.SOUTH,
-                    "left": Direction.WEST,
-                    "north": Direction.NORTH,
-                    "east": Direction.EAST,
-                    "south": Direction.SOUTH,
-                    "west": Direction.WEST
-                }
-                blueprint_direction = direction_map.get(direction, Direction.NORTH)
-                
-                # Create transport belt entity
-                print(f"  - Placing transport belt for {item} at {position} facing {blueprint_direction}")
-                belt = TransportBelt(
-                    name="transport-belt",
-                    position=position,
-                    direction=blueprint_direction
-                )
-                blueprint.entities.append(belt)
-                occupied_positions.add(position)
         
-        print("4. Placing underground belts...")
+        
+        print("3. Placing underground belts...")
         # Place underground belts from the JSON data
         if "entities" in factory_data and "underground_belts" in factory_data["entities"]:
             for ug_data in factory_data["entities"]["underground_belts"]:
@@ -2126,10 +2101,6 @@ def create_blueprint_from_json(json_path, output_path=None):
                 
                 # Convert direction string to draftsman Direction constant
                 direction_map = {
-                    "up": Direction.NORTH,
-                    "right": Direction.EAST,
-                    "down": Direction.SOUTH,
-                    "left": Direction.WEST,
                     "north": Direction.NORTH,
                     "east": Direction.EAST,
                     "south": Direction.SOUTH,
@@ -2151,7 +2122,7 @@ def create_blueprint_from_json(json_path, output_path=None):
                 blueprint.entities.append(ug_belt)
                 occupied_positions.add(position)
         
-        print("5. Placing splitters...")
+        print("4. Placing splitters...")
         # Place splitters from the JSON data
         if "entities" in factory_data and "splitters" in factory_data["entities"]:
             for splitter_data in factory_data["entities"]["splitters"]:
@@ -2166,10 +2137,6 @@ def create_blueprint_from_json(json_path, output_path=None):
                 
                 # Convert direction string to draftsman Direction constant
                 direction_map = {
-                    "up": Direction.NORTH,
-                    "right": Direction.EAST,
-                    "down": Direction.SOUTH,
-                    "left": Direction.WEST,
                     "north": Direction.NORTH,
                     "east": Direction.EAST,
                     "south": Direction.SOUTH,
@@ -2196,14 +2163,104 @@ def create_blueprint_from_json(json_path, output_path=None):
                     # Vertical splitter (takes up two vertical tiles)
                     occupied_positions.add((position[0], position[1] + 1))
         
+        
+                
+        print("5. Placing transport belts...")
+        # Place regular belts from the JSON data
+        if "entities" in factory_data and "belts" in factory_data["entities"]:
+            for belt_data in factory_data["entities"]["belts"]:
+                item = belt_data["item"]
+                position = tuple(belt_data["position"])
+                direction = belt_data.get("direction", "north")  # Default to north if not specified
+                
+                # Skip if position is occupied
+                if position in occupied_positions:
+                    print(f"  - Skipping belt at {position} due to overlap")
+                    continue
+                
+                # Convert direction string to draftsman Direction constant
+                direction_map = {
+                    "north": Direction.NORTH,
+                    "east": Direction.EAST,
+                    "south": Direction.SOUTH,
+                    "west": Direction.WEST
+                }
+                blueprint_direction = direction_map.get(direction, Direction.NORTH)
+                
+                # Create transport belt entity
+                print(f"  - Placing transport belt for {item} at {position} facing {blueprint_direction}")
+                belt = TransportBelt(
+                    name="transport-belt",
+                    position=position,
+                    direction=blueprint_direction
+                )
+                blueprint.entities.append(belt)
+                occupied_positions.add(position)
+        
+        print("6. Placing external I/O points as constant combinators...")
+        if "io_points" in factory_data and "inputs" in factory_data["io_points"]:
+            for io_data in factory_data["io_points"]["inputs"]:
+                if io_data["external"]:
+                    item = io_data["item"]
+                    position = tuple(io_data["position"])
+                    
+                    # Skip if position is occupied
+                    if position in occupied_positions:
+                        print(f"  - Skipping input point at {position} due to overlap")
+                        continue
+                
+                    print(f"  - Placing input point for {item} at {position}")
+                    constant_combinator = ConstantCombinator()
+                    constant_combinator.tile_position = position
+                    constant_combinator.direction = Direction.SOUTH
+                    section = constant_combinator.add_section()
+                    section.filters = [{
+                                "index": 1,
+                                "name": item,  # The name should be at top level, not nested in signal
+                                "count": 1,
+                                "comparator": "=",
+                    }]
+                    constant_combinator.id = "output_" + item
+                    blueprint.entities.append(constant_combinator)
+                    
+                    occupied_positions.add(position)
+        
+        if "io_points" in factory_data and "outputs" in factory_data["io_points"]:
+            for io_data in factory_data["io_points"]["outputs"]:
+                if io_data["external"]:
+                    item = io_data["item"]
+                    position = tuple(io_data["position"])
+                    
+                    # Skip if position is occupied
+                    if position in occupied_positions:
+                        print(f"  - Skipping output point at {position} due to overlap")
+                        continue
+    
+                    print(f"  - Placing output point for {item} at {position}")
+                    constant_combinator = ConstantCombinator()
+                    constant_combinator.tile_position = position
+                    constant_combinator.direction = Direction.SOUTH
+                    section = constant_combinator.add_section()
+                    section.filters = [{
+                                "index": 1,
+                                "name": item,  # The name should be at top level, not nested in signal
+                                "count": 1,
+                                "comparator": "="
+                    }]
+                    constant_combinator.id = "output_" + item
+                    
+                    blueprint.entities.append(constant_combinator)
+                    occupied_positions.add(position)
+        
+        
         # Export the blueprint to a file
-        print(f"6. Exporting blueprint to {output_path}...")
+        print(f"7. Exporting blueprint to {output_path}...")
         with open(output_path, "w") as f:
             f.write(blueprint.to_string())
             
-        logging.info(f"Blueprint successfully exported to {output_path}")
+        logger.info(f"Blueprint successfully exported to {output_path}")
         return True
-            
+ 
     except Exception as e:
         print(f"Error creating blueprint: {e}")
         import traceback
@@ -2544,9 +2601,9 @@ if __name__ == "__main__":
     #plot_csv_data("execution_times_big_factory.csv")
     main()
     
-    json_file_path = "BigFactory.json"
-    output_file_path = "Blueprints/BigFactory_blueprint.txt"
-    save_image_path = "Factorys/Factory_visualization.png"
-    create_blueprint_from_json(json_file_path, output_file_path)
-    visualize_json(json_file_path, cell_size=30, save_path=save_image_path)
+    json_file_path = "Factorys/factory_electronic-circuit_200.json"
+    output_file_path = "Blueprints/factory_electronic-circuit_200.txt"
+    #save_image_path = "Factorys/Factory_visualization.png"
+    #create_blueprint_from_json(json_file_path, output_file_path)
+    #visualize_json(json_file_path, cell_size=30, save_path=save_image_patsh)
 
