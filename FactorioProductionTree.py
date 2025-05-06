@@ -10,6 +10,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from z3 import And , Or
 from SMT_Solver  import SMTSolver
+from GurobiSolver import GurobiSolver
 import seaborn as sns
 import numpy as np
 from draftsman.blueprintable import Blueprint
@@ -751,8 +752,11 @@ class FactorioProductionTree:
     def solve(self,production_data,sequential,solver_type):
         
         # Initialize solver with grid size and production data
-        if self.z3_solver is None:
+        if self.z3_solver is None and solver_type == "z3":
             self.z3_solver = SMTSolver(self.grid_width,self.grid_height, production_data,solver_type)
+        
+        if self.z3_solver is None and solver_type == "gurobi":
+            self.z3_solver = GurobiSolver(self.grid_width,self.grid_height, production_data)
         # Process the input to place assemblers
         
         if sequential:
@@ -765,9 +769,14 @@ class FactorioProductionTree:
             self.z3_solver.solve()
         
     def add_manual_IO_constraints(self,production_data,solver_type):
-        if self.z3_solver is None:
+        
+        
+        
+        if self.z3_solver is None and solver_type == "z3":
             self.z3_solver = SMTSolver(self.grid_width,self.grid_height, production_data,solver_type)
         
+        if self.z3_solver is None and solver_type == "gurobi":
+            self.z3_solver = GurobiSolver(self.grid_width,self.grid_height, production_data)
         
         
         self.z3_solver.add_manuel_IO_constraints(self.input_information,self.output_information)

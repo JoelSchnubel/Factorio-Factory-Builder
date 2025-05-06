@@ -1,0 +1,90 @@
+2025-05-06 17:32:09,401 - Pathfinder - INFO - Processing items in order: ['copper-plate']
+2025-05-06 17:32:09,401 - Pathfinder - DEBUG - All pairs sorted by heuristic distance: [(9, (0, 9), (0, 0), None, None)]
+2025-05-06 17:32:09,402 - Pathfinder - DEBUG - Path found: [(0, 9), (0, 8), (0, 7), (0, 6), (0, 5), (0, 4), (0, 3), (0, 2), (0, 1), (0, 0)] with underground segments: {}
+2025-05-06 17:32:09,402 - Pathfinder - INFO - Found better path for copper-plate from (0, 9) to (0, 0) with length 10
+2025-05-06 17:32:09,402 - Pathfinder - DEBUG - Adding path for copper-plate from (0, 9) to (0, 0)
+2025-05-06 17:32:09,402 - Pathfinder - DEBUG - ======================================================
+2025-05-06 17:32:09,402 - Pathfinder - DEBUG - Marking path on grid for copper-plate from (0, 9) to (0, 0)
+2025-05-06 17:32:09,403 - Pathfinder - DEBUG - BEFORE :Working grid:
+[[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]]
+2025-05-06 17:32:09,403 - Pathfinder - DEBUG - AFTER: Working grid:
+[[1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]]
+2025-05-06 17:32:09,403 - Pathfinder - DEBUG - ======================================================
+2025-05-06 17:32:10,540 - Pathfinder - INFO - Processing items in order: ['iron-plate']
+2025-05-06 17:32:10,540 - Pathfinder - DEBUG - All pairs sorted by heuristic distance: [(9, (12, 9), (12, 0), None, None)]
+2025-05-06 17:32:10,540 - Pathfinder - DEBUG - Path found: [(12, 9), (12, 8), (12, 7), (12, 6), (12, 5), (12, 4), (12, 3), (12, 2), (12, 1), (12, 0)] with underground segments: {}
+2025-05-06 17:32:10,540 - Pathfinder - INFO - Found better path for iron-plate from (12, 9) to (12, 0) with length 10
+2025-05-06 17:32:10,540 - Pathfinder - DEBUG - Adding path for iron-plate from (12, 9) to (12, 0)
+2025-05-06 17:32:10,540 - Pathfinder - DEBUG - ======================================================
+2025-05-06 17:32:10,541 - Pathfinder - DEBUG - Marking path on grid for iron-plate from (12, 9) to (12, 0)
+2025-05-06 17:32:10,542 - Pathfinder - DEBUG - BEFORE :Working grid:
+[[1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]]
+2025-05-06 17:32:10,542 - Pathfinder - DEBUG - AFTER: Working grid:
+[[1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]]
+2025-05-06 17:32:10,542 - Pathfinder - DEBUG - ======================================================
+2025-05-06 17:32:12,274 - Pathfinder - INFO - Processing items in order: ['electronic-circuit']
+2025-05-06 17:32:12,274 - Pathfinder - DEBUG - All pairs sorted by heuristic distance: [(9, (15, 0), (15, 9), None, None)]
+2025-05-06 17:32:12,275 - Pathfinder - DEBUG - Path found: [(15, 0), (15, 1), (15, 2), (15, 3), (15, 4), (15, 5), (15, 6), (15, 7), (15, 8), (15, 9)] with underground segments: {}
+2025-05-06 17:32:12,275 - Pathfinder - INFO - Found better path for electronic-circuit from (15, 0) to (15, 9) with length 10
+2025-05-06 17:32:12,275 - Pathfinder - DEBUG - Adding path for electronic-circuit from (15, 0) to (15, 9)
+2025-05-06 17:32:12,275 - Pathfinder - DEBUG - ======================================================
+2025-05-06 17:32:12,275 - Pathfinder - DEBUG - Marking path on grid for electronic-circuit from (15, 0) to (15, 9)
+2025-05-06 17:32:12,276 - Pathfinder - DEBUG - BEFORE :Working grid:
+[[1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]]
+2025-05-06 17:32:12,277 - Pathfinder - DEBUG - AFTER: Working grid:
+[[1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]]
+2025-05-06 17:32:12,277 - Pathfinder - DEBUG - ======================================================

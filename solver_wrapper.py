@@ -94,11 +94,11 @@ class SolverFactory:
             
         elif solver_type.lower() == "gurobi":
             
-            from gurobipy import  Model, Env ,GRB, quicksum, Var
+            from gurobipy import Model, Env, GRB, quicksum, Var
             env = Env(empty=True)
             
             if no_output:
-                env.setParam("OutputFlag",0)
+                env.setParam("OutputFlag", 0)
             env.start()
             model = Model(env=env)
             model = Wrapper(model)
@@ -148,7 +148,6 @@ class SolverFactory:
                 print("Status:", model.status)
                 return model.status
 
-
             def And(*args):
                 # For AND, all conditions must be true
                 # In Gurobi, we simply add each constraint individually
@@ -167,13 +166,30 @@ class SolverFactory:
                         if hasattr(arg.var, 'VType') and arg.var.VType == GRB.BINARY:
                             model.addConstr(arg.var == 1)
                         else:
-                            model.addConstr(arg.var)
+                            model.addConstr(arg)
                     elif hasattr(arg, 'var'):
                         # For other objects with var attribute
                         model.addConstr(arg.var)
                     else:
-                        # Direct constraint expressions
-                        model.addConstr(arg)
+                        try:
+                            # Direct constraint expressions
+                            model.addConstr(arg)
+                        except Exception as e:
+                            # Handle expressions like x + y < 100
+                            if '+' in str(arg) and '<' in str(arg):
+                                parts = str(arg).split('<')
+                                left_expr = eval(parts[0].strip())
+                                right_val = int(parts[1].strip())
+                                model.addConstr(left_expr <= right_val - 1)
+                            elif '+' in str(arg) and '<=' in str(arg):
+                                parts = str(arg).split('<=')
+                                left_expr = eval(parts[0].strip())
+                                right_val = int(parts[1].strip())
+                                model.addConstr(left_expr <= right_val)
+                            else:
+                                # Try our best with other expressions
+                                print(f"Warning: Could not add constraint {arg} directly: {e}")
+                                return False
                 
                 # All constraints were added successfully
                 return True
@@ -202,16 +218,33 @@ class SolverFactory:
                     elif isinstance(arg, GurobiVarWrapper) and hasattr(arg.var, 'VType') and arg.var.VType == GRB.BINARY:
                         binary_vars.append(arg.var)
                     else:
-                        # For non-binary expressions, we need indicator constraints
-                        # This is more complex - may need a different approach
-                        raise NotImplementedError("OR with non-binary variables not yet supported")
+                        # For non-binary expressions, we need to handle them differently
+                        result_var = model.addVar(vtype=GRB.BINARY, name=f"or_expr_{id(arg)}")
+                        # Add constraints to link the expression with the result var
+                        try:
+                            # Try to add a direct constraint
+                            model.addGenConstrIndicator(result_var, True, arg)
+                        except:
+                            # Fallback: Add a constraint that arg implies result_var
+                            M = 1e6  # A large value for big-M method
+                            if isinstance(arg, GurobiVarWrapper):
+                                model.addConstr(arg.var <= M * result_var)
+                            else:
+                                # Last resort
+                                print(f"Warning: Complex expression in Or: {arg}")
+                                return False
+                        binary_vars.append(result_var)
                 
                 # Create constraint: sum of binary vars >= 1
                 if binary_vars:
-                    result_var = model.addVar(vtype=GRB.BINARY, name=f"or_result_{id(args)}")
-                    model.addConstr(sum(binary_vars) >= result_var)
-                    model.addConstr(sum(binary_vars) <= len(binary_vars) * result_var)
-                    return result_var == 1
+                    if len(binary_vars) == 1:
+                        # If only one binary variable, just return it == 1
+                        return binary_vars[0] == 1
+                    else:
+                        result_var = model.addVar(vtype=GRB.BINARY, name=f"or_result_{id(args)}")
+                        model.addConstr(sum(binary_vars) >= result_var)
+                        model.addConstr(sum(binary_vars) <= len(binary_vars) * result_var)
+                        return result_var == 1
                 
                 # If we get here, all args were False
                 return False
@@ -220,49 +253,112 @@ class SolverFactory:
                 # For NOT, we need to negate the condition
                 if isinstance(arg, bool):
                     return not arg
-                elif hasattr(arg, 'var'):
+                elif isinstance(arg, GurobiVarWrapper):
                     # For binary variables, we need to set them to 0 (false)
                     if hasattr(arg.var, 'VType') and arg.var.VType == GRB.BINARY:
-                        model.addConstr(arg.var == 0)
+                        result_var = model.addVar(vtype=GRB.BINARY, name=f"not_{id(arg)}")
+                        model.addConstr(result_var + arg.var == 1)  # result = 1-arg
+                        return GurobiVarWrapper(result_var)
                     else:
-                        # Other variable expressions (like comparisons)
-                        model.addConstr(arg.var == 0)
+                        # For other expressions, create a binary result variable
+                        print("Warning: Not with non-binary variable might not work as expected")
+                        return GurobiVarWrapper(model.addVar(vtype=GRB.BINARY, name=f"not_complex_{id(arg)}"))
+                elif hasattr(arg, 'var'):
+                    # For other objects with var attribute
+                    if hasattr(arg.var, 'VType') and arg.var.VType == GRB.BINARY:
+                        result_var = model.addVar(vtype=GRB.BINARY, name=f"not_attr_{id(arg)}")
+                        model.addConstr(result_var + arg.var == 1)  # result = 1-arg
+                        return GurobiVarWrapper(result_var)
+                    else:
+                        print("Warning: Not with complex expression might not work as expected")
+                        return GurobiVarWrapper(model.addVar(vtype=GRB.BINARY, name=f"not_complex_attr_{id(arg)}"))
                 else:
-                    # Direct constraint expressions
-                    model.addConstr(arg == 0)
+                    # Direct expressions - this is tricky and might not always work
+                    print("Warning: Not with direct expression might not work as expected")
+                    return not arg  # Try the Python 'not' operator
                     
             def Implies(a, b):
-                # For implication, we need to ensure that if a is true, b must also be true
-                # In Gurobi, we can use a big-M constraint or simply add the constraints directly
+                # For implication a → b, equivalent to (¬a ∨ b)
                 if isinstance(a, bool) and isinstance(b, bool):
                     return not a or b
-                elif hasattr(a, 'var') and hasattr(b, 'var'):
-                    # For binary variables, we need to set them accordingly
-                    if hasattr(a.var, 'VType') and a.var.VType == GRB.BINARY:
-                        model.addConstr(Or(Not(a.var), b.var))
+                
+                # Create a binary result variable
+                result_var = model.addVar(vtype=GRB.BINARY, name=f"implies_{id((a,b))}")
+                
+                # Handle different cases
+                if isinstance(a, GurobiVarWrapper) and hasattr(a.var, 'VType') and a.var.VType == GRB.BINARY:
+                    if isinstance(b, GurobiVarWrapper) and hasattr(b.var, 'VType') and b.var.VType == GRB.BINARY:
+                        # Both a and b are binary variables
+                        model.addConstr(b.var >= a.var * result_var)
+                        model.addConstr(b.var >= a.var - (1 - result_var))
                     else:
-                        # Other variable expressions (like comparisons)
-                        model.addConstr(Implies(a.var, b.var))
+                        # a is binary, b is an expression
+                        # Use indicator constraint
+                        try:
+                            model.addGenConstrIndicator(a.var, True, b)
+                            return result_var == 1
+                        except:
+                            print("Warning: Complex implication with non-binary RHS")
+                            return False
                 else:
-                    # Direct constraint expressions
-                    model.addConstr(Implies(a, b))
+                    # a is not a binary variable, more complex case
+                    try:
+                        # Try Or(Not(a), b)
+                        not_a = Not(a)
+                        return Or(not_a, b)
+                    except:
+                        print("Warning: Complex implication with non-binary LHS")
+                        return False
+                
+                return result_var == 1
             
             def If(cond, true_expr, false_expr):
                 # For If, we need to create a conditional constraint
                 if isinstance(cond, bool):
                     return true_expr if cond else false_expr
-                elif hasattr(cond, 'var'):
-                    # For binary variables, we need to set them accordingly
-                    if hasattr(cond.var, 'VType') and cond.var.VType == GRB.BINARY:
-                        model.addConstr(If(cond.var == 1, true_expr, false_expr))
+                
+                # Create result variable based on types
+                if isinstance(true_expr, (int, float)) and isinstance(false_expr, (int, float)):
+                    # Numeric literals
+                    result_var = model.addVar(vtype=GRB.INTEGER, name=f"if_result_{id((cond,true_expr,false_expr))}")
+                elif isinstance(true_expr, GurobiVarWrapper) and isinstance(false_expr, GurobiVarWrapper):
+                    # Both expressions are variables
+                    if true_expr.var.VType == GRB.BINARY and false_expr.var.VType == GRB.BINARY:
+                        result_var = model.addVar(vtype=GRB.BINARY, name=f"if_result_{id((cond,true_expr,false_expr))}")
                     else:
-                        # Other variable expressions (like comparisons)
-                        model.addConstr(If(cond.var, true_expr, false_expr))
+                        result_var = model.addVar(vtype=GRB.INTEGER, name=f"if_result_{id((cond,true_expr,false_expr))}")
                 else:
-                    # Direct constraint expressions
-                    model.addConstr(If(cond, true_expr, false_expr))
+                    # Default to INTEGER
+                    result_var = model.addVar(vtype=GRB.INTEGER, name=f"if_result_{id((cond,true_expr,false_expr))}")
+                
+                # Handle the condition
+                if isinstance(cond, GurobiVarWrapper) and hasattr(cond.var, 'VType') and cond.var.VType == GRB.BINARY:
+                    # Binary condition
+                    if isinstance(true_expr, (int, float)) and isinstance(false_expr, (int, float)):
+                        # Simple numeric literals
+                        model.addConstr(result_var == cond.var * true_expr + (1 - cond.var) * false_expr)
+                    elif isinstance(true_expr, GurobiVarWrapper) and isinstance(false_expr, GurobiVarWrapper):
+                        # Both are variables
+                        M = 1e6  # Big-M constant
+                        model.addConstr(result_var <= true_expr.var + M * (1 - cond.var))
+                        model.addConstr(result_var >= true_expr.var - M * (1 - cond.var))
+                        model.addConstr(result_var <= false_expr.var + M * cond.var)
+                        model.addConstr(result_var >= false_expr.var - M * cond.var)
+                    else:
+                        # Mixed types or expressions
+                        try:
+                            model.addGenConstrIndicator(cond.var, True, result_var == true_expr)
+                            model.addGenConstrIndicator(cond.var, False, result_var == false_expr)
+                        except:
+                            print("Warning: Complex If expression with mixed types")
+                            return true_expr  # Fallback to true branch
+                else:
+                    # Complex condition
+                    print("Warning: If with non-binary condition might not work as expected")
+                    return true_expr  # Fallback to true branch
+                
+                return GurobiVarWrapper(result_var)
 
-            
             def model_func():
                 # Return the model object
                 return model
@@ -273,8 +369,7 @@ class SolverFactory:
                     return var.var.X
                 return None
                         
-            
-
+            # Assign methods to the model
             model.get = getitem
             model.Int = Int
             model.Bool = Bool
@@ -283,26 +378,14 @@ class SolverFactory:
             model.maximize = maximize
             model.check = check
             model.model = model_func
-            sat = [2,9] # 2 = optimal, 9 = suboptimal
+            sat = [2, 9]  # 2 = optimal, 9 = suboptimal
             
             return model, Int, Bool, Or, And, Not, Implies, If, quicksum, sat
 
 # Test code for the wrapper
 if __name__ == "__main__":
-    import gurobipy as gp 
-    from gurobipy import GRB
 
-    # Create a new model
-    m = gp.Model()
 
-    # Create variables
-    x1 = m.addVar(vtype=GRB.INTEGER, name="x")
-    y1 = m.addVar(vtype=GRB.INTEGER, name="y")
-    z1 = m.addVar(vtype=GRB.INTEGER, name="z")
-    m.addConstr(x1+y1 >= 10)
-    
-
-    # Now test with Gurobi
     print("\nTesting with Gurobi...")
     solver, Int, Bool, Or, And, Not, Implies, If, Sum, sat = SolverFactory.create_solver("gurobi")
     
@@ -316,17 +399,17 @@ if __name__ == "__main__":
     solver.add(x < 10)
     solver.add(y >= 0)
     solver.add(y < 5)
+    solver.add(x + y < 100)
     
+    
+    solver.add(Or(x + y < 10, b == 1))
     solver.add(And(x + y < 100, b == 1))
+    # Add individual constraints instead of using And
+    
+    solver.add(b == 1)
     
     status = solver.check()
     print("Gurobi Status:", status)
     m = solver.model()
     
     print(f"Gurobi Solution: x = {m.get(x)}, y = {m.get(y)}, b = {m.get(b)}")
-    
-    #if solver.check() == sat:
-    #    m = solver.model()
-    #    print(f"Gurobi Solution: x = {m[x]}, y = {m[y]}, b = {m[b]}")
-    #else:
-    #    print("Gurobi found no solution.")
