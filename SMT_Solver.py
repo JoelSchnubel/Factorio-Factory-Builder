@@ -97,9 +97,6 @@ class Belt:
     def __str__(self) -> str:
         return f"Belt(id={self.id}, position=({self.x}, {self.y}), type={self.type}), item={self.item}"
 
-
-
-
 class SMTSolver:
     def __init__(self, width, height, production_data,solver_type="z3"):
         self.width = width
@@ -824,7 +821,7 @@ class SMTSolver:
             if result == self.sat:
                 self.model = self.solver.model() 
                
-                self.debug_print_model_values()
+                #self.debug_print_model_values()
                 
                 # Identify non-overlapping inserters
                 non_overlapping_inserters = self.find_non_overlapping_inserters()
