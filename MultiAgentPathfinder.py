@@ -83,12 +83,7 @@ class MultiAgentPathfinder:
         # Directions for adjacent moves (right, down, left, up)
         self.directions = [(1, 0), (0, 1), (-1, 0), (0, -1)]
         
-        # Setup logger
-        logger.basicConfig(
-            level=logger.DEBUG,
-            format='%(asctime)s - %(levelname)s - %(message)s',
-            handlers=[logger.FileHandler("multi_agent_pathfinding.log", mode='w')]
-        )
+
     
     def is_valid_position(self, position):
         """Check if a position is within bounds and not an obstacle."""

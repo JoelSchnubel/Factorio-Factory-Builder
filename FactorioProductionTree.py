@@ -9,7 +9,7 @@ import time
 import pandas as pd
 import matplotlib.pyplot as plt
 from z3 import And , Or
-from z3Solver  import Z3Solver
+from SMT_Solver  import SMTSolver
 import seaborn as sns
 import numpy as np
 from draftsman.blueprintable import Blueprint
@@ -748,11 +748,11 @@ class FactorioProductionTree:
         pygame.quit()
         self.input_information = input_information
 
-    def solve(self,production_data,sequential):
+    def solve(self,production_data,sequential,solver_type):
         
         # Initialize solver with grid size and production data
         if self.z3_solver is None:
-            self.z3_solver = Z3Solver(self.grid_width,self.grid_height, production_data)
+            self.z3_solver = SMTSolver(self.grid_width,self.grid_height, production_data,solver_type)
         # Process the input to place assemblers
         
         if sequential:
@@ -764,9 +764,9 @@ class FactorioProductionTree:
             self.z3_solver.build_constraints()
             self.z3_solver.solve()
         
-    def add_manual_IO_constraints(self,production_data):
+    def add_manual_IO_constraints(self,production_data,solver_type):
         if self.z3_solver is None:
-            self.z3_solver = Z3Solver(self.grid_width,self.grid_height, production_data)
+            self.z3_solver = SMTSolver(self.grid_width,self.grid_height, production_data,solver_type)
         
         
         
@@ -2536,7 +2536,7 @@ def plot_csv_data(file_path):
 
 
 # Function to log method execution times with additional information
-def log_method_time(item, amount, minimizer, method_name, assembler_counts,start_time, end_time):
+def log_method_time(item, amount, method_name, assembler_counts,start_time, end_time, solver_type):
     execution_time = end_time - start_time
     logger.info(f"Execution time for {method_name}: {execution_time:.4f} seconds.")
     
@@ -2544,11 +2544,12 @@ def log_method_time(item, amount, minimizer, method_name, assembler_counts,start
     try:
         with open("execution_times.csv", "a", newline="") as file:
             writer = csv.writer(file)
-            writer.writerow([item, amount, minimizer, method_name,assembler_counts,execution_time])
+            writer.writerow([item, amount, method_name,assembler_counts,execution_time,solver_type])
     except Exception as e:
         logger.error(f"Error logger execution time for {method_name}: {e}")
         
-        
+     
+       
 def main():
     #factory = FactorioProductionTree(16,10)
     #factory.create_blueprint("Modules/electronic-circuit_120_[]_module.json", "electronic-circuit_120_[]_module.txt")
@@ -2562,18 +2563,15 @@ def main():
 
    
 def Simple_Run():
-    # Set up logger for better output in the console
-    logger.basicConfig(level=logger.INFO, format='%(asctime)s - %(message)s')
     
     print("start")
-    
     
     # Example item and amount
     item_to_produce = "electronic-circuit"
     amount_needed = 120
-    
-    
+    solver_type = "gurobi"  # "gurobi" or "z3"
     input_items = []  # Using explicit input items
+    
     
     # init 
     factorioProductionTree = FactorioProductionTree(16,10)
@@ -2590,24 +2588,22 @@ def Simple_Run():
 
 
     
-    factorioProductionTree.add_manual_IO_constraints(production_data)
+    factorioProductionTree.add_manual_IO_constraints(production_data,solver_type=solver_type)
     
     assembler_counts = factorioProductionTree.count_assemblers(production_data)
         
     # Track time for solving the problem
     start_time = time.perf_counter()
-    factorioProductionTree.solve(production_data,sequential=False)
+    factorioProductionTree.solve(production_data,sequential=False,solver_type=solver_type)
     end_time = time.perf_counter()
-    log_method_time(item_to_produce, 1, 1, "solve", assembler_counts, start_time, end_time)
+    log_method_time(item_to_produce, 1, "solve", assembler_counts, start_time, end_time,solver_type)
     
     
     start_time = time.perf_counter()
     paths, placed_inserter_information = factorioProductionTree.build_belts(max_tries=2)
     end_time = time.perf_counter()
-    log_method_time(item_to_produce, 1, 1, "build_belts", assembler_counts, start_time, end_time)
+    log_method_time(item_to_produce, 1, "build_belts", assembler_counts, start_time, end_time,solver_type)
     
-    print(f'paths: {paths}')
-  
     
     if(paths):
         print("saving data")
