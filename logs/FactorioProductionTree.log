@@ -1,0 +1,6 @@
+2025-05-12 19:03:16,370 - FactorioProductionTree - INFO - Execution time for solve: 0.7775 seconds.
+2025-05-12 19:03:16,669 - FactorioProductionTree - INFO - build output path infomation for plastic-bar_0
+2025-05-12 19:03:16,721 - FactorioProductionTree - INFO - Execution time for build_belts: 0.3503 seconds.
+2025-05-12 19:03:16,867 - FactorioProductionTree - INFO - Creating blueprint from Modules/plastic-bar_20_[]_module.json
+2025-05-12 19:03:16,868 - FactorioProductionTree - INFO - 1. Placing assembling machines...
+2025-05-12 19:03:16,868 - FactorioProductionTree - ERROR - Error creating blueprint: too many values to unpack (expected 3)

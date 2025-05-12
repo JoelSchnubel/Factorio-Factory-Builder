@@ -1,11 +1,83 @@
-2025-05-06 17:32:09,401 - Pathfinder - INFO - Processing items in order: ['copper-plate']
-2025-05-06 17:32:09,401 - Pathfinder - DEBUG - All pairs sorted by heuristic distance: [(9, (0, 9), (0, 0), None, None)]
-2025-05-06 17:32:09,402 - Pathfinder - DEBUG - Path found: [(0, 9), (0, 8), (0, 7), (0, 6), (0, 5), (0, 4), (0, 3), (0, 2), (0, 1), (0, 0)] with underground segments: {}
-2025-05-06 17:32:09,402 - Pathfinder - INFO - Found better path for copper-plate from (0, 9) to (0, 0) with length 10
-2025-05-06 17:32:09,402 - Pathfinder - DEBUG - Adding path for copper-plate from (0, 9) to (0, 0)
-2025-05-06 17:32:09,402 - Pathfinder - DEBUG - ======================================================
-2025-05-06 17:32:09,402 - Pathfinder - DEBUG - Marking path on grid for copper-plate from (0, 9) to (0, 0)
-2025-05-06 17:32:09,403 - Pathfinder - DEBUG - BEFORE :Working grid:
+2025-05-12 19:03:11,227 - Pathfinder - INFO - Processing items in order: ['coal']
+2025-05-12 19:03:11,228 - Pathfinder - DEBUG - All pairs sorted by heuristic distance: [(9, (0, 9), (0, 0), None, None)]
+2025-05-12 19:03:11,228 - Pathfinder - DEBUG - Checking underground path from (0, 9) to (4, 9) with length 3
+2025-05-12 19:03:11,228 - Pathfinder - DEBUG - Checking underground path from (0, 9) to (3, 9) with length 2
+2025-05-12 19:03:11,228 - Pathfinder - DEBUG - Checking underground path from (0, 9) to (0, 13) with length 3
+2025-05-12 19:03:11,228 - Pathfinder - DEBUG - Checking underground path from (0, 9) to (0, 12) with length 2
+2025-05-12 19:03:11,228 - Pathfinder - DEBUG - Checking underground path from (0, 9) to (-4, 9) with length 3
+2025-05-12 19:03:11,228 - Pathfinder - DEBUG - Checking underground path from (0, 9) to (-3, 9) with length 2
+2025-05-12 19:03:11,228 - Pathfinder - DEBUG - Checking underground path from (0, 9) to (0, 5) with length 3
+2025-05-12 19:03:11,228 - Pathfinder - DEBUG - Checking underground path from (0, 9) to (0, 6) with length 2
+2025-05-12 19:03:11,229 - Pathfinder - DEBUG - Checking underground path from (0, 8) to (4, 8) with length 3
+2025-05-12 19:03:11,229 - Pathfinder - DEBUG - Checking underground path from (0, 8) to (3, 8) with length 2
+2025-05-12 19:03:11,229 - Pathfinder - DEBUG - Checking underground path from (0, 8) to (0, 12) with length 3
+2025-05-12 19:03:11,229 - Pathfinder - DEBUG - Checking underground path from (0, 8) to (0, 11) with length 2
+2025-05-12 19:03:11,229 - Pathfinder - DEBUG - Checking underground path from (0, 8) to (-4, 8) with length 3
+2025-05-12 19:03:11,229 - Pathfinder - DEBUG - Checking underground path from (0, 8) to (-3, 8) with length 2
+2025-05-12 19:03:11,229 - Pathfinder - DEBUG - Checking underground path from (0, 8) to (0, 4) with length 3
+2025-05-12 19:03:11,229 - Pathfinder - DEBUG - Checking underground path from (0, 8) to (0, 5) with length 2
+2025-05-12 19:03:11,229 - Pathfinder - DEBUG - Checking underground path from (0, 7) to (4, 7) with length 3
+2025-05-12 19:03:11,230 - Pathfinder - DEBUG - Checking underground path from (0, 7) to (3, 7) with length 2
+2025-05-12 19:03:11,230 - Pathfinder - DEBUG - Checking underground path from (0, 7) to (0, 11) with length 3
+2025-05-12 19:03:11,230 - Pathfinder - DEBUG - Checking underground path from (0, 7) to (0, 10) with length 2
+2025-05-12 19:03:11,230 - Pathfinder - DEBUG - Checking underground path from (0, 7) to (-4, 7) with length 3
+2025-05-12 19:03:11,230 - Pathfinder - DEBUG - Checking underground path from (0, 7) to (-3, 7) with length 2
+2025-05-12 19:03:11,230 - Pathfinder - DEBUG - Checking underground path from (0, 7) to (0, 3) with length 3
+2025-05-12 19:03:11,230 - Pathfinder - DEBUG - Checking underground path from (0, 7) to (0, 4) with length 2
+2025-05-12 19:03:11,230 - Pathfinder - DEBUG - Checking underground path from (0, 6) to (4, 6) with length 3
+2025-05-12 19:03:11,230 - Pathfinder - DEBUG - Checking underground path from (0, 6) to (3, 6) with length 2
+2025-05-12 19:03:11,230 - Pathfinder - DEBUG - Checking underground path from (0, 6) to (0, 10) with length 3
+2025-05-12 19:03:11,231 - Pathfinder - DEBUG - Checking underground path from (0, 6) to (0, 9) with length 2
+2025-05-12 19:03:11,231 - Pathfinder - DEBUG - Checking underground path from (0, 6) to (-4, 6) with length 3
+2025-05-12 19:03:11,231 - Pathfinder - DEBUG - Checking underground path from (0, 6) to (-3, 6) with length 2
+2025-05-12 19:03:11,231 - Pathfinder - DEBUG - Checking underground path from (0, 6) to (0, 2) with length 3
+2025-05-12 19:03:11,231 - Pathfinder - DEBUG - Checking underground path from (0, 6) to (0, 3) with length 2
+2025-05-12 19:03:11,231 - Pathfinder - DEBUG - Checking underground path from (0, 5) to (4, 5) with length 3
+2025-05-12 19:03:11,231 - Pathfinder - DEBUG - Checking underground path from (0, 5) to (3, 5) with length 2
+2025-05-12 19:03:11,232 - Pathfinder - DEBUG - Checking underground path from (0, 5) to (0, 9) with length 3
+2025-05-12 19:03:11,232 - Pathfinder - DEBUG - Checking underground path from (0, 5) to (0, 8) with length 2
+2025-05-12 19:03:11,232 - Pathfinder - DEBUG - Checking underground path from (0, 5) to (-4, 5) with length 3
+2025-05-12 19:03:11,232 - Pathfinder - DEBUG - Checking underground path from (0, 5) to (-3, 5) with length 2
+2025-05-12 19:03:11,232 - Pathfinder - DEBUG - Checking underground path from (0, 5) to (0, 1) with length 3
+2025-05-12 19:03:11,232 - Pathfinder - DEBUG - Checking underground path from (0, 5) to (0, 2) with length 2
+2025-05-12 19:03:11,232 - Pathfinder - DEBUG - Checking underground path from (0, 4) to (4, 4) with length 3
+2025-05-12 19:03:11,232 - Pathfinder - DEBUG - Checking underground path from (0, 4) to (3, 4) with length 2
+2025-05-12 19:03:11,233 - Pathfinder - DEBUG - Checking underground path from (0, 4) to (0, 8) with length 3
+2025-05-12 19:03:11,233 - Pathfinder - DEBUG - Checking underground path from (0, 4) to (0, 7) with length 2
+2025-05-12 19:03:11,233 - Pathfinder - DEBUG - Checking underground path from (0, 4) to (-4, 4) with length 3
+2025-05-12 19:03:11,233 - Pathfinder - DEBUG - Checking underground path from (0, 4) to (-3, 4) with length 2
+2025-05-12 19:03:11,233 - Pathfinder - DEBUG - Checking underground path from (0, 4) to (0, 0) with length 3
+2025-05-12 19:03:11,233 - Pathfinder - DEBUG - Checking underground path from (0, 4) to (0, 1) with length 2
+2025-05-12 19:03:11,233 - Pathfinder - DEBUG - Checking underground path from (0, 3) to (4, 3) with length 3
+2025-05-12 19:03:11,234 - Pathfinder - DEBUG - Checking underground path from (0, 3) to (3, 3) with length 2
+2025-05-12 19:03:11,234 - Pathfinder - DEBUG - Checking underground path from (0, 3) to (0, 7) with length 3
+2025-05-12 19:03:11,234 - Pathfinder - DEBUG - Checking underground path from (0, 3) to (0, 6) with length 2
+2025-05-12 19:03:11,234 - Pathfinder - DEBUG - Checking underground path from (0, 3) to (-4, 3) with length 3
+2025-05-12 19:03:11,234 - Pathfinder - DEBUG - Checking underground path from (0, 3) to (-3, 3) with length 2
+2025-05-12 19:03:11,234 - Pathfinder - DEBUG - Checking underground path from (0, 3) to (0, -1) with length 3
+2025-05-12 19:03:11,234 - Pathfinder - DEBUG - Checking underground path from (0, 3) to (0, 0) with length 2
+2025-05-12 19:03:11,235 - Pathfinder - DEBUG - Checking underground path from (0, 2) to (4, 2) with length 3
+2025-05-12 19:03:11,235 - Pathfinder - DEBUG - Checking underground path from (0, 2) to (3, 2) with length 2
+2025-05-12 19:03:11,235 - Pathfinder - DEBUG - Checking underground path from (0, 2) to (0, 6) with length 3
+2025-05-12 19:03:11,235 - Pathfinder - DEBUG - Checking underground path from (0, 2) to (0, 5) with length 2
+2025-05-12 19:03:11,235 - Pathfinder - DEBUG - Checking underground path from (0, 2) to (-4, 2) with length 3
+2025-05-12 19:03:11,235 - Pathfinder - DEBUG - Checking underground path from (0, 2) to (-3, 2) with length 2
+2025-05-12 19:03:11,235 - Pathfinder - DEBUG - Checking underground path from (0, 2) to (0, -2) with length 3
+2025-05-12 19:03:11,236 - Pathfinder - DEBUG - Checking underground path from (0, 2) to (0, -1) with length 2
+2025-05-12 19:03:11,236 - Pathfinder - DEBUG - Checking underground path from (0, 1) to (4, 1) with length 3
+2025-05-12 19:03:11,236 - Pathfinder - DEBUG - Checking underground path from (0, 1) to (3, 1) with length 2
+2025-05-12 19:03:11,236 - Pathfinder - DEBUG - Checking underground path from (0, 1) to (0, 5) with length 3
+2025-05-12 19:03:11,236 - Pathfinder - DEBUG - Checking underground path from (0, 1) to (0, 4) with length 2
+2025-05-12 19:03:11,236 - Pathfinder - DEBUG - Checking underground path from (0, 1) to (-4, 1) with length 3
+2025-05-12 19:03:11,236 - Pathfinder - DEBUG - Checking underground path from (0, 1) to (-3, 1) with length 2
+2025-05-12 19:03:11,237 - Pathfinder - DEBUG - Checking underground path from (0, 1) to (0, -3) with length 3
+2025-05-12 19:03:11,237 - Pathfinder - DEBUG - Checking underground path from (0, 1) to (0, -2) with length 2
+2025-05-12 19:03:11,237 - Pathfinder - DEBUG - Path found: [(0, 9), (0, 8), (0, 7), (0, 6), (0, 5), (0, 4), (0, 3), (0, 2), (0, 1), (0, 0)] with underground segments: {}
+2025-05-12 19:03:11,237 - Pathfinder - INFO - Found better path for coal from (0, 9) to (0, 0) with length 10
+2025-05-12 19:03:11,237 - Pathfinder - DEBUG - Adding path for coal from (0, 9) to (0, 0)
+2025-05-12 19:03:11,237 - Pathfinder - DEBUG - ======================================================
+2025-05-12 19:03:11,238 - Pathfinder - DEBUG - Marking path on grid for coal from (0, 9) to (0, 0)
+2025-05-12 19:03:11,239 - Pathfinder - DEBUG - BEFORE :Working grid:
 [[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
  [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
  [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
@@ -16,7 +88,7 @@
  [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
  [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
  [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]]
-2025-05-06 17:32:09,403 - Pathfinder - DEBUG - AFTER: Working grid:
+2025-05-12 19:03:11,240 - Pathfinder - DEBUG - AFTER: Working grid:
 [[1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
  [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
  [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
@@ -27,15 +99,267 @@
  [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
  [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
  [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]]
-2025-05-06 17:32:09,403 - Pathfinder - DEBUG - ======================================================
-2025-05-06 17:32:10,540 - Pathfinder - INFO - Processing items in order: ['iron-plate']
-2025-05-06 17:32:10,540 - Pathfinder - DEBUG - All pairs sorted by heuristic distance: [(9, (12, 9), (12, 0), None, None)]
-2025-05-06 17:32:10,540 - Pathfinder - DEBUG - Path found: [(12, 9), (12, 8), (12, 7), (12, 6), (12, 5), (12, 4), (12, 3), (12, 2), (12, 1), (12, 0)] with underground segments: {}
-2025-05-06 17:32:10,540 - Pathfinder - INFO - Found better path for iron-plate from (12, 9) to (12, 0) with length 10
-2025-05-06 17:32:10,540 - Pathfinder - DEBUG - Adding path for iron-plate from (12, 9) to (12, 0)
-2025-05-06 17:32:10,540 - Pathfinder - DEBUG - ======================================================
-2025-05-06 17:32:10,541 - Pathfinder - DEBUG - Marking path on grid for iron-plate from (12, 9) to (12, 0)
-2025-05-06 17:32:10,542 - Pathfinder - DEBUG - BEFORE :Working grid:
+2025-05-12 19:03:11,240 - Pathfinder - DEBUG - ======================================================
+2025-05-12 19:03:12,708 - Pathfinder - INFO - Processing items in order: ['petroleum-gas']
+2025-05-12 19:03:12,708 - Pathfinder - DEBUG - All pairs sorted by heuristic distance: [(9, (8, 9), (8, 0), None, None)]
+2025-05-12 19:03:12,708 - Pathfinder - DEBUG - Checking underground path from (8, 9) to (17, 9) with length 8
+2025-05-12 19:03:12,708 - Pathfinder - DEBUG - Checking underground path from (8, 9) to (16, 9) with length 7
+2025-05-12 19:03:12,708 - Pathfinder - DEBUG - Checking underground path from (8, 9) to (15, 9) with length 6
+2025-05-12 19:03:12,708 - Pathfinder - DEBUG - Checking underground path from (8, 9) to (14, 9) with length 5
+2025-05-12 19:03:12,708 - Pathfinder - DEBUG - Checking underground path from (8, 9) to (13, 9) with length 4
+2025-05-12 19:03:12,708 - Pathfinder - DEBUG - Checking underground path from (8, 9) to (12, 9) with length 3
+2025-05-12 19:03:12,708 - Pathfinder - DEBUG - Checking underground path from (8, 9) to (11, 9) with length 2
+2025-05-12 19:03:12,708 - Pathfinder - DEBUG - Checking underground path from (8, 9) to (8, 18) with length 8
+2025-05-12 19:03:12,708 - Pathfinder - DEBUG - Checking underground path from (8, 9) to (8, 17) with length 7
+2025-05-12 19:03:12,710 - Pathfinder - DEBUG - Checking underground path from (8, 9) to (8, 16) with length 6
+2025-05-12 19:03:12,710 - Pathfinder - DEBUG - Checking underground path from (8, 9) to (8, 15) with length 5
+2025-05-12 19:03:12,710 - Pathfinder - DEBUG - Checking underground path from (8, 9) to (8, 14) with length 4
+2025-05-12 19:03:12,710 - Pathfinder - DEBUG - Checking underground path from (8, 9) to (8, 13) with length 3
+2025-05-12 19:03:12,710 - Pathfinder - DEBUG - Checking underground path from (8, 9) to (8, 12) with length 2
+2025-05-12 19:03:12,710 - Pathfinder - DEBUG - Checking underground path from (8, 9) to (-1, 9) with length 8
+2025-05-12 19:03:12,710 - Pathfinder - DEBUG - Checking underground path from (8, 9) to (0, 9) with length 7
+2025-05-12 19:03:12,710 - Pathfinder - DEBUG - Checking underground path from (8, 9) to (1, 9) with length 6
+2025-05-12 19:03:12,710 - Pathfinder - DEBUG - Checking underground path from (8, 9) to (2, 9) with length 5
+2025-05-12 19:03:12,710 - Pathfinder - DEBUG - Checking underground path from (8, 9) to (3, 9) with length 4
+2025-05-12 19:03:12,710 - Pathfinder - DEBUG - Checking underground path from (8, 9) to (4, 9) with length 3
+2025-05-12 19:03:12,710 - Pathfinder - DEBUG - Checking underground path from (8, 9) to (5, 9) with length 2
+2025-05-12 19:03:12,711 - Pathfinder - DEBUG - Checking underground path from (8, 9) to (8, 0) with length 8
+2025-05-12 19:03:12,711 - Pathfinder - DEBUG - Checking underground path from (8, 9) to (8, 1) with length 7
+2025-05-12 19:03:12,711 - Pathfinder - DEBUG - Checking underground path from (8, 9) to (8, 2) with length 6
+2025-05-12 19:03:12,711 - Pathfinder - DEBUG - Checking underground path from (8, 9) to (8, 3) with length 5
+2025-05-12 19:03:12,711 - Pathfinder - DEBUG - Checking underground path from (8, 9) to (8, 4) with length 4
+2025-05-12 19:03:12,711 - Pathfinder - DEBUG - Checking underground path from (8, 9) to (8, 5) with length 3
+2025-05-12 19:03:12,711 - Pathfinder - DEBUG - Checking underground path from (8, 9) to (8, 6) with length 2
+2025-05-12 19:03:12,711 - Pathfinder - DEBUG - Checking underground path from (8, 8) to (17, 8) with length 8
+2025-05-12 19:03:12,711 - Pathfinder - DEBUG - Checking underground path from (8, 8) to (16, 8) with length 7
+2025-05-12 19:03:12,711 - Pathfinder - DEBUG - Checking underground path from (8, 8) to (15, 8) with length 6
+2025-05-12 19:03:12,711 - Pathfinder - DEBUG - Checking underground path from (8, 8) to (14, 8) with length 5
+2025-05-12 19:03:12,712 - Pathfinder - DEBUG - Checking underground path from (8, 8) to (13, 8) with length 4
+2025-05-12 19:03:12,712 - Pathfinder - DEBUG - Checking underground path from (8, 8) to (12, 8) with length 3
+2025-05-12 19:03:12,712 - Pathfinder - DEBUG - Checking underground path from (8, 8) to (11, 8) with length 2
+2025-05-12 19:03:12,712 - Pathfinder - DEBUG - Checking underground path from (8, 8) to (8, 17) with length 8
+2025-05-12 19:03:12,712 - Pathfinder - DEBUG - Checking underground path from (8, 8) to (8, 16) with length 7
+2025-05-12 19:03:12,712 - Pathfinder - DEBUG - Checking underground path from (8, 8) to (8, 15) with length 6
+2025-05-12 19:03:12,712 - Pathfinder - DEBUG - Checking underground path from (8, 8) to (8, 14) with length 5
+2025-05-12 19:03:12,712 - Pathfinder - DEBUG - Checking underground path from (8, 8) to (8, 13) with length 4
+2025-05-12 19:03:12,712 - Pathfinder - DEBUG - Checking underground path from (8, 8) to (8, 12) with length 3
+2025-05-12 19:03:12,712 - Pathfinder - DEBUG - Checking underground path from (8, 8) to (8, 11) with length 2
+2025-05-12 19:03:12,713 - Pathfinder - DEBUG - Checking underground path from (8, 8) to (-1, 8) with length 8
+2025-05-12 19:03:12,713 - Pathfinder - DEBUG - Checking underground path from (8, 8) to (0, 8) with length 7
+2025-05-12 19:03:12,713 - Pathfinder - DEBUG - Checking underground path from (8, 8) to (1, 8) with length 6
+2025-05-12 19:03:12,713 - Pathfinder - DEBUG - Checking underground path from (8, 8) to (2, 8) with length 5
+2025-05-12 19:03:12,713 - Pathfinder - DEBUG - Checking underground path from (8, 8) to (3, 8) with length 4
+2025-05-12 19:03:12,713 - Pathfinder - DEBUG - Checking underground path from (8, 8) to (4, 8) with length 3
+2025-05-12 19:03:12,713 - Pathfinder - DEBUG - Checking underground path from (8, 8) to (5, 8) with length 2
+2025-05-12 19:03:12,713 - Pathfinder - DEBUG - Checking underground path from (8, 8) to (8, -1) with length 8
+2025-05-12 19:03:12,713 - Pathfinder - DEBUG - Checking underground path from (8, 8) to (8, 0) with length 7
+2025-05-12 19:03:12,713 - Pathfinder - DEBUG - Checking underground path from (8, 8) to (8, 1) with length 6
+2025-05-12 19:03:12,714 - Pathfinder - DEBUG - Checking underground path from (8, 8) to (8, 2) with length 5
+2025-05-12 19:03:12,714 - Pathfinder - DEBUG - Checking underground path from (8, 8) to (8, 3) with length 4
+2025-05-12 19:03:12,714 - Pathfinder - DEBUG - Checking underground path from (8, 8) to (8, 4) with length 3
+2025-05-12 19:03:12,714 - Pathfinder - DEBUG - Checking underground path from (8, 8) to (8, 5) with length 2
+2025-05-12 19:03:12,714 - Pathfinder - DEBUG - Checking underground path from (8, 7) to (17, 7) with length 8
+2025-05-12 19:03:12,714 - Pathfinder - DEBUG - Checking underground path from (8, 7) to (16, 7) with length 7
+2025-05-12 19:03:12,714 - Pathfinder - DEBUG - Checking underground path from (8, 7) to (15, 7) with length 6
+2025-05-12 19:03:12,714 - Pathfinder - DEBUG - Checking underground path from (8, 7) to (14, 7) with length 5
+2025-05-12 19:03:12,714 - Pathfinder - DEBUG - Checking underground path from (8, 7) to (13, 7) with length 4
+2025-05-12 19:03:12,714 - Pathfinder - DEBUG - Checking underground path from (8, 7) to (12, 7) with length 3
+2025-05-12 19:03:12,715 - Pathfinder - DEBUG - Checking underground path from (8, 7) to (11, 7) with length 2
+2025-05-12 19:03:12,715 - Pathfinder - DEBUG - Checking underground path from (8, 7) to (8, 16) with length 8
+2025-05-12 19:03:12,715 - Pathfinder - DEBUG - Checking underground path from (8, 7) to (8, 15) with length 7
+2025-05-12 19:03:12,715 - Pathfinder - DEBUG - Checking underground path from (8, 7) to (8, 14) with length 6
+2025-05-12 19:03:12,715 - Pathfinder - DEBUG - Checking underground path from (8, 7) to (8, 13) with length 5
+2025-05-12 19:03:12,715 - Pathfinder - DEBUG - Checking underground path from (8, 7) to (8, 12) with length 4
+2025-05-12 19:03:12,715 - Pathfinder - DEBUG - Checking underground path from (8, 7) to (8, 11) with length 3
+2025-05-12 19:03:12,715 - Pathfinder - DEBUG - Checking underground path from (8, 7) to (8, 10) with length 2
+2025-05-12 19:03:12,715 - Pathfinder - DEBUG - Checking underground path from (8, 7) to (-1, 7) with length 8
+2025-05-12 19:03:12,715 - Pathfinder - DEBUG - Checking underground path from (8, 7) to (0, 7) with length 7
+2025-05-12 19:03:12,715 - Pathfinder - DEBUG - Checking underground path from (8, 7) to (1, 7) with length 6
+2025-05-12 19:03:12,715 - Pathfinder - DEBUG - Checking underground path from (8, 7) to (2, 7) with length 5
+2025-05-12 19:03:12,716 - Pathfinder - DEBUG - Checking underground path from (8, 7) to (3, 7) with length 4
+2025-05-12 19:03:12,716 - Pathfinder - DEBUG - Checking underground path from (8, 7) to (4, 7) with length 3
+2025-05-12 19:03:12,716 - Pathfinder - DEBUG - Checking underground path from (8, 7) to (5, 7) with length 2
+2025-05-12 19:03:12,716 - Pathfinder - DEBUG - Checking underground path from (8, 7) to (8, -2) with length 8
+2025-05-12 19:03:12,716 - Pathfinder - DEBUG - Checking underground path from (8, 7) to (8, -1) with length 7
+2025-05-12 19:03:12,716 - Pathfinder - DEBUG - Checking underground path from (8, 7) to (8, 0) with length 6
+2025-05-12 19:03:12,716 - Pathfinder - DEBUG - Checking underground path from (8, 7) to (8, 1) with length 5
+2025-05-12 19:03:12,716 - Pathfinder - DEBUG - Checking underground path from (8, 7) to (8, 2) with length 4
+2025-05-12 19:03:12,716 - Pathfinder - DEBUG - Checking underground path from (8, 7) to (8, 3) with length 3
+2025-05-12 19:03:12,716 - Pathfinder - DEBUG - Checking underground path from (8, 7) to (8, 4) with length 2
+2025-05-12 19:03:12,716 - Pathfinder - DEBUG - Checking underground path from (8, 6) to (17, 6) with length 8
+2025-05-12 19:03:12,717 - Pathfinder - DEBUG - Checking underground path from (8, 6) to (16, 6) with length 7
+2025-05-12 19:03:12,717 - Pathfinder - DEBUG - Checking underground path from (8, 6) to (15, 6) with length 6
+2025-05-12 19:03:12,717 - Pathfinder - DEBUG - Checking underground path from (8, 6) to (14, 6) with length 5
+2025-05-12 19:03:12,717 - Pathfinder - DEBUG - Checking underground path from (8, 6) to (13, 6) with length 4
+2025-05-12 19:03:12,717 - Pathfinder - DEBUG - Checking underground path from (8, 6) to (12, 6) with length 3
+2025-05-12 19:03:12,717 - Pathfinder - DEBUG - Checking underground path from (8, 6) to (11, 6) with length 2
+2025-05-12 19:03:12,717 - Pathfinder - DEBUG - Checking underground path from (8, 6) to (8, 15) with length 8
+2025-05-12 19:03:12,717 - Pathfinder - DEBUG - Checking underground path from (8, 6) to (8, 14) with length 7
+2025-05-12 19:03:12,717 - Pathfinder - DEBUG - Checking underground path from (8, 6) to (8, 13) with length 6
+2025-05-12 19:03:12,717 - Pathfinder - DEBUG - Checking underground path from (8, 6) to (8, 12) with length 5
+2025-05-12 19:03:12,717 - Pathfinder - DEBUG - Checking underground path from (8, 6) to (8, 11) with length 4
+2025-05-12 19:03:12,717 - Pathfinder - DEBUG - Checking underground path from (8, 6) to (8, 10) with length 3
+2025-05-12 19:03:12,718 - Pathfinder - DEBUG - Checking underground path from (8, 6) to (8, 9) with length 2
+2025-05-12 19:03:12,718 - Pathfinder - DEBUG - Checking underground path from (8, 6) to (-1, 6) with length 8
+2025-05-12 19:03:12,718 - Pathfinder - DEBUG - Checking underground path from (8, 6) to (0, 6) with length 7
+2025-05-12 19:03:12,718 - Pathfinder - DEBUG - Checking underground path from (8, 6) to (1, 6) with length 6
+2025-05-12 19:03:12,718 - Pathfinder - DEBUG - Checking underground path from (8, 6) to (2, 6) with length 5
+2025-05-12 19:03:12,718 - Pathfinder - DEBUG - Checking underground path from (8, 6) to (3, 6) with length 4
+2025-05-12 19:03:12,718 - Pathfinder - DEBUG - Checking underground path from (8, 6) to (4, 6) with length 3
+2025-05-12 19:03:12,718 - Pathfinder - DEBUG - Checking underground path from (8, 6) to (5, 6) with length 2
+2025-05-12 19:03:12,718 - Pathfinder - DEBUG - Checking underground path from (8, 6) to (8, -3) with length 8
+2025-05-12 19:03:12,718 - Pathfinder - DEBUG - Checking underground path from (8, 6) to (8, -2) with length 7
+2025-05-12 19:03:12,718 - Pathfinder - DEBUG - Checking underground path from (8, 6) to (8, -1) with length 6
+2025-05-12 19:03:12,718 - Pathfinder - DEBUG - Checking underground path from (8, 6) to (8, 0) with length 5
+2025-05-12 19:03:12,718 - Pathfinder - DEBUG - Checking underground path from (8, 6) to (8, 1) with length 4
+2025-05-12 19:03:12,719 - Pathfinder - DEBUG - Checking underground path from (8, 6) to (8, 2) with length 3
+2025-05-12 19:03:12,719 - Pathfinder - DEBUG - Checking underground path from (8, 6) to (8, 3) with length 2
+2025-05-12 19:03:12,719 - Pathfinder - DEBUG - Checking underground path from (8, 5) to (17, 5) with length 8
+2025-05-12 19:03:12,719 - Pathfinder - DEBUG - Checking underground path from (8, 5) to (16, 5) with length 7
+2025-05-12 19:03:12,719 - Pathfinder - DEBUG - Checking underground path from (8, 5) to (15, 5) with length 6
+2025-05-12 19:03:12,719 - Pathfinder - DEBUG - Checking underground path from (8, 5) to (14, 5) with length 5
+2025-05-12 19:03:12,719 - Pathfinder - DEBUG - Checking underground path from (8, 5) to (13, 5) with length 4
+2025-05-12 19:03:12,719 - Pathfinder - DEBUG - Checking underground path from (8, 5) to (12, 5) with length 3
+2025-05-12 19:03:12,719 - Pathfinder - DEBUG - Checking underground path from (8, 5) to (11, 5) with length 2
+2025-05-12 19:03:12,719 - Pathfinder - DEBUG - Checking underground path from (8, 5) to (8, 14) with length 8
+2025-05-12 19:03:12,719 - Pathfinder - DEBUG - Checking underground path from (8, 5) to (8, 13) with length 7
+2025-05-12 19:03:12,719 - Pathfinder - DEBUG - Checking underground path from (8, 5) to (8, 12) with length 6
+2025-05-12 19:03:12,720 - Pathfinder - DEBUG - Checking underground path from (8, 5) to (8, 11) with length 5
+2025-05-12 19:03:12,720 - Pathfinder - DEBUG - Checking underground path from (8, 5) to (8, 10) with length 4
+2025-05-12 19:03:12,720 - Pathfinder - DEBUG - Checking underground path from (8, 5) to (8, 9) with length 3
+2025-05-12 19:03:12,720 - Pathfinder - DEBUG - Checking underground path from (8, 5) to (8, 8) with length 2
+2025-05-12 19:03:12,720 - Pathfinder - DEBUG - Checking underground path from (8, 5) to (-1, 5) with length 8
+2025-05-12 19:03:12,720 - Pathfinder - DEBUG - Checking underground path from (8, 5) to (0, 5) with length 7
+2025-05-12 19:03:12,720 - Pathfinder - DEBUG - Checking underground path from (8, 5) to (1, 5) with length 6
+2025-05-12 19:03:12,720 - Pathfinder - DEBUG - Checking underground path from (8, 5) to (2, 5) with length 5
+2025-05-12 19:03:12,720 - Pathfinder - DEBUG - Checking underground path from (8, 5) to (3, 5) with length 4
+2025-05-12 19:03:12,720 - Pathfinder - DEBUG - Checking underground path from (8, 5) to (4, 5) with length 3
+2025-05-12 19:03:12,720 - Pathfinder - DEBUG - Checking underground path from (8, 5) to (5, 5) with length 2
+2025-05-12 19:03:12,720 - Pathfinder - DEBUG - Checking underground path from (8, 5) to (8, -4) with length 8
+2025-05-12 19:03:12,720 - Pathfinder - DEBUG - Checking underground path from (8, 5) to (8, -3) with length 7
+2025-05-12 19:03:12,720 - Pathfinder - DEBUG - Checking underground path from (8, 5) to (8, -2) with length 6
+2025-05-12 19:03:12,720 - Pathfinder - DEBUG - Checking underground path from (8, 5) to (8, -1) with length 5
+2025-05-12 19:03:12,720 - Pathfinder - DEBUG - Checking underground path from (8, 5) to (8, 0) with length 4
+2025-05-12 19:03:12,720 - Pathfinder - DEBUG - Checking underground path from (8, 5) to (8, 1) with length 3
+2025-05-12 19:03:12,720 - Pathfinder - DEBUG - Checking underground path from (8, 5) to (8, 2) with length 2
+2025-05-12 19:03:12,721 - Pathfinder - DEBUG - Checking underground path from (8, 4) to (17, 4) with length 8
+2025-05-12 19:03:12,721 - Pathfinder - DEBUG - Checking underground path from (8, 4) to (16, 4) with length 7
+2025-05-12 19:03:12,721 - Pathfinder - DEBUG - Checking underground path from (8, 4) to (15, 4) with length 6
+2025-05-12 19:03:12,721 - Pathfinder - DEBUG - Checking underground path from (8, 4) to (14, 4) with length 5
+2025-05-12 19:03:12,721 - Pathfinder - DEBUG - Checking underground path from (8, 4) to (13, 4) with length 4
+2025-05-12 19:03:12,721 - Pathfinder - DEBUG - Checking underground path from (8, 4) to (12, 4) with length 3
+2025-05-12 19:03:12,721 - Pathfinder - DEBUG - Checking underground path from (8, 4) to (11, 4) with length 2
+2025-05-12 19:03:12,721 - Pathfinder - DEBUG - Checking underground path from (8, 4) to (8, 13) with length 8
+2025-05-12 19:03:12,721 - Pathfinder - DEBUG - Checking underground path from (8, 4) to (8, 12) with length 7
+2025-05-12 19:03:12,721 - Pathfinder - DEBUG - Checking underground path from (8, 4) to (8, 11) with length 6
+2025-05-12 19:03:12,721 - Pathfinder - DEBUG - Checking underground path from (8, 4) to (8, 10) with length 5
+2025-05-12 19:03:12,722 - Pathfinder - DEBUG - Checking underground path from (8, 4) to (8, 9) with length 4
+2025-05-12 19:03:12,722 - Pathfinder - DEBUG - Checking underground path from (8, 4) to (8, 8) with length 3
+2025-05-12 19:03:12,722 - Pathfinder - DEBUG - Checking underground path from (8, 4) to (8, 7) with length 2
+2025-05-12 19:03:12,722 - Pathfinder - DEBUG - Checking underground path from (8, 4) to (-1, 4) with length 8
+2025-05-12 19:03:12,722 - Pathfinder - DEBUG - Checking underground path from (8, 4) to (0, 4) with length 7
+2025-05-12 19:03:12,722 - Pathfinder - DEBUG - Checking underground path from (8, 4) to (1, 4) with length 6
+2025-05-12 19:03:12,722 - Pathfinder - DEBUG - Checking underground path from (8, 4) to (2, 4) with length 5
+2025-05-12 19:03:12,722 - Pathfinder - DEBUG - Checking underground path from (8, 4) to (3, 4) with length 4
+2025-05-12 19:03:12,722 - Pathfinder - DEBUG - Checking underground path from (8, 4) to (4, 4) with length 3
+2025-05-12 19:03:12,723 - Pathfinder - DEBUG - Checking underground path from (8, 4) to (5, 4) with length 2
+2025-05-12 19:03:12,723 - Pathfinder - DEBUG - Checking underground path from (8, 4) to (8, -5) with length 8
+2025-05-12 19:03:12,723 - Pathfinder - DEBUG - Checking underground path from (8, 4) to (8, -4) with length 7
+2025-05-12 19:03:12,723 - Pathfinder - DEBUG - Checking underground path from (8, 4) to (8, -3) with length 6
+2025-05-12 19:03:12,723 - Pathfinder - DEBUG - Checking underground path from (8, 4) to (8, -2) with length 5
+2025-05-12 19:03:12,723 - Pathfinder - DEBUG - Checking underground path from (8, 4) to (8, -1) with length 4
+2025-05-12 19:03:12,723 - Pathfinder - DEBUG - Checking underground path from (8, 4) to (8, 0) with length 3
+2025-05-12 19:03:12,723 - Pathfinder - DEBUG - Checking underground path from (8, 4) to (8, 1) with length 2
+2025-05-12 19:03:12,723 - Pathfinder - DEBUG - Checking underground path from (8, 3) to (17, 3) with length 8
+2025-05-12 19:03:12,723 - Pathfinder - DEBUG - Checking underground path from (8, 3) to (16, 3) with length 7
+2025-05-12 19:03:12,723 - Pathfinder - DEBUG - Checking underground path from (8, 3) to (15, 3) with length 6
+2025-05-12 19:03:12,723 - Pathfinder - DEBUG - Checking underground path from (8, 3) to (14, 3) with length 5
+2025-05-12 19:03:12,724 - Pathfinder - DEBUG - Checking underground path from (8, 3) to (13, 3) with length 4
+2025-05-12 19:03:12,724 - Pathfinder - DEBUG - Checking underground path from (8, 3) to (12, 3) with length 3
+2025-05-12 19:03:12,724 - Pathfinder - DEBUG - Checking underground path from (8, 3) to (11, 3) with length 2
+2025-05-12 19:03:12,724 - Pathfinder - DEBUG - Checking underground path from (8, 3) to (8, 12) with length 8
+2025-05-12 19:03:12,724 - Pathfinder - DEBUG - Checking underground path from (8, 3) to (8, 11) with length 7
+2025-05-12 19:03:12,724 - Pathfinder - DEBUG - Checking underground path from (8, 3) to (8, 10) with length 6
+2025-05-12 19:03:12,724 - Pathfinder - DEBUG - Checking underground path from (8, 3) to (8, 9) with length 5
+2025-05-12 19:03:12,724 - Pathfinder - DEBUG - Checking underground path from (8, 3) to (8, 8) with length 4
+2025-05-12 19:03:12,724 - Pathfinder - DEBUG - Checking underground path from (8, 3) to (8, 7) with length 3
+2025-05-12 19:03:12,724 - Pathfinder - DEBUG - Checking underground path from (8, 3) to (8, 6) with length 2
+2025-05-12 19:03:12,724 - Pathfinder - DEBUG - Checking underground path from (8, 3) to (-1, 3) with length 8
+2025-05-12 19:03:12,725 - Pathfinder - DEBUG - Checking underground path from (8, 3) to (0, 3) with length 7
+2025-05-12 19:03:12,725 - Pathfinder - DEBUG - Checking underground path from (8, 3) to (1, 3) with length 6
+2025-05-12 19:03:12,725 - Pathfinder - DEBUG - Checking underground path from (8, 3) to (2, 3) with length 5
+2025-05-12 19:03:12,725 - Pathfinder - DEBUG - Checking underground path from (8, 3) to (3, 3) with length 4
+2025-05-12 19:03:12,725 - Pathfinder - DEBUG - Checking underground path from (8, 3) to (4, 3) with length 3
+2025-05-12 19:03:12,725 - Pathfinder - DEBUG - Checking underground path from (8, 3) to (5, 3) with length 2
+2025-05-12 19:03:12,725 - Pathfinder - DEBUG - Checking underground path from (8, 3) to (8, -6) with length 8
+2025-05-12 19:03:12,725 - Pathfinder - DEBUG - Checking underground path from (8, 3) to (8, -5) with length 7
+2025-05-12 19:03:12,725 - Pathfinder - DEBUG - Checking underground path from (8, 3) to (8, -4) with length 6
+2025-05-12 19:03:12,725 - Pathfinder - DEBUG - Checking underground path from (8, 3) to (8, -3) with length 5
+2025-05-12 19:03:12,725 - Pathfinder - DEBUG - Checking underground path from (8, 3) to (8, -2) with length 4
+2025-05-12 19:03:12,725 - Pathfinder - DEBUG - Checking underground path from (8, 3) to (8, -1) with length 3
+2025-05-12 19:03:12,726 - Pathfinder - DEBUG - Checking underground path from (8, 3) to (8, 0) with length 2
+2025-05-12 19:03:12,726 - Pathfinder - DEBUG - Checking underground path from (8, 2) to (17, 2) with length 8
+2025-05-12 19:03:12,726 - Pathfinder - DEBUG - Checking underground path from (8, 2) to (16, 2) with length 7
+2025-05-12 19:03:12,726 - Pathfinder - DEBUG - Checking underground path from (8, 2) to (15, 2) with length 6
+2025-05-12 19:03:12,726 - Pathfinder - DEBUG - Checking underground path from (8, 2) to (14, 2) with length 5
+2025-05-12 19:03:12,726 - Pathfinder - DEBUG - Checking underground path from (8, 2) to (13, 2) with length 4
+2025-05-12 19:03:12,726 - Pathfinder - DEBUG - Checking underground path from (8, 2) to (12, 2) with length 3
+2025-05-12 19:03:12,726 - Pathfinder - DEBUG - Checking underground path from (8, 2) to (11, 2) with length 2
+2025-05-12 19:03:12,726 - Pathfinder - DEBUG - Checking underground path from (8, 2) to (8, 11) with length 8
+2025-05-12 19:03:12,726 - Pathfinder - DEBUG - Checking underground path from (8, 2) to (8, 10) with length 7
+2025-05-12 19:03:12,726 - Pathfinder - DEBUG - Checking underground path from (8, 2) to (8, 9) with length 6
+2025-05-12 19:03:12,726 - Pathfinder - DEBUG - Checking underground path from (8, 2) to (8, 8) with length 5
+2025-05-12 19:03:12,727 - Pathfinder - DEBUG - Checking underground path from (8, 2) to (8, 7) with length 4
+2025-05-12 19:03:12,727 - Pathfinder - DEBUG - Checking underground path from (8, 2) to (8, 6) with length 3
+2025-05-12 19:03:12,727 - Pathfinder - DEBUG - Checking underground path from (8, 2) to (8, 5) with length 2
+2025-05-12 19:03:12,727 - Pathfinder - DEBUG - Checking underground path from (8, 2) to (-1, 2) with length 8
+2025-05-12 19:03:12,727 - Pathfinder - DEBUG - Checking underground path from (8, 2) to (0, 2) with length 7
+2025-05-12 19:03:12,727 - Pathfinder - DEBUG - Checking underground path from (8, 2) to (1, 2) with length 6
+2025-05-12 19:03:12,727 - Pathfinder - DEBUG - Checking underground path from (8, 2) to (2, 2) with length 5
+2025-05-12 19:03:12,727 - Pathfinder - DEBUG - Checking underground path from (8, 2) to (3, 2) with length 4
+2025-05-12 19:03:12,727 - Pathfinder - DEBUG - Checking underground path from (8, 2) to (4, 2) with length 3
+2025-05-12 19:03:12,727 - Pathfinder - DEBUG - Checking underground path from (8, 2) to (5, 2) with length 2
+2025-05-12 19:03:12,727 - Pathfinder - DEBUG - Checking underground path from (8, 2) to (8, -7) with length 8
+2025-05-12 19:03:12,728 - Pathfinder - DEBUG - Checking underground path from (8, 2) to (8, -6) with length 7
+2025-05-12 19:03:12,728 - Pathfinder - DEBUG - Checking underground path from (8, 2) to (8, -5) with length 6
+2025-05-12 19:03:12,728 - Pathfinder - DEBUG - Checking underground path from (8, 2) to (8, -4) with length 5
+2025-05-12 19:03:12,728 - Pathfinder - DEBUG - Checking underground path from (8, 2) to (8, -3) with length 4
+2025-05-12 19:03:12,728 - Pathfinder - DEBUG - Checking underground path from (8, 2) to (8, -2) with length 3
+2025-05-12 19:03:12,728 - Pathfinder - DEBUG - Checking underground path from (8, 2) to (8, -1) with length 2
+2025-05-12 19:03:12,728 - Pathfinder - DEBUG - Checking underground path from (8, 1) to (17, 1) with length 8
+2025-05-12 19:03:12,728 - Pathfinder - DEBUG - Checking underground path from (8, 1) to (16, 1) with length 7
+2025-05-12 19:03:12,728 - Pathfinder - DEBUG - Checking underground path from (8, 1) to (15, 1) with length 6
+2025-05-12 19:03:12,728 - Pathfinder - DEBUG - Checking underground path from (8, 1) to (14, 1) with length 5
+2025-05-12 19:03:12,728 - Pathfinder - DEBUG - Checking underground path from (8, 1) to (13, 1) with length 4
+2025-05-12 19:03:12,728 - Pathfinder - DEBUG - Checking underground path from (8, 1) to (12, 1) with length 3
+2025-05-12 19:03:12,728 - Pathfinder - DEBUG - Checking underground path from (8, 1) to (11, 1) with length 2
+2025-05-12 19:03:12,728 - Pathfinder - DEBUG - Checking underground path from (8, 1) to (8, 10) with length 8
+2025-05-12 19:03:12,728 - Pathfinder - DEBUG - Checking underground path from (8, 1) to (8, 9) with length 7
+2025-05-12 19:03:12,728 - Pathfinder - DEBUG - Checking underground path from (8, 1) to (8, 8) with length 6
+2025-05-12 19:03:12,728 - Pathfinder - DEBUG - Checking underground path from (8, 1) to (8, 7) with length 5
+2025-05-12 19:03:12,728 - Pathfinder - DEBUG - Checking underground path from (8, 1) to (8, 6) with length 4
+2025-05-12 19:03:12,728 - Pathfinder - DEBUG - Checking underground path from (8, 1) to (8, 5) with length 3
+2025-05-12 19:03:12,730 - Pathfinder - DEBUG - Checking underground path from (8, 1) to (8, 4) with length 2
+2025-05-12 19:03:12,730 - Pathfinder - DEBUG - Checking underground path from (8, 1) to (-1, 1) with length 8
+2025-05-12 19:03:12,730 - Pathfinder - DEBUG - Checking underground path from (8, 1) to (0, 1) with length 7
+2025-05-12 19:03:12,730 - Pathfinder - DEBUG - Checking underground path from (8, 1) to (1, 1) with length 6
+2025-05-12 19:03:12,730 - Pathfinder - DEBUG - Checking underground path from (8, 1) to (2, 1) with length 5
+2025-05-12 19:03:12,730 - Pathfinder - DEBUG - Checking underground path from (8, 1) to (3, 1) with length 4
+2025-05-12 19:03:12,730 - Pathfinder - DEBUG - Checking underground path from (8, 1) to (4, 1) with length 3
+2025-05-12 19:03:12,730 - Pathfinder - DEBUG - Checking underground path from (8, 1) to (5, 1) with length 2
+2025-05-12 19:03:12,730 - Pathfinder - DEBUG - Checking underground path from (8, 1) to (8, -8) with length 8
+2025-05-12 19:03:12,730 - Pathfinder - DEBUG - Checking underground path from (8, 1) to (8, -7) with length 7
+2025-05-12 19:03:12,730 - Pathfinder - DEBUG - Checking underground path from (8, 1) to (8, -6) with length 6
+2025-05-12 19:03:12,731 - Pathfinder - DEBUG - Checking underground path from (8, 1) to (8, -5) with length 5
+2025-05-12 19:03:12,731 - Pathfinder - DEBUG - Checking underground path from (8, 1) to (8, -4) with length 4
+2025-05-12 19:03:12,731 - Pathfinder - DEBUG - Checking underground path from (8, 1) to (8, -3) with length 3
+2025-05-12 19:03:12,731 - Pathfinder - DEBUG - Checking underground path from (8, 1) to (8, -2) with length 2
+2025-05-12 19:03:12,731 - Pathfinder - DEBUG - Path found: [(8, 9), (8, 8), (8, 7), (8, 6), (8, 5), (8, 4), (8, 3), (8, 2), (8, 1), (8, 0)] with underground segments: {}
+2025-05-12 19:03:12,731 - Pathfinder - INFO - Found better path for petroleum-gas from (8, 9) to (8, 0) with length 10
+2025-05-12 19:03:12,731 - Pathfinder - DEBUG - Adding path for petroleum-gas from (8, 9) to (8, 0)
+2025-05-12 19:03:12,731 - Pathfinder - DEBUG - ======================================================
+2025-05-12 19:03:12,731 - Pathfinder - DEBUG - Marking path on grid for petroleum-gas from (8, 9) to (8, 0)
+2025-05-12 19:03:12,732 - Pathfinder - DEBUG - BEFORE :Working grid:
 [[1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
  [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
  [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
@@ -46,45 +370,526 @@
  [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
  [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
  [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]]
-2025-05-06 17:32:10,542 - Pathfinder - DEBUG - AFTER: Working grid:
-[[1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
- [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
- [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
- [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
- [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
- [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
- [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
- [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
- [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
- [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]]
-2025-05-06 17:32:10,542 - Pathfinder - DEBUG - ======================================================
-2025-05-06 17:32:12,274 - Pathfinder - INFO - Processing items in order: ['electronic-circuit']
-2025-05-06 17:32:12,274 - Pathfinder - DEBUG - All pairs sorted by heuristic distance: [(9, (15, 0), (15, 9), None, None)]
-2025-05-06 17:32:12,275 - Pathfinder - DEBUG - Path found: [(15, 0), (15, 1), (15, 2), (15, 3), (15, 4), (15, 5), (15, 6), (15, 7), (15, 8), (15, 9)] with underground segments: {}
-2025-05-06 17:32:12,275 - Pathfinder - INFO - Found better path for electronic-circuit from (15, 0) to (15, 9) with length 10
-2025-05-06 17:32:12,275 - Pathfinder - DEBUG - Adding path for electronic-circuit from (15, 0) to (15, 9)
-2025-05-06 17:32:12,275 - Pathfinder - DEBUG - ======================================================
-2025-05-06 17:32:12,275 - Pathfinder - DEBUG - Marking path on grid for electronic-circuit from (15, 0) to (15, 9)
-2025-05-06 17:32:12,276 - Pathfinder - DEBUG - BEFORE :Working grid:
-[[1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
- [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
- [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
- [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
- [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
- [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
- [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
- [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
- [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
- [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]]
-2025-05-06 17:32:12,277 - Pathfinder - DEBUG - AFTER: Working grid:
-[[1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
- [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
- [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
- [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
- [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
- [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
- [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
- [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
- [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
- [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]]
-2025-05-06 17:32:12,277 - Pathfinder - DEBUG - ======================================================
+2025-05-12 19:03:12,733 - Pathfinder - DEBUG - AFTER: Working grid:
+[[1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0]]
+2025-05-12 19:03:12,733 - Pathfinder - DEBUG - ======================================================
+2025-05-12 19:03:14,810 - Pathfinder - INFO - Processing items in order: ['plastic-bar']
+2025-05-12 19:03:14,811 - Pathfinder - DEBUG - All pairs sorted by heuristic distance: [(9, (15, 0), (15, 9), None, None)]
+2025-05-12 19:03:14,811 - Pathfinder - DEBUG - Path found: [(15, 0), (15, 1), (15, 2), (15, 3), (15, 4), (15, 5), (15, 6), (15, 7), (15, 8), (15, 9)] with underground segments: {}
+2025-05-12 19:03:14,811 - Pathfinder - INFO - Found better path for plastic-bar from (15, 0) to (15, 9) with length 10
+2025-05-12 19:03:14,811 - Pathfinder - DEBUG - Adding path for plastic-bar from (15, 0) to (15, 9)
+2025-05-12 19:03:14,811 - Pathfinder - DEBUG - ======================================================
+2025-05-12 19:03:14,811 - Pathfinder - DEBUG - Marking path on grid for plastic-bar from (15, 0) to (15, 9)
+2025-05-12 19:03:14,812 - Pathfinder - DEBUG - BEFORE :Working grid:
+[[1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0]]
+2025-05-12 19:03:14,812 - Pathfinder - DEBUG - AFTER: Working grid:
+[[1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1]
+ [1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1]
+ [1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1]
+ [1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1]
+ [1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1]
+ [1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1]
+ [1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1]
+ [1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1]
+ [1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1]
+ [1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1]]
+2025-05-12 19:03:14,813 - Pathfinder - DEBUG - ======================================================
+2025-05-12 19:03:16,669 - Pathfinder - INFO - Processing items in order: ['plastic-bar_0', 'petroleum-gas_0', 'petroleum-gas_1']
+2025-05-12 19:03:16,670 - Pathfinder - INFO - Placing output inserter for item plastic-bar
+2025-05-12 19:03:16,670 - Pathfinder - DEBUG - Total points in self.points: 3
+2025-05-12 19:03:16,670 - Pathfinder - DEBUG - Keys in self.points: ['petroleum-gas_0', 'petroleum-gas_1', 'plastic-bar_0']
+2025-05-12 19:03:16,670 - Pathfinder - DEBUG - Checking item_key: petroleum-gas_0, item type: petroleum-gas
+2025-05-12 19:03:16,670 - Pathfinder - DEBUG - Skipping petroleum-gas_0 as it's not the output item plastic-bar
+2025-05-12 19:03:16,670 - Pathfinder - DEBUG - Checking item_key: petroleum-gas_1, item type: petroleum-gas
+2025-05-12 19:03:16,670 - Pathfinder - DEBUG - Skipping petroleum-gas_1 as it's not the output item plastic-bar
+2025-05-12 19:03:16,671 - Pathfinder - DEBUG - Checking item_key: plastic-bar_0, item type: plastic-bar
+2025-05-12 19:03:16,671 - Pathfinder - INFO - Found output item match: plastic-bar_0
+2025-05-12 19:03:16,671 - Pathfinder - DEBUG - Start points for plastic-bar_0: [(2, 4), (3, 4), (4, 4), (6, 2)]
+2025-05-12 19:03:16,671 - Pathfinder - DEBUG - Destination points for plastic-bar_0: [(15, 0), (15, 1), (15, 2), (15, 3), (15, 4), (15, 5), (15, 6), (15, 7), (15, 8), (15, 9), (15, 0), (15, 9)]
+2025-05-12 19:03:16,671 - Pathfinder - DEBUG - Processing start point: (2, 4)
+2025-05-12 19:03:16,671 - Pathfinder - DEBUG - Processing destination point: (15, 0)
+2025-05-12 19:03:16,671 - Pathfinder - DEBUG - Heuristic distance from (2, 4) to (15, 0): 17
+2025-05-12 19:03:16,671 - Pathfinder - DEBUG - Processing destination point: (15, 1)
+2025-05-12 19:03:16,672 - Pathfinder - DEBUG - Heuristic distance from (2, 4) to (15, 1): 16
+2025-05-12 19:03:16,672 - Pathfinder - DEBUG - Processing destination point: (15, 2)
+2025-05-12 19:03:16,672 - Pathfinder - DEBUG - Heuristic distance from (2, 4) to (15, 2): 15
+2025-05-12 19:03:16,672 - Pathfinder - DEBUG - Processing destination point: (15, 3)
+2025-05-12 19:03:16,672 - Pathfinder - DEBUG - Heuristic distance from (2, 4) to (15, 3): 14
+2025-05-12 19:03:16,672 - Pathfinder - DEBUG - Processing destination point: (15, 4)
+2025-05-12 19:03:16,672 - Pathfinder - DEBUG - Heuristic distance from (2, 4) to (15, 4): 13
+2025-05-12 19:03:16,673 - Pathfinder - DEBUG - Processing destination point: (15, 5)
+2025-05-12 19:03:16,673 - Pathfinder - DEBUG - Heuristic distance from (2, 4) to (15, 5): 14
+2025-05-12 19:03:16,673 - Pathfinder - DEBUG - Processing destination point: (15, 6)
+2025-05-12 19:03:16,673 - Pathfinder - DEBUG - Heuristic distance from (2, 4) to (15, 6): 15
+2025-05-12 19:03:16,673 - Pathfinder - DEBUG - Processing destination point: (15, 7)
+2025-05-12 19:03:16,673 - Pathfinder - DEBUG - Heuristic distance from (2, 4) to (15, 7): 16
+2025-05-12 19:03:16,673 - Pathfinder - DEBUG - Processing destination point: (15, 8)
+2025-05-12 19:03:16,673 - Pathfinder - DEBUG - Heuristic distance from (2, 4) to (15, 8): 17
+2025-05-12 19:03:16,673 - Pathfinder - DEBUG - Processing destination point: (15, 9)
+2025-05-12 19:03:16,674 - Pathfinder - DEBUG - Heuristic distance from (2, 4) to (15, 9): 18
+2025-05-12 19:03:16,674 - Pathfinder - DEBUG - Processing destination point: (15, 0)
+2025-05-12 19:03:16,674 - Pathfinder - DEBUG - Heuristic distance from (2, 4) to (15, 0): 17
+2025-05-12 19:03:16,674 - Pathfinder - DEBUG - Processing destination point: (15, 9)
+2025-05-12 19:03:16,674 - Pathfinder - DEBUG - Heuristic distance from (2, 4) to (15, 9): 18
+2025-05-12 19:03:16,674 - Pathfinder - DEBUG - Processing start point: (3, 4)
+2025-05-12 19:03:16,674 - Pathfinder - DEBUG - Processing destination point: (15, 0)
+2025-05-12 19:03:16,674 - Pathfinder - DEBUG - Heuristic distance from (3, 4) to (15, 0): 16
+2025-05-12 19:03:16,675 - Pathfinder - DEBUG - Processing destination point: (15, 1)
+2025-05-12 19:03:16,675 - Pathfinder - DEBUG - Heuristic distance from (3, 4) to (15, 1): 15
+2025-05-12 19:03:16,675 - Pathfinder - DEBUG - Processing destination point: (15, 2)
+2025-05-12 19:03:16,675 - Pathfinder - DEBUG - Heuristic distance from (3, 4) to (15, 2): 14
+2025-05-12 19:03:16,675 - Pathfinder - DEBUG - Processing destination point: (15, 3)
+2025-05-12 19:03:16,675 - Pathfinder - DEBUG - Heuristic distance from (3, 4) to (15, 3): 13
+2025-05-12 19:03:16,675 - Pathfinder - DEBUG - Processing destination point: (15, 4)
+2025-05-12 19:03:16,675 - Pathfinder - DEBUG - Heuristic distance from (3, 4) to (15, 4): 12
+2025-05-12 19:03:16,675 - Pathfinder - DEBUG - Processing destination point: (15, 5)
+2025-05-12 19:03:16,676 - Pathfinder - DEBUG - Heuristic distance from (3, 4) to (15, 5): 13
+2025-05-12 19:03:16,676 - Pathfinder - DEBUG - Processing destination point: (15, 6)
+2025-05-12 19:03:16,676 - Pathfinder - DEBUG - Heuristic distance from (3, 4) to (15, 6): 14
+2025-05-12 19:03:16,676 - Pathfinder - DEBUG - Processing destination point: (15, 7)
+2025-05-12 19:03:16,676 - Pathfinder - DEBUG - Heuristic distance from (3, 4) to (15, 7): 15
+2025-05-12 19:03:16,676 - Pathfinder - DEBUG - Processing destination point: (15, 8)
+2025-05-12 19:03:16,676 - Pathfinder - DEBUG - Heuristic distance from (3, 4) to (15, 8): 16
+2025-05-12 19:03:16,676 - Pathfinder - DEBUG - Processing destination point: (15, 9)
+2025-05-12 19:03:16,676 - Pathfinder - DEBUG - Heuristic distance from (3, 4) to (15, 9): 17
+2025-05-12 19:03:16,676 - Pathfinder - DEBUG - Processing destination point: (15, 0)
+2025-05-12 19:03:16,676 - Pathfinder - DEBUG - Heuristic distance from (3, 4) to (15, 0): 16
+2025-05-12 19:03:16,677 - Pathfinder - DEBUG - Processing destination point: (15, 9)
+2025-05-12 19:03:16,677 - Pathfinder - DEBUG - Heuristic distance from (3, 4) to (15, 9): 17
+2025-05-12 19:03:16,677 - Pathfinder - DEBUG - Processing start point: (4, 4)
+2025-05-12 19:03:16,677 - Pathfinder - DEBUG - Processing destination point: (15, 0)
+2025-05-12 19:03:16,677 - Pathfinder - DEBUG - Heuristic distance from (4, 4) to (15, 0): 15
+2025-05-12 19:03:16,677 - Pathfinder - DEBUG - Processing destination point: (15, 1)
+2025-05-12 19:03:16,677 - Pathfinder - DEBUG - Heuristic distance from (4, 4) to (15, 1): 14
+2025-05-12 19:03:16,677 - Pathfinder - DEBUG - Processing destination point: (15, 2)
+2025-05-12 19:03:16,677 - Pathfinder - DEBUG - Heuristic distance from (4, 4) to (15, 2): 13
+2025-05-12 19:03:16,677 - Pathfinder - DEBUG - Processing destination point: (15, 3)
+2025-05-12 19:03:16,677 - Pathfinder - DEBUG - Heuristic distance from (4, 4) to (15, 3): 12
+2025-05-12 19:03:16,677 - Pathfinder - DEBUG - Processing destination point: (15, 4)
+2025-05-12 19:03:16,678 - Pathfinder - DEBUG - Heuristic distance from (4, 4) to (15, 4): 11
+2025-05-12 19:03:16,678 - Pathfinder - DEBUG - Processing destination point: (15, 5)
+2025-05-12 19:03:16,678 - Pathfinder - DEBUG - Heuristic distance from (4, 4) to (15, 5): 12
+2025-05-12 19:03:16,678 - Pathfinder - DEBUG - Processing destination point: (15, 6)
+2025-05-12 19:03:16,678 - Pathfinder - DEBUG - Heuristic distance from (4, 4) to (15, 6): 13
+2025-05-12 19:03:16,678 - Pathfinder - DEBUG - Processing destination point: (15, 7)
+2025-05-12 19:03:16,678 - Pathfinder - DEBUG - Heuristic distance from (4, 4) to (15, 7): 14
+2025-05-12 19:03:16,678 - Pathfinder - DEBUG - Processing destination point: (15, 8)
+2025-05-12 19:03:16,678 - Pathfinder - DEBUG - Heuristic distance from (4, 4) to (15, 8): 15
+2025-05-12 19:03:16,678 - Pathfinder - DEBUG - Processing destination point: (15, 9)
+2025-05-12 19:03:16,679 - Pathfinder - DEBUG - Heuristic distance from (4, 4) to (15, 9): 16
+2025-05-12 19:03:16,679 - Pathfinder - DEBUG - Processing destination point: (15, 0)
+2025-05-12 19:03:16,679 - Pathfinder - DEBUG - Heuristic distance from (4, 4) to (15, 0): 15
+2025-05-12 19:03:16,679 - Pathfinder - DEBUG - Processing destination point: (15, 9)
+2025-05-12 19:03:16,679 - Pathfinder - DEBUG - Heuristic distance from (4, 4) to (15, 9): 16
+2025-05-12 19:03:16,679 - Pathfinder - DEBUG - Processing start point: (6, 2)
+2025-05-12 19:03:16,679 - Pathfinder - DEBUG - Processing destination point: (15, 0)
+2025-05-12 19:03:16,679 - Pathfinder - DEBUG - Heuristic distance from (6, 2) to (15, 0): 11
+2025-05-12 19:03:16,679 - Pathfinder - DEBUG - Processing destination point: (15, 1)
+2025-05-12 19:03:16,679 - Pathfinder - DEBUG - Heuristic distance from (6, 2) to (15, 1): 10
+2025-05-12 19:03:16,680 - Pathfinder - DEBUG - Processing destination point: (15, 2)
+2025-05-12 19:03:16,680 - Pathfinder - DEBUG - Heuristic distance from (6, 2) to (15, 2): 9
+2025-05-12 19:03:16,680 - Pathfinder - DEBUG - Processing destination point: (15, 3)
+2025-05-12 19:03:16,680 - Pathfinder - DEBUG - Heuristic distance from (6, 2) to (15, 3): 10
+2025-05-12 19:03:16,680 - Pathfinder - DEBUG - Processing destination point: (15, 4)
+2025-05-12 19:03:16,680 - Pathfinder - DEBUG - Heuristic distance from (6, 2) to (15, 4): 11
+2025-05-12 19:03:16,680 - Pathfinder - DEBUG - Processing destination point: (15, 5)
+2025-05-12 19:03:16,680 - Pathfinder - DEBUG - Heuristic distance from (6, 2) to (15, 5): 12
+2025-05-12 19:03:16,681 - Pathfinder - DEBUG - Processing destination point: (15, 6)
+2025-05-12 19:03:16,681 - Pathfinder - DEBUG - Heuristic distance from (6, 2) to (15, 6): 13
+2025-05-12 19:03:16,681 - Pathfinder - DEBUG - Processing destination point: (15, 7)
+2025-05-12 19:03:16,681 - Pathfinder - DEBUG - Heuristic distance from (6, 2) to (15, 7): 14
+2025-05-12 19:03:16,681 - Pathfinder - DEBUG - Processing destination point: (15, 8)
+2025-05-12 19:03:16,681 - Pathfinder - DEBUG - Heuristic distance from (6, 2) to (15, 8): 15
+2025-05-12 19:03:16,681 - Pathfinder - DEBUG - Processing destination point: (15, 9)
+2025-05-12 19:03:16,681 - Pathfinder - DEBUG - Heuristic distance from (6, 2) to (15, 9): 16
+2025-05-12 19:03:16,681 - Pathfinder - DEBUG - Processing destination point: (15, 0)
+2025-05-12 19:03:16,682 - Pathfinder - DEBUG - Heuristic distance from (6, 2) to (15, 0): 11
+2025-05-12 19:03:16,682 - Pathfinder - DEBUG - Processing destination point: (15, 9)
+2025-05-12 19:03:16,682 - Pathfinder - DEBUG - Heuristic distance from (6, 2) to (15, 9): 16
+2025-05-12 19:03:16,682 - Pathfinder - DEBUG - Generated 48 start-destination pairs
+2025-05-12 19:03:16,682 - Pathfinder - DEBUG - Sorted pairs (first 5): [(9, (6, 2), (15, 2)), (10, (6, 2), (15, 1)), (10, (6, 2), (15, 3)), (11, (4, 4), (15, 4)), (11, (6, 2), (15, 0))]
+2025-05-12 19:03:16,682 - Pathfinder - DEBUG - Inserter mapping for plastic-bar_0: {'(2, 4)': (2, 3), '(3, 4)': (3, 3), '(4, 4)': (4, 3), '(6, 2)': (5, 2)}
+2025-05-12 19:03:16,682 - Pathfinder - DEBUG - Best start position: (6, 2)
+2025-05-12 19:03:16,682 - Pathfinder - INFO - Found inserter at (5, 2) for start position (6, 2)
+2025-05-12 19:03:16,682 - Pathfinder - INFO - Marked inserter at (5, 2) as obstacle (previous value: 0)
+2025-05-12 19:03:16,683 - Pathfinder - INFO - Updated start_points for plastic-bar_0 from [(2, 4), (3, 4), (4, 4), (6, 2)] to [(6, 2)]
+2025-05-12 19:03:16,683 - Pathfinder - WARNING - Failed to place output inserter for any output item instance
+2025-05-12 19:03:16,683 - Pathfinder - INFO - Processing all splitters
+2025-05-12 19:03:16,683 - Pathfinder - INFO - Valid splitter at (0, 8) with next position (1, 8), facing (0, -1)
+2025-05-12 19:03:16,683 - Pathfinder - INFO -   Inputs: [(1, 9)]
+2025-05-12 19:03:16,683 - Pathfinder - INFO -   Outputs: [(1, 7)]
+2025-05-12 19:03:16,684 - Pathfinder - INFO - Valid splitter at (0, 7) with next position (1, 7), facing (0, -1)
+2025-05-12 19:03:16,684 - Pathfinder - INFO -   Inputs: [(1, 8)]
+2025-05-12 19:03:16,684 - Pathfinder - INFO -   Outputs: [(1, 6)]
+2025-05-12 19:03:16,684 - Pathfinder - INFO - Valid splitter at (0, 6) with next position (1, 6), facing (0, -1)
+2025-05-12 19:03:16,684 - Pathfinder - INFO -   Inputs: [(1, 7)]
+2025-05-12 19:03:16,684 - Pathfinder - INFO -   Outputs: [(1, 5)]
+2025-05-12 19:03:16,685 - Pathfinder - INFO - Valid splitter at (0, 5) with next position (1, 5), facing (0, -1)
+2025-05-12 19:03:16,685 - Pathfinder - INFO -   Inputs: [(1, 6)]
+2025-05-12 19:03:16,685 - Pathfinder - INFO -   Outputs: [(1, 4)]
+2025-05-12 19:03:16,685 - Pathfinder - INFO - Valid splitter at (0, 4) with next position (1, 4), facing (0, -1)
+2025-05-12 19:03:16,685 - Pathfinder - INFO -   Inputs: [(1, 5)]
+2025-05-12 19:03:16,685 - Pathfinder - INFO -   Outputs: [(1, 3)]
+2025-05-12 19:03:16,686 - Pathfinder - INFO - Valid splitter at (0, 3) with next position (1, 3), facing (0, -1)
+2025-05-12 19:03:16,686 - Pathfinder - INFO -   Inputs: [(1, 4)]
+2025-05-12 19:03:16,686 - Pathfinder - INFO -   Outputs: [(1, 2)]
+2025-05-12 19:03:16,686 - Pathfinder - INFO - Valid splitter at (8, 8) with next position (7, 8), facing (0, -1)
+2025-05-12 19:03:16,686 - Pathfinder - INFO -   Inputs: [(7, 9)]
+2025-05-12 19:03:16,686 - Pathfinder - INFO -   Outputs: [(7, 7)]
+2025-05-12 19:03:16,686 - Pathfinder - INFO - Valid splitter at (8, 8) with next position (9, 8), facing (0, -1)
+2025-05-12 19:03:16,686 - Pathfinder - INFO -   Inputs: [(9, 9)]
+2025-05-12 19:03:16,687 - Pathfinder - INFO -   Outputs: [(9, 7)]
+2025-05-12 19:03:16,687 - Pathfinder - INFO - Valid splitter at (8, 7) with next position (7, 7), facing (0, -1)
+2025-05-12 19:03:16,687 - Pathfinder - INFO -   Inputs: [(7, 8)]
+2025-05-12 19:03:16,687 - Pathfinder - INFO -   Outputs: [(7, 6)]
+2025-05-12 19:03:16,687 - Pathfinder - INFO - Valid splitter at (8, 7) with next position (9, 7), facing (0, -1)
+2025-05-12 19:03:16,687 - Pathfinder - INFO -   Inputs: [(9, 8)]
+2025-05-12 19:03:16,687 - Pathfinder - INFO -   Outputs: [(9, 6)]
+2025-05-12 19:03:16,687 - Pathfinder - INFO - Valid splitter at (8, 6) with next position (7, 6), facing (0, -1)
+2025-05-12 19:03:16,687 - Pathfinder - INFO -   Inputs: [(7, 7)]
+2025-05-12 19:03:16,688 - Pathfinder - INFO -   Outputs: [(7, 5)]
+2025-05-12 19:03:16,688 - Pathfinder - INFO - Valid splitter at (8, 6) with next position (9, 6), facing (0, -1)
+2025-05-12 19:03:16,688 - Pathfinder - INFO -   Inputs: [(9, 7)]
+2025-05-12 19:03:16,688 - Pathfinder - INFO -   Outputs: [(9, 5)]
+2025-05-12 19:03:16,688 - Pathfinder - INFO - Valid splitter at (8, 5) with next position (7, 5), facing (0, -1)
+2025-05-12 19:03:16,688 - Pathfinder - INFO -   Inputs: [(7, 6)]
+2025-05-12 19:03:16,688 - Pathfinder - INFO -   Outputs: [(7, 4)]
+2025-05-12 19:03:16,688 - Pathfinder - INFO - Valid splitter at (8, 5) with next position (9, 5), facing (0, -1)
+2025-05-12 19:03:16,688 - Pathfinder - INFO -   Inputs: [(9, 6)]
+2025-05-12 19:03:16,689 - Pathfinder - INFO -   Outputs: [(9, 4)]
+2025-05-12 19:03:16,689 - Pathfinder - INFO - Valid splitter at (8, 4) with next position (7, 4), facing (0, -1)
+2025-05-12 19:03:16,689 - Pathfinder - INFO -   Inputs: [(7, 5)]
+2025-05-12 19:03:16,689 - Pathfinder - INFO -   Outputs: [(7, 3)]
+2025-05-12 19:03:16,689 - Pathfinder - INFO - Valid splitter at (8, 4) with next position (9, 4), facing (0, -1)
+2025-05-12 19:03:16,689 - Pathfinder - INFO -   Inputs: [(9, 5)]
+2025-05-12 19:03:16,689 - Pathfinder - INFO -   Outputs: [(9, 3)]
+2025-05-12 19:03:16,689 - Pathfinder - INFO - Valid splitter at (8, 3) with next position (7, 3), facing (0, -1)
+2025-05-12 19:03:16,689 - Pathfinder - INFO -   Inputs: [(7, 4)]
+2025-05-12 19:03:16,689 - Pathfinder - INFO -   Outputs: [(7, 2)]
+2025-05-12 19:03:16,689 - Pathfinder - INFO - Valid splitter at (8, 3) with next position (9, 3), facing (0, -1)
+2025-05-12 19:03:16,689 - Pathfinder - INFO -   Inputs: [(9, 4)]
+2025-05-12 19:03:16,689 - Pathfinder - INFO -   Outputs: [(9, 2)]
+2025-05-12 19:03:16,689 - Pathfinder - INFO - Valid splitter at (8, 2) with next position (7, 2), facing (0, -1)
+2025-05-12 19:03:16,689 - Pathfinder - INFO -   Inputs: [(7, 3)]
+2025-05-12 19:03:16,689 - Pathfinder - INFO -   Outputs: [(7, 1)]
+2025-05-12 19:03:16,691 - Pathfinder - INFO - Valid splitter at (8, 2) with next position (9, 2), facing (0, -1)
+2025-05-12 19:03:16,691 - Pathfinder - INFO -   Inputs: [(9, 3)]
+2025-05-12 19:03:16,691 - Pathfinder - INFO -   Outputs: [(9, 1)]
+2025-05-12 19:03:16,691 - Pathfinder - INFO - Valid splitter at (8, 1) with next position (7, 1), facing (0, -1)
+2025-05-12 19:03:16,691 - Pathfinder - INFO -   Inputs: [(7, 2)]
+2025-05-12 19:03:16,691 - Pathfinder - INFO -   Outputs: [(7, 0)]
+2025-05-12 19:03:16,691 - Pathfinder - INFO - Valid splitter at (8, 1) with next position (9, 1), facing (0, -1)
+2025-05-12 19:03:16,691 - Pathfinder - INFO -   Inputs: [(9, 2)]
+2025-05-12 19:03:16,691 - Pathfinder - INFO -   Outputs: [(9, 0)]
+2025-05-12 19:03:16,691 - Pathfinder - INFO - Valid splitter at (15, 1) with next position (14, 1), facing (0, 1)
+2025-05-12 19:03:16,692 - Pathfinder - INFO -   Inputs: [(14, 0)]
+2025-05-12 19:03:16,692 - Pathfinder - INFO -   Outputs: [(14, 2)]
+2025-05-12 19:03:16,692 - Pathfinder - INFO - Valid splitter at (15, 2) with next position (14, 2), facing (0, 1)
+2025-05-12 19:03:16,692 - Pathfinder - INFO -   Inputs: [(14, 1)]
+2025-05-12 19:03:16,692 - Pathfinder - INFO -   Outputs: [(14, 3)]
+2025-05-12 19:03:16,692 - Pathfinder - INFO - Valid splitter at (15, 3) with next position (14, 3), facing (0, 1)
+2025-05-12 19:03:16,692 - Pathfinder - INFO -   Inputs: [(14, 2)]
+2025-05-12 19:03:16,692 - Pathfinder - INFO -   Outputs: [(14, 4)]
+2025-05-12 19:03:16,692 - Pathfinder - INFO - Valid splitter at (15, 4) with next position (14, 4), facing (0, 1)
+2025-05-12 19:03:16,692 - Pathfinder - INFO -   Inputs: [(14, 3)]
+2025-05-12 19:03:16,692 - Pathfinder - INFO -   Outputs: [(14, 5)]
+2025-05-12 19:03:16,692 - Pathfinder - INFO - Valid splitter at (15, 5) with next position (14, 5), facing (0, 1)
+2025-05-12 19:03:16,693 - Pathfinder - INFO -   Inputs: [(14, 4)]
+2025-05-12 19:03:16,693 - Pathfinder - INFO -   Outputs: [(14, 6)]
+2025-05-12 19:03:16,693 - Pathfinder - INFO - Valid splitter at (15, 6) with next position (14, 6), facing (0, 1)
+2025-05-12 19:03:16,693 - Pathfinder - INFO -   Inputs: [(14, 5)]
+2025-05-12 19:03:16,693 - Pathfinder - INFO -   Outputs: [(14, 7)]
+2025-05-12 19:03:16,693 - Pathfinder - INFO - Valid splitter at (15, 7) with next position (14, 7), facing (0, 1)
+2025-05-12 19:03:16,693 - Pathfinder - INFO -   Inputs: [(14, 6)]
+2025-05-12 19:03:16,693 - Pathfinder - INFO -   Outputs: [(14, 8)]
+2025-05-12 19:03:16,693 - Pathfinder - INFO - Valid splitter at (15, 8) with next position (14, 8), facing (0, 1)
+2025-05-12 19:03:16,693 - Pathfinder - INFO -   Inputs: [(14, 7)]
+2025-05-12 19:03:16,693 - Pathfinder - INFO -   Outputs: [(14, 9)]
+2025-05-12 19:03:16,693 - Pathfinder - INFO - Found splitter at destination point (15, 1)
+2025-05-12 19:03:16,694 - Pathfinder - INFO - Found splitter at destination point (15, 2)
+2025-05-12 19:03:16,694 - Pathfinder - INFO - Found splitter at destination point (15, 3)
+2025-05-12 19:03:16,694 - Pathfinder - INFO - Found splitter at destination point (15, 4)
+2025-05-12 19:03:16,694 - Pathfinder - INFO - Found splitter at destination point (15, 5)
+2025-05-12 19:03:16,694 - Pathfinder - INFO - Found splitter at destination point (15, 6)
+2025-05-12 19:03:16,694 - Pathfinder - INFO - Found splitter at destination point (15, 7)
+2025-05-12 19:03:16,694 - Pathfinder - INFO - Found splitter at destination point (15, 8)
+2025-05-12 19:03:16,694 - Pathfinder - INFO - Added splitter input (14, 0) as destination
+2025-05-12 19:03:16,694 - Pathfinder - INFO - Added splitter input (14, 1) as destination
+2025-05-12 19:03:16,694 - Pathfinder - INFO - Added splitter input (14, 2) as destination
+2025-05-12 19:03:16,695 - Pathfinder - INFO - Added splitter input (14, 3) as destination
+2025-05-12 19:03:16,695 - Pathfinder - INFO - Added splitter input (14, 4) as destination
+2025-05-12 19:03:16,695 - Pathfinder - INFO - Added splitter input (14, 5) as destination
+2025-05-12 19:03:16,695 - Pathfinder - INFO - Added splitter input (14, 6) as destination
+2025-05-12 19:03:16,695 - Pathfinder - INFO - Added splitter input (14, 7) as destination
+2025-05-12 19:03:16,695 - Pathfinder - INFO - Destination point (14, 0) is an input of splitter at (15, 1)
+2025-05-12 19:03:16,695 - Pathfinder - INFO - Destination point (14, 1) is an input of splitter at (15, 2)
+2025-05-12 19:03:16,695 - Pathfinder - INFO - Destination point (14, 2) is an input of splitter at (15, 3)
+2025-05-12 19:03:16,695 - Pathfinder - INFO - Destination point (14, 3) is an input of splitter at (15, 4)
+2025-05-12 19:03:16,695 - Pathfinder - INFO - Destination point (14, 4) is an input of splitter at (15, 5)
+2025-05-12 19:03:16,695 - Pathfinder - INFO - Destination point (14, 5) is an input of splitter at (15, 6)
+2025-05-12 19:03:16,696 - Pathfinder - INFO - Destination point (14, 6) is an input of splitter at (15, 7)
+2025-05-12 19:03:16,696 - Pathfinder - INFO - Destination point (14, 7) is an input of splitter at (15, 8)
+2025-05-12 19:03:16,696 - Pathfinder - DEBUG - All pairs sorted by heuristic distance: [(8, (6, 2), (14, 2), None, <MultiAgentPathfinder.Splitter object at 0x0000019F3FEE54F0>), (9, (6, 2), (14, 1), None, <MultiAgentPathfinder.Splitter object at 0x0000019F3FEE6120>), (9, (6, 2), (14, 3), None, <MultiAgentPathfinder.Splitter object at 0x0000019F3FEE4920>), (10, (6, 2), (14, 0), None, <MultiAgentPathfinder.Splitter object at 0x0000019F3FEE5610>), (10, (6, 2), (14, 4), None, <MultiAgentPathfinder.Splitter object at 0x0000019F3FEE55E0>), (11, (6, 2), (14, 5), None, <MultiAgentPathfinder.Splitter object at 0x0000019F3FEE5F40>), (12, (6, 2), (14, 6), None, <MultiAgentPathfinder.Splitter object at 0x0000019F3FEE5EE0>), (13, (6, 2), (14, 7), None, <MultiAgentPathfinder.Splitter object at 0x0000019F3FEE4860>)]
+2025-05-12 19:03:16,696 - Pathfinder - DEBUG - Checking underground path from (6, 2) to (11, 2) with length 4
+2025-05-12 19:03:16,696 - Pathfinder - DEBUG - Found valid underground path from (6, 2) to (11, 2) with obstacle? True
+2025-05-12 19:03:16,696 - Pathfinder - DEBUG - Checking underground path from (6, 2) to (6, 7) with length 4
+2025-05-12 19:03:16,696 - Pathfinder - DEBUG - Checking underground path from (6, 2) to (6, 6) with length 3
+2025-05-12 19:03:16,696 - Pathfinder - DEBUG - Checking underground path from (6, 2) to (6, 5) with length 2
+2025-05-12 19:03:16,696 - Pathfinder - DEBUG - Checking underground path from (6, 2) to (1, 2) with length 4
+2025-05-12 19:03:16,697 - Pathfinder - DEBUG - Checking underground path from (6, 2) to (2, 2) with length 3
+2025-05-12 19:03:16,697 - Pathfinder - DEBUG - Checking underground path from (6, 2) to (3, 2) with length 2
+2025-05-12 19:03:16,697 - Pathfinder - DEBUG - Checking underground path from (6, 2) to (6, -3) with length 4
+2025-05-12 19:03:16,697 - Pathfinder - DEBUG - Checking underground path from (6, 2) to (6, -2) with length 3
+2025-05-12 19:03:16,697 - Pathfinder - DEBUG - Checking underground path from (6, 2) to (6, -1) with length 2
+2025-05-12 19:03:16,697 - Pathfinder - DEBUG - Checking underground path from (7, 2) to (12, 2) with length 4
+2025-05-12 19:03:16,697 - Pathfinder - DEBUG - Found valid underground path from (7, 2) to (12, 2) with obstacle? True
+2025-05-12 19:03:16,697 - Pathfinder - DEBUG - Checking underground path from (7, 2) to (7, 7) with length 4
+2025-05-12 19:03:16,697 - Pathfinder - DEBUG - Checking underground path from (7, 2) to (7, 6) with length 3
+2025-05-12 19:03:16,698 - Pathfinder - DEBUG - Checking underground path from (7, 2) to (7, 5) with length 2
+2025-05-12 19:03:16,698 - Pathfinder - DEBUG - Checking underground path from (7, 2) to (2, 2) with length 4
+2025-05-12 19:03:16,698 - Pathfinder - DEBUG - Checking underground path from (7, 2) to (3, 2) with length 3
+2025-05-12 19:03:16,698 - Pathfinder - DEBUG - Checking underground path from (7, 2) to (4, 2) with length 2
+2025-05-12 19:03:16,698 - Pathfinder - DEBUG - Checking underground path from (7, 2) to (7, -3) with length 4
+2025-05-12 19:03:16,698 - Pathfinder - DEBUG - Checking underground path from (7, 2) to (7, -2) with length 3
+2025-05-12 19:03:16,698 - Pathfinder - DEBUG - Checking underground path from (7, 2) to (7, -1) with length 2
+2025-05-12 19:03:16,698 - Pathfinder - DEBUG - Checking underground path from (11, 2) to (16, 2) with length 4
+2025-05-12 19:03:16,698 - Pathfinder - DEBUG - Checking underground path from (11, 2) to (15, 2) with length 3
+2025-05-12 19:03:16,698 - Pathfinder - DEBUG - Checking underground path from (11, 2) to (14, 2) with length 2
+2025-05-12 19:03:16,698 - Pathfinder - DEBUG - Checking underground path from (11, 2) to (11, 7) with length 4
+2025-05-12 19:03:16,698 - Pathfinder - DEBUG - Checking underground path from (11, 2) to (11, 6) with length 3
+2025-05-12 19:03:16,699 - Pathfinder - DEBUG - Checking underground path from (11, 2) to (11, 5) with length 2
+2025-05-12 19:03:16,699 - Pathfinder - DEBUG - Checking underground path from (11, 2) to (6, 2) with length 4
+2025-05-12 19:03:16,699 - Pathfinder - DEBUG - Checking underground path from (11, 2) to (7, 2) with length 3
+2025-05-12 19:03:16,699 - Pathfinder - DEBUG - Exit (7, 2) rejected because it doesn't get closer to goal
+2025-05-12 19:03:16,699 - Pathfinder - DEBUG - Checking underground path from (11, 2) to (8, 2) with length 2
+2025-05-12 19:03:16,699 - Pathfinder - DEBUG - Checking underground path from (11, 2) to (11, -3) with length 4
+2025-05-12 19:03:16,699 - Pathfinder - DEBUG - Checking underground path from (11, 2) to (11, -2) with length 3
+2025-05-12 19:03:16,699 - Pathfinder - DEBUG - Checking underground path from (11, 2) to (11, -1) with length 2
+2025-05-12 19:03:16,700 - Pathfinder - DEBUG - Checking underground path from (12, 2) to (17, 2) with length 4
+2025-05-12 19:03:16,700 - Pathfinder - DEBUG - Checking underground path from (12, 2) to (16, 2) with length 3
+2025-05-12 19:03:16,700 - Pathfinder - DEBUG - Checking underground path from (12, 2) to (15, 2) with length 2
+2025-05-12 19:03:16,700 - Pathfinder - DEBUG - Checking underground path from (12, 2) to (12, 7) with length 4
+2025-05-12 19:03:16,700 - Pathfinder - DEBUG - Checking underground path from (12, 2) to (12, 6) with length 3
+2025-05-12 19:03:16,700 - Pathfinder - DEBUG - Checking underground path from (12, 2) to (12, 5) with length 2
+2025-05-12 19:03:16,700 - Pathfinder - DEBUG - Checking underground path from (12, 2) to (7, 2) with length 4
+2025-05-12 19:03:16,701 - Pathfinder - DEBUG - Exit (7, 2) rejected because it doesn't get closer to goal
+2025-05-12 19:03:16,701 - Pathfinder - DEBUG - Checking underground path from (12, 2) to (8, 2) with length 3
+2025-05-12 19:03:16,701 - Pathfinder - DEBUG - Checking underground path from (12, 2) to (9, 2) with length 2
+2025-05-12 19:03:16,701 - Pathfinder - DEBUG - Checking underground path from (12, 2) to (12, -3) with length 4
+2025-05-12 19:03:16,701 - Pathfinder - DEBUG - Checking underground path from (12, 2) to (12, -2) with length 3
+2025-05-12 19:03:16,701 - Pathfinder - DEBUG - Checking underground path from (12, 2) to (12, -1) with length 2
+2025-05-12 19:03:16,701 - Pathfinder - DEBUG - Checking underground path from (13, 2) to (18, 2) with length 4
+2025-05-12 19:03:16,701 - Pathfinder - DEBUG - Checking underground path from (13, 2) to (17, 2) with length 3
+2025-05-12 19:03:16,701 - Pathfinder - DEBUG - Checking underground path from (13, 2) to (16, 2) with length 2
+2025-05-12 19:03:16,701 - Pathfinder - DEBUG - Checking underground path from (13, 2) to (13, 7) with length 4
+2025-05-12 19:03:16,701 - Pathfinder - DEBUG - Checking underground path from (13, 2) to (13, 6) with length 3
+2025-05-12 19:03:16,701 - Pathfinder - DEBUG - Checking underground path from (13, 2) to (13, 5) with length 2
+2025-05-12 19:03:16,702 - Pathfinder - DEBUG - Checking underground path from (13, 2) to (8, 2) with length 4
+2025-05-12 19:03:16,702 - Pathfinder - DEBUG - Checking underground path from (13, 2) to (9, 2) with length 3
+2025-05-12 19:03:16,702 - Pathfinder - DEBUG - Checking underground path from (13, 2) to (10, 2) with length 2
+2025-05-12 19:03:16,702 - Pathfinder - DEBUG - Checking underground path from (13, 2) to (13, -3) with length 4
+2025-05-12 19:03:16,702 - Pathfinder - DEBUG - Checking underground path from (13, 2) to (13, -2) with length 3
+2025-05-12 19:03:16,702 - Pathfinder - DEBUG - Checking underground path from (13, 2) to (13, -1) with length 2
+2025-05-12 19:03:16,702 - Pathfinder - DEBUG - Path found: [(6, 2), (7, 2), (12, 2), (13, 2), (14, 2)] with underground segments: {'segment_0': {'start': (7, 2), 'end': (12, 2)}}
+2025-05-12 19:03:16,702 - Pathfinder - INFO - Found better path for plastic-bar_0 from (6, 2) to (14, 2) with length 5
+2025-05-12 19:03:16,702 - Pathfinder - DEBUG - path_foundTrue for plastic-bar_0 from (6, 2) to (14, 2)
+2025-05-12 19:03:16,703 - Pathfinder - DEBUG - Adding path for plastic-bar_0 from (6, 2) to (14, 2)
+2025-05-12 19:03:16,703 - Pathfinder - DEBUG - ======================================================
+2025-05-12 19:03:16,703 - Pathfinder - DEBUG - Marking path on grid for plastic-bar_0 from (6, 2) to (14, 2)
+2025-05-12 19:03:16,703 - Pathfinder - DEBUG - BEFORE :Working grid:
+[[99 44 33 33 33 99  0  0  1  0  0  0  0  0  0 22]
+ [ 1 77 33 33 33 99  0  0  1  0  0  0  0  0  0 22]
+ [ 1  0 33 33 33  1  0  0  1  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  1  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  1  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  1  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  1  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  1  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  1  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  1  0  0  0  0  0  0 22]]
+2025-05-12 19:03:16,704 - Pathfinder - DEBUG - AFTER: Working grid:
+[[99 44 33 33 33 99  0  0  1  0  0  0  0  0  0 22]
+ [ 1 77 33 33 33 99  0  0  1  0  0  0  0  0  0 22]
+ [ 1  0 33 33 33  1  1  1  1  1  1  1  1  1  1 22]
+ [ 1  0  0  0  0  0  0  0  1  0  0  0  0  0  1  1]
+ [ 1  0  0  0  0  0  0  0  1  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  1  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  1  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  1  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  1  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  1  0  0  0  0  0  0 22]]
+2025-05-12 19:03:16,704 - Pathfinder - DEBUG - ======================================================
+2025-05-12 19:03:16,704 - Pathfinder - DEBUG - All pairs sorted by heuristic distance: [(3, (8, 0), (5, 0), None, None), (3, (8, 0), (5, 0), None, None), (4, (8, 1), (5, 0), None, None), (5, (8, 2), (5, 0), None, None), (6, (8, 3), (5, 0), None, None), (7, (8, 4), (5, 0), None, None), (8, (8, 5), (5, 0), None, None), (9, (8, 6), (5, 0), None, None), (10, (8, 7), (5, 0), None, None), (11, (8, 8), (5, 0), None, None), (12, (8, 9), (5, 0), None, None), (12, (8, 9), (5, 0), None, None)]
+2025-05-12 19:03:16,704 - Pathfinder - DEBUG - Checking underground path from (8, 0) to (13, 0) with length 4
+2025-05-12 19:03:16,705 - Pathfinder - DEBUG - Checking underground path from (8, 0) to (12, 0) with length 3
+2025-05-12 19:03:16,705 - Pathfinder - DEBUG - Checking underground path from (8, 0) to (11, 0) with length 2
+2025-05-12 19:03:16,705 - Pathfinder - DEBUG - Checking underground path from (8, 0) to (8, 5) with length 4
+2025-05-12 19:03:16,705 - Pathfinder - DEBUG - Checking underground path from (8, 0) to (8, 4) with length 3
+2025-05-12 19:03:16,705 - Pathfinder - DEBUG - Checking underground path from (8, 0) to (8, 3) with length 2
+2025-05-12 19:03:16,705 - Pathfinder - DEBUG - Checking underground path from (8, 0) to (3, 0) with length 4
+2025-05-12 19:03:16,705 - Pathfinder - DEBUG - Checking underground path from (8, 0) to (4, 0) with length 3
+2025-05-12 19:03:16,705 - Pathfinder - DEBUG - Checking underground path from (8, 0) to (5, 0) with length 2
+2025-05-12 19:03:16,705 - Pathfinder - DEBUG - Checking underground path from (8, 0) to (8, -5) with length 4
+2025-05-12 19:03:16,705 - Pathfinder - DEBUG - Checking underground path from (8, 0) to (8, -4) with length 3
+2025-05-12 19:03:16,705 - Pathfinder - DEBUG - Checking underground path from (8, 0) to (8, -3) with length 2
+2025-05-12 19:03:16,705 - Pathfinder - DEBUG - Checking underground path from (7, 0) to (12, 0) with length 4
+2025-05-12 19:03:16,705 - Pathfinder - DEBUG - Checking underground path from (7, 0) to (11, 0) with length 3
+2025-05-12 19:03:16,706 - Pathfinder - DEBUG - Checking underground path from (7, 0) to (10, 0) with length 2
+2025-05-12 19:03:16,706 - Pathfinder - DEBUG - Checking underground path from (7, 0) to (7, 5) with length 4
+2025-05-12 19:03:16,706 - Pathfinder - DEBUG - Checking underground path from (7, 0) to (7, 4) with length 3
+2025-05-12 19:03:16,706 - Pathfinder - DEBUG - Checking underground path from (7, 0) to (7, 3) with length 2
+2025-05-12 19:03:16,706 - Pathfinder - DEBUG - Checking underground path from (7, 0) to (2, 0) with length 4
+2025-05-12 19:03:16,706 - Pathfinder - DEBUG - Checking underground path from (7, 0) to (3, 0) with length 3
+2025-05-12 19:03:16,706 - Pathfinder - DEBUG - Checking underground path from (7, 0) to (4, 0) with length 2
+2025-05-12 19:03:16,706 - Pathfinder - DEBUG - Checking underground path from (7, 0) to (7, -5) with length 4
+2025-05-12 19:03:16,706 - Pathfinder - DEBUG - Checking underground path from (7, 0) to (7, -4) with length 3
+2025-05-12 19:03:16,706 - Pathfinder - DEBUG - Checking underground path from (7, 0) to (7, -3) with length 2
+2025-05-12 19:03:16,707 - Pathfinder - DEBUG - Checking underground path from (6, 0) to (11, 0) with length 4
+2025-05-12 19:03:16,707 - Pathfinder - DEBUG - Checking underground path from (6, 0) to (10, 0) with length 3
+2025-05-12 19:03:16,707 - Pathfinder - DEBUG - Checking underground path from (6, 0) to (9, 0) with length 2
+2025-05-12 19:03:16,707 - Pathfinder - DEBUG - Checking underground path from (6, 0) to (6, 5) with length 4
+2025-05-12 19:03:16,707 - Pathfinder - DEBUG - Exit (6, 5) rejected because it doesn't get closer to goal
+2025-05-12 19:03:16,707 - Pathfinder - DEBUG - Checking underground path from (6, 0) to (6, 4) with length 3
+2025-05-12 19:03:16,707 - Pathfinder - DEBUG - Exit (6, 4) rejected because it doesn't get closer to goal
+2025-05-12 19:03:16,707 - Pathfinder - DEBUG - Checking underground path from (6, 0) to (6, 3) with length 2
+2025-05-12 19:03:16,707 - Pathfinder - DEBUG - Exit (6, 3) rejected because it doesn't get closer to goal
+2025-05-12 19:03:16,707 - Pathfinder - DEBUG - Checking underground path from (6, 0) to (1, 0) with length 4
+2025-05-12 19:03:16,707 - Pathfinder - DEBUG - Checking underground path from (6, 0) to (2, 0) with length 3
+2025-05-12 19:03:16,707 - Pathfinder - DEBUG - Checking underground path from (6, 0) to (3, 0) with length 2
+2025-05-12 19:03:16,708 - Pathfinder - DEBUG - Checking underground path from (6, 0) to (6, -5) with length 4
+2025-05-12 19:03:16,708 - Pathfinder - DEBUG - Checking underground path from (6, 0) to (6, -4) with length 3
+2025-05-12 19:03:16,708 - Pathfinder - DEBUG - Checking underground path from (6, 0) to (6, -3) with length 2
+2025-05-12 19:03:16,708 - Pathfinder - DEBUG - Path found: [(8, 0), (7, 0), (6, 0), (5, 0)] with underground segments: {}
+2025-05-12 19:03:16,708 - Pathfinder - INFO - Found better path for petroleum-gas_0 from (8, 0) to (5, 0) with length 4
+2025-05-12 19:03:16,708 - Pathfinder - DEBUG - path_foundTrue for petroleum-gas_0 from (8, 0) to (5, 0)
+2025-05-12 19:03:16,708 - Pathfinder - DEBUG - Checking underground path from (8, 0) to (13, 0) with length 4
+2025-05-12 19:03:16,708 - Pathfinder - DEBUG - Checking underground path from (8, 0) to (12, 0) with length 3
+2025-05-12 19:03:16,708 - Pathfinder - DEBUG - Checking underground path from (8, 0) to (11, 0) with length 2
+2025-05-12 19:03:16,709 - Pathfinder - DEBUG - Checking underground path from (8, 0) to (8, 5) with length 4
+2025-05-12 19:03:16,709 - Pathfinder - DEBUG - Checking underground path from (8, 0) to (8, 4) with length 3
+2025-05-12 19:03:16,709 - Pathfinder - DEBUG - Checking underground path from (8, 0) to (8, 3) with length 2
+2025-05-12 19:03:16,709 - Pathfinder - DEBUG - Checking underground path from (8, 0) to (3, 0) with length 4
+2025-05-12 19:03:16,709 - Pathfinder - DEBUG - Checking underground path from (8, 0) to (4, 0) with length 3
+2025-05-12 19:03:16,709 - Pathfinder - DEBUG - Checking underground path from (8, 0) to (5, 0) with length 2
+2025-05-12 19:03:16,709 - Pathfinder - DEBUG - Checking underground path from (8, 0) to (8, -5) with length 4
+2025-05-12 19:03:16,710 - Pathfinder - DEBUG - Checking underground path from (8, 0) to (8, -4) with length 3
+2025-05-12 19:03:16,710 - Pathfinder - DEBUG - Checking underground path from (8, 0) to (8, -3) with length 2
+2025-05-12 19:03:16,710 - Pathfinder - DEBUG - Checking underground path from (7, 0) to (12, 0) with length 4
+2025-05-12 19:03:16,710 - Pathfinder - DEBUG - Checking underground path from (7, 0) to (11, 0) with length 3
+2025-05-12 19:03:16,710 - Pathfinder - DEBUG - Checking underground path from (7, 0) to (10, 0) with length 2
+2025-05-12 19:03:16,710 - Pathfinder - DEBUG - Checking underground path from (7, 0) to (7, 5) with length 4
+2025-05-12 19:03:16,710 - Pathfinder - DEBUG - Checking underground path from (7, 0) to (7, 4) with length 3
+2025-05-12 19:03:16,711 - Pathfinder - DEBUG - Checking underground path from (7, 0) to (7, 3) with length 2
+2025-05-12 19:03:16,711 - Pathfinder - DEBUG - Checking underground path from (7, 0) to (2, 0) with length 4
+2025-05-12 19:03:16,711 - Pathfinder - DEBUG - Checking underground path from (7, 0) to (3, 0) with length 3
+2025-05-12 19:03:16,711 - Pathfinder - DEBUG - Checking underground path from (7, 0) to (4, 0) with length 2
+2025-05-12 19:03:16,711 - Pathfinder - DEBUG - Checking underground path from (7, 0) to (7, -5) with length 4
+2025-05-12 19:03:16,711 - Pathfinder - DEBUG - Checking underground path from (7, 0) to (7, -4) with length 3
+2025-05-12 19:03:16,711 - Pathfinder - DEBUG - Checking underground path from (7, 0) to (7, -3) with length 2
+2025-05-12 19:03:16,711 - Pathfinder - DEBUG - Checking underground path from (6, 0) to (11, 0) with length 4
+2025-05-12 19:03:16,712 - Pathfinder - DEBUG - Checking underground path from (6, 0) to (10, 0) with length 3
+2025-05-12 19:03:16,712 - Pathfinder - DEBUG - Checking underground path from (6, 0) to (9, 0) with length 2
+2025-05-12 19:03:16,712 - Pathfinder - DEBUG - Checking underground path from (6, 0) to (6, 5) with length 4
+2025-05-12 19:03:16,712 - Pathfinder - DEBUG - Exit (6, 5) rejected because it doesn't get closer to goal
+2025-05-12 19:03:16,712 - Pathfinder - DEBUG - Checking underground path from (6, 0) to (6, 4) with length 3
+2025-05-12 19:03:16,712 - Pathfinder - DEBUG - Exit (6, 4) rejected because it doesn't get closer to goal
+2025-05-12 19:03:16,712 - Pathfinder - DEBUG - Checking underground path from (6, 0) to (6, 3) with length 2
+2025-05-12 19:03:16,713 - Pathfinder - DEBUG - Exit (6, 3) rejected because it doesn't get closer to goal
+2025-05-12 19:03:16,713 - Pathfinder - DEBUG - Checking underground path from (6, 0) to (1, 0) with length 4
+2025-05-12 19:03:16,713 - Pathfinder - DEBUG - Checking underground path from (6, 0) to (2, 0) with length 3
+2025-05-12 19:03:16,713 - Pathfinder - DEBUG - Checking underground path from (6, 0) to (3, 0) with length 2
+2025-05-12 19:03:16,713 - Pathfinder - DEBUG - Checking underground path from (6, 0) to (6, -5) with length 4
+2025-05-12 19:03:16,713 - Pathfinder - DEBUG - Checking underground path from (6, 0) to (6, -4) with length 3
+2025-05-12 19:03:16,714 - Pathfinder - DEBUG - Checking underground path from (6, 0) to (6, -3) with length 2
+2025-05-12 19:03:16,714 - Pathfinder - DEBUG - Path found: [(8, 0), (7, 0), (6, 0), (5, 0)] with underground segments: {}
+2025-05-12 19:03:16,714 - Pathfinder - DEBUG - path_foundTrue for petroleum-gas_0 from (8, 0) to (5, 0)
+2025-05-12 19:03:16,714 - Pathfinder - DEBUG - Adding path for petroleum-gas_0 from (8, 0) to (5, 0)
+2025-05-12 19:03:16,714 - Pathfinder - DEBUG - ======================================================
+2025-05-12 19:03:16,714 - Pathfinder - DEBUG - Marking path on grid for petroleum-gas_0 from (8, 0) to (5, 0)
+2025-05-12 19:03:16,716 - Pathfinder - DEBUG - BEFORE :Working grid:
+[[99 44 33 33 33  0  0  0  0  0  0  0  0  0  0 22]
+ [ 1 77 33 33 33 99  0  0  0  0  0  0  0  0  0 22]
+ [ 1  0 33 33 33  1  1  1  0  1  1  1  1  1  1 22]
+ [ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  1  1]
+ [ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  0 22]]
+2025-05-12 19:03:16,717 - Pathfinder - DEBUG - AFTER: Working grid:
+[[99 44 33 33 33  1  1  1  1  0  0  0  0  0  0 22]
+ [ 1 77 33 33 33 99  0  0  0  0  0  0  0  0  0 22]
+ [ 1  0 33 33 33  1  1  1  0  1  1  1  1  1  1 22]
+ [ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  1  1]
+ [ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  0 22]]
+2025-05-12 19:03:16,717 - Pathfinder - DEBUG - ======================================================
+2025-05-12 19:03:16,717 - Pathfinder - DEBUG - All pairs sorted by heuristic distance: [(3, (8, 1), (5, 1), None, None), (4, (8, 0), (5, 1), None, None), (4, (8, 0), (5, 1), None, None), (4, (8, 2), (5, 1), None, None), (5, (8, 3), (5, 1), None, None), (6, (8, 4), (5, 1), None, None), (7, (8, 5), (5, 1), None, None), (8, (8, 6), (5, 1), None, None), (9, (8, 7), (5, 1), None, None), (10, (8, 8), (5, 1), None, None), (11, (8, 9), (5, 1), None, None), (11, (8, 9), (5, 1), None, None)]
+2025-05-12 19:03:16,717 - Pathfinder - DEBUG - Checking underground path from (8, 1) to (13, 1) with length 4
+2025-05-12 19:03:16,717 - Pathfinder - DEBUG - Exit (13, 1) rejected because it doesn't get closer to goal
+2025-05-12 19:03:16,717 - Pathfinder - DEBUG - Checking underground path from (8, 1) to (12, 1) with length 3
+2025-05-12 19:03:16,719 - Pathfinder - DEBUG - Exit (12, 1) rejected because it doesn't get closer to goal
+2025-05-12 19:03:16,719 - Pathfinder - DEBUG - Checking underground path from (8, 1) to (11, 1) with length 2
+2025-05-12 19:03:16,719 - Pathfinder - DEBUG - Exit (11, 1) rejected because it doesn't get closer to goal
+2025-05-12 19:03:16,719 - Pathfinder - DEBUG - Checking underground path from (8, 1) to (8, 6) with length 4
+2025-05-12 19:03:16,719 - Pathfinder - DEBUG - Checking underground path from (8, 1) to (8, 5) with length 3
+2025-05-12 19:03:16,719 - Pathfinder - DEBUG - Checking underground path from (8, 1) to (8, 4) with length 2
+2025-05-12 19:03:16,719 - Pathfinder - DEBUG - Checking underground path from (8, 1) to (3, 1) with length 4
+2025-05-12 19:03:16,719 - Pathfinder - DEBUG - Checking underground path from (8, 1) to (4, 1) with length 3
+2025-05-12 19:03:16,719 - Pathfinder - DEBUG - Checking underground path from (8, 1) to (5, 1) with length 2
+2025-05-12 19:03:16,719 - Pathfinder - DEBUG - Found valid underground path directly to goal from (8, 1) to (5, 1)
+2025-05-12 19:03:16,719 - Pathfinder - DEBUG - Checking underground path from (8, 1) to (8, -4) with length 4
+2025-05-12 19:03:16,719 - Pathfinder - DEBUG - Checking underground path from (8, 1) to (8, -3) with length 3
+2025-05-12 19:03:16,719 - Pathfinder - DEBUG - Checking underground path from (8, 1) to (8, -2) with length 2
+2025-05-12 19:03:16,719 - Pathfinder - DEBUG - Path found: [(8, 1), (5, 1)] with underground segments: {'segment_0': {'start': (8, 1), 'end': (5, 1)}}
+2025-05-12 19:03:16,719 - Pathfinder - INFO - Found better path for petroleum-gas_1 from (8, 1) to (5, 1) with length 2
+2025-05-12 19:03:16,719 - Pathfinder - DEBUG - path_foundTrue for petroleum-gas_1 from (8, 1) to (5, 1)
+2025-05-12 19:03:16,719 - Pathfinder - DEBUG - Adding path for petroleum-gas_1 from (8, 1) to (5, 1)
+2025-05-12 19:03:16,720 - Pathfinder - DEBUG - ======================================================
+2025-05-12 19:03:16,720 - Pathfinder - DEBUG - Marking path on grid for petroleum-gas_1 from (8, 1) to (5, 1)
+2025-05-12 19:03:16,720 - Pathfinder - DEBUG - BEFORE :Working grid:
+[[99 44 33 33 33  1  1  1  0  0  0  0  0  0  0 22]
+ [ 1 77 33 33 33  0  0  0  0  0  0  0  0  0  0 22]
+ [ 1  0 33 33 33  1  1  1  0  1  1  1  1  1  1 22]
+ [ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  1  1]
+ [ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  0 22]]
+2025-05-12 19:03:16,721 - Pathfinder - DEBUG - AFTER: Working grid:
+[[99 44 33 33 33  1  1  1  0  0  0  0  0  0  0 22]
+ [ 1 77 33 33 33  1  1  1  1  0  0  0  0  0  0 22]
+ [ 1  0 33 33 33  1  1  1  0  1  1  1  1  1  1 22]
+ [ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  1  1]
+ [ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  0 22]]
+2025-05-12 19:03:16,721 - Pathfinder - DEBUG - ======================================================

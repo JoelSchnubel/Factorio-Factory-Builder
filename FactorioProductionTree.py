@@ -48,6 +48,13 @@ BELT_COLOR_MAP = {
 
 class FactorioProductionTree:
     def __init__(self,grid_width=15,grid_height=15) -> None:
+        
+        self.config = self.load_config()
+        
+        
+        self.grid_width = grid_width if grid_width is not None else self.config["grid"]["default_width"]
+        self.grid_height = grid_height if grid_height is not None else self.config["grid"]["default_height"]
+        
         # Load the data from JSON
         items_data = self.load_json("recipes.json")
         
@@ -55,8 +62,6 @@ class FactorioProductionTree:
         
         self.grid = [[0 for _ in range(grid_width)] for _ in range(grid_height)]
 
-        self.grid_width = grid_width
-        self.grid_height = grid_height
         
         # Create a lookup dictionary for items by their ID
         self.item_lookup = {item["id"]: item for item in items_data}
@@ -77,7 +82,44 @@ class FactorioProductionTree:
         
         self.production_data = {}
     
-        
+    def load_config(self):
+        """Load the configuration file"""
+        try:
+            with open("config.json", "r") as file:
+                config = json.load(file)
+            return config
+        except FileNotFoundError:
+            # Return default config if file doesn't exist
+            return {
+                "grid": {"default_width": 16, "default_height": 10},
+                "machines": {
+                    "default_assembler": "assembling-machine-2",
+                    "default_furnace": "electric-furnace",
+                    "default_chemical_plant": "chemical-plant",
+                    "default_refinery": "oil-refinery"
+                },
+                "inserters": {
+                    "default_type": "inserter", 
+                    "input_type": "fast-inserter",
+                    "output_type": "fast-inserter"
+                },
+                "belts": {
+                    "default_type": "transport-belt",
+                    "underground_type": "underground-belt",
+                    "underground_max_length": 4
+                },
+                "visualization": {
+                    "cell_size": 50,
+                    "show_grid_lines": True,
+                    "save_images": True
+                },
+                "pathfinding": {
+                    "allow_underground": True,
+                    "allow_splitters": True,
+                    "find_optimal_paths": True,
+                    "max_tries": 3
+                }
+            }
         
     def load_json(self,recipe_file):
         with open(recipe_file, "r") as file:
@@ -121,7 +163,7 @@ class FactorioProductionTree:
         total_requirements = {
             item_id: {
                 "amount_per_minute": items_per_minute,
-                "assemblers": math.ceil(self._calculate_assemblers(time_per_unit, recipe_runs_needed_per_minute)),
+                "assemblers": math.ceil(self._calculate_assemblers(time_per_unit, recipe_runs_needed_per_minute,item_id)),
                 "input_inserters": [],
                 "belts": 0  ,
                 "capacity": 0
@@ -139,8 +181,8 @@ class FactorioProductionTree:
 
             # Calculate inserters needed for this ingredient
             # set upper bound for number inserters to 3
-        
-            inserters_needed = min(3, math.ceil(total_ingredient_needed_per_minute / (60 * self.machines_data['inserters']['ItemsPerSecond'])))
+            inserter_type = self.config["inserters"]["input_type"]
+            inserters_needed = min(3, math.ceil(total_ingredient_needed_per_minute / (60 * self.machines_data['inserters'][inserter_type]['items_per_second'])))
         
             
             total_requirements[item_id]["input_inserters"].append({
@@ -223,22 +265,54 @@ class FactorioProductionTree:
         return production_data
 
     # Calculate how many assemblers are needed to produce the required amount per minute.
-    def _calculate_assemblers(self, time_per_unit, recipe_runs_needed_per_minute):
-        crafting_speed = self.machines_data["assemblers"]["crafting_speed"]
+    def _calculate_assemblers(self, time_per_unit, recipe_runs_needed_per_minute,item_id):
+        
+        machine_type = self._get_machine_type_for_recipe(item_id)
+          # Get machine info from the machine data
+        if machine_type in self.machines_data["assemblers"]:
+            machine_info = self.machines_data["assemblers"][machine_type]
+            crafting_speed = machine_info["crafting_speed"]
+        else:
+            # Fall back to default if not found
+            default_type = self.config["machines"]["default_assembler"]
+            crafting_speed = self.machines_data["assemblers"][default_type]["crafting_speed"]
+    
         items_per_second_per_assembler = crafting_speed / time_per_unit
         items_per_minute_per_assembler = items_per_second_per_assembler * 60
         return recipe_runs_needed_per_minute / items_per_minute_per_assembler
+    
+    
+    def _get_machine_type_for_recipe(self, recipe_id):
+        # Check the recipe machine mapping in machine_data.json
+        if "recipe_machine_mapping" in self.machines_data:
+            recipes = self.machines_data["recipe_machine_mapping"].get("recipes", {})
+            if recipe_id in recipes:
+                return recipes[recipe_id]
+        
+        # If no specific mapping, use the appropriate default based on config
+        if recipe_id in self.machines_data.get("production_recipes", {}) and "required_machine" in self.machines_data["production_recipes"][recipe_id]:
+            machine_type = self.machines_data["production_recipes"][recipe_id]["required_machine"]
+            if machine_type == "oil-refinery":
+                return self.config["machines"]["default_refinery"]
+            elif machine_type == "chemical-plant":
+                return self.config["machines"]["default_chemical_plant"]
+            elif machine_type == "electric-furnace":
+                return self.config["machines"]["default_furnace"]
+        
+        # Default to the standard assembler
+        return self.config["machines"]["default_assembler"]
 
     # Calculate how many inserters are needed to move the required amount of items per minute.
     def _calculate_inserters(self, recipe_runs_needed_per_minute):
-       
-        items_per_second_per_inserter = self.machines_data["inserters"]["ItemsPerSecond"]
+        inserter_type = self.config["inserters"]["input_type"]
+        items_per_second_per_inserter = self.machines_data["inserters"][inserter_type]["items_per_second"]
         items_per_minute_per_inserter = items_per_second_per_inserter * 60
         return recipe_runs_needed_per_minute / items_per_minute_per_inserter
+    
     # Calculate how many belts are needed to move the required amount of items per minute.
     def _calculate_belts(self, total_items_needed_per_minute):
-      
-        items_per_second_per_belt = self.machines_data["belts"]["ItemsPerSecond"]
+        belt_type = self.config["belts"]["default_type"]
+        items_per_second_per_belt = self.machines_data["belts"][belt_type]["items_per_second"]
         items_per_minute_per_belt = items_per_second_per_belt * 60
         return total_items_needed_per_minute / items_per_minute_per_belt
     
@@ -292,7 +366,8 @@ class FactorioProductionTree:
         # Load images for the items
         item_images = {item: pygame.image.load(f"assets/{item}.png") for item in input_items}
         
-        conveyor_image = pygame.image.load("assets/conveyor.png")
+        belt_type = self.config["belts"]["default_type"]
+        conveyor_image = pygame.image.load(f"assets/{belt_type}.png")
         # Resize images to fit in the grid cells
         item_images = {item: pygame.transform.scale(image, (CELL_SIZE, CELL_SIZE)) for item, image in item_images.items()}
         conveyor_image = pygame.transform.scale(conveyor_image, (CELL_SIZE, CELL_SIZE))
@@ -528,6 +603,13 @@ class FactorioProductionTree:
         self.output_information = output_information
         pygame.quit()
     
+    def is_fluid_item(self, item_id):
+        """Check if an item is a fluid based on its type in recipes data"""
+        # Look up item in the recipe data
+        item = self.item_lookup.get(item_id, {})
+        # Check if the item type is "Liquid"
+        return item.get("type", "") == "Liquid"
+    
     def manual_Input(self, Title="Manual Input"):
         side_panel_width = 300
         CELL_SIZE = 50  # Assuming a default cell size
@@ -541,10 +623,19 @@ class FactorioProductionTree:
         
         # Load images for the items
         item_images = {item: pygame.image.load(f"assets/{item}.png") for item in input_items}
-        conveyor_image = pygame.image.load("assets/conveyor.png")
+        
+        # Load appropriate transport entity images based on item type
+        transport_images = {}
+        for item in input_items:
+            if self.is_fluid_item(item):
+                transport_images[item] = pygame.image.load("assets/pipe.png")
+            else:
+                belt_type = self.config["belts"]["default_type"]
+                transport_images[item] = pygame.image.load(f"assets/{belt_type}.png")
+        
         # Resize images to fit in the grid cells
         item_images = {item: pygame.transform.scale(image, (CELL_SIZE, CELL_SIZE)) for item, image in item_images.items()}
-        conveyor_image = pygame.transform.scale(conveyor_image, (CELL_SIZE, CELL_SIZE))
+        transport_images = {item: pygame.transform.scale(image, (CELL_SIZE, CELL_SIZE)) for item, image in transport_images.items()}
 
         # Track positions for inputs and outputs (item -> {'input': (row, col), 'output': (row, col)})
         input_information = {item: {'input': None, 'output': None, 'paths': None} for item in input_items}
@@ -592,7 +683,7 @@ class FactorioProductionTree:
                                     input_information[current_item]['output'] = (row, col)
                                     setting_input = True  # After setting output, switch to input for next item
 
-                                    # Once both input and output are set, find the path and connect belts
+                                    # Once both input and output are set, find the path and connect transport entities
                                     if input_information[current_item]['input'] and input_information[current_item]['output']:
                                         
                                         grid_astar = [[0 for _ in range(self.grid_width)] for _ in range(self.grid_height)]
@@ -628,26 +719,28 @@ class FactorioProductionTree:
                                                 'item': current_item,
                                                 'destination': [(output_x, output_y)],  # Swap to (col, row) for pathfinder
                                                 'start_points': [(input_x, input_y)],  # Swap to (col, row) for pathfinder
-                                                'inserter_mapping': None
+                                                'inserter_mapping': None,
+                                                'is_fluid': self.is_fluid_item(current_item)  # Flag for fluid handling
                                             }
                                         }
                                         
-                                        # Create the pathfinder object
+                                        # Create the pathfinder object with appropriate underground length
+                                        is_fluid = self.is_fluid_item(current_item)
+                                        underground_length = 10 if is_fluid else 3  # Pipes can go further underground
+                                        
                                         pathfinder = MultiAgentPathfinder(
                                             grid_astar, 
                                             points,
-                                            allow_underground=True,  # You can enable underground belts if needed
-                                            underground_length=3,
+                                            allow_underground=True,  # Enable underground entities
+                                            underground_length=underground_length,
                                             allow_splitters=False,   # Disable splitters
                                             splitters={},            # Empty splitters dictionary
                                             find_optimal_paths=False # Don't need to find optimal paths
                                         )
                                         
-                                      
                                         # Find paths for all items
                                         paths, _ = pathfinder.find_paths_for_all_items()
                                         
-                                
                                         # Store path information directly
                                         if current_item in paths and paths[current_item]:
                                             input_information[current_item]['paths'] = paths
@@ -701,10 +794,13 @@ class FactorioProductionTree:
             # Draw paths for each item using the path data directly
             for item, data in input_information.items():
                 if data['paths'] is not None and item in data['paths']:
+                    is_fluid = self.is_fluid_item(item)
+                    transport_img = transport_images[item]
+                    
                     for path_data in data['paths'][item]:
                         path = path_data['path']
                         
-                        # Draw belts for each segment of the path
+                        # Draw transport entities for each segment of the path
                         for i in range(len(path) - 2):
                             current = path[i+1]
                             next_node = path[i + 2]
@@ -725,19 +821,27 @@ class FactorioProductionTree:
                             else:
                                 continue  # Skip if not a direct connection
                             
-                            # Draw belt with correct rotation
-                            rotated_belt = pygame.transform.rotate(conveyor_image, angle)
-                            window.blit(rotated_belt, (side_panel_width + current[0] * CELL_SIZE, current[1] * CELL_SIZE))
+                            # For fluids, only rotate if we're using pipes with directional graphics
+                            if is_fluid:
+                                # For pipes, we may not need to rotate if they connect automatically
+                                rotated_entity = transport_img
+                            else:
+                                rotated_entity = pygame.transform.rotate(transport_img, angle)
+                                
+                            window.blit(rotated_entity, (side_panel_width + current[0] * CELL_SIZE, current[1] * CELL_SIZE))
             
             # Draw the side panel
             pygame.draw.rect(window, BLACK, (0, 0, side_panel_width, window_height))  # Side panel background
             font = pygame.font.Font(None, 36)
             item_text = f"Setting: {items[current_item_index]}"
             setting_text = "Input" if setting_input else "Output"
+            is_fluid_text = "Type: Fluid" if self.is_fluid_item(items[current_item_index]) else "Type: Solid"
             text_surface_item = font.render(item_text, True, WHITE)
             text_surface_setting = font.render(setting_text, True, WHITE)
+            text_surface_fluid = font.render(is_fluid_text, True, WHITE)
             window.blit(text_surface_item, (10, 50))  # Show the current item being set
             window.blit(text_surface_setting, (10, 100))  # Show whether we're setting input or output
+            window.blit(text_surface_fluid, (10, 150))  # Show whether current item is fluid or solid
 
             # Update display
             pygame.display.flip()
@@ -847,11 +951,11 @@ class FactorioProductionTree:
         belt_coords = (belt[1], belt[2]) 
         
         for assembler in assembler_information:
-            assembler_item, assembler_x, assembler_y = assembler
+            assembler_item, assembler_x, assembler_y, width, height, machine_type, orientation_idx = assembler
             
             # Check if the belt's coordinates overlap with the assembler's 3x3 area
-            for dx in range(3):  # Assembler width: 3
-                for dy in range(3):  # Assembler height: 3
+            for dx in range(width):  
+                for dy in range(height):  
                     assembler_coords = (assembler_x + dx, assembler_y + dy)
                     
                     # If the belt's coordinates overlap with any of the assembler's coordinates
@@ -867,7 +971,13 @@ class FactorioProductionTree:
             return self.obstacle_map[y][x] == 0
         return False  # Out-of-bounds positions are considered unavailable
     
-
+    def is_fluid_item(self, item_id):
+        """Check if an item is a fluid based on its type in recipes data"""
+        # Look up item in the recipe data
+        item = self.item_lookup.get(item_id, {})
+        # Check if the item type is "Liquid"
+        return item.get("type", "") == "Liquid"
+    
     def get_retrieval_points(self, belt_point_information, assembler_information):
         retrieval_points = {}  # Dictionary to store all retrieval points for each item
 
@@ -875,11 +985,14 @@ class FactorioProductionTree:
         for i,(item, x, y, _) in enumerate(belt_point_information):
             key = f"{item}_{i}"  # Unique key per occurrence of the item on the belt
             
+            
+            
             retrieval_points[key] = {
             'item': item,
             'destination': [(x,y)],  # This is the destination point from belt_point_information
             'start_points': [],  # List to store relevant start points
-            'inserter_mapping': None
+            'inserter_mapping': None,
+            'is_fluid': self.is_fluid_item(item)  # Check if the item is a fluid
             }
             
             # Step 2: Check if item is in `input_information`
@@ -905,32 +1018,70 @@ class FactorioProductionTree:
                             retrieval_points[key]["start_points"].append(pos)
                 
                 continue  # Move to the next belt item after checking input information
-
-            # Step 2: Check assembler output points from `assembler_information`
-            for asm_item, assembler_x, assembler_y in assembler_information:
+            
+            
+            
+            fluid_connection_positions = set()
+            _, _, _, _, fluid_connection_info = self.z3_solver.build_map()
+            
+            for conn in fluid_connection_info:
+                fluid_connection_positions.add(conn["position"])
+                # Also add the position one step further in the same direction
+                rel_pos = conn["relative_pos"]
+                assembler_pos = None
+                
+                # Find the corresponding assembler position
+                for asm_item, asm_x, asm_y, width, height, machine_type, orientation_idx in assembler_information:
+                    if conn["assembler_id"].startswith(asm_item):
+                        assembler_pos = (asm_x, asm_y)
+                        break
+                
+                # Skip if we can't find the assembler
+                if not assembler_pos:
+                    continue
+                    
+                # Add positions adjacent to fluid connections (one step outward)
+                if rel_pos[0] == 0:  # Left edge
+                    fluid_connection_positions.add((conn["position"][0] - 1, conn["position"][1]))
+                elif rel_pos[0] == width:  # Right edge
+                    fluid_connection_positions.add((conn["position"][0] + 1, conn["position"][1]))
+                elif rel_pos[1] == 0:  # Top edge
+                    fluid_connection_positions.add((conn["position"][0], conn["position"][1] - 1))
+                elif rel_pos[1] == height:  # Bottom edge
+                    fluid_connection_positions.add((conn["position"][0], conn["position"][1] + 1))
+              
+                    
+            for asm_item, assembler_x, assembler_y,width,height, machine_type, orientation_idx  in assembler_information:
                 if asm_item == item:
-        
-                    # Define assembler output positions based on `output_positions` template
-                    output_positions = [
-                        [(assembler_x, assembler_y - 1), (assembler_x, assembler_y - 2)],  # Upper left
-                        [(assembler_x + 1, assembler_y - 1), (assembler_x + 1, assembler_y - 2)],  # Upper middle
-                        [(assembler_x + 2, assembler_y - 1), (assembler_x + 2,assembler_y - 2)],  # Upper right
-                        [(assembler_x, assembler_y + 3), (assembler_x, assembler_y + 4)],  # Bottom left
-                        [(assembler_x + 1, assembler_y + 3), (assembler_x + 1, assembler_y + 4)],  # Bottom middle
-                        [(assembler_x + 2, assembler_y + 3), (assembler_x + 2, assembler_y + 4)],  # Bottom right
-                        [(assembler_x - 1, assembler_y), (assembler_x - 2, assembler_y)],  # Left up
-                        [(assembler_x - 1, assembler_y + 1), (assembler_x - 2, assembler_y + 1)],  # Left middle
-                        [(assembler_x - 1, assembler_y + 2), (assembler_x - 2, assembler_y + 2)],  # Left bottom
-                        [(assembler_x + 4, assembler_y), (assembler_x + 5, assembler_y)],  # Right up
-                        [(assembler_x + 4, assembler_y + 1), (assembler_x + 5, assembler_y + 1)],  # Right middle
-                        [(assembler_x + 4, assembler_y + 2), (assembler_x + 5, assembler_y + 2)]  # Right bottom
-                    ]
+                    output_positions = []
+                                
+                    # Top edge
+                    for dx in range(width):
+                        output_positions.append([(assembler_x + dx, assembler_y - 1), (assembler_x + dx, assembler_y - 2)])
+                    
+                    # Bottom edge
+                    for dx in range(width):
+                        output_positions.append([(assembler_x + dx, assembler_y + height), (assembler_x + dx, assembler_y + height + 1)])
+                    
+                    # Left edge
+                    for dy in range(height):
+                        output_positions.append([(assembler_x - 1, assembler_y + dy), (assembler_x - 2, assembler_y + dy)])
+                    
+                    # Right edge
+                    for dy in range(height):
+                        output_positions.append([(assembler_x + width, assembler_y + dy), (assembler_x + width + 1, assembler_y + dy)])
 
-                    # Filter output positions to ensure no overlap with any existing structures
+                    # Filter output positions to ensure no overlap with any existing structures or fluid connections
                     for position_pair in output_positions:
-                        # Filter output positions to ensure no overlap with any existing structures
-                            if self.is_position_available(position_pair[0]) and self.is_position_available(position_pair[1]):
-                                retrieval_points[key]["destination"].append(position_pair[1])
+                        inserter_pos, belt_pos = position_pair
+                        
+                        # Skip positions that overlap with fluid connections
+                        if inserter_pos in fluid_connection_positions or belt_pos in fluid_connection_positions:
+                            continue
+                            
+                        # Check if positions are available
+                        if self.is_position_available(inserter_pos) and self.is_position_available(belt_pos):
+                            retrieval_points[key]["destination"].append(belt_pos)
 
         return retrieval_points
 
@@ -960,7 +1111,11 @@ class FactorioProductionTree:
         output_coords.append(input_point)
         output_coords.append(output_point)
         
-        for i, (asm_item, assembler_x, assembler_y) in enumerate(assembler_information):
+        # Handle fluid connections
+        fluid_connection_positions = set()
+        _, _, _, _, fluid_connection_info = self.z3_solver.build_map()
+        
+        for i, (asm_item, assembler_x, assembler_y,width,height,machine_type, orientation_idx) in enumerate(assembler_information):
             if asm_item == output_item:
                 
                 # For each output assembler build own representation    
@@ -968,33 +1123,33 @@ class FactorioProductionTree:
                 
                 logger.info(f"build output path infomation for {key}")
         
-                    
-                # Define assembler output positions based on `output_positions` template
-                output_positions = [
-                    [(assembler_x, assembler_y - 1), (assembler_x, assembler_y - 2)],  # Upper left
-                    [(assembler_x + 1, assembler_y - 1), (assembler_x + 1, assembler_y - 2)],  # Upper middle
-                    [(assembler_x + 2, assembler_y - 1), (assembler_x + 2,assembler_y - 2)],  # Upper right
-                    
-                    [(assembler_x, assembler_y + 3), (assembler_x, assembler_y + 4)],  # Bottom left
-                    [(assembler_x + 1, assembler_y + 3), (assembler_x + 1, assembler_y + 4)],  # Bottom middle
-                    [(assembler_x + 2, assembler_y + 3), (assembler_x + 2, assembler_y + 4)],  # Bottom right
-                    
-                    [(assembler_x - 1, assembler_y), (assembler_x - 2, assembler_y)],  # Left up
-                    [(assembler_x - 1, assembler_y + 1), (assembler_x - 2, assembler_y + 1)],  # Left middle
-                    [(assembler_x - 1, assembler_y + 2), (assembler_x - 2, assembler_y + 2)],  # Left bottom
-                    
-                    [(assembler_x + 3, assembler_y), (assembler_x + 4, assembler_y)],  # Right up
-                    [(assembler_x + 3, assembler_y + 1), (assembler_x + 4, assembler_y + 1)],  # Right middle
-                    [(assembler_x + 3, assembler_y + 2), (assembler_x + 4, assembler_y + 2)]  # Right bottom
-                ]
+
+                # Define assembler output positions based on machine dimensions
+                output_positions = []
                 
-            
+                # Top edge
+                for dx in range(width):
+                    output_positions.append([(assembler_x + dx, assembler_y - 1), (assembler_x + dx, assembler_y - 2)])
+                
+                # Bottom edge
+                for dx in range(width):
+                    output_positions.append([(assembler_x + dx, assembler_y + height), (assembler_x + dx, assembler_y + height + 1)])
+                
+                # Left edge
+                for dy in range(height):
+                    output_positions.append([(assembler_x - 1, assembler_y + dy), (assembler_x - 2, assembler_y + dy)])
+                
+                # Right edge
+                for dy in range(height):
+                    output_positions.append([(assembler_x + width, assembler_y + dy), (assembler_x + width + 1, assembler_y + dy)])
+                
                 
                 retrieval_points[key] = {
                     'item': output_item,
-                    'destination': output_coords,  # This is the destination point from belt_point_information
-                    'start_points': [],  # List to store relevant start points
-                    'inserter_mapping': {}      
+                    'destination': output_coords,  
+                    'start_points': [],  
+                    'inserter_mapping': {}  ,    
+                    'is_fluid': self.is_fluid_item(output_item) 
                 }
 
                 # Filter output positions to ensure no overlap with any existing structures
@@ -1156,7 +1311,7 @@ class FactorioProductionTree:
             print(f'Try Number: {i}')
             
             
-            self.obstacle_map,belt_point_information,assembler_information,_ = self.z3_solver.build_map()
+            self.obstacle_map,belt_point_information,assembler_information,_,_ = self.z3_solver.build_map()
           
              
             # get rid of belts that are already connected -> overlap with other input and output belts set by user or overlap with assembler -> direct insertion
@@ -1173,7 +1328,7 @@ class FactorioProductionTree:
             self.retrieval_points = self.rearrange_dict(retrieval_points, self.output_item)
             
             try:
-                
+             
                 splitters = self.prepare_splitter_information(self.input_information,self.output_information)
  
          
@@ -1181,12 +1336,13 @@ class FactorioProductionTree:
                 pathfinder = MultiAgentPathfinder(
                     self.obstacle_map, 
                     retrieval_points,
-                    allow_underground=True,
-                    underground_length=3,
-                    allow_splitters=True,
+                    allow_underground=self.config["pathfinding"]["allow_underground"],
+                    underground_length=self.config["belts"]["underground_max_length"],
+                    allow_splitters=self.config["pathfinding"]["allow_splitters"],
                     splitters=splitters,  
-                    find_optimal_paths=True,
+                    find_optimal_paths=self.config["pathfinding"]["find_optimal_paths"],
                     output_item=self.output_item,
+                    pipe_underground_length=self.config["belts"]["underground_max_length"],
                 )
 
                 # Find paths for all items
@@ -1289,7 +1445,7 @@ class FactorioProductionTree:
             
     def store_data(self, file_path, paths, placed_inserter_information):
         try:
-            obstacle_map, belt_point_information, assembler_information, inserter_information = self.z3_solver.build_map()
+            obstacle_map, belt_point_information, assembler_information, inserter_information ,fluid_connection_info = self.z3_solver.build_map()
             
             # Convert NumPy array to list if needed
             serializable_obstacle_map = []
@@ -1465,7 +1621,7 @@ class FactorioProductionTree:
                 "retrieval_points": serializable_retrieval_points,
                 "obstacle_map": serializable_obstacle_map,
                 "paths": serializable_paths,
-                "placed_inserter_information": serializable_placed_inserters
+                "placed_inserter_information": serializable_placed_inserters,
             }
             
             # Ensure file path has a .json extension
@@ -1506,7 +1662,7 @@ class FactorioProductionTree:
         clock = pygame.time.Clock()
         
         # Get factory layout data
-        _, belt_point_information, assembler_information, inserter_information = self.z3_solver.build_map()
+        _, belt_point_information, assembler_information, inserter_information ,fluid_connection_info  = self.z3_solver.build_map()
         
         # Process additional inserters from placed_inserter_information
         if placed_inserter_information:
@@ -1545,12 +1701,16 @@ class FactorioProductionTree:
         
         # Load basic factory elements
         image_files = {
-            'assembler': 'assets/assembler.png',
-            'inserter': 'assets/inserter.png',
-            'conveyor': 'assets/conveyor.png',
-            'underground': 'assets/underground_belt.png',
-            'splitter': 'assets/splitter.png'
-        }
+            'assembler': f'assets/{self.config['machines']['default_assembler']}.png',
+            'inserter': f'assets/{self.config['inserters']['input_type']}.png',
+            'conveyor': f"assets/{self.config['belts']['default_type']}.png",
+            'underground': f"assets/{self.config['belts']['underground_type']}.png",
+            'splitter': 'assets/splitter.png',
+            'pipe': 'assets/pipe.png',  
+            'pipe-underground': 'assets/pipe-to-ground.png',  
+            'chemical-plant': 'assets/chemical-plant.png',  
+            'oil-refinery': 'assets/oil-refinery.png'  
+            }
         
         for key, path in image_files.items():
             image = pygame.image.load(path)
@@ -1590,35 +1750,55 @@ class FactorioProductionTree:
                 pygame.draw.rect(window, BLACK, rect, 1)
         
         # Draw assemblers
-        for assembler_item, assembler_x, assembler_y in assembler_information:
+        for assembler_item, assembler_x, assembler_y,width,height,machine_type, orientation_idx  in assembler_information:
             pixel_x = assembler_x * cell_size
             pixel_y = assembler_y * cell_size
-            window.blit(images['assembler'], (pixel_x, pixel_y))
+            
+                # Choose the correct image based on machine_type
+            if machine_type == "chemical-plant" and "chemical-plant" in images:
+                machine_image = images["chemical-plant"]
+            elif machine_type == "oil-refinery" and "oil-refinery" in images:
+                machine_image = images["oil-refinery"]
+            elif machine_type in images:
+                # Use specific machine image if available
+                machine_image = images[machine_type]
+            else:
+                # Fall back to default assembler
+                machine_image = images['assembler']
+        
+            window.blit(machine_image, (pixel_x, pixel_y))
             
             # Draw item icon on top of assembler
             if assembler_item in item_images:
                 window.blit(item_images[assembler_item], (pixel_x, pixel_y))
         
         # Draw inserters
-        for inserter_item, inserter_x, inserter_y , direction in inserter_information:
-            pixel_x = inserter_x * cell_size
-            pixel_y = inserter_y * cell_size
-            window.blit(images['inserter'], (pixel_x, pixel_y))
-            
-            # Draw small item icon on inserter
-            if inserter_item in item_images:
-                original_image = item_images[inserter_item]
-                quarter_size = (original_image.get_width() // 2, original_image.get_height() // 2)
-                scaled_image = pygame.transform.scale(original_image, quarter_size)
+        for inserter_data in inserter_information:
+            if len(inserter_data) >= 3:  # Ensure we have at least item, x, y
+                inserter_item = inserter_data[0]
+                inserter_x = inserter_data[1]
+                inserter_y = inserter_data[2]
+                # Direction may be missing, default to "north" if not provided
+                direction = inserter_data[3] if len(inserter_data) >= 4 else "north"
                 
-                # Position in bottom-right corner of inserter
-                inserter_width = images['inserter'].get_width()
-                inserter_height = images['inserter'].get_height()
-                scaled_width = scaled_image.get_width()
-                scaled_height = scaled_image.get_height()
-                corner_x = pixel_x + inserter_width - scaled_width
-                corner_y = pixel_y + inserter_height - scaled_height
-                window.blit(scaled_image, (corner_x, corner_y))
+                pixel_x = inserter_x * cell_size
+                pixel_y = inserter_y * cell_size
+                window.blit(images['inserter'], (pixel_x, pixel_y))
+                
+                # Draw small item icon on inserter
+                if inserter_item in item_images:
+                    original_image = item_images[inserter_item]
+                    quarter_size = (original_image.get_width() // 2, original_image.get_height() // 2)
+                    scaled_image = pygame.transform.scale(original_image, quarter_size)
+                    
+                    # Position in bottom-right corner of inserter
+                    inserter_width = images['inserter'].get_width()
+                    inserter_height = images['inserter'].get_height()
+                    scaled_width = scaled_image.get_width()
+                    scaled_height = scaled_image.get_height()
+                    corner_x = pixel_x + inserter_width - scaled_width
+                    corner_y = pixel_y + inserter_height - scaled_height
+                    window.blit(scaled_image, (corner_x, corner_y))
 
     def _draw_factory_paths(self, window, paths, images, item_images, cell_size):
         """Draw paths on top of the base factory layout."""
@@ -2012,9 +2192,35 @@ class FactorioProductionTree:
                             window.blit(rotated_belt, (current[0] * cell_size, current[1] * cell_size))
     
     def calculate_max_output(self):
-        cycles_per_minute = 60 / self.item_lookup[self.output_item]["recipe"]["time"]
-        return self.production_data[self.output_item]['assemblers']* self.machines_data["assemblers"]["crafting_speed"]* cycles_per_minute *self.item_lookup[self.output_item]["recipe"]["yield"]
-    
+        # Get the item recipe
+        recipe = self.item_lookup[self.output_item].get("recipe", {})
+        
+        if not recipe:
+            return 0
+        
+        # Get the time per unit and yield per recipe
+        time_per_unit = recipe.get("time", 1)
+        yield_per_recipe = recipe.get("yield", 1)
+        
+        # Get the machine type for this recipe
+        machine_type = self._get_machine_type_for_recipe(self.output_item)
+        
+        # Get the crafting speed for this machine type
+        if machine_type in self.machines_data["assemblers"]:
+            crafting_speed = self.machines_data["assemblers"][machine_type].get("crafting_speed", 1)
+        else:
+            # Fallback to default assembler if machine type not found
+            default_type = self.config["machines"]["default_assembler"]
+            crafting_speed = self.machines_data["assemblers"][default_type].get("crafting_speed", 1)
+        
+        # Calculate cycles per minute
+        cycles_per_minute = 60 / time_per_unit
+        
+        # Get the number of assemblers
+        assembler_count = self.production_data.get(self.output_item, {}).get('assemblers', 0)
+        
+        # Calculate and return the maximum output
+        return assembler_count * crafting_speed * cycles_per_minute * yield_per_recipe
  
     
     def count_assemblers(self,production_data):
@@ -2059,34 +2265,45 @@ class FactorioProductionTree:
             logger.info("1. Placing assembling machines...")
             # Place assembling machines from assembler_information
             if hasattr(self, 'assembler_information'):
-                for item, x, y in self.assembler_information:
+                for item, x, y,width,height,machine_type,orientation_idx in self.assembler_information:
                     # Create assembling machine
-                    center_x = x + 1
-                    center_y = y + 1
+                    center_x = x + int(width/2)
+                    center_y = y + int(height/2)
                     
                     logger.info(f"  - Placing assembler for {item} at ({center_x},{center_y})")
                     
+                    direction_mapping = {
+                        0: Direction.NORTH,  # Up
+                        1: Direction.EAST,   # Right
+                        2: Direction.SOUTH,  # Down
+                        3: Direction.WEST    # Left
+                    }
+                    
                     assembler = AssemblingMachine(
-                        name="assembling-machine-1", 
+                        name=machine_type, 
                         position=(center_x, center_y),
-                        recipe=item  # Set the recipe to the item it produces
+                        recipe=item,  # Set the recipe to the item it produces
+                        direction=direction_mapping.get(orientation_idx)
+                        
                     )
                     blueprint.entities.append(assembler)
                     
                     # Store the assembler in our mapping
-                    for dx in range(3):
-                        for dy in range(3):
+                    for dx in range(width):
+                        for dy in range(height):
                             assembler_positions[(x + dx, y + dy)] = (item, (x, y), (center_x, center_y))
                     
                     # Mark the 3x3 area as occupied
-                    for dx in range(3):
-                        for dy in range(3):
+                    for dx in range(width):
+                        for dy in range(height):
                             occupied_positions.add((x + dx, y + dy))
             
             print("2. Placing inserters...")
             # Place inserters from inserter_information - check for overlaps and orient properly
             if hasattr(self, 'inserter_information'):
                 for item, x, y , direction in self.inserter_information:
+                    
+                    
                     # Skip if position is occupied by an assembler
                     if (x, y) in occupied_positions:
                         print(f"  - Skipping inserter at ({x},{y}) due to overlap with assembler")
@@ -2196,6 +2413,10 @@ class FactorioProductionTree:
             return False
     
     def _add_belt_path_to_blueprint(self, blueprint, path_data, item, occupied_positions):
+        
+        belt_type = self.config["belts"]["default_type"]
+        underground_type = self.config["belts"]["underground_type"]
+            
         """Add a specific belt path to the blueprint, avoiding overlaps"""
         path = path_data.get('path', [])
         if not path or len(path) < 2:
@@ -2314,7 +2535,7 @@ class FactorioProductionTree:
                 
                 # Create and place underground belt entrance
                 entrance = UndergroundBelt(
-                    name="underground-belt",
+                    name=underground_type,
                     position=start_pos,
                     direction=direction,
                     type="input"  # This is the entrance
@@ -2325,7 +2546,7 @@ class FactorioProductionTree:
                 
                 # Create and place underground belt exit
                 exit_belt = UndergroundBelt(
-                    name="underground-belt",
+                    name=underground_type,
                     position=end_pos,
                     direction=direction,
                     type="output"  # This is the exit
@@ -2371,7 +2592,7 @@ class FactorioProductionTree:
             # Create and place transport belt
             print(f"  - Adding transport belt at {current} facing {direction}")
             belt = TransportBelt(
-                name="transport-belt",
+                name=belt_type,
                 position=current,
                 direction=direction
             )
@@ -2563,22 +2784,19 @@ def main():
     #factory = FactorioProductionTree(16,10)
     #factory.create_blueprint("Modules/electronic-circuit_120_[]_module.json", "electronic-circuit_120_[]_module.txt")
     
-    
-    
     Simple_Run()
     
     #Eval_Runs("big-electric-pole",start=50,end=500,step=50,rep_per_step=10)
    
 
-   
 def Simple_Run():
     
     print("start")
     
     # Example item and amount
-    item_to_produce = "electronic-circuit"
-    amount_needed = 120
-    solver_type = "gurobi"  # "gurobi" or "z3"
+    item_to_produce = "plastic-bar"
+    amount_needed = 20
+    solver_type = "z3"  # "gurobi" or "z3"
     input_items = []  # Using explicit input items
     
     
@@ -2588,8 +2806,11 @@ def Simple_Run():
     production_data  = factorioProductionTree.calculate_production(item_to_produce,amount_needed,input_items=input_items) #60
     factorioProductionTree.production_data = production_data
 
+        
     production_data = factorioProductionTree.set_capacities(production_data)
     
+    
+    print(f"Production data for {production_data}:")
     
     # Manual input and output
     factorioProductionTree.manual_Input()
@@ -2620,8 +2841,8 @@ def Simple_Run():
         
         factorioProductionTree.create_blueprint(f'Modules/{item_to_produce}_{amount_needed}_{input_items}_module.json',f'Blueprints/{item_to_produce}_{amount_needed}_{input_items}_module.txt')
         
-        #factorioProductionTree.visualize_factory(paths,placed_inserter_information,store=True,file_path=f'Modules/{item_to_produce}_{amount_needed}_{input_items}_module.png')
-        pass
+        factorioProductionTree.visualize_factory(paths,placed_inserter_information,store=True,file_path=f'Modules/{item_to_produce}_{amount_needed}_{input_items}_module.png')
+        
 
    
 

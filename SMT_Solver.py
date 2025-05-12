@@ -5,7 +5,7 @@ from z3 import Optimize , Context
 import numpy as np
 import logging
 from solver_wrapper import SolverFactory
-
+import json
 
 set_param('parallel.enable',True)
 set_param('smt.threads', 8)
@@ -18,9 +18,6 @@ logging.basicConfig(
         logging.FileHandler("factory_log.log", mode='w'),  # Specify the log file name
     ]
 )
-
-
-ITEMS_PER_SECOND = 7.5
 
 # Define constants for colors
 WHITE = (255, 255, 255)
@@ -43,18 +40,24 @@ BELT_COLOR_MAP = {
 }
 
 
-
+# can also be other machine like chamical plant, oil refinery, etc.
 class Assembler:
-    def __init__(self,id,inserters,item=None,capacity=0, solver=None):
+    def __init__(self,id,inserters,item=None,capacity=0, solver=None,width=3,height=3):
         self.id = id
         self.x = solver.Int(f'{id}_x')
         self.y = solver.Int(f'{id}_y')
+        
+        self.width = width
+        self.height = height
         
         self.inserters = inserters
         self.item = item
         
         #self.capacity = Int(f'{id}_capacity')
         self.capacity = capacity
+        
+        # for chemical plant, oil refinery, etc.
+        self.fluid_orientation = solver.Int(f'{id}_fluid_orientation')  # 0-3 for different orientations
      
     def __str__(self) -> str:
             inserters_str = ', '.join([str(inserter) for inserter in self.inserters])
@@ -64,7 +67,7 @@ class Assembler:
         
         
 class Inserter:
-    def __init__(self,id,type,belt,item=None, solver=None):
+    def __init__(self,id,type,belt,item=None, solver=None, is_fluid=False):
         self.id = id
         self.x = solver.Int(f'{id}_x')
         self.y = solver.Int(f'{id}_y')
@@ -75,6 +78,7 @@ class Inserter:
         
         self.direct_interaction =False
 
+        self.is_fluid = is_fluid  # Falg to indicate if the inserter is a pipe 
    
         
     def __str__(self) -> str:
@@ -102,6 +106,7 @@ class SMTSolver:
         self.width = width
         self.height = height
         self.production_data = production_data
+        self.machines_data = self.load_json("machine_data.json")
         
         #self.solver = Optimize()
         self.solver_ops = SolverFactory.create_solver(solver_type)
@@ -126,7 +131,12 @@ class SMTSolver:
         self.model = None
      
      
-     
+             
+    def load_json(self,recipe_file):
+        with open(recipe_file, "r") as file:
+                recipes = json.load(file)
+                return recipes
+            
     def build_constraints(self):
         self.create_assemblers()
         
@@ -231,15 +241,54 @@ class SMTSolver:
         self.additional_constraints.append(constraint)
         self.solver.add(constraint)
         logging.debug(f"Added constraint: {constraint}")
-
+        
+    def get_machine_type_for_recipe(self, recipe_id):
+        """Determine the machine type to use for a given recipe."""
+        if "recipe_machine_mapping" in self.machines_data:
+            recipes = self.machines_data["recipe_machine_mapping"].get("recipes", {})
+            if recipe_id in recipes:
+                return recipes[recipe_id]
+        
+        # Default to assembling-machine-2 
+        return self.machines_data["recipe_machine_mapping"].get("default", "assembling-machine-2")
+    
     def create_assemblers(self):
         logging.info("Starting to create assemblers based on production data.")
         assembler_count = 0
+        
+         # Dictionary to map item IDs to their types from recipes data
+        item_types = {}
+        
+        # Get recipes data to check for fluid items
+        try:
+            with open("recipes.json", "r") as f:
+                recipes_data = json.load(f)
+                for item in recipes_data:
+                    if isinstance(item, dict) and "id" in item and "type" in item:
+                        item_types[item["id"]] = item["type"]
+        except Exception as e:
+            logging.error(f"Failed to load recipes.json: {e}")
+        
+        
         
         for item_id, item_info in self.production_data.items():
             logging.debug(f"Processing item '{item_id}' with production data: {item_info}")
 
             if 'assemblers' in item_info and item_info['assemblers'] > 0:
+                
+                machine_type = self.get_machine_type_for_recipe(item_id)
+                
+                # Get machine dimensions
+                machine_info = self.machines_data["assemblers"].get(machine_type, self.machines_data["assemblers"]["default"])
+                width = machine_info["dimensions"]["width"]
+                height = machine_info["dimensions"]["height"]
+                
+                fixed_inputs = machine_info.get("fixed_inputs", [])
+                fixed_outputs = machine_info.get("fixed_outputs", [])
+                
+                logging.info(f"Using {machine_type} for {item_id} with dimensions {width}x{height}")
+            
+                
                 for i in range(item_info['assemblers']):
                     logging.info(f"Creating assembler for item '{item_id}', instance {i}")
                     
@@ -247,6 +296,13 @@ class SMTSolver:
                     input_inserters = []
                     
                     for inserter_info in item_info['input_inserters']:
+                        
+                        input_item = inserter_info['id']
+                        
+                        # Check if item is a fluid by looking up its type
+                        is_fluid = item_types.get(input_item, "") == "Liquid"
+                        logging.info(f"Item '{input_item}' is {'fluid' if is_fluid else 'solid'}")
+                    
                         for j in range(inserter_info['inserters']):
                             input_inserter_id = f"{inserter_info['id']}_in_{assembler_count}_{i}_{j}"
                             belt_id = f"{inserter_info['id']}_end_{assembler_count}_{i}_{j}"
@@ -260,11 +316,13 @@ class SMTSolver:
                                     type='input',
                                     item=inserter_info['id'],
                                     solver = self,
+                                    is_fluid=is_fluid,
                                     belt=Belt(
                                         id=belt_id,
                                         type="end",  
                                         item=inserter_info['id'],
                                         solver = self
+                                     
                                     )
                                 )
                             )
@@ -275,9 +333,14 @@ class SMTSolver:
                         inserters=input_inserters,
                         item=item_id,
                         capacity=item_info['capacity'],
-                        solver = self
+                        solver = self,
+                        width=width,
+                        height=height
                     )
                     
+                    # Add fixed input/output points
+                    assembler.fixed_inputs = fixed_inputs
+                    assembler.fixed_outputs = fixed_outputs
                     
                     self.assemblers.append(assembler)
                     logging.debug(f"Created assembler with ID: {assembler.id} and input inserters: {[inserter.id for inserter in input_inserters]}")
@@ -292,8 +355,8 @@ class SMTSolver:
         logging.info("Adding boundary constraints for assemblers.")
         for assembler in self.assemblers:
             logging.debug(f"Setting boundary constraints for assembler ID {assembler.id}")
-            self.solver.add(self.And(assembler.x >= 0, assembler.x <= self.width - 3))
-            self.solver.add(self.And(assembler.y >= 0, assembler.y <= self.height - 3))
+            self.solver.add(self.And(assembler.x >= 0, assembler.x <= self.width - assembler.width))
+            self.solver.add(self.And(assembler.y >= 0, assembler.y <= self.height - assembler.height))
 
     # belts and inserter bound constraints
     def add_bound_constraints_belts_and_inserters(self):
@@ -315,8 +378,8 @@ class SMTSolver:
             for belt in belts:
                 #logging.debug(f"Preventing overlap between assembler ID {assembler.id} and belt ID {belt.id}")
                 self.solver.add(self.Or(
-                    self.Or(belt.x < assembler.x, belt.x > assembler.x + 2),
-                    self.Or(belt.y < assembler.y, belt.y > assembler.y + 2)
+                    self.Or(belt.x < assembler.x, belt.x > assembler.x + assembler.width-1),
+                    self.Or(belt.y < assembler.y, belt.y > assembler.y + assembler.height-1)
                 ))
                 
     # user input/putput belts are not allowed to overlap with inserter
@@ -354,8 +417,12 @@ class SMTSolver:
             for other_assembler in self.assemblers:
                 if assembler.id != other_assembler.id:
                     #logging.debug(f"Preventing overlap between assembler ID {assembler.id} and assembler ID {other_assembler.id}")
-                    self.solver.add(self.Or(assembler.x + 2 < other_assembler.x, assembler.x > other_assembler.x + 2,
-                                    assembler.y + 2 < other_assembler.y, assembler.y > other_assembler.y + 2))
+                    self.solver.add(self.Or(
+                        assembler.x + assembler.width <= other_assembler.x, 
+                        assembler.x >= other_assembler.x + other_assembler.width,
+                        assembler.y + assembler.height <= other_assembler.y, 
+                        assembler.y >= other_assembler.y + other_assembler.height
+                    ))
                     
     # assemblers are not allowed to overlap with inserters
     def add_assembler_overlap_inserter_constraint(self):
@@ -366,8 +433,8 @@ class SMTSolver:
                     for inserter in other_assembler.inserters:
                         #logging.debug(f"Preventing overlap between assembler ID {assembler.id} and inserter ID {inserter.id}")
                         self.solver.add(self.Or(
-                            self.Or(inserter.x < assembler.x, inserter.x > assembler.x + 2),
-                            self.Or(inserter.y < assembler.y, inserter.y > assembler.y + 2)
+                            self.Or(inserter.x < assembler.x, inserter.x > assembler.x + assembler.width-1),
+                            self.Or(inserter.y < assembler.y, inserter.y > assembler.y + assembler.height-1)
                         ))
     # assembler and belts are only allowed to overlap if they have the same item 
     def add_assembler_overlap_belt_constraint(self):
@@ -380,8 +447,8 @@ class SMTSolver:
                         if belt.item != assembler.item:
                             #logging.debug(f"Preventing overlap between assembler ID {assembler.id} and belt ID {belt.id}")
                             self.solver.add(self.Or(
-                                self.Or(belt.x < assembler.x, belt.x > assembler.x + 2),
-                                self.Or(belt.y < assembler.y, belt.y > assembler.y + 2)
+                                self.Or(belt.x < assembler.x, belt.x > assembler.x + assembler.width-1),
+                                self.Or(belt.y < assembler.y, belt.y > assembler.y + assembler.height-1)
                             ))
                             
     # inserters are not allowed to overlap each other 
@@ -449,35 +516,136 @@ class SMTSolver:
 
         for assembler in self.assemblers:
             
-            input_positions = [
-                    (assembler.x, assembler.y - 1), (assembler.x + 1, assembler.y - 1), (assembler.x + 2, assembler.y - 1),  # Top row
-                    (assembler.x, assembler.y + 3), (assembler.x + 1, assembler.y + 3), (assembler.x + 2, assembler.y + 3),  # Bottom row
-                    (assembler.x - 1, assembler.y), (assembler.x - 1, assembler.y + 1), (assembler.x - 1, assembler.y + 2),  # Left column
-                    (assembler.x + 3, assembler.y), (assembler.x + 3, assembler.y + 1), (assembler.x + 3, assembler.y + 2)   # Right column
-                ]
+            machine_type = self.get_machine_type_for_recipe(assembler.item)
+            machine_info = self.machines_data["assemblers"].get(machine_type, self.machines_data["assemblers"]["default"])
+            
+            # For solid inserters - calculate positions around the machine based on dimensions
+            width = assembler.width
+            height = assembler.height
+        
+            
+            solid_positions = []
+            
+            # Top Edge
+            for dx in range(width):
+                solid_positions.append((assembler.x + dx, assembler.y - 1))
+            # Bottom edge
+            for dx in range(width):
+                solid_positions.append((assembler.x + dx, assembler.y + height))
+            # Left edge
+            for dy in range(height):
+                solid_positions.append((assembler.x - 1, assembler.y + dy))
+            # Right edge
+            for dy in range(height):
+                solid_positions.append((assembler.x + width, assembler.y + dy))
             
             
+            # Check if this machine has fluid connection pairs
+            fluid_connection_pairs = machine_info.get("fluid_connection_pairs", [])
+            
+            if fluid_connection_pairs:
+                # Constrain orientation to valid values (0 to num_orientations-1)
+                num_orientations = len(fluid_connection_pairs)
+                self.solver.add(self.And(assembler.fluid_orientation >= 0, 
+                                        assembler.fluid_orientation < num_orientations))
+                
+                
+                fluid_inserters_by_item = {}
+                fluid_inserters = [ins for ins in assembler.inserters if ins.is_fluid]
+
+                for ins in fluid_inserters:
+                    if ins.item not in fluid_inserters_by_item:
+                        fluid_inserters_by_item[ins.item] = []
+                        fluid_inserters_by_item[ins.item].append(ins)
+                        
+                logging.info(f"Found {len(fluid_inserters)} fluid inserters for assembler {assembler.id}")
+                logging.info(f"Fluid inserter items: {list(fluid_inserters_by_item.keys())}")
+     
+                if fluid_inserters:
+                    orientation_constraints = []
+                    for orientation_idx, connection_pair in enumerate(fluid_connection_pairs):
+                        # For this orientation, define where fluid inserters can go
+                        orientation_constraint = (assembler.fluid_orientation == orientation_idx)
+                        
+                        # Collect all input positions for this orientation
+                        input_positions = []
+                        for input_pos in connection_pair["inputs"]:
+                            input_positions.append((assembler.x + input_pos["dx"], 
+                                                assembler.y + input_pos["dy"]))
+                        
+                        # Create constraints for each fluid inserter
+                        for fluid_inserter in fluid_inserters:
+                            # Fluid inserter must be at one of the input positions for this orientation
+                            inserter_pos_constraint = self.Or([
+                                self.And(fluid_inserter.x == pos[0], fluid_inserter.y == pos[1]) 
+                                for pos in input_positions
+                            ])
+                            
+                            # Combine with orientation constraint
+                            orientation_constraints.append(
+                                self.Implies(orientation_constraint, inserter_pos_constraint)
+                            )
+                            
+                            # For fluid inserters, the "belt" is at the same position
+                            belt = fluid_inserter.belt
+                            if belt is not None:
+                                self.solver.add(belt.is_used == True)
+                                self.solver.add(self.And(belt.x == fluid_inserter.x, 
+                                                        belt.y == fluid_inserter.y))
+                    
+                    # Add all orientation constraints
+                    self.solver.add(self.And(orientation_constraints))
+                    
             
             for inserter in assembler.inserters:
-                # Ensure each inserter is adjacent to its assembler
-                logging.info(f"Ensuring inserter {inserter.id} is adjacent to assembler {assembler.id}")
-                self.solver.add(self.Or([self.And(inserter.x == pos[0], inserter.y == pos[1]) for pos in input_positions]))
-
-                belt = inserter.belt
-                if belt is not None:
-                    logging.info(f"Adding belt position constraint for inserter {inserter.id} with belt {belt.id}")
-                    # Ensure that the belt corresponding to the inserter is at the opposite side of the assembler
-                    self.solver.add(
-                    self.Or(
-                                # Inserter to the left of the assembler, belt is to the left of the inserter
-                                self.And(inserter.x == assembler.x - 1, belt.x == inserter.x - 1, belt.y == inserter.y),
-                                # Inserter to the right of the assembler, belt is to the right of the inserter
-                                self.And(inserter.x == assembler.x + 3, belt.x == inserter.x + 1, belt.y == inserter.y),
-                                # Inserter above the assembler, belt is above the inserter
-                                self.And(inserter.y == assembler.y - 1, belt.x == inserter.x, belt.y == inserter.y - 1),
-                                # Inserter below the assembler, belt is below the inserter
-                                self.And(inserter.y == assembler.y + 3, belt.x == inserter.x, belt.y == inserter.y + 1)
-                        ))
+                if not inserter.is_fluid:
+                    # For solids, use standard positions around the machine
+                    logging.info(f"Allowing solid inserter {inserter.id} to be placed at any valid edge position")
+                    self.solver.add(self.Or([self.And(inserter.x == pos[0], inserter.y == pos[1]) for pos in solid_positions]))
+                    
+                    # For solids, the belt should be positioned properly based on inserter location
+                    belt = inserter.belt
+                    if belt is not None:
+                        belt_constraints = []
+                        
+                        # Top edge
+                        for dx in range(width):
+                            belt_constraints.append(self.And(
+                                inserter.x == assembler.x + dx, 
+                                inserter.y == assembler.y - 1,
+                                belt.x == inserter.x,
+                                belt.y == inserter.y - 1
+                            ))
+                        
+                        # Bottom edge
+                        for dx in range(width):
+                            belt_constraints.append(self.And(
+                                inserter.x == assembler.x + dx, 
+                                inserter.y == assembler.y + height,
+                                belt.x == inserter.x,
+                                belt.y == inserter.y + 1
+                            ))
+                        
+                        # Left edge
+                        for dy in range(height):
+                            belt_constraints.append(self.And(
+                                inserter.x == assembler.x - 1, 
+                                inserter.y == assembler.y + dy,
+                                belt.x == inserter.x - 1,
+                                belt.y == inserter.y
+                            ))
+                        
+                        # Right edge
+                        for dy in range(height):
+                            belt_constraints.append(self.And(
+                                inserter.x == assembler.x + width, 
+                                inserter.y == assembler.y + dy,
+                                belt.x == inserter.x + 1,
+                                belt.y == inserter.y
+                            ))
+                        
+                        self.solver.add(self.Or(belt_constraints))
+    
     
     # ensure at least one space 1 and 2 tiles away from the assembler is free to ensure a possible output
     def add_space_for_output_of_assembler(self):
@@ -517,10 +685,10 @@ class SMTSolver:
         
         occupied_conditions = []
         for assembler in self.assemblers:
-            # Assembler occupies a 3x3 area
+            # Assembler occupies a wxh area
             occupied_conditions.append(
-                self.And(x >= assembler.x, x <= assembler.x + 2,
-                    y >= assembler.y, y <= assembler.y + 2)
+                self.And(x >= assembler.x, x <= assembler.x + assembler.width - 1,
+                    y >= assembler.y, y <= assembler.y + assembler.height - 1)
             )
             for inserter in assembler.inserters:
                 
@@ -835,8 +1003,18 @@ class SMTSolver:
                 self.model = self.solver.model() 
                 logging.info(f"Final solver check result:{final_result}")
                 self.build_map()
+
+             
+                output_item = next(iter(self.production_data.keys()))
+                output_amount = 0
+                if output_item in self.production_data:
+                    output_amount = self.production_data[output_item].get("amount_per_minute", 0)
                 
-                
+        
+                os.makedirs("Modules", exist_ok=True)  # Create the directory if it doesn't exist
+                model_file = os.path.join("SMT_Modules", f"solver_model_{output_item}_{output_amount}.smt")
+                self.write_model_to_file(file_path=model_file)
+        
                 return 
                 
         
@@ -866,6 +1044,7 @@ class SMTSolver:
         belt_point_information = []
         assembler_information = []
         inserter_information = []
+        fluid_connection_info = []
         
         if self.solver.check() == self.sat:
             # Add input and output belts
@@ -884,15 +1063,85 @@ class SMTSolver:
             for assembler in self.assemblers:
                 x = self.model.evaluate(assembler.x).as_long()
                 y = self.model.evaluate(assembler.y).as_long()
+                width = assembler.width
+                height = assembler.height
+            
                 
-                assembler_information.append([assembler.item, x, y])
+                
+                machine_type = self.get_machine_type_for_recipe(assembler.item)
+                machine_info = self.machines_data["assemblers"].get(machine_type, self.machines_data["assemblers"]["default"])
+                
+                # Get selected orientation for fluid connections
+                orientation_idx = 0
+                if hasattr(assembler, 'fluid_orientation'):
+                    try:
+                        # Try the standard Z3 approach
+                        orientation_val = self.model.evaluate(assembler.fluid_orientation)
+                        if hasattr(orientation_val, 'as_long'):
+                            orientation_idx = orientation_val.as_long()
+                        else:
+                            # For other solvers, try to extract the numerical value differently
+                            orientation_idx = int(str(orientation_val))
+                    except Exception as e:
+                        logging.warning(f"Could not get orientation for {assembler.id}: {e}")
+                        orientation_idx = 0  # Default to first orientation
+                        
+                # Add assembler with dimensions and orientation to info
+                assembler_information.append([
+                    assembler.item, x, y, width, height, machine_type, orientation_idx
+                ])
+                
                 
                 # Mark 3x3 area around the assembler as occupied
-                for dx in range(3):
-                    for dy in range(3):
+                for dx in range(width):
+                    for dy in range(height):
                         if 0 <= x + dx < self.width and 0 <= y + dy < self.height:
                             obstacle_map[y + dy][x + dx] = 33
 
+                
+                
+                
+                
+                # Mark fluid connection points if this machine has them
+                fluid_connection_pairs = machine_info.get("fluid_connection_pairs", [])
+                if fluid_connection_pairs and orientation_idx < len(fluid_connection_pairs):
+                    connection_pair = fluid_connection_pairs[orientation_idx]
+                    
+                    # Mark all input points
+                    for input_pos in connection_pair["inputs"]:
+                        conn_x = x + input_pos["dx"]
+                        conn_y = y + input_pos["dy"]
+                        
+                        if 0 <= conn_x < self.width and 0 <= conn_y < self.height:
+                            obstacle_map[conn_y][conn_x] = 66  # Mark as fluid input
+                            
+                            fluid_connection_info.append({
+                                "assembler_id": assembler.id,
+                                "position": (conn_x, conn_y),
+                                "relative_pos": (input_pos["dx"], input_pos["dy"]),
+                                "type": "input",
+                                "machine_type": machine_type,
+                                "orientation": orientation_idx
+                            })
+                    
+                    # Mark all output points
+                    for output_pos in connection_pair["outputs"]:
+                        conn_x = x + output_pos["dx"]
+                        conn_y = y + output_pos["dy"]
+                        
+                        if 0 <= conn_x < self.width and 0 <= conn_y < self.height:
+                            obstacle_map[conn_y][conn_x] = 77  # Mark as fluid output
+                            
+                            fluid_connection_info.append({
+                                "assembler_id": assembler.id,
+                                "position": (conn_x, conn_y),
+                                "relative_pos": (output_pos["dx"], output_pos["dy"]),
+                                "type": "output",
+                                "machine_type": machine_type,
+                                "orientation": orientation_idx
+                            })
+                
+                
                 # Mark inserters in the obstacle map
                 for inserter in assembler.inserters:
                     ix = self.model.evaluate(inserter.x).as_long()
@@ -942,7 +1191,7 @@ class SMTSolver:
         else:
             print('not sat')
             
-        return obstacle_map, belt_point_information, assembler_information, inserter_information
+        return obstacle_map, belt_point_information, assembler_information, inserter_information,fluid_connection_info
 
     
         
@@ -974,6 +1223,25 @@ class SMTSolver:
         else:
             print("No valid configuration to restrict (solver state is not SAT).")
             
+    
+    def write_model_to_file(self, file_path):
+        """Write the current constraint system to a file in SMT-LIB2 format"""
+        try:
+            os.makedirs(os.path.dirname(file_path), exist_ok=True)  # Create directory if it doesn't exist
+            
+            with open(file_path, 'w') as f:
+                    f.write(self.solver.sexpr())
+            
+            logging.info(f"Successfully wrote model to {file_path}")
+            print(f"Model saved to {file_path}")
+            return True
+        
+        except Exception as e:
+            
+            logging.error(f"Failed to write model to file: {e}")
+            print(f"Error writing model to file: {e}")
+            return False
+    
     def debug_print_model_values(self):
         """Print all variable values from the current model for debugging"""
         logging.info("=== DEBUG: Model Variable Values ===")

@@ -50,7 +50,7 @@ class MultiAgentPathfinder:
     from their respective start points to their destinations.
     """
     
-    def __init__(self, obstacle_map, points, allow_underground=False, underground_length=3,allow_splitters=False,splitters={},find_optimal_paths=False,output_item=None):
+    def __init__(self, obstacle_map, points, allow_underground=False, underground_length=3,allow_splitters=False,splitters={},find_optimal_paths=False,output_item=None,pipe_underground_length=8):
         """
         Initialize the pathfinder with an obstacle map and points to connect.
         
@@ -64,6 +64,7 @@ class MultiAgentPathfinder:
         self.points = points
         self.allow_underground = allow_underground
         self.underground_length = underground_length
+        self.pipe_underground_length = pipe_underground_length  #
         
         self.allow_splitters = allow_splitters
         self.splitters = splitters
@@ -83,8 +84,7 @@ class MultiAgentPathfinder:
         # Directions for adjacent moves (right, down, left, up)
         self.directions = [(1, 0), (0, 1), (-1, 0), (0, -1)]
         
-
-    
+        
     def is_valid_position(self, position):
         """Check if a position is within bounds and not an obstacle."""
         x, y = position
@@ -97,7 +97,7 @@ class MultiAgentPathfinder:
         """Calculate Manhattan distance heuristic between points a and b."""
         return abs(a[0] - b[0]) + abs(a[1] - b[1])
     
-    def find_path(self, start, goal):
+    def find_path(self, start, goal,is_fluid=False):
         """
         Find a path from start to goal using A* algorithm with support for underground paths.
         
@@ -206,7 +206,7 @@ class MultiAgentPathfinder:
                 # Try in all four directions
                 for dx, dy in self.directions:
                     # Check if we can go underground in this direction
-                    can_go_underground, entry, exit = self.can_build_underground(current, dx, dy, goal)
+                    can_go_underground, entry, exit = self.can_build_underground(current, dx, dy, goal,is_fluid)
                     
                     if can_go_underground:
                         # Underground paths have a higher cost
@@ -231,7 +231,7 @@ class MultiAgentPathfinder:
         # No path found
         return None, {}
 
-    def can_build_underground(self, position, dx, dy, goal):
+    def can_build_underground(self, position, dx, dy, goal,is_fluid):
         """
         Check if we can build an underground path from the given position in the specified direction.
         
@@ -244,6 +244,9 @@ class MultiAgentPathfinder:
         Returns:
             tuple: (can_build, entry_position, exit_position) - whether underground path is possible and positions
         """
+        
+        underground_length = self.pipe_underground_length if is_fluid else self.underground_length
+        
         x, y = position
         entry = (x, y)  # The entry position is the current position
         
@@ -253,7 +256,7 @@ class MultiAgentPathfinder:
         
         # Check if the current position was just used as an underground exit in the same direction
         # This avoids having underground segments directly connected to each other
-        # Check previous segments in our path
+        # Check previous segments in our 'pipe_underground_max_length'
         for segment_dict in self.paths.values():
             for path_data in segment_dict:
                 if 'underground_segments' in path_data and path_data['underground_segments']:
@@ -291,13 +294,17 @@ class MultiAgentPathfinder:
         has_obstacle = False
         
         # Look for a valid exit point within the underground length
-        for length in range(2, self.underground_length + 1):
+        for length in range(underground_length+1, 2, -1):
+            
+            
             exit_x = x + dx * length
             exit_y = y + dy * length
             exit_pos = (exit_x, exit_y)
             
             following_x = exit_x + dx
             following_y = exit_y + dy
+            
+            logger.debug(f"Checking underground path from {entry} to {exit_pos} with length {length-1}")
             
             # Check if exit is in bounds
             if not (0 <= exit_x < self.width and 0 <= exit_y < self.height):
@@ -674,7 +681,7 @@ class MultiAgentPathfinder:
             #logger.info(f"Finding path for {item_key}")
             #logger.debug(f"Working grid:\n{np.array(self.working_grid)}")
             
-            
+            is_fluid = item_data.get('is_fluid', False)
            
             
             # Extract item information
@@ -689,7 +696,7 @@ class MultiAgentPathfinder:
             
             
             # Replace the incomplete section in find_paths_for_all_items
-            if self.allow_splitters and item_name in self.splitters:
+            if self.allow_splitters and item_name in self.splitters and not is_fluid:
                 # Find splitters that are relevant to our start/destination points
                 relevant_start_splitters = []
                 relevant_dest_splitters = []
@@ -906,7 +913,7 @@ class MultiAgentPathfinder:
                 self.working_grid = iteration_grid
                 
                 # Try to find a path with the modified grid
-                path, underground_segments = self.find_path(start, dest)
+                path, underground_segments = self.find_path(start, dest,is_fluid=is_fluid)
                 
                 logger.debug(f"Path found: {path} with underground segments: {underground_segments}")
                 

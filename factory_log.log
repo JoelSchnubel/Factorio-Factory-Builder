@@ -1,13 +1,85 @@
-2025-05-06 17:32:07,096 - DEBUG - Popen(['git', 'version'], cwd=e:\Programmieren\Bachelor-Thesis, stdin=None, shell=False, universal_newlines=False)
-2025-05-06 17:32:07,143 - DEBUG - Popen(['git', 'version'], cwd=e:\Programmieren\Bachelor-Thesis, stdin=None, shell=False, universal_newlines=False)
-2025-05-06 17:32:09,401 - INFO - Processing items in order: ['copper-plate']
-2025-05-06 17:32:09,401 - DEBUG - All pairs sorted by heuristic distance: [(9, (0, 9), (0, 0), None, None)]
-2025-05-06 17:32:09,402 - DEBUG - Path found: [(0, 9), (0, 8), (0, 7), (0, 6), (0, 5), (0, 4), (0, 3), (0, 2), (0, 1), (0, 0)] with underground segments: {}
-2025-05-06 17:32:09,402 - INFO - Found better path for copper-plate from (0, 9) to (0, 0) with length 10
-2025-05-06 17:32:09,402 - DEBUG - Adding path for copper-plate from (0, 9) to (0, 0)
-2025-05-06 17:32:09,402 - DEBUG - ======================================================
-2025-05-06 17:32:09,402 - DEBUG - Marking path on grid for copper-plate from (0, 9) to (0, 0)
-2025-05-06 17:32:09,403 - DEBUG - BEFORE :Working grid:
+2025-05-12 19:03:08,785 - DEBUG - Popen(['git', 'version'], cwd=e:\Programmieren\Bachelor-Thesis, stdin=None, shell=False, universal_newlines=False)
+2025-05-12 19:03:08,831 - DEBUG - Popen(['git', 'version'], cwd=e:\Programmieren\Bachelor-Thesis, stdin=None, shell=False, universal_newlines=False)
+2025-05-12 19:03:11,227 - INFO - Processing items in order: ['coal']
+2025-05-12 19:03:11,228 - DEBUG - All pairs sorted by heuristic distance: [(9, (0, 9), (0, 0), None, None)]
+2025-05-12 19:03:11,228 - DEBUG - Checking underground path from (0, 9) to (4, 9) with length 3
+2025-05-12 19:03:11,228 - DEBUG - Checking underground path from (0, 9) to (3, 9) with length 2
+2025-05-12 19:03:11,228 - DEBUG - Checking underground path from (0, 9) to (0, 13) with length 3
+2025-05-12 19:03:11,228 - DEBUG - Checking underground path from (0, 9) to (0, 12) with length 2
+2025-05-12 19:03:11,228 - DEBUG - Checking underground path from (0, 9) to (-4, 9) with length 3
+2025-05-12 19:03:11,228 - DEBUG - Checking underground path from (0, 9) to (-3, 9) with length 2
+2025-05-12 19:03:11,228 - DEBUG - Checking underground path from (0, 9) to (0, 5) with length 3
+2025-05-12 19:03:11,228 - DEBUG - Checking underground path from (0, 9) to (0, 6) with length 2
+2025-05-12 19:03:11,229 - DEBUG - Checking underground path from (0, 8) to (4, 8) with length 3
+2025-05-12 19:03:11,229 - DEBUG - Checking underground path from (0, 8) to (3, 8) with length 2
+2025-05-12 19:03:11,229 - DEBUG - Checking underground path from (0, 8) to (0, 12) with length 3
+2025-05-12 19:03:11,229 - DEBUG - Checking underground path from (0, 8) to (0, 11) with length 2
+2025-05-12 19:03:11,229 - DEBUG - Checking underground path from (0, 8) to (-4, 8) with length 3
+2025-05-12 19:03:11,229 - DEBUG - Checking underground path from (0, 8) to (-3, 8) with length 2
+2025-05-12 19:03:11,229 - DEBUG - Checking underground path from (0, 8) to (0, 4) with length 3
+2025-05-12 19:03:11,229 - DEBUG - Checking underground path from (0, 8) to (0, 5) with length 2
+2025-05-12 19:03:11,229 - DEBUG - Checking underground path from (0, 7) to (4, 7) with length 3
+2025-05-12 19:03:11,230 - DEBUG - Checking underground path from (0, 7) to (3, 7) with length 2
+2025-05-12 19:03:11,230 - DEBUG - Checking underground path from (0, 7) to (0, 11) with length 3
+2025-05-12 19:03:11,230 - DEBUG - Checking underground path from (0, 7) to (0, 10) with length 2
+2025-05-12 19:03:11,230 - DEBUG - Checking underground path from (0, 7) to (-4, 7) with length 3
+2025-05-12 19:03:11,230 - DEBUG - Checking underground path from (0, 7) to (-3, 7) with length 2
+2025-05-12 19:03:11,230 - DEBUG - Checking underground path from (0, 7) to (0, 3) with length 3
+2025-05-12 19:03:11,230 - DEBUG - Checking underground path from (0, 7) to (0, 4) with length 2
+2025-05-12 19:03:11,230 - DEBUG - Checking underground path from (0, 6) to (4, 6) with length 3
+2025-05-12 19:03:11,230 - DEBUG - Checking underground path from (0, 6) to (3, 6) with length 2
+2025-05-12 19:03:11,230 - DEBUG - Checking underground path from (0, 6) to (0, 10) with length 3
+2025-05-12 19:03:11,231 - DEBUG - Checking underground path from (0, 6) to (0, 9) with length 2
+2025-05-12 19:03:11,231 - DEBUG - Checking underground path from (0, 6) to (-4, 6) with length 3
+2025-05-12 19:03:11,231 - DEBUG - Checking underground path from (0, 6) to (-3, 6) with length 2
+2025-05-12 19:03:11,231 - DEBUG - Checking underground path from (0, 6) to (0, 2) with length 3
+2025-05-12 19:03:11,231 - DEBUG - Checking underground path from (0, 6) to (0, 3) with length 2
+2025-05-12 19:03:11,231 - DEBUG - Checking underground path from (0, 5) to (4, 5) with length 3
+2025-05-12 19:03:11,231 - DEBUG - Checking underground path from (0, 5) to (3, 5) with length 2
+2025-05-12 19:03:11,232 - DEBUG - Checking underground path from (0, 5) to (0, 9) with length 3
+2025-05-12 19:03:11,232 - DEBUG - Checking underground path from (0, 5) to (0, 8) with length 2
+2025-05-12 19:03:11,232 - DEBUG - Checking underground path from (0, 5) to (-4, 5) with length 3
+2025-05-12 19:03:11,232 - DEBUG - Checking underground path from (0, 5) to (-3, 5) with length 2
+2025-05-12 19:03:11,232 - DEBUG - Checking underground path from (0, 5) to (0, 1) with length 3
+2025-05-12 19:03:11,232 - DEBUG - Checking underground path from (0, 5) to (0, 2) with length 2
+2025-05-12 19:03:11,232 - DEBUG - Checking underground path from (0, 4) to (4, 4) with length 3
+2025-05-12 19:03:11,232 - DEBUG - Checking underground path from (0, 4) to (3, 4) with length 2
+2025-05-12 19:03:11,233 - DEBUG - Checking underground path from (0, 4) to (0, 8) with length 3
+2025-05-12 19:03:11,233 - DEBUG - Checking underground path from (0, 4) to (0, 7) with length 2
+2025-05-12 19:03:11,233 - DEBUG - Checking underground path from (0, 4) to (-4, 4) with length 3
+2025-05-12 19:03:11,233 - DEBUG - Checking underground path from (0, 4) to (-3, 4) with length 2
+2025-05-12 19:03:11,233 - DEBUG - Checking underground path from (0, 4) to (0, 0) with length 3
+2025-05-12 19:03:11,233 - DEBUG - Checking underground path from (0, 4) to (0, 1) with length 2
+2025-05-12 19:03:11,233 - DEBUG - Checking underground path from (0, 3) to (4, 3) with length 3
+2025-05-12 19:03:11,234 - DEBUG - Checking underground path from (0, 3) to (3, 3) with length 2
+2025-05-12 19:03:11,234 - DEBUG - Checking underground path from (0, 3) to (0, 7) with length 3
+2025-05-12 19:03:11,234 - DEBUG - Checking underground path from (0, 3) to (0, 6) with length 2
+2025-05-12 19:03:11,234 - DEBUG - Checking underground path from (0, 3) to (-4, 3) with length 3
+2025-05-12 19:03:11,234 - DEBUG - Checking underground path from (0, 3) to (-3, 3) with length 2
+2025-05-12 19:03:11,234 - DEBUG - Checking underground path from (0, 3) to (0, -1) with length 3
+2025-05-12 19:03:11,234 - DEBUG - Checking underground path from (0, 3) to (0, 0) with length 2
+2025-05-12 19:03:11,235 - DEBUG - Checking underground path from (0, 2) to (4, 2) with length 3
+2025-05-12 19:03:11,235 - DEBUG - Checking underground path from (0, 2) to (3, 2) with length 2
+2025-05-12 19:03:11,235 - DEBUG - Checking underground path from (0, 2) to (0, 6) with length 3
+2025-05-12 19:03:11,235 - DEBUG - Checking underground path from (0, 2) to (0, 5) with length 2
+2025-05-12 19:03:11,235 - DEBUG - Checking underground path from (0, 2) to (-4, 2) with length 3
+2025-05-12 19:03:11,235 - DEBUG - Checking underground path from (0, 2) to (-3, 2) with length 2
+2025-05-12 19:03:11,235 - DEBUG - Checking underground path from (0, 2) to (0, -2) with length 3
+2025-05-12 19:03:11,236 - DEBUG - Checking underground path from (0, 2) to (0, -1) with length 2
+2025-05-12 19:03:11,236 - DEBUG - Checking underground path from (0, 1) to (4, 1) with length 3
+2025-05-12 19:03:11,236 - DEBUG - Checking underground path from (0, 1) to (3, 1) with length 2
+2025-05-12 19:03:11,236 - DEBUG - Checking underground path from (0, 1) to (0, 5) with length 3
+2025-05-12 19:03:11,236 - DEBUG - Checking underground path from (0, 1) to (0, 4) with length 2
+2025-05-12 19:03:11,236 - DEBUG - Checking underground path from (0, 1) to (-4, 1) with length 3
+2025-05-12 19:03:11,236 - DEBUG - Checking underground path from (0, 1) to (-3, 1) with length 2
+2025-05-12 19:03:11,237 - DEBUG - Checking underground path from (0, 1) to (0, -3) with length 3
+2025-05-12 19:03:11,237 - DEBUG - Checking underground path from (0, 1) to (0, -2) with length 2
+2025-05-12 19:03:11,237 - DEBUG - Path found: [(0, 9), (0, 8), (0, 7), (0, 6), (0, 5), (0, 4), (0, 3), (0, 2), (0, 1), (0, 0)] with underground segments: {}
+2025-05-12 19:03:11,237 - INFO - Found better path for coal from (0, 9) to (0, 0) with length 10
+2025-05-12 19:03:11,237 - DEBUG - Adding path for coal from (0, 9) to (0, 0)
+2025-05-12 19:03:11,237 - DEBUG - ======================================================
+2025-05-12 19:03:11,238 - DEBUG - Marking path on grid for coal from (0, 9) to (0, 0)
+2025-05-12 19:03:11,239 - DEBUG - BEFORE :Working grid:
 [[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
  [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
  [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
@@ -18,7 +90,7 @@
  [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
  [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
  [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]]
-2025-05-06 17:32:09,403 - DEBUG - AFTER: Working grid:
+2025-05-12 19:03:11,240 - DEBUG - AFTER: Working grid:
 [[1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
  [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
  [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
@@ -29,15 +101,267 @@
  [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
  [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
  [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]]
-2025-05-06 17:32:09,403 - DEBUG - ======================================================
-2025-05-06 17:32:10,540 - INFO - Processing items in order: ['iron-plate']
-2025-05-06 17:32:10,540 - DEBUG - All pairs sorted by heuristic distance: [(9, (12, 9), (12, 0), None, None)]
-2025-05-06 17:32:10,540 - DEBUG - Path found: [(12, 9), (12, 8), (12, 7), (12, 6), (12, 5), (12, 4), (12, 3), (12, 2), (12, 1), (12, 0)] with underground segments: {}
-2025-05-06 17:32:10,540 - INFO - Found better path for iron-plate from (12, 9) to (12, 0) with length 10
-2025-05-06 17:32:10,540 - DEBUG - Adding path for iron-plate from (12, 9) to (12, 0)
-2025-05-06 17:32:10,540 - DEBUG - ======================================================
-2025-05-06 17:32:10,541 - DEBUG - Marking path on grid for iron-plate from (12, 9) to (12, 0)
-2025-05-06 17:32:10,542 - DEBUG - BEFORE :Working grid:
+2025-05-12 19:03:11,240 - DEBUG - ======================================================
+2025-05-12 19:03:12,708 - INFO - Processing items in order: ['petroleum-gas']
+2025-05-12 19:03:12,708 - DEBUG - All pairs sorted by heuristic distance: [(9, (8, 9), (8, 0), None, None)]
+2025-05-12 19:03:12,708 - DEBUG - Checking underground path from (8, 9) to (17, 9) with length 8
+2025-05-12 19:03:12,708 - DEBUG - Checking underground path from (8, 9) to (16, 9) with length 7
+2025-05-12 19:03:12,708 - DEBUG - Checking underground path from (8, 9) to (15, 9) with length 6
+2025-05-12 19:03:12,708 - DEBUG - Checking underground path from (8, 9) to (14, 9) with length 5
+2025-05-12 19:03:12,708 - DEBUG - Checking underground path from (8, 9) to (13, 9) with length 4
+2025-05-12 19:03:12,708 - DEBUG - Checking underground path from (8, 9) to (12, 9) with length 3
+2025-05-12 19:03:12,708 - DEBUG - Checking underground path from (8, 9) to (11, 9) with length 2
+2025-05-12 19:03:12,708 - DEBUG - Checking underground path from (8, 9) to (8, 18) with length 8
+2025-05-12 19:03:12,708 - DEBUG - Checking underground path from (8, 9) to (8, 17) with length 7
+2025-05-12 19:03:12,710 - DEBUG - Checking underground path from (8, 9) to (8, 16) with length 6
+2025-05-12 19:03:12,710 - DEBUG - Checking underground path from (8, 9) to (8, 15) with length 5
+2025-05-12 19:03:12,710 - DEBUG - Checking underground path from (8, 9) to (8, 14) with length 4
+2025-05-12 19:03:12,710 - DEBUG - Checking underground path from (8, 9) to (8, 13) with length 3
+2025-05-12 19:03:12,710 - DEBUG - Checking underground path from (8, 9) to (8, 12) with length 2
+2025-05-12 19:03:12,710 - DEBUG - Checking underground path from (8, 9) to (-1, 9) with length 8
+2025-05-12 19:03:12,710 - DEBUG - Checking underground path from (8, 9) to (0, 9) with length 7
+2025-05-12 19:03:12,710 - DEBUG - Checking underground path from (8, 9) to (1, 9) with length 6
+2025-05-12 19:03:12,710 - DEBUG - Checking underground path from (8, 9) to (2, 9) with length 5
+2025-05-12 19:03:12,710 - DEBUG - Checking underground path from (8, 9) to (3, 9) with length 4
+2025-05-12 19:03:12,710 - DEBUG - Checking underground path from (8, 9) to (4, 9) with length 3
+2025-05-12 19:03:12,710 - DEBUG - Checking underground path from (8, 9) to (5, 9) with length 2
+2025-05-12 19:03:12,711 - DEBUG - Checking underground path from (8, 9) to (8, 0) with length 8
+2025-05-12 19:03:12,711 - DEBUG - Checking underground path from (8, 9) to (8, 1) with length 7
+2025-05-12 19:03:12,711 - DEBUG - Checking underground path from (8, 9) to (8, 2) with length 6
+2025-05-12 19:03:12,711 - DEBUG - Checking underground path from (8, 9) to (8, 3) with length 5
+2025-05-12 19:03:12,711 - DEBUG - Checking underground path from (8, 9) to (8, 4) with length 4
+2025-05-12 19:03:12,711 - DEBUG - Checking underground path from (8, 9) to (8, 5) with length 3
+2025-05-12 19:03:12,711 - DEBUG - Checking underground path from (8, 9) to (8, 6) with length 2
+2025-05-12 19:03:12,711 - DEBUG - Checking underground path from (8, 8) to (17, 8) with length 8
+2025-05-12 19:03:12,711 - DEBUG - Checking underground path from (8, 8) to (16, 8) with length 7
+2025-05-12 19:03:12,711 - DEBUG - Checking underground path from (8, 8) to (15, 8) with length 6
+2025-05-12 19:03:12,711 - DEBUG - Checking underground path from (8, 8) to (14, 8) with length 5
+2025-05-12 19:03:12,712 - DEBUG - Checking underground path from (8, 8) to (13, 8) with length 4
+2025-05-12 19:03:12,712 - DEBUG - Checking underground path from (8, 8) to (12, 8) with length 3
+2025-05-12 19:03:12,712 - DEBUG - Checking underground path from (8, 8) to (11, 8) with length 2
+2025-05-12 19:03:12,712 - DEBUG - Checking underground path from (8, 8) to (8, 17) with length 8
+2025-05-12 19:03:12,712 - DEBUG - Checking underground path from (8, 8) to (8, 16) with length 7
+2025-05-12 19:03:12,712 - DEBUG - Checking underground path from (8, 8) to (8, 15) with length 6
+2025-05-12 19:03:12,712 - DEBUG - Checking underground path from (8, 8) to (8, 14) with length 5
+2025-05-12 19:03:12,712 - DEBUG - Checking underground path from (8, 8) to (8, 13) with length 4
+2025-05-12 19:03:12,712 - DEBUG - Checking underground path from (8, 8) to (8, 12) with length 3
+2025-05-12 19:03:12,712 - DEBUG - Checking underground path from (8, 8) to (8, 11) with length 2
+2025-05-12 19:03:12,713 - DEBUG - Checking underground path from (8, 8) to (-1, 8) with length 8
+2025-05-12 19:03:12,713 - DEBUG - Checking underground path from (8, 8) to (0, 8) with length 7
+2025-05-12 19:03:12,713 - DEBUG - Checking underground path from (8, 8) to (1, 8) with length 6
+2025-05-12 19:03:12,713 - DEBUG - Checking underground path from (8, 8) to (2, 8) with length 5
+2025-05-12 19:03:12,713 - DEBUG - Checking underground path from (8, 8) to (3, 8) with length 4
+2025-05-12 19:03:12,713 - DEBUG - Checking underground path from (8, 8) to (4, 8) with length 3
+2025-05-12 19:03:12,713 - DEBUG - Checking underground path from (8, 8) to (5, 8) with length 2
+2025-05-12 19:03:12,713 - DEBUG - Checking underground path from (8, 8) to (8, -1) with length 8
+2025-05-12 19:03:12,713 - DEBUG - Checking underground path from (8, 8) to (8, 0) with length 7
+2025-05-12 19:03:12,713 - DEBUG - Checking underground path from (8, 8) to (8, 1) with length 6
+2025-05-12 19:03:12,714 - DEBUG - Checking underground path from (8, 8) to (8, 2) with length 5
+2025-05-12 19:03:12,714 - DEBUG - Checking underground path from (8, 8) to (8, 3) with length 4
+2025-05-12 19:03:12,714 - DEBUG - Checking underground path from (8, 8) to (8, 4) with length 3
+2025-05-12 19:03:12,714 - DEBUG - Checking underground path from (8, 8) to (8, 5) with length 2
+2025-05-12 19:03:12,714 - DEBUG - Checking underground path from (8, 7) to (17, 7) with length 8
+2025-05-12 19:03:12,714 - DEBUG - Checking underground path from (8, 7) to (16, 7) with length 7
+2025-05-12 19:03:12,714 - DEBUG - Checking underground path from (8, 7) to (15, 7) with length 6
+2025-05-12 19:03:12,714 - DEBUG - Checking underground path from (8, 7) to (14, 7) with length 5
+2025-05-12 19:03:12,714 - DEBUG - Checking underground path from (8, 7) to (13, 7) with length 4
+2025-05-12 19:03:12,714 - DEBUG - Checking underground path from (8, 7) to (12, 7) with length 3
+2025-05-12 19:03:12,715 - DEBUG - Checking underground path from (8, 7) to (11, 7) with length 2
+2025-05-12 19:03:12,715 - DEBUG - Checking underground path from (8, 7) to (8, 16) with length 8
+2025-05-12 19:03:12,715 - DEBUG - Checking underground path from (8, 7) to (8, 15) with length 7
+2025-05-12 19:03:12,715 - DEBUG - Checking underground path from (8, 7) to (8, 14) with length 6
+2025-05-12 19:03:12,715 - DEBUG - Checking underground path from (8, 7) to (8, 13) with length 5
+2025-05-12 19:03:12,715 - DEBUG - Checking underground path from (8, 7) to (8, 12) with length 4
+2025-05-12 19:03:12,715 - DEBUG - Checking underground path from (8, 7) to (8, 11) with length 3
+2025-05-12 19:03:12,715 - DEBUG - Checking underground path from (8, 7) to (8, 10) with length 2
+2025-05-12 19:03:12,715 - DEBUG - Checking underground path from (8, 7) to (-1, 7) with length 8
+2025-05-12 19:03:12,715 - DEBUG - Checking underground path from (8, 7) to (0, 7) with length 7
+2025-05-12 19:03:12,715 - DEBUG - Checking underground path from (8, 7) to (1, 7) with length 6
+2025-05-12 19:03:12,715 - DEBUG - Checking underground path from (8, 7) to (2, 7) with length 5
+2025-05-12 19:03:12,716 - DEBUG - Checking underground path from (8, 7) to (3, 7) with length 4
+2025-05-12 19:03:12,716 - DEBUG - Checking underground path from (8, 7) to (4, 7) with length 3
+2025-05-12 19:03:12,716 - DEBUG - Checking underground path from (8, 7) to (5, 7) with length 2
+2025-05-12 19:03:12,716 - DEBUG - Checking underground path from (8, 7) to (8, -2) with length 8
+2025-05-12 19:03:12,716 - DEBUG - Checking underground path from (8, 7) to (8, -1) with length 7
+2025-05-12 19:03:12,716 - DEBUG - Checking underground path from (8, 7) to (8, 0) with length 6
+2025-05-12 19:03:12,716 - DEBUG - Checking underground path from (8, 7) to (8, 1) with length 5
+2025-05-12 19:03:12,716 - DEBUG - Checking underground path from (8, 7) to (8, 2) with length 4
+2025-05-12 19:03:12,716 - DEBUG - Checking underground path from (8, 7) to (8, 3) with length 3
+2025-05-12 19:03:12,716 - DEBUG - Checking underground path from (8, 7) to (8, 4) with length 2
+2025-05-12 19:03:12,716 - DEBUG - Checking underground path from (8, 6) to (17, 6) with length 8
+2025-05-12 19:03:12,717 - DEBUG - Checking underground path from (8, 6) to (16, 6) with length 7
+2025-05-12 19:03:12,717 - DEBUG - Checking underground path from (8, 6) to (15, 6) with length 6
+2025-05-12 19:03:12,717 - DEBUG - Checking underground path from (8, 6) to (14, 6) with length 5
+2025-05-12 19:03:12,717 - DEBUG - Checking underground path from (8, 6) to (13, 6) with length 4
+2025-05-12 19:03:12,717 - DEBUG - Checking underground path from (8, 6) to (12, 6) with length 3
+2025-05-12 19:03:12,717 - DEBUG - Checking underground path from (8, 6) to (11, 6) with length 2
+2025-05-12 19:03:12,717 - DEBUG - Checking underground path from (8, 6) to (8, 15) with length 8
+2025-05-12 19:03:12,717 - DEBUG - Checking underground path from (8, 6) to (8, 14) with length 7
+2025-05-12 19:03:12,717 - DEBUG - Checking underground path from (8, 6) to (8, 13) with length 6
+2025-05-12 19:03:12,717 - DEBUG - Checking underground path from (8, 6) to (8, 12) with length 5
+2025-05-12 19:03:12,717 - DEBUG - Checking underground path from (8, 6) to (8, 11) with length 4
+2025-05-12 19:03:12,717 - DEBUG - Checking underground path from (8, 6) to (8, 10) with length 3
+2025-05-12 19:03:12,718 - DEBUG - Checking underground path from (8, 6) to (8, 9) with length 2
+2025-05-12 19:03:12,718 - DEBUG - Checking underground path from (8, 6) to (-1, 6) with length 8
+2025-05-12 19:03:12,718 - DEBUG - Checking underground path from (8, 6) to (0, 6) with length 7
+2025-05-12 19:03:12,718 - DEBUG - Checking underground path from (8, 6) to (1, 6) with length 6
+2025-05-12 19:03:12,718 - DEBUG - Checking underground path from (8, 6) to (2, 6) with length 5
+2025-05-12 19:03:12,718 - DEBUG - Checking underground path from (8, 6) to (3, 6) with length 4
+2025-05-12 19:03:12,718 - DEBUG - Checking underground path from (8, 6) to (4, 6) with length 3
+2025-05-12 19:03:12,718 - DEBUG - Checking underground path from (8, 6) to (5, 6) with length 2
+2025-05-12 19:03:12,718 - DEBUG - Checking underground path from (8, 6) to (8, -3) with length 8
+2025-05-12 19:03:12,718 - DEBUG - Checking underground path from (8, 6) to (8, -2) with length 7
+2025-05-12 19:03:12,718 - DEBUG - Checking underground path from (8, 6) to (8, -1) with length 6
+2025-05-12 19:03:12,718 - DEBUG - Checking underground path from (8, 6) to (8, 0) with length 5
+2025-05-12 19:03:12,718 - DEBUG - Checking underground path from (8, 6) to (8, 1) with length 4
+2025-05-12 19:03:12,719 - DEBUG - Checking underground path from (8, 6) to (8, 2) with length 3
+2025-05-12 19:03:12,719 - DEBUG - Checking underground path from (8, 6) to (8, 3) with length 2
+2025-05-12 19:03:12,719 - DEBUG - Checking underground path from (8, 5) to (17, 5) with length 8
+2025-05-12 19:03:12,719 - DEBUG - Checking underground path from (8, 5) to (16, 5) with length 7
+2025-05-12 19:03:12,719 - DEBUG - Checking underground path from (8, 5) to (15, 5) with length 6
+2025-05-12 19:03:12,719 - DEBUG - Checking underground path from (8, 5) to (14, 5) with length 5
+2025-05-12 19:03:12,719 - DEBUG - Checking underground path from (8, 5) to (13, 5) with length 4
+2025-05-12 19:03:12,719 - DEBUG - Checking underground path from (8, 5) to (12, 5) with length 3
+2025-05-12 19:03:12,719 - DEBUG - Checking underground path from (8, 5) to (11, 5) with length 2
+2025-05-12 19:03:12,719 - DEBUG - Checking underground path from (8, 5) to (8, 14) with length 8
+2025-05-12 19:03:12,719 - DEBUG - Checking underground path from (8, 5) to (8, 13) with length 7
+2025-05-12 19:03:12,719 - DEBUG - Checking underground path from (8, 5) to (8, 12) with length 6
+2025-05-12 19:03:12,720 - DEBUG - Checking underground path from (8, 5) to (8, 11) with length 5
+2025-05-12 19:03:12,720 - DEBUG - Checking underground path from (8, 5) to (8, 10) with length 4
+2025-05-12 19:03:12,720 - DEBUG - Checking underground path from (8, 5) to (8, 9) with length 3
+2025-05-12 19:03:12,720 - DEBUG - Checking underground path from (8, 5) to (8, 8) with length 2
+2025-05-12 19:03:12,720 - DEBUG - Checking underground path from (8, 5) to (-1, 5) with length 8
+2025-05-12 19:03:12,720 - DEBUG - Checking underground path from (8, 5) to (0, 5) with length 7
+2025-05-12 19:03:12,720 - DEBUG - Checking underground path from (8, 5) to (1, 5) with length 6
+2025-05-12 19:03:12,720 - DEBUG - Checking underground path from (8, 5) to (2, 5) with length 5
+2025-05-12 19:03:12,720 - DEBUG - Checking underground path from (8, 5) to (3, 5) with length 4
+2025-05-12 19:03:12,720 - DEBUG - Checking underground path from (8, 5) to (4, 5) with length 3
+2025-05-12 19:03:12,720 - DEBUG - Checking underground path from (8, 5) to (5, 5) with length 2
+2025-05-12 19:03:12,720 - DEBUG - Checking underground path from (8, 5) to (8, -4) with length 8
+2025-05-12 19:03:12,720 - DEBUG - Checking underground path from (8, 5) to (8, -3) with length 7
+2025-05-12 19:03:12,720 - DEBUG - Checking underground path from (8, 5) to (8, -2) with length 6
+2025-05-12 19:03:12,720 - DEBUG - Checking underground path from (8, 5) to (8, -1) with length 5
+2025-05-12 19:03:12,720 - DEBUG - Checking underground path from (8, 5) to (8, 0) with length 4
+2025-05-12 19:03:12,720 - DEBUG - Checking underground path from (8, 5) to (8, 1) with length 3
+2025-05-12 19:03:12,720 - DEBUG - Checking underground path from (8, 5) to (8, 2) with length 2
+2025-05-12 19:03:12,721 - DEBUG - Checking underground path from (8, 4) to (17, 4) with length 8
+2025-05-12 19:03:12,721 - DEBUG - Checking underground path from (8, 4) to (16, 4) with length 7
+2025-05-12 19:03:12,721 - DEBUG - Checking underground path from (8, 4) to (15, 4) with length 6
+2025-05-12 19:03:12,721 - DEBUG - Checking underground path from (8, 4) to (14, 4) with length 5
+2025-05-12 19:03:12,721 - DEBUG - Checking underground path from (8, 4) to (13, 4) with length 4
+2025-05-12 19:03:12,721 - DEBUG - Checking underground path from (8, 4) to (12, 4) with length 3
+2025-05-12 19:03:12,721 - DEBUG - Checking underground path from (8, 4) to (11, 4) with length 2
+2025-05-12 19:03:12,721 - DEBUG - Checking underground path from (8, 4) to (8, 13) with length 8
+2025-05-12 19:03:12,721 - DEBUG - Checking underground path from (8, 4) to (8, 12) with length 7
+2025-05-12 19:03:12,721 - DEBUG - Checking underground path from (8, 4) to (8, 11) with length 6
+2025-05-12 19:03:12,721 - DEBUG - Checking underground path from (8, 4) to (8, 10) with length 5
+2025-05-12 19:03:12,722 - DEBUG - Checking underground path from (8, 4) to (8, 9) with length 4
+2025-05-12 19:03:12,722 - DEBUG - Checking underground path from (8, 4) to (8, 8) with length 3
+2025-05-12 19:03:12,722 - DEBUG - Checking underground path from (8, 4) to (8, 7) with length 2
+2025-05-12 19:03:12,722 - DEBUG - Checking underground path from (8, 4) to (-1, 4) with length 8
+2025-05-12 19:03:12,722 - DEBUG - Checking underground path from (8, 4) to (0, 4) with length 7
+2025-05-12 19:03:12,722 - DEBUG - Checking underground path from (8, 4) to (1, 4) with length 6
+2025-05-12 19:03:12,722 - DEBUG - Checking underground path from (8, 4) to (2, 4) with length 5
+2025-05-12 19:03:12,722 - DEBUG - Checking underground path from (8, 4) to (3, 4) with length 4
+2025-05-12 19:03:12,722 - DEBUG - Checking underground path from (8, 4) to (4, 4) with length 3
+2025-05-12 19:03:12,723 - DEBUG - Checking underground path from (8, 4) to (5, 4) with length 2
+2025-05-12 19:03:12,723 - DEBUG - Checking underground path from (8, 4) to (8, -5) with length 8
+2025-05-12 19:03:12,723 - DEBUG - Checking underground path from (8, 4) to (8, -4) with length 7
+2025-05-12 19:03:12,723 - DEBUG - Checking underground path from (8, 4) to (8, -3) with length 6
+2025-05-12 19:03:12,723 - DEBUG - Checking underground path from (8, 4) to (8, -2) with length 5
+2025-05-12 19:03:12,723 - DEBUG - Checking underground path from (8, 4) to (8, -1) with length 4
+2025-05-12 19:03:12,723 - DEBUG - Checking underground path from (8, 4) to (8, 0) with length 3
+2025-05-12 19:03:12,723 - DEBUG - Checking underground path from (8, 4) to (8, 1) with length 2
+2025-05-12 19:03:12,723 - DEBUG - Checking underground path from (8, 3) to (17, 3) with length 8
+2025-05-12 19:03:12,723 - DEBUG - Checking underground path from (8, 3) to (16, 3) with length 7
+2025-05-12 19:03:12,723 - DEBUG - Checking underground path from (8, 3) to (15, 3) with length 6
+2025-05-12 19:03:12,723 - DEBUG - Checking underground path from (8, 3) to (14, 3) with length 5
+2025-05-12 19:03:12,724 - DEBUG - Checking underground path from (8, 3) to (13, 3) with length 4
+2025-05-12 19:03:12,724 - DEBUG - Checking underground path from (8, 3) to (12, 3) with length 3
+2025-05-12 19:03:12,724 - DEBUG - Checking underground path from (8, 3) to (11, 3) with length 2
+2025-05-12 19:03:12,724 - DEBUG - Checking underground path from (8, 3) to (8, 12) with length 8
+2025-05-12 19:03:12,724 - DEBUG - Checking underground path from (8, 3) to (8, 11) with length 7
+2025-05-12 19:03:12,724 - DEBUG - Checking underground path from (8, 3) to (8, 10) with length 6
+2025-05-12 19:03:12,724 - DEBUG - Checking underground path from (8, 3) to (8, 9) with length 5
+2025-05-12 19:03:12,724 - DEBUG - Checking underground path from (8, 3) to (8, 8) with length 4
+2025-05-12 19:03:12,724 - DEBUG - Checking underground path from (8, 3) to (8, 7) with length 3
+2025-05-12 19:03:12,724 - DEBUG - Checking underground path from (8, 3) to (8, 6) with length 2
+2025-05-12 19:03:12,724 - DEBUG - Checking underground path from (8, 3) to (-1, 3) with length 8
+2025-05-12 19:03:12,725 - DEBUG - Checking underground path from (8, 3) to (0, 3) with length 7
+2025-05-12 19:03:12,725 - DEBUG - Checking underground path from (8, 3) to (1, 3) with length 6
+2025-05-12 19:03:12,725 - DEBUG - Checking underground path from (8, 3) to (2, 3) with length 5
+2025-05-12 19:03:12,725 - DEBUG - Checking underground path from (8, 3) to (3, 3) with length 4
+2025-05-12 19:03:12,725 - DEBUG - Checking underground path from (8, 3) to (4, 3) with length 3
+2025-05-12 19:03:12,725 - DEBUG - Checking underground path from (8, 3) to (5, 3) with length 2
+2025-05-12 19:03:12,725 - DEBUG - Checking underground path from (8, 3) to (8, -6) with length 8
+2025-05-12 19:03:12,725 - DEBUG - Checking underground path from (8, 3) to (8, -5) with length 7
+2025-05-12 19:03:12,725 - DEBUG - Checking underground path from (8, 3) to (8, -4) with length 6
+2025-05-12 19:03:12,725 - DEBUG - Checking underground path from (8, 3) to (8, -3) with length 5
+2025-05-12 19:03:12,725 - DEBUG - Checking underground path from (8, 3) to (8, -2) with length 4
+2025-05-12 19:03:12,725 - DEBUG - Checking underground path from (8, 3) to (8, -1) with length 3
+2025-05-12 19:03:12,726 - DEBUG - Checking underground path from (8, 3) to (8, 0) with length 2
+2025-05-12 19:03:12,726 - DEBUG - Checking underground path from (8, 2) to (17, 2) with length 8
+2025-05-12 19:03:12,726 - DEBUG - Checking underground path from (8, 2) to (16, 2) with length 7
+2025-05-12 19:03:12,726 - DEBUG - Checking underground path from (8, 2) to (15, 2) with length 6
+2025-05-12 19:03:12,726 - DEBUG - Checking underground path from (8, 2) to (14, 2) with length 5
+2025-05-12 19:03:12,726 - DEBUG - Checking underground path from (8, 2) to (13, 2) with length 4
+2025-05-12 19:03:12,726 - DEBUG - Checking underground path from (8, 2) to (12, 2) with length 3
+2025-05-12 19:03:12,726 - DEBUG - Checking underground path from (8, 2) to (11, 2) with length 2
+2025-05-12 19:03:12,726 - DEBUG - Checking underground path from (8, 2) to (8, 11) with length 8
+2025-05-12 19:03:12,726 - DEBUG - Checking underground path from (8, 2) to (8, 10) with length 7
+2025-05-12 19:03:12,726 - DEBUG - Checking underground path from (8, 2) to (8, 9) with length 6
+2025-05-12 19:03:12,726 - DEBUG - Checking underground path from (8, 2) to (8, 8) with length 5
+2025-05-12 19:03:12,727 - DEBUG - Checking underground path from (8, 2) to (8, 7) with length 4
+2025-05-12 19:03:12,727 - DEBUG - Checking underground path from (8, 2) to (8, 6) with length 3
+2025-05-12 19:03:12,727 - DEBUG - Checking underground path from (8, 2) to (8, 5) with length 2
+2025-05-12 19:03:12,727 - DEBUG - Checking underground path from (8, 2) to (-1, 2) with length 8
+2025-05-12 19:03:12,727 - DEBUG - Checking underground path from (8, 2) to (0, 2) with length 7
+2025-05-12 19:03:12,727 - DEBUG - Checking underground path from (8, 2) to (1, 2) with length 6
+2025-05-12 19:03:12,727 - DEBUG - Checking underground path from (8, 2) to (2, 2) with length 5
+2025-05-12 19:03:12,727 - DEBUG - Checking underground path from (8, 2) to (3, 2) with length 4
+2025-05-12 19:03:12,727 - DEBUG - Checking underground path from (8, 2) to (4, 2) with length 3
+2025-05-12 19:03:12,727 - DEBUG - Checking underground path from (8, 2) to (5, 2) with length 2
+2025-05-12 19:03:12,727 - DEBUG - Checking underground path from (8, 2) to (8, -7) with length 8
+2025-05-12 19:03:12,728 - DEBUG - Checking underground path from (8, 2) to (8, -6) with length 7
+2025-05-12 19:03:12,728 - DEBUG - Checking underground path from (8, 2) to (8, -5) with length 6
+2025-05-12 19:03:12,728 - DEBUG - Checking underground path from (8, 2) to (8, -4) with length 5
+2025-05-12 19:03:12,728 - DEBUG - Checking underground path from (8, 2) to (8, -3) with length 4
+2025-05-12 19:03:12,728 - DEBUG - Checking underground path from (8, 2) to (8, -2) with length 3
+2025-05-12 19:03:12,728 - DEBUG - Checking underground path from (8, 2) to (8, -1) with length 2
+2025-05-12 19:03:12,728 - DEBUG - Checking underground path from (8, 1) to (17, 1) with length 8
+2025-05-12 19:03:12,728 - DEBUG - Checking underground path from (8, 1) to (16, 1) with length 7
+2025-05-12 19:03:12,728 - DEBUG - Checking underground path from (8, 1) to (15, 1) with length 6
+2025-05-12 19:03:12,728 - DEBUG - Checking underground path from (8, 1) to (14, 1) with length 5
+2025-05-12 19:03:12,728 - DEBUG - Checking underground path from (8, 1) to (13, 1) with length 4
+2025-05-12 19:03:12,728 - DEBUG - Checking underground path from (8, 1) to (12, 1) with length 3
+2025-05-12 19:03:12,728 - DEBUG - Checking underground path from (8, 1) to (11, 1) with length 2
+2025-05-12 19:03:12,728 - DEBUG - Checking underground path from (8, 1) to (8, 10) with length 8
+2025-05-12 19:03:12,728 - DEBUG - Checking underground path from (8, 1) to (8, 9) with length 7
+2025-05-12 19:03:12,728 - DEBUG - Checking underground path from (8, 1) to (8, 8) with length 6
+2025-05-12 19:03:12,728 - DEBUG - Checking underground path from (8, 1) to (8, 7) with length 5
+2025-05-12 19:03:12,728 - DEBUG - Checking underground path from (8, 1) to (8, 6) with length 4
+2025-05-12 19:03:12,728 - DEBUG - Checking underground path from (8, 1) to (8, 5) with length 3
+2025-05-12 19:03:12,730 - DEBUG - Checking underground path from (8, 1) to (8, 4) with length 2
+2025-05-12 19:03:12,730 - DEBUG - Checking underground path from (8, 1) to (-1, 1) with length 8
+2025-05-12 19:03:12,730 - DEBUG - Checking underground path from (8, 1) to (0, 1) with length 7
+2025-05-12 19:03:12,730 - DEBUG - Checking underground path from (8, 1) to (1, 1) with length 6
+2025-05-12 19:03:12,730 - DEBUG - Checking underground path from (8, 1) to (2, 1) with length 5
+2025-05-12 19:03:12,730 - DEBUG - Checking underground path from (8, 1) to (3, 1) with length 4
+2025-05-12 19:03:12,730 - DEBUG - Checking underground path from (8, 1) to (4, 1) with length 3
+2025-05-12 19:03:12,730 - DEBUG - Checking underground path from (8, 1) to (5, 1) with length 2
+2025-05-12 19:03:12,730 - DEBUG - Checking underground path from (8, 1) to (8, -8) with length 8
+2025-05-12 19:03:12,730 - DEBUG - Checking underground path from (8, 1) to (8, -7) with length 7
+2025-05-12 19:03:12,730 - DEBUG - Checking underground path from (8, 1) to (8, -6) with length 6
+2025-05-12 19:03:12,731 - DEBUG - Checking underground path from (8, 1) to (8, -5) with length 5
+2025-05-12 19:03:12,731 - DEBUG - Checking underground path from (8, 1) to (8, -4) with length 4
+2025-05-12 19:03:12,731 - DEBUG - Checking underground path from (8, 1) to (8, -3) with length 3
+2025-05-12 19:03:12,731 - DEBUG - Checking underground path from (8, 1) to (8, -2) with length 2
+2025-05-12 19:03:12,731 - DEBUG - Path found: [(8, 9), (8, 8), (8, 7), (8, 6), (8, 5), (8, 4), (8, 3), (8, 2), (8, 1), (8, 0)] with underground segments: {}
+2025-05-12 19:03:12,731 - INFO - Found better path for petroleum-gas from (8, 9) to (8, 0) with length 10
+2025-05-12 19:03:12,731 - DEBUG - Adding path for petroleum-gas from (8, 9) to (8, 0)
+2025-05-12 19:03:12,731 - DEBUG - ======================================================
+2025-05-12 19:03:12,731 - DEBUG - Marking path on grid for petroleum-gas from (8, 9) to (8, 0)
+2025-05-12 19:03:12,732 - DEBUG - BEFORE :Working grid:
 [[1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
  [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
  [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
@@ -48,161 +372,809 @@
  [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
  [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
  [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]]
-2025-05-06 17:32:10,542 - DEBUG - AFTER: Working grid:
-[[1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
- [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
- [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
- [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
- [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
- [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
- [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
- [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
- [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
- [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]]
-2025-05-06 17:32:10,542 - DEBUG - ======================================================
-2025-05-06 17:32:12,274 - INFO - Processing items in order: ['electronic-circuit']
-2025-05-06 17:32:12,274 - DEBUG - All pairs sorted by heuristic distance: [(9, (15, 0), (15, 9), None, None)]
-2025-05-06 17:32:12,275 - DEBUG - Path found: [(15, 0), (15, 1), (15, 2), (15, 3), (15, 4), (15, 5), (15, 6), (15, 7), (15, 8), (15, 9)] with underground segments: {}
-2025-05-06 17:32:12,275 - INFO - Found better path for electronic-circuit from (15, 0) to (15, 9) with length 10
-2025-05-06 17:32:12,275 - DEBUG - Adding path for electronic-circuit from (15, 0) to (15, 9)
-2025-05-06 17:32:12,275 - DEBUG - ======================================================
-2025-05-06 17:32:12,275 - DEBUG - Marking path on grid for electronic-circuit from (15, 0) to (15, 9)
-2025-05-06 17:32:12,276 - DEBUG - BEFORE :Working grid:
-[[1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
- [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
- [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
- [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
- [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
- [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
- [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
- [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
- [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
- [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]]
-2025-05-06 17:32:12,277 - DEBUG - AFTER: Working grid:
-[[1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
- [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
- [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
- [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
- [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
- [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
- [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
- [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
- [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
- [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]]
-2025-05-06 17:32:12,277 - DEBUG - ======================================================
-2025-05-06 17:32:12,946 - INFO - Starting to add manual I/O constraints.
-2025-05-06 17:32:12,947 - DEBUG - Processing input item 'copper-plate' with data: {'input': (9, 0), 'output': (0, 0), 'paths': {'copper-plate': [{'item': 'copper-plate', 'path': [(0, 9), (0, 8), (0, 7), (0, 6), (0, 5), (0, 4), (0, 3), (0, 2), (0, 1), (0, 0)], 'start': (0, 9), 'destination': (0, 0), 'underground_segments': {}, 'start_splitter': None, 'dest_splitter': None}]}}
-2025-05-06 17:32:12,947 - INFO - Adding input belt for item 'copper-plate' at position (9, 0)
-2025-05-06 17:32:12,948 - INFO - Adding output belt for item 'copper-plate' at position (0, 0)
-2025-05-06 17:32:12,949 - DEBUG - Processing path data for input item 'copper-plate'
-2025-05-06 17:32:12,949 - INFO - Adding belt path for 'copper-plate' at position (0, 8)
-2025-05-06 17:32:12,949 - INFO - Adding belt path for 'copper-plate' at position (0, 7)
-2025-05-06 17:32:12,949 - INFO - Adding belt path for 'copper-plate' at position (0, 6)
-2025-05-06 17:32:12,950 - INFO - Adding belt path for 'copper-plate' at position (0, 5)
-2025-05-06 17:32:12,950 - INFO - Adding belt path for 'copper-plate' at position (0, 4)
-2025-05-06 17:32:12,950 - INFO - Adding belt path for 'copper-plate' at position (0, 3)
-2025-05-06 17:32:12,950 - INFO - Adding belt path for 'copper-plate' at position (0, 2)
-2025-05-06 17:32:12,951 - INFO - Adding belt path for 'copper-plate' at position (0, 1)
-2025-05-06 17:32:12,951 - DEBUG - Processing input item 'iron-plate' with data: {'input': (9, 12), 'output': (0, 12), 'paths': {'iron-plate': [{'item': 'iron-plate', 'path': [(12, 9), (12, 8), (12, 7), (12, 6), (12, 5), (12, 4), (12, 3), (12, 2), (12, 1), (12, 0)], 'start': (12, 9), 'destination': (12, 0), 'underground_segments': {}, 'start_splitter': None, 'dest_splitter': None}]}}
-2025-05-06 17:32:12,951 - INFO - Adding input belt for item 'iron-plate' at position (9, 12)
-2025-05-06 17:32:12,951 - INFO - Adding output belt for item 'iron-plate' at position (0, 12)
-2025-05-06 17:32:12,952 - DEBUG - Processing path data for input item 'iron-plate'
-2025-05-06 17:32:12,952 - INFO - Adding belt path for 'iron-plate' at position (12, 8)
-2025-05-06 17:32:12,952 - INFO - Adding belt path for 'iron-plate' at position (12, 7)
-2025-05-06 17:32:12,952 - INFO - Adding belt path for 'iron-plate' at position (12, 6)
-2025-05-06 17:32:12,952 - INFO - Adding belt path for 'iron-plate' at position (12, 5)
-2025-05-06 17:32:12,952 - INFO - Adding belt path for 'iron-plate' at position (12, 4)
-2025-05-06 17:32:12,952 - INFO - Adding belt path for 'iron-plate' at position (12, 3)
-2025-05-06 17:32:12,953 - INFO - Adding belt path for 'iron-plate' at position (12, 2)
-2025-05-06 17:32:12,953 - INFO - Adding belt path for 'iron-plate' at position (12, 1)
-2025-05-06 17:32:12,953 - DEBUG - Processing output item 'electronic-circuit' with data: {'input': (0, 15), 'output': (9, 15), 'paths': {'electronic-circuit': [{'item': 'electronic-circuit', 'path': [(15, 0), (15, 1), (15, 2), (15, 3), (15, 4), (15, 5), (15, 6), (15, 7), (15, 8), (15, 9)], 'start': (15, 0), 'destination': (15, 9), 'underground_segments': {}, 'start_splitter': None, 'dest_splitter': None}]}}
-2025-05-06 17:32:12,953 - INFO - Adding input belt for output item 'electronic-circuit' at position (0, 15)
-2025-05-06 17:32:12,953 - INFO - Adding output belt for output item 'electronic-circuit' at position (9, 15)
-2025-05-06 17:32:12,953 - DEBUG - Processing path data for output item 'electronic-circuit'
-2025-05-06 17:32:12,954 - INFO - Adding belt path for 'electronic-circuit' at position (15, 1)
-2025-05-06 17:32:12,954 - INFO - Adding belt path for 'electronic-circuit' at position (15, 2)
-2025-05-06 17:32:12,954 - INFO - Adding belt path for 'electronic-circuit' at position (15, 3)
-2025-05-06 17:32:12,954 - INFO - Adding belt path for 'electronic-circuit' at position (15, 4)
-2025-05-06 17:32:12,954 - INFO - Adding belt path for 'electronic-circuit' at position (15, 5)
-2025-05-06 17:32:12,954 - INFO - Adding belt path for 'electronic-circuit' at position (15, 6)
-2025-05-06 17:32:12,954 - INFO - Adding belt path for 'electronic-circuit' at position (15, 7)
-2025-05-06 17:32:12,954 - INFO - Adding belt path for 'electronic-circuit' at position (15, 8)
-2025-05-06 17:32:12,955 - INFO - Finished adding manual I/O constraints. Calling solver.
-2025-05-06 17:32:12,955 - INFO - Starting to solve the optimization model.
-2025-05-06 17:32:12,955 - INFO - Solver status: 2 - Solution found
-2025-05-06 17:32:12,955 - INFO - Identifying non-overlapping inserters.
-2025-05-06 17:32:12,956 - INFO - Starting to create assemblers based on production data.
-2025-05-06 17:32:12,956 - DEBUG - Processing item 'electronic-circuit' with production data: {'amount_per_minute': 120, 'assemblers': 2, 'input_inserters': [{'id': 'copper-cable', 'inserters': 3, 'amount': 3}, {'id': 'iron-plate', 'inserters': 1, 'amount': 1}], 'belts': 2, 'capacity': 0}
-2025-05-06 17:32:12,956 - INFO - Creating assembler for item 'electronic-circuit', instance 0
-2025-05-06 17:32:12,956 - INFO - Creating input inserter for copper-cable at copper-cable_in_0_0_0
-2025-05-06 17:32:12,956 - INFO - Creating input inserter for copper-cable at copper-cable_in_0_0_1
-2025-05-06 17:32:12,956 - INFO - Creating input inserter for copper-cable at copper-cable_in_0_0_2
-2025-05-06 17:32:12,956 - INFO - Creating input inserter for iron-plate at iron-plate_in_0_0_0
-2025-05-06 17:32:12,956 - DEBUG - Created assembler with ID: electronic-circuit_0_0 and input inserters: ['copper-cable_in_0_0_0', 'copper-cable_in_0_0_1', 'copper-cable_in_0_0_2', 'iron-plate_in_0_0_0']
-2025-05-06 17:32:12,957 - DEBUG - Created assembler with ID: electronic-circuit_0_0 with item = electronic-circuit
-2025-05-06 17:32:12,957 - DEBUG - Created assembler with ID: electronic-circuit_0_0 with capacity = 0
-2025-05-06 17:32:12,957 - INFO - Creating assembler for item 'electronic-circuit', instance 1
-2025-05-06 17:32:12,957 - INFO - Creating input inserter for copper-cable at copper-cable_in_0_1_0
-2025-05-06 17:32:12,957 - INFO - Creating input inserter for copper-cable at copper-cable_in_0_1_1
-2025-05-06 17:32:12,957 - INFO - Creating input inserter for copper-cable at copper-cable_in_0_1_2
-2025-05-06 17:32:12,957 - INFO - Creating input inserter for iron-plate at iron-plate_in_0_1_0
-2025-05-06 17:32:12,957 - DEBUG - Created assembler with ID: electronic-circuit_0_1 and input inserters: ['copper-cable_in_0_1_0', 'copper-cable_in_0_1_1', 'copper-cable_in_0_1_2', 'iron-plate_in_0_1_0']
-2025-05-06 17:32:12,957 - DEBUG - Created assembler with ID: electronic-circuit_0_1 with item = electronic-circuit
-2025-05-06 17:32:12,959 - DEBUG - Created assembler with ID: electronic-circuit_0_1 with capacity = 0
-2025-05-06 17:32:12,959 - DEBUG - Processing item 'copper-cable' with production data: {'amount_per_minute': 360.0, 'assemblers': 3, 'input_inserters': [{'id': 'copper-plate', 'inserters': 2, 'amount': 1}], 'belts': 1, 'capacity': 2}
-2025-05-06 17:32:12,959 - INFO - Creating assembler for item 'copper-cable', instance 0
-2025-05-06 17:32:12,959 - INFO - Creating input inserter for copper-plate at copper-plate_in_1_0_0
-2025-05-06 17:32:12,959 - INFO - Creating input inserter for copper-plate at copper-plate_in_1_0_1
-2025-05-06 17:32:12,959 - DEBUG - Created assembler with ID: copper-cable_1_0 and input inserters: ['copper-plate_in_1_0_0', 'copper-plate_in_1_0_1']
-2025-05-06 17:32:12,959 - DEBUG - Created assembler with ID: copper-cable_1_0 with item = copper-cable
-2025-05-06 17:32:12,960 - DEBUG - Created assembler with ID: copper-cable_1_0 with capacity = 2
-2025-05-06 17:32:12,960 - INFO - Creating assembler for item 'copper-cable', instance 1
-2025-05-06 17:32:12,960 - INFO - Creating input inserter for copper-plate at copper-plate_in_1_1_0
-2025-05-06 17:32:12,960 - INFO - Creating input inserter for copper-plate at copper-plate_in_1_1_1
-2025-05-06 17:32:12,960 - DEBUG - Created assembler with ID: copper-cable_1_1 and input inserters: ['copper-plate_in_1_1_0', 'copper-plate_in_1_1_1']
-2025-05-06 17:32:12,960 - DEBUG - Created assembler with ID: copper-cable_1_1 with item = copper-cable
-2025-05-06 17:32:12,961 - DEBUG - Created assembler with ID: copper-cable_1_1 with capacity = 2
-2025-05-06 17:32:12,961 - INFO - Creating assembler for item 'copper-cable', instance 2
-2025-05-06 17:32:12,961 - INFO - Creating input inserter for copper-plate at copper-plate_in_1_2_0
-2025-05-06 17:32:12,961 - INFO - Creating input inserter for copper-plate at copper-plate_in_1_2_1
-2025-05-06 17:32:12,961 - DEBUG - Created assembler with ID: copper-cable_1_2 and input inserters: ['copper-plate_in_1_2_0', 'copper-plate_in_1_2_1']
-2025-05-06 17:32:12,961 - DEBUG - Created assembler with ID: copper-cable_1_2 with item = copper-cable
-2025-05-06 17:32:12,961 - DEBUG - Created assembler with ID: copper-cable_1_2 with capacity = 2
-2025-05-06 17:32:12,962 - DEBUG - Processing item 'copper-plate' with production data: {'amount_per_minute': 180.0, 'capacity': 0}
-2025-05-06 17:32:12,962 - DEBUG - Processing item 'iron-plate' with production data: {'amount_per_minute': 120.0, 'capacity': 0}
-2025-05-06 17:32:12,962 - INFO - Created 5 assemblers in total.
-2025-05-06 17:32:12,962 - INFO - Adding assembler overlap constraints to avoid global belts.
-2025-05-06 17:32:12,997 - INFO - Adding inserter overlap constraints to avoid global belts.
-2025-05-06 17:32:13,106 - INFO - Adding belt overlap constraints to avoid conflicts with global belts (different items only).
-2025-05-06 17:32:13,188 - INFO - Adding boundary constraints for assemblers.
-2025-05-06 17:32:13,188 - DEBUG - Setting boundary constraints for assembler ID electronic-circuit_0_0
-2025-05-06 17:32:13,188 - DEBUG - Setting boundary constraints for assembler ID electronic-circuit_0_1
-2025-05-06 17:32:13,188 - DEBUG - Setting boundary constraints for assembler ID copper-cable_1_0
-2025-05-06 17:32:13,188 - DEBUG - Setting boundary constraints for assembler ID copper-cable_1_1
-2025-05-06 17:32:13,188 - DEBUG - Setting boundary constraints for assembler ID copper-cable_1_2
-2025-05-06 17:32:13,188 - INFO - Adding boundary constraints for belts and inserters.
-2025-05-06 17:32:13,189 - DEBUG - Setting boundary constraints for inserter ID copper-cable_in_0_0_0 and belt ID copper-cable_end_0_0_0
-2025-05-06 17:32:13,189 - DEBUG - Setting boundary constraints for inserter ID copper-cable_in_0_0_1 and belt ID copper-cable_end_0_0_1
-2025-05-06 17:32:13,189 - DEBUG - Setting boundary constraints for inserter ID copper-cable_in_0_0_2 and belt ID copper-cable_end_0_0_2
-2025-05-06 17:32:13,189 - DEBUG - Setting boundary constraints for inserter ID iron-plate_in_0_0_0 and belt ID iron-plate_end_0_0_0
-2025-05-06 17:32:13,189 - DEBUG - Setting boundary constraints for inserter ID copper-cable_in_0_1_0 and belt ID copper-cable_end_0_1_0
-2025-05-06 17:32:13,189 - DEBUG - Setting boundary constraints for inserter ID copper-cable_in_0_1_1 and belt ID copper-cable_end_0_1_1
-2025-05-06 17:32:13,190 - DEBUG - Setting boundary constraints for inserter ID copper-cable_in_0_1_2 and belt ID copper-cable_end_0_1_2
-2025-05-06 17:32:13,190 - DEBUG - Setting boundary constraints for inserter ID iron-plate_in_0_1_0 and belt ID iron-plate_end_0_1_0
-2025-05-06 17:32:13,190 - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_1_0_0 and belt ID copper-plate_end_1_0_0
-2025-05-06 17:32:13,190 - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_1_0_1 and belt ID copper-plate_end_1_0_1
-2025-05-06 17:32:13,191 - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_1_1_0 and belt ID copper-plate_end_1_1_0
-2025-05-06 17:32:13,191 - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_1_1_1 and belt ID copper-plate_end_1_1_1
-2025-05-06 17:32:13,191 - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_1_2_0 and belt ID copper-plate_end_1_2_0
-2025-05-06 17:32:13,191 - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_1_2_1 and belt ID copper-plate_end_1_2_1
-2025-05-06 17:32:13,192 - INFO - Adding assembler overlap constraints to prevent assembler-assembler overlap.
-2025-05-06 17:32:13,194 - INFO - Adding assembler-inserter overlap constraints.
-2025-05-06 17:32:13,204 - INFO - Adding assembler-belt overlap constraints (excluding same-item belts).
-2025-05-06 17:32:13,212 - INFO - Adding inserter overlap constraints to prevent inserter-inserter overlap.
-2025-05-06 17:32:13,236 - INFO - Adding inserter-belt overlap constraints to prevent inserters from overlapping with belts.
-2025-05-06 17:32:13,271 - INFO - Adding belt overlap constraints to prevent belt-belt overlap (except same-item belts).
-2025-05-06 17:32:13,284 - INFO - Adding inserter adjacency constraints.
-2025-05-06 17:32:13,331 - INFO - Adding output space constraints.
-2025-05-06 17:32:15,085 - INFO - Adding input inserter merge constraints.
-2025-05-06 17:32:15,107 - INFO - Adding belt overlap optimization objective.
-2025-05-06 17:32:15,168 - INFO - Starting to solve the optimization model.
+2025-05-12 19:03:12,733 - DEBUG - AFTER: Working grid:
+[[1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0]]
+2025-05-12 19:03:12,733 - DEBUG - ======================================================
+2025-05-12 19:03:14,810 - INFO - Processing items in order: ['plastic-bar']
+2025-05-12 19:03:14,811 - DEBUG - All pairs sorted by heuristic distance: [(9, (15, 0), (15, 9), None, None)]
+2025-05-12 19:03:14,811 - DEBUG - Path found: [(15, 0), (15, 1), (15, 2), (15, 3), (15, 4), (15, 5), (15, 6), (15, 7), (15, 8), (15, 9)] with underground segments: {}
+2025-05-12 19:03:14,811 - INFO - Found better path for plastic-bar from (15, 0) to (15, 9) with length 10
+2025-05-12 19:03:14,811 - DEBUG - Adding path for plastic-bar from (15, 0) to (15, 9)
+2025-05-12 19:03:14,811 - DEBUG - ======================================================
+2025-05-12 19:03:14,811 - DEBUG - Marking path on grid for plastic-bar from (15, 0) to (15, 9)
+2025-05-12 19:03:14,812 - DEBUG - BEFORE :Working grid:
+[[1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0]]
+2025-05-12 19:03:14,812 - DEBUG - AFTER: Working grid:
+[[1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1]
+ [1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1]
+ [1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1]
+ [1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1]
+ [1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1]
+ [1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1]
+ [1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1]
+ [1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1]
+ [1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1]
+ [1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1]]
+2025-05-12 19:03:14,813 - DEBUG - ======================================================
+2025-05-12 19:03:15,570 - INFO - Starting to add manual I/O constraints.
+2025-05-12 19:03:15,570 - DEBUG - Processing input item 'coal' with data: {'input': (9, 0), 'output': (0, 0), 'paths': {'coal': [{'item': 'coal', 'path': [(0, 9), (0, 8), (0, 7), (0, 6), (0, 5), (0, 4), (0, 3), (0, 2), (0, 1), (0, 0)], 'start': (0, 9), 'destination': (0, 0), 'underground_segments': {}, 'start_splitter': None, 'dest_splitter': None}]}}
+2025-05-12 19:03:15,570 - INFO - Adding input belt for item 'coal' at position (9, 0)
+2025-05-12 19:03:15,571 - INFO - Adding output belt for item 'coal' at position (0, 0)
+2025-05-12 19:03:15,571 - DEBUG - Processing path data for input item 'coal'
+2025-05-12 19:03:15,571 - INFO - Adding belt path for 'coal' at position (0, 8)
+2025-05-12 19:03:15,571 - INFO - Adding belt path for 'coal' at position (0, 7)
+2025-05-12 19:03:15,572 - INFO - Adding belt path for 'coal' at position (0, 6)
+2025-05-12 19:03:15,572 - INFO - Adding belt path for 'coal' at position (0, 5)
+2025-05-12 19:03:15,572 - INFO - Adding belt path for 'coal' at position (0, 4)
+2025-05-12 19:03:15,572 - INFO - Adding belt path for 'coal' at position (0, 3)
+2025-05-12 19:03:15,573 - INFO - Adding belt path for 'coal' at position (0, 2)
+2025-05-12 19:03:15,573 - INFO - Adding belt path for 'coal' at position (0, 1)
+2025-05-12 19:03:15,573 - DEBUG - Processing input item 'petroleum-gas' with data: {'input': (9, 8), 'output': (0, 8), 'paths': {'petroleum-gas': [{'item': 'petroleum-gas', 'path': [(8, 9), (8, 8), (8, 7), (8, 6), (8, 5), (8, 4), (8, 3), (8, 2), (8, 1), (8, 0)], 'start': (8, 9), 'destination': (8, 0), 'underground_segments': {}, 'start_splitter': None, 'dest_splitter': None}]}}
+2025-05-12 19:03:15,573 - INFO - Adding input belt for item 'petroleum-gas' at position (9, 8)
+2025-05-12 19:03:15,573 - INFO - Adding output belt for item 'petroleum-gas' at position (0, 8)
+2025-05-12 19:03:15,574 - DEBUG - Processing path data for input item 'petroleum-gas'
+2025-05-12 19:03:15,574 - INFO - Adding belt path for 'petroleum-gas' at position (8, 8)
+2025-05-12 19:03:15,574 - INFO - Adding belt path for 'petroleum-gas' at position (8, 7)
+2025-05-12 19:03:15,574 - INFO - Adding belt path for 'petroleum-gas' at position (8, 6)
+2025-05-12 19:03:15,575 - INFO - Adding belt path for 'petroleum-gas' at position (8, 5)
+2025-05-12 19:03:15,575 - INFO - Adding belt path for 'petroleum-gas' at position (8, 4)
+2025-05-12 19:03:15,575 - INFO - Adding belt path for 'petroleum-gas' at position (8, 3)
+2025-05-12 19:03:15,575 - INFO - Adding belt path for 'petroleum-gas' at position (8, 2)
+2025-05-12 19:03:15,576 - INFO - Adding belt path for 'petroleum-gas' at position (8, 1)
+2025-05-12 19:03:15,576 - DEBUG - Processing output item 'plastic-bar' with data: {'input': (0, 15), 'output': (9, 15), 'paths': {'plastic-bar': [{'item': 'plastic-bar', 'path': [(15, 0), (15, 1), (15, 2), (15, 3), (15, 4), (15, 5), (15, 6), (15, 7), (15, 8), (15, 9)], 'start': (15, 0), 'destination': (15, 9), 'underground_segments': {}, 'start_splitter': None, 'dest_splitter': None}]}}
+2025-05-12 19:03:15,576 - INFO - Adding input belt for output item 'plastic-bar' at position (0, 15)
+2025-05-12 19:03:15,576 - INFO - Adding output belt for output item 'plastic-bar' at position (9, 15)
+2025-05-12 19:03:15,576 - DEBUG - Processing path data for output item 'plastic-bar'
+2025-05-12 19:03:15,576 - INFO - Adding belt path for 'plastic-bar' at position (15, 1)
+2025-05-12 19:03:15,577 - INFO - Adding belt path for 'plastic-bar' at position (15, 2)
+2025-05-12 19:03:15,577 - INFO - Adding belt path for 'plastic-bar' at position (15, 3)
+2025-05-12 19:03:15,578 - INFO - Adding belt path for 'plastic-bar' at position (15, 4)
+2025-05-12 19:03:15,578 - INFO - Adding belt path for 'plastic-bar' at position (15, 5)
+2025-05-12 19:03:15,578 - INFO - Adding belt path for 'plastic-bar' at position (15, 6)
+2025-05-12 19:03:15,579 - INFO - Adding belt path for 'plastic-bar' at position (15, 7)
+2025-05-12 19:03:15,579 - INFO - Adding belt path for 'plastic-bar' at position (15, 8)
+2025-05-12 19:03:15,579 - INFO - Finished adding manual I/O constraints. Calling solver.
+2025-05-12 19:03:15,582 - INFO - Solver check result: sat
+2025-05-12 19:03:15,582 - INFO - === Identifying Non-Overlapping Inserters ===
+2025-05-12 19:03:15,582 - INFO - === Locking Initial Solution ===
+2025-05-12 19:03:15,583 - INFO - === Minimizing Distance for Non-Overlapping Inserters ===
+2025-05-12 19:03:15,585 - INFO - Final solver check result:sat
+2025-05-12 19:03:15,592 - INFO - Successfully wrote model to SMT_Modules\solver_model_plastic-bar_20.smt
+2025-05-12 19:03:15,592 - INFO - Starting to create assemblers based on production data.
+2025-05-12 19:03:15,594 - DEBUG - Processing item 'plastic-bar' with production data: {'amount_per_minute': 20, 'assemblers': 1, 'input_inserters': [{'id': 'coal', 'inserters': 1, 'amount': 1}, {'id': 'petroleum-gas', 'inserters': 2, 'amount': 20}], 'belts': 1, 'capacity': 0}
+2025-05-12 19:03:15,594 - INFO - Using chemical-plant for plastic-bar with dimensions 3x3
+2025-05-12 19:03:15,594 - INFO - Creating assembler for item 'plastic-bar', instance 0
+2025-05-12 19:03:15,594 - INFO - Item 'coal' is solid
+2025-05-12 19:03:15,594 - INFO - Creating input inserter for coal at coal_in_0_0_0
+2025-05-12 19:03:15,595 - INFO - Item 'petroleum-gas' is fluid
+2025-05-12 19:03:15,595 - INFO - Creating input inserter for petroleum-gas at petroleum-gas_in_0_0_0
+2025-05-12 19:03:15,595 - INFO - Creating input inserter for petroleum-gas at petroleum-gas_in_0_0_1
+2025-05-12 19:03:15,595 - DEBUG - Created assembler with ID: plastic-bar_0_0 and input inserters: ['coal_in_0_0_0', 'petroleum-gas_in_0_0_0', 'petroleum-gas_in_0_0_1']
+2025-05-12 19:03:15,595 - DEBUG - Created assembler with ID: plastic-bar_0_0 with item = plastic-bar
+2025-05-12 19:03:15,595 - DEBUG - Created assembler with ID: plastic-bar_0_0 with capacity = 0
+2025-05-12 19:03:15,595 - DEBUG - Processing item 'coal' with production data: {'amount_per_minute': 10.0, 'capacity': 0}
+2025-05-12 19:03:15,595 - DEBUG - Processing item 'petroleum-gas' with production data: {'amount_per_minute': 200.0, 'capacity': 0}
+2025-05-12 19:03:15,595 - INFO - Created 1 assemblers in total.
+2025-05-12 19:03:15,595 - INFO - Adding assembler overlap constraints to avoid global belts.
+2025-05-12 19:03:15,613 - INFO - Adding inserter overlap constraints to avoid global belts.
+2025-05-12 19:03:15,628 - INFO - Adding belt overlap constraints to avoid conflicts with global belts (different items only).
+2025-05-12 19:03:15,640 - INFO - Adding boundary constraints for assemblers.
+2025-05-12 19:03:15,640 - DEBUG - Setting boundary constraints for assembler ID plastic-bar_0_0
+2025-05-12 19:03:15,640 - INFO - Adding boundary constraints for belts and inserters.
+2025-05-12 19:03:15,640 - DEBUG - Setting boundary constraints for inserter ID coal_in_0_0_0 and belt ID coal_end_0_0_0
+2025-05-12 19:03:15,641 - DEBUG - Setting boundary constraints for inserter ID petroleum-gas_in_0_0_0 and belt ID petroleum-gas_end_0_0_0
+2025-05-12 19:03:15,642 - DEBUG - Setting boundary constraints for inserter ID petroleum-gas_in_0_0_1 and belt ID petroleum-gas_end_0_0_1
+2025-05-12 19:03:15,643 - INFO - Adding assembler overlap constraints to prevent assembler-assembler overlap.
+2025-05-12 19:03:15,643 - INFO - Adding assembler-inserter overlap constraints.
+2025-05-12 19:03:15,643 - INFO - Adding assembler-belt overlap constraints (excluding same-item belts).
+2025-05-12 19:03:15,643 - INFO - Adding inserter overlap constraints to prevent inserter-inserter overlap.
+2025-05-12 19:03:15,644 - INFO - Adding inserter-belt overlap constraints to prevent inserters from overlapping with belts.
+2025-05-12 19:03:15,644 - INFO - Adding belt overlap constraints to prevent belt-belt overlap (except same-item belts).
+2025-05-12 19:03:15,645 - INFO - Found 2 fluid inserters for assembler plastic-bar_0_0
+2025-05-12 19:03:15,646 - INFO - Fluid inserter items: ['petroleum-gas']
+2025-05-12 19:03:15,653 - INFO - Allowing solid inserter coal_in_0_0_0 to be placed at any valid edge position
+2025-05-12 19:03:15,813 - INFO - Adding output space constraints for assembler plastic-bar_0_0
+2025-05-12 19:03:15,813 - DEBUG - Adding constraints to merge input inserters with assembler edges for items with matching types.
+2025-05-12 19:03:15,813 - INFO - ===== Adding constraints to maximize belt overlaps =====
+2025-05-12 19:03:15,821 - INFO - Adding optimization goal to maximize belt overlaps.
+2025-05-12 19:03:15,885 - INFO - Solver check result: sat
+2025-05-12 19:03:15,885 - INFO - === Identifying Non-Overlapping Inserters ===
+2025-05-12 19:03:15,886 - INFO - Inserter coal_in_0_0_0 is locked (either overlaps or has no matching global belt).
+2025-05-12 19:03:15,888 - INFO - Inserter petroleum-gas_in_0_0_0 does not overlap but has matching item.
+2025-05-12 19:03:15,889 - INFO - Inserter petroleum-gas_in_0_0_1 does not overlap but has matching item.
+2025-05-12 19:03:15,890 - INFO - === Locking Initial Solution ===
+2025-05-12 19:03:15,890 - INFO - Locking assembler plastic-bar_0_0 at (plastic-bar_0_0_x, plastic-bar_0_0_y).
+2025-05-12 19:03:15,891 - INFO - Locking inserter coal_in_0_0_0 at (coal_in_0_0_0_x, coal_in_0_0_0_y).
+2025-05-12 19:03:15,891 - INFO - Inserter petroleum-gas_in_0_0_0 is free to move.
+2025-05-12 19:03:15,891 - INFO - Inserter petroleum-gas_in_0_0_1 is free to move.
+2025-05-12 19:03:15,891 - INFO - === Minimizing Distance for Non-Overlapping Inserters ===
+2025-05-12 19:03:15,920 - INFO - Inserter petroleum-gas_in_0_0_0 has distances [If(petroleum-gas_end_0_0_0_x - petroleum-gas_(9, 8)_input_x >
+   0,
+   petroleum-gas_end_0_0_0_x - petroleum-gas_(9, 8)_input_x,
+   -(petroleum-gas_end_0_0_0_x -
+     petroleum-gas_(9, 8)_input_x)) +
+If(petroleum-gas_end_0_0_0_y - petroleum-gas_(9, 8)_input_y >
+   0,
+   petroleum-gas_end_0_0_0_y - petroleum-gas_(9, 8)_input_y,
+   -(petroleum-gas_end_0_0_0_y -
+     petroleum-gas_(9, 8)_input_y)), If(petroleum-gas_end_0_0_0_x - petroleum-gas_(0, 8)_input_x >
+   0,
+   petroleum-gas_end_0_0_0_x - petroleum-gas_(0, 8)_input_x,
+   -(petroleum-gas_end_0_0_0_x -
+     petroleum-gas_(0, 8)_input_x)) +
+If(petroleum-gas_end_0_0_0_y - petroleum-gas_(0, 8)_input_y >
+   0,
+   petroleum-gas_end_0_0_0_y - petroleum-gas_(0, 8)_input_y,
+   -(petroleum-gas_end_0_0_0_y -
+     petroleum-gas_(0, 8)_input_y)), If(petroleum-gas_end_0_0_0_x - petroleum-gas_(8, 8)_input_x >
+   0,
+   petroleum-gas_end_0_0_0_x - petroleum-gas_(8, 8)_input_x,
+   -(petroleum-gas_end_0_0_0_x -
+     petroleum-gas_(8, 8)_input_x)) +
+If(petroleum-gas_end_0_0_0_y - petroleum-gas_(8, 8)_input_y >
+   0,
+   petroleum-gas_end_0_0_0_y - petroleum-gas_(8, 8)_input_y,
+   -(petroleum-gas_end_0_0_0_y -
+     petroleum-gas_(8, 8)_input_y)), If(petroleum-gas_end_0_0_0_x - petroleum-gas_(8, 7)_input_x >
+   0,
+   petroleum-gas_end_0_0_0_x - petroleum-gas_(8, 7)_input_x,
+   -(petroleum-gas_end_0_0_0_x -
+     petroleum-gas_(8, 7)_input_x)) +
+If(petroleum-gas_end_0_0_0_y - petroleum-gas_(8, 7)_input_y >
+   0,
+   petroleum-gas_end_0_0_0_y - petroleum-gas_(8, 7)_input_y,
+   -(petroleum-gas_end_0_0_0_y -
+     petroleum-gas_(8, 7)_input_y)), If(petroleum-gas_end_0_0_0_x - petroleum-gas_(8, 6)_input_x >
+   0,
+   petroleum-gas_end_0_0_0_x - petroleum-gas_(8, 6)_input_x,
+   -(petroleum-gas_end_0_0_0_x -
+     petroleum-gas_(8, 6)_input_x)) +
+If(petroleum-gas_end_0_0_0_y - petroleum-gas_(8, 6)_input_y >
+   0,
+   petroleum-gas_end_0_0_0_y - petroleum-gas_(8, 6)_input_y,
+   -(petroleum-gas_end_0_0_0_y -
+     petroleum-gas_(8, 6)_input_y)), If(petroleum-gas_end_0_0_0_x - petroleum-gas_(8, 5)_input_x >
+   0,
+   petroleum-gas_end_0_0_0_x - petroleum-gas_(8, 5)_input_x,
+   -(petroleum-gas_end_0_0_0_x -
+     petroleum-gas_(8, 5)_input_x)) +
+If(petroleum-gas_end_0_0_0_y - petroleum-gas_(8, 5)_input_y >
+   0,
+   petroleum-gas_end_0_0_0_y - petroleum-gas_(8, 5)_input_y,
+   -(petroleum-gas_end_0_0_0_y -
+     petroleum-gas_(8, 5)_input_y)), If(petroleum-gas_end_0_0_0_x - petroleum-gas_(8, 4)_input_x >
+   0,
+   petroleum-gas_end_0_0_0_x - petroleum-gas_(8, 4)_input_x,
+   -(petroleum-gas_end_0_0_0_x -
+     petroleum-gas_(8, 4)_input_x)) +
+If(petroleum-gas_end_0_0_0_y - petroleum-gas_(8, 4)_input_y >
+   0,
+   petroleum-gas_end_0_0_0_y - petroleum-gas_(8, 4)_input_y,
+   -(petroleum-gas_end_0_0_0_y -
+     petroleum-gas_(8, 4)_input_y)), If(petroleum-gas_end_0_0_0_x - petroleum-gas_(8, 3)_input_x >
+   0,
+   petroleum-gas_end_0_0_0_x - petroleum-gas_(8, 3)_input_x,
+   -(petroleum-gas_end_0_0_0_x -
+     petroleum-gas_(8, 3)_input_x)) +
+If(petroleum-gas_end_0_0_0_y - petroleum-gas_(8, 3)_input_y >
+   0,
+   petroleum-gas_end_0_0_0_y - petroleum-gas_(8, 3)_input_y,
+   -(petroleum-gas_end_0_0_0_y -
+     petroleum-gas_(8, 3)_input_y)), If(petroleum-gas_end_0_0_0_x - petroleum-gas_(8, 2)_input_x >
+   0,
+   petroleum-gas_end_0_0_0_x - petroleum-gas_(8, 2)_input_x,
+   -(petroleum-gas_end_0_0_0_x -
+     petroleum-gas_(8, 2)_input_x)) +
+If(petroleum-gas_end_0_0_0_y - petroleum-gas_(8, 2)_input_y >
+   0,
+   petroleum-gas_end_0_0_0_y - petroleum-gas_(8, 2)_input_y,
+   -(petroleum-gas_end_0_0_0_y -
+     petroleum-gas_(8, 2)_input_y)), If(petroleum-gas_end_0_0_0_x - petroleum-gas_(8, 1)_input_x >
+   0,
+   petroleum-gas_end_0_0_0_x - petroleum-gas_(8, 1)_input_x,
+   -(petroleum-gas_end_0_0_0_x -
+     petroleum-gas_(8, 1)_input_x)) +
+If(petroleum-gas_end_0_0_0_y - petroleum-gas_(8, 1)_input_y >
+   0,
+   petroleum-gas_end_0_0_0_y - petroleum-gas_(8, 1)_input_y,
+   -(petroleum-gas_end_0_0_0_y -
+     petroleum-gas_(8, 1)_input_y))] to matching global belts.
+2025-05-12 19:03:15,950 - INFO - Inserter petroleum-gas_in_0_0_1 has distances [If(petroleum-gas_end_0_0_1_x - petroleum-gas_(9, 8)_input_x >
+   0,
+   petroleum-gas_end_0_0_1_x - petroleum-gas_(9, 8)_input_x,
+   -(petroleum-gas_end_0_0_1_x -
+     petroleum-gas_(9, 8)_input_x)) +
+If(petroleum-gas_end_0_0_1_y - petroleum-gas_(9, 8)_input_y >
+   0,
+   petroleum-gas_end_0_0_1_y - petroleum-gas_(9, 8)_input_y,
+   -(petroleum-gas_end_0_0_1_y -
+     petroleum-gas_(9, 8)_input_y)), If(petroleum-gas_end_0_0_1_x - petroleum-gas_(0, 8)_input_x >
+   0,
+   petroleum-gas_end_0_0_1_x - petroleum-gas_(0, 8)_input_x,
+   -(petroleum-gas_end_0_0_1_x -
+     petroleum-gas_(0, 8)_input_x)) +
+If(petroleum-gas_end_0_0_1_y - petroleum-gas_(0, 8)_input_y >
+   0,
+   petroleum-gas_end_0_0_1_y - petroleum-gas_(0, 8)_input_y,
+   -(petroleum-gas_end_0_0_1_y -
+     petroleum-gas_(0, 8)_input_y)), If(petroleum-gas_end_0_0_1_x - petroleum-gas_(8, 8)_input_x >
+   0,
+   petroleum-gas_end_0_0_1_x - petroleum-gas_(8, 8)_input_x,
+   -(petroleum-gas_end_0_0_1_x -
+     petroleum-gas_(8, 8)_input_x)) +
+If(petroleum-gas_end_0_0_1_y - petroleum-gas_(8, 8)_input_y >
+   0,
+   petroleum-gas_end_0_0_1_y - petroleum-gas_(8, 8)_input_y,
+   -(petroleum-gas_end_0_0_1_y -
+     petroleum-gas_(8, 8)_input_y)), If(petroleum-gas_end_0_0_1_x - petroleum-gas_(8, 7)_input_x >
+   0,
+   petroleum-gas_end_0_0_1_x - petroleum-gas_(8, 7)_input_x,
+   -(petroleum-gas_end_0_0_1_x -
+     petroleum-gas_(8, 7)_input_x)) +
+If(petroleum-gas_end_0_0_1_y - petroleum-gas_(8, 7)_input_y >
+   0,
+   petroleum-gas_end_0_0_1_y - petroleum-gas_(8, 7)_input_y,
+   -(petroleum-gas_end_0_0_1_y -
+     petroleum-gas_(8, 7)_input_y)), If(petroleum-gas_end_0_0_1_x - petroleum-gas_(8, 6)_input_x >
+   0,
+   petroleum-gas_end_0_0_1_x - petroleum-gas_(8, 6)_input_x,
+   -(petroleum-gas_end_0_0_1_x -
+     petroleum-gas_(8, 6)_input_x)) +
+If(petroleum-gas_end_0_0_1_y - petroleum-gas_(8, 6)_input_y >
+   0,
+   petroleum-gas_end_0_0_1_y - petroleum-gas_(8, 6)_input_y,
+   -(petroleum-gas_end_0_0_1_y -
+     petroleum-gas_(8, 6)_input_y)), If(petroleum-gas_end_0_0_1_x - petroleum-gas_(8, 5)_input_x >
+   0,
+   petroleum-gas_end_0_0_1_x - petroleum-gas_(8, 5)_input_x,
+   -(petroleum-gas_end_0_0_1_x -
+     petroleum-gas_(8, 5)_input_x)) +
+If(petroleum-gas_end_0_0_1_y - petroleum-gas_(8, 5)_input_y >
+   0,
+   petroleum-gas_end_0_0_1_y - petroleum-gas_(8, 5)_input_y,
+   -(petroleum-gas_end_0_0_1_y -
+     petroleum-gas_(8, 5)_input_y)), If(petroleum-gas_end_0_0_1_x - petroleum-gas_(8, 4)_input_x >
+   0,
+   petroleum-gas_end_0_0_1_x - petroleum-gas_(8, 4)_input_x,
+   -(petroleum-gas_end_0_0_1_x -
+     petroleum-gas_(8, 4)_input_x)) +
+If(petroleum-gas_end_0_0_1_y - petroleum-gas_(8, 4)_input_y >
+   0,
+   petroleum-gas_end_0_0_1_y - petroleum-gas_(8, 4)_input_y,
+   -(petroleum-gas_end_0_0_1_y -
+     petroleum-gas_(8, 4)_input_y)), If(petroleum-gas_end_0_0_1_x - petroleum-gas_(8, 3)_input_x >
+   0,
+   petroleum-gas_end_0_0_1_x - petroleum-gas_(8, 3)_input_x,
+   -(petroleum-gas_end_0_0_1_x -
+     petroleum-gas_(8, 3)_input_x)) +
+If(petroleum-gas_end_0_0_1_y - petroleum-gas_(8, 3)_input_y >
+   0,
+   petroleum-gas_end_0_0_1_y - petroleum-gas_(8, 3)_input_y,
+   -(petroleum-gas_end_0_0_1_y -
+     petroleum-gas_(8, 3)_input_y)), If(petroleum-gas_end_0_0_1_x - petroleum-gas_(8, 2)_input_x >
+   0,
+   petroleum-gas_end_0_0_1_x - petroleum-gas_(8, 2)_input_x,
+   -(petroleum-gas_end_0_0_1_x -
+     petroleum-gas_(8, 2)_input_x)) +
+If(petroleum-gas_end_0_0_1_y - petroleum-gas_(8, 2)_input_y >
+   0,
+   petroleum-gas_end_0_0_1_y - petroleum-gas_(8, 2)_input_y,
+   -(petroleum-gas_end_0_0_1_y -
+     petroleum-gas_(8, 2)_input_y)), If(petroleum-gas_end_0_0_1_x - petroleum-gas_(8, 1)_input_x >
+   0,
+   petroleum-gas_end_0_0_1_x - petroleum-gas_(8, 1)_input_x,
+   -(petroleum-gas_end_0_0_1_x -
+     petroleum-gas_(8, 1)_input_x)) +
+If(petroleum-gas_end_0_0_1_y - petroleum-gas_(8, 1)_input_y >
+   0,
+   petroleum-gas_end_0_0_1_y - petroleum-gas_(8, 1)_input_y,
+   -(petroleum-gas_end_0_0_1_y -
+     petroleum-gas_(8, 1)_input_y))] to matching global belts.
+2025-05-12 19:03:15,952 - INFO - Added minimization constraint for total distance.
+2025-05-12 19:03:16,134 - INFO - Final solver check result:sat
+2025-05-12 19:03:16,370 - INFO - Successfully wrote model to SMT_Modules\solver_model_plastic-bar_20.smt
+2025-05-12 19:03:16,370 - INFO - Execution time for solve: 0.7775 seconds.
+2025-05-12 19:03:16,669 - INFO - build output path infomation for plastic-bar_0
+2025-05-12 19:03:16,669 - INFO - Processing items in order: ['plastic-bar_0', 'petroleum-gas_0', 'petroleum-gas_1']
+2025-05-12 19:03:16,670 - INFO - Placing output inserter for item plastic-bar
+2025-05-12 19:03:16,670 - DEBUG - Total points in self.points: 3
+2025-05-12 19:03:16,670 - DEBUG - Keys in self.points: ['petroleum-gas_0', 'petroleum-gas_1', 'plastic-bar_0']
+2025-05-12 19:03:16,670 - DEBUG - Checking item_key: petroleum-gas_0, item type: petroleum-gas
+2025-05-12 19:03:16,670 - DEBUG - Skipping petroleum-gas_0 as it's not the output item plastic-bar
+2025-05-12 19:03:16,670 - DEBUG - Checking item_key: petroleum-gas_1, item type: petroleum-gas
+2025-05-12 19:03:16,670 - DEBUG - Skipping petroleum-gas_1 as it's not the output item plastic-bar
+2025-05-12 19:03:16,671 - DEBUG - Checking item_key: plastic-bar_0, item type: plastic-bar
+2025-05-12 19:03:16,671 - INFO - Found output item match: plastic-bar_0
+2025-05-12 19:03:16,671 - DEBUG - Start points for plastic-bar_0: [(2, 4), (3, 4), (4, 4), (6, 2)]
+2025-05-12 19:03:16,671 - DEBUG - Destination points for plastic-bar_0: [(15, 0), (15, 1), (15, 2), (15, 3), (15, 4), (15, 5), (15, 6), (15, 7), (15, 8), (15, 9), (15, 0), (15, 9)]
+2025-05-12 19:03:16,671 - DEBUG - Processing start point: (2, 4)
+2025-05-12 19:03:16,671 - DEBUG - Processing destination point: (15, 0)
+2025-05-12 19:03:16,671 - DEBUG - Heuristic distance from (2, 4) to (15, 0): 17
+2025-05-12 19:03:16,671 - DEBUG - Processing destination point: (15, 1)
+2025-05-12 19:03:16,672 - DEBUG - Heuristic distance from (2, 4) to (15, 1): 16
+2025-05-12 19:03:16,672 - DEBUG - Processing destination point: (15, 2)
+2025-05-12 19:03:16,672 - DEBUG - Heuristic distance from (2, 4) to (15, 2): 15
+2025-05-12 19:03:16,672 - DEBUG - Processing destination point: (15, 3)
+2025-05-12 19:03:16,672 - DEBUG - Heuristic distance from (2, 4) to (15, 3): 14
+2025-05-12 19:03:16,672 - DEBUG - Processing destination point: (15, 4)
+2025-05-12 19:03:16,672 - DEBUG - Heuristic distance from (2, 4) to (15, 4): 13
+2025-05-12 19:03:16,673 - DEBUG - Processing destination point: (15, 5)
+2025-05-12 19:03:16,673 - DEBUG - Heuristic distance from (2, 4) to (15, 5): 14
+2025-05-12 19:03:16,673 - DEBUG - Processing destination point: (15, 6)
+2025-05-12 19:03:16,673 - DEBUG - Heuristic distance from (2, 4) to (15, 6): 15
+2025-05-12 19:03:16,673 - DEBUG - Processing destination point: (15, 7)
+2025-05-12 19:03:16,673 - DEBUG - Heuristic distance from (2, 4) to (15, 7): 16
+2025-05-12 19:03:16,673 - DEBUG - Processing destination point: (15, 8)
+2025-05-12 19:03:16,673 - DEBUG - Heuristic distance from (2, 4) to (15, 8): 17
+2025-05-12 19:03:16,673 - DEBUG - Processing destination point: (15, 9)
+2025-05-12 19:03:16,674 - DEBUG - Heuristic distance from (2, 4) to (15, 9): 18
+2025-05-12 19:03:16,674 - DEBUG - Processing destination point: (15, 0)
+2025-05-12 19:03:16,674 - DEBUG - Heuristic distance from (2, 4) to (15, 0): 17
+2025-05-12 19:03:16,674 - DEBUG - Processing destination point: (15, 9)
+2025-05-12 19:03:16,674 - DEBUG - Heuristic distance from (2, 4) to (15, 9): 18
+2025-05-12 19:03:16,674 - DEBUG - Processing start point: (3, 4)
+2025-05-12 19:03:16,674 - DEBUG - Processing destination point: (15, 0)
+2025-05-12 19:03:16,674 - DEBUG - Heuristic distance from (3, 4) to (15, 0): 16
+2025-05-12 19:03:16,675 - DEBUG - Processing destination point: (15, 1)
+2025-05-12 19:03:16,675 - DEBUG - Heuristic distance from (3, 4) to (15, 1): 15
+2025-05-12 19:03:16,675 - DEBUG - Processing destination point: (15, 2)
+2025-05-12 19:03:16,675 - DEBUG - Heuristic distance from (3, 4) to (15, 2): 14
+2025-05-12 19:03:16,675 - DEBUG - Processing destination point: (15, 3)
+2025-05-12 19:03:16,675 - DEBUG - Heuristic distance from (3, 4) to (15, 3): 13
+2025-05-12 19:03:16,675 - DEBUG - Processing destination point: (15, 4)
+2025-05-12 19:03:16,675 - DEBUG - Heuristic distance from (3, 4) to (15, 4): 12
+2025-05-12 19:03:16,675 - DEBUG - Processing destination point: (15, 5)
+2025-05-12 19:03:16,676 - DEBUG - Heuristic distance from (3, 4) to (15, 5): 13
+2025-05-12 19:03:16,676 - DEBUG - Processing destination point: (15, 6)
+2025-05-12 19:03:16,676 - DEBUG - Heuristic distance from (3, 4) to (15, 6): 14
+2025-05-12 19:03:16,676 - DEBUG - Processing destination point: (15, 7)
+2025-05-12 19:03:16,676 - DEBUG - Heuristic distance from (3, 4) to (15, 7): 15
+2025-05-12 19:03:16,676 - DEBUG - Processing destination point: (15, 8)
+2025-05-12 19:03:16,676 - DEBUG - Heuristic distance from (3, 4) to (15, 8): 16
+2025-05-12 19:03:16,676 - DEBUG - Processing destination point: (15, 9)
+2025-05-12 19:03:16,676 - DEBUG - Heuristic distance from (3, 4) to (15, 9): 17
+2025-05-12 19:03:16,676 - DEBUG - Processing destination point: (15, 0)
+2025-05-12 19:03:16,676 - DEBUG - Heuristic distance from (3, 4) to (15, 0): 16
+2025-05-12 19:03:16,677 - DEBUG - Processing destination point: (15, 9)
+2025-05-12 19:03:16,677 - DEBUG - Heuristic distance from (3, 4) to (15, 9): 17
+2025-05-12 19:03:16,677 - DEBUG - Processing start point: (4, 4)
+2025-05-12 19:03:16,677 - DEBUG - Processing destination point: (15, 0)
+2025-05-12 19:03:16,677 - DEBUG - Heuristic distance from (4, 4) to (15, 0): 15
+2025-05-12 19:03:16,677 - DEBUG - Processing destination point: (15, 1)
+2025-05-12 19:03:16,677 - DEBUG - Heuristic distance from (4, 4) to (15, 1): 14
+2025-05-12 19:03:16,677 - DEBUG - Processing destination point: (15, 2)
+2025-05-12 19:03:16,677 - DEBUG - Heuristic distance from (4, 4) to (15, 2): 13
+2025-05-12 19:03:16,677 - DEBUG - Processing destination point: (15, 3)
+2025-05-12 19:03:16,677 - DEBUG - Heuristic distance from (4, 4) to (15, 3): 12
+2025-05-12 19:03:16,677 - DEBUG - Processing destination point: (15, 4)
+2025-05-12 19:03:16,678 - DEBUG - Heuristic distance from (4, 4) to (15, 4): 11
+2025-05-12 19:03:16,678 - DEBUG - Processing destination point: (15, 5)
+2025-05-12 19:03:16,678 - DEBUG - Heuristic distance from (4, 4) to (15, 5): 12
+2025-05-12 19:03:16,678 - DEBUG - Processing destination point: (15, 6)
+2025-05-12 19:03:16,678 - DEBUG - Heuristic distance from (4, 4) to (15, 6): 13
+2025-05-12 19:03:16,678 - DEBUG - Processing destination point: (15, 7)
+2025-05-12 19:03:16,678 - DEBUG - Heuristic distance from (4, 4) to (15, 7): 14
+2025-05-12 19:03:16,678 - DEBUG - Processing destination point: (15, 8)
+2025-05-12 19:03:16,678 - DEBUG - Heuristic distance from (4, 4) to (15, 8): 15
+2025-05-12 19:03:16,678 - DEBUG - Processing destination point: (15, 9)
+2025-05-12 19:03:16,679 - DEBUG - Heuristic distance from (4, 4) to (15, 9): 16
+2025-05-12 19:03:16,679 - DEBUG - Processing destination point: (15, 0)
+2025-05-12 19:03:16,679 - DEBUG - Heuristic distance from (4, 4) to (15, 0): 15
+2025-05-12 19:03:16,679 - DEBUG - Processing destination point: (15, 9)
+2025-05-12 19:03:16,679 - DEBUG - Heuristic distance from (4, 4) to (15, 9): 16
+2025-05-12 19:03:16,679 - DEBUG - Processing start point: (6, 2)
+2025-05-12 19:03:16,679 - DEBUG - Processing destination point: (15, 0)
+2025-05-12 19:03:16,679 - DEBUG - Heuristic distance from (6, 2) to (15, 0): 11
+2025-05-12 19:03:16,679 - DEBUG - Processing destination point: (15, 1)
+2025-05-12 19:03:16,679 - DEBUG - Heuristic distance from (6, 2) to (15, 1): 10
+2025-05-12 19:03:16,680 - DEBUG - Processing destination point: (15, 2)
+2025-05-12 19:03:16,680 - DEBUG - Heuristic distance from (6, 2) to (15, 2): 9
+2025-05-12 19:03:16,680 - DEBUG - Processing destination point: (15, 3)
+2025-05-12 19:03:16,680 - DEBUG - Heuristic distance from (6, 2) to (15, 3): 10
+2025-05-12 19:03:16,680 - DEBUG - Processing destination point: (15, 4)
+2025-05-12 19:03:16,680 - DEBUG - Heuristic distance from (6, 2) to (15, 4): 11
+2025-05-12 19:03:16,680 - DEBUG - Processing destination point: (15, 5)
+2025-05-12 19:03:16,680 - DEBUG - Heuristic distance from (6, 2) to (15, 5): 12
+2025-05-12 19:03:16,681 - DEBUG - Processing destination point: (15, 6)
+2025-05-12 19:03:16,681 - DEBUG - Heuristic distance from (6, 2) to (15, 6): 13
+2025-05-12 19:03:16,681 - DEBUG - Processing destination point: (15, 7)
+2025-05-12 19:03:16,681 - DEBUG - Heuristic distance from (6, 2) to (15, 7): 14
+2025-05-12 19:03:16,681 - DEBUG - Processing destination point: (15, 8)
+2025-05-12 19:03:16,681 - DEBUG - Heuristic distance from (6, 2) to (15, 8): 15
+2025-05-12 19:03:16,681 - DEBUG - Processing destination point: (15, 9)
+2025-05-12 19:03:16,681 - DEBUG - Heuristic distance from (6, 2) to (15, 9): 16
+2025-05-12 19:03:16,681 - DEBUG - Processing destination point: (15, 0)
+2025-05-12 19:03:16,682 - DEBUG - Heuristic distance from (6, 2) to (15, 0): 11
+2025-05-12 19:03:16,682 - DEBUG - Processing destination point: (15, 9)
+2025-05-12 19:03:16,682 - DEBUG - Heuristic distance from (6, 2) to (15, 9): 16
+2025-05-12 19:03:16,682 - DEBUG - Generated 48 start-destination pairs
+2025-05-12 19:03:16,682 - DEBUG - Sorted pairs (first 5): [(9, (6, 2), (15, 2)), (10, (6, 2), (15, 1)), (10, (6, 2), (15, 3)), (11, (4, 4), (15, 4)), (11, (6, 2), (15, 0))]
+2025-05-12 19:03:16,682 - DEBUG - Inserter mapping for plastic-bar_0: {'(2, 4)': (2, 3), '(3, 4)': (3, 3), '(4, 4)': (4, 3), '(6, 2)': (5, 2)}
+2025-05-12 19:03:16,682 - DEBUG - Best start position: (6, 2)
+2025-05-12 19:03:16,682 - INFO - Found inserter at (5, 2) for start position (6, 2)
+2025-05-12 19:03:16,682 - INFO - Marked inserter at (5, 2) as obstacle (previous value: 0)
+2025-05-12 19:03:16,683 - INFO - Updated start_points for plastic-bar_0 from [(2, 4), (3, 4), (4, 4), (6, 2)] to [(6, 2)]
+2025-05-12 19:03:16,683 - WARNING - Failed to place output inserter for any output item instance
+2025-05-12 19:03:16,683 - INFO - Processing all splitters
+2025-05-12 19:03:16,683 - INFO - Valid splitter at (0, 8) with next position (1, 8), facing (0, -1)
+2025-05-12 19:03:16,683 - INFO -   Inputs: [(1, 9)]
+2025-05-12 19:03:16,683 - INFO -   Outputs: [(1, 7)]
+2025-05-12 19:03:16,684 - INFO - Valid splitter at (0, 7) with next position (1, 7), facing (0, -1)
+2025-05-12 19:03:16,684 - INFO -   Inputs: [(1, 8)]
+2025-05-12 19:03:16,684 - INFO -   Outputs: [(1, 6)]
+2025-05-12 19:03:16,684 - INFO - Valid splitter at (0, 6) with next position (1, 6), facing (0, -1)
+2025-05-12 19:03:16,684 - INFO -   Inputs: [(1, 7)]
+2025-05-12 19:03:16,684 - INFO -   Outputs: [(1, 5)]
+2025-05-12 19:03:16,685 - INFO - Valid splitter at (0, 5) with next position (1, 5), facing (0, -1)
+2025-05-12 19:03:16,685 - INFO -   Inputs: [(1, 6)]
+2025-05-12 19:03:16,685 - INFO -   Outputs: [(1, 4)]
+2025-05-12 19:03:16,685 - INFO - Valid splitter at (0, 4) with next position (1, 4), facing (0, -1)
+2025-05-12 19:03:16,685 - INFO -   Inputs: [(1, 5)]
+2025-05-12 19:03:16,685 - INFO -   Outputs: [(1, 3)]
+2025-05-12 19:03:16,686 - INFO - Valid splitter at (0, 3) with next position (1, 3), facing (0, -1)
+2025-05-12 19:03:16,686 - INFO -   Inputs: [(1, 4)]
+2025-05-12 19:03:16,686 - INFO -   Outputs: [(1, 2)]
+2025-05-12 19:03:16,686 - INFO - Valid splitter at (8, 8) with next position (7, 8), facing (0, -1)
+2025-05-12 19:03:16,686 - INFO -   Inputs: [(7, 9)]
+2025-05-12 19:03:16,686 - INFO -   Outputs: [(7, 7)]
+2025-05-12 19:03:16,686 - INFO - Valid splitter at (8, 8) with next position (9, 8), facing (0, -1)
+2025-05-12 19:03:16,686 - INFO -   Inputs: [(9, 9)]
+2025-05-12 19:03:16,687 - INFO -   Outputs: [(9, 7)]
+2025-05-12 19:03:16,687 - INFO - Valid splitter at (8, 7) with next position (7, 7), facing (0, -1)
+2025-05-12 19:03:16,687 - INFO -   Inputs: [(7, 8)]
+2025-05-12 19:03:16,687 - INFO -   Outputs: [(7, 6)]
+2025-05-12 19:03:16,687 - INFO - Valid splitter at (8, 7) with next position (9, 7), facing (0, -1)
+2025-05-12 19:03:16,687 - INFO -   Inputs: [(9, 8)]
+2025-05-12 19:03:16,687 - INFO -   Outputs: [(9, 6)]
+2025-05-12 19:03:16,687 - INFO - Valid splitter at (8, 6) with next position (7, 6), facing (0, -1)
+2025-05-12 19:03:16,687 - INFO -   Inputs: [(7, 7)]
+2025-05-12 19:03:16,688 - INFO -   Outputs: [(7, 5)]
+2025-05-12 19:03:16,688 - INFO - Valid splitter at (8, 6) with next position (9, 6), facing (0, -1)
+2025-05-12 19:03:16,688 - INFO -   Inputs: [(9, 7)]
+2025-05-12 19:03:16,688 - INFO -   Outputs: [(9, 5)]
+2025-05-12 19:03:16,688 - INFO - Valid splitter at (8, 5) with next position (7, 5), facing (0, -1)
+2025-05-12 19:03:16,688 - INFO -   Inputs: [(7, 6)]
+2025-05-12 19:03:16,688 - INFO -   Outputs: [(7, 4)]
+2025-05-12 19:03:16,688 - INFO - Valid splitter at (8, 5) with next position (9, 5), facing (0, -1)
+2025-05-12 19:03:16,688 - INFO -   Inputs: [(9, 6)]
+2025-05-12 19:03:16,689 - INFO -   Outputs: [(9, 4)]
+2025-05-12 19:03:16,689 - INFO - Valid splitter at (8, 4) with next position (7, 4), facing (0, -1)
+2025-05-12 19:03:16,689 - INFO -   Inputs: [(7, 5)]
+2025-05-12 19:03:16,689 - INFO -   Outputs: [(7, 3)]
+2025-05-12 19:03:16,689 - INFO - Valid splitter at (8, 4) with next position (9, 4), facing (0, -1)
+2025-05-12 19:03:16,689 - INFO -   Inputs: [(9, 5)]
+2025-05-12 19:03:16,689 - INFO -   Outputs: [(9, 3)]
+2025-05-12 19:03:16,689 - INFO - Valid splitter at (8, 3) with next position (7, 3), facing (0, -1)
+2025-05-12 19:03:16,689 - INFO -   Inputs: [(7, 4)]
+2025-05-12 19:03:16,689 - INFO -   Outputs: [(7, 2)]
+2025-05-12 19:03:16,689 - INFO - Valid splitter at (8, 3) with next position (9, 3), facing (0, -1)
+2025-05-12 19:03:16,689 - INFO -   Inputs: [(9, 4)]
+2025-05-12 19:03:16,689 - INFO -   Outputs: [(9, 2)]
+2025-05-12 19:03:16,689 - INFO - Valid splitter at (8, 2) with next position (7, 2), facing (0, -1)
+2025-05-12 19:03:16,689 - INFO -   Inputs: [(7, 3)]
+2025-05-12 19:03:16,689 - INFO -   Outputs: [(7, 1)]
+2025-05-12 19:03:16,691 - INFO - Valid splitter at (8, 2) with next position (9, 2), facing (0, -1)
+2025-05-12 19:03:16,691 - INFO -   Inputs: [(9, 3)]
+2025-05-12 19:03:16,691 - INFO -   Outputs: [(9, 1)]
+2025-05-12 19:03:16,691 - INFO - Valid splitter at (8, 1) with next position (7, 1), facing (0, -1)
+2025-05-12 19:03:16,691 - INFO -   Inputs: [(7, 2)]
+2025-05-12 19:03:16,691 - INFO -   Outputs: [(7, 0)]
+2025-05-12 19:03:16,691 - INFO - Valid splitter at (8, 1) with next position (9, 1), facing (0, -1)
+2025-05-12 19:03:16,691 - INFO -   Inputs: [(9, 2)]
+2025-05-12 19:03:16,691 - INFO -   Outputs: [(9, 0)]
+2025-05-12 19:03:16,691 - INFO - Valid splitter at (15, 1) with next position (14, 1), facing (0, 1)
+2025-05-12 19:03:16,692 - INFO -   Inputs: [(14, 0)]
+2025-05-12 19:03:16,692 - INFO -   Outputs: [(14, 2)]
+2025-05-12 19:03:16,692 - INFO - Valid splitter at (15, 2) with next position (14, 2), facing (0, 1)
+2025-05-12 19:03:16,692 - INFO -   Inputs: [(14, 1)]
+2025-05-12 19:03:16,692 - INFO -   Outputs: [(14, 3)]
+2025-05-12 19:03:16,692 - INFO - Valid splitter at (15, 3) with next position (14, 3), facing (0, 1)
+2025-05-12 19:03:16,692 - INFO -   Inputs: [(14, 2)]
+2025-05-12 19:03:16,692 - INFO -   Outputs: [(14, 4)]
+2025-05-12 19:03:16,692 - INFO - Valid splitter at (15, 4) with next position (14, 4), facing (0, 1)
+2025-05-12 19:03:16,692 - INFO -   Inputs: [(14, 3)]
+2025-05-12 19:03:16,692 - INFO -   Outputs: [(14, 5)]
+2025-05-12 19:03:16,692 - INFO - Valid splitter at (15, 5) with next position (14, 5), facing (0, 1)
+2025-05-12 19:03:16,693 - INFO -   Inputs: [(14, 4)]
+2025-05-12 19:03:16,693 - INFO -   Outputs: [(14, 6)]
+2025-05-12 19:03:16,693 - INFO - Valid splitter at (15, 6) with next position (14, 6), facing (0, 1)
+2025-05-12 19:03:16,693 - INFO -   Inputs: [(14, 5)]
+2025-05-12 19:03:16,693 - INFO -   Outputs: [(14, 7)]
+2025-05-12 19:03:16,693 - INFO - Valid splitter at (15, 7) with next position (14, 7), facing (0, 1)
+2025-05-12 19:03:16,693 - INFO -   Inputs: [(14, 6)]
+2025-05-12 19:03:16,693 - INFO -   Outputs: [(14, 8)]
+2025-05-12 19:03:16,693 - INFO - Valid splitter at (15, 8) with next position (14, 8), facing (0, 1)
+2025-05-12 19:03:16,693 - INFO -   Inputs: [(14, 7)]
+2025-05-12 19:03:16,693 - INFO -   Outputs: [(14, 9)]
+2025-05-12 19:03:16,693 - INFO - Found splitter at destination point (15, 1)
+2025-05-12 19:03:16,694 - INFO - Found splitter at destination point (15, 2)
+2025-05-12 19:03:16,694 - INFO - Found splitter at destination point (15, 3)
+2025-05-12 19:03:16,694 - INFO - Found splitter at destination point (15, 4)
+2025-05-12 19:03:16,694 - INFO - Found splitter at destination point (15, 5)
+2025-05-12 19:03:16,694 - INFO - Found splitter at destination point (15, 6)
+2025-05-12 19:03:16,694 - INFO - Found splitter at destination point (15, 7)
+2025-05-12 19:03:16,694 - INFO - Found splitter at destination point (15, 8)
+2025-05-12 19:03:16,694 - INFO - Added splitter input (14, 0) as destination
+2025-05-12 19:03:16,694 - INFO - Added splitter input (14, 1) as destination
+2025-05-12 19:03:16,694 - INFO - Added splitter input (14, 2) as destination
+2025-05-12 19:03:16,695 - INFO - Added splitter input (14, 3) as destination
+2025-05-12 19:03:16,695 - INFO - Added splitter input (14, 4) as destination
+2025-05-12 19:03:16,695 - INFO - Added splitter input (14, 5) as destination
+2025-05-12 19:03:16,695 - INFO - Added splitter input (14, 6) as destination
+2025-05-12 19:03:16,695 - INFO - Added splitter input (14, 7) as destination
+2025-05-12 19:03:16,695 - INFO - Destination point (14, 0) is an input of splitter at (15, 1)
+2025-05-12 19:03:16,695 - INFO - Destination point (14, 1) is an input of splitter at (15, 2)
+2025-05-12 19:03:16,695 - INFO - Destination point (14, 2) is an input of splitter at (15, 3)
+2025-05-12 19:03:16,695 - INFO - Destination point (14, 3) is an input of splitter at (15, 4)
+2025-05-12 19:03:16,695 - INFO - Destination point (14, 4) is an input of splitter at (15, 5)
+2025-05-12 19:03:16,695 - INFO - Destination point (14, 5) is an input of splitter at (15, 6)
+2025-05-12 19:03:16,696 - INFO - Destination point (14, 6) is an input of splitter at (15, 7)
+2025-05-12 19:03:16,696 - INFO - Destination point (14, 7) is an input of splitter at (15, 8)
+2025-05-12 19:03:16,696 - DEBUG - All pairs sorted by heuristic distance: [(8, (6, 2), (14, 2), None, <MultiAgentPathfinder.Splitter object at 0x0000019F3FEE54F0>), (9, (6, 2), (14, 1), None, <MultiAgentPathfinder.Splitter object at 0x0000019F3FEE6120>), (9, (6, 2), (14, 3), None, <MultiAgentPathfinder.Splitter object at 0x0000019F3FEE4920>), (10, (6, 2), (14, 0), None, <MultiAgentPathfinder.Splitter object at 0x0000019F3FEE5610>), (10, (6, 2), (14, 4), None, <MultiAgentPathfinder.Splitter object at 0x0000019F3FEE55E0>), (11, (6, 2), (14, 5), None, <MultiAgentPathfinder.Splitter object at 0x0000019F3FEE5F40>), (12, (6, 2), (14, 6), None, <MultiAgentPathfinder.Splitter object at 0x0000019F3FEE5EE0>), (13, (6, 2), (14, 7), None, <MultiAgentPathfinder.Splitter object at 0x0000019F3FEE4860>)]
+2025-05-12 19:03:16,696 - DEBUG - Checking underground path from (6, 2) to (11, 2) with length 4
+2025-05-12 19:03:16,696 - DEBUG - Found valid underground path from (6, 2) to (11, 2) with obstacle? True
+2025-05-12 19:03:16,696 - DEBUG - Checking underground path from (6, 2) to (6, 7) with length 4
+2025-05-12 19:03:16,696 - DEBUG - Checking underground path from (6, 2) to (6, 6) with length 3
+2025-05-12 19:03:16,696 - DEBUG - Checking underground path from (6, 2) to (6, 5) with length 2
+2025-05-12 19:03:16,696 - DEBUG - Checking underground path from (6, 2) to (1, 2) with length 4
+2025-05-12 19:03:16,697 - DEBUG - Checking underground path from (6, 2) to (2, 2) with length 3
+2025-05-12 19:03:16,697 - DEBUG - Checking underground path from (6, 2) to (3, 2) with length 2
+2025-05-12 19:03:16,697 - DEBUG - Checking underground path from (6, 2) to (6, -3) with length 4
+2025-05-12 19:03:16,697 - DEBUG - Checking underground path from (6, 2) to (6, -2) with length 3
+2025-05-12 19:03:16,697 - DEBUG - Checking underground path from (6, 2) to (6, -1) with length 2
+2025-05-12 19:03:16,697 - DEBUG - Checking underground path from (7, 2) to (12, 2) with length 4
+2025-05-12 19:03:16,697 - DEBUG - Found valid underground path from (7, 2) to (12, 2) with obstacle? True
+2025-05-12 19:03:16,697 - DEBUG - Checking underground path from (7, 2) to (7, 7) with length 4
+2025-05-12 19:03:16,697 - DEBUG - Checking underground path from (7, 2) to (7, 6) with length 3
+2025-05-12 19:03:16,698 - DEBUG - Checking underground path from (7, 2) to (7, 5) with length 2
+2025-05-12 19:03:16,698 - DEBUG - Checking underground path from (7, 2) to (2, 2) with length 4
+2025-05-12 19:03:16,698 - DEBUG - Checking underground path from (7, 2) to (3, 2) with length 3
+2025-05-12 19:03:16,698 - DEBUG - Checking underground path from (7, 2) to (4, 2) with length 2
+2025-05-12 19:03:16,698 - DEBUG - Checking underground path from (7, 2) to (7, -3) with length 4
+2025-05-12 19:03:16,698 - DEBUG - Checking underground path from (7, 2) to (7, -2) with length 3
+2025-05-12 19:03:16,698 - DEBUG - Checking underground path from (7, 2) to (7, -1) with length 2
+2025-05-12 19:03:16,698 - DEBUG - Checking underground path from (11, 2) to (16, 2) with length 4
+2025-05-12 19:03:16,698 - DEBUG - Checking underground path from (11, 2) to (15, 2) with length 3
+2025-05-12 19:03:16,698 - DEBUG - Checking underground path from (11, 2) to (14, 2) with length 2
+2025-05-12 19:03:16,698 - DEBUG - Checking underground path from (11, 2) to (11, 7) with length 4
+2025-05-12 19:03:16,698 - DEBUG - Checking underground path from (11, 2) to (11, 6) with length 3
+2025-05-12 19:03:16,699 - DEBUG - Checking underground path from (11, 2) to (11, 5) with length 2
+2025-05-12 19:03:16,699 - DEBUG - Checking underground path from (11, 2) to (6, 2) with length 4
+2025-05-12 19:03:16,699 - DEBUG - Checking underground path from (11, 2) to (7, 2) with length 3
+2025-05-12 19:03:16,699 - DEBUG - Exit (7, 2) rejected because it doesn't get closer to goal
+2025-05-12 19:03:16,699 - DEBUG - Checking underground path from (11, 2) to (8, 2) with length 2
+2025-05-12 19:03:16,699 - DEBUG - Checking underground path from (11, 2) to (11, -3) with length 4
+2025-05-12 19:03:16,699 - DEBUG - Checking underground path from (11, 2) to (11, -2) with length 3
+2025-05-12 19:03:16,699 - DEBUG - Checking underground path from (11, 2) to (11, -1) with length 2
+2025-05-12 19:03:16,700 - DEBUG - Checking underground path from (12, 2) to (17, 2) with length 4
+2025-05-12 19:03:16,700 - DEBUG - Checking underground path from (12, 2) to (16, 2) with length 3
+2025-05-12 19:03:16,700 - DEBUG - Checking underground path from (12, 2) to (15, 2) with length 2
+2025-05-12 19:03:16,700 - DEBUG - Checking underground path from (12, 2) to (12, 7) with length 4
+2025-05-12 19:03:16,700 - DEBUG - Checking underground path from (12, 2) to (12, 6) with length 3
+2025-05-12 19:03:16,700 - DEBUG - Checking underground path from (12, 2) to (12, 5) with length 2
+2025-05-12 19:03:16,700 - DEBUG - Checking underground path from (12, 2) to (7, 2) with length 4
+2025-05-12 19:03:16,701 - DEBUG - Exit (7, 2) rejected because it doesn't get closer to goal
+2025-05-12 19:03:16,701 - DEBUG - Checking underground path from (12, 2) to (8, 2) with length 3
+2025-05-12 19:03:16,701 - DEBUG - Checking underground path from (12, 2) to (9, 2) with length 2
+2025-05-12 19:03:16,701 - DEBUG - Checking underground path from (12, 2) to (12, -3) with length 4
+2025-05-12 19:03:16,701 - DEBUG - Checking underground path from (12, 2) to (12, -2) with length 3
+2025-05-12 19:03:16,701 - DEBUG - Checking underground path from (12, 2) to (12, -1) with length 2
+2025-05-12 19:03:16,701 - DEBUG - Checking underground path from (13, 2) to (18, 2) with length 4
+2025-05-12 19:03:16,701 - DEBUG - Checking underground path from (13, 2) to (17, 2) with length 3
+2025-05-12 19:03:16,701 - DEBUG - Checking underground path from (13, 2) to (16, 2) with length 2
+2025-05-12 19:03:16,701 - DEBUG - Checking underground path from (13, 2) to (13, 7) with length 4
+2025-05-12 19:03:16,701 - DEBUG - Checking underground path from (13, 2) to (13, 6) with length 3
+2025-05-12 19:03:16,701 - DEBUG - Checking underground path from (13, 2) to (13, 5) with length 2
+2025-05-12 19:03:16,702 - DEBUG - Checking underground path from (13, 2) to (8, 2) with length 4
+2025-05-12 19:03:16,702 - DEBUG - Checking underground path from (13, 2) to (9, 2) with length 3
+2025-05-12 19:03:16,702 - DEBUG - Checking underground path from (13, 2) to (10, 2) with length 2
+2025-05-12 19:03:16,702 - DEBUG - Checking underground path from (13, 2) to (13, -3) with length 4
+2025-05-12 19:03:16,702 - DEBUG - Checking underground path from (13, 2) to (13, -2) with length 3
+2025-05-12 19:03:16,702 - DEBUG - Checking underground path from (13, 2) to (13, -1) with length 2
+2025-05-12 19:03:16,702 - DEBUG - Path found: [(6, 2), (7, 2), (12, 2), (13, 2), (14, 2)] with underground segments: {'segment_0': {'start': (7, 2), 'end': (12, 2)}}
+2025-05-12 19:03:16,702 - INFO - Found better path for plastic-bar_0 from (6, 2) to (14, 2) with length 5
+2025-05-12 19:03:16,702 - DEBUG - path_foundTrue for plastic-bar_0 from (6, 2) to (14, 2)
+2025-05-12 19:03:16,703 - DEBUG - Adding path for plastic-bar_0 from (6, 2) to (14, 2)
+2025-05-12 19:03:16,703 - DEBUG - ======================================================
+2025-05-12 19:03:16,703 - DEBUG - Marking path on grid for plastic-bar_0 from (6, 2) to (14, 2)
+2025-05-12 19:03:16,703 - DEBUG - BEFORE :Working grid:
+[[99 44 33 33 33 99  0  0  1  0  0  0  0  0  0 22]
+ [ 1 77 33 33 33 99  0  0  1  0  0  0  0  0  0 22]
+ [ 1  0 33 33 33  1  0  0  1  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  1  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  1  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  1  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  1  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  1  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  1  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  1  0  0  0  0  0  0 22]]
+2025-05-12 19:03:16,704 - DEBUG - AFTER: Working grid:
+[[99 44 33 33 33 99  0  0  1  0  0  0  0  0  0 22]
+ [ 1 77 33 33 33 99  0  0  1  0  0  0  0  0  0 22]
+ [ 1  0 33 33 33  1  1  1  1  1  1  1  1  1  1 22]
+ [ 1  0  0  0  0  0  0  0  1  0  0  0  0  0  1  1]
+ [ 1  0  0  0  0  0  0  0  1  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  1  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  1  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  1  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  1  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  1  0  0  0  0  0  0 22]]
+2025-05-12 19:03:16,704 - DEBUG - ======================================================
+2025-05-12 19:03:16,704 - DEBUG - All pairs sorted by heuristic distance: [(3, (8, 0), (5, 0), None, None), (3, (8, 0), (5, 0), None, None), (4, (8, 1), (5, 0), None, None), (5, (8, 2), (5, 0), None, None), (6, (8, 3), (5, 0), None, None), (7, (8, 4), (5, 0), None, None), (8, (8, 5), (5, 0), None, None), (9, (8, 6), (5, 0), None, None), (10, (8, 7), (5, 0), None, None), (11, (8, 8), (5, 0), None, None), (12, (8, 9), (5, 0), None, None), (12, (8, 9), (5, 0), None, None)]
+2025-05-12 19:03:16,704 - DEBUG - Checking underground path from (8, 0) to (13, 0) with length 4
+2025-05-12 19:03:16,705 - DEBUG - Checking underground path from (8, 0) to (12, 0) with length 3
+2025-05-12 19:03:16,705 - DEBUG - Checking underground path from (8, 0) to (11, 0) with length 2
+2025-05-12 19:03:16,705 - DEBUG - Checking underground path from (8, 0) to (8, 5) with length 4
+2025-05-12 19:03:16,705 - DEBUG - Checking underground path from (8, 0) to (8, 4) with length 3
+2025-05-12 19:03:16,705 - DEBUG - Checking underground path from (8, 0) to (8, 3) with length 2
+2025-05-12 19:03:16,705 - DEBUG - Checking underground path from (8, 0) to (3, 0) with length 4
+2025-05-12 19:03:16,705 - DEBUG - Checking underground path from (8, 0) to (4, 0) with length 3
+2025-05-12 19:03:16,705 - DEBUG - Checking underground path from (8, 0) to (5, 0) with length 2
+2025-05-12 19:03:16,705 - DEBUG - Checking underground path from (8, 0) to (8, -5) with length 4
+2025-05-12 19:03:16,705 - DEBUG - Checking underground path from (8, 0) to (8, -4) with length 3
+2025-05-12 19:03:16,705 - DEBUG - Checking underground path from (8, 0) to (8, -3) with length 2
+2025-05-12 19:03:16,705 - DEBUG - Checking underground path from (7, 0) to (12, 0) with length 4
+2025-05-12 19:03:16,705 - DEBUG - Checking underground path from (7, 0) to (11, 0) with length 3
+2025-05-12 19:03:16,706 - DEBUG - Checking underground path from (7, 0) to (10, 0) with length 2
+2025-05-12 19:03:16,706 - DEBUG - Checking underground path from (7, 0) to (7, 5) with length 4
+2025-05-12 19:03:16,706 - DEBUG - Checking underground path from (7, 0) to (7, 4) with length 3
+2025-05-12 19:03:16,706 - DEBUG - Checking underground path from (7, 0) to (7, 3) with length 2
+2025-05-12 19:03:16,706 - DEBUG - Checking underground path from (7, 0) to (2, 0) with length 4
+2025-05-12 19:03:16,706 - DEBUG - Checking underground path from (7, 0) to (3, 0) with length 3
+2025-05-12 19:03:16,706 - DEBUG - Checking underground path from (7, 0) to (4, 0) with length 2
+2025-05-12 19:03:16,706 - DEBUG - Checking underground path from (7, 0) to (7, -5) with length 4
+2025-05-12 19:03:16,706 - DEBUG - Checking underground path from (7, 0) to (7, -4) with length 3
+2025-05-12 19:03:16,706 - DEBUG - Checking underground path from (7, 0) to (7, -3) with length 2
+2025-05-12 19:03:16,707 - DEBUG - Checking underground path from (6, 0) to (11, 0) with length 4
+2025-05-12 19:03:16,707 - DEBUG - Checking underground path from (6, 0) to (10, 0) with length 3
+2025-05-12 19:03:16,707 - DEBUG - Checking underground path from (6, 0) to (9, 0) with length 2
+2025-05-12 19:03:16,707 - DEBUG - Checking underground path from (6, 0) to (6, 5) with length 4
+2025-05-12 19:03:16,707 - DEBUG - Exit (6, 5) rejected because it doesn't get closer to goal
+2025-05-12 19:03:16,707 - DEBUG - Checking underground path from (6, 0) to (6, 4) with length 3
+2025-05-12 19:03:16,707 - DEBUG - Exit (6, 4) rejected because it doesn't get closer to goal
+2025-05-12 19:03:16,707 - DEBUG - Checking underground path from (6, 0) to (6, 3) with length 2
+2025-05-12 19:03:16,707 - DEBUG - Exit (6, 3) rejected because it doesn't get closer to goal
+2025-05-12 19:03:16,707 - DEBUG - Checking underground path from (6, 0) to (1, 0) with length 4
+2025-05-12 19:03:16,707 - DEBUG - Checking underground path from (6, 0) to (2, 0) with length 3
+2025-05-12 19:03:16,707 - DEBUG - Checking underground path from (6, 0) to (3, 0) with length 2
+2025-05-12 19:03:16,708 - DEBUG - Checking underground path from (6, 0) to (6, -5) with length 4
+2025-05-12 19:03:16,708 - DEBUG - Checking underground path from (6, 0) to (6, -4) with length 3
+2025-05-12 19:03:16,708 - DEBUG - Checking underground path from (6, 0) to (6, -3) with length 2
+2025-05-12 19:03:16,708 - DEBUG - Path found: [(8, 0), (7, 0), (6, 0), (5, 0)] with underground segments: {}
+2025-05-12 19:03:16,708 - INFO - Found better path for petroleum-gas_0 from (8, 0) to (5, 0) with length 4
+2025-05-12 19:03:16,708 - DEBUG - path_foundTrue for petroleum-gas_0 from (8, 0) to (5, 0)
+2025-05-12 19:03:16,708 - DEBUG - Checking underground path from (8, 0) to (13, 0) with length 4
+2025-05-12 19:03:16,708 - DEBUG - Checking underground path from (8, 0) to (12, 0) with length 3
+2025-05-12 19:03:16,708 - DEBUG - Checking underground path from (8, 0) to (11, 0) with length 2
+2025-05-12 19:03:16,709 - DEBUG - Checking underground path from (8, 0) to (8, 5) with length 4
+2025-05-12 19:03:16,709 - DEBUG - Checking underground path from (8, 0) to (8, 4) with length 3
+2025-05-12 19:03:16,709 - DEBUG - Checking underground path from (8, 0) to (8, 3) with length 2
+2025-05-12 19:03:16,709 - DEBUG - Checking underground path from (8, 0) to (3, 0) with length 4
+2025-05-12 19:03:16,709 - DEBUG - Checking underground path from (8, 0) to (4, 0) with length 3
+2025-05-12 19:03:16,709 - DEBUG - Checking underground path from (8, 0) to (5, 0) with length 2
+2025-05-12 19:03:16,709 - DEBUG - Checking underground path from (8, 0) to (8, -5) with length 4
+2025-05-12 19:03:16,710 - DEBUG - Checking underground path from (8, 0) to (8, -4) with length 3
+2025-05-12 19:03:16,710 - DEBUG - Checking underground path from (8, 0) to (8, -3) with length 2
+2025-05-12 19:03:16,710 - DEBUG - Checking underground path from (7, 0) to (12, 0) with length 4
+2025-05-12 19:03:16,710 - DEBUG - Checking underground path from (7, 0) to (11, 0) with length 3
+2025-05-12 19:03:16,710 - DEBUG - Checking underground path from (7, 0) to (10, 0) with length 2
+2025-05-12 19:03:16,710 - DEBUG - Checking underground path from (7, 0) to (7, 5) with length 4
+2025-05-12 19:03:16,710 - DEBUG - Checking underground path from (7, 0) to (7, 4) with length 3
+2025-05-12 19:03:16,711 - DEBUG - Checking underground path from (7, 0) to (7, 3) with length 2
+2025-05-12 19:03:16,711 - DEBUG - Checking underground path from (7, 0) to (2, 0) with length 4
+2025-05-12 19:03:16,711 - DEBUG - Checking underground path from (7, 0) to (3, 0) with length 3
+2025-05-12 19:03:16,711 - DEBUG - Checking underground path from (7, 0) to (4, 0) with length 2
+2025-05-12 19:03:16,711 - DEBUG - Checking underground path from (7, 0) to (7, -5) with length 4
+2025-05-12 19:03:16,711 - DEBUG - Checking underground path from (7, 0) to (7, -4) with length 3
+2025-05-12 19:03:16,711 - DEBUG - Checking underground path from (7, 0) to (7, -3) with length 2
+2025-05-12 19:03:16,711 - DEBUG - Checking underground path from (6, 0) to (11, 0) with length 4
+2025-05-12 19:03:16,712 - DEBUG - Checking underground path from (6, 0) to (10, 0) with length 3
+2025-05-12 19:03:16,712 - DEBUG - Checking underground path from (6, 0) to (9, 0) with length 2
+2025-05-12 19:03:16,712 - DEBUG - Checking underground path from (6, 0) to (6, 5) with length 4
+2025-05-12 19:03:16,712 - DEBUG - Exit (6, 5) rejected because it doesn't get closer to goal
+2025-05-12 19:03:16,712 - DEBUG - Checking underground path from (6, 0) to (6, 4) with length 3
+2025-05-12 19:03:16,712 - DEBUG - Exit (6, 4) rejected because it doesn't get closer to goal
+2025-05-12 19:03:16,712 - DEBUG - Checking underground path from (6, 0) to (6, 3) with length 2
+2025-05-12 19:03:16,713 - DEBUG - Exit (6, 3) rejected because it doesn't get closer to goal
+2025-05-12 19:03:16,713 - DEBUG - Checking underground path from (6, 0) to (1, 0) with length 4
+2025-05-12 19:03:16,713 - DEBUG - Checking underground path from (6, 0) to (2, 0) with length 3
+2025-05-12 19:03:16,713 - DEBUG - Checking underground path from (6, 0) to (3, 0) with length 2
+2025-05-12 19:03:16,713 - DEBUG - Checking underground path from (6, 0) to (6, -5) with length 4
+2025-05-12 19:03:16,713 - DEBUG - Checking underground path from (6, 0) to (6, -4) with length 3
+2025-05-12 19:03:16,714 - DEBUG - Checking underground path from (6, 0) to (6, -3) with length 2
+2025-05-12 19:03:16,714 - DEBUG - Path found: [(8, 0), (7, 0), (6, 0), (5, 0)] with underground segments: {}
+2025-05-12 19:03:16,714 - DEBUG - path_foundTrue for petroleum-gas_0 from (8, 0) to (5, 0)
+2025-05-12 19:03:16,714 - DEBUG - Adding path for petroleum-gas_0 from (8, 0) to (5, 0)
+2025-05-12 19:03:16,714 - DEBUG - ======================================================
+2025-05-12 19:03:16,714 - DEBUG - Marking path on grid for petroleum-gas_0 from (8, 0) to (5, 0)
+2025-05-12 19:03:16,716 - DEBUG - BEFORE :Working grid:
+[[99 44 33 33 33  0  0  0  0  0  0  0  0  0  0 22]
+ [ 1 77 33 33 33 99  0  0  0  0  0  0  0  0  0 22]
+ [ 1  0 33 33 33  1  1  1  0  1  1  1  1  1  1 22]
+ [ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  1  1]
+ [ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  0 22]]
+2025-05-12 19:03:16,717 - DEBUG - AFTER: Working grid:
+[[99 44 33 33 33  1  1  1  1  0  0  0  0  0  0 22]
+ [ 1 77 33 33 33 99  0  0  0  0  0  0  0  0  0 22]
+ [ 1  0 33 33 33  1  1  1  0  1  1  1  1  1  1 22]
+ [ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  1  1]
+ [ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  0 22]]
+2025-05-12 19:03:16,717 - DEBUG - ======================================================
+2025-05-12 19:03:16,717 - DEBUG - All pairs sorted by heuristic distance: [(3, (8, 1), (5, 1), None, None), (4, (8, 0), (5, 1), None, None), (4, (8, 0), (5, 1), None, None), (4, (8, 2), (5, 1), None, None), (5, (8, 3), (5, 1), None, None), (6, (8, 4), (5, 1), None, None), (7, (8, 5), (5, 1), None, None), (8, (8, 6), (5, 1), None, None), (9, (8, 7), (5, 1), None, None), (10, (8, 8), (5, 1), None, None), (11, (8, 9), (5, 1), None, None), (11, (8, 9), (5, 1), None, None)]
+2025-05-12 19:03:16,717 - DEBUG - Checking underground path from (8, 1) to (13, 1) with length 4
+2025-05-12 19:03:16,717 - DEBUG - Exit (13, 1) rejected because it doesn't get closer to goal
+2025-05-12 19:03:16,717 - DEBUG - Checking underground path from (8, 1) to (12, 1) with length 3
+2025-05-12 19:03:16,719 - DEBUG - Exit (12, 1) rejected because it doesn't get closer to goal
+2025-05-12 19:03:16,719 - DEBUG - Checking underground path from (8, 1) to (11, 1) with length 2
+2025-05-12 19:03:16,719 - DEBUG - Exit (11, 1) rejected because it doesn't get closer to goal
+2025-05-12 19:03:16,719 - DEBUG - Checking underground path from (8, 1) to (8, 6) with length 4
+2025-05-12 19:03:16,719 - DEBUG - Checking underground path from (8, 1) to (8, 5) with length 3
+2025-05-12 19:03:16,719 - DEBUG - Checking underground path from (8, 1) to (8, 4) with length 2
+2025-05-12 19:03:16,719 - DEBUG - Checking underground path from (8, 1) to (3, 1) with length 4
+2025-05-12 19:03:16,719 - DEBUG - Checking underground path from (8, 1) to (4, 1) with length 3
+2025-05-12 19:03:16,719 - DEBUG - Checking underground path from (8, 1) to (5, 1) with length 2
+2025-05-12 19:03:16,719 - DEBUG - Found valid underground path directly to goal from (8, 1) to (5, 1)
+2025-05-12 19:03:16,719 - DEBUG - Checking underground path from (8, 1) to (8, -4) with length 4
+2025-05-12 19:03:16,719 - DEBUG - Checking underground path from (8, 1) to (8, -3) with length 3
+2025-05-12 19:03:16,719 - DEBUG - Checking underground path from (8, 1) to (8, -2) with length 2
+2025-05-12 19:03:16,719 - DEBUG - Path found: [(8, 1), (5, 1)] with underground segments: {'segment_0': {'start': (8, 1), 'end': (5, 1)}}
+2025-05-12 19:03:16,719 - INFO - Found better path for petroleum-gas_1 from (8, 1) to (5, 1) with length 2
+2025-05-12 19:03:16,719 - DEBUG - path_foundTrue for petroleum-gas_1 from (8, 1) to (5, 1)
+2025-05-12 19:03:16,719 - DEBUG - Adding path for petroleum-gas_1 from (8, 1) to (5, 1)
+2025-05-12 19:03:16,720 - DEBUG - ======================================================
+2025-05-12 19:03:16,720 - DEBUG - Marking path on grid for petroleum-gas_1 from (8, 1) to (5, 1)
+2025-05-12 19:03:16,720 - DEBUG - BEFORE :Working grid:
+[[99 44 33 33 33  1  1  1  0  0  0  0  0  0  0 22]
+ [ 1 77 33 33 33  0  0  0  0  0  0  0  0  0  0 22]
+ [ 1  0 33 33 33  1  1  1  0  1  1  1  1  1  1 22]
+ [ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  1  1]
+ [ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  0 22]]
+2025-05-12 19:03:16,721 - DEBUG - AFTER: Working grid:
+[[99 44 33 33 33  1  1  1  0  0  0  0  0  0  0 22]
+ [ 1 77 33 33 33  1  1  1  1  0  0  0  0  0  0 22]
+ [ 1  0 33 33 33  1  1  1  0  1  1  1  1  1  1 22]
+ [ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  1  1]
+ [ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  0 22]
+ [ 1  0  0  0  0  0  0  0  0  0  0  0  0  0  0 22]]
+2025-05-12 19:03:16,721 - DEBUG - ======================================================
+2025-05-12 19:03:16,721 - INFO - Execution time for build_belts: 0.3503 seconds.
+2025-05-12 19:03:16,867 - INFO - Creating blueprint from Modules/plastic-bar_20_[]_module.json
+2025-05-12 19:03:16,868 - INFO - 1. Placing assembling machines...
+2025-05-12 19:03:16,868 - ERROR - Error creating blueprint: too many values to unpack (expected 3)

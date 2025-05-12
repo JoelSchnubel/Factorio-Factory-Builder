@@ -599,3 +599,38 @@ electronic-circuit,1,solve,"{'electronic-circuit': 2, 'copper-cable': 3, 'copper
 electronic-circuit,1,build_belts,"{'electronic-circuit': 2, 'copper-cable': 3, 'copper-plate': 0, 'iron-plate': 0}",0.017171600000011722,gurobi
 electronic-circuit,1,solve,"{'electronic-circuit': 2, 'copper-cable': 3, 'copper-plate': 0, 'iron-plate': 0}",1.4465036999999938,gurobi
 electronic-circuit,1,build_belts,"{'electronic-circuit': 2, 'copper-cable': 3, 'copper-plate': 0, 'iron-plate': 0}",0.019723899999974037,gurobi
+electronic-circuit,1,solve,"{'electronic-circuit': 2, 'copper-cable': 3, 'copper-plate': 0, 'iron-plate': 0}",8.201346899999407,z3
+electronic-circuit,1,build_belts,"{'electronic-circuit': 2, 'copper-cable': 3, 'copper-plate': 0, 'iron-plate': 0}",0.3664231999991898,z3
+electronic-circuit,1,solve,"{'electronic-circuit': 2, 'copper-cable': 3, 'copper-plate': 0, 'iron-plate': 0}",9.774322100000063,z3
+electronic-circuit,1,build_belts,"{'electronic-circuit': 2, 'copper-cable': 3, 'copper-plate': 0, 'iron-plate': 0}",0.3845937000005506,z3
+electronic-circuit,1,solve,"{'electronic-circuit': 2, 'copper-cable': 3, 'copper-plate': 0, 'iron-plate': 0}",9.346992200000386,z3
+electronic-circuit,1,build_belts,"{'electronic-circuit': 2, 'copper-cable': 3, 'copper-plate': 0, 'iron-plate': 0}",0.3853552000000491,z3
+electronic-circuit,1,solve,"{'electronic-circuit': 2, 'copper-cable': 3, 'copper-plate': 0, 'iron-plate': 0}",8.79892370000016,z3
+electronic-circuit,1,build_belts,"{'electronic-circuit': 2, 'copper-cable': 3, 'copper-plate': 0, 'iron-plate': 0}",0.3386270000046352,z3
+electronic-circuit,1,solve,"{'electronic-circuit': 2, 'copper-cable': 2, 'copper-plate': 0, 'iron-plate': 0}",8.551379600015935,z3
+electronic-circuit,1,solve,"{'electronic-circuit': 2, 'copper-cable': 2, 'copper-plate': 0, 'iron-plate': 0}",8.463119299995014,z3
+electronic-circuit,1,solve,"{'electronic-circuit': 2, 'copper-cable': 2, 'copper-plate': 0, 'iron-plate': 0}",7.706362600001739,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.30951740001910366,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.24342329998034984,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.29876429997966625,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.05467990000033751,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.23162159998901188,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.036620300001231954,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.29206879998673685,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.038189100014278665,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.25269720001961105,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.04086460001417436,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.2549754999927245,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.03923280001617968,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.3053340000042226,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.0420573000155855,z3
+plastic-bar,1,solve,"{'plastic-bar': 1, 'coal': 0, 'petroleum-gas': 0}",0.8340491000271868,z3
+plastic-bar,1,build_belts,"{'plastic-bar': 1, 'coal': 0, 'petroleum-gas': 0}",0.3990615999791771,z3
+plastic-bar,1,solve,"{'plastic-bar': 1, 'coal': 0, 'petroleum-gas': 0}",0.8115170000237413,z3
+plastic-bar,1,solve,"{'plastic-bar': 1, 'coal': 0, 'petroleum-gas': 0}",0.8468375999946147,z3
+plastic-bar,1,solve,"{'plastic-bar': 1, 'coal': 0, 'petroleum-gas': 0}",0.9093543000053614,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.3554106999945361,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.28529070000513457,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.28745669999625534,z3
+plastic-bar,1,solve,"{'plastic-bar': 1, 'coal': 0, 'petroleum-gas': 0}",0.7775050000054762,z3
+plastic-bar,1,build_belts,"{'plastic-bar': 1, 'coal': 0, 'petroleum-gas': 0}",0.3502596000034828,z3
