@@ -97,6 +97,33 @@ class MultiAgentPathfinder:
         """Calculate Manhattan distance heuristic between points a and b."""
         return abs(a[0] - b[0]) + abs(a[1] - b[1])
     
+    
+    def expand_fluid_positions(self, positions):
+        """
+        For fluid items, expand the valid starting to be all adjacent tiles.
+        
+        Args:
+            positions (list): List of position tuples (x, y)
+            
+        Returns:
+            list: Expanded list of positions including adjacent tiles
+        """
+        expanded_positions = []
+        
+        for pos in positions:
+            # Check all four adjacent directions
+            for dx, dy in self.directions:
+                adjacent_pos = (pos[0] + dx, pos[1] + dy)
+                # Make sure position is in bounds and not an obstacle
+                if (0 <= adjacent_pos[0] < self.width and 
+                    0 <= adjacent_pos[1] < self.height and 
+                    self.working_grid[adjacent_pos[1]][adjacent_pos[0]] == 0 and
+                    adjacent_pos not in expanded_positions):
+                    expanded_positions.append(adjacent_pos)
+                    logger.info(f"Added adjacent position {adjacent_pos} for fluid item")
+        
+        return expanded_positions
+
     def find_path(self, start, goal,is_fluid=False):
         """
         Find a path from start to goal using A* algorithm with support for underground paths.
@@ -623,7 +650,7 @@ class MultiAgentPathfinder:
       
     
     
-    def find_paths_for_all_items(self):
+    def find_paths_for_all_items(self,IO_paths=False):
         """
         Find paths for all items in the points dictionary.
         
@@ -682,14 +709,22 @@ class MultiAgentPathfinder:
             #logger.debug(f"Working grid:\n{np.array(self.working_grid)}")
             
             is_fluid = item_data.get('is_fluid', False)
-           
+            
+          
             
             # Extract item information
             start_points = item_data['start_points'].copy()
             destinations = item_data['destination'].copy()
             inserter_mapping = item_data.get('inserter_mapping', None)
 
-
+    
+            if is_fluid and not IO_paths:
+                logger.info(f"Processing fluid item {item_key}, expanding start positions")
+                original_starts = start_points.copy()
+                start_points = self.expand_fluid_positions(start_points)
+                logger.info(f"Expanded start positions for {item_key} from {len(original_starts)} to {len(start_points)}")
+            
+            
             
             # Extract base item name
             item_name = item_data['item']

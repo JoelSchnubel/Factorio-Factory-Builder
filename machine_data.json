@@ -86,11 +86,11 @@
           "name": "left-right",
           "inputs": [
             { "dx": -1, "dy": 0 },
-            { "dx": -1, "dy": 1 }
+            { "dx": -1, "dy": 2 }
           ],
           "outputs": [
             { "dx": 3, "dy": 0 },
-            { "dx": 3, "dy": 1 }
+            { "dx": 3, "dy": 2 }
           ]
         },
         {
@@ -100,26 +100,26 @@
             { "dx": 2, "dy": -1 }
           ],
           "outputs": [
-            { "dx": 0, "dy": 2 },
-            { "dx": 2, "dy": 2 }
+            { "dx": 0, "dy": 3 },
+            { "dx": 2, "dy": 3 }
           ]
         },
         {
           "name": "right-left",
           "inputs": [
             { "dx": 3, "dy": 0 },
-            { "dx": 3, "dy": 1 }
+            { "dx": 3, "dy": 2 }
           ],
           "outputs": [
             { "dx": -1, "dy": 0 },
-            { "dx": -1, "dy": 1 }
+            { "dx": -1, "dy": 2 }
           ]
         },
         {
           "name": "bottom-top",
           "inputs": [
-            { "dx": 0, "dy": 2 },
-            { "dx": 2, "dy": 2 }
+            { "dx": 0, "dy": 3 },
+            { "dx": 2, "dy": 3 }
           ],
           "outputs": [
             { "dx": 0, "dy": -1 },
@@ -173,6 +173,32 @@
       "advanced-circuit": "assembling-machine-2",
       "processing-unit": "assembling-machine-2",
       "copper-cable": "assembling-machine-2"
+    }
+  },
+  "power_poles": {
+    "small-electric-pole": {
+      "supply_area_radius": 2,
+      "wire_reach": 7.5,
+      "dimensions": { "width": 1, "height": 1 },
+      "entity_name": "small-electric-pole"
+    },
+    "medium-electric-pole": {
+      "supply_area_radius": 3,
+      "wire_reach": 9,
+      "dimensions": { "width": 1, "height": 1 },
+      "entity_name": "medium-electric-pole"
+    },
+    "big-electric-pole": {
+      "supply_area_radius": 1,
+      "wire_reach": 30,
+      "dimensions": { "width": 2, "height": 2 },
+      "entity_name": "big-electric-pole"
+    },
+    "substation": {
+      "supply_area_radius": 9,
+      "wire_reach": 18,
+      "dimensions": { "width": 2, "height": 2 },
+      "entity_name": "substation"
     }
   }
 }

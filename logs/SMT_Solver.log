@@ -1,0 +1,189 @@
+2025-05-13 18:59:47,397 - SMT_Solver - DEBUG - Loading JSON data from machine_data.json
+2025-05-13 18:59:47,398 - SMT_Solver - DEBUG - Loading JSON data from config.json
+2025-05-13 18:59:47,410 - SMT_Solver - INFO - Starting to add manual I/O constraints.
+2025-05-13 18:59:47,410 - SMT_Solver - DEBUG - Processing input item 'coal' with data: {'input': (9, 0), 'output': (0, 0), 'paths': {'coal': [{'item': 'coal', 'path': [(0, 9), (0, 8), (0, 7), (0, 6), (0, 5), (0, 4), (0, 3), (0, 2), (0, 1), (0, 0)], 'start': (0, 9), 'destination': (0, 0), 'underground_segments': {}, 'start_splitter': None, 'dest_splitter': None}]}}
+2025-05-13 18:59:47,411 - SMT_Solver - INFO - Adding input belt for item 'coal' at position (9, 0)
+2025-05-13 18:59:47,411 - SMT_Solver - INFO - Adding output belt for item 'coal' at position (0, 0)
+2025-05-13 18:59:47,412 - SMT_Solver - DEBUG - Processing path data for input item 'coal'
+2025-05-13 18:59:47,412 - SMT_Solver - INFO - Adding belt path for 'coal' at position (0, 8)
+2025-05-13 18:59:47,412 - SMT_Solver - INFO - Adding belt path for 'coal' at position (0, 7)
+2025-05-13 18:59:47,413 - SMT_Solver - INFO - Adding belt path for 'coal' at position (0, 6)
+2025-05-13 18:59:47,413 - SMT_Solver - INFO - Adding belt path for 'coal' at position (0, 5)
+2025-05-13 18:59:47,413 - SMT_Solver - INFO - Adding belt path for 'coal' at position (0, 4)
+2025-05-13 18:59:47,414 - SMT_Solver - INFO - Adding belt path for 'coal' at position (0, 3)
+2025-05-13 18:59:47,414 - SMT_Solver - INFO - Adding belt path for 'coal' at position (0, 2)
+2025-05-13 18:59:47,414 - SMT_Solver - INFO - Adding belt path for 'coal' at position (0, 1)
+2025-05-13 18:59:47,415 - SMT_Solver - DEBUG - Processing input item 'petroleum-gas' with data: {'input': (9, 7), 'output': (0, 7), 'paths': {'petroleum-gas': [{'item': 'petroleum-gas', 'path': [(7, 9), (7, 8), (7, 7), (7, 6), (7, 5), (7, 4), (7, 3), (7, 2), (7, 1), (7, 0)], 'start': (7, 9), 'destination': (7, 0), 'underground_segments': {}, 'start_splitter': None, 'dest_splitter': None}]}}
+2025-05-13 18:59:47,415 - SMT_Solver - INFO - Adding input belt for item 'petroleum-gas' at position (9, 7)
+2025-05-13 18:59:47,415 - SMT_Solver - INFO - Adding output belt for item 'petroleum-gas' at position (0, 7)
+2025-05-13 18:59:47,415 - SMT_Solver - DEBUG - Processing path data for input item 'petroleum-gas'
+2025-05-13 18:59:47,416 - SMT_Solver - INFO - Adding belt path for 'petroleum-gas' at position (7, 8)
+2025-05-13 18:59:47,416 - SMT_Solver - INFO - Adding belt path for 'petroleum-gas' at position (7, 7)
+2025-05-13 18:59:47,416 - SMT_Solver - INFO - Adding belt path for 'petroleum-gas' at position (7, 6)
+2025-05-13 18:59:47,417 - SMT_Solver - INFO - Adding belt path for 'petroleum-gas' at position (7, 5)
+2025-05-13 18:59:47,417 - SMT_Solver - INFO - Adding belt path for 'petroleum-gas' at position (7, 4)
+2025-05-13 18:59:47,417 - SMT_Solver - INFO - Adding belt path for 'petroleum-gas' at position (7, 3)
+2025-05-13 18:59:47,419 - SMT_Solver - INFO - Adding belt path for 'petroleum-gas' at position (7, 2)
+2025-05-13 18:59:47,419 - SMT_Solver - INFO - Adding belt path for 'petroleum-gas' at position (7, 1)
+2025-05-13 18:59:47,419 - SMT_Solver - DEBUG - Processing output item 'plastic-bar' with data: {'input': (0, 15), 'output': (9, 15), 'paths': {'plastic-bar': [{'item': 'plastic-bar', 'path': [(15, 0), (15, 1), (15, 2), (15, 3), (15, 4), (15, 5), (15, 6), (15, 7), (15, 8), (15, 9)], 'start': (15, 0), 'destination': (15, 9), 'underground_segments': {}, 'start_splitter': None, 'dest_splitter': None}]}}
+2025-05-13 18:59:47,420 - SMT_Solver - INFO - Adding input belt for output item 'plastic-bar' at position (0, 15)
+2025-05-13 18:59:47,420 - SMT_Solver - INFO - Adding output belt for output item 'plastic-bar' at position (9, 15)
+2025-05-13 18:59:47,420 - SMT_Solver - DEBUG - Processing path data for output item 'plastic-bar'
+2025-05-13 18:59:47,420 - SMT_Solver - INFO - Adding belt path for 'plastic-bar' at position (15, 1)
+2025-05-13 18:59:47,420 - SMT_Solver - INFO - Adding belt path for 'plastic-bar' at position (15, 2)
+2025-05-13 18:59:47,421 - SMT_Solver - INFO - Adding belt path for 'plastic-bar' at position (15, 3)
+2025-05-13 18:59:47,421 - SMT_Solver - INFO - Adding belt path for 'plastic-bar' at position (15, 4)
+2025-05-13 18:59:47,422 - SMT_Solver - INFO - Adding belt path for 'plastic-bar' at position (15, 5)
+2025-05-13 18:59:47,422 - SMT_Solver - INFO - Adding belt path for 'plastic-bar' at position (15, 6)
+2025-05-13 18:59:47,422 - SMT_Solver - INFO - Adding belt path for 'plastic-bar' at position (15, 7)
+2025-05-13 18:59:47,423 - SMT_Solver - INFO - Adding belt path for 'plastic-bar' at position (15, 8)
+2025-05-13 18:59:47,423 - SMT_Solver - INFO - Finished adding manual I/O constraints. Calling solver.
+2025-05-13 18:59:47,423 - SMT_Solver - INFO - Power poles are enabled, setting up power pole constraints.
+2025-05-13 18:59:47,423 - SMT_Solver - INFO - Setting up power poles
+2025-05-13 18:59:47,423 - SMT_Solver - INFO - Creating 8 power poles of type medium-electric-pole
+2025-05-13 18:59:47,424 - SMT_Solver - INFO - Adding power pole constraints
+2025-05-13 18:59:47,424 - SMT_Solver - DEBUG - Power pole type: medium-electric-pole, radius: 3
+2025-05-13 18:59:47,424 - SMT_Solver - DEBUG - Added grid bounds constraint for pole power_pole_0
+2025-05-13 18:59:47,425 - SMT_Solver - DEBUG - Added grid bounds constraint for pole power_pole_1
+2025-05-13 18:59:47,426 - SMT_Solver - DEBUG - Added grid bounds constraint for pole power_pole_2
+2025-05-13 18:59:47,426 - SMT_Solver - DEBUG - Added grid bounds constraint for pole power_pole_3
+2025-05-13 18:59:47,427 - SMT_Solver - DEBUG - Added grid bounds constraint for pole power_pole_4
+2025-05-13 18:59:47,427 - SMT_Solver - DEBUG - Added grid bounds constraint for pole power_pole_5
+2025-05-13 18:59:47,428 - SMT_Solver - DEBUG - Added grid bounds constraint for pole power_pole_6
+2025-05-13 18:59:47,429 - SMT_Solver - DEBUG - Added grid bounds constraint for pole power_pole_7
+2025-05-13 18:59:47,429 - SMT_Solver - DEBUG - Added assembler overlap constraint for pole power_pole_0
+2025-05-13 18:59:47,429 - SMT_Solver - DEBUG - Added assembler overlap constraint for pole power_pole_1
+2025-05-13 18:59:47,429 - SMT_Solver - DEBUG - Added assembler overlap constraint for pole power_pole_2
+2025-05-13 18:59:47,429 - SMT_Solver - DEBUG - Added assembler overlap constraint for pole power_pole_3
+2025-05-13 18:59:47,429 - SMT_Solver - DEBUG - Added assembler overlap constraint for pole power_pole_4
+2025-05-13 18:59:47,430 - SMT_Solver - DEBUG - Added assembler overlap constraint for pole power_pole_5
+2025-05-13 18:59:47,430 - SMT_Solver - DEBUG - Added assembler overlap constraint for pole power_pole_6
+2025-05-13 18:59:47,430 - SMT_Solver - DEBUG - Added assembler overlap constraint for pole power_pole_7
+2025-05-13 18:59:47,436 - SMT_Solver - DEBUG - Added pole-pole overlap constraint for pole power_pole_0
+2025-05-13 18:59:47,442 - SMT_Solver - DEBUG - Added pole-pole overlap constraint for pole power_pole_1
+2025-05-13 18:59:47,446 - SMT_Solver - DEBUG - Added pole-pole overlap constraint for pole power_pole_2
+2025-05-13 18:59:47,449 - SMT_Solver - DEBUG - Added pole-pole overlap constraint for pole power_pole_3
+2025-05-13 18:59:47,452 - SMT_Solver - DEBUG - Added pole-pole overlap constraint for pole power_pole_4
+2025-05-13 18:59:47,454 - SMT_Solver - DEBUG - Added pole-pole overlap constraint for pole power_pole_5
+2025-05-13 18:59:47,455 - SMT_Solver - DEBUG - Added pole-pole overlap constraint for pole power_pole_6
+2025-05-13 18:59:47,455 - SMT_Solver - DEBUG - Added pole-pole overlap constraint for pole power_pole_7
+2025-05-13 18:59:47,455 - SMT_Solver - DEBUG - Adding coverage variables for assemblers and inserters
+2025-05-13 18:59:47,455 - SMT_Solver - DEBUG - Defining coverage conditions for assemblers
+2025-05-13 18:59:47,455 - SMT_Solver - DEBUG - Defining coverage conditions for inserters
+2025-05-13 18:59:47,455 - SMT_Solver - DEBUG - Adding hard coverage constraints - all entities must be covered
+2025-05-13 18:59:47,462 - SMT_Solver - INFO - Solver check result: sat
+2025-05-13 18:59:47,462 - SMT_Solver - INFO - === Identifying Non-Overlapping Inserters ===
+2025-05-13 18:59:47,462 - SMT_Solver - INFO - === Locking Initial Solution ===
+2025-05-13 18:59:47,462 - SMT_Solver - INFO - === Minimizing Distance for Non-Overlapping Inserters ===
+2025-05-13 18:59:47,467 - SMT_Solver - INFO - Successfully minimized inserter distances
+2025-05-13 18:59:47,468 - SMT_Solver - INFO - === Minimizing Number of Power Poles ===
+2025-05-13 18:59:47,476 - SMT_Solver - INFO - Found initial solution before minimizing power poles
+2025-05-13 18:59:47,476 - SMT_Solver - INFO - Locking positions of all entities except power poles
+2025-05-13 18:59:47,484 - SMT_Solver - INFO - Successfully minimized power poles: using 0 poles
+2025-05-13 18:59:47,485 - SMT_Solver - INFO - Final solver check result successful
+2025-05-13 18:59:47,504 - SMT_Solver - INFO - Successfully wrote model to SMT_Modules\solver_model_plastic-bar_20.smt
+2025-05-13 18:59:47,504 - SMT_Solver - INFO - Model saved to SMT_Modules\solver_model_plastic-bar_20.smt
+2025-05-13 18:59:47,504 - SMT_Solver - INFO - Starting to create assemblers based on production data.
+2025-05-13 18:59:47,506 - SMT_Solver - DEBUG - Processing item 'plastic-bar' with production data: {'amount_per_minute': 20, 'assemblers': 1, 'input_inserters': [{'id': 'coal', 'inserters': 1, 'amount': 1}, {'id': 'petroleum-gas', 'inserters': 2, 'amount': 20}], 'belts': 1, 'capacity': 0}
+2025-05-13 18:59:47,506 - SMT_Solver - INFO - Using chemical-plant for plastic-bar with dimensions 3x3
+2025-05-13 18:59:47,507 - SMT_Solver - INFO - Creating assembler for item 'plastic-bar', instance 0
+2025-05-13 18:59:47,507 - SMT_Solver - INFO - Item 'coal' is solid
+2025-05-13 18:59:47,507 - SMT_Solver - INFO - Creating input inserter for coal at coal_in_0_0_0
+2025-05-13 18:59:47,507 - SMT_Solver - INFO - Item 'petroleum-gas' is fluid
+2025-05-13 18:59:47,507 - SMT_Solver - INFO - Creating one fluid inserter for petroleum-gas
+2025-05-13 18:59:47,507 - SMT_Solver - DEBUG - Created assembler with ID: plastic-bar_0_0 and input inserters: ['coal_in_0_0_0', 'petroleum-gas_in_0_0_0']
+2025-05-13 18:59:47,507 - SMT_Solver - DEBUG - Created assembler with ID: plastic-bar_0_0 with item = plastic-bar
+2025-05-13 18:59:47,507 - SMT_Solver - DEBUG - Created assembler with ID: plastic-bar_0_0 with capacity = 0
+2025-05-13 18:59:47,507 - SMT_Solver - DEBUG - Processing item 'coal' with production data: {'amount_per_minute': 10.0, 'capacity': 0}
+2025-05-13 18:59:47,509 - SMT_Solver - DEBUG - Processing item 'petroleum-gas' with production data: {'amount_per_minute': 200.0, 'capacity': 0}
+2025-05-13 18:59:47,509 - SMT_Solver - INFO - Created 1 assemblers in total.
+2025-05-13 18:59:47,509 - SMT_Solver - INFO - Adding assembler overlap constraints to avoid global belts.
+2025-05-13 18:59:47,528 - SMT_Solver - INFO - Adding inserter overlap constraints to avoid global belts.
+2025-05-13 18:59:47,539 - SMT_Solver - INFO - Adding belt overlap constraints to avoid conflicts with global belts (different items only).
+2025-05-13 18:59:47,546 - SMT_Solver - INFO - Adding boundary constraints for assemblers.
+2025-05-13 18:59:47,546 - SMT_Solver - DEBUG - Setting boundary constraints for assembler ID plastic-bar_0_0
+2025-05-13 18:59:47,547 - SMT_Solver - INFO - Adding boundary constraints for belts and inserters.
+2025-05-13 18:59:47,547 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID coal_in_0_0_0 and belt ID coal_end_0_0_0
+2025-05-13 18:59:47,549 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID petroleum-gas_in_0_0_0 and belt ID petroleum-gas_end_0_0_0
+2025-05-13 18:59:47,549 - SMT_Solver - INFO - Adding assembler overlap constraints to prevent assembler-assembler overlap.
+2025-05-13 18:59:47,550 - SMT_Solver - INFO - Adding assembler-inserter overlap constraints.
+2025-05-13 18:59:47,550 - SMT_Solver - INFO - Adding assembler-belt overlap constraints (excluding same-item belts).
+2025-05-13 18:59:47,550 - SMT_Solver - INFO - Adding inserter overlap constraints to prevent inserter-inserter overlap.
+2025-05-13 18:59:47,550 - SMT_Solver - INFO - Adding inserter-belt overlap constraints to prevent inserters from overlapping with belts.
+2025-05-13 18:59:47,550 - SMT_Solver - INFO - Adding belt overlap constraints to prevent belt-belt overlap (except same-item belts).
+2025-05-13 18:59:47,553 - SMT_Solver - INFO - Allowing solid inserter coal_in_0_0_0 to be placed at any valid edge position
+2025-05-13 18:59:47,560 - SMT_Solver - INFO - Allowing fluid inserter petroleum-gas_in_0_0_0 to be placed at any valid edge position
+2025-05-13 18:59:47,769 - SMT_Solver - INFO - Adding output space constraints for assembler plastic-bar_0_0
+2025-05-13 18:59:47,770 - SMT_Solver - DEBUG - Adding constraints to merge input inserters with assembler edges for items with matching types.
+2025-05-13 18:59:47,770 - SMT_Solver - INFO - ===== Adding constraints to maximize belt overlaps =====
+2025-05-13 18:59:47,777 - SMT_Solver - INFO - Adding optimization goal to maximize belt overlaps.
+2025-05-13 18:59:47,780 - SMT_Solver - INFO - Power poles are enabled, setting up power pole constraints.
+2025-05-13 18:59:47,781 - SMT_Solver - INFO - Setting up power poles
+2025-05-13 18:59:47,781 - SMT_Solver - INFO - Creating 8 power poles of type medium-electric-pole
+2025-05-13 18:59:47,781 - SMT_Solver - INFO - Adding power pole constraints
+2025-05-13 18:59:47,781 - SMT_Solver - DEBUG - Assembler plastic-bar_0_0: width=3, height=3
+2025-05-13 18:59:47,781 - SMT_Solver - DEBUG - Inserters for assembler plastic-bar_0_0: ['coal_in_0_0_0', 'petroleum-gas_in_0_0_0']
+2025-05-13 18:59:47,781 - SMT_Solver - DEBUG - Power pole type: medium-electric-pole, radius: 3
+2025-05-13 18:59:47,782 - SMT_Solver - DEBUG - Added grid bounds constraint for pole power_pole_0
+2025-05-13 18:59:47,782 - SMT_Solver - DEBUG - Added grid bounds constraint for pole power_pole_1
+2025-05-13 18:59:47,782 - SMT_Solver - DEBUG - Added grid bounds constraint for pole power_pole_2
+2025-05-13 18:59:47,783 - SMT_Solver - DEBUG - Added grid bounds constraint for pole power_pole_3
+2025-05-13 18:59:47,783 - SMT_Solver - DEBUG - Added grid bounds constraint for pole power_pole_4
+2025-05-13 18:59:47,784 - SMT_Solver - DEBUG - Added grid bounds constraint for pole power_pole_5
+2025-05-13 18:59:47,784 - SMT_Solver - DEBUG - Added grid bounds constraint for pole power_pole_6
+2025-05-13 18:59:47,784 - SMT_Solver - DEBUG - Added grid bounds constraint for pole power_pole_7
+2025-05-13 18:59:47,785 - SMT_Solver - DEBUG - Added grid bounds constraint for pole power_pole_0
+2025-05-13 18:59:47,785 - SMT_Solver - DEBUG - Added grid bounds constraint for pole power_pole_1
+2025-05-13 18:59:47,786 - SMT_Solver - DEBUG - Added grid bounds constraint for pole power_pole_2
+2025-05-13 18:59:47,786 - SMT_Solver - DEBUG - Added grid bounds constraint for pole power_pole_3
+2025-05-13 18:59:47,786 - SMT_Solver - DEBUG - Added grid bounds constraint for pole power_pole_4
+2025-05-13 18:59:47,787 - SMT_Solver - DEBUG - Added grid bounds constraint for pole power_pole_5
+2025-05-13 18:59:47,788 - SMT_Solver - DEBUG - Added grid bounds constraint for pole power_pole_6
+2025-05-13 18:59:47,788 - SMT_Solver - DEBUG - Added grid bounds constraint for pole power_pole_7
+2025-05-13 18:59:47,789 - SMT_Solver - DEBUG - Added assembler overlap constraint for pole power_pole_0
+2025-05-13 18:59:47,790 - SMT_Solver - DEBUG - Added assembler overlap constraint for pole power_pole_1
+2025-05-13 18:59:47,790 - SMT_Solver - DEBUG - Added assembler overlap constraint for pole power_pole_2
+2025-05-13 18:59:47,791 - SMT_Solver - DEBUG - Added assembler overlap constraint for pole power_pole_3
+2025-05-13 18:59:47,792 - SMT_Solver - DEBUG - Added assembler overlap constraint for pole power_pole_4
+2025-05-13 18:59:47,793 - SMT_Solver - DEBUG - Added assembler overlap constraint for pole power_pole_5
+2025-05-13 18:59:47,793 - SMT_Solver - DEBUG - Added assembler overlap constraint for pole power_pole_6
+2025-05-13 18:59:47,794 - SMT_Solver - DEBUG - Added assembler overlap constraint for pole power_pole_7
+2025-05-13 18:59:47,795 - SMT_Solver - DEBUG - Added assembler overlap constraint for pole power_pole_0
+2025-05-13 18:59:47,795 - SMT_Solver - DEBUG - Added assembler overlap constraint for pole power_pole_1
+2025-05-13 18:59:47,796 - SMT_Solver - DEBUG - Added assembler overlap constraint for pole power_pole_2
+2025-05-13 18:59:47,796 - SMT_Solver - DEBUG - Added assembler overlap constraint for pole power_pole_3
+2025-05-13 18:59:47,797 - SMT_Solver - DEBUG - Added assembler overlap constraint for pole power_pole_4
+2025-05-13 18:59:47,797 - SMT_Solver - DEBUG - Added assembler overlap constraint for pole power_pole_5
+2025-05-13 18:59:47,798 - SMT_Solver - DEBUG - Added assembler overlap constraint for pole power_pole_6
+2025-05-13 18:59:47,798 - SMT_Solver - DEBUG - Added assembler overlap constraint for pole power_pole_7
+2025-05-13 18:59:47,807 - SMT_Solver - DEBUG - Added pole-pole overlap constraint for pole power_pole_0
+2025-05-13 18:59:47,815 - SMT_Solver - DEBUG - Added pole-pole overlap constraint for pole power_pole_1
+2025-05-13 18:59:47,823 - SMT_Solver - DEBUG - Added pole-pole overlap constraint for pole power_pole_2
+2025-05-13 18:59:47,832 - SMT_Solver - DEBUG - Added pole-pole overlap constraint for pole power_pole_3
+2025-05-13 18:59:47,842 - SMT_Solver - DEBUG - Added pole-pole overlap constraint for pole power_pole_4
+2025-05-13 18:59:47,850 - SMT_Solver - DEBUG - Added pole-pole overlap constraint for pole power_pole_5
+2025-05-13 18:59:47,855 - SMT_Solver - DEBUG - Added pole-pole overlap constraint for pole power_pole_6
+2025-05-13 18:59:47,859 - SMT_Solver - DEBUG - Added pole-pole overlap constraint for pole power_pole_7
+2025-05-13 18:59:47,863 - SMT_Solver - DEBUG - Added pole-pole overlap constraint for pole power_pole_0
+2025-05-13 18:59:47,867 - SMT_Solver - DEBUG - Added pole-pole overlap constraint for pole power_pole_1
+2025-05-13 18:59:47,870 - SMT_Solver - DEBUG - Added pole-pole overlap constraint for pole power_pole_2
+2025-05-13 18:59:47,873 - SMT_Solver - DEBUG - Added pole-pole overlap constraint for pole power_pole_3
+2025-05-13 18:59:47,874 - SMT_Solver - DEBUG - Added pole-pole overlap constraint for pole power_pole_4
+2025-05-13 18:59:47,876 - SMT_Solver - DEBUG - Added pole-pole overlap constraint for pole power_pole_5
+2025-05-13 18:59:47,876 - SMT_Solver - DEBUG - Added pole-pole overlap constraint for pole power_pole_6
+2025-05-13 18:59:47,876 - SMT_Solver - DEBUG - Added pole-pole overlap constraint for pole power_pole_7
+2025-05-13 18:59:47,876 - SMT_Solver - DEBUG - Adding coverage variables for assemblers and inserters
+2025-05-13 18:59:47,876 - SMT_Solver - DEBUG - Defining coverage conditions for assemblers
+2025-05-13 18:59:47,958 - SMT_Solver - DEBUG - Added coverage conditions for assembler plastic-bar_0_0: 144 conditions
+2025-05-13 18:59:47,958 - SMT_Solver - DEBUG - Defining coverage conditions for inserters
+2025-05-13 18:59:47,968 - SMT_Solver - DEBUG - Added coverage conditions for inserter coal_in_0_0_0: 16 conditions
+2025-05-13 18:59:47,977 - SMT_Solver - DEBUG - Added coverage conditions for inserter petroleum-gas_in_0_0_0: 16 conditions
+2025-05-13 18:59:47,977 - SMT_Solver - DEBUG - Adding hard coverage constraints - all entities must be covered
+2025-05-13 18:59:47,978 - SMT_Solver - DEBUG - Added hard constraint: Assembler plastic-bar_0_0 must be covered
+2025-05-13 18:59:47,978 - SMT_Solver - DEBUG - Added hard constraint: Inserter coal_in_0_0_0 must be covered
+2025-05-13 18:59:47,978 - SMT_Solver - DEBUG - Added hard constraint: Inserter petroleum-gas_in_0_0_0 must be covered
+2025-05-13 18:59:47,978 - SMT_Solver - DEBUG - Added constraint to ensure at least one pole is used
+2025-05-13 18:59:47,986 - SMT_Solver - INFO - Solver check result: unsat
+2025-05-13 18:59:47,986 - SMT_Solver - WARNING - Solver failed to find a solution.
+2025-05-13 18:59:47,994 - SMT_Solver - INFO - not sat
+2025-05-13 18:59:48,000 - SMT_Solver - INFO - not sat

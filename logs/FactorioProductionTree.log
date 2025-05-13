@@ -1,6 +1,5 @@
-2025-05-12 19:03:16,370 - FactorioProductionTree - INFO - Execution time for solve: 0.7775 seconds.
-2025-05-12 19:03:16,669 - FactorioProductionTree - INFO - build output path infomation for plastic-bar_0
-2025-05-12 19:03:16,721 - FactorioProductionTree - INFO - Execution time for build_belts: 0.3503 seconds.
-2025-05-12 19:03:16,867 - FactorioProductionTree - INFO - Creating blueprint from Modules/plastic-bar_20_[]_module.json
-2025-05-12 19:03:16,868 - FactorioProductionTree - INFO - 1. Placing assembling machines...
-2025-05-12 19:03:16,868 - FactorioProductionTree - ERROR - Error creating blueprint: too many values to unpack (expected 3)
+2025-05-13 18:59:42,288 - FactorioProductionTree - INFO - start
+2025-05-13 18:59:42,292 - FactorioProductionTree - INFO - Production data for {'plastic-bar': {'amount_per_minute': 20, 'assemblers': 1, 'input_inserters': [{'id': 'coal', 'inserters': 1, 'amount': 1}, {'id': 'petroleum-gas', 'inserters': 2, 'amount': 20}], 'belts': 1, 'capacity': 0}, 'coal': {'amount_per_minute': 10.0, 'capacity': 0}, 'petroleum-gas': {'amount_per_minute': 200.0, 'capacity': 0}}:
+2025-05-13 18:59:47,986 - FactorioProductionTree - INFO - Execution time for solve: 0.4820 seconds.
+2025-05-13 18:59:47,987 - FactorioProductionTree - INFO - Try Number: 0
+2025-05-13 18:59:48,010 - FactorioProductionTree - INFO - Execution time for build_belts: 0.0230 seconds.

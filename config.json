@@ -34,5 +34,10 @@
     "default_type": "pipe",
     "underground_type": "pipe-to-ground",
     "underground_max_length": 8
+  },
+  "power": {
+    "default_type": "medium-electric-pole",
+    "place_power_poles": true,
+    "maximize_coverage": true
   }
 }
