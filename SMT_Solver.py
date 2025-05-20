@@ -518,8 +518,12 @@ class SMTSolver:
                 
                 machine_type = self.get_machine_type_for_recipe(item_id)
                 
+                default_assembler = self.config.get("machines", {}).get("default_assembler", "assembling-machine-1")
+            
+            
                 # Get machine dimensions
-                machine_info = self.machines_data["assemblers"].get(machine_type, self.machines_data["assemblers"]["default"])
+                machine_info = self.machines_data["assemblers"].get(machine_type, self.machines_data["assemblers"][default_assembler])
+            
                 width = machine_info["dimensions"]["width"]
                 height = machine_info["dimensions"]["height"]
                 
@@ -782,8 +786,11 @@ class SMTSolver:
 
         for assembler in self.assemblers:
             
+            default_assembler = self.config.get("machines", {}).get("default_assembler", "assembling-machine-1")
+        
             machine_type = self.get_machine_type_for_recipe(assembler.item)
-            machine_info = self.machines_data["assemblers"].get(machine_type, self.machines_data["assemblers"]["default"])
+            # Use default_assembler from config instead of "default" literal
+            machine_info = self.machines_data["assemblers"].get(machine_type, self.machines_data["assemblers"][default_assembler])
             
             # For solid inserters - calculate positions around the machine based on dimensions
             width = assembler.width
@@ -1099,16 +1106,25 @@ class SMTSolver:
  
         # Check overlaps with other assemblers
         for assembler in self.assemblers:
-            assembler_edges = [
-                (assembler.x, assembler.y),  # Upper-left
-                (assembler.x + 1, assembler.y),  # Upper-middle
-                (assembler.x + 2, assembler.y),  # Upper-right
-                (assembler.x, assembler.y + 1),  # Middle-left
-                (assembler.x + 2, assembler.y + 1),  # Middle-right
-                (assembler.x, assembler.y + 2),  # Lower-left
-                (assembler.x + 1, assembler.y + 2),  # Lower-middle
-                (assembler.x + 2, assembler.y + 2),  # Lower-right
-            ]
+            
+            assembler_edges = []
+            
+            # Top edge
+            for dx in range(assembler.width):
+                assembler_edges.append((assembler.x + dx, assembler.y))
+            
+            # Bottom edge
+            for dx in range(assembler.width):
+                assembler_edges.append((assembler.x + dx, assembler.y + assembler.height - 1))
+            
+            # Left edge (excluding corners which we've already added)
+            for dy in range(1, assembler.height - 1):
+                assembler_edges.append((assembler.x, assembler.y + dy))
+            
+            # Right edge (excluding corners which we've already added)
+            for dy in range(1, assembler.height - 1):
+                assembler_edges.append((assembler.x + assembler.width - 1, assembler.y + dy))
+    
             
             for edge in assembler_edges:
                 is_overlapping = self.And(
@@ -1183,7 +1199,7 @@ class SMTSolver:
                 
     def minimize_non_overlapping_inserters(self, non_overlapping_inserters):
        
-        """Minimizes distance for non-overlapping inserters to the closest global belt."""
+        """Minimizes distance for non-overlapping inserters to the closest source. either global belt or assembler"""
         
         logger.info("=== Minimizing Distance for Non-Overlapping Inserters ===")
         
@@ -1194,25 +1210,69 @@ class SMTSolver:
         for inserter, same_item_belts in non_overlapping_inserters:
             belt = inserter.belt
             min_distance = self.Int(f"min_dist_{belt.id}")
+            
+            # Compute Manhattan distances to global belts
+            belt_distances = [Abs(belt.x - gb.x) + Abs(belt.y - gb.y) for gb in same_item_belts]
+            
+            # Find assemblers that produce the needed item
+            producing_assemblers = [
+                asm for asm in self.assemblers 
+                if asm.item == inserter.item and asm.id != inserter.id.split('_in_')[0]
+            ]
+        
 
-            # Compute Manhattan distances
-            distances = [Abs(belt.x - gb.x) + Abs(belt.y - gb.y) for gb in same_item_belts]
+                
+            logger.info(f"Found {len(producing_assemblers)} producing assemblers for item {inserter.item}.")
+            # Compute Manhattan distances to producing assemblers (using their edges)
+            assembler_distances = []
+            for asm in producing_assemblers:
+                # Get all edge positions of the assembler
+                edge_positions = []
+                
+                # Top edge
+                for dx in range(asm.width):
+                    edge_positions.append((asm.x + dx, asm.y))
+                
+                # Bottom edge
+                for dx in range(asm.width):
+                    edge_positions.append((asm.x + dx, asm.y + asm.height - 1))
+                
+                # Left edge (excluding corners)
+                for dy in range(1, asm.height - 1):
+                    edge_positions.append((asm.x, asm.y + dy))
+                
+                # Right edge (excluding corners)
+                for dy in range(1, asm.height - 1):
+                    edge_positions.append((asm.x + asm.width - 1, asm.y + dy))
+                
+                # Find minimum distance to any edge of the assembler
+                for edge_pos in edge_positions:
+                    assembler_distances.append(Abs(belt.x - edge_pos[0]) + Abs(belt.y - edge_pos[1]))
+        
 
-            # Log distance calculation
-            logger.info(f"Inserter {inserter.id} has distances {distances} to matching global belts.")
+            
+            all_distances = belt_distances + assembler_distances
            
 
-            # Minimize the distance to the closest matching global belt
-            self.solver.add(self.Or([min_distance == d for d in distances]))  # Ensure min_distance is one of the distances
-            self.solver.add(min_distance >= 0)  # Ensure non-negative distance
-            distance_constraints.append(min_distance)
+            if all_distances:
+                logger.info(f"Inserter {inserter.id} has {len(belt_distances)} distances to matching global belts " +
+                        f"and {len(assembler_distances)} distances to assemblers producing {inserter.item}.")
+                
+                # Minimize the distance to the closest source (belt or assembler edge)
+                self.solver.add(self.Or([min_distance == d for d in all_distances]))
+                self.solver.add(min_distance >= 0)  # Ensure non-negative distance
+                distance_constraints.append(min_distance)
+            else:
+                logger.warning(f"Inserter {inserter.id} has no matching global belts or assemblers producing {inserter.item}.")
+
             
 
         if distance_constraints:
             self.solver.add(total_distance == self.Sum(distance_constraints))
             self.solver.minimize(total_distance)
             logger.info("Added minimization constraint for total distance.")
-            
+        else:
+            logger.warning("No distance constraints were added - no inserters to optimize")
             
     
     
@@ -1319,10 +1379,9 @@ class SMTSolver:
                 width = assembler.width
                 height = assembler.height
             
-                
-                
                 machine_type = self.get_machine_type_for_recipe(assembler.item)
-                machine_info = self.machines_data["assemblers"].get(machine_type, self.machines_data["assemblers"]["default"])
+                default_assembler = self.config.get("machines", {}).get("default_assembler", "assembling-machine-1")
+                machine_info = self.machines_data["assemblers"].get(machine_type, self.machines_data["assemblers"][default_assembler])
                 
                 # Get selected orientation for fluid connections
                 orientation_idx = 0

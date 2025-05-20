@@ -1,0 +1,97 @@
+solver,file,status,time,stdout,stderr
+cvc5,solver_model_copper-cable_1.smt,unknown,0.02268362045288086,,"Der Befehl ""cvc5"" ist entweder falsch geschrieben oder
+konnte nicht gefunden werden.
+"
+z3,solver_model_copper-cable_1.smt,unknown,0.020040512084960938,,"Der Befehl ""z3"" ist entweder falsch geschrieben oder
+konnte nicht gefunden werden.
+"
+yices-smt2,solver_model_copper-cable_1.smt,unknown,0.01936650276184082,,"Der Befehl ""yices-smt2"" ist entweder falsch geschrieben oder
+konnte nicht gefunden werden.
+"
+boolector,solver_model_copper-cable_1.smt,unknown,0.020623445510864258,,"Der Befehl ""boolector"" ist entweder falsch geschrieben oder
+konnte nicht gefunden werden.
+"
+cvc5,solver_model_copper-cable_120.smt,unknown,0.020058631896972656,,"Der Befehl ""cvc5"" ist entweder falsch geschrieben oder
+konnte nicht gefunden werden.
+"
+z3,solver_model_copper-cable_120.smt,unknown,0.01820230484008789,,"Der Befehl ""z3"" ist entweder falsch geschrieben oder
+konnte nicht gefunden werden.
+"
+yices-smt2,solver_model_copper-cable_120.smt,unknown,0.0190277099609375,,"Der Befehl ""yices-smt2"" ist entweder falsch geschrieben oder
+konnte nicht gefunden werden.
+"
+boolector,solver_model_copper-cable_120.smt,unknown,0.018033266067504883,,"Der Befehl ""boolector"" ist entweder falsch geschrieben oder
+konnte nicht gefunden werden.
+"
+cvc5,solver_model_copper-cable_20.smt,unknown,0.018618106842041016,,"Der Befehl ""cvc5"" ist entweder falsch geschrieben oder
+konnte nicht gefunden werden.
+"
+z3,solver_model_copper-cable_20.smt,unknown,0.01866292953491211,,"Der Befehl ""z3"" ist entweder falsch geschrieben oder
+konnte nicht gefunden werden.
+"
+yices-smt2,solver_model_copper-cable_20.smt,unknown,0.019166946411132812,,"Der Befehl ""yices-smt2"" ist entweder falsch geschrieben oder
+konnte nicht gefunden werden.
+"
+boolector,solver_model_copper-cable_20.smt,unknown,0.01904582977294922,,"Der Befehl ""boolector"" ist entweder falsch geschrieben oder
+konnte nicht gefunden werden.
+"
+cvc5,solver_model_copper-cable_300.smt,unknown,0.01921701431274414,,"Der Befehl ""cvc5"" ist entweder falsch geschrieben oder
+konnte nicht gefunden werden.
+"
+z3,solver_model_copper-cable_300.smt,unknown,0.01922750473022461,,"Der Befehl ""z3"" ist entweder falsch geschrieben oder
+konnte nicht gefunden werden.
+"
+yices-smt2,solver_model_copper-cable_300.smt,unknown,0.019034862518310547,,"Der Befehl ""yices-smt2"" ist entweder falsch geschrieben oder
+konnte nicht gefunden werden.
+"
+boolector,solver_model_copper-cable_300.smt,unknown,0.018555402755737305,,"Der Befehl ""boolector"" ist entweder falsch geschrieben oder
+konnte nicht gefunden werden.
+"
+cvc5,solver_model_electronic-circuit_1.smt,unknown,0.020044565200805664,,"Der Befehl ""cvc5"" ist entweder falsch geschrieben oder
+konnte nicht gefunden werden.
+"
+z3,solver_model_electronic-circuit_1.smt,unknown,0.019236326217651367,,"Der Befehl ""z3"" ist entweder falsch geschrieben oder
+konnte nicht gefunden werden.
+"
+yices-smt2,solver_model_electronic-circuit_1.smt,unknown,0.020178556442260742,,"Der Befehl ""yices-smt2"" ist entweder falsch geschrieben oder
+konnte nicht gefunden werden.
+"
+boolector,solver_model_electronic-circuit_1.smt,unknown,0.01967024803161621,,"Der Befehl ""boolector"" ist entweder falsch geschrieben oder
+konnte nicht gefunden werden.
+"
+cvc5,solver_model_electronic-circuit_100.smt,unknown,0.02014946937561035,,"Der Befehl ""cvc5"" ist entweder falsch geschrieben oder
+konnte nicht gefunden werden.
+"
+z3,solver_model_electronic-circuit_100.smt,unknown,0.020222187042236328,,"Der Befehl ""z3"" ist entweder falsch geschrieben oder
+konnte nicht gefunden werden.
+"
+yices-smt2,solver_model_electronic-circuit_100.smt,unknown,0.022711753845214844,,"Der Befehl ""yices-smt2"" ist entweder falsch geschrieben oder
+konnte nicht gefunden werden.
+"
+boolector,solver_model_electronic-circuit_100.smt,unknown,0.020834922790527344,,"Der Befehl ""boolector"" ist entweder falsch geschrieben oder
+konnte nicht gefunden werden.
+"
+cvc5,solver_model_electronic-circuit_120.smt,unknown,0.02108144760131836,,"Der Befehl ""cvc5"" ist entweder falsch geschrieben oder
+konnte nicht gefunden werden.
+"
+z3,solver_model_electronic-circuit_120.smt,unknown,0.019037961959838867,,"Der Befehl ""z3"" ist entweder falsch geschrieben oder
+konnte nicht gefunden werden.
+"
+yices-smt2,solver_model_electronic-circuit_120.smt,unknown,0.018528461456298828,,"Der Befehl ""yices-smt2"" ist entweder falsch geschrieben oder
+konnte nicht gefunden werden.
+"
+boolector,solver_model_electronic-circuit_120.smt,unknown,0.019034624099731445,,"Der Befehl ""boolector"" ist entweder falsch geschrieben oder
+konnte nicht gefunden werden.
+"
+cvc5,solver_model_plastic-bar_20.smt,unknown,0.01824951171875,,"Der Befehl ""cvc5"" ist entweder falsch geschrieben oder
+konnte nicht gefunden werden.
+"
+z3,solver_model_plastic-bar_20.smt,unknown,0.019649744033813477,,"Der Befehl ""z3"" ist entweder falsch geschrieben oder
+konnte nicht gefunden werden.
+"
+yices-smt2,solver_model_plastic-bar_20.smt,unknown,0.0191347599029541,,"Der Befehl ""yices-smt2"" ist entweder falsch geschrieben oder
+konnte nicht gefunden werden.
+"
+boolector,solver_model_plastic-bar_20.smt,unknown,0.019075393676757812,,"Der Befehl ""boolector"" ist entweder falsch geschrieben oder
+konnte nicht gefunden werden.
+"

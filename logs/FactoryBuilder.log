@@ -1,125 +1,13 @@
-2025-05-05 14:25:32,171 - FactoryBuilder - INFO - Defining factory I/O points
-2025-05-05 14:25:32,171 - FactoryBuilder - INFO - External inputs: {'iron-plate', 'copper-plate'}
-2025-05-05 14:25:32,172 - FactoryBuilder - INFO - External outputs: {'electronic-circuit'}
-2025-05-05 14:25:32,172 - FactoryBuilder - INFO - Internal items: set()
-2025-05-05 14:25:33,963 - FactoryBuilder - DEBUG - Selected South at position (3, 29) for iron-plate
-2025-05-05 14:25:34,999 - FactoryBuilder - DEBUG - Selected South at position (0, 29) for copper-plate
-2025-05-05 14:25:35,061 - FactoryBuilder - INFO - Created fixed input gate for iron-plate at position (3, 29) on South edge
-2025-05-05 14:25:35,061 - FactoryBuilder - INFO - Created fixed input gate for copper-plate at position (0, 29) on South edge
-2025-05-05 14:25:36,481 - FactoryBuilder - DEBUG - Selected South at position (7, 29) for electronic-circuit
-2025-05-05 14:25:36,546 - FactoryBuilder - INFO - Created fixed output gate for electronic-circuit at position (7, 29) on South edge
-2025-05-05 14:25:36,556 - FactoryBuilder - INFO - Added fixed input gate external_input_iron-plate at position (3, 29)
-2025-05-05 14:25:36,557 - FactoryBuilder - INFO - Added fixed input gate external_input_copper-plate at position (0, 29)
-2025-05-05 14:25:36,558 - FactoryBuilder - INFO - Added fixed output gate external_output_electronic-circuit at position (7, 29)
-2025-05-05 14:25:36,621 - FactoryBuilder - WARNING - Module JSON not found for fixed_block_external_input_iron-plate (type: block), skipping
-2025-05-05 14:25:36,621 - FactoryBuilder - ERROR - Error processing module JSON for fixed_block_external_input_iron-plate: expected str, bytes or os.PathLike object, not NoneType
-2025-05-05 14:25:36,621 - FactoryBuilder - WARNING - Module JSON not found for fixed_block_external_input_copper-plate (type: block), skipping
-2025-05-05 14:25:36,621 - FactoryBuilder - ERROR - Error processing module JSON for fixed_block_external_input_copper-plate: expected str, bytes or os.PathLike object, not NoneType
-2025-05-05 14:25:36,622 - FactoryBuilder - WARNING - Module JSON not found for fixed_block_external_output_electronic-circuit (type: block), skipping
-2025-05-05 14:25:36,622 - FactoryBuilder - ERROR - Error processing module JSON for fixed_block_external_output_electronic-circuit: expected str, bytes or os.PathLike object, not NoneType
-2025-05-05 14:25:36,623 - FactoryBuilder - INFO - Processing module data from E:/Programmieren/Bachelor-Thesis/Modules/electronic-circuit_120_[]_module.json for block Block_electronic-circuit_0_0
-2025-05-05 14:25:36,623 - FactoryBuilder - INFO - Added assembler electronic-circuit at [6, 21] for block Block_electronic-circuit_0_0
-2025-05-05 14:25:36,624 - FactoryBuilder - INFO - Added assembler electronic-circuit at [6, 25] for block Block_electronic-circuit_0_0
-2025-05-05 14:25:36,624 - FactoryBuilder - INFO - Added assembler copper-cable at [2, 20] for block Block_electronic-circuit_0_0
-2025-05-05 14:25:36,624 - FactoryBuilder - INFO - Added assembler copper-cable at [2, 23] for block Block_electronic-circuit_0_0
-2025-05-05 14:25:36,624 - FactoryBuilder - INFO - Added assembler copper-cable at [2, 26] for block Block_electronic-circuit_0_0
-2025-05-05 14:25:36,624 - FactoryBuilder - INFO - Added inserter copper-cable at [5, 21] facing east for block Block_electronic-circuit_0_0
-2025-05-05 14:25:36,624 - FactoryBuilder - INFO - Added inserter copper-cable at [5, 22] facing east for block Block_electronic-circuit_0_0
-2025-05-05 14:25:36,624 - FactoryBuilder - INFO - Added inserter copper-cable at [5, 23] facing east for block Block_electronic-circuit_0_0
-2025-05-05 14:25:36,624 - FactoryBuilder - INFO - Added inserter iron-plate at [9, 23] facing west for block Block_electronic-circuit_0_0
-2025-05-05 14:25:36,624 - FactoryBuilder - INFO - Added inserter copper-cable at [5, 25] facing east for block Block_electronic-circuit_0_0
-2025-05-05 14:25:36,624 - FactoryBuilder - INFO - Added inserter copper-cable at [5, 27] facing east for block Block_electronic-circuit_0_0
-2025-05-05 14:25:36,625 - FactoryBuilder - INFO - Added inserter copper-cable at [5, 26] facing east for block Block_electronic-circuit_0_0
-2025-05-05 14:25:36,625 - FactoryBuilder - INFO - Added inserter iron-plate at [9, 25] facing west for block Block_electronic-circuit_0_0
-2025-05-05 14:25:36,625 - FactoryBuilder - INFO - Added inserter copper-plate at [1, 20] facing east for block Block_electronic-circuit_0_0
-2025-05-05 14:25:36,625 - FactoryBuilder - INFO - Added inserter copper-plate at [1, 22] facing east for block Block_electronic-circuit_0_0
-2025-05-05 14:25:36,625 - FactoryBuilder - INFO - Added inserter copper-plate at [1, 23] facing east for block Block_electronic-circuit_0_0
-2025-05-05 14:25:36,625 - FactoryBuilder - INFO - Added inserter copper-plate at [1, 25] facing east for block Block_electronic-circuit_0_0
-2025-05-05 14:25:36,625 - FactoryBuilder - INFO - Added inserter copper-plate at [1, 27] facing east for block Block_electronic-circuit_0_0
-2025-05-05 14:25:36,625 - FactoryBuilder - INFO - Added inserter copper-plate at [1, 28] facing east for block Block_electronic-circuit_0_0
-2025-05-05 14:25:36,626 - FactoryBuilder - INFO - Added placed inserter for electronic-circuit at [9, 21] facing east
-2025-05-05 14:25:36,626 - FactoryBuilder - INFO - Added placed inserter for electronic-circuit at [9, 26] facing east
-2025-05-05 14:25:36,626 - FactoryBuilder - INFO - Added input belt route for copper-plate at [0, 19] facing north
-2025-05-05 14:25:36,626 - FactoryBuilder - INFO - Added input belt route for iron-plate at [12, 19] facing north
-2025-05-05 14:25:36,626 - FactoryBuilder - INFO - Added output belt route for electronic-circuit at [15, 28] facing south
-2025-05-05 14:25:36,626 - FactoryBuilder - INFO - Added belt electronic-circuit at [10, 21] facing east for block Block_electronic-circuit_0_0
-2025-05-05 14:25:36,627 - FactoryBuilder - INFO - Added belt electronic-circuit at [13, 21] facing east for block Block_electronic-circuit_0_0
-2025-05-05 14:25:36,627 - FactoryBuilder - INFO - Added belt electronic-circuit at [14, 21] facing south for block Block_electronic-circuit_0_0
-2025-05-05 14:25:36,627 - FactoryBuilder - INFO - Added underground belt segment electronic-circuit from [10, 21] to [13, 21] for block Block_electronic-circuit_0_0
-2025-05-05 14:25:36,627 - FactoryBuilder - INFO - Added splitter electronic-circuit at [15, 22] facing south for block Block_electronic-circuit_0_0
-2025-05-05 14:25:36,627 - FactoryBuilder - INFO - Added belt electronic-circuit at [10, 26] facing east for block Block_electronic-circuit_0_0
-2025-05-05 14:25:36,627 - FactoryBuilder - INFO - Added belt electronic-circuit at [13, 26] facing east for block Block_electronic-circuit_0_0
-2025-05-05 14:25:36,627 - FactoryBuilder - INFO - Added belt electronic-circuit at [14, 26] facing south for block Block_electronic-circuit_0_0
-2025-05-05 14:25:36,627 - FactoryBuilder - INFO - Added underground belt segment electronic-circuit from [10, 26] to [13, 26] for block Block_electronic-circuit_0_0
-2025-05-05 14:25:36,627 - FactoryBuilder - INFO - Added splitter electronic-circuit at [15, 27] facing south for block Block_electronic-circuit_0_0
-2025-05-05 14:25:36,628 - FactoryBuilder - INFO - Added belt iron-plate at [11, 23] facing west for block Block_electronic-circuit_0_0
-2025-05-05 14:25:36,628 - FactoryBuilder - INFO - Added belt iron-plate at [10, 23] facing west for block Block_electronic-circuit_0_0
-2025-05-05 14:25:36,628 - FactoryBuilder - INFO - Added splitter iron-plate at [12, 24] facing north for block Block_electronic-circuit_0_0
-2025-05-05 14:25:36,628 - FactoryBuilder - INFO - Added belt iron-plate at [11, 25] facing west for block Block_electronic-circuit_0_0
-2025-05-05 14:25:36,628 - FactoryBuilder - INFO - Added belt iron-plate at [10, 25] facing west for block Block_electronic-circuit_0_0
-2025-05-05 14:25:36,628 - FactoryBuilder - INFO - Added splitter iron-plate at [12, 26] facing north for block Block_electronic-circuit_0_0
-2025-05-05 14:25:36,630 - FactoryBuilder - INFO - Processing module data from E:/Programmieren/Bachelor-Thesis/Modules/electronic-circuit_120_[]_module.json for block Block_electronic-circuit_0_1
-2025-05-05 14:25:36,630 - FactoryBuilder - INFO - Added assembler electronic-circuit at [6, 11] for block Block_electronic-circuit_0_1
-2025-05-05 14:25:36,630 - FactoryBuilder - INFO - Added assembler electronic-circuit at [6, 15] for block Block_electronic-circuit_0_1
-2025-05-05 14:25:36,630 - FactoryBuilder - INFO - Added assembler copper-cable at [2, 10] for block Block_electronic-circuit_0_1
-2025-05-05 14:25:36,630 - FactoryBuilder - INFO - Added assembler copper-cable at [2, 13] for block Block_electronic-circuit_0_1
-2025-05-05 14:25:36,630 - FactoryBuilder - INFO - Added assembler copper-cable at [2, 16] for block Block_electronic-circuit_0_1
-2025-05-05 14:25:36,630 - FactoryBuilder - INFO - Added inserter copper-cable at [5, 11] facing east for block Block_electronic-circuit_0_1
-2025-05-05 14:25:36,630 - FactoryBuilder - INFO - Added inserter copper-cable at [5, 12] facing east for block Block_electronic-circuit_0_1
-2025-05-05 14:25:36,630 - FactoryBuilder - INFO - Added inserter copper-cable at [5, 13] facing east for block Block_electronic-circuit_0_1
-2025-05-05 14:25:36,630 - FactoryBuilder - INFO - Added inserter iron-plate at [9, 13] facing west for block Block_electronic-circuit_0_1
-2025-05-05 14:25:36,630 - FactoryBuilder - INFO - Added inserter copper-cable at [5, 15] facing east for block Block_electronic-circuit_0_1
-2025-05-05 14:25:36,631 - FactoryBuilder - INFO - Added inserter copper-cable at [5, 17] facing east for block Block_electronic-circuit_0_1
-2025-05-05 14:25:36,631 - FactoryBuilder - INFO - Added inserter copper-cable at [5, 16] facing east for block Block_electronic-circuit_0_1
-2025-05-05 14:25:36,631 - FactoryBuilder - INFO - Added inserter iron-plate at [9, 15] facing west for block Block_electronic-circuit_0_1
-2025-05-05 14:25:36,631 - FactoryBuilder - INFO - Added inserter copper-plate at [1, 10] facing east for block Block_electronic-circuit_0_1
-2025-05-05 14:25:36,631 - FactoryBuilder - INFO - Added inserter copper-plate at [1, 12] facing east for block Block_electronic-circuit_0_1
-2025-05-05 14:25:36,631 - FactoryBuilder - INFO - Added inserter copper-plate at [1, 13] facing east for block Block_electronic-circuit_0_1
-2025-05-05 14:25:36,631 - FactoryBuilder - INFO - Added inserter copper-plate at [1, 15] facing east for block Block_electronic-circuit_0_1
-2025-05-05 14:25:36,631 - FactoryBuilder - INFO - Added inserter copper-plate at [1, 17] facing east for block Block_electronic-circuit_0_1
-2025-05-05 14:25:36,631 - FactoryBuilder - INFO - Added inserter copper-plate at [1, 18] facing east for block Block_electronic-circuit_0_1
-2025-05-05 14:25:36,631 - FactoryBuilder - INFO - Added placed inserter for electronic-circuit at [9, 11] facing east
-2025-05-05 14:25:36,631 - FactoryBuilder - INFO - Added placed inserter for electronic-circuit at [9, 16] facing east
-2025-05-05 14:25:36,632 - FactoryBuilder - INFO - Added input belt route for copper-plate at [0, 9] facing north
-2025-05-05 14:25:36,632 - FactoryBuilder - INFO - Added input belt route for iron-plate at [12, 9] facing north
-2025-05-05 14:25:36,632 - FactoryBuilder - INFO - Added output belt route for electronic-circuit at [15, 18] facing south
-2025-05-05 14:25:36,632 - FactoryBuilder - INFO - Added belt electronic-circuit at [10, 11] facing east for block Block_electronic-circuit_0_1
-2025-05-05 14:25:36,632 - FactoryBuilder - INFO - Added belt electronic-circuit at [13, 11] facing east for block Block_electronic-circuit_0_1
-2025-05-05 14:25:36,632 - FactoryBuilder - INFO - Added belt electronic-circuit at [14, 11] facing south for block Block_electronic-circuit_0_1
-2025-05-05 14:25:36,632 - FactoryBuilder - INFO - Added underground belt segment electronic-circuit from [10, 11] to [13, 11] for block Block_electronic-circuit_0_1
-2025-05-05 14:25:36,633 - FactoryBuilder - INFO - Added splitter electronic-circuit at [15, 12] facing south for block Block_electronic-circuit_0_1
-2025-05-05 14:25:36,633 - FactoryBuilder - INFO - Added belt electronic-circuit at [10, 16] facing east for block Block_electronic-circuit_0_1
-2025-05-05 14:25:36,633 - FactoryBuilder - INFO - Added belt electronic-circuit at [13, 16] facing east for block Block_electronic-circuit_0_1
-2025-05-05 14:25:36,633 - FactoryBuilder - INFO - Added belt electronic-circuit at [14, 16] facing south for block Block_electronic-circuit_0_1
-2025-05-05 14:25:36,633 - FactoryBuilder - INFO - Added underground belt segment electronic-circuit from [10, 16] to [13, 16] for block Block_electronic-circuit_0_1
-2025-05-05 14:25:36,633 - FactoryBuilder - INFO - Added splitter electronic-circuit at [15, 17] facing south for block Block_electronic-circuit_0_1
-2025-05-05 14:25:36,634 - FactoryBuilder - INFO - Added belt iron-plate at [11, 13] facing west for block Block_electronic-circuit_0_1
-2025-05-05 14:25:36,634 - FactoryBuilder - INFO - Added belt iron-plate at [10, 13] facing west for block Block_electronic-circuit_0_1
-2025-05-05 14:25:36,634 - FactoryBuilder - INFO - Added splitter iron-plate at [12, 14] facing north for block Block_electronic-circuit_0_1
-2025-05-05 14:25:36,634 - FactoryBuilder - INFO - Added belt iron-plate at [11, 15] facing west for block Block_electronic-circuit_0_1
-2025-05-05 14:25:36,634 - FactoryBuilder - INFO - Added belt iron-plate at [10, 15] facing west for block Block_electronic-circuit_0_1
-2025-05-05 14:25:36,634 - FactoryBuilder - INFO - Added splitter iron-plate at [12, 16] facing north for block Block_electronic-circuit_0_1
-2025-05-05 14:25:36,634 - FactoryBuilder - INFO - Added external input gate iron-plate at (3, 29)
-2025-05-05 14:25:36,634 - FactoryBuilder - INFO - Added external input gate copper-plate at (0, 29)
-2025-05-05 14:25:36,635 - FactoryBuilder - INFO - Added external output gate electronic-circuit at (7, 29)
-2025-05-05 14:25:36,639 - FactoryBuilder - INFO - Factory JSON data saved to Factorys/factory_electronic-circuit_200.json
-2025-05-05 14:25:36,640 - FactoryBuilder - INFO - Planning inter-block paths with detailed obstacles...
-2025-05-05 14:25:37,014 - FactoryBuilder - INFO - Saved detailed obstacle map visualization
-2025-05-05 14:25:37,015 - FactoryBuilder - DEBUG - Processing connection 0: (<FactoryZ3Solver.Gate object at 0x00000242ED733680>, <FactoryZ3Solver.Gate object at 0x00000242ED733650>)
-2025-05-05 14:25:37,015 - FactoryBuilder - ERROR - Error processing connection 0: 'electronic-circuit'
-2025-05-05 14:25:37,015 - FactoryBuilder - DEBUG - Processing connection 1: (<FactoryZ3Solver.Gate object at 0x00000242ED733A10>, <FactoryZ3Solver.Gate object at 0x00000242ED732450>)
-2025-05-05 14:25:37,015 - FactoryBuilder - ERROR - Error processing connection 1: 'electronic-circuit'
-2025-05-05 14:25:37,015 - FactoryBuilder - DEBUG - Processing connection 2: (<FactoryZ3Solver.Gate object at 0x00000242ED733740>, <FactoryZ3Solver.Gate object at 0x00000242ED732570>)
-2025-05-05 14:25:37,015 - FactoryBuilder - ERROR - Error processing connection 2: 'electronic-circuit'
-2025-05-05 14:25:37,015 - FactoryBuilder - DEBUG - Processing connection 3: (<FactoryZ3Solver.Gate object at 0x00000242ED733CB0>, <FactoryZ3Solver.Gate object at 0x00000242ED733DA0>)
-2025-05-05 14:25:37,015 - FactoryBuilder - ERROR - Error processing connection 3: 'electronic-circuit'
-2025-05-05 14:25:37,016 - FactoryBuilder - DEBUG - Processing connection 4: (<FactoryZ3Solver.Gate object at 0x00000242ED7333E0>, <FactoryZ3Solver.Gate object at 0x00000242ED733590>)
-2025-05-05 14:25:37,016 - FactoryBuilder - ERROR - Error processing connection 4: 'electronic-circuit'
-2025-05-05 14:25:37,016 - FactoryBuilder - DEBUG - Processing connection 5: (<FactoryZ3Solver.Gate object at 0x00000242ED733EF0>, <FactoryZ3Solver.Gate object at 0x00000242ED733A40>)
-2025-05-05 14:25:37,016 - FactoryBuilder - ERROR - Error processing connection 5: 'external'
-2025-05-05 14:25:37,016 - FactoryBuilder - WARNING - No valid connections to route!
-2025-05-05 14:25:37,028 - FactoryBuilder - INFO - Adding 0 inter-block paths to Factorys/factory_electronic-circuit_200.json
-2025-05-05 14:25:37,034 - FactoryBuilder - INFO - Successfully added 0 inter-block paths to Factorys/factory_electronic-circuit_200.json
-2025-05-05 14:25:37,047 - FactoryBuilder - INFO - Creating blueprint from Factorys/factory_electronic-circuit_200.json
-2025-05-05 14:25:37,147 - FactoryBuilder - INFO - Blueprint successfully exported to Blueprints/blueprint_electronic-circuit_200.txt
-2025-05-05 14:25:37,148 - FactoryBuilder - INFO - Execution time for solve: 4.9769 seconds.
+2025-05-18 20:19:54,582 - FactoryBuilder - INFO - Defining factory I/O points
+2025-05-18 20:19:54,582 - FactoryBuilder - INFO - External inputs: {'iron-plate', 'copper-plate'}
+2025-05-18 20:19:54,582 - FactoryBuilder - INFO - External outputs: {'electronic-circuit'}
+2025-05-18 20:19:54,582 - FactoryBuilder - INFO - Internal items: set()
+2025-05-18 20:19:56,202 - FactoryBuilder - DEBUG - Selected South at position (0, 29) for iron-plate
+2025-05-18 20:19:57,378 - FactoryBuilder - DEBUG - Selected South at position (3, 29) for copper-plate
+2025-05-18 20:19:57,447 - FactoryBuilder - INFO - Created fixed input gate for iron-plate at position (0, 29) on South edge
+2025-05-18 20:19:57,447 - FactoryBuilder - INFO - Created fixed input gate for copper-plate at position (3, 29) on South edge
+2025-05-18 20:19:58,875 - FactoryBuilder - DEBUG - Selected South at position (7, 29) for electronic-circuit
+2025-05-18 20:19:58,928 - FactoryBuilder - INFO - Created fixed output gate for electronic-circuit at position (7, 29) on South edge
+2025-05-18 20:19:58,937 - FactoryBuilder - INFO - Added fixed input gate external_input_iron-plate at position (0, 29)
+2025-05-18 20:19:58,937 - FactoryBuilder - INFO - Added fixed input gate external_input_copper-plate at position (3, 29)
+2025-05-18 20:19:58,937 - FactoryBuilder - INFO - Added fixed output gate external_output_electronic-circuit at position (7, 29)

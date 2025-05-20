@@ -233,7 +233,7 @@ class MultiAgentPathfinder:
                 # Try in all four directions
                 for dx, dy in self.directions:
                     # Check if we can go underground in this direction
-                    can_go_underground, entry, exit = self.can_build_underground(current, dx, dy, goal,is_fluid)
+                    can_go_underground, entry, exit, following = self.can_build_underground(current, dx, dy, goal,is_fluid)
                     
                     if can_go_underground:
                         # Underground paths have a higher cost
@@ -254,7 +254,19 @@ class MultiAgentPathfinder:
                             # Add to open set
                             if not any(pos == exit for _, pos, _ in open_set):
                                 heapq.heappush(open_set, (f_score[exit], exit, new_segments))
-        
+
+                            # We also need to ensure the following position gets added to the path
+                            # if it's not the goal itself
+                            if following != goal and (following not in g_score or tentative_g_score + 1 < g_score[following]):
+                                # Add the position after the exit with an additional step cost
+                                came_from[following] = exit
+                                g_score[following] = tentative_g_score + 1  # +1 for the extra step
+                                f_score[following] = tentative_g_score + 1 + self.heuristic(following, goal)
+                                
+                                # Add to open set
+                                if not any(pos == following for _, pos, _ in open_set):
+                                    # No need to add underground segments for this position
+                                    heapq.heappush(open_set, (f_score[following], following, underground_segments[exit]))
         # No path found
         return None, {}
 
@@ -279,7 +291,7 @@ class MultiAgentPathfinder:
         
         # Don't allow diagonal movement for undergrounds
         if dx != 0 and dy != 0:
-            return False, None, None
+            return False, None, None, None
         
         # Check if the current position was just used as an underground exit in the same direction
         # This avoids having underground segments directly connected to each other
@@ -302,7 +314,7 @@ class MultiAgentPathfinder:
                             
                             # If the direction is the same, don't allow another underground
                             if prev_dx == dx and prev_dy == dy:
-                                return False, None, None
+                                return False, None, None, None
         
         # Track segment ends to avoid placing segments right next to each other
         # This avoids case where segment_1 ends at position A and segment_2 starts at position A
@@ -315,14 +327,14 @@ class MultiAgentPathfinder:
                         
         # Don't start a new underground from a position that's already an end point
         if position in segment_ends:
-            return False, None, None
+            return False, None, None, None
         
         # Check if there's at least one obstacle in the path that needs to be crossed
         has_obstacle = False
         
         # Look for a valid exit point within the underground length
-        for length in range(underground_length+1, 2, -1):
-            
+        #for length in range(underground_length+1, 2, -1):
+        for length in range(2, underground_length+1, 1):   
             
             exit_x = x + dx * length
             exit_y = y + dy * length
@@ -330,12 +342,14 @@ class MultiAgentPathfinder:
             
             following_x = exit_x + dx
             following_y = exit_y + dy
+            following_pos = (following_x, following_y)
             
             logger.debug(f"Checking underground path from {entry} to {exit_pos} with length {length-1}")
             
             # Check if exit is in bounds
             if not (0 <= exit_x < self.width and 0 <= exit_y < self.height):
                 continue
+                
                 
             # Special case: If the exit is the goal itself, we don't need to check the following position
             if exit_pos == goal:
@@ -354,7 +368,7 @@ class MultiAgentPathfinder:
                 # If there's at least one obstacle, this is a valid underground to the goal
                 if has_obstacle:
                     logger.debug(f"Found valid underground path directly to goal from {entry} to {exit_pos}")
-                    return True, entry, exit_pos
+                    return True, entry, exit_pos, goal
                 continue
             
             # Normal case: Check the position following the exit
@@ -406,14 +420,14 @@ class MultiAgentPathfinder:
                 if is_valid_exit:
                     # This is a valid exit that's closer to the goal
                     logger.debug(f"Found valid underground path from {entry} to {exit_pos} with obstacle? {has_obstacle}")
-                    return True, entry, exit_pos
+                    return True, entry, exit_pos, following_pos
                 else:
                     logger.debug(f"Exit {exit_pos} rejected because it's already an entry point")
             else:
                 logger.debug(f"Exit {exit_pos} rejected because it doesn't get closer to goal")
         
         # No valid exit found
-        return False, None, None
+        return False, None, None, None
 
     
     
@@ -535,37 +549,34 @@ class MultiAgentPathfinder:
                             
     def place_output_inserter(self):
         """
-        Place an inserter at the output item location if defined.
-        
-        Returns:
-            tuple: (x, y) coordinates of the placed inserter
+        Place inserters at the output item locations if defined.
+        Handles multiple output items that might share inserter positions.
         """
-        
         if not self.output_item:
             logger.info("No output item defined, skipping output inserter placement")
             return None
         
         logger.info(f"Placing output inserter for item {self.output_item}")
         
-        # Debug the current state of points
-        logger.debug(f"Total points in self.points: {len(self.points)}")
-        logger.debug(f"Keys in self.points: {list(self.points.keys())}")
+        # Track which inserter positions have already been used
+        used_inserters = set()
         
+        # Process each output item
         for item_key, item_data in self.points.items():
-            logger.debug(f"Checking item_key: {item_key}, item type: {item_data.get('item', 'No item defined')}")
-            
             if item_data.get('item') != self.output_item:
                 logger.debug(f"Skipping {item_key} as it's not the output item {self.output_item}")
                 continue
                 
             logger.info(f"Found output item match: {item_key}")
             
-            # Get best start destination pair for the output item
+            # Get start points, destinations, and inserter mapping
             start_points = item_data.get('start_points', [])
             destinations = item_data.get('destination', [])
+            inserter_mapping = item_data.get('inserter_mapping', {})
             
             logger.debug(f"Start points for {item_key}: {start_points}")
             logger.debug(f"Destination points for {item_key}: {destinations}")
+            logger.debug(f"Inserter mapping for {item_key}: {inserter_mapping}")
             
             if not start_points:
                 logger.warning(f"No start points defined for {item_key}, cannot place output inserter")
@@ -575,78 +586,78 @@ class MultiAgentPathfinder:
                 logger.warning(f"No destination points defined for {item_key}, cannot place output inserter")
                 continue
             
-            pairs = []
+            if not inserter_mapping:
+                logger.warning(f"No inserter mapping defined for {item_key}, cannot place output inserter")
+                continue
             
-            # Generate all pairs of start and destination points
-            for start in start_points:
-                logger.debug(f"Processing start point: {start}")
+            # Generate all valid start points with their inserters
+            valid_starts = []
+            
+            for start_pos in start_points:
+                start_pos_str = str(start_pos)
                 
-                # Check if start point is in bounds
-                if not (0 <= start[0] < self.width and 0 <= start[1] < self.height):
-                    logger.warning(f"Start point {start} is out of bounds, skipping")
+                if start_pos_str not in inserter_mapping:
+                    logger.debug(f"No inserter mapping for start position {start_pos}, skipping")
                     continue
                     
-                for dest in destinations:
-                    logger.debug(f"Processing destination point: {dest}")
-                    
-                    # Check if destination point is in bounds
-                    if not (0 <= dest[0] < self.width and 0 <= dest[1] < self.height):
-                        logger.warning(f"Destination point {dest} is out of bounds, skipping")
-                        continue
-                        
-                    # Calculate heuristic distance
-                    h_distance = self.heuristic(start, dest)
-                    logger.debug(f"Heuristic distance from {start} to {dest}: {h_distance}")
-                    pairs.append((h_distance, start, dest))
-            
-            logger.debug(f"Generated {len(pairs)} start-destination pairs")
-            
-            if not pairs:
-                logger.warning(f"No valid start-destination pairs generated for {item_key}")
-                continue
-                
-            # Sort pairs by heuristic distance (ascending)
-            pairs.sort()
-            logger.debug(f"Sorted pairs (first 5): {pairs[:5] if len(pairs) > 5 else pairs}")
-            
-            # Find inserter mapping
-            inserter_mapping = item_data.get('inserter_mapping', None)
-            logger.debug(f"Inserter mapping for {item_key}: {inserter_mapping}")
-            
-            if not inserter_mapping:
-                logger.warning(f"No inserter mapping defined for {item_key}")
-                continue
-                
-            # Get best start position
-            start_pos = pairs[0][1]
-            logger.debug(f"Best start position: {start_pos}")
-            
-            # Check if start position has an inserter mapping
-            if str(start_pos) in inserter_mapping:
-                inserter = inserter_mapping[str(start_pos)]
-                logger.info(f"Found inserter at {inserter} for start position {start_pos}")
+                inserter_pos = inserter_mapping[start_pos_str]
+                inserter_pos_str = str(inserter_pos)
                 
                 # Check if inserter position is in bounds
-                ix, iy = inserter
+                ix, iy = inserter_pos
                 if not (0 <= ix < self.width and 0 <= iy < self.height):
-                    logger.warning(f"Inserter position {inserter} is out of bounds, skipping")
+                    logger.warning(f"Inserter position {inserter_pos} is out of bounds, skipping")
                     continue
-                    
-                # Mark inserter position as obstacle
+                
+                # Check if this inserter has already been used
+                if inserter_pos_str in used_inserters:
+                    # This inserter is already placed - it's still valid, just mark it
+                    valid_starts.append((start_pos, inserter_pos, True))
+                    logger.info(f"Inserter already exists at {inserter_pos} for {start_pos}")
+                else:
+                    # Check if the position is free in the working grid
+                    if self.working_grid[iy][ix] == 0:
+                        valid_starts.append((start_pos, inserter_pos, False))
+                        logger.info(f"Found valid inserter placement at {inserter_pos} for start {start_pos}")
+                    else:
+                        logger.warning(f"Inserter position {inserter_pos} is not valid (value: {self.working_grid[iy][ix]}), skipping")
+            
+            # Sort valid starts: unused inserters first, then used ones
+            valid_starts.sort(key=lambda x: x[2])  # False (unused) comes first
+            
+            if not valid_starts:
+                logger.warning(f"No valid inserter placements found for {item_key}")
+                continue
+            
+            # Use the first valid start
+            start_pos, inserter_pos, already_used = valid_starts[0]
+            
+            # Place the inserter if it hasn't been placed already
+            if not already_used:
+                ix, iy = inserter_pos
                 prev_value = self.working_grid[iy][ix]
                 self.working_grid[iy][ix] = 1
-                logger.info(f"Marked inserter at {inserter} as obstacle (previous value: {prev_value})")
+                logger.info(f"Marked inserter at {inserter_pos} as obstacle (previous value: {prev_value})")
+                used_inserters.add(str(inserter_pos))
+            
+            # Update the start points to prioritize this one
+            old_start_points = self.points[item_key]['start_points']
+            self.points[item_key]['start_points'] = [start_pos]
+            logger.info(f"Updated start_points for {item_key} from {old_start_points} to {[start_pos]}")
+            
+            # Store the inserter in our collection
+            if item_key not in self.inserters:
+                self.inserters[item_key] = {}
                 
-                # Mark starting position
-                old_start_points = self.points[item_key]['start_points']
-                self.points[item_key]['start_points'] = [start_pos]
-                logger.info(f"Updated start_points for {item_key} from {old_start_points} to {[start_pos]}")
-              
-            else:
-                logger.warning(f"No inserter mapping found for start position {start_pos}")
-                logger.debug(f"Available mappings: {list(inserter_mapping.keys())}")
+            self.inserters[item_key][str(start_pos)] = inserter_pos
+            logger.info(f"Stored inserter {inserter_pos} for {item_key} at start position {start_pos}")
         
-        logger.warning("Failed to place output inserter for any output item instance")
+        if not used_inserters:
+            logger.warning("Failed to place any output inserters")
+            return None
+            
+        logger.info(f"Successfully placed {len(used_inserters)} inserters")
+        return used_inserters
       
     
     
@@ -664,7 +675,7 @@ class MultiAgentPathfinder:
                 - used_splitters: dictionary of splitters used as I/O points
         """
         
-          # Sort the points -> output items first
+        # Sort the points -> output items first
         # Separate output items from other items
         output_items = {}
         other_items = {}
@@ -705,8 +716,8 @@ class MultiAgentPathfinder:
             
             item_data = self.points[item_key] 
             
-            #logger.info(f"Finding path for {item_key}")
-            #logger.debug(f"Working grid:\n{np.array(self.working_grid)}")
+            logger.info(f"Finding path for {item_key}")
+            logger.debug(f"Working grid:\n{np.array(self.working_grid)}")
             
             is_fluid = item_data.get('is_fluid', False)
             
@@ -716,7 +727,7 @@ class MultiAgentPathfinder:
             start_points = item_data['start_points'].copy()
             destinations = item_data['destination'].copy()
             inserter_mapping = item_data.get('inserter_mapping', None)
-
+            item_name = item_data['item']
     
             if is_fluid and not IO_paths:
                 logger.info(f"Processing fluid item {item_key}, expanding start positions")
@@ -725,12 +736,54 @@ class MultiAgentPathfinder:
                 logger.info(f"Expanded start positions for {item_key} from {len(original_starts)} to {len(start_points)}")
             
             
+
             
-            # Extract base item name
-            item_name = item_data['item']
+            # if item is output item, add all other paths of this item to the destination points
+            if self.output_item and item_name == self.output_item:
+                    for other_item_key, other_paths in self.paths.items():
+                        for other_path_data in other_paths:  # Iterate through each path data in the list
+                            if other_item_key != item_key and other_path_data['item'] == item_name:
+                                # Get underground segments to exclude their endpoints
+                                underground_segments = other_path_data.get('underground_segments', {})
+                                underground_entries = []
+                                underground_exits = []
+                                
+                                # Collect all underground entry/exit points
+                                for segment in underground_segments.values():
+                                    underground_entries.append(segment['start'])
+                                    underground_exits.append(segment['end'])
+                                
+                                # Only add points that are not part of underground segments
+                                filtered_path = []
+                                for point in other_path_data['path']:
+                                    if point not in underground_entries and point not in underground_exits:
+                                        filtered_path.append(point)
+                                
+                                destinations.extend(filtered_path)
+                                logger.info(f"Added {len(filtered_path)} destination points from other item {other_item_key} (filtered out {len(other_path_data['path']) - len(filtered_path)} underground points)")
+                                        
+                            
+            # if the item is not the output item, add the destination points of all other paths with the same item to the start points
+            if item_name != self.output_item:
+                    for other_item_key, other_paths in self.paths.items():
+                        
+                        for other_path_data in other_paths:  # Iterate through each path data in the list
+                            if other_item_key != item_key and other_path_data['item'] == item_name:
+                                # point is not allowed to be a undground segment
+                                underground_segments = other_path_data.get('underground_segments', {})
+
+                                is_underground = True
+                                for segment in underground_segments.values():
+                                    if segment['end'] == other_path_data['destination'] or segment['start'] == other_path_data['destination']:
+                                       is_underground = False
+                                       break
+        
+                                if is_underground:
+                                    start_points.extend([other_path_data['destination']])
+                                    logger.info(f"Added start points from other item {other_item_key}")
+                    
             
             
-            # Replace the incomplete section in find_paths_for_all_items
             if self.allow_splitters and item_name in self.splitters and not is_fluid:
                 # Find splitters that are relevant to our start/destination points
                 relevant_start_splitters = []
@@ -759,35 +812,7 @@ class MultiAgentPathfinder:
                     destinations = []
                 
                 
-                # if item is output item, add all other paths of this item to the destination points
-                if self.output_item and item_name == self.output_item:
-                    for other_item_key, other_paths in self.paths.items():
-                    
-                        for other_path_data in other_paths:  # Iterate through each path data in the list
-                            if other_item_key != item_key and other_path_data['item'] == item_name:
-                                destinations.extend(other_path_data['path'])
-                                logger.info(f"Added destination points from other item {other_item_key}")
-                                        
-                            
-                # if the item is not the output item, add the destination points of all other paths with the same item to the start points
-                if item_name != self.output_item:
-                    for other_item_key, other_paths in self.paths.items():
-                        
-                        for other_path_data in other_paths:  # Iterate through each path data in the list
-                            if other_item_key != item_key and other_path_data['item'] == item_name:
-                                # point is not allowed to be a undground segment
-                                underground_segments = other_path_data.get('underground_segments', None)
-
-                                flag = True
-                                for segment in underground_segments.values():
-                                    if segment['end'] == other_path_data['destination']:
-                                       flag = False
-                                       break
-        
-                                if flag:
-                                    start_points.extend([other_path_data['destination']])
-                                    logger.info(f"Added start points from other item {other_item_key}")
-                    
+       
                                 
                 # Add output points from start splitters as start points
                 for splitter in relevant_start_splitters:
@@ -827,7 +852,7 @@ class MultiAgentPathfinder:
                             if item_key not in self.inserters:
                                 self.inserters[item_key] = {}
                             
-                            self.inserters[item_key][str(best_start)] = inserter
+                            self.inserters[item_key][str(point)] = inserter
                             logger.info(f"Marked inserter at {inserter} as obstacle (previous value: {prev_value})")
                     
                     break

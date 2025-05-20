@@ -4,7 +4,7 @@
     "default_height": 10
   },
   "machines": {
-    "default_assembler": "assembling-machine-2",
+    "default_assembler": "assembling-machine-1",
     "default_furnace": "electric-furnace",
     "default_chemical_plant": "chemical-plant",
     "default_refinery": "oil-refinery"
@@ -37,7 +37,7 @@
   },
   "power": {
     "default_type": "medium-electric-pole",
-    "place_power_poles": true,
-    "maximize_coverage": true
+    "place_power_poles": false,
+    "maximize_coverage": false
   }
 }

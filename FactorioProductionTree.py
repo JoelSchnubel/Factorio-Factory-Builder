@@ -853,7 +853,7 @@ class FactorioProductionTree:
         pygame.quit()
         self.input_information = input_information
 
-    def solve(self,production_data,sequential,solver_type):
+    def solve(self,production_data,solver_type):
         
         # Initialize solver with grid size and production data
         if self.z3_solver is None and solver_type == "z3":
@@ -862,15 +862,9 @@ class FactorioProductionTree:
         if self.z3_solver is None and solver_type == "gurobi":
             self.z3_solver = GurobiSolver(self.grid_width,self.grid_height, production_data)
         # Process the input to place assemblers
-        
-        if sequential:
-            self.placed_assembler, self.model = self.z3_solver.build_sequential()
-            
-            
-            
-        else:
-            self.z3_solver.build_constraints()
-            self.z3_solver.solve()
+
+        self.z3_solver.build_constraints()
+        self.z3_solver.solve()
         
     def add_manual_IO_constraints(self,production_data,solver_type):
         
@@ -981,11 +975,34 @@ class FactorioProductionTree:
     def get_retrieval_points(self, belt_point_information, assembler_information):
         retrieval_points = {}  # Dictionary to store all retrieval points for each item
 
+
         # Step 1: Check direct input points from `input_information`
         for i,(item, x, y, _) in enumerate(belt_point_information):
             key = f"{item}_{i}"  # Unique key per occurrence of the item on the belt
             
-            
+            output_path_positions = set()
+            if item in self.output_information:
+                # Get all positions with the matching item from `input_information`
+                input_point = self.output_information[item]['input']
+                output_point = self.output_information[item]['output']
+                input_point = (input_point[1], input_point[0])  # Swap the coordinates
+                output_point = (output_point[1], output_point[0])  # Swap the coordinates
+                
+                
+                output_path_positions.add(input_point)
+                output_path_positions.add(output_point)
+                
+    
+                # Process path data directly if it exists
+                if self.output_information[item]['paths'] is not None and item in self.output_information[item]['paths']:
+                    for path_data in self.output_information[item]['paths'][item]:
+                        path = path_data['path']
+                        
+                        # Add all points in the path as potential destinations
+                        for pos in path:
+                            # Convert from (x, y) to (col, row) for consistency
+                            output_path_positions.add(pos)
+
             
             retrieval_points[key] = {
             'item': item,
@@ -1018,8 +1035,7 @@ class FactorioProductionTree:
                             retrieval_points[key]["start_points"].append(pos)
                 
                 continue  # Move to the next belt item after checking input information
-            
-            
+                    
             
             fluid_connection_positions = set()
             _, _, _, _, fluid_connection_info, _ = self.z3_solver.build_map()
@@ -1079,85 +1095,170 @@ class FactorioProductionTree:
                         if inserter_pos in fluid_connection_positions or belt_pos in fluid_connection_positions:
                             continue
                             
+                        logger.debug(f"Checking positions: {inserter_pos}, {belt_pos}")
+                        
                         # Check if positions are available
-                        if self.is_position_available(inserter_pos) and self.is_position_available(belt_pos):
+                        if self.is_position_available(inserter_pos) and (self.is_position_available(belt_pos) or belt_pos in output_path_positions):
                             retrieval_points[key]["destination"].append(belt_pos)
 
         return retrieval_points
 
     
+    def get_num_inserters(self, item):
+        # Check if the item is a fluid
+        if self.is_fluid_item(item):
+            logger.debug(f"Item {item} is a fluid, using 1 fluid connection")
+            return 1
+        
+        # Get item production data
+        if item not in self.production_data:
+            logger.warning(f"No production data found for {item}, using default inserter count")
+            return 1
+        
+        # Get items per minute being produced
+        items_per_minute = self.production_data[item].get("amount_per_minute", 0)
+        
+        # Get inserter type and capacity from config
+        inserter_type = self.config["inserters"]["output_type"]
+        inserter_capacity = self.machines_data["inserters"][inserter_type]["items_per_second"] * 60  # Items per minute
+        
+        # Calculate number of inserters needed based on throughput
+        inserters_needed = math.ceil(items_per_minute / inserter_capacity)
+        
+        # Cap at 1-3 inserters
+        inserters_needed = max(1, min(3, inserters_needed))
+        
+        logger.debug(f"Calculated {inserters_needed} inserters for {item} (producing {items_per_minute} items/min)")
+        return inserters_needed
+    
+    
     def add_out_point_information(self, output_item, assembler_information):
         retrieval_points = {}
         
-        # Get all the possible output positions from the output information set by the user
+        # Collect all the possible output positions from the output information
         output_coords = []
+        output_path_positions = set()
         
-        # Process path data directly if it exists
+        logger.info(f"Finding output points for {output_item}")
+        
+        # Extract coordinates from output path data
         if self.output_information[output_item]['paths'] is not None and output_item in self.output_information[output_item]['paths']:
             for path_data in self.output_information[output_item]['paths'][output_item]:
                 path = path_data['path']
+                logger.info(f"Found existing output path with {len(path)} points")
                 
                 # Add all points in the path as potential destinations
                 for pos in path:
-                    output_coords.append(pos)  # Positions are already in (x, y) format
-                        
-        # Add input and output points
+                    output_coords.append(pos)  # Add to ordered list
+                    output_path_positions.add(tuple(pos))  # Add to fast lookup set
+        
+        # Add input and output points from specified I/O
         input_point = self.output_information[output_item]['input']
-        output_point = self.output_information[output_item]['output']         
-                        
-        input_point = (input_point[1], input_point[0])  # Swap the coordinates (row, col) -> (x, y)
-        output_point = (output_point[1], output_point[0])  # Swap the coordinates (row, col) -> (x, y)
+        output_point = self.output_information[output_item]['output']
         
-        output_coords.append(input_point)
-        output_coords.append(output_point)
-        
-        # Handle fluid connections
+        if input_point and output_point:
+            logger.info(f"Using defined I/O points: input at {input_point}, output at {output_point}")
+            
+            input_point = (input_point[1], input_point[0])  # Swap the coordinates (row, col) -> (x, y)
+            output_point = (output_point[1], output_point[0])  # Swap the coordinates
+            
+            output_coords.append(input_point)
+            output_coords.append(output_point)
+            
+            output_path_positions.add(input_point)
+            output_path_positions.add(output_point)
+            
         fluid_connection_positions = set()
         _, _, _, _, fluid_connection_info, _ = self.z3_solver.build_map()
         
-        for i, (asm_item, assembler_x, assembler_y,width,height,machine_type, orientation_idx) in enumerate(assembler_information):
+        # Process each assembler that produces this item
+        for i, (asm_item, assembler_x, assembler_y, width, height, machine_type, orientation_idx) in enumerate(assembler_information):
             if asm_item == output_item:
+                # Get the number of inserters needed for this assembler/item
+                num_inserters = self.get_num_inserters(output_item)
+                logger.info(f"Need {num_inserters} inserters for {output_item} at assembler {i}")
                 
-                # For each output assembler build own representation    
-                key = f"{output_item}_{i}"
-                
-                logger.info(f"build output path infomation for {key}")
-        
-
-                # Define assembler output positions based on machine dimensions
+                # Generate potential output positions around the assembler
                 output_positions = []
                 
-                # Top edge
+                # Define all possible positions around the assembler's edges
+                # Top edge of assembler
                 for dx in range(width):
                     output_positions.append([(assembler_x + dx, assembler_y - 1), (assembler_x + dx, assembler_y - 2)])
                 
-                # Bottom edge
+                # Bottom edge of assembler
                 for dx in range(width):
                     output_positions.append([(assembler_x + dx, assembler_y + height), (assembler_x + dx, assembler_y + height + 1)])
                 
-                # Left edge
+                # Left edge of assembler
                 for dy in range(height):
                     output_positions.append([(assembler_x - 1, assembler_y + dy), (assembler_x - 2, assembler_y + dy)])
                 
-                # Right edge
+                # Right edge of assembler
                 for dy in range(height):
                     output_positions.append([(assembler_x + width, assembler_y + dy), (assembler_x + width + 1, assembler_y + dy)])
                 
+                # Rank positions by their proximity to destination and existing paths
+                ranked_positions = []
                 
-                retrieval_points[key] = {
-                    'item': output_item,
-                    'destination': output_coords,  
-                    'start_points': [],  
-                    'inserter_mapping': {}  ,    
-                    'is_fluid': self.is_fluid_item(output_item) 
-                }
-
-                # Filter output positions to ensure no overlap with any existing structures
                 for position_pair in output_positions:
-                    if self.is_position_available(position_pair[0]) and self.is_position_available(position_pair[1]):
-                        retrieval_points[key]["inserter_mapping"][str(position_pair[1])] = position_pair[0]
-                        retrieval_points[key]["start_points"].append(position_pair[1])
-                                
+                    inserter_pos, belt_pos = position_pair
+                    belt_pos_tuple = tuple(belt_pos)
+                    
+                    # Skip immediately if inserter position isn't available
+                    if not self.is_position_available(inserter_pos):
+                        logger.debug(f"Skipping inserter position {inserter_pos} - not available")
+                        continue
+                    
+                    # HIGHEST PRIORITY: Direct connection to existing path
+                    if belt_pos_tuple in output_path_positions:
+                        # Found a perfect match - belt connects directly to existing path
+                        logger.info(f"Found optimal position: inserter at {inserter_pos}, belt at {belt_pos} connects to existing path")
+                        ranked_positions.append((0, inserter_pos, belt_pos))  # Priority 0 (highest)
+                        continue
+                    
+                    # Check if belt position is available (if not connecting to existing path)
+                    if not self.is_position_available(belt_pos):
+                        logger.debug(f"Skipping belt position {belt_pos} - not available")
+                        continue
+                    
+                    # Calculate minimum distance to any destination
+                    min_distance = float('inf')
+                    for dest in output_coords:
+                        distance = abs(belt_pos[0] - dest[0]) + abs(belt_pos[1] - dest[1])
+                        min_distance = min(min_distance, distance)
+                    
+                    logger.debug(f"Position {belt_pos} has distance {min_distance} to nearest destination")
+                    ranked_positions.append((min_distance, inserter_pos, belt_pos))
+                
+                # Sort by distance (lowest first)
+                ranked_positions.sort()
+                
+                # Create separate retrieval points for each inserter needed
+                for inserter_idx in range(num_inserters):
+                    # Create unique key for each inserter for this assembler
+                    key = f"{output_item}_{i}_{inserter_idx}"
+                    logger.info(f"Creating retrieval point {key}")
+                    
+                    # Initialize data structure for this assembler's output
+                    retrieval_points[key] = {
+                        'item': output_item,
+                        'destination': list(set(output_coords)),  # Use copy of output coordinates
+                        'start_points': [],
+                        'inserter_mapping': {},
+                        'is_fluid': self.is_fluid_item(output_item)
+                    }
+                    
+
+                    # Add these positions to the retrieval point
+                    for _, inserter_pos, belt_pos in ranked_positions:
+                        retrieval_points[key]["inserter_mapping"][str(belt_pos)] = inserter_pos
+                        retrieval_points[key]["start_points"].append(belt_pos)
+                        logger.debug(f"Added potential inserter at {inserter_pos} with belt at {belt_pos} to {key}")
+                    
+                    # Log total positions found
+                    logger.info(f"Added {len(retrieval_points[key]['start_points'])} potential positions for {key}")
+        
         return retrieval_points
         
     
@@ -1171,13 +1272,6 @@ class FactorioProductionTree:
         return rearranged_dict
     
     def prepare_splitter_information(self, input_information, output_information):
-        """
-        Prepare splitter information and add orientation data to paths.
-        Creates a splitter object for every point in the path.
-        
-        Returns:
-            dict: Dictionary mapping each item to a list of Splitter objects
-        """
         splitters = {}
         
         # Process input information
@@ -1311,16 +1405,23 @@ class FactorioProductionTree:
             logger.info(f'Try Number: {i}')
             
             self.obstacle_map, belt_point_information, assembler_information, _, fluid_connection_info, power_pole_information = self.z3_solver.build_map()
-             
+            
             # get rid of belts that are already connected -> overlap with other input and output belts set by user or overlap with assembler -> direct insertion
             belt_point_information = [belt for belt in belt_point_information if not self.detect_belt_overlap(belt)]
+            
+            
             belt_point_information = [belt for belt in belt_point_information if not self.detect_assembler_overlap(belt, assembler_information)]
 
             
             retrieval_points = self.get_retrieval_points(belt_point_information,assembler_information)
             
+            
             # add output belt if needed to form all possible to all possible
             retrieval_points.update(self.add_out_point_information(self.output_item,assembler_information))
+            
+           
+            
+            logger.info(f"retrieval points: {retrieval_points}")
             
             # rearrange such that we first build paths for outputs
             self.retrieval_points = self.rearrange_dict(retrieval_points, self.output_item)
@@ -1676,6 +1777,7 @@ class FactorioProductionTree:
         # 1. Base view without paths
             
         self._draw_factory_base(window, assembler_information, inserter_information, item_images, images, cell_size)
+        self._draw_io_points(window, item_images, cell_size)
         self._draw_io_paths(window, images,item_images, cell_size)
         if store and file_path:
             pygame.image.save(window, file_path.replace('.png', '_no_paths.png'))
@@ -2289,7 +2391,95 @@ class FactorioProductionTree:
                             # For output paths, use the standard direction (not reversed)
                             rotated_belt = pygame.transform.rotate(images['conveyor'], angle)
                             window.blit(rotated_belt, (current[0] * cell_size, current[1] * cell_size))
-    
+  
+  
+    def _draw_io_points(self, window, item_images, cell_size):
+        """Draw input/output points with colored backgrounds."""
+        logger.info("Drawing input/output points")
+        
+        # Process input information
+        if self.input_information:
+            logger.info(f"Input information available for {len(self.input_information)} items: {list(self.input_information.keys())}")
+            
+            for item in self.input_information:
+                # Correctly access input position array
+                if self.input_information[item].get('input'):
+                    input_pos = self.input_information[item]['input']
+                    row, col = input_pos[0], input_pos[1]  # Correctly unpack the array
+                    
+                    rect = pygame.Rect(col * cell_size, row * cell_size, cell_size, cell_size)
+                    # Draw green background for input
+                    logger.info(f"Drawing INPUT GREEN rect for {item} at ({row},{col})")
+                    pygame.draw.rect(window, GREEN, rect)
+                    if item in item_images:
+                        logger.info(f"Drawing item image for {item}")
+                        window.blit(item_images[item], rect)
+                    else:
+                        logger.warning(f"Item image for {item} not found")
+                
+                # Correctly access output position array
+                if self.input_information[item].get('output'):
+                    output_pos = self.input_information[item]['output']
+                    row, col = output_pos[0], output_pos[1]  # Correctly unpack the array
+                    
+                    rect = pygame.Rect(col * cell_size, row * cell_size, cell_size, cell_size)
+                    # Draw red background for output
+                    logger.info(f"Drawing INPUT RED rect for {item} at ({row},{col})")
+                    pygame.draw.rect(window, RED, rect)
+                    if item in item_images:
+                        logger.info(f"Drawing item image for {item}")
+                        window.blit(item_images[item], rect)
+                    else:
+                        logger.warning(f"Item image for {item} not found")
+        else:
+            logger.info("No input_information available")
+            
+        # Process output information
+        if self.output_information:
+            logger.info(f"Output information available for {len(self.output_information)} items: {list(self.output_information.keys())}")
+            
+            # Load output image if needed
+            output_image = None
+            if self.output_item in item_images:
+                output_image = item_images[self.output_item]
+                logger.info(f"Output image loaded for {self.output_item}")
+            else:
+                logger.warning(f"Output image for {self.output_item} not found in item_images")
+            
+            for item in self.output_information:
+                # Correctly access input position array for output items
+                if self.output_information[item].get('input'):
+                    input_pos = self.output_information[item]['input']
+                    row, col = input_pos[0], input_pos[1]  # Correctly unpack the array
+                    
+                    rect = pygame.Rect(col * cell_size, row * cell_size, cell_size, cell_size)
+                    # Draw green background for input
+                    logger.info(f"Drawing OUTPUT GREEN rect for {item} at ({row},{col})")
+                    pygame.draw.rect(window, GREEN, rect)
+                    if output_image:
+                        logger.info(f"Drawing output image for {item}")
+                        window.blit(output_image, rect)
+                    else:
+                        logger.warning("No output image available")
+                        
+                # Correctly access output position array for output items
+                if self.output_information[item].get('output'):
+                    output_pos = self.output_information[item]['output']
+                    row, col = output_pos[0], output_pos[1]  # Correctly unpack the array
+                    
+                    rect = pygame.Rect(col * cell_size, row * cell_size, cell_size, cell_size)
+                    # Draw red background for output
+                    logger.info(f"Drawing OUTPUT RED rect for {item} at ({row},{col})")
+                    pygame.draw.rect(window, RED, rect)
+                    if output_image:
+                        logger.info(f"Drawing output image for {item}")
+                        window.blit(output_image, rect)
+                    else:
+                        logger.warning("No output image available")
+        else:
+            logger.info("No output_information available")
+  
+  
     def calculate_max_output(self):
         # Get the item recipe
         recipe = self.item_lookup[self.output_item].get("recipe", {})
@@ -2956,7 +3146,7 @@ def main():
     
     Simple_Run()
     
-    #Eval_Runs("big-electric-pole",start=50,end=500,step=50,rep_per_step=10)
+    #Eval_Runs("copper-cable",start=1,end=1,step=1,rep_per_step=10)
    
 
 def Simple_Run():
@@ -2964,8 +3154,8 @@ def Simple_Run():
     logger.info("start")
     
     # Example item and amount
-    item_to_produce = "plastic-bar"
-    amount_needed = 20
+    item_to_produce = "electronic-circuit"
+    amount_needed = 100
     solver_type = "z3"  # "gurobi" or "z3"
     input_items = []  # Using explicit input items
     
@@ -2994,7 +3184,7 @@ def Simple_Run():
         
     # Track time for solving the problem
     start_time = time.perf_counter()
-    factorioProductionTree.solve(production_data,sequential=False,solver_type=solver_type)
+    factorioProductionTree.solve(production_data,solver_type=solver_type)
     end_time = time.perf_counter()
     log_method_time(item_to_produce, 1, "solve", assembler_counts, start_time, end_time,solver_type)
     
@@ -3019,15 +3209,27 @@ def Simple_Run():
    
 def Eval_Runs(item_to_produce, start, end, step, rep_per_step):
     # Initialize the production tree
-    factorioProductionTree = FactorioProductionTree(15, 15)
+    factorioProductionTree = FactorioProductionTree(8, 8)
     
     # Always start with a simulation for 1 unit
-    production_data = factorioProductionTree.calculate_production(item_to_produce, 1)
+    production_data = factorioProductionTree.calculate_production(item_to_produce, 300)
+    factorioProductionTree.production_data = production_data
+
+        
+    production_data = factorioProductionTree.set_capacities(production_data)
+    #production_data['copper-cable']['input_inserters'][0]['inserters'] = 4
     
+    print(production_data)
+    
+
     # Set manual input and output
     factorioProductionTree.manual_Input()
     factorioProductionTree.manual_Output()
     
+    # Store timing data
+    solve_times = []
+    belt_times = []
+    combined_times = []
     
     for rep in range(rep_per_step):
         factorioProductionTree.destroy_solver()
@@ -3038,22 +3240,58 @@ def Eval_Runs(item_to_produce, start, end, step, rep_per_step):
         production_data = factorioProductionTree.set_capacities(production_data)
         assembler_counts = factorioProductionTree.count_assemblers(production_data)
         
-        factorioProductionTree.add_manual_IO_constraints(production_data, sequential=False)
+        factorioProductionTree.add_manual_IO_constraints(production_data,solver_type="z3")
         
-        # Solve the production problem for amount_needed = 1
-        start_time = time.perf.counter()
-        factorioProductionTree.solve(production_data, sequential=False)
-        end_time = time.perf.counter()
-        log_method_time(item_to_produce, 1, 1, "solve", assembler_counts, start_time, end_time)
+       # Solve the production problem for amount_needed = 1
+        start_time = time.perf_counter()
+        factorioProductionTree.solve(production_data, solver_type="z3")
+        solve_end_time = time.perf_counter()
+        solve_time = solve_end_time - start_time
+        solve_times.append(solve_time)
+        log_method_time(item_to_produce, 1, "solve", assembler_counts, start_time, solve_end_time, "z3")
         
         # Build belts and visualize for amount_needed = 1
-        start_time = time.perf.counter()
+        belt_start_time = time.perf_counter()
         paths, placed_inserter_information = factorioProductionTree.build_belts(max_tries=2)
-        end_time = time.perf.counter()
-        log_method_time(item_to_produce, 1, 1, "build_belts", assembler_counts, start_time, end_time)
+        belt_end_time = time.perf_counter()
+        belt_time = belt_end_time - belt_start_time
+        belt_times.append(belt_time)
+        log_method_time(item_to_produce, 1, "build_belts", assembler_counts, belt_start_time, belt_end_time, "z3")
+        
+        # Calculate and store combined time
+        combined_time = solve_time + belt_time
+        combined_times.append(combined_time)
+        log_method_time(item_to_produce, 1, "combined", assembler_counts, start_time, belt_end_time, "z3")
+
+        if paths or placed_inserter_information:
+            factorioProductionTree.visualize_factory(paths,placed_inserter_information,store=True,file_path=f'Modules/3x5.png')
+        
     
 
+    if solve_times:
+        avg_solve_time = sum(solve_times) / len(solve_times)
+        logger.info(f"\nSolve times for {item_to_produce}:")
+        for i, time_value in enumerate(solve_times):
+            logger.info(f"Run {i+1}: {time_value:.4f} seconds")
+        logger.info(f"Average solve time: {avg_solve_time:.4f} seconds")
     
+    if belt_times:
+        avg_belt_time = sum(belt_times) / len(belt_times)
+        logger.info(f"\nBelt building times for {item_to_produce}:")
+        for i, time_value in enumerate(belt_times):
+            logger.info(f"Run {i+1}: {time_value:.4f} seconds")
+        logger.info(f"Average belt building time: {avg_belt_time:.4f} seconds")
+    
+    if combined_times:
+        avg_combined_time = sum(combined_times) / len(combined_times)
+        logger.info(f"\nCombined execution times for {item_to_produce}:")
+        for i, time_value in enumerate(combined_times):
+            logger.info(f"Run {i+1}: {time_value:.4f} seconds")
+        logger.info(f"Average combined execution time: {avg_combined_time:.4f} seconds")
+        
+        print(f"Average combined execution time: {avg_combined_time:.4f} seconds")
+    
+    return
     # Loop through different amounts
     for amount_needed in range(start, end, step):
         for rep in range(rep_per_step):

@@ -362,6 +362,9 @@ class FactoryBuilder:
             blueprint_path= f"Blueprints/blueprint_{self.output_item}_{self.amount}.txt"
             create_blueprint_from_json(path, output_path=blueprint_path)
             
+            factory_img_path= f"Factorys/factory_{self.output_item}_{self.amount}.png"
+            self.visualize_factory(save_path=factory_img_path)
+            
         
         print(f"Factory dimensions: {self.final_x} x {self.final_y}")
         print(f"Final blocks: {self.final_blocks}")
@@ -974,8 +977,6 @@ class FactoryBuilder:
         
         logger.info(f"Found {len(connections)} connections between different blocks")
         return connections
-
-
 
     def load_images(self):
         """Load images from the assets folder based on block names."""
@@ -1896,7 +1897,7 @@ def manhattan_distance(p1, p2):
 def main():
     
     output_item = "electronic-circuit"
-    amount = 200
+    amount = 1200
     max_assembler_per_blueprint = 5
     
     start_width = 15

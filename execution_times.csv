@@ -695,3 +695,562 @@ plastic-bar,1,solve,"{'plastic-bar': 1, 'coal': 0, 'petroleum-gas': 0}",0.431934
 plastic-bar,1,build_belts,"{'plastic-bar': 1, 'coal': 0, 'petroleum-gas': 0}",0.022591800006921403,z3
 plastic-bar,1,solve,"{'plastic-bar': 1, 'coal': 0, 'petroleum-gas': 0}",0.48202219999802765,z3
 plastic-bar,1,build_belts,"{'plastic-bar': 1, 'coal': 0, 'petroleum-gas': 0}",0.022951999999349937,z3
+electronic-circuit,1,solve,"{'electronic-circuit': 2, 'copper-cable': 2, 'copper-plate': 0, 'iron-plate': 0}",2.0468379000085406,z3
+electronic-circuit,1,build_belts,"{'electronic-circuit': 2, 'copper-cable': 2, 'copper-plate': 0, 'iron-plate': 0}",0.06543059999239631,z3
+electronic-circuit,1,solve,"{'electronic-circuit': 2, 'copper-cable': 2, 'copper-plate': 0, 'iron-plate': 0}",6.687836900004186,z3
+electronic-circuit,1,build_belts,"{'electronic-circuit': 2, 'copper-cable': 2, 'copper-plate': 0, 'iron-plate': 0}",1.6679904999909922,z3
+electronic-circuit,1,solve,"{'electronic-circuit': 2, 'copper-cable': 2, 'copper-plate': 0, 'iron-plate': 0}",6.702631099993596,z3
+electronic-circuit,1,build_belts,"{'electronic-circuit': 2, 'copper-cable': 2, 'copper-plate': 0, 'iron-plate': 0}",1.7625782000250183,z3
+electronic-circuit,1,solve,"{'electronic-circuit': 2, 'copper-cable': 2, 'copper-plate': 0, 'iron-plate': 0}",6.779271399980644,z3
+electronic-circuit,1,build_belts,"{'electronic-circuit': 2, 'copper-cable': 2, 'copper-plate': 0, 'iron-plate': 0}",1.7354990000021644,z3
+electronic-circuit,1,solve,"{'electronic-circuit': 2, 'copper-cable': 2, 'copper-plate': 0, 'iron-plate': 0}",7.336843500001123,z3
+electronic-circuit,1,build_belts,"{'electronic-circuit': 2, 'copper-cable': 2, 'copper-plate': 0, 'iron-plate': 0}",1.8569548999948893,z3
+electronic-circuit,1,solve,"{'electronic-circuit': 2, 'copper-cable': 2, 'copper-plate': 0, 'iron-plate': 0}",7.256949100003112,z3
+electronic-circuit,1,build_belts,"{'electronic-circuit': 2, 'copper-cable': 2, 'copper-plate': 0, 'iron-plate': 0}",1.8742247999762185,z3
+electronic-circuit,1,solve,"{'electronic-circuit': 2, 'copper-cable': 2, 'copper-plate': 0, 'iron-plate': 0}",9.747506900021108,z3
+electronic-circuit,1,build_belts,"{'electronic-circuit': 2, 'copper-cable': 2, 'copper-plate': 0, 'iron-plate': 0}",0.7768590999767184,z3
+electronic-circuit,1,solve,"{'electronic-circuit': 2, 'copper-cable': 3, 'copper-plate': 0, 'iron-plate': 0}",12.107227000000421,z3
+electronic-circuit,1,build_belts,"{'electronic-circuit': 2, 'copper-cable': 3, 'copper-plate': 0, 'iron-plate': 0}",0.7144229999976233,z3
+electronic-circuit,1,solve,"{'electronic-circuit': 2, 'copper-cable': 3, 'copper-plate': 0, 'iron-plate': 0}",11.593650000024354,z3
+electronic-circuit,1,build_belts,"{'electronic-circuit': 2, 'copper-cable': 3, 'copper-plate': 0, 'iron-plate': 0}",0.8402978999947663,z3
+electronic-circuit,1,solve,"{'electronic-circuit': 2, 'copper-cable': 3, 'copper-plate': 0, 'iron-plate': 0}",11.834476899995934,z3
+electronic-circuit,1,build_belts,"{'electronic-circuit': 2, 'copper-cable': 3, 'copper-plate': 0, 'iron-plate': 0}",0.692008900019573,z3
+electronic-circuit,1,solve,"{'electronic-circuit': 2, 'copper-cable': 3, 'copper-plate': 0, 'iron-plate': 0}",11.410593999986304,z3
+electronic-circuit,1,build_belts,"{'electronic-circuit': 2, 'copper-cable': 3, 'copper-plate': 0, 'iron-plate': 0}",0.703156300005503,z3
+electronic-circuit,1,solve,"{'electronic-circuit': 2, 'copper-cable': 3, 'copper-plate': 0, 'iron-plate': 0}",11.458968199993251,z3
+electronic-circuit,1,build_belts,"{'electronic-circuit': 2, 'copper-cable': 3, 'copper-plate': 0, 'iron-plate': 0}",0.6601559999980964,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.1038589999998294,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.011902899999768124,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.1165541000000303,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.11483889999999519,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.012663000000429747,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.1280894999999873,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.10501509999994596,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.00959679999959917,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.11503699999957462,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.09333100000003469,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.010705999999117921,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.10445889999937208,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.09467289999975037,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.009684900000138441,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.10480319999987842,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.09495450000031269,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.009974999999940337,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.1053410000004078,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.09165220000068075,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.00980249999975058,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.10184750000007625,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.0929919999998674,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.010030800000095041,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.1034365000004982,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.09858640000038577,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.011262799999713025,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.11048449999998411,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.11855839999952877,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.010427899999740475,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.1295745999996143,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.14378190000024915,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.023097000000234402,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.16736070000024483,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.13952200000039738,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.01723889999993844,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.15713060000052792,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.1309058000006189,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.019967999999607855,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.15129290000004403,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.1335853999999017,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.01704890000019077,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.15101560000039171,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.13328120000005583,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.01892260000022361,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.15260440000020026,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.13350049999917246,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.019019200000002456,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.15293709999968996,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.1542618000003131,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.018847899999855144,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.17353379999985918,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.13137259999984963,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.017356399999698624,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.1490838999998232,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.1319552000004478,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.018350100000134262,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.15065950000007433,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.13333119999970222,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.019586500000514206,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.15329320000000735,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.09929470000042784,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.010532500000408618,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.11026870000023337,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.13990350000040053,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.019583799999963958,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.15991250000024593,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.1266966000002867,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.010470400000485824,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.13770950000071025,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.09287619999940944,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.009388899999976275,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.10268639999958395,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.1131863999999041,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.053868400000283145,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.16782340000008844,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.10659829999985959,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.012576700000863639,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.11970470000051137,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.10346690000005765,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.012441399999261193,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.1163154999994731,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.10794799999985116,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.014507400000184134,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.12290279999979248,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.10400860000117973,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.021699899998566252,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.12648040000021865,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.1331952000000456,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.016337199998815777,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.15034279999963474,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.12373490000027232,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.013444600001093931,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.13785790000110865,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.10676820000117004,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.016608399999313406,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.12385050000011688,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.14136349999898812,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.01728000000002794,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.159157399999458,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.16052630000012869,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.008474399999613524,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.16945640000085405,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.10363300000062736,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.007812300000296091,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.11194410000098287,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.1115922999997565,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.007763600000544102,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.1198949999998149,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.1294556000011653,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.011687600001096143,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.1416815000011411,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.11736220000057074,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.007223200000225916,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.12519800000154646,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.11006749999978638,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.007491399999707937,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.11798549999912211,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.09204879999924742,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.005885200000193436,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.09836809999978868,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.09257109999998647,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.005607799999779672,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.09860889999981737,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.09495790000073612,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.005732300000090618,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.10107539999989967,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.09823299999879964,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.005772399999841582,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.10440009999911126,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.10191590000067663,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.008704600000783103,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.11114400000042224,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.100680999999895,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.005684199999450357,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.10679119999986142,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.09283039999900211,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.005458700001327088,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.09868319999986852,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.13517309999951976,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.00610910000068543,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.14169120000042312,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.15994940000018687,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.012971100000868319,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.1733358000001317,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.13336720000006608,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.012776300000041374,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.14652749999913794,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.14335229999960575,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.013547900000048685,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.15740030000051775,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.13618700000006356,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.012337699999989127,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.14891229999921052,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.13225520000014512,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.012735000000247965,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.14540080000006128,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.14279910000004747,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.012508499999967171,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.15571019999879354,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.15060509999966598,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.012873499999841442,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.16388410000035947,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.1304880999996385,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.01246020000144199,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.14339540000037232,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.1364540999984456,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.013060699999186909,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.14998959999866202,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.1341284000009182,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.013171399999919231,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.14766400000007707,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.09805799999958253,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.09672839999984717,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.01302909999867552,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.11023059999934048,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.10095000000001164,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.012707899999440997,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.11407209999924817,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.09780490000048303,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.011545199999090983,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.10977749999983644,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.09343760000047041,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.011757500000385335,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.10562410000056843,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.11484539999946719,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.01525460000084422,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.1306328000009671,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.09714249999888125,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.011817499998869607,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.1094065999986924,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.0915158000007068,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.011907000000064727,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.10384280000107537,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.09351820000119915,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.011447399998360197,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.10539009999956761,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.11265370000000985,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.015962699999363394,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.1291863000005833,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.10363629999847035,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.011227099999814527,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.1152894999995624,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.10098999999900116,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.006432500000300934,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.10795089999919583,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.10095890000047802,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.005728099999032565,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.1071126999995613,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.09394969999993918,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.00541720000001078,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.09978610000143817,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.10959019999972952,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.005802800000310526,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.11579580000034184,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.09417460000076971,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.00575109999954293,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.10037050000028103,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.10031689999959781,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.006047400000170455,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.10688029999982973,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.10257030000138911,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.007397100000162027,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.11047390000021551,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.09955839999929594,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.0063302999988081865,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.10636009999871021,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.09465199999976903,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.005525000000488944,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.10053660000085074,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.09560240000064368,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.0060272000009717885,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.10223510000105307,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.0946687000014208,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.005675099999280064,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.10082300000067335,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.09276709999903687,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.0056435000005876645,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.09881110000060289,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.09163040000021283,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.005223000000114553,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.09725230000003648,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.09650179999880493,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.006071299998438917,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.102986999998393,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.12821319999966363,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.006575499999598833,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.13522869999906106,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.10452059999988705,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.005804000000352971,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.11081220000050962,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.0898099000005459,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.00566640000033658,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.09590930000013032,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.09401079999952344,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.005668599998898571,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.10012409999944794,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.09246079999866197,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.0054894999993848614,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.09833939999953145,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.09676580000086688,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.00776899999982561,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.10513490000084857,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.0965792999995756,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.007809999999153661,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.10486629999832076,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.10198210000089603,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.006998000000749016,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.10941810000076657,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.09455139999954554,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.00764789999993809,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.10268379999979516,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.09778250000090338,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.007196100001237937,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.105396800001472,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.12790399999903457,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.008428500001173234,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.137001600000076,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.09507579999990412,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.008117800000036368,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.10365360000105284,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.09427379999942787,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.007697700000790064,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.10238059999937832,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.09902300000067044,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.008757800000239513,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.10815379999985453,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.0978995000004943,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.0074723000016092556,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.10579800000050454,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.093797599998652,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.007843299999876763,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.10214689999884285,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.12715340000067954,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.013556900001276517,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.14137420000042766,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.0937300999994477,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.007607100000313949,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.10177540000040608,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.11364900000080524,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.011835300001621363,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.12588550000145915,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.09426039999925706,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.010589099998469464,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.10534179999922344,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.14271730000109528,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.04019739999966987,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.18335730000035255,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.11117709999962244,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.0524184999994759,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.16413680000005115,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.10307339999963006,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.03873299999941082,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.14223929999934626,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.10556829999950423,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.020667800001319847,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.12669009999990521,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.11130339999908756,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.0528654000008828,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.16464660000019649,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.1273363000000245,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.02476349999960803,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.152661199999784,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.09658409999974538,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.011547699999937322,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.10874300000068615,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.10341690000132076,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.013281399998959387,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.11724270000013348,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.09791649999897345,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.010985000000800937,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.10927730000003066,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.09304460000021209,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.010792700000820332,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.10418419999950856,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.09230439999919327,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.010960800000248128,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.10368709999966086,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.09993709999980638,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.010809499999595573,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.11117379999996047,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.09504030000061903,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.011052600000766688,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.10645520000070974,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.09478000000126485,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.011172799999258132,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.10630940000010014,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.09199210000042513,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.01065059999928053,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.10299019999911252,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.09419359999992594,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.01068170000144164,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.10535750000053667,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.09400830000049609,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.012565799999720184,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.10699060000115423,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.34061389999988023,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.09895130000040808,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.4399788999999146,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.32756639999934123,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.07768460000079358,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.4056137999996281,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.29314660000090953,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.07943189999969036,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.3729607000004762,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.33045469999888155,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.09022469999945315,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.4210695999991003,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.2968494000015198,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.08515640000041458,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.382366900001216,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.3043877000000066,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.0769574999994802,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.38177989999894635,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.297826799998802,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.09399610000036773,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.39224429999921995,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.3242690000006405,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.08064649999869289,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.4053335999997216,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.2990647999995417,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.09203530000013416,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.39147940000111703,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.3067366999985097,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.08317859999988286,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.3903193999994983,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.3955697000001237,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.06089620000057039,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.456904200000281,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.3964049000005616,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.06786860000102024,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.4647443000012572,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.38390329999856476,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.07961559999966994,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.46411499999885564,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.3926516999999876,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.057217199999286095,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.45025770000029297,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.3935424999999668,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.06405999999878986,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.4580091999996512,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.41575039999952423,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.06660319999900821,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.4827685999989626,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.4647430999993958,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.0692484000010154,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.534474300000511,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.3928126999999222,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.054606699999567354,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.44777539999995497,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.38053239999862853,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.06869060000099125,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.44961719999992056,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.3804877000002307,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.06178320000071835,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.44266980000065814,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.4820295999998052,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.06371020000005956,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.5461649999997462,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.38047009999900183,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.06197760000031849,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.4428941999995004,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.3521132000005309,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.05489050000142015,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.4074123000009422,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.388311499998963,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.05850869999994757,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.44722639999963576,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.36102000000028056,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.06254230000013195,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.4239766000009695,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.4224826000008761,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.06858339999962482,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.49150080000072194,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.4093421000015951,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.06560869999884744,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.47533130000010715,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.4064306000000215,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.05965479999940726,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.4665740000000369,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.38980089999859047,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.05977339999844844,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.45001569999840285,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.39662529999986873,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.06508229999963078,z3
+copper-cable,1,combined,"{'copper-cable': 1, 'copper-plate': 0}",0.4620940000004339,z3
+electronic-circuit,1,solve,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.48653790000025765,z3
+electronic-circuit,1,build_belts,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.08924310000111291,z3
+electronic-circuit,1,combined,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.5762356000013824,z3
+electronic-circuit,1,solve,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.46736049999890383,z3
+electronic-circuit,1,build_belts,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.09114600000066275,z3
+electronic-circuit,1,combined,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.5589400999997451,z3
+electronic-circuit,1,solve,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.42484439999861934,z3
+electronic-circuit,1,build_belts,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.08194860000003246,z3
+electronic-circuit,1,combined,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.5072010999992926,z3
+electronic-circuit,1,solve,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.4882283999995707,z3
+electronic-circuit,1,build_belts,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.07863200000065262,z3
+electronic-circuit,1,combined,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.5673036999996839,z3
+electronic-circuit,1,solve,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.4738636000001861,z3
+electronic-circuit,1,build_belts,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.08703190000051109,z3
+electronic-circuit,1,combined,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.5613253000010445,z3
+electronic-circuit,1,solve,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.4705847999994148,z3
+electronic-circuit,1,build_belts,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.08589039999969827,z3
+electronic-circuit,1,combined,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.5568634999999631,z3
+electronic-circuit,1,solve,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.4410431999986031,z3
+electronic-circuit,1,build_belts,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.07596590000139258,z3
+electronic-circuit,1,combined,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.5173905999999988,z3
+electronic-circuit,1,solve,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.4613005000010162,z3
+electronic-circuit,1,build_belts,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.07598079999843321,z3
+electronic-circuit,1,combined,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.5377458999992086,z3
+electronic-circuit,1,solve,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.4477389999992738,z3
+electronic-circuit,1,build_belts,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.07919220000076166,z3
+electronic-circuit,1,combined,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.5273727000003419,z3
+electronic-circuit,1,solve,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.4374344000007113,z3
+electronic-circuit,1,build_belts,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.07791259999976319,z3
+electronic-circuit,1,combined,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.5157431999996334,z3
+electronic-circuit,1,solve,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.4213129999989178,z3
+electronic-circuit,1,build_belts,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.01598320000084641,z3
+electronic-circuit,1,combined,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.43771449999985634,z3
+electronic-circuit,1,solve,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.4199026000005688,z3
+electronic-circuit,1,build_belts,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.01697049999893352,z3
+electronic-circuit,1,combined,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.43735559999913676,z3
+electronic-circuit,1,solve,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.44886699999915436,z3
+electronic-circuit,1,build_belts,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.017895200000566547,z3
+electronic-circuit,1,combined,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.46722459999909915,z3
+electronic-circuit,1,solve,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.4141880000006495,z3
+electronic-circuit,1,build_belts,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.016434299999673385,z3
+electronic-circuit,1,combined,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.43105610000020533,z3
+electronic-circuit,1,solve,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.41934890000084124,z3
+electronic-circuit,1,build_belts,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.01787060000060592,z3
+electronic-circuit,1,combined,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.4376465000004828,z3
+electronic-circuit,1,solve,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.40175449999878765,z3
+electronic-circuit,1,build_belts,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.01722410000002128,z3
+electronic-circuit,1,combined,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.41938130000016827,z3
+electronic-circuit,1,solve,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.4224840000006225,z3
+electronic-circuit,1,build_belts,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.016213300001254538,z3
+electronic-circuit,1,combined,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.4390999000006559,z3
+electronic-circuit,1,solve,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.42698139999993145,z3
+electronic-circuit,1,build_belts,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.016553200000998913,z3
+electronic-circuit,1,combined,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.44395389999954205,z3
+electronic-circuit,1,solve,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.3907282000000123,z3
+electronic-circuit,1,build_belts,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.01826970000001893,z3
+electronic-circuit,1,combined,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.4097237000005407,z3
+electronic-circuit,1,solve,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.40795559999969555,z3
+electronic-circuit,1,build_belts,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.01625150000108988,z3
+electronic-circuit,1,combined,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.42464769999969576,z3
+copper-cable,1,solve,"{'copper-cable': 3, 'copper-plate': 0}",1.6899812999999995,z3
+copper-cable,1,build_belts,"{'copper-cable': 3, 'copper-plate': 0}",0.2362702000009449,z3
+copper-cable,1,combined,"{'copper-cable': 3, 'copper-plate': 0}",1.926675400000022,z3
+copper-cable,1,solve,"{'copper-cable': 3, 'copper-plate': 0}",1.5598279000005277,z3
+copper-cable,1,build_belts,"{'copper-cable': 3, 'copper-plate': 0}",0.3043430999987322,z3
+copper-cable,1,combined,"{'copper-cable': 3, 'copper-plate': 0}",1.8645992999990995,z3
+copper-cable,1,solve,"{'copper-cable': 3, 'copper-plate': 0}",1.5372330999998667,z3
+copper-cable,1,build_belts,"{'copper-cable': 3, 'copper-plate': 0}",0.2597734999999375,z3
+copper-cable,1,combined,"{'copper-cable': 3, 'copper-plate': 0}",1.7974498000003223,z3
+copper-cable,1,solve,"{'copper-cable': 3, 'copper-plate': 0}",1.5230271000000357,z3
+copper-cable,1,build_belts,"{'copper-cable': 3, 'copper-plate': 0}",0.20216470000013942,z3
+copper-cable,1,combined,"{'copper-cable': 3, 'copper-plate': 0}",1.7256106000004365,z3
+copper-cable,1,solve,"{'copper-cable': 3, 'copper-plate': 0}",1.795291600001292,z3
+copper-cable,1,build_belts,"{'copper-cable': 3, 'copper-plate': 0}",0.39044400000057067,z3
+copper-cable,1,combined,"{'copper-cable': 3, 'copper-plate': 0}",2.1861721000004763,z3
+copper-cable,1,solve,"{'copper-cable': 3, 'copper-plate': 0}",1.4125053999996453,z3
+copper-cable,1,build_belts,"{'copper-cable': 3, 'copper-plate': 0}",0.24026989999947546,z3
+copper-cable,1,combined,"{'copper-cable': 3, 'copper-plate': 0}",1.6532607999997708,z3
+copper-cable,1,solve,"{'copper-cable': 3, 'copper-plate': 0}",1.513837300000887,z3
+copper-cable,1,build_belts,"{'copper-cable': 3, 'copper-plate': 0}",0.29884469999888097,z3
+copper-cable,1,combined,"{'copper-cable': 3, 'copper-plate': 0}",1.8131116999993537,z3
+copper-cable,1,solve,"{'copper-cable': 3, 'copper-plate': 0}",1.5505611000007775,z3
+copper-cable,1,build_belts,"{'copper-cable': 3, 'copper-plate': 0}",0.2345707999993465,z3
+copper-cable,1,combined,"{'copper-cable': 3, 'copper-plate': 0}",1.7855773999999656,z3
+copper-cable,1,solve,"{'copper-cable': 3, 'copper-plate': 0}",1.4124083999995491,z3
+copper-cable,1,build_belts,"{'copper-cable': 3, 'copper-plate': 0}",0.27527159999954165,z3
+copper-cable,1,combined,"{'copper-cable': 3, 'copper-plate': 0}",1.6881167999999889,z3
+copper-cable,1,solve,"{'copper-cable': 3, 'copper-plate': 0}",1.586892600000283,z3
+copper-cable,1,build_belts,"{'copper-cable': 3, 'copper-plate': 0}",0.3018370000008872,z3
+copper-cable,1,combined,"{'copper-cable': 3, 'copper-plate': 0}",1.8891386000013881,z3

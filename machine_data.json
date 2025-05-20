@@ -45,7 +45,7 @@
     }
   },
   "assemblers": {
-    "default": {
+    "assembling-machine-1": {
       "crafting_speed": 0.5,
       "dimensions": { "width": 3, "height": 3 },
       "entity_name": "assembling-machine-1",
@@ -144,7 +144,7 @@
     }
   },
   "recipe_machine_mapping": {
-    "default": "assembling-machine-2",
+    "default": "assembling-machine-1",
     "recipes": {
       "basic-oil-processing": "oil-refinery",
       "advanced-oil-processing": "oil-refinery",
@@ -167,12 +167,7 @@
       "iron-plate": "electric-furnace",
       "steel-plate": "electric-furnace",
       "stone-brick": "electric-furnace",
-      "iron-stick": "assembling-machine-2",
-      "iron-gear-wheel": "assembling-machine-2",
-      "electronic-circuit": "assembling-machine-2",
-      "advanced-circuit": "assembling-machine-2",
-      "processing-unit": "assembling-machine-2",
-      "copper-cable": "assembling-machine-2"
+      "iron-stick": "assembling-machine-2"
     }
   },
   "power_poles": {

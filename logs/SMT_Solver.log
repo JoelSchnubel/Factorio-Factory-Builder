@@ -1,189 +1,1390 @@
-2025-05-13 18:59:47,397 - SMT_Solver - DEBUG - Loading JSON data from machine_data.json
-2025-05-13 18:59:47,398 - SMT_Solver - DEBUG - Loading JSON data from config.json
-2025-05-13 18:59:47,410 - SMT_Solver - INFO - Starting to add manual I/O constraints.
-2025-05-13 18:59:47,410 - SMT_Solver - DEBUG - Processing input item 'coal' with data: {'input': (9, 0), 'output': (0, 0), 'paths': {'coal': [{'item': 'coal', 'path': [(0, 9), (0, 8), (0, 7), (0, 6), (0, 5), (0, 4), (0, 3), (0, 2), (0, 1), (0, 0)], 'start': (0, 9), 'destination': (0, 0), 'underground_segments': {}, 'start_splitter': None, 'dest_splitter': None}]}}
-2025-05-13 18:59:47,411 - SMT_Solver - INFO - Adding input belt for item 'coal' at position (9, 0)
-2025-05-13 18:59:47,411 - SMT_Solver - INFO - Adding output belt for item 'coal' at position (0, 0)
-2025-05-13 18:59:47,412 - SMT_Solver - DEBUG - Processing path data for input item 'coal'
-2025-05-13 18:59:47,412 - SMT_Solver - INFO - Adding belt path for 'coal' at position (0, 8)
-2025-05-13 18:59:47,412 - SMT_Solver - INFO - Adding belt path for 'coal' at position (0, 7)
-2025-05-13 18:59:47,413 - SMT_Solver - INFO - Adding belt path for 'coal' at position (0, 6)
-2025-05-13 18:59:47,413 - SMT_Solver - INFO - Adding belt path for 'coal' at position (0, 5)
-2025-05-13 18:59:47,413 - SMT_Solver - INFO - Adding belt path for 'coal' at position (0, 4)
-2025-05-13 18:59:47,414 - SMT_Solver - INFO - Adding belt path for 'coal' at position (0, 3)
-2025-05-13 18:59:47,414 - SMT_Solver - INFO - Adding belt path for 'coal' at position (0, 2)
-2025-05-13 18:59:47,414 - SMT_Solver - INFO - Adding belt path for 'coal' at position (0, 1)
-2025-05-13 18:59:47,415 - SMT_Solver - DEBUG - Processing input item 'petroleum-gas' with data: {'input': (9, 7), 'output': (0, 7), 'paths': {'petroleum-gas': [{'item': 'petroleum-gas', 'path': [(7, 9), (7, 8), (7, 7), (7, 6), (7, 5), (7, 4), (7, 3), (7, 2), (7, 1), (7, 0)], 'start': (7, 9), 'destination': (7, 0), 'underground_segments': {}, 'start_splitter': None, 'dest_splitter': None}]}}
-2025-05-13 18:59:47,415 - SMT_Solver - INFO - Adding input belt for item 'petroleum-gas' at position (9, 7)
-2025-05-13 18:59:47,415 - SMT_Solver - INFO - Adding output belt for item 'petroleum-gas' at position (0, 7)
-2025-05-13 18:59:47,415 - SMT_Solver - DEBUG - Processing path data for input item 'petroleum-gas'
-2025-05-13 18:59:47,416 - SMT_Solver - INFO - Adding belt path for 'petroleum-gas' at position (7, 8)
-2025-05-13 18:59:47,416 - SMT_Solver - INFO - Adding belt path for 'petroleum-gas' at position (7, 7)
-2025-05-13 18:59:47,416 - SMT_Solver - INFO - Adding belt path for 'petroleum-gas' at position (7, 6)
-2025-05-13 18:59:47,417 - SMT_Solver - INFO - Adding belt path for 'petroleum-gas' at position (7, 5)
-2025-05-13 18:59:47,417 - SMT_Solver - INFO - Adding belt path for 'petroleum-gas' at position (7, 4)
-2025-05-13 18:59:47,417 - SMT_Solver - INFO - Adding belt path for 'petroleum-gas' at position (7, 3)
-2025-05-13 18:59:47,419 - SMT_Solver - INFO - Adding belt path for 'petroleum-gas' at position (7, 2)
-2025-05-13 18:59:47,419 - SMT_Solver - INFO - Adding belt path for 'petroleum-gas' at position (7, 1)
-2025-05-13 18:59:47,419 - SMT_Solver - DEBUG - Processing output item 'plastic-bar' with data: {'input': (0, 15), 'output': (9, 15), 'paths': {'plastic-bar': [{'item': 'plastic-bar', 'path': [(15, 0), (15, 1), (15, 2), (15, 3), (15, 4), (15, 5), (15, 6), (15, 7), (15, 8), (15, 9)], 'start': (15, 0), 'destination': (15, 9), 'underground_segments': {}, 'start_splitter': None, 'dest_splitter': None}]}}
-2025-05-13 18:59:47,420 - SMT_Solver - INFO - Adding input belt for output item 'plastic-bar' at position (0, 15)
-2025-05-13 18:59:47,420 - SMT_Solver - INFO - Adding output belt for output item 'plastic-bar' at position (9, 15)
-2025-05-13 18:59:47,420 - SMT_Solver - DEBUG - Processing path data for output item 'plastic-bar'
-2025-05-13 18:59:47,420 - SMT_Solver - INFO - Adding belt path for 'plastic-bar' at position (15, 1)
-2025-05-13 18:59:47,420 - SMT_Solver - INFO - Adding belt path for 'plastic-bar' at position (15, 2)
-2025-05-13 18:59:47,421 - SMT_Solver - INFO - Adding belt path for 'plastic-bar' at position (15, 3)
-2025-05-13 18:59:47,421 - SMT_Solver - INFO - Adding belt path for 'plastic-bar' at position (15, 4)
-2025-05-13 18:59:47,422 - SMT_Solver - INFO - Adding belt path for 'plastic-bar' at position (15, 5)
-2025-05-13 18:59:47,422 - SMT_Solver - INFO - Adding belt path for 'plastic-bar' at position (15, 6)
-2025-05-13 18:59:47,422 - SMT_Solver - INFO - Adding belt path for 'plastic-bar' at position (15, 7)
-2025-05-13 18:59:47,423 - SMT_Solver - INFO - Adding belt path for 'plastic-bar' at position (15, 8)
-2025-05-13 18:59:47,423 - SMT_Solver - INFO - Finished adding manual I/O constraints. Calling solver.
-2025-05-13 18:59:47,423 - SMT_Solver - INFO - Power poles are enabled, setting up power pole constraints.
-2025-05-13 18:59:47,423 - SMT_Solver - INFO - Setting up power poles
-2025-05-13 18:59:47,423 - SMT_Solver - INFO - Creating 8 power poles of type medium-electric-pole
-2025-05-13 18:59:47,424 - SMT_Solver - INFO - Adding power pole constraints
-2025-05-13 18:59:47,424 - SMT_Solver - DEBUG - Power pole type: medium-electric-pole, radius: 3
-2025-05-13 18:59:47,424 - SMT_Solver - DEBUG - Added grid bounds constraint for pole power_pole_0
-2025-05-13 18:59:47,425 - SMT_Solver - DEBUG - Added grid bounds constraint for pole power_pole_1
-2025-05-13 18:59:47,426 - SMT_Solver - DEBUG - Added grid bounds constraint for pole power_pole_2
-2025-05-13 18:59:47,426 - SMT_Solver - DEBUG - Added grid bounds constraint for pole power_pole_3
-2025-05-13 18:59:47,427 - SMT_Solver - DEBUG - Added grid bounds constraint for pole power_pole_4
-2025-05-13 18:59:47,427 - SMT_Solver - DEBUG - Added grid bounds constraint for pole power_pole_5
-2025-05-13 18:59:47,428 - SMT_Solver - DEBUG - Added grid bounds constraint for pole power_pole_6
-2025-05-13 18:59:47,429 - SMT_Solver - DEBUG - Added grid bounds constraint for pole power_pole_7
-2025-05-13 18:59:47,429 - SMT_Solver - DEBUG - Added assembler overlap constraint for pole power_pole_0
-2025-05-13 18:59:47,429 - SMT_Solver - DEBUG - Added assembler overlap constraint for pole power_pole_1
-2025-05-13 18:59:47,429 - SMT_Solver - DEBUG - Added assembler overlap constraint for pole power_pole_2
-2025-05-13 18:59:47,429 - SMT_Solver - DEBUG - Added assembler overlap constraint for pole power_pole_3
-2025-05-13 18:59:47,429 - SMT_Solver - DEBUG - Added assembler overlap constraint for pole power_pole_4
-2025-05-13 18:59:47,430 - SMT_Solver - DEBUG - Added assembler overlap constraint for pole power_pole_5
-2025-05-13 18:59:47,430 - SMT_Solver - DEBUG - Added assembler overlap constraint for pole power_pole_6
-2025-05-13 18:59:47,430 - SMT_Solver - DEBUG - Added assembler overlap constraint for pole power_pole_7
-2025-05-13 18:59:47,436 - SMT_Solver - DEBUG - Added pole-pole overlap constraint for pole power_pole_0
-2025-05-13 18:59:47,442 - SMT_Solver - DEBUG - Added pole-pole overlap constraint for pole power_pole_1
-2025-05-13 18:59:47,446 - SMT_Solver - DEBUG - Added pole-pole overlap constraint for pole power_pole_2
-2025-05-13 18:59:47,449 - SMT_Solver - DEBUG - Added pole-pole overlap constraint for pole power_pole_3
-2025-05-13 18:59:47,452 - SMT_Solver - DEBUG - Added pole-pole overlap constraint for pole power_pole_4
-2025-05-13 18:59:47,454 - SMT_Solver - DEBUG - Added pole-pole overlap constraint for pole power_pole_5
-2025-05-13 18:59:47,455 - SMT_Solver - DEBUG - Added pole-pole overlap constraint for pole power_pole_6
-2025-05-13 18:59:47,455 - SMT_Solver - DEBUG - Added pole-pole overlap constraint for pole power_pole_7
-2025-05-13 18:59:47,455 - SMT_Solver - DEBUG - Adding coverage variables for assemblers and inserters
-2025-05-13 18:59:47,455 - SMT_Solver - DEBUG - Defining coverage conditions for assemblers
-2025-05-13 18:59:47,455 - SMT_Solver - DEBUG - Defining coverage conditions for inserters
-2025-05-13 18:59:47,455 - SMT_Solver - DEBUG - Adding hard coverage constraints - all entities must be covered
-2025-05-13 18:59:47,462 - SMT_Solver - INFO - Solver check result: sat
-2025-05-13 18:59:47,462 - SMT_Solver - INFO - === Identifying Non-Overlapping Inserters ===
-2025-05-13 18:59:47,462 - SMT_Solver - INFO - === Locking Initial Solution ===
-2025-05-13 18:59:47,462 - SMT_Solver - INFO - === Minimizing Distance for Non-Overlapping Inserters ===
-2025-05-13 18:59:47,467 - SMT_Solver - INFO - Successfully minimized inserter distances
-2025-05-13 18:59:47,468 - SMT_Solver - INFO - === Minimizing Number of Power Poles ===
-2025-05-13 18:59:47,476 - SMT_Solver - INFO - Found initial solution before minimizing power poles
-2025-05-13 18:59:47,476 - SMT_Solver - INFO - Locking positions of all entities except power poles
-2025-05-13 18:59:47,484 - SMT_Solver - INFO - Successfully minimized power poles: using 0 poles
-2025-05-13 18:59:47,485 - SMT_Solver - INFO - Final solver check result successful
-2025-05-13 18:59:47,504 - SMT_Solver - INFO - Successfully wrote model to SMT_Modules\solver_model_plastic-bar_20.smt
-2025-05-13 18:59:47,504 - SMT_Solver - INFO - Model saved to SMT_Modules\solver_model_plastic-bar_20.smt
-2025-05-13 18:59:47,504 - SMT_Solver - INFO - Starting to create assemblers based on production data.
-2025-05-13 18:59:47,506 - SMT_Solver - DEBUG - Processing item 'plastic-bar' with production data: {'amount_per_minute': 20, 'assemblers': 1, 'input_inserters': [{'id': 'coal', 'inserters': 1, 'amount': 1}, {'id': 'petroleum-gas', 'inserters': 2, 'amount': 20}], 'belts': 1, 'capacity': 0}
-2025-05-13 18:59:47,506 - SMT_Solver - INFO - Using chemical-plant for plastic-bar with dimensions 3x3
-2025-05-13 18:59:47,507 - SMT_Solver - INFO - Creating assembler for item 'plastic-bar', instance 0
-2025-05-13 18:59:47,507 - SMT_Solver - INFO - Item 'coal' is solid
-2025-05-13 18:59:47,507 - SMT_Solver - INFO - Creating input inserter for coal at coal_in_0_0_0
-2025-05-13 18:59:47,507 - SMT_Solver - INFO - Item 'petroleum-gas' is fluid
-2025-05-13 18:59:47,507 - SMT_Solver - INFO - Creating one fluid inserter for petroleum-gas
-2025-05-13 18:59:47,507 - SMT_Solver - DEBUG - Created assembler with ID: plastic-bar_0_0 and input inserters: ['coal_in_0_0_0', 'petroleum-gas_in_0_0_0']
-2025-05-13 18:59:47,507 - SMT_Solver - DEBUG - Created assembler with ID: plastic-bar_0_0 with item = plastic-bar
-2025-05-13 18:59:47,507 - SMT_Solver - DEBUG - Created assembler with ID: plastic-bar_0_0 with capacity = 0
-2025-05-13 18:59:47,507 - SMT_Solver - DEBUG - Processing item 'coal' with production data: {'amount_per_minute': 10.0, 'capacity': 0}
-2025-05-13 18:59:47,509 - SMT_Solver - DEBUG - Processing item 'petroleum-gas' with production data: {'amount_per_minute': 200.0, 'capacity': 0}
-2025-05-13 18:59:47,509 - SMT_Solver - INFO - Created 1 assemblers in total.
-2025-05-13 18:59:47,509 - SMT_Solver - INFO - Adding assembler overlap constraints to avoid global belts.
-2025-05-13 18:59:47,528 - SMT_Solver - INFO - Adding inserter overlap constraints to avoid global belts.
-2025-05-13 18:59:47,539 - SMT_Solver - INFO - Adding belt overlap constraints to avoid conflicts with global belts (different items only).
-2025-05-13 18:59:47,546 - SMT_Solver - INFO - Adding boundary constraints for assemblers.
-2025-05-13 18:59:47,546 - SMT_Solver - DEBUG - Setting boundary constraints for assembler ID plastic-bar_0_0
-2025-05-13 18:59:47,547 - SMT_Solver - INFO - Adding boundary constraints for belts and inserters.
-2025-05-13 18:59:47,547 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID coal_in_0_0_0 and belt ID coal_end_0_0_0
-2025-05-13 18:59:47,549 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID petroleum-gas_in_0_0_0 and belt ID petroleum-gas_end_0_0_0
-2025-05-13 18:59:47,549 - SMT_Solver - INFO - Adding assembler overlap constraints to prevent assembler-assembler overlap.
-2025-05-13 18:59:47,550 - SMT_Solver - INFO - Adding assembler-inserter overlap constraints.
-2025-05-13 18:59:47,550 - SMT_Solver - INFO - Adding assembler-belt overlap constraints (excluding same-item belts).
-2025-05-13 18:59:47,550 - SMT_Solver - INFO - Adding inserter overlap constraints to prevent inserter-inserter overlap.
-2025-05-13 18:59:47,550 - SMT_Solver - INFO - Adding inserter-belt overlap constraints to prevent inserters from overlapping with belts.
-2025-05-13 18:59:47,550 - SMT_Solver - INFO - Adding belt overlap constraints to prevent belt-belt overlap (except same-item belts).
-2025-05-13 18:59:47,553 - SMT_Solver - INFO - Allowing solid inserter coal_in_0_0_0 to be placed at any valid edge position
-2025-05-13 18:59:47,560 - SMT_Solver - INFO - Allowing fluid inserter petroleum-gas_in_0_0_0 to be placed at any valid edge position
-2025-05-13 18:59:47,769 - SMT_Solver - INFO - Adding output space constraints for assembler plastic-bar_0_0
-2025-05-13 18:59:47,770 - SMT_Solver - DEBUG - Adding constraints to merge input inserters with assembler edges for items with matching types.
-2025-05-13 18:59:47,770 - SMT_Solver - INFO - ===== Adding constraints to maximize belt overlaps =====
-2025-05-13 18:59:47,777 - SMT_Solver - INFO - Adding optimization goal to maximize belt overlaps.
-2025-05-13 18:59:47,780 - SMT_Solver - INFO - Power poles are enabled, setting up power pole constraints.
-2025-05-13 18:59:47,781 - SMT_Solver - INFO - Setting up power poles
-2025-05-13 18:59:47,781 - SMT_Solver - INFO - Creating 8 power poles of type medium-electric-pole
-2025-05-13 18:59:47,781 - SMT_Solver - INFO - Adding power pole constraints
-2025-05-13 18:59:47,781 - SMT_Solver - DEBUG - Assembler plastic-bar_0_0: width=3, height=3
-2025-05-13 18:59:47,781 - SMT_Solver - DEBUG - Inserters for assembler plastic-bar_0_0: ['coal_in_0_0_0', 'petroleum-gas_in_0_0_0']
-2025-05-13 18:59:47,781 - SMT_Solver - DEBUG - Power pole type: medium-electric-pole, radius: 3
-2025-05-13 18:59:47,782 - SMT_Solver - DEBUG - Added grid bounds constraint for pole power_pole_0
-2025-05-13 18:59:47,782 - SMT_Solver - DEBUG - Added grid bounds constraint for pole power_pole_1
-2025-05-13 18:59:47,782 - SMT_Solver - DEBUG - Added grid bounds constraint for pole power_pole_2
-2025-05-13 18:59:47,783 - SMT_Solver - DEBUG - Added grid bounds constraint for pole power_pole_3
-2025-05-13 18:59:47,783 - SMT_Solver - DEBUG - Added grid bounds constraint for pole power_pole_4
-2025-05-13 18:59:47,784 - SMT_Solver - DEBUG - Added grid bounds constraint for pole power_pole_5
-2025-05-13 18:59:47,784 - SMT_Solver - DEBUG - Added grid bounds constraint for pole power_pole_6
-2025-05-13 18:59:47,784 - SMT_Solver - DEBUG - Added grid bounds constraint for pole power_pole_7
-2025-05-13 18:59:47,785 - SMT_Solver - DEBUG - Added grid bounds constraint for pole power_pole_0
-2025-05-13 18:59:47,785 - SMT_Solver - DEBUG - Added grid bounds constraint for pole power_pole_1
-2025-05-13 18:59:47,786 - SMT_Solver - DEBUG - Added grid bounds constraint for pole power_pole_2
-2025-05-13 18:59:47,786 - SMT_Solver - DEBUG - Added grid bounds constraint for pole power_pole_3
-2025-05-13 18:59:47,786 - SMT_Solver - DEBUG - Added grid bounds constraint for pole power_pole_4
-2025-05-13 18:59:47,787 - SMT_Solver - DEBUG - Added grid bounds constraint for pole power_pole_5
-2025-05-13 18:59:47,788 - SMT_Solver - DEBUG - Added grid bounds constraint for pole power_pole_6
-2025-05-13 18:59:47,788 - SMT_Solver - DEBUG - Added grid bounds constraint for pole power_pole_7
-2025-05-13 18:59:47,789 - SMT_Solver - DEBUG - Added assembler overlap constraint for pole power_pole_0
-2025-05-13 18:59:47,790 - SMT_Solver - DEBUG - Added assembler overlap constraint for pole power_pole_1
-2025-05-13 18:59:47,790 - SMT_Solver - DEBUG - Added assembler overlap constraint for pole power_pole_2
-2025-05-13 18:59:47,791 - SMT_Solver - DEBUG - Added assembler overlap constraint for pole power_pole_3
-2025-05-13 18:59:47,792 - SMT_Solver - DEBUG - Added assembler overlap constraint for pole power_pole_4
-2025-05-13 18:59:47,793 - SMT_Solver - DEBUG - Added assembler overlap constraint for pole power_pole_5
-2025-05-13 18:59:47,793 - SMT_Solver - DEBUG - Added assembler overlap constraint for pole power_pole_6
-2025-05-13 18:59:47,794 - SMT_Solver - DEBUG - Added assembler overlap constraint for pole power_pole_7
-2025-05-13 18:59:47,795 - SMT_Solver - DEBUG - Added assembler overlap constraint for pole power_pole_0
-2025-05-13 18:59:47,795 - SMT_Solver - DEBUG - Added assembler overlap constraint for pole power_pole_1
-2025-05-13 18:59:47,796 - SMT_Solver - DEBUG - Added assembler overlap constraint for pole power_pole_2
-2025-05-13 18:59:47,796 - SMT_Solver - DEBUG - Added assembler overlap constraint for pole power_pole_3
-2025-05-13 18:59:47,797 - SMT_Solver - DEBUG - Added assembler overlap constraint for pole power_pole_4
-2025-05-13 18:59:47,797 - SMT_Solver - DEBUG - Added assembler overlap constraint for pole power_pole_5
-2025-05-13 18:59:47,798 - SMT_Solver - DEBUG - Added assembler overlap constraint for pole power_pole_6
-2025-05-13 18:59:47,798 - SMT_Solver - DEBUG - Added assembler overlap constraint for pole power_pole_7
-2025-05-13 18:59:47,807 - SMT_Solver - DEBUG - Added pole-pole overlap constraint for pole power_pole_0
-2025-05-13 18:59:47,815 - SMT_Solver - DEBUG - Added pole-pole overlap constraint for pole power_pole_1
-2025-05-13 18:59:47,823 - SMT_Solver - DEBUG - Added pole-pole overlap constraint for pole power_pole_2
-2025-05-13 18:59:47,832 - SMT_Solver - DEBUG - Added pole-pole overlap constraint for pole power_pole_3
-2025-05-13 18:59:47,842 - SMT_Solver - DEBUG - Added pole-pole overlap constraint for pole power_pole_4
-2025-05-13 18:59:47,850 - SMT_Solver - DEBUG - Added pole-pole overlap constraint for pole power_pole_5
-2025-05-13 18:59:47,855 - SMT_Solver - DEBUG - Added pole-pole overlap constraint for pole power_pole_6
-2025-05-13 18:59:47,859 - SMT_Solver - DEBUG - Added pole-pole overlap constraint for pole power_pole_7
-2025-05-13 18:59:47,863 - SMT_Solver - DEBUG - Added pole-pole overlap constraint for pole power_pole_0
-2025-05-13 18:59:47,867 - SMT_Solver - DEBUG - Added pole-pole overlap constraint for pole power_pole_1
-2025-05-13 18:59:47,870 - SMT_Solver - DEBUG - Added pole-pole overlap constraint for pole power_pole_2
-2025-05-13 18:59:47,873 - SMT_Solver - DEBUG - Added pole-pole overlap constraint for pole power_pole_3
-2025-05-13 18:59:47,874 - SMT_Solver - DEBUG - Added pole-pole overlap constraint for pole power_pole_4
-2025-05-13 18:59:47,876 - SMT_Solver - DEBUG - Added pole-pole overlap constraint for pole power_pole_5
-2025-05-13 18:59:47,876 - SMT_Solver - DEBUG - Added pole-pole overlap constraint for pole power_pole_6
-2025-05-13 18:59:47,876 - SMT_Solver - DEBUG - Added pole-pole overlap constraint for pole power_pole_7
-2025-05-13 18:59:47,876 - SMT_Solver - DEBUG - Adding coverage variables for assemblers and inserters
-2025-05-13 18:59:47,876 - SMT_Solver - DEBUG - Defining coverage conditions for assemblers
-2025-05-13 18:59:47,958 - SMT_Solver - DEBUG - Added coverage conditions for assembler plastic-bar_0_0: 144 conditions
-2025-05-13 18:59:47,958 - SMT_Solver - DEBUG - Defining coverage conditions for inserters
-2025-05-13 18:59:47,968 - SMT_Solver - DEBUG - Added coverage conditions for inserter coal_in_0_0_0: 16 conditions
-2025-05-13 18:59:47,977 - SMT_Solver - DEBUG - Added coverage conditions for inserter petroleum-gas_in_0_0_0: 16 conditions
-2025-05-13 18:59:47,977 - SMT_Solver - DEBUG - Adding hard coverage constraints - all entities must be covered
-2025-05-13 18:59:47,978 - SMT_Solver - DEBUG - Added hard constraint: Assembler plastic-bar_0_0 must be covered
-2025-05-13 18:59:47,978 - SMT_Solver - DEBUG - Added hard constraint: Inserter coal_in_0_0_0 must be covered
-2025-05-13 18:59:47,978 - SMT_Solver - DEBUG - Added hard constraint: Inserter petroleum-gas_in_0_0_0 must be covered
-2025-05-13 18:59:47,978 - SMT_Solver - DEBUG - Added constraint to ensure at least one pole is used
-2025-05-13 18:59:47,986 - SMT_Solver - INFO - Solver check result: unsat
-2025-05-13 18:59:47,986 - SMT_Solver - WARNING - Solver failed to find a solution.
-2025-05-13 18:59:47,994 - SMT_Solver - INFO - not sat
-2025-05-13 18:59:48,000 - SMT_Solver - INFO - not sat
+2025-05-20 16:22:15,737 - SMT_Solver - DEBUG - Loading JSON data from machine_data.json
+2025-05-20 16:22:15,738 - SMT_Solver - DEBUG - Loading JSON data from config.json
+2025-05-20 16:22:15,744 - SMT_Solver - INFO - Starting to add manual I/O constraints.
+2025-05-20 16:22:15,744 - SMT_Solver - DEBUG - Processing input item 'copper-plate' with data: {'input': (7, 0), 'output': (7, 0), 'paths': None}
+2025-05-20 16:22:15,744 - SMT_Solver - INFO - Adding input belt for item 'copper-plate' at position (7, 0)
+2025-05-20 16:22:15,745 - SMT_Solver - INFO - Adding output belt for item 'copper-plate' at position (7, 0)
+2025-05-20 16:22:15,746 - SMT_Solver - DEBUG - Processing output item 'copper-cable' with data: {'input': (0, 7), 'output': (0, 7), 'paths': None}
+2025-05-20 16:22:15,746 - SMT_Solver - INFO - Adding input belt for output item 'copper-cable' at position (0, 7)
+2025-05-20 16:22:15,747 - SMT_Solver - INFO - Adding output belt for output item 'copper-cable' at position (0, 7)
+2025-05-20 16:22:15,747 - SMT_Solver - INFO - Finished adding manual I/O constraints. Calling solver.
+2025-05-20 16:22:15,747 - SMT_Solver - WARNING - Power poles are not enabled, skipping setup.
+2025-05-20 16:22:15,750 - SMT_Solver - INFO - Solver check result: sat
+2025-05-20 16:22:15,751 - SMT_Solver - INFO - === Identifying Non-Overlapping Inserters ===
+2025-05-20 16:22:15,751 - SMT_Solver - INFO - === Locking Initial Solution ===
+2025-05-20 16:22:15,751 - SMT_Solver - INFO - === Minimizing Distance for Non-Overlapping Inserters ===
+2025-05-20 16:22:15,751 - SMT_Solver - WARNING - No distance constraints were added - no inserters to optimize
+2025-05-20 16:22:15,753 - SMT_Solver - INFO - Successfully minimized inserter distances
+2025-05-20 16:22:15,753 - SMT_Solver - WARNING - Power poles are not enabled, skipping minimization.
+2025-05-20 16:22:15,754 - SMT_Solver - INFO - Final solver check result successful
+2025-05-20 16:22:15,760 - SMT_Solver - INFO - Successfully wrote model to SMT_Modules\solver_model_copper-cable_300.smt
+2025-05-20 16:22:15,760 - SMT_Solver - INFO - Model saved to SMT_Modules\solver_model_copper-cable_300.smt
+2025-05-20 16:22:15,760 - SMT_Solver - INFO - Starting to create assemblers based on production data.
+2025-05-20 16:22:15,763 - SMT_Solver - DEBUG - Processing item 'copper-cable' with production data: {'amount_per_minute': 300, 'assemblers': 3, 'input_inserters': [{'id': 'copper-plate', 'inserters': 2, 'amount': 1}], 'belts': 1, 'capacity': 0}
+2025-05-20 16:22:15,763 - SMT_Solver - INFO - Using assembling-machine-1 for copper-cable with dimensions 3x3
+2025-05-20 16:22:15,763 - SMT_Solver - INFO - Creating assembler for item 'copper-cable', instance 0
+2025-05-20 16:22:15,764 - SMT_Solver - INFO - Item 'copper-plate' is solid
+2025-05-20 16:22:15,764 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_0_0
+2025-05-20 16:22:15,764 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_0_1
+2025-05-20 16:22:15,764 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_0 and input inserters: ['copper-plate_in_0_0_0', 'copper-plate_in_0_0_1']
+2025-05-20 16:22:15,765 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_0 with item = copper-cable
+2025-05-20 16:22:15,765 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_0 with capacity = 0
+2025-05-20 16:22:15,765 - SMT_Solver - INFO - Creating assembler for item 'copper-cable', instance 1
+2025-05-20 16:22:15,765 - SMT_Solver - INFO - Item 'copper-plate' is solid
+2025-05-20 16:22:15,765 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_1_0
+2025-05-20 16:22:15,765 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_1_1
+2025-05-20 16:22:15,766 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_1 and input inserters: ['copper-plate_in_0_1_0', 'copper-plate_in_0_1_1']
+2025-05-20 16:22:15,766 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_1 with item = copper-cable
+2025-05-20 16:22:15,766 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_1 with capacity = 0
+2025-05-20 16:22:15,766 - SMT_Solver - INFO - Creating assembler for item 'copper-cable', instance 2
+2025-05-20 16:22:15,766 - SMT_Solver - INFO - Item 'copper-plate' is solid
+2025-05-20 16:22:15,766 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_2_0
+2025-05-20 16:22:15,767 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_2_1
+2025-05-20 16:22:15,767 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_2 and input inserters: ['copper-plate_in_0_2_0', 'copper-plate_in_0_2_1']
+2025-05-20 16:22:15,767 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_2 with item = copper-cable
+2025-05-20 16:22:15,767 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_2 with capacity = 0
+2025-05-20 16:22:15,767 - SMT_Solver - DEBUG - Processing item 'copper-plate' with production data: {'amount_per_minute': 150.0, 'capacity': 0}
+2025-05-20 16:22:15,768 - SMT_Solver - INFO - Created 3 assemblers in total.
+2025-05-20 16:22:15,768 - SMT_Solver - INFO - Adding assembler overlap constraints to avoid global belts.
+2025-05-20 16:22:15,782 - SMT_Solver - INFO - Adding inserter overlap constraints to avoid global belts.
+2025-05-20 16:22:15,788 - SMT_Solver - INFO - Adding belt overlap constraints to avoid conflicts with global belts (different items only).
+2025-05-20 16:22:15,791 - SMT_Solver - INFO - Adding boundary constraints for assemblers.
+2025-05-20 16:22:15,792 - SMT_Solver - DEBUG - Setting boundary constraints for assembler ID copper-cable_0_0
+2025-05-20 16:22:15,792 - SMT_Solver - DEBUG - Setting boundary constraints for assembler ID copper-cable_0_1
+2025-05-20 16:22:15,793 - SMT_Solver - DEBUG - Setting boundary constraints for assembler ID copper-cable_0_2
+2025-05-20 16:22:15,793 - SMT_Solver - INFO - Adding boundary constraints for belts and inserters.
+2025-05-20 16:22:15,793 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_0_0 and belt ID copper-plate_end_0_0_0
+2025-05-20 16:22:15,794 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_0_1 and belt ID copper-plate_end_0_0_1
+2025-05-20 16:22:15,795 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_1_0 and belt ID copper-plate_end_0_1_0
+2025-05-20 16:22:15,796 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_1_1 and belt ID copper-plate_end_0_1_1
+2025-05-20 16:22:15,797 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_2_0 and belt ID copper-plate_end_0_2_0
+2025-05-20 16:22:15,798 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_2_1 and belt ID copper-plate_end_0_2_1
+2025-05-20 16:22:15,799 - SMT_Solver - INFO - Adding assembler overlap constraints to prevent assembler-assembler overlap.
+2025-05-20 16:22:15,804 - SMT_Solver - INFO - Adding assembler-inserter overlap constraints.
+2025-05-20 16:22:15,814 - SMT_Solver - INFO - Adding assembler-belt overlap constraints (excluding same-item belts).
+2025-05-20 16:22:15,822 - SMT_Solver - INFO - Adding inserter overlap constraints to prevent inserter-inserter overlap.
+2025-05-20 16:22:15,829 - SMT_Solver - INFO - Adding inserter-belt overlap constraints to prevent inserters from overlapping with belts.
+2025-05-20 16:22:15,836 - SMT_Solver - INFO - Adding belt overlap constraints to prevent belt-belt overlap (except same-item belts).
+2025-05-20 16:22:15,837 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_0_0 to be placed at any valid edge position
+2025-05-20 16:22:15,850 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_0_1 to be placed at any valid edge position
+2025-05-20 16:22:15,861 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_1_0 to be placed at any valid edge position
+2025-05-20 16:22:15,872 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_1_1 to be placed at any valid edge position
+2025-05-20 16:22:15,898 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_2_0 to be placed at any valid edge position
+2025-05-20 16:22:15,914 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_2_1 to be placed at any valid edge position
+2025-05-20 16:22:16,070 - SMT_Solver - INFO - Adding output space constraints for assembler copper-cable_0_0
+2025-05-20 16:22:16,165 - SMT_Solver - INFO - Adding output space constraints for assembler copper-cable_0_1
+2025-05-20 16:22:16,260 - SMT_Solver - INFO - Adding output space constraints for assembler copper-cable_0_2
+2025-05-20 16:22:16,261 - SMT_Solver - DEBUG - Adding constraints to merge input inserters with assembler edges for items with matching types.
+2025-05-20 16:22:16,263 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_0_0 and assembler copper-cable_0_1 with capcity: 0.
+2025-05-20 16:22:16,264 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_0_0 and assembler copper-cable_0_2 with capcity: 0.
+2025-05-20 16:22:16,266 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_0_1 and assembler copper-cable_0_1 with capcity: 0.
+2025-05-20 16:22:16,269 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_0_1 and assembler copper-cable_0_2 with capcity: 0.
+2025-05-20 16:22:16,271 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_1_0 and assembler copper-cable_0_0 with capcity: 0.
+2025-05-20 16:22:16,273 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_1_0 and assembler copper-cable_0_2 with capcity: 0.
+2025-05-20 16:22:16,277 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_1_1 and assembler copper-cable_0_0 with capcity: 0.
+2025-05-20 16:22:16,279 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_1_1 and assembler copper-cable_0_2 with capcity: 0.
+2025-05-20 16:22:16,281 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_2_0 and assembler copper-cable_0_0 with capcity: 0.
+2025-05-20 16:22:16,283 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_2_0 and assembler copper-cable_0_1 with capcity: 0.
+2025-05-20 16:22:16,286 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_2_1 and assembler copper-cable_0_0 with capcity: 0.
+2025-05-20 16:22:16,288 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_2_1 and assembler copper-cable_0_1 with capcity: 0.
+2025-05-20 16:22:16,288 - SMT_Solver - INFO - ===== Adding constraints to maximize belt overlaps =====
+2025-05-20 16:22:16,297 - SMT_Solver - INFO - Adding optimization goal to maximize belt overlaps.
+2025-05-20 16:22:16,302 - SMT_Solver - WARNING - Power poles are not enabled, skipping setup.
+2025-05-20 16:22:17,049 - SMT_Solver - INFO - Solver check result: sat
+2025-05-20 16:22:17,049 - SMT_Solver - INFO - === Identifying Non-Overlapping Inserters ===
+2025-05-20 16:22:17,050 - SMT_Solver - INFO - Inserter copper-plate_in_0_0_0 does not overlap but has matching item.
+2025-05-20 16:22:17,051 - SMT_Solver - INFO - Inserter copper-plate_in_0_0_1 does not overlap but has matching item.
+2025-05-20 16:22:17,051 - SMT_Solver - INFO - Inserter copper-plate_in_0_1_0 is locked (either overlaps or has no matching global belt).
+2025-05-20 16:22:17,052 - SMT_Solver - INFO - Inserter copper-plate_in_0_1_1 does not overlap but has matching item.
+2025-05-20 16:22:17,052 - SMT_Solver - INFO - Inserter copper-plate_in_0_2_0 does not overlap but has matching item.
+2025-05-20 16:22:17,052 - SMT_Solver - INFO - Inserter copper-plate_in_0_2_1 does not overlap but has matching item.
+2025-05-20 16:22:17,053 - SMT_Solver - INFO - === Locking Initial Solution ===
+2025-05-20 16:22:17,053 - SMT_Solver - INFO - Locking assembler copper-cable_0_0 at (copper-cable_0_0_x, copper-cable_0_0_y).
+2025-05-20 16:22:17,053 - SMT_Solver - INFO - Inserter copper-plate_in_0_0_0 is free to move.
+2025-05-20 16:22:17,053 - SMT_Solver - INFO - Inserter copper-plate_in_0_0_1 is free to move.
+2025-05-20 16:22:17,054 - SMT_Solver - INFO - Locking assembler copper-cable_0_1 at (copper-cable_0_1_x, copper-cable_0_1_y).
+2025-05-20 16:22:17,054 - SMT_Solver - INFO - Locking inserter copper-plate_in_0_1_0 at (copper-plate_in_0_1_0_x, copper-plate_in_0_1_0_y).
+2025-05-20 16:22:17,054 - SMT_Solver - INFO - Inserter copper-plate_in_0_1_1 is free to move.
+2025-05-20 16:22:17,054 - SMT_Solver - INFO - Locking assembler copper-cable_0_2 at (copper-cable_0_2_x, copper-cable_0_2_y).
+2025-05-20 16:22:17,055 - SMT_Solver - INFO - Inserter copper-plate_in_0_2_0 is free to move.
+2025-05-20 16:22:17,055 - SMT_Solver - INFO - Inserter copper-plate_in_0_2_1 is free to move.
+2025-05-20 16:22:17,055 - SMT_Solver - INFO - === Minimizing Distance for Non-Overlapping Inserters ===
+2025-05-20 16:22:17,056 - SMT_Solver - INFO - Found 0 producing assemblers for item copper-plate.
+2025-05-20 16:22:17,056 - SMT_Solver - INFO - Inserter copper-plate_in_0_0_0 has 2 distances to matching global belts and 0 distances to assemblers producing copper-plate.
+2025-05-20 16:22:17,057 - SMT_Solver - INFO - Found 0 producing assemblers for item copper-plate.
+2025-05-20 16:22:17,057 - SMT_Solver - INFO - Inserter copper-plate_in_0_0_1 has 2 distances to matching global belts and 0 distances to assemblers producing copper-plate.
+2025-05-20 16:22:17,058 - SMT_Solver - INFO - Found 0 producing assemblers for item copper-plate.
+2025-05-20 16:22:17,058 - SMT_Solver - INFO - Inserter copper-plate_in_0_1_1 has 2 distances to matching global belts and 0 distances to assemblers producing copper-plate.
+2025-05-20 16:22:17,059 - SMT_Solver - INFO - Found 0 producing assemblers for item copper-plate.
+2025-05-20 16:22:17,059 - SMT_Solver - INFO - Inserter copper-plate_in_0_2_0 has 2 distances to matching global belts and 0 distances to assemblers producing copper-plate.
+2025-05-20 16:22:17,061 - SMT_Solver - INFO - Found 0 producing assemblers for item copper-plate.
+2025-05-20 16:22:17,061 - SMT_Solver - INFO - Inserter copper-plate_in_0_2_1 has 2 distances to matching global belts and 0 distances to assemblers producing copper-plate.
+2025-05-20 16:22:17,061 - SMT_Solver - INFO - Added minimization constraint for total distance.
+2025-05-20 16:22:17,167 - SMT_Solver - INFO - Successfully minimized inserter distances
+2025-05-20 16:22:17,167 - SMT_Solver - WARNING - Power poles are not enabled, skipping minimization.
+2025-05-20 16:22:17,167 - SMT_Solver - INFO - Final solver check result successful
+2025-05-20 16:22:17,263 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_0: invalid literal for int() with base 10: 'copper-cable_0_0_fluid_orientation'
+2025-05-20 16:22:17,264 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_1: invalid literal for int() with base 10: 'copper-cable_0_1_fluid_orientation'
+2025-05-20 16:22:17,264 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_2: invalid literal for int() with base 10: 'copper-cable_0_2_fluid_orientation'
+2025-05-20 16:22:17,449 - SMT_Solver - INFO - Successfully wrote model to SMT_Modules\solver_model_copper-cable_300.smt
+2025-05-20 16:22:17,450 - SMT_Solver - INFO - Model saved to SMT_Modules\solver_model_copper-cable_300.smt
+2025-05-20 16:22:17,544 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_0: invalid literal for int() with base 10: 'copper-cable_0_0_fluid_orientation'
+2025-05-20 16:22:17,545 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_1: invalid literal for int() with base 10: 'copper-cable_0_1_fluid_orientation'
+2025-05-20 16:22:17,545 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_2: invalid literal for int() with base 10: 'copper-cable_0_2_fluid_orientation'
+2025-05-20 16:22:17,646 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_0: invalid literal for int() with base 10: 'copper-cable_0_0_fluid_orientation'
+2025-05-20 16:22:17,646 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_1: invalid literal for int() with base 10: 'copper-cable_0_1_fluid_orientation'
+2025-05-20 16:22:17,647 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_2: invalid literal for int() with base 10: 'copper-cable_0_2_fluid_orientation'
+2025-05-20 16:22:17,978 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_0: invalid literal for int() with base 10: 'copper-cable_0_0_fluid_orientation'
+2025-05-20 16:22:17,978 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_1: invalid literal for int() with base 10: 'copper-cable_0_1_fluid_orientation'
+2025-05-20 16:22:17,979 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_2: invalid literal for int() with base 10: 'copper-cable_0_2_fluid_orientation'
+2025-05-20 16:22:18,036 - SMT_Solver - DEBUG - Loading JSON data from machine_data.json
+2025-05-20 16:22:18,036 - SMT_Solver - DEBUG - Loading JSON data from config.json
+2025-05-20 16:22:18,036 - SMT_Solver - INFO - Starting to add manual I/O constraints.
+2025-05-20 16:22:18,036 - SMT_Solver - DEBUG - Processing input item 'copper-plate' with data: {'input': (7, 0), 'output': (7, 0), 'paths': None}
+2025-05-20 16:22:18,036 - SMT_Solver - INFO - Adding input belt for item 'copper-plate' at position (7, 0)
+2025-05-20 16:22:18,037 - SMT_Solver - INFO - Adding output belt for item 'copper-plate' at position (7, 0)
+2025-05-20 16:22:18,037 - SMT_Solver - DEBUG - Processing output item 'copper-cable' with data: {'input': (0, 7), 'output': (0, 7), 'paths': None}
+2025-05-20 16:22:18,037 - SMT_Solver - INFO - Adding input belt for output item 'copper-cable' at position (0, 7)
+2025-05-20 16:22:18,037 - SMT_Solver - INFO - Adding output belt for output item 'copper-cable' at position (0, 7)
+2025-05-20 16:22:18,038 - SMT_Solver - INFO - Finished adding manual I/O constraints. Calling solver.
+2025-05-20 16:22:18,038 - SMT_Solver - WARNING - Power poles are not enabled, skipping setup.
+2025-05-20 16:22:18,039 - SMT_Solver - INFO - Solver check result: sat
+2025-05-20 16:22:18,039 - SMT_Solver - INFO - === Identifying Non-Overlapping Inserters ===
+2025-05-20 16:22:18,039 - SMT_Solver - INFO - === Locking Initial Solution ===
+2025-05-20 16:22:18,039 - SMT_Solver - INFO - === Minimizing Distance for Non-Overlapping Inserters ===
+2025-05-20 16:22:18,039 - SMT_Solver - WARNING - No distance constraints were added - no inserters to optimize
+2025-05-20 16:22:18,040 - SMT_Solver - INFO - Successfully minimized inserter distances
+2025-05-20 16:22:18,040 - SMT_Solver - WARNING - Power poles are not enabled, skipping minimization.
+2025-05-20 16:22:18,040 - SMT_Solver - INFO - Final solver check result successful
+2025-05-20 16:22:18,043 - SMT_Solver - INFO - Successfully wrote model to SMT_Modules\solver_model_copper-cable_300.smt
+2025-05-20 16:22:18,043 - SMT_Solver - INFO - Model saved to SMT_Modules\solver_model_copper-cable_300.smt
+2025-05-20 16:22:18,043 - SMT_Solver - INFO - Starting to create assemblers based on production data.
+2025-05-20 16:22:18,045 - SMT_Solver - DEBUG - Processing item 'copper-cable' with production data: {'amount_per_minute': 300, 'assemblers': 3, 'input_inserters': [{'id': 'copper-plate', 'inserters': 2, 'amount': 1}], 'belts': 1, 'capacity': 0}
+2025-05-20 16:22:18,045 - SMT_Solver - INFO - Using assembling-machine-1 for copper-cable with dimensions 3x3
+2025-05-20 16:22:18,045 - SMT_Solver - INFO - Creating assembler for item 'copper-cable', instance 0
+2025-05-20 16:22:18,045 - SMT_Solver - INFO - Item 'copper-plate' is solid
+2025-05-20 16:22:18,045 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_0_0
+2025-05-20 16:22:18,045 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_0_1
+2025-05-20 16:22:18,045 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_0 and input inserters: ['copper-plate_in_0_0_0', 'copper-plate_in_0_0_1']
+2025-05-20 16:22:18,045 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_0 with item = copper-cable
+2025-05-20 16:22:18,046 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_0 with capacity = 0
+2025-05-20 16:22:18,046 - SMT_Solver - INFO - Creating assembler for item 'copper-cable', instance 1
+2025-05-20 16:22:18,046 - SMT_Solver - INFO - Item 'copper-plate' is solid
+2025-05-20 16:22:18,046 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_1_0
+2025-05-20 16:22:18,046 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_1_1
+2025-05-20 16:22:18,046 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_1 and input inserters: ['copper-plate_in_0_1_0', 'copper-plate_in_0_1_1']
+2025-05-20 16:22:18,046 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_1 with item = copper-cable
+2025-05-20 16:22:18,046 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_1 with capacity = 0
+2025-05-20 16:22:18,046 - SMT_Solver - INFO - Creating assembler for item 'copper-cable', instance 2
+2025-05-20 16:22:18,046 - SMT_Solver - INFO - Item 'copper-plate' is solid
+2025-05-20 16:22:18,046 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_2_0
+2025-05-20 16:22:18,046 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_2_1
+2025-05-20 16:22:18,047 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_2 and input inserters: ['copper-plate_in_0_2_0', 'copper-plate_in_0_2_1']
+2025-05-20 16:22:18,047 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_2 with item = copper-cable
+2025-05-20 16:22:18,047 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_2 with capacity = 0
+2025-05-20 16:22:18,047 - SMT_Solver - DEBUG - Processing item 'copper-plate' with production data: {'amount_per_minute': 150.0, 'capacity': 0}
+2025-05-20 16:22:18,047 - SMT_Solver - INFO - Created 3 assemblers in total.
+2025-05-20 16:22:18,047 - SMT_Solver - INFO - Adding assembler overlap constraints to avoid global belts.
+2025-05-20 16:22:18,053 - SMT_Solver - INFO - Adding inserter overlap constraints to avoid global belts.
+2025-05-20 16:22:18,057 - SMT_Solver - INFO - Adding belt overlap constraints to avoid conflicts with global belts (different items only).
+2025-05-20 16:22:18,059 - SMT_Solver - INFO - Adding boundary constraints for assemblers.
+2025-05-20 16:22:18,059 - SMT_Solver - DEBUG - Setting boundary constraints for assembler ID copper-cable_0_0
+2025-05-20 16:22:18,059 - SMT_Solver - DEBUG - Setting boundary constraints for assembler ID copper-cable_0_1
+2025-05-20 16:22:18,060 - SMT_Solver - DEBUG - Setting boundary constraints for assembler ID copper-cable_0_2
+2025-05-20 16:22:18,060 - SMT_Solver - INFO - Adding boundary constraints for belts and inserters.
+2025-05-20 16:22:18,060 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_0_0 and belt ID copper-plate_end_0_0_0
+2025-05-20 16:22:18,061 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_0_1 and belt ID copper-plate_end_0_0_1
+2025-05-20 16:22:18,061 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_1_0 and belt ID copper-plate_end_0_1_0
+2025-05-20 16:22:18,062 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_1_1 and belt ID copper-plate_end_0_1_1
+2025-05-20 16:22:18,064 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_2_0 and belt ID copper-plate_end_0_2_0
+2025-05-20 16:22:18,065 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_2_1 and belt ID copper-plate_end_0_2_1
+2025-05-20 16:22:18,065 - SMT_Solver - INFO - Adding assembler overlap constraints to prevent assembler-assembler overlap.
+2025-05-20 16:22:18,068 - SMT_Solver - INFO - Adding assembler-inserter overlap constraints.
+2025-05-20 16:22:18,075 - SMT_Solver - INFO - Adding assembler-belt overlap constraints (excluding same-item belts).
+2025-05-20 16:22:18,080 - SMT_Solver - INFO - Adding inserter overlap constraints to prevent inserter-inserter overlap.
+2025-05-20 16:22:18,085 - SMT_Solver - INFO - Adding inserter-belt overlap constraints to prevent inserters from overlapping with belts.
+2025-05-20 16:22:18,089 - SMT_Solver - INFO - Adding belt overlap constraints to prevent belt-belt overlap (except same-item belts).
+2025-05-20 16:22:18,090 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_0_0 to be placed at any valid edge position
+2025-05-20 16:22:18,098 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_0_1 to be placed at any valid edge position
+2025-05-20 16:22:18,107 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_1_0 to be placed at any valid edge position
+2025-05-20 16:22:18,114 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_1_1 to be placed at any valid edge position
+2025-05-20 16:22:18,123 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_2_0 to be placed at any valid edge position
+2025-05-20 16:22:18,129 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_2_1 to be placed at any valid edge position
+2025-05-20 16:22:18,230 - SMT_Solver - INFO - Adding output space constraints for assembler copper-cable_0_0
+2025-05-20 16:22:18,324 - SMT_Solver - INFO - Adding output space constraints for assembler copper-cable_0_1
+2025-05-20 16:22:18,420 - SMT_Solver - INFO - Adding output space constraints for assembler copper-cable_0_2
+2025-05-20 16:22:18,421 - SMT_Solver - DEBUG - Adding constraints to merge input inserters with assembler edges for items with matching types.
+2025-05-20 16:22:18,423 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_0_0 and assembler copper-cable_0_1 with capcity: 0.
+2025-05-20 16:22:18,424 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_0_0 and assembler copper-cable_0_2 with capcity: 0.
+2025-05-20 16:22:18,427 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_0_1 and assembler copper-cable_0_1 with capcity: 0.
+2025-05-20 16:22:18,428 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_0_1 and assembler copper-cable_0_2 with capcity: 0.
+2025-05-20 16:22:18,430 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_1_0 and assembler copper-cable_0_0 with capcity: 0.
+2025-05-20 16:22:18,432 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_1_0 and assembler copper-cable_0_2 with capcity: 0.
+2025-05-20 16:22:18,434 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_1_1 and assembler copper-cable_0_0 with capcity: 0.
+2025-05-20 16:22:18,436 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_1_1 and assembler copper-cable_0_2 with capcity: 0.
+2025-05-20 16:22:18,438 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_2_0 and assembler copper-cable_0_0 with capcity: 0.
+2025-05-20 16:22:18,440 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_2_0 and assembler copper-cable_0_1 with capcity: 0.
+2025-05-20 16:22:18,442 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_2_1 and assembler copper-cable_0_0 with capcity: 0.
+2025-05-20 16:22:18,445 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_2_1 and assembler copper-cable_0_1 with capcity: 0.
+2025-05-20 16:22:18,445 - SMT_Solver - INFO - ===== Adding constraints to maximize belt overlaps =====
+2025-05-20 16:22:18,454 - SMT_Solver - INFO - Adding optimization goal to maximize belt overlaps.
+2025-05-20 16:22:18,459 - SMT_Solver - WARNING - Power poles are not enabled, skipping setup.
+2025-05-20 16:22:19,158 - SMT_Solver - INFO - Solver check result: sat
+2025-05-20 16:22:19,159 - SMT_Solver - INFO - === Identifying Non-Overlapping Inserters ===
+2025-05-20 16:22:19,159 - SMT_Solver - INFO - Inserter copper-plate_in_0_0_0 does not overlap but has matching item.
+2025-05-20 16:22:19,160 - SMT_Solver - INFO - Inserter copper-plate_in_0_0_1 does not overlap but has matching item.
+2025-05-20 16:22:19,160 - SMT_Solver - INFO - Inserter copper-plate_in_0_1_0 does not overlap but has matching item.
+2025-05-20 16:22:19,161 - SMT_Solver - INFO - Inserter copper-plate_in_0_1_1 does not overlap but has matching item.
+2025-05-20 16:22:19,161 - SMT_Solver - INFO - Inserter copper-plate_in_0_2_0 does not overlap but has matching item.
+2025-05-20 16:22:19,161 - SMT_Solver - INFO - Inserter copper-plate_in_0_2_1 is locked (either overlaps or has no matching global belt).
+2025-05-20 16:22:19,161 - SMT_Solver - INFO - === Locking Initial Solution ===
+2025-05-20 16:22:19,162 - SMT_Solver - INFO - Locking assembler copper-cable_0_0 at (copper-cable_0_0_x, copper-cable_0_0_y).
+2025-05-20 16:22:19,162 - SMT_Solver - INFO - Inserter copper-plate_in_0_0_0 is free to move.
+2025-05-20 16:22:19,162 - SMT_Solver - INFO - Inserter copper-plate_in_0_0_1 is free to move.
+2025-05-20 16:22:19,162 - SMT_Solver - INFO - Locking assembler copper-cable_0_1 at (copper-cable_0_1_x, copper-cable_0_1_y).
+2025-05-20 16:22:19,162 - SMT_Solver - INFO - Inserter copper-plate_in_0_1_0 is free to move.
+2025-05-20 16:22:19,162 - SMT_Solver - INFO - Inserter copper-plate_in_0_1_1 is free to move.
+2025-05-20 16:22:19,163 - SMT_Solver - INFO - Locking assembler copper-cable_0_2 at (copper-cable_0_2_x, copper-cable_0_2_y).
+2025-05-20 16:22:19,163 - SMT_Solver - INFO - Inserter copper-plate_in_0_2_0 is free to move.
+2025-05-20 16:22:19,163 - SMT_Solver - INFO - Locking inserter copper-plate_in_0_2_1 at (copper-plate_in_0_2_1_x, copper-plate_in_0_2_1_y).
+2025-05-20 16:22:19,163 - SMT_Solver - INFO - === Minimizing Distance for Non-Overlapping Inserters ===
+2025-05-20 16:22:19,165 - SMT_Solver - INFO - Found 0 producing assemblers for item copper-plate.
+2025-05-20 16:22:19,165 - SMT_Solver - INFO - Inserter copper-plate_in_0_0_0 has 2 distances to matching global belts and 0 distances to assemblers producing copper-plate.
+2025-05-20 16:22:19,166 - SMT_Solver - INFO - Found 0 producing assemblers for item copper-plate.
+2025-05-20 16:22:19,166 - SMT_Solver - INFO - Inserter copper-plate_in_0_0_1 has 2 distances to matching global belts and 0 distances to assemblers producing copper-plate.
+2025-05-20 16:22:19,167 - SMT_Solver - INFO - Found 0 producing assemblers for item copper-plate.
+2025-05-20 16:22:19,167 - SMT_Solver - INFO - Inserter copper-plate_in_0_1_0 has 2 distances to matching global belts and 0 distances to assemblers producing copper-plate.
+2025-05-20 16:22:19,168 - SMT_Solver - INFO - Found 0 producing assemblers for item copper-plate.
+2025-05-20 16:22:19,168 - SMT_Solver - INFO - Inserter copper-plate_in_0_1_1 has 2 distances to matching global belts and 0 distances to assemblers producing copper-plate.
+2025-05-20 16:22:19,169 - SMT_Solver - INFO - Found 0 producing assemblers for item copper-plate.
+2025-05-20 16:22:19,169 - SMT_Solver - INFO - Inserter copper-plate_in_0_2_0 has 2 distances to matching global belts and 0 distances to assemblers producing copper-plate.
+2025-05-20 16:22:19,170 - SMT_Solver - INFO - Added minimization constraint for total distance.
+2025-05-20 16:22:19,290 - SMT_Solver - INFO - Successfully minimized inserter distances
+2025-05-20 16:22:19,290 - SMT_Solver - WARNING - Power poles are not enabled, skipping minimization.
+2025-05-20 16:22:19,290 - SMT_Solver - INFO - Final solver check result successful
+2025-05-20 16:22:19,429 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_0: invalid literal for int() with base 10: 'copper-cable_0_0_fluid_orientation'
+2025-05-20 16:22:19,429 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_1: invalid literal for int() with base 10: 'copper-cable_0_1_fluid_orientation'
+2025-05-20 16:22:19,430 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_2: invalid literal for int() with base 10: 'copper-cable_0_2_fluid_orientation'
+2025-05-20 16:22:19,603 - SMT_Solver - INFO - Successfully wrote model to SMT_Modules\solver_model_copper-cable_300.smt
+2025-05-20 16:22:19,603 - SMT_Solver - INFO - Model saved to SMT_Modules\solver_model_copper-cable_300.smt
+2025-05-20 16:22:19,736 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_0: invalid literal for int() with base 10: 'copper-cable_0_0_fluid_orientation'
+2025-05-20 16:22:19,737 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_1: invalid literal for int() with base 10: 'copper-cable_0_1_fluid_orientation'
+2025-05-20 16:22:19,737 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_2: invalid literal for int() with base 10: 'copper-cable_0_2_fluid_orientation'
+2025-05-20 16:22:19,871 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_0: invalid literal for int() with base 10: 'copper-cable_0_0_fluid_orientation'
+2025-05-20 16:22:19,872 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_1: invalid literal for int() with base 10: 'copper-cable_0_1_fluid_orientation'
+2025-05-20 16:22:19,872 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_2: invalid literal for int() with base 10: 'copper-cable_0_2_fluid_orientation'
+2025-05-20 16:22:20,048 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_0: invalid literal for int() with base 10: 'copper-cable_0_0_fluid_orientation'
+2025-05-20 16:22:20,048 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_1: invalid literal for int() with base 10: 'copper-cable_0_1_fluid_orientation'
+2025-05-20 16:22:20,049 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_2: invalid literal for int() with base 10: 'copper-cable_0_2_fluid_orientation'
+2025-05-20 16:22:20,105 - SMT_Solver - DEBUG - Loading JSON data from machine_data.json
+2025-05-20 16:22:20,105 - SMT_Solver - DEBUG - Loading JSON data from config.json
+2025-05-20 16:22:20,106 - SMT_Solver - INFO - Starting to add manual I/O constraints.
+2025-05-20 16:22:20,106 - SMT_Solver - DEBUG - Processing input item 'copper-plate' with data: {'input': (7, 0), 'output': (7, 0), 'paths': None}
+2025-05-20 16:22:20,106 - SMT_Solver - INFO - Adding input belt for item 'copper-plate' at position (7, 0)
+2025-05-20 16:22:20,106 - SMT_Solver - INFO - Adding output belt for item 'copper-plate' at position (7, 0)
+2025-05-20 16:22:20,106 - SMT_Solver - DEBUG - Processing output item 'copper-cable' with data: {'input': (0, 7), 'output': (0, 7), 'paths': None}
+2025-05-20 16:22:20,106 - SMT_Solver - INFO - Adding input belt for output item 'copper-cable' at position (0, 7)
+2025-05-20 16:22:20,107 - SMT_Solver - INFO - Adding output belt for output item 'copper-cable' at position (0, 7)
+2025-05-20 16:22:20,107 - SMT_Solver - INFO - Finished adding manual I/O constraints. Calling solver.
+2025-05-20 16:22:20,107 - SMT_Solver - WARNING - Power poles are not enabled, skipping setup.
+2025-05-20 16:22:20,108 - SMT_Solver - INFO - Solver check result: sat
+2025-05-20 16:22:20,108 - SMT_Solver - INFO - === Identifying Non-Overlapping Inserters ===
+2025-05-20 16:22:20,108 - SMT_Solver - INFO - === Locking Initial Solution ===
+2025-05-20 16:22:20,108 - SMT_Solver - INFO - === Minimizing Distance for Non-Overlapping Inserters ===
+2025-05-20 16:22:20,108 - SMT_Solver - WARNING - No distance constraints were added - no inserters to optimize
+2025-05-20 16:22:20,109 - SMT_Solver - INFO - Successfully minimized inserter distances
+2025-05-20 16:22:20,109 - SMT_Solver - WARNING - Power poles are not enabled, skipping minimization.
+2025-05-20 16:22:20,109 - SMT_Solver - INFO - Final solver check result successful
+2025-05-20 16:22:20,111 - SMT_Solver - INFO - Successfully wrote model to SMT_Modules\solver_model_copper-cable_300.smt
+2025-05-20 16:22:20,111 - SMT_Solver - INFO - Model saved to SMT_Modules\solver_model_copper-cable_300.smt
+2025-05-20 16:22:20,111 - SMT_Solver - INFO - Starting to create assemblers based on production data.
+2025-05-20 16:22:20,114 - SMT_Solver - DEBUG - Processing item 'copper-cable' with production data: {'amount_per_minute': 300, 'assemblers': 3, 'input_inserters': [{'id': 'copper-plate', 'inserters': 2, 'amount': 1}], 'belts': 1, 'capacity': 0}
+2025-05-20 16:22:20,114 - SMT_Solver - INFO - Using assembling-machine-1 for copper-cable with dimensions 3x3
+2025-05-20 16:22:20,114 - SMT_Solver - INFO - Creating assembler for item 'copper-cable', instance 0
+2025-05-20 16:22:20,114 - SMT_Solver - INFO - Item 'copper-plate' is solid
+2025-05-20 16:22:20,114 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_0_0
+2025-05-20 16:22:20,114 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_0_1
+2025-05-20 16:22:20,114 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_0 and input inserters: ['copper-plate_in_0_0_0', 'copper-plate_in_0_0_1']
+2025-05-20 16:22:20,114 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_0 with item = copper-cable
+2025-05-20 16:22:20,114 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_0 with capacity = 0
+2025-05-20 16:22:20,115 - SMT_Solver - INFO - Creating assembler for item 'copper-cable', instance 1
+2025-05-20 16:22:20,115 - SMT_Solver - INFO - Item 'copper-plate' is solid
+2025-05-20 16:22:20,115 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_1_0
+2025-05-20 16:22:20,115 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_1_1
+2025-05-20 16:22:20,115 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_1 and input inserters: ['copper-plate_in_0_1_0', 'copper-plate_in_0_1_1']
+2025-05-20 16:22:20,115 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_1 with item = copper-cable
+2025-05-20 16:22:20,115 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_1 with capacity = 0
+2025-05-20 16:22:20,115 - SMT_Solver - INFO - Creating assembler for item 'copper-cable', instance 2
+2025-05-20 16:22:20,115 - SMT_Solver - INFO - Item 'copper-plate' is solid
+2025-05-20 16:22:20,115 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_2_0
+2025-05-20 16:22:20,115 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_2_1
+2025-05-20 16:22:20,116 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_2 and input inserters: ['copper-plate_in_0_2_0', 'copper-plate_in_0_2_1']
+2025-05-20 16:22:20,116 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_2 with item = copper-cable
+2025-05-20 16:22:20,116 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_2 with capacity = 0
+2025-05-20 16:22:20,116 - SMT_Solver - DEBUG - Processing item 'copper-plate' with production data: {'amount_per_minute': 150.0, 'capacity': 0}
+2025-05-20 16:22:20,116 - SMT_Solver - INFO - Created 3 assemblers in total.
+2025-05-20 16:22:20,116 - SMT_Solver - INFO - Adding assembler overlap constraints to avoid global belts.
+2025-05-20 16:22:20,122 - SMT_Solver - INFO - Adding inserter overlap constraints to avoid global belts.
+2025-05-20 16:22:20,126 - SMT_Solver - INFO - Adding belt overlap constraints to avoid conflicts with global belts (different items only).
+2025-05-20 16:22:20,128 - SMT_Solver - INFO - Adding boundary constraints for assemblers.
+2025-05-20 16:22:20,128 - SMT_Solver - DEBUG - Setting boundary constraints for assembler ID copper-cable_0_0
+2025-05-20 16:22:20,129 - SMT_Solver - DEBUG - Setting boundary constraints for assembler ID copper-cable_0_1
+2025-05-20 16:22:20,129 - SMT_Solver - DEBUG - Setting boundary constraints for assembler ID copper-cable_0_2
+2025-05-20 16:22:20,129 - SMT_Solver - INFO - Adding boundary constraints for belts and inserters.
+2025-05-20 16:22:20,130 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_0_0 and belt ID copper-plate_end_0_0_0
+2025-05-20 16:22:20,130 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_0_1 and belt ID copper-plate_end_0_0_1
+2025-05-20 16:22:20,131 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_1_0 and belt ID copper-plate_end_0_1_0
+2025-05-20 16:22:20,131 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_1_1 and belt ID copper-plate_end_0_1_1
+2025-05-20 16:22:20,132 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_2_0 and belt ID copper-plate_end_0_2_0
+2025-05-20 16:22:20,133 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_2_1 and belt ID copper-plate_end_0_2_1
+2025-05-20 16:22:20,134 - SMT_Solver - INFO - Adding assembler overlap constraints to prevent assembler-assembler overlap.
+2025-05-20 16:22:20,137 - SMT_Solver - INFO - Adding assembler-inserter overlap constraints.
+2025-05-20 16:22:20,143 - SMT_Solver - INFO - Adding assembler-belt overlap constraints (excluding same-item belts).
+2025-05-20 16:22:20,149 - SMT_Solver - INFO - Adding inserter overlap constraints to prevent inserter-inserter overlap.
+2025-05-20 16:22:20,155 - SMT_Solver - INFO - Adding inserter-belt overlap constraints to prevent inserters from overlapping with belts.
+2025-05-20 16:22:20,159 - SMT_Solver - INFO - Adding belt overlap constraints to prevent belt-belt overlap (except same-item belts).
+2025-05-20 16:22:20,160 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_0_0 to be placed at any valid edge position
+2025-05-20 16:22:20,167 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_0_1 to be placed at any valid edge position
+2025-05-20 16:22:20,175 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_1_0 to be placed at any valid edge position
+2025-05-20 16:22:20,182 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_1_1 to be placed at any valid edge position
+2025-05-20 16:22:20,191 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_2_0 to be placed at any valid edge position
+2025-05-20 16:22:20,197 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_2_1 to be placed at any valid edge position
+2025-05-20 16:22:20,299 - SMT_Solver - INFO - Adding output space constraints for assembler copper-cable_0_0
+2025-05-20 16:22:20,392 - SMT_Solver - INFO - Adding output space constraints for assembler copper-cable_0_1
+2025-05-20 16:22:20,487 - SMT_Solver - INFO - Adding output space constraints for assembler copper-cable_0_2
+2025-05-20 16:22:20,487 - SMT_Solver - DEBUG - Adding constraints to merge input inserters with assembler edges for items with matching types.
+2025-05-20 16:22:20,489 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_0_0 and assembler copper-cable_0_1 with capcity: 0.
+2025-05-20 16:22:20,491 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_0_0 and assembler copper-cable_0_2 with capcity: 0.
+2025-05-20 16:22:20,493 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_0_1 and assembler copper-cable_0_1 with capcity: 0.
+2025-05-20 16:22:20,496 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_0_1 and assembler copper-cable_0_2 with capcity: 0.
+2025-05-20 16:22:20,498 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_1_0 and assembler copper-cable_0_0 with capcity: 0.
+2025-05-20 16:22:20,500 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_1_0 and assembler copper-cable_0_2 with capcity: 0.
+2025-05-20 16:22:20,502 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_1_1 and assembler copper-cable_0_0 with capcity: 0.
+2025-05-20 16:22:20,503 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_1_1 and assembler copper-cable_0_2 with capcity: 0.
+2025-05-20 16:22:20,505 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_2_0 and assembler copper-cable_0_0 with capcity: 0.
+2025-05-20 16:22:20,507 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_2_0 and assembler copper-cable_0_1 with capcity: 0.
+2025-05-20 16:22:20,509 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_2_1 and assembler copper-cable_0_0 with capcity: 0.
+2025-05-20 16:22:20,511 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_2_1 and assembler copper-cable_0_1 with capcity: 0.
+2025-05-20 16:22:20,511 - SMT_Solver - INFO - ===== Adding constraints to maximize belt overlaps =====
+2025-05-20 16:22:20,521 - SMT_Solver - INFO - Adding optimization goal to maximize belt overlaps.
+2025-05-20 16:22:20,525 - SMT_Solver - WARNING - Power poles are not enabled, skipping setup.
+2025-05-20 16:22:21,225 - SMT_Solver - INFO - Solver check result: sat
+2025-05-20 16:22:21,225 - SMT_Solver - INFO - === Identifying Non-Overlapping Inserters ===
+2025-05-20 16:22:21,226 - SMT_Solver - INFO - Inserter copper-plate_in_0_0_0 does not overlap but has matching item.
+2025-05-20 16:22:21,226 - SMT_Solver - INFO - Inserter copper-plate_in_0_0_1 does not overlap but has matching item.
+2025-05-20 16:22:21,227 - SMT_Solver - INFO - Inserter copper-plate_in_0_1_0 does not overlap but has matching item.
+2025-05-20 16:22:21,227 - SMT_Solver - INFO - Inserter copper-plate_in_0_1_1 does not overlap but has matching item.
+2025-05-20 16:22:21,227 - SMT_Solver - INFO - Inserter copper-plate_in_0_2_0 does not overlap but has matching item.
+2025-05-20 16:22:21,228 - SMT_Solver - INFO - Inserter copper-plate_in_0_2_1 is locked (either overlaps or has no matching global belt).
+2025-05-20 16:22:21,228 - SMT_Solver - INFO - === Locking Initial Solution ===
+2025-05-20 16:22:21,228 - SMT_Solver - INFO - Locking assembler copper-cable_0_0 at (copper-cable_0_0_x, copper-cable_0_0_y).
+2025-05-20 16:22:21,228 - SMT_Solver - INFO - Inserter copper-plate_in_0_0_0 is free to move.
+2025-05-20 16:22:21,228 - SMT_Solver - INFO - Inserter copper-plate_in_0_0_1 is free to move.
+2025-05-20 16:22:21,228 - SMT_Solver - INFO - Locking assembler copper-cable_0_1 at (copper-cable_0_1_x, copper-cable_0_1_y).
+2025-05-20 16:22:21,229 - SMT_Solver - INFO - Inserter copper-plate_in_0_1_0 is free to move.
+2025-05-20 16:22:21,229 - SMT_Solver - INFO - Inserter copper-plate_in_0_1_1 is free to move.
+2025-05-20 16:22:21,229 - SMT_Solver - INFO - Locking assembler copper-cable_0_2 at (copper-cable_0_2_x, copper-cable_0_2_y).
+2025-05-20 16:22:21,229 - SMT_Solver - INFO - Inserter copper-plate_in_0_2_0 is free to move.
+2025-05-20 16:22:21,229 - SMT_Solver - INFO - Locking inserter copper-plate_in_0_2_1 at (copper-plate_in_0_2_1_x, copper-plate_in_0_2_1_y).
+2025-05-20 16:22:21,230 - SMT_Solver - INFO - === Minimizing Distance for Non-Overlapping Inserters ===
+2025-05-20 16:22:21,230 - SMT_Solver - INFO - Found 0 producing assemblers for item copper-plate.
+2025-05-20 16:22:21,230 - SMT_Solver - INFO - Inserter copper-plate_in_0_0_0 has 2 distances to matching global belts and 0 distances to assemblers producing copper-plate.
+2025-05-20 16:22:21,231 - SMT_Solver - INFO - Found 0 producing assemblers for item copper-plate.
+2025-05-20 16:22:21,232 - SMT_Solver - INFO - Inserter copper-plate_in_0_0_1 has 2 distances to matching global belts and 0 distances to assemblers producing copper-plate.
+2025-05-20 16:22:21,233 - SMT_Solver - INFO - Found 0 producing assemblers for item copper-plate.
+2025-05-20 16:22:21,233 - SMT_Solver - INFO - Inserter copper-plate_in_0_1_0 has 2 distances to matching global belts and 0 distances to assemblers producing copper-plate.
+2025-05-20 16:22:21,234 - SMT_Solver - INFO - Found 0 producing assemblers for item copper-plate.
+2025-05-20 16:22:21,234 - SMT_Solver - INFO - Inserter copper-plate_in_0_1_1 has 2 distances to matching global belts and 0 distances to assemblers producing copper-plate.
+2025-05-20 16:22:21,235 - SMT_Solver - INFO - Found 0 producing assemblers for item copper-plate.
+2025-05-20 16:22:21,235 - SMT_Solver - INFO - Inserter copper-plate_in_0_2_0 has 2 distances to matching global belts and 0 distances to assemblers producing copper-plate.
+2025-05-20 16:22:21,236 - SMT_Solver - INFO - Added minimization constraint for total distance.
+2025-05-20 16:22:21,352 - SMT_Solver - INFO - Successfully minimized inserter distances
+2025-05-20 16:22:21,352 - SMT_Solver - WARNING - Power poles are not enabled, skipping minimization.
+2025-05-20 16:22:21,354 - SMT_Solver - INFO - Final solver check result successful
+2025-05-20 16:22:21,489 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_0: invalid literal for int() with base 10: 'copper-cable_0_0_fluid_orientation'
+2025-05-20 16:22:21,490 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_1: invalid literal for int() with base 10: 'copper-cable_0_1_fluid_orientation'
+2025-05-20 16:22:21,490 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_2: invalid literal for int() with base 10: 'copper-cable_0_2_fluid_orientation'
+2025-05-20 16:22:21,648 - SMT_Solver - INFO - Successfully wrote model to SMT_Modules\solver_model_copper-cable_300.smt
+2025-05-20 16:22:21,649 - SMT_Solver - INFO - Model saved to SMT_Modules\solver_model_copper-cable_300.smt
+2025-05-20 16:22:21,754 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_0: invalid literal for int() with base 10: 'copper-cable_0_0_fluid_orientation'
+2025-05-20 16:22:21,755 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_1: invalid literal for int() with base 10: 'copper-cable_0_1_fluid_orientation'
+2025-05-20 16:22:21,755 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_2: invalid literal for int() with base 10: 'copper-cable_0_2_fluid_orientation'
+2025-05-20 16:22:21,873 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_0: invalid literal for int() with base 10: 'copper-cable_0_0_fluid_orientation'
+2025-05-20 16:22:21,874 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_1: invalid literal for int() with base 10: 'copper-cable_0_1_fluid_orientation'
+2025-05-20 16:22:21,874 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_2: invalid literal for int() with base 10: 'copper-cable_0_2_fluid_orientation'
+2025-05-20 16:22:22,030 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_0: invalid literal for int() with base 10: 'copper-cable_0_0_fluid_orientation'
+2025-05-20 16:22:22,030 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_1: invalid literal for int() with base 10: 'copper-cable_0_1_fluid_orientation'
+2025-05-20 16:22:22,030 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_2: invalid literal for int() with base 10: 'copper-cable_0_2_fluid_orientation'
+2025-05-20 16:22:22,079 - SMT_Solver - DEBUG - Loading JSON data from machine_data.json
+2025-05-20 16:22:22,080 - SMT_Solver - DEBUG - Loading JSON data from config.json
+2025-05-20 16:22:22,080 - SMT_Solver - INFO - Starting to add manual I/O constraints.
+2025-05-20 16:22:22,080 - SMT_Solver - DEBUG - Processing input item 'copper-plate' with data: {'input': (7, 0), 'output': (7, 0), 'paths': None}
+2025-05-20 16:22:22,080 - SMT_Solver - INFO - Adding input belt for item 'copper-plate' at position (7, 0)
+2025-05-20 16:22:22,081 - SMT_Solver - INFO - Adding output belt for item 'copper-plate' at position (7, 0)
+2025-05-20 16:22:22,081 - SMT_Solver - DEBUG - Processing output item 'copper-cable' with data: {'input': (0, 7), 'output': (0, 7), 'paths': None}
+2025-05-20 16:22:22,081 - SMT_Solver - INFO - Adding input belt for output item 'copper-cable' at position (0, 7)
+2025-05-20 16:22:22,081 - SMT_Solver - INFO - Adding output belt for output item 'copper-cable' at position (0, 7)
+2025-05-20 16:22:22,082 - SMT_Solver - INFO - Finished adding manual I/O constraints. Calling solver.
+2025-05-20 16:22:22,082 - SMT_Solver - WARNING - Power poles are not enabled, skipping setup.
+2025-05-20 16:22:22,083 - SMT_Solver - INFO - Solver check result: sat
+2025-05-20 16:22:22,083 - SMT_Solver - INFO - === Identifying Non-Overlapping Inserters ===
+2025-05-20 16:22:22,083 - SMT_Solver - INFO - === Locking Initial Solution ===
+2025-05-20 16:22:22,083 - SMT_Solver - INFO - === Minimizing Distance for Non-Overlapping Inserters ===
+2025-05-20 16:22:22,083 - SMT_Solver - WARNING - No distance constraints were added - no inserters to optimize
+2025-05-20 16:22:22,084 - SMT_Solver - INFO - Successfully minimized inserter distances
+2025-05-20 16:22:22,084 - SMT_Solver - WARNING - Power poles are not enabled, skipping minimization.
+2025-05-20 16:22:22,084 - SMT_Solver - INFO - Final solver check result successful
+2025-05-20 16:22:22,085 - SMT_Solver - INFO - Successfully wrote model to SMT_Modules\solver_model_copper-cable_300.smt
+2025-05-20 16:22:22,085 - SMT_Solver - INFO - Model saved to SMT_Modules\solver_model_copper-cable_300.smt
+2025-05-20 16:22:22,085 - SMT_Solver - INFO - Starting to create assemblers based on production data.
+2025-05-20 16:22:22,088 - SMT_Solver - DEBUG - Processing item 'copper-cable' with production data: {'amount_per_minute': 300, 'assemblers': 3, 'input_inserters': [{'id': 'copper-plate', 'inserters': 2, 'amount': 1}], 'belts': 1, 'capacity': 0}
+2025-05-20 16:22:22,088 - SMT_Solver - INFO - Using assembling-machine-1 for copper-cable with dimensions 3x3
+2025-05-20 16:22:22,088 - SMT_Solver - INFO - Creating assembler for item 'copper-cable', instance 0
+2025-05-20 16:22:22,088 - SMT_Solver - INFO - Item 'copper-plate' is solid
+2025-05-20 16:22:22,088 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_0_0
+2025-05-20 16:22:22,088 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_0_1
+2025-05-20 16:22:22,088 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_0 and input inserters: ['copper-plate_in_0_0_0', 'copper-plate_in_0_0_1']
+2025-05-20 16:22:22,088 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_0 with item = copper-cable
+2025-05-20 16:22:22,088 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_0 with capacity = 0
+2025-05-20 16:22:22,088 - SMT_Solver - INFO - Creating assembler for item 'copper-cable', instance 1
+2025-05-20 16:22:22,088 - SMT_Solver - INFO - Item 'copper-plate' is solid
+2025-05-20 16:22:22,089 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_1_0
+2025-05-20 16:22:22,089 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_1_1
+2025-05-20 16:22:22,089 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_1 and input inserters: ['copper-plate_in_0_1_0', 'copper-plate_in_0_1_1']
+2025-05-20 16:22:22,089 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_1 with item = copper-cable
+2025-05-20 16:22:22,089 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_1 with capacity = 0
+2025-05-20 16:22:22,089 - SMT_Solver - INFO - Creating assembler for item 'copper-cable', instance 2
+2025-05-20 16:22:22,089 - SMT_Solver - INFO - Item 'copper-plate' is solid
+2025-05-20 16:22:22,089 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_2_0
+2025-05-20 16:22:22,089 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_2_1
+2025-05-20 16:22:22,090 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_2 and input inserters: ['copper-plate_in_0_2_0', 'copper-plate_in_0_2_1']
+2025-05-20 16:22:22,090 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_2 with item = copper-cable
+2025-05-20 16:22:22,090 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_2 with capacity = 0
+2025-05-20 16:22:22,090 - SMT_Solver - DEBUG - Processing item 'copper-plate' with production data: {'amount_per_minute': 150.0, 'capacity': 0}
+2025-05-20 16:22:22,090 - SMT_Solver - INFO - Created 3 assemblers in total.
+2025-05-20 16:22:22,090 - SMT_Solver - INFO - Adding assembler overlap constraints to avoid global belts.
+2025-05-20 16:22:22,097 - SMT_Solver - INFO - Adding inserter overlap constraints to avoid global belts.
+2025-05-20 16:22:22,101 - SMT_Solver - INFO - Adding belt overlap constraints to avoid conflicts with global belts (different items only).
+2025-05-20 16:22:22,103 - SMT_Solver - INFO - Adding boundary constraints for assemblers.
+2025-05-20 16:22:22,103 - SMT_Solver - DEBUG - Setting boundary constraints for assembler ID copper-cable_0_0
+2025-05-20 16:22:22,103 - SMT_Solver - DEBUG - Setting boundary constraints for assembler ID copper-cable_0_1
+2025-05-20 16:22:22,103 - SMT_Solver - DEBUG - Setting boundary constraints for assembler ID copper-cable_0_2
+2025-05-20 16:22:22,104 - SMT_Solver - INFO - Adding boundary constraints for belts and inserters.
+2025-05-20 16:22:22,104 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_0_0 and belt ID copper-plate_end_0_0_0
+2025-05-20 16:22:22,105 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_0_1 and belt ID copper-plate_end_0_0_1
+2025-05-20 16:22:22,105 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_1_0 and belt ID copper-plate_end_0_1_0
+2025-05-20 16:22:22,106 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_1_1 and belt ID copper-plate_end_0_1_1
+2025-05-20 16:22:22,107 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_2_0 and belt ID copper-plate_end_0_2_0
+2025-05-20 16:22:22,107 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_2_1 and belt ID copper-plate_end_0_2_1
+2025-05-20 16:22:22,108 - SMT_Solver - INFO - Adding assembler overlap constraints to prevent assembler-assembler overlap.
+2025-05-20 16:22:22,111 - SMT_Solver - INFO - Adding assembler-inserter overlap constraints.
+2025-05-20 16:22:22,117 - SMT_Solver - INFO - Adding assembler-belt overlap constraints (excluding same-item belts).
+2025-05-20 16:22:22,123 - SMT_Solver - INFO - Adding inserter overlap constraints to prevent inserter-inserter overlap.
+2025-05-20 16:22:22,128 - SMT_Solver - INFO - Adding inserter-belt overlap constraints to prevent inserters from overlapping with belts.
+2025-05-20 16:22:22,132 - SMT_Solver - INFO - Adding belt overlap constraints to prevent belt-belt overlap (except same-item belts).
+2025-05-20 16:22:22,133 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_0_0 to be placed at any valid edge position
+2025-05-20 16:22:22,140 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_0_1 to be placed at any valid edge position
+2025-05-20 16:22:22,147 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_1_0 to be placed at any valid edge position
+2025-05-20 16:22:22,155 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_1_1 to be placed at any valid edge position
+2025-05-20 16:22:22,163 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_2_0 to be placed at any valid edge position
+2025-05-20 16:22:22,170 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_2_1 to be placed at any valid edge position
+2025-05-20 16:22:22,269 - SMT_Solver - INFO - Adding output space constraints for assembler copper-cable_0_0
+2025-05-20 16:22:22,363 - SMT_Solver - INFO - Adding output space constraints for assembler copper-cable_0_1
+2025-05-20 16:22:22,457 - SMT_Solver - INFO - Adding output space constraints for assembler copper-cable_0_2
+2025-05-20 16:22:22,458 - SMT_Solver - DEBUG - Adding constraints to merge input inserters with assembler edges for items with matching types.
+2025-05-20 16:22:22,460 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_0_0 and assembler copper-cable_0_1 with capcity: 0.
+2025-05-20 16:22:22,462 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_0_0 and assembler copper-cable_0_2 with capcity: 0.
+2025-05-20 16:22:22,464 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_0_1 and assembler copper-cable_0_1 with capcity: 0.
+2025-05-20 16:22:22,466 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_0_1 and assembler copper-cable_0_2 with capcity: 0.
+2025-05-20 16:22:22,468 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_1_0 and assembler copper-cable_0_0 with capcity: 0.
+2025-05-20 16:22:22,470 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_1_0 and assembler copper-cable_0_2 with capcity: 0.
+2025-05-20 16:22:22,472 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_1_1 and assembler copper-cable_0_0 with capcity: 0.
+2025-05-20 16:22:22,474 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_1_1 and assembler copper-cable_0_2 with capcity: 0.
+2025-05-20 16:22:22,476 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_2_0 and assembler copper-cable_0_0 with capcity: 0.
+2025-05-20 16:22:22,478 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_2_0 and assembler copper-cable_0_1 with capcity: 0.
+2025-05-20 16:22:22,480 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_2_1 and assembler copper-cable_0_0 with capcity: 0.
+2025-05-20 16:22:22,482 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_2_1 and assembler copper-cable_0_1 with capcity: 0.
+2025-05-20 16:22:22,483 - SMT_Solver - INFO - ===== Adding constraints to maximize belt overlaps =====
+2025-05-20 16:22:22,492 - SMT_Solver - INFO - Adding optimization goal to maximize belt overlaps.
+2025-05-20 16:22:22,496 - SMT_Solver - WARNING - Power poles are not enabled, skipping setup.
+2025-05-20 16:22:23,233 - SMT_Solver - INFO - Solver check result: sat
+2025-05-20 16:22:23,233 - SMT_Solver - INFO - === Identifying Non-Overlapping Inserters ===
+2025-05-20 16:22:23,234 - SMT_Solver - INFO - Inserter copper-plate_in_0_0_0 does not overlap but has matching item.
+2025-05-20 16:22:23,234 - SMT_Solver - INFO - Inserter copper-plate_in_0_0_1 does not overlap but has matching item.
+2025-05-20 16:22:23,234 - SMT_Solver - INFO - Inserter copper-plate_in_0_1_0 does not overlap but has matching item.
+2025-05-20 16:22:23,235 - SMT_Solver - INFO - Inserter copper-plate_in_0_1_1 does not overlap but has matching item.
+2025-05-20 16:22:23,235 - SMT_Solver - INFO - Inserter copper-plate_in_0_2_0 is locked (either overlaps or has no matching global belt).
+2025-05-20 16:22:23,236 - SMT_Solver - INFO - Inserter copper-plate_in_0_2_1 does not overlap but has matching item.
+2025-05-20 16:22:23,236 - SMT_Solver - INFO - === Locking Initial Solution ===
+2025-05-20 16:22:23,236 - SMT_Solver - INFO - Locking assembler copper-cable_0_0 at (copper-cable_0_0_x, copper-cable_0_0_y).
+2025-05-20 16:22:23,236 - SMT_Solver - INFO - Inserter copper-plate_in_0_0_0 is free to move.
+2025-05-20 16:22:23,236 - SMT_Solver - INFO - Inserter copper-plate_in_0_0_1 is free to move.
+2025-05-20 16:22:23,236 - SMT_Solver - INFO - Locking assembler copper-cable_0_1 at (copper-cable_0_1_x, copper-cable_0_1_y).
+2025-05-20 16:22:23,237 - SMT_Solver - INFO - Inserter copper-plate_in_0_1_0 is free to move.
+2025-05-20 16:22:23,237 - SMT_Solver - INFO - Inserter copper-plate_in_0_1_1 is free to move.
+2025-05-20 16:22:23,237 - SMT_Solver - INFO - Locking assembler copper-cable_0_2 at (copper-cable_0_2_x, copper-cable_0_2_y).
+2025-05-20 16:22:23,237 - SMT_Solver - INFO - Locking inserter copper-plate_in_0_2_0 at (copper-plate_in_0_2_0_x, copper-plate_in_0_2_0_y).
+2025-05-20 16:22:23,238 - SMT_Solver - INFO - Inserter copper-plate_in_0_2_1 is free to move.
+2025-05-20 16:22:23,238 - SMT_Solver - INFO - === Minimizing Distance for Non-Overlapping Inserters ===
+2025-05-20 16:22:23,238 - SMT_Solver - INFO - Found 0 producing assemblers for item copper-plate.
+2025-05-20 16:22:23,238 - SMT_Solver - INFO - Inserter copper-plate_in_0_0_0 has 2 distances to matching global belts and 0 distances to assemblers producing copper-plate.
+2025-05-20 16:22:23,240 - SMT_Solver - INFO - Found 0 producing assemblers for item copper-plate.
+2025-05-20 16:22:23,240 - SMT_Solver - INFO - Inserter copper-plate_in_0_0_1 has 2 distances to matching global belts and 0 distances to assemblers producing copper-plate.
+2025-05-20 16:22:23,241 - SMT_Solver - INFO - Found 0 producing assemblers for item copper-plate.
+2025-05-20 16:22:23,241 - SMT_Solver - INFO - Inserter copper-plate_in_0_1_0 has 2 distances to matching global belts and 0 distances to assemblers producing copper-plate.
+2025-05-20 16:22:23,243 - SMT_Solver - INFO - Found 0 producing assemblers for item copper-plate.
+2025-05-20 16:22:23,243 - SMT_Solver - INFO - Inserter copper-plate_in_0_1_1 has 2 distances to matching global belts and 0 distances to assemblers producing copper-plate.
+2025-05-20 16:22:23,244 - SMT_Solver - INFO - Found 0 producing assemblers for item copper-plate.
+2025-05-20 16:22:23,244 - SMT_Solver - INFO - Inserter copper-plate_in_0_2_1 has 2 distances to matching global belts and 0 distances to assemblers producing copper-plate.
+2025-05-20 16:22:23,244 - SMT_Solver - INFO - Added minimization constraint for total distance.
+2025-05-20 16:22:23,334 - SMT_Solver - INFO - Successfully minimized inserter distances
+2025-05-20 16:22:23,334 - SMT_Solver - WARNING - Power poles are not enabled, skipping minimization.
+2025-05-20 16:22:23,334 - SMT_Solver - INFO - Final solver check result successful
+2025-05-20 16:22:23,445 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_0: invalid literal for int() with base 10: 'copper-cable_0_0_fluid_orientation'
+2025-05-20 16:22:23,446 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_1: invalid literal for int() with base 10: 'copper-cable_0_1_fluid_orientation'
+2025-05-20 16:22:23,446 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_2: invalid literal for int() with base 10: 'copper-cable_0_2_fluid_orientation'
+2025-05-20 16:22:23,609 - SMT_Solver - INFO - Successfully wrote model to SMT_Modules\solver_model_copper-cable_300.smt
+2025-05-20 16:22:23,609 - SMT_Solver - INFO - Model saved to SMT_Modules\solver_model_copper-cable_300.smt
+2025-05-20 16:22:23,693 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_0: invalid literal for int() with base 10: 'copper-cable_0_0_fluid_orientation'
+2025-05-20 16:22:23,694 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_1: invalid literal for int() with base 10: 'copper-cable_0_1_fluid_orientation'
+2025-05-20 16:22:23,694 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_2: invalid literal for int() with base 10: 'copper-cable_0_2_fluid_orientation'
+2025-05-20 16:22:23,775 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_0: invalid literal for int() with base 10: 'copper-cable_0_0_fluid_orientation'
+2025-05-20 16:22:23,776 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_1: invalid literal for int() with base 10: 'copper-cable_0_1_fluid_orientation'
+2025-05-20 16:22:23,777 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_2: invalid literal for int() with base 10: 'copper-cable_0_2_fluid_orientation'
+2025-05-20 16:22:23,904 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_0: invalid literal for int() with base 10: 'copper-cable_0_0_fluid_orientation'
+2025-05-20 16:22:23,904 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_1: invalid literal for int() with base 10: 'copper-cable_0_1_fluid_orientation'
+2025-05-20 16:22:23,904 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_2: invalid literal for int() with base 10: 'copper-cable_0_2_fluid_orientation'
+2025-05-20 16:22:23,964 - SMT_Solver - DEBUG - Loading JSON data from machine_data.json
+2025-05-20 16:22:23,965 - SMT_Solver - DEBUG - Loading JSON data from config.json
+2025-05-20 16:22:23,965 - SMT_Solver - INFO - Starting to add manual I/O constraints.
+2025-05-20 16:22:23,965 - SMT_Solver - DEBUG - Processing input item 'copper-plate' with data: {'input': (7, 0), 'output': (7, 0), 'paths': None}
+2025-05-20 16:22:23,965 - SMT_Solver - INFO - Adding input belt for item 'copper-plate' at position (7, 0)
+2025-05-20 16:22:23,966 - SMT_Solver - INFO - Adding output belt for item 'copper-plate' at position (7, 0)
+2025-05-20 16:22:23,966 - SMT_Solver - DEBUG - Processing output item 'copper-cable' with data: {'input': (0, 7), 'output': (0, 7), 'paths': None}
+2025-05-20 16:22:23,966 - SMT_Solver - INFO - Adding input belt for output item 'copper-cable' at position (0, 7)
+2025-05-20 16:22:23,966 - SMT_Solver - INFO - Adding output belt for output item 'copper-cable' at position (0, 7)
+2025-05-20 16:22:23,966 - SMT_Solver - INFO - Finished adding manual I/O constraints. Calling solver.
+2025-05-20 16:22:23,966 - SMT_Solver - WARNING - Power poles are not enabled, skipping setup.
+2025-05-20 16:22:23,967 - SMT_Solver - INFO - Solver check result: sat
+2025-05-20 16:22:23,968 - SMT_Solver - INFO - === Identifying Non-Overlapping Inserters ===
+2025-05-20 16:22:23,968 - SMT_Solver - INFO - === Locking Initial Solution ===
+2025-05-20 16:22:23,968 - SMT_Solver - INFO - === Minimizing Distance for Non-Overlapping Inserters ===
+2025-05-20 16:22:23,969 - SMT_Solver - WARNING - No distance constraints were added - no inserters to optimize
+2025-05-20 16:22:23,969 - SMT_Solver - INFO - Successfully minimized inserter distances
+2025-05-20 16:22:23,970 - SMT_Solver - WARNING - Power poles are not enabled, skipping minimization.
+2025-05-20 16:22:23,970 - SMT_Solver - INFO - Final solver check result successful
+2025-05-20 16:22:23,972 - SMT_Solver - INFO - Successfully wrote model to SMT_Modules\solver_model_copper-cable_300.smt
+2025-05-20 16:22:23,972 - SMT_Solver - INFO - Model saved to SMT_Modules\solver_model_copper-cable_300.smt
+2025-05-20 16:22:23,972 - SMT_Solver - INFO - Starting to create assemblers based on production data.
+2025-05-20 16:22:23,973 - SMT_Solver - DEBUG - Processing item 'copper-cable' with production data: {'amount_per_minute': 300, 'assemblers': 3, 'input_inserters': [{'id': 'copper-plate', 'inserters': 2, 'amount': 1}], 'belts': 1, 'capacity': 0}
+2025-05-20 16:22:23,973 - SMT_Solver - INFO - Using assembling-machine-1 for copper-cable with dimensions 3x3
+2025-05-20 16:22:23,973 - SMT_Solver - INFO - Creating assembler for item 'copper-cable', instance 0
+2025-05-20 16:22:23,973 - SMT_Solver - INFO - Item 'copper-plate' is solid
+2025-05-20 16:22:23,973 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_0_0
+2025-05-20 16:22:23,974 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_0_1
+2025-05-20 16:22:23,974 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_0 and input inserters: ['copper-plate_in_0_0_0', 'copper-plate_in_0_0_1']
+2025-05-20 16:22:23,974 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_0 with item = copper-cable
+2025-05-20 16:22:23,974 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_0 with capacity = 0
+2025-05-20 16:22:23,974 - SMT_Solver - INFO - Creating assembler for item 'copper-cable', instance 1
+2025-05-20 16:22:23,974 - SMT_Solver - INFO - Item 'copper-plate' is solid
+2025-05-20 16:22:23,974 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_1_0
+2025-05-20 16:22:23,974 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_1_1
+2025-05-20 16:22:23,974 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_1 and input inserters: ['copper-plate_in_0_1_0', 'copper-plate_in_0_1_1']
+2025-05-20 16:22:23,975 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_1 with item = copper-cable
+2025-05-20 16:22:23,975 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_1 with capacity = 0
+2025-05-20 16:22:23,975 - SMT_Solver - INFO - Creating assembler for item 'copper-cable', instance 2
+2025-05-20 16:22:23,975 - SMT_Solver - INFO - Item 'copper-plate' is solid
+2025-05-20 16:22:23,975 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_2_0
+2025-05-20 16:22:23,975 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_2_1
+2025-05-20 16:22:23,975 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_2 and input inserters: ['copper-plate_in_0_2_0', 'copper-plate_in_0_2_1']
+2025-05-20 16:22:23,975 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_2 with item = copper-cable
+2025-05-20 16:22:23,976 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_2 with capacity = 0
+2025-05-20 16:22:23,976 - SMT_Solver - DEBUG - Processing item 'copper-plate' with production data: {'amount_per_minute': 150.0, 'capacity': 0}
+2025-05-20 16:22:23,976 - SMT_Solver - INFO - Created 3 assemblers in total.
+2025-05-20 16:22:23,976 - SMT_Solver - INFO - Adding assembler overlap constraints to avoid global belts.
+2025-05-20 16:22:23,982 - SMT_Solver - INFO - Adding inserter overlap constraints to avoid global belts.
+2025-05-20 16:22:23,987 - SMT_Solver - INFO - Adding belt overlap constraints to avoid conflicts with global belts (different items only).
+2025-05-20 16:22:23,989 - SMT_Solver - INFO - Adding boundary constraints for assemblers.
+2025-05-20 16:22:23,989 - SMT_Solver - DEBUG - Setting boundary constraints for assembler ID copper-cable_0_0
+2025-05-20 16:22:23,989 - SMT_Solver - DEBUG - Setting boundary constraints for assembler ID copper-cable_0_1
+2025-05-20 16:22:23,989 - SMT_Solver - DEBUG - Setting boundary constraints for assembler ID copper-cable_0_2
+2025-05-20 16:22:23,990 - SMT_Solver - INFO - Adding boundary constraints for belts and inserters.
+2025-05-20 16:22:23,990 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_0_0 and belt ID copper-plate_end_0_0_0
+2025-05-20 16:22:23,991 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_0_1 and belt ID copper-plate_end_0_0_1
+2025-05-20 16:22:23,991 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_1_0 and belt ID copper-plate_end_0_1_0
+2025-05-20 16:22:23,992 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_1_1 and belt ID copper-plate_end_0_1_1
+2025-05-20 16:22:23,992 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_2_0 and belt ID copper-plate_end_0_2_0
+2025-05-20 16:22:23,993 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_2_1 and belt ID copper-plate_end_0_2_1
+2025-05-20 16:22:23,994 - SMT_Solver - INFO - Adding assembler overlap constraints to prevent assembler-assembler overlap.
+2025-05-20 16:22:23,996 - SMT_Solver - INFO - Adding assembler-inserter overlap constraints.
+2025-05-20 16:22:24,002 - SMT_Solver - INFO - Adding assembler-belt overlap constraints (excluding same-item belts).
+2025-05-20 16:22:24,009 - SMT_Solver - INFO - Adding inserter overlap constraints to prevent inserter-inserter overlap.
+2025-05-20 16:22:24,014 - SMT_Solver - INFO - Adding inserter-belt overlap constraints to prevent inserters from overlapping with belts.
+2025-05-20 16:22:24,020 - SMT_Solver - INFO - Adding belt overlap constraints to prevent belt-belt overlap (except same-item belts).
+2025-05-20 16:22:24,020 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_0_0 to be placed at any valid edge position
+2025-05-20 16:22:24,028 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_0_1 to be placed at any valid edge position
+2025-05-20 16:22:24,035 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_1_0 to be placed at any valid edge position
+2025-05-20 16:22:24,043 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_1_1 to be placed at any valid edge position
+2025-05-20 16:22:24,051 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_2_0 to be placed at any valid edge position
+2025-05-20 16:22:24,058 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_2_1 to be placed at any valid edge position
+2025-05-20 16:22:24,163 - SMT_Solver - INFO - Adding output space constraints for assembler copper-cable_0_0
+2025-05-20 16:22:24,258 - SMT_Solver - INFO - Adding output space constraints for assembler copper-cable_0_1
+2025-05-20 16:22:24,353 - SMT_Solver - INFO - Adding output space constraints for assembler copper-cable_0_2
+2025-05-20 16:22:24,353 - SMT_Solver - DEBUG - Adding constraints to merge input inserters with assembler edges for items with matching types.
+2025-05-20 16:22:24,355 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_0_0 and assembler copper-cable_0_1 with capcity: 0.
+2025-05-20 16:22:24,358 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_0_0 and assembler copper-cable_0_2 with capcity: 0.
+2025-05-20 16:22:24,361 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_0_1 and assembler copper-cable_0_1 with capcity: 0.
+2025-05-20 16:22:24,363 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_0_1 and assembler copper-cable_0_2 with capcity: 0.
+2025-05-20 16:22:24,365 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_1_0 and assembler copper-cable_0_0 with capcity: 0.
+2025-05-20 16:22:24,367 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_1_0 and assembler copper-cable_0_2 with capcity: 0.
+2025-05-20 16:22:24,369 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_1_1 and assembler copper-cable_0_0 with capcity: 0.
+2025-05-20 16:22:24,371 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_1_1 and assembler copper-cable_0_2 with capcity: 0.
+2025-05-20 16:22:24,373 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_2_0 and assembler copper-cable_0_0 with capcity: 0.
+2025-05-20 16:22:24,375 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_2_0 and assembler copper-cable_0_1 with capcity: 0.
+2025-05-20 16:22:24,377 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_2_1 and assembler copper-cable_0_0 with capcity: 0.
+2025-05-20 16:22:24,379 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_2_1 and assembler copper-cable_0_1 with capcity: 0.
+2025-05-20 16:22:24,379 - SMT_Solver - INFO - ===== Adding constraints to maximize belt overlaps =====
+2025-05-20 16:22:24,388 - SMT_Solver - INFO - Adding optimization goal to maximize belt overlaps.
+2025-05-20 16:22:24,392 - SMT_Solver - WARNING - Power poles are not enabled, skipping setup.
+2025-05-20 16:22:25,233 - SMT_Solver - INFO - Solver check result: sat
+2025-05-20 16:22:25,233 - SMT_Solver - INFO - === Identifying Non-Overlapping Inserters ===
+2025-05-20 16:22:25,234 - SMT_Solver - INFO - Inserter copper-plate_in_0_0_0 does not overlap but has matching item.
+2025-05-20 16:22:25,234 - SMT_Solver - INFO - Inserter copper-plate_in_0_0_1 is locked (either overlaps or has no matching global belt).
+2025-05-20 16:22:25,235 - SMT_Solver - INFO - Inserter copper-plate_in_0_1_0 does not overlap but has matching item.
+2025-05-20 16:22:25,235 - SMT_Solver - INFO - Inserter copper-plate_in_0_1_1 does not overlap but has matching item.
+2025-05-20 16:22:25,236 - SMT_Solver - INFO - Inserter copper-plate_in_0_2_0 does not overlap but has matching item.
+2025-05-20 16:22:25,236 - SMT_Solver - INFO - Inserter copper-plate_in_0_2_1 does not overlap but has matching item.
+2025-05-20 16:22:25,236 - SMT_Solver - INFO - === Locking Initial Solution ===
+2025-05-20 16:22:25,237 - SMT_Solver - INFO - Locking assembler copper-cable_0_0 at (copper-cable_0_0_x, copper-cable_0_0_y).
+2025-05-20 16:22:25,237 - SMT_Solver - INFO - Inserter copper-plate_in_0_0_0 is free to move.
+2025-05-20 16:22:25,237 - SMT_Solver - INFO - Locking inserter copper-plate_in_0_0_1 at (copper-plate_in_0_0_1_x, copper-plate_in_0_0_1_y).
+2025-05-20 16:22:25,237 - SMT_Solver - INFO - Locking assembler copper-cable_0_1 at (copper-cable_0_1_x, copper-cable_0_1_y).
+2025-05-20 16:22:25,237 - SMT_Solver - INFO - Inserter copper-plate_in_0_1_0 is free to move.
+2025-05-20 16:22:25,238 - SMT_Solver - INFO - Inserter copper-plate_in_0_1_1 is free to move.
+2025-05-20 16:22:25,238 - SMT_Solver - INFO - Locking assembler copper-cable_0_2 at (copper-cable_0_2_x, copper-cable_0_2_y).
+2025-05-20 16:22:25,238 - SMT_Solver - INFO - Inserter copper-plate_in_0_2_0 is free to move.
+2025-05-20 16:22:25,238 - SMT_Solver - INFO - Inserter copper-plate_in_0_2_1 is free to move.
+2025-05-20 16:22:25,238 - SMT_Solver - INFO - === Minimizing Distance for Non-Overlapping Inserters ===
+2025-05-20 16:22:25,239 - SMT_Solver - INFO - Found 0 producing assemblers for item copper-plate.
+2025-05-20 16:22:25,239 - SMT_Solver - INFO - Inserter copper-plate_in_0_0_0 has 2 distances to matching global belts and 0 distances to assemblers producing copper-plate.
+2025-05-20 16:22:25,240 - SMT_Solver - INFO - Found 0 producing assemblers for item copper-plate.
+2025-05-20 16:22:25,241 - SMT_Solver - INFO - Inserter copper-plate_in_0_1_0 has 2 distances to matching global belts and 0 distances to assemblers producing copper-plate.
+2025-05-20 16:22:25,242 - SMT_Solver - INFO - Found 0 producing assemblers for item copper-plate.
+2025-05-20 16:22:25,242 - SMT_Solver - INFO - Inserter copper-plate_in_0_1_1 has 2 distances to matching global belts and 0 distances to assemblers producing copper-plate.
+2025-05-20 16:22:25,243 - SMT_Solver - INFO - Found 0 producing assemblers for item copper-plate.
+2025-05-20 16:22:25,243 - SMT_Solver - INFO - Inserter copper-plate_in_0_2_0 has 2 distances to matching global belts and 0 distances to assemblers producing copper-plate.
+2025-05-20 16:22:25,244 - SMT_Solver - INFO - Found 0 producing assemblers for item copper-plate.
+2025-05-20 16:22:25,244 - SMT_Solver - INFO - Inserter copper-plate_in_0_2_1 has 2 distances to matching global belts and 0 distances to assemblers producing copper-plate.
+2025-05-20 16:22:25,245 - SMT_Solver - INFO - Added minimization constraint for total distance.
+2025-05-20 16:22:25,418 - SMT_Solver - INFO - Successfully minimized inserter distances
+2025-05-20 16:22:25,418 - SMT_Solver - WARNING - Power poles are not enabled, skipping minimization.
+2025-05-20 16:22:25,418 - SMT_Solver - INFO - Final solver check result successful
+2025-05-20 16:22:25,595 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_0: invalid literal for int() with base 10: 'copper-cable_0_0_fluid_orientation'
+2025-05-20 16:22:25,596 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_1: invalid literal for int() with base 10: 'copper-cable_0_1_fluid_orientation'
+2025-05-20 16:22:25,596 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_2: invalid literal for int() with base 10: 'copper-cable_0_2_fluid_orientation'
+2025-05-20 16:22:25,767 - SMT_Solver - INFO - Successfully wrote model to SMT_Modules\solver_model_copper-cable_300.smt
+2025-05-20 16:22:25,767 - SMT_Solver - INFO - Model saved to SMT_Modules\solver_model_copper-cable_300.smt
+2025-05-20 16:22:25,936 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_0: invalid literal for int() with base 10: 'copper-cable_0_0_fluid_orientation'
+2025-05-20 16:22:25,937 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_1: invalid literal for int() with base 10: 'copper-cable_0_1_fluid_orientation'
+2025-05-20 16:22:25,937 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_2: invalid literal for int() with base 10: 'copper-cable_0_2_fluid_orientation'
+2025-05-20 16:22:26,088 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_0: invalid literal for int() with base 10: 'copper-cable_0_0_fluid_orientation'
+2025-05-20 16:22:26,089 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_1: invalid literal for int() with base 10: 'copper-cable_0_1_fluid_orientation'
+2025-05-20 16:22:26,089 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_2: invalid literal for int() with base 10: 'copper-cable_0_2_fluid_orientation'
+2025-05-20 16:22:26,318 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_0: invalid literal for int() with base 10: 'copper-cable_0_0_fluid_orientation'
+2025-05-20 16:22:26,318 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_1: invalid literal for int() with base 10: 'copper-cable_0_1_fluid_orientation'
+2025-05-20 16:22:26,319 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_2: invalid literal for int() with base 10: 'copper-cable_0_2_fluid_orientation'
+2025-05-20 16:22:26,384 - SMT_Solver - DEBUG - Loading JSON data from machine_data.json
+2025-05-20 16:22:26,384 - SMT_Solver - DEBUG - Loading JSON data from config.json
+2025-05-20 16:22:26,384 - SMT_Solver - INFO - Starting to add manual I/O constraints.
+2025-05-20 16:22:26,385 - SMT_Solver - DEBUG - Processing input item 'copper-plate' with data: {'input': (7, 0), 'output': (7, 0), 'paths': None}
+2025-05-20 16:22:26,385 - SMT_Solver - INFO - Adding input belt for item 'copper-plate' at position (7, 0)
+2025-05-20 16:22:26,385 - SMT_Solver - INFO - Adding output belt for item 'copper-plate' at position (7, 0)
+2025-05-20 16:22:26,385 - SMT_Solver - DEBUG - Processing output item 'copper-cable' with data: {'input': (0, 7), 'output': (0, 7), 'paths': None}
+2025-05-20 16:22:26,385 - SMT_Solver - INFO - Adding input belt for output item 'copper-cable' at position (0, 7)
+2025-05-20 16:22:26,386 - SMT_Solver - INFO - Adding output belt for output item 'copper-cable' at position (0, 7)
+2025-05-20 16:22:26,386 - SMT_Solver - INFO - Finished adding manual I/O constraints. Calling solver.
+2025-05-20 16:22:26,386 - SMT_Solver - WARNING - Power poles are not enabled, skipping setup.
+2025-05-20 16:22:26,387 - SMT_Solver - INFO - Solver check result: sat
+2025-05-20 16:22:26,387 - SMT_Solver - INFO - === Identifying Non-Overlapping Inserters ===
+2025-05-20 16:22:26,387 - SMT_Solver - INFO - === Locking Initial Solution ===
+2025-05-20 16:22:26,387 - SMT_Solver - INFO - === Minimizing Distance for Non-Overlapping Inserters ===
+2025-05-20 16:22:26,387 - SMT_Solver - WARNING - No distance constraints were added - no inserters to optimize
+2025-05-20 16:22:26,389 - SMT_Solver - INFO - Successfully minimized inserter distances
+2025-05-20 16:22:26,389 - SMT_Solver - WARNING - Power poles are not enabled, skipping minimization.
+2025-05-20 16:22:26,389 - SMT_Solver - INFO - Final solver check result successful
+2025-05-20 16:22:26,391 - SMT_Solver - INFO - Successfully wrote model to SMT_Modules\solver_model_copper-cable_300.smt
+2025-05-20 16:22:26,391 - SMT_Solver - INFO - Model saved to SMT_Modules\solver_model_copper-cable_300.smt
+2025-05-20 16:22:26,391 - SMT_Solver - INFO - Starting to create assemblers based on production data.
+2025-05-20 16:22:26,393 - SMT_Solver - DEBUG - Processing item 'copper-cable' with production data: {'amount_per_minute': 300, 'assemblers': 3, 'input_inserters': [{'id': 'copper-plate', 'inserters': 2, 'amount': 1}], 'belts': 1, 'capacity': 0}
+2025-05-20 16:22:26,393 - SMT_Solver - INFO - Using assembling-machine-1 for copper-cable with dimensions 3x3
+2025-05-20 16:22:26,393 - SMT_Solver - INFO - Creating assembler for item 'copper-cable', instance 0
+2025-05-20 16:22:26,393 - SMT_Solver - INFO - Item 'copper-plate' is solid
+2025-05-20 16:22:26,393 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_0_0
+2025-05-20 16:22:26,393 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_0_1
+2025-05-20 16:22:26,393 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_0 and input inserters: ['copper-plate_in_0_0_0', 'copper-plate_in_0_0_1']
+2025-05-20 16:22:26,393 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_0 with item = copper-cable
+2025-05-20 16:22:26,393 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_0 with capacity = 0
+2025-05-20 16:22:26,394 - SMT_Solver - INFO - Creating assembler for item 'copper-cable', instance 1
+2025-05-20 16:22:26,394 - SMT_Solver - INFO - Item 'copper-plate' is solid
+2025-05-20 16:22:26,394 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_1_0
+2025-05-20 16:22:26,394 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_1_1
+2025-05-20 16:22:26,394 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_1 and input inserters: ['copper-plate_in_0_1_0', 'copper-plate_in_0_1_1']
+2025-05-20 16:22:26,394 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_1 with item = copper-cable
+2025-05-20 16:22:26,394 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_1 with capacity = 0
+2025-05-20 16:22:26,394 - SMT_Solver - INFO - Creating assembler for item 'copper-cable', instance 2
+2025-05-20 16:22:26,394 - SMT_Solver - INFO - Item 'copper-plate' is solid
+2025-05-20 16:22:26,394 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_2_0
+2025-05-20 16:22:26,394 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_2_1
+2025-05-20 16:22:26,395 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_2 and input inserters: ['copper-plate_in_0_2_0', 'copper-plate_in_0_2_1']
+2025-05-20 16:22:26,395 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_2 with item = copper-cable
+2025-05-20 16:22:26,395 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_2 with capacity = 0
+2025-05-20 16:22:26,395 - SMT_Solver - DEBUG - Processing item 'copper-plate' with production data: {'amount_per_minute': 150.0, 'capacity': 0}
+2025-05-20 16:22:26,395 - SMT_Solver - INFO - Created 3 assemblers in total.
+2025-05-20 16:22:26,395 - SMT_Solver - INFO - Adding assembler overlap constraints to avoid global belts.
+2025-05-20 16:22:26,401 - SMT_Solver - INFO - Adding inserter overlap constraints to avoid global belts.
+2025-05-20 16:22:26,405 - SMT_Solver - INFO - Adding belt overlap constraints to avoid conflicts with global belts (different items only).
+2025-05-20 16:22:26,408 - SMT_Solver - INFO - Adding boundary constraints for assemblers.
+2025-05-20 16:22:26,408 - SMT_Solver - DEBUG - Setting boundary constraints for assembler ID copper-cable_0_0
+2025-05-20 16:22:26,408 - SMT_Solver - DEBUG - Setting boundary constraints for assembler ID copper-cable_0_1
+2025-05-20 16:22:26,409 - SMT_Solver - DEBUG - Setting boundary constraints for assembler ID copper-cable_0_2
+2025-05-20 16:22:26,409 - SMT_Solver - INFO - Adding boundary constraints for belts and inserters.
+2025-05-20 16:22:26,409 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_0_0 and belt ID copper-plate_end_0_0_0
+2025-05-20 16:22:26,410 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_0_1 and belt ID copper-plate_end_0_0_1
+2025-05-20 16:22:26,410 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_1_0 and belt ID copper-plate_end_0_1_0
+2025-05-20 16:22:26,411 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_1_1 and belt ID copper-plate_end_0_1_1
+2025-05-20 16:22:26,411 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_2_0 and belt ID copper-plate_end_0_2_0
+2025-05-20 16:22:26,412 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_2_1 and belt ID copper-plate_end_0_2_1
+2025-05-20 16:22:26,413 - SMT_Solver - INFO - Adding assembler overlap constraints to prevent assembler-assembler overlap.
+2025-05-20 16:22:26,416 - SMT_Solver - INFO - Adding assembler-inserter overlap constraints.
+2025-05-20 16:22:26,422 - SMT_Solver - INFO - Adding assembler-belt overlap constraints (excluding same-item belts).
+2025-05-20 16:22:26,428 - SMT_Solver - INFO - Adding inserter overlap constraints to prevent inserter-inserter overlap.
+2025-05-20 16:22:26,433 - SMT_Solver - INFO - Adding inserter-belt overlap constraints to prevent inserters from overlapping with belts.
+2025-05-20 16:22:26,436 - SMT_Solver - INFO - Adding belt overlap constraints to prevent belt-belt overlap (except same-item belts).
+2025-05-20 16:22:26,438 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_0_0 to be placed at any valid edge position
+2025-05-20 16:22:26,446 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_0_1 to be placed at any valid edge position
+2025-05-20 16:22:26,454 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_1_0 to be placed at any valid edge position
+2025-05-20 16:22:26,464 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_1_1 to be placed at any valid edge position
+2025-05-20 16:22:26,472 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_2_0 to be placed at any valid edge position
+2025-05-20 16:22:26,480 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_2_1 to be placed at any valid edge position
+2025-05-20 16:22:26,584 - SMT_Solver - INFO - Adding output space constraints for assembler copper-cable_0_0
+2025-05-20 16:22:26,678 - SMT_Solver - INFO - Adding output space constraints for assembler copper-cable_0_1
+2025-05-20 16:22:26,773 - SMT_Solver - INFO - Adding output space constraints for assembler copper-cable_0_2
+2025-05-20 16:22:26,773 - SMT_Solver - DEBUG - Adding constraints to merge input inserters with assembler edges for items with matching types.
+2025-05-20 16:22:26,775 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_0_0 and assembler copper-cable_0_1 with capcity: 0.
+2025-05-20 16:22:26,777 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_0_0 and assembler copper-cable_0_2 with capcity: 0.
+2025-05-20 16:22:26,779 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_0_1 and assembler copper-cable_0_1 with capcity: 0.
+2025-05-20 16:22:26,781 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_0_1 and assembler copper-cable_0_2 with capcity: 0.
+2025-05-20 16:22:26,784 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_1_0 and assembler copper-cable_0_0 with capcity: 0.
+2025-05-20 16:22:26,786 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_1_0 and assembler copper-cable_0_2 with capcity: 0.
+2025-05-20 16:22:26,788 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_1_1 and assembler copper-cable_0_0 with capcity: 0.
+2025-05-20 16:22:26,790 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_1_1 and assembler copper-cable_0_2 with capcity: 0.
+2025-05-20 16:22:26,792 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_2_0 and assembler copper-cable_0_0 with capcity: 0.
+2025-05-20 16:22:26,794 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_2_0 and assembler copper-cable_0_1 with capcity: 0.
+2025-05-20 16:22:26,796 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_2_1 and assembler copper-cable_0_0 with capcity: 0.
+2025-05-20 16:22:26,798 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_2_1 and assembler copper-cable_0_1 with capcity: 0.
+2025-05-20 16:22:26,798 - SMT_Solver - INFO - ===== Adding constraints to maximize belt overlaps =====
+2025-05-20 16:22:26,808 - SMT_Solver - INFO - Adding optimization goal to maximize belt overlaps.
+2025-05-20 16:22:26,812 - SMT_Solver - WARNING - Power poles are not enabled, skipping setup.
+2025-05-20 16:22:27,442 - SMT_Solver - INFO - Solver check result: sat
+2025-05-20 16:22:27,444 - SMT_Solver - INFO - === Identifying Non-Overlapping Inserters ===
+2025-05-20 16:22:27,444 - SMT_Solver - INFO - Inserter copper-plate_in_0_0_0 does not overlap but has matching item.
+2025-05-20 16:22:27,445 - SMT_Solver - INFO - Inserter copper-plate_in_0_0_1 does not overlap but has matching item.
+2025-05-20 16:22:27,445 - SMT_Solver - INFO - Inserter copper-plate_in_0_1_0 does not overlap but has matching item.
+2025-05-20 16:22:27,445 - SMT_Solver - INFO - Inserter copper-plate_in_0_1_1 does not overlap but has matching item.
+2025-05-20 16:22:27,445 - SMT_Solver - INFO - Inserter copper-plate_in_0_2_0 is locked (either overlaps or has no matching global belt).
+2025-05-20 16:22:27,446 - SMT_Solver - INFO - Inserter copper-plate_in_0_2_1 does not overlap but has matching item.
+2025-05-20 16:22:27,446 - SMT_Solver - INFO - === Locking Initial Solution ===
+2025-05-20 16:22:27,446 - SMT_Solver - INFO - Locking assembler copper-cable_0_0 at (copper-cable_0_0_x, copper-cable_0_0_y).
+2025-05-20 16:22:27,446 - SMT_Solver - INFO - Inserter copper-plate_in_0_0_0 is free to move.
+2025-05-20 16:22:27,446 - SMT_Solver - INFO - Inserter copper-plate_in_0_0_1 is free to move.
+2025-05-20 16:22:27,447 - SMT_Solver - INFO - Locking assembler copper-cable_0_1 at (copper-cable_0_1_x, copper-cable_0_1_y).
+2025-05-20 16:22:27,447 - SMT_Solver - INFO - Inserter copper-plate_in_0_1_0 is free to move.
+2025-05-20 16:22:27,447 - SMT_Solver - INFO - Inserter copper-plate_in_0_1_1 is free to move.
+2025-05-20 16:22:27,447 - SMT_Solver - INFO - Locking assembler copper-cable_0_2 at (copper-cable_0_2_x, copper-cable_0_2_y).
+2025-05-20 16:22:27,447 - SMT_Solver - INFO - Locking inserter copper-plate_in_0_2_0 at (copper-plate_in_0_2_0_x, copper-plate_in_0_2_0_y).
+2025-05-20 16:22:27,448 - SMT_Solver - INFO - Inserter copper-plate_in_0_2_1 is free to move.
+2025-05-20 16:22:27,448 - SMT_Solver - INFO - === Minimizing Distance for Non-Overlapping Inserters ===
+2025-05-20 16:22:27,449 - SMT_Solver - INFO - Found 0 producing assemblers for item copper-plate.
+2025-05-20 16:22:27,449 - SMT_Solver - INFO - Inserter copper-plate_in_0_0_0 has 2 distances to matching global belts and 0 distances to assemblers producing copper-plate.
+2025-05-20 16:22:27,450 - SMT_Solver - INFO - Found 0 producing assemblers for item copper-plate.
+2025-05-20 16:22:27,450 - SMT_Solver - INFO - Inserter copper-plate_in_0_0_1 has 2 distances to matching global belts and 0 distances to assemblers producing copper-plate.
+2025-05-20 16:22:27,451 - SMT_Solver - INFO - Found 0 producing assemblers for item copper-plate.
+2025-05-20 16:22:27,451 - SMT_Solver - INFO - Inserter copper-plate_in_0_1_0 has 2 distances to matching global belts and 0 distances to assemblers producing copper-plate.
+2025-05-20 16:22:27,452 - SMT_Solver - INFO - Found 0 producing assemblers for item copper-plate.
+2025-05-20 16:22:27,452 - SMT_Solver - INFO - Inserter copper-plate_in_0_1_1 has 2 distances to matching global belts and 0 distances to assemblers producing copper-plate.
+2025-05-20 16:22:27,454 - SMT_Solver - INFO - Found 0 producing assemblers for item copper-plate.
+2025-05-20 16:22:27,454 - SMT_Solver - INFO - Inserter copper-plate_in_0_2_1 has 2 distances to matching global belts and 0 distances to assemblers producing copper-plate.
+2025-05-20 16:22:27,454 - SMT_Solver - INFO - Added minimization constraint for total distance.
+2025-05-20 16:22:27,550 - SMT_Solver - INFO - Successfully minimized inserter distances
+2025-05-20 16:22:27,550 - SMT_Solver - WARNING - Power poles are not enabled, skipping minimization.
+2025-05-20 16:22:27,550 - SMT_Solver - INFO - Final solver check result successful
+2025-05-20 16:22:27,641 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_0: invalid literal for int() with base 10: 'copper-cable_0_0_fluid_orientation'
+2025-05-20 16:22:27,641 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_1: invalid literal for int() with base 10: 'copper-cable_0_1_fluid_orientation'
+2025-05-20 16:22:27,642 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_2: invalid literal for int() with base 10: 'copper-cable_0_2_fluid_orientation'
+2025-05-20 16:22:27,804 - SMT_Solver - INFO - Successfully wrote model to SMT_Modules\solver_model_copper-cable_300.smt
+2025-05-20 16:22:27,804 - SMT_Solver - INFO - Model saved to SMT_Modules\solver_model_copper-cable_300.smt
+2025-05-20 16:22:27,896 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_0: invalid literal for int() with base 10: 'copper-cable_0_0_fluid_orientation'
+2025-05-20 16:22:27,897 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_1: invalid literal for int() with base 10: 'copper-cable_0_1_fluid_orientation'
+2025-05-20 16:22:27,897 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_2: invalid literal for int() with base 10: 'copper-cable_0_2_fluid_orientation'
+2025-05-20 16:22:27,988 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_0: invalid literal for int() with base 10: 'copper-cable_0_0_fluid_orientation'
+2025-05-20 16:22:27,989 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_1: invalid literal for int() with base 10: 'copper-cable_0_1_fluid_orientation'
+2025-05-20 16:22:27,989 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_2: invalid literal for int() with base 10: 'copper-cable_0_2_fluid_orientation'
+2025-05-20 16:22:28,137 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_0: invalid literal for int() with base 10: 'copper-cable_0_0_fluid_orientation'
+2025-05-20 16:22:28,137 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_1: invalid literal for int() with base 10: 'copper-cable_0_1_fluid_orientation'
+2025-05-20 16:22:28,138 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_2: invalid literal for int() with base 10: 'copper-cable_0_2_fluid_orientation'
+2025-05-20 16:22:28,195 - SMT_Solver - DEBUG - Loading JSON data from machine_data.json
+2025-05-20 16:22:28,195 - SMT_Solver - DEBUG - Loading JSON data from config.json
+2025-05-20 16:22:28,195 - SMT_Solver - INFO - Starting to add manual I/O constraints.
+2025-05-20 16:22:28,195 - SMT_Solver - DEBUG - Processing input item 'copper-plate' with data: {'input': (7, 0), 'output': (7, 0), 'paths': None}
+2025-05-20 16:22:28,196 - SMT_Solver - INFO - Adding input belt for item 'copper-plate' at position (7, 0)
+2025-05-20 16:22:28,196 - SMT_Solver - INFO - Adding output belt for item 'copper-plate' at position (7, 0)
+2025-05-20 16:22:28,196 - SMT_Solver - DEBUG - Processing output item 'copper-cable' with data: {'input': (0, 7), 'output': (0, 7), 'paths': None}
+2025-05-20 16:22:28,196 - SMT_Solver - INFO - Adding input belt for output item 'copper-cable' at position (0, 7)
+2025-05-20 16:22:28,197 - SMT_Solver - INFO - Adding output belt for output item 'copper-cable' at position (0, 7)
+2025-05-20 16:22:28,197 - SMT_Solver - INFO - Finished adding manual I/O constraints. Calling solver.
+2025-05-20 16:22:28,197 - SMT_Solver - WARNING - Power poles are not enabled, skipping setup.
+2025-05-20 16:22:28,198 - SMT_Solver - INFO - Solver check result: sat
+2025-05-20 16:22:28,198 - SMT_Solver - INFO - === Identifying Non-Overlapping Inserters ===
+2025-05-20 16:22:28,198 - SMT_Solver - INFO - === Locking Initial Solution ===
+2025-05-20 16:22:28,198 - SMT_Solver - INFO - === Minimizing Distance for Non-Overlapping Inserters ===
+2025-05-20 16:22:28,198 - SMT_Solver - WARNING - No distance constraints were added - no inserters to optimize
+2025-05-20 16:22:28,198 - SMT_Solver - INFO - Successfully minimized inserter distances
+2025-05-20 16:22:28,199 - SMT_Solver - WARNING - Power poles are not enabled, skipping minimization.
+2025-05-20 16:22:28,199 - SMT_Solver - INFO - Final solver check result successful
+2025-05-20 16:22:28,201 - SMT_Solver - INFO - Successfully wrote model to SMT_Modules\solver_model_copper-cable_300.smt
+2025-05-20 16:22:28,201 - SMT_Solver - INFO - Model saved to SMT_Modules\solver_model_copper-cable_300.smt
+2025-05-20 16:22:28,201 - SMT_Solver - INFO - Starting to create assemblers based on production data.
+2025-05-20 16:22:28,203 - SMT_Solver - DEBUG - Processing item 'copper-cable' with production data: {'amount_per_minute': 300, 'assemblers': 3, 'input_inserters': [{'id': 'copper-plate', 'inserters': 2, 'amount': 1}], 'belts': 1, 'capacity': 0}
+2025-05-20 16:22:28,203 - SMT_Solver - INFO - Using assembling-machine-1 for copper-cable with dimensions 3x3
+2025-05-20 16:22:28,203 - SMT_Solver - INFO - Creating assembler for item 'copper-cable', instance 0
+2025-05-20 16:22:28,203 - SMT_Solver - INFO - Item 'copper-plate' is solid
+2025-05-20 16:22:28,203 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_0_0
+2025-05-20 16:22:28,203 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_0_1
+2025-05-20 16:22:28,204 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_0 and input inserters: ['copper-plate_in_0_0_0', 'copper-plate_in_0_0_1']
+2025-05-20 16:22:28,204 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_0 with item = copper-cable
+2025-05-20 16:22:28,204 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_0 with capacity = 0
+2025-05-20 16:22:28,204 - SMT_Solver - INFO - Creating assembler for item 'copper-cable', instance 1
+2025-05-20 16:22:28,204 - SMT_Solver - INFO - Item 'copper-plate' is solid
+2025-05-20 16:22:28,204 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_1_0
+2025-05-20 16:22:28,204 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_1_1
+2025-05-20 16:22:28,205 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_1 and input inserters: ['copper-plate_in_0_1_0', 'copper-plate_in_0_1_1']
+2025-05-20 16:22:28,205 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_1 with item = copper-cable
+2025-05-20 16:22:28,205 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_1 with capacity = 0
+2025-05-20 16:22:28,205 - SMT_Solver - INFO - Creating assembler for item 'copper-cable', instance 2
+2025-05-20 16:22:28,205 - SMT_Solver - INFO - Item 'copper-plate' is solid
+2025-05-20 16:22:28,205 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_2_0
+2025-05-20 16:22:28,205 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_2_1
+2025-05-20 16:22:28,205 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_2 and input inserters: ['copper-plate_in_0_2_0', 'copper-plate_in_0_2_1']
+2025-05-20 16:22:28,205 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_2 with item = copper-cable
+2025-05-20 16:22:28,205 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_2 with capacity = 0
+2025-05-20 16:22:28,205 - SMT_Solver - DEBUG - Processing item 'copper-plate' with production data: {'amount_per_minute': 150.0, 'capacity': 0}
+2025-05-20 16:22:28,206 - SMT_Solver - INFO - Created 3 assemblers in total.
+2025-05-20 16:22:28,206 - SMT_Solver - INFO - Adding assembler overlap constraints to avoid global belts.
+2025-05-20 16:22:28,211 - SMT_Solver - INFO - Adding inserter overlap constraints to avoid global belts.
+2025-05-20 16:22:28,216 - SMT_Solver - INFO - Adding belt overlap constraints to avoid conflicts with global belts (different items only).
+2025-05-20 16:22:28,218 - SMT_Solver - INFO - Adding boundary constraints for assemblers.
+2025-05-20 16:22:28,218 - SMT_Solver - DEBUG - Setting boundary constraints for assembler ID copper-cable_0_0
+2025-05-20 16:22:28,219 - SMT_Solver - DEBUG - Setting boundary constraints for assembler ID copper-cable_0_1
+2025-05-20 16:22:28,219 - SMT_Solver - DEBUG - Setting boundary constraints for assembler ID copper-cable_0_2
+2025-05-20 16:22:28,219 - SMT_Solver - INFO - Adding boundary constraints for belts and inserters.
+2025-05-20 16:22:28,220 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_0_0 and belt ID copper-plate_end_0_0_0
+2025-05-20 16:22:28,220 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_0_1 and belt ID copper-plate_end_0_0_1
+2025-05-20 16:22:28,221 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_1_0 and belt ID copper-plate_end_0_1_0
+2025-05-20 16:22:28,222 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_1_1 and belt ID copper-plate_end_0_1_1
+2025-05-20 16:22:28,222 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_2_0 and belt ID copper-plate_end_0_2_0
+2025-05-20 16:22:28,223 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_2_1 and belt ID copper-plate_end_0_2_1
+2025-05-20 16:22:28,224 - SMT_Solver - INFO - Adding assembler overlap constraints to prevent assembler-assembler overlap.
+2025-05-20 16:22:28,226 - SMT_Solver - INFO - Adding assembler-inserter overlap constraints.
+2025-05-20 16:22:28,232 - SMT_Solver - INFO - Adding assembler-belt overlap constraints (excluding same-item belts).
+2025-05-20 16:22:28,238 - SMT_Solver - INFO - Adding inserter overlap constraints to prevent inserter-inserter overlap.
+2025-05-20 16:22:28,243 - SMT_Solver - INFO - Adding inserter-belt overlap constraints to prevent inserters from overlapping with belts.
+2025-05-20 16:22:28,247 - SMT_Solver - INFO - Adding belt overlap constraints to prevent belt-belt overlap (except same-item belts).
+2025-05-20 16:22:28,249 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_0_0 to be placed at any valid edge position
+2025-05-20 16:22:28,255 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_0_1 to be placed at any valid edge position
+2025-05-20 16:22:28,264 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_1_0 to be placed at any valid edge position
+2025-05-20 16:22:28,270 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_1_1 to be placed at any valid edge position
+2025-05-20 16:22:28,278 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_2_0 to be placed at any valid edge position
+2025-05-20 16:22:28,286 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_2_1 to be placed at any valid edge position
+2025-05-20 16:22:28,386 - SMT_Solver - INFO - Adding output space constraints for assembler copper-cable_0_0
+2025-05-20 16:22:28,480 - SMT_Solver - INFO - Adding output space constraints for assembler copper-cable_0_1
+2025-05-20 16:22:28,574 - SMT_Solver - INFO - Adding output space constraints for assembler copper-cable_0_2
+2025-05-20 16:22:28,574 - SMT_Solver - DEBUG - Adding constraints to merge input inserters with assembler edges for items with matching types.
+2025-05-20 16:22:28,576 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_0_0 and assembler copper-cable_0_1 with capcity: 0.
+2025-05-20 16:22:28,579 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_0_0 and assembler copper-cable_0_2 with capcity: 0.
+2025-05-20 16:22:28,581 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_0_1 and assembler copper-cable_0_1 with capcity: 0.
+2025-05-20 16:22:28,583 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_0_1 and assembler copper-cable_0_2 with capcity: 0.
+2025-05-20 16:22:28,585 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_1_0 and assembler copper-cable_0_0 with capcity: 0.
+2025-05-20 16:22:28,587 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_1_0 and assembler copper-cable_0_2 with capcity: 0.
+2025-05-20 16:22:28,589 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_1_1 and assembler copper-cable_0_0 with capcity: 0.
+2025-05-20 16:22:28,591 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_1_1 and assembler copper-cable_0_2 with capcity: 0.
+2025-05-20 16:22:28,593 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_2_0 and assembler copper-cable_0_0 with capcity: 0.
+2025-05-20 16:22:28,594 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_2_0 and assembler copper-cable_0_1 with capcity: 0.
+2025-05-20 16:22:28,596 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_2_1 and assembler copper-cable_0_0 with capcity: 0.
+2025-05-20 16:22:28,598 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_2_1 and assembler copper-cable_0_1 with capcity: 0.
+2025-05-20 16:22:28,599 - SMT_Solver - INFO - ===== Adding constraints to maximize belt overlaps =====
+2025-05-20 16:22:28,608 - SMT_Solver - INFO - Adding optimization goal to maximize belt overlaps.
+2025-05-20 16:22:28,612 - SMT_Solver - WARNING - Power poles are not enabled, skipping setup.
+2025-05-20 16:22:29,284 - SMT_Solver - INFO - Solver check result: sat
+2025-05-20 16:22:29,284 - SMT_Solver - INFO - === Identifying Non-Overlapping Inserters ===
+2025-05-20 16:22:29,285 - SMT_Solver - INFO - Inserter copper-plate_in_0_0_0 is locked (either overlaps or has no matching global belt).
+2025-05-20 16:22:29,285 - SMT_Solver - INFO - Inserter copper-plate_in_0_0_1 does not overlap but has matching item.
+2025-05-20 16:22:29,286 - SMT_Solver - INFO - Inserter copper-plate_in_0_1_0 does not overlap but has matching item.
+2025-05-20 16:22:29,286 - SMT_Solver - INFO - Inserter copper-plate_in_0_1_1 does not overlap but has matching item.
+2025-05-20 16:22:29,287 - SMT_Solver - INFO - Inserter copper-plate_in_0_2_0 does not overlap but has matching item.
+2025-05-20 16:22:29,287 - SMT_Solver - INFO - Inserter copper-plate_in_0_2_1 does not overlap but has matching item.
+2025-05-20 16:22:29,287 - SMT_Solver - INFO - === Locking Initial Solution ===
+2025-05-20 16:22:29,287 - SMT_Solver - INFO - Locking assembler copper-cable_0_0 at (copper-cable_0_0_x, copper-cable_0_0_y).
+2025-05-20 16:22:29,288 - SMT_Solver - INFO - Locking inserter copper-plate_in_0_0_0 at (copper-plate_in_0_0_0_x, copper-plate_in_0_0_0_y).
+2025-05-20 16:22:29,288 - SMT_Solver - INFO - Inserter copper-plate_in_0_0_1 is free to move.
+2025-05-20 16:22:29,289 - SMT_Solver - INFO - Locking assembler copper-cable_0_1 at (copper-cable_0_1_x, copper-cable_0_1_y).
+2025-05-20 16:22:29,289 - SMT_Solver - INFO - Inserter copper-plate_in_0_1_0 is free to move.
+2025-05-20 16:22:29,289 - SMT_Solver - INFO - Inserter copper-plate_in_0_1_1 is free to move.
+2025-05-20 16:22:29,289 - SMT_Solver - INFO - Locking assembler copper-cable_0_2 at (copper-cable_0_2_x, copper-cable_0_2_y).
+2025-05-20 16:22:29,289 - SMT_Solver - INFO - Inserter copper-plate_in_0_2_0 is free to move.
+2025-05-20 16:22:29,289 - SMT_Solver - INFO - Inserter copper-plate_in_0_2_1 is free to move.
+2025-05-20 16:22:29,289 - SMT_Solver - INFO - === Minimizing Distance for Non-Overlapping Inserters ===
+2025-05-20 16:22:29,290 - SMT_Solver - INFO - Found 0 producing assemblers for item copper-plate.
+2025-05-20 16:22:29,290 - SMT_Solver - INFO - Inserter copper-plate_in_0_0_1 has 2 distances to matching global belts and 0 distances to assemblers producing copper-plate.
+2025-05-20 16:22:29,291 - SMT_Solver - INFO - Found 0 producing assemblers for item copper-plate.
+2025-05-20 16:22:29,292 - SMT_Solver - INFO - Inserter copper-plate_in_0_1_0 has 2 distances to matching global belts and 0 distances to assemblers producing copper-plate.
+2025-05-20 16:22:29,293 - SMT_Solver - INFO - Found 0 producing assemblers for item copper-plate.
+2025-05-20 16:22:29,293 - SMT_Solver - INFO - Inserter copper-plate_in_0_1_1 has 2 distances to matching global belts and 0 distances to assemblers producing copper-plate.
+2025-05-20 16:22:29,293 - SMT_Solver - INFO - Found 0 producing assemblers for item copper-plate.
+2025-05-20 16:22:29,293 - SMT_Solver - INFO - Inserter copper-plate_in_0_2_0 has 2 distances to matching global belts and 0 distances to assemblers producing copper-plate.
+2025-05-20 16:22:29,294 - SMT_Solver - INFO - Found 0 producing assemblers for item copper-plate.
+2025-05-20 16:22:29,294 - SMT_Solver - INFO - Inserter copper-plate_in_0_2_1 has 2 distances to matching global belts and 0 distances to assemblers producing copper-plate.
+2025-05-20 16:22:29,295 - SMT_Solver - INFO - Added minimization constraint for total distance.
+2025-05-20 16:22:29,426 - SMT_Solver - INFO - Successfully minimized inserter distances
+2025-05-20 16:22:29,426 - SMT_Solver - WARNING - Power poles are not enabled, skipping minimization.
+2025-05-20 16:22:29,426 - SMT_Solver - INFO - Final solver check result successful
+2025-05-20 16:22:29,553 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_0: invalid literal for int() with base 10: 'copper-cable_0_0_fluid_orientation'
+2025-05-20 16:22:29,554 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_1: invalid literal for int() with base 10: 'copper-cable_0_1_fluid_orientation'
+2025-05-20 16:22:29,554 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_2: invalid literal for int() with base 10: 'copper-cable_0_2_fluid_orientation'
+2025-05-20 16:22:29,714 - SMT_Solver - INFO - Successfully wrote model to SMT_Modules\solver_model_copper-cable_300.smt
+2025-05-20 16:22:29,715 - SMT_Solver - INFO - Model saved to SMT_Modules\solver_model_copper-cable_300.smt
+2025-05-20 16:22:29,825 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_0: invalid literal for int() with base 10: 'copper-cable_0_0_fluid_orientation'
+2025-05-20 16:22:29,825 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_1: invalid literal for int() with base 10: 'copper-cable_0_1_fluid_orientation'
+2025-05-20 16:22:29,826 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_2: invalid literal for int() with base 10: 'copper-cable_0_2_fluid_orientation'
+2025-05-20 16:22:29,977 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_0: invalid literal for int() with base 10: 'copper-cable_0_0_fluid_orientation'
+2025-05-20 16:22:29,977 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_1: invalid literal for int() with base 10: 'copper-cable_0_1_fluid_orientation'
+2025-05-20 16:22:29,978 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_2: invalid literal for int() with base 10: 'copper-cable_0_2_fluid_orientation'
+2025-05-20 16:22:30,147 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_0: invalid literal for int() with base 10: 'copper-cable_0_0_fluid_orientation'
+2025-05-20 16:22:30,147 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_1: invalid literal for int() with base 10: 'copper-cable_0_1_fluid_orientation'
+2025-05-20 16:22:30,147 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_2: invalid literal for int() with base 10: 'copper-cable_0_2_fluid_orientation'
+2025-05-20 16:22:30,196 - SMT_Solver - DEBUG - Loading JSON data from machine_data.json
+2025-05-20 16:22:30,197 - SMT_Solver - DEBUG - Loading JSON data from config.json
+2025-05-20 16:22:30,197 - SMT_Solver - INFO - Starting to add manual I/O constraints.
+2025-05-20 16:22:30,198 - SMT_Solver - DEBUG - Processing input item 'copper-plate' with data: {'input': (7, 0), 'output': (7, 0), 'paths': None}
+2025-05-20 16:22:30,198 - SMT_Solver - INFO - Adding input belt for item 'copper-plate' at position (7, 0)
+2025-05-20 16:22:30,198 - SMT_Solver - INFO - Adding output belt for item 'copper-plate' at position (7, 0)
+2025-05-20 16:22:30,198 - SMT_Solver - DEBUG - Processing output item 'copper-cable' with data: {'input': (0, 7), 'output': (0, 7), 'paths': None}
+2025-05-20 16:22:30,198 - SMT_Solver - INFO - Adding input belt for output item 'copper-cable' at position (0, 7)
+2025-05-20 16:22:30,199 - SMT_Solver - INFO - Adding output belt for output item 'copper-cable' at position (0, 7)
+2025-05-20 16:22:30,199 - SMT_Solver - INFO - Finished adding manual I/O constraints. Calling solver.
+2025-05-20 16:22:30,199 - SMT_Solver - WARNING - Power poles are not enabled, skipping setup.
+2025-05-20 16:22:30,200 - SMT_Solver - INFO - Solver check result: sat
+2025-05-20 16:22:30,200 - SMT_Solver - INFO - === Identifying Non-Overlapping Inserters ===
+2025-05-20 16:22:30,200 - SMT_Solver - INFO - === Locking Initial Solution ===
+2025-05-20 16:22:30,200 - SMT_Solver - INFO - === Minimizing Distance for Non-Overlapping Inserters ===
+2025-05-20 16:22:30,201 - SMT_Solver - WARNING - No distance constraints were added - no inserters to optimize
+2025-05-20 16:22:30,202 - SMT_Solver - INFO - Successfully minimized inserter distances
+2025-05-20 16:22:30,202 - SMT_Solver - WARNING - Power poles are not enabled, skipping minimization.
+2025-05-20 16:22:30,202 - SMT_Solver - INFO - Final solver check result successful
+2025-05-20 16:22:30,204 - SMT_Solver - INFO - Successfully wrote model to SMT_Modules\solver_model_copper-cable_300.smt
+2025-05-20 16:22:30,204 - SMT_Solver - INFO - Model saved to SMT_Modules\solver_model_copper-cable_300.smt
+2025-05-20 16:22:30,205 - SMT_Solver - INFO - Starting to create assemblers based on production data.
+2025-05-20 16:22:30,206 - SMT_Solver - DEBUG - Processing item 'copper-cable' with production data: {'amount_per_minute': 300, 'assemblers': 3, 'input_inserters': [{'id': 'copper-plate', 'inserters': 2, 'amount': 1}], 'belts': 1, 'capacity': 0}
+2025-05-20 16:22:30,206 - SMT_Solver - INFO - Using assembling-machine-1 for copper-cable with dimensions 3x3
+2025-05-20 16:22:30,206 - SMT_Solver - INFO - Creating assembler for item 'copper-cable', instance 0
+2025-05-20 16:22:30,206 - SMT_Solver - INFO - Item 'copper-plate' is solid
+2025-05-20 16:22:30,207 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_0_0
+2025-05-20 16:22:30,207 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_0_1
+2025-05-20 16:22:30,207 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_0 and input inserters: ['copper-plate_in_0_0_0', 'copper-plate_in_0_0_1']
+2025-05-20 16:22:30,207 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_0 with item = copper-cable
+2025-05-20 16:22:30,207 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_0 with capacity = 0
+2025-05-20 16:22:30,207 - SMT_Solver - INFO - Creating assembler for item 'copper-cable', instance 1
+2025-05-20 16:22:30,207 - SMT_Solver - INFO - Item 'copper-plate' is solid
+2025-05-20 16:22:30,207 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_1_0
+2025-05-20 16:22:30,207 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_1_1
+2025-05-20 16:22:30,208 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_1 and input inserters: ['copper-plate_in_0_1_0', 'copper-plate_in_0_1_1']
+2025-05-20 16:22:30,208 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_1 with item = copper-cable
+2025-05-20 16:22:30,208 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_1 with capacity = 0
+2025-05-20 16:22:30,208 - SMT_Solver - INFO - Creating assembler for item 'copper-cable', instance 2
+2025-05-20 16:22:30,208 - SMT_Solver - INFO - Item 'copper-plate' is solid
+2025-05-20 16:22:30,208 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_2_0
+2025-05-20 16:22:30,208 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_2_1
+2025-05-20 16:22:30,208 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_2 and input inserters: ['copper-plate_in_0_2_0', 'copper-plate_in_0_2_1']
+2025-05-20 16:22:30,208 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_2 with item = copper-cable
+2025-05-20 16:22:30,208 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_2 with capacity = 0
+2025-05-20 16:22:30,208 - SMT_Solver - DEBUG - Processing item 'copper-plate' with production data: {'amount_per_minute': 150.0, 'capacity': 0}
+2025-05-20 16:22:30,208 - SMT_Solver - INFO - Created 3 assemblers in total.
+2025-05-20 16:22:30,208 - SMT_Solver - INFO - Adding assembler overlap constraints to avoid global belts.
+2025-05-20 16:22:30,215 - SMT_Solver - INFO - Adding inserter overlap constraints to avoid global belts.
+2025-05-20 16:22:30,219 - SMT_Solver - INFO - Adding belt overlap constraints to avoid conflicts with global belts (different items only).
+2025-05-20 16:22:30,221 - SMT_Solver - INFO - Adding boundary constraints for assemblers.
+2025-05-20 16:22:30,221 - SMT_Solver - DEBUG - Setting boundary constraints for assembler ID copper-cable_0_0
+2025-05-20 16:22:30,221 - SMT_Solver - DEBUG - Setting boundary constraints for assembler ID copper-cable_0_1
+2025-05-20 16:22:30,222 - SMT_Solver - DEBUG - Setting boundary constraints for assembler ID copper-cable_0_2
+2025-05-20 16:22:30,222 - SMT_Solver - INFO - Adding boundary constraints for belts and inserters.
+2025-05-20 16:22:30,222 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_0_0 and belt ID copper-plate_end_0_0_0
+2025-05-20 16:22:30,223 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_0_1 and belt ID copper-plate_end_0_0_1
+2025-05-20 16:22:30,223 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_1_0 and belt ID copper-plate_end_0_1_0
+2025-05-20 16:22:30,224 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_1_1 and belt ID copper-plate_end_0_1_1
+2025-05-20 16:22:30,225 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_2_0 and belt ID copper-plate_end_0_2_0
+2025-05-20 16:22:30,225 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_2_1 and belt ID copper-plate_end_0_2_1
+2025-05-20 16:22:30,226 - SMT_Solver - INFO - Adding assembler overlap constraints to prevent assembler-assembler overlap.
+2025-05-20 16:22:30,229 - SMT_Solver - INFO - Adding assembler-inserter overlap constraints.
+2025-05-20 16:22:30,235 - SMT_Solver - INFO - Adding assembler-belt overlap constraints (excluding same-item belts).
+2025-05-20 16:22:30,241 - SMT_Solver - INFO - Adding inserter overlap constraints to prevent inserter-inserter overlap.
+2025-05-20 16:22:30,246 - SMT_Solver - INFO - Adding inserter-belt overlap constraints to prevent inserters from overlapping with belts.
+2025-05-20 16:22:30,251 - SMT_Solver - INFO - Adding belt overlap constraints to prevent belt-belt overlap (except same-item belts).
+2025-05-20 16:22:30,252 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_0_0 to be placed at any valid edge position
+2025-05-20 16:22:30,258 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_0_1 to be placed at any valid edge position
+2025-05-20 16:22:30,266 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_1_0 to be placed at any valid edge position
+2025-05-20 16:22:30,273 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_1_1 to be placed at any valid edge position
+2025-05-20 16:22:30,281 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_2_0 to be placed at any valid edge position
+2025-05-20 16:22:30,289 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_2_1 to be placed at any valid edge position
+2025-05-20 16:22:30,390 - SMT_Solver - INFO - Adding output space constraints for assembler copper-cable_0_0
+2025-05-20 16:22:30,484 - SMT_Solver - INFO - Adding output space constraints for assembler copper-cable_0_1
+2025-05-20 16:22:30,579 - SMT_Solver - INFO - Adding output space constraints for assembler copper-cable_0_2
+2025-05-20 16:22:30,579 - SMT_Solver - DEBUG - Adding constraints to merge input inserters with assembler edges for items with matching types.
+2025-05-20 16:22:30,581 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_0_0 and assembler copper-cable_0_1 with capcity: 0.
+2025-05-20 16:22:30,584 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_0_0 and assembler copper-cable_0_2 with capcity: 0.
+2025-05-20 16:22:30,585 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_0_1 and assembler copper-cable_0_1 with capcity: 0.
+2025-05-20 16:22:30,587 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_0_1 and assembler copper-cable_0_2 with capcity: 0.
+2025-05-20 16:22:30,589 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_1_0 and assembler copper-cable_0_0 with capcity: 0.
+2025-05-20 16:22:30,591 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_1_0 and assembler copper-cable_0_2 with capcity: 0.
+2025-05-20 16:22:30,593 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_1_1 and assembler copper-cable_0_0 with capcity: 0.
+2025-05-20 16:22:30,595 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_1_1 and assembler copper-cable_0_2 with capcity: 0.
+2025-05-20 16:22:30,598 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_2_0 and assembler copper-cable_0_0 with capcity: 0.
+2025-05-20 16:22:30,599 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_2_0 and assembler copper-cable_0_1 with capcity: 0.
+2025-05-20 16:22:30,601 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_2_1 and assembler copper-cable_0_0 with capcity: 0.
+2025-05-20 16:22:30,603 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_2_1 and assembler copper-cable_0_1 with capcity: 0.
+2025-05-20 16:22:30,603 - SMT_Solver - INFO - ===== Adding constraints to maximize belt overlaps =====
+2025-05-20 16:22:30,612 - SMT_Solver - INFO - Adding optimization goal to maximize belt overlaps.
+2025-05-20 16:22:30,617 - SMT_Solver - WARNING - Power poles are not enabled, skipping setup.
+2025-05-20 16:22:31,389 - SMT_Solver - INFO - Solver check result: sat
+2025-05-20 16:22:31,390 - SMT_Solver - INFO - === Identifying Non-Overlapping Inserters ===
+2025-05-20 16:22:31,390 - SMT_Solver - INFO - Inserter copper-plate_in_0_0_0 does not overlap but has matching item.
+2025-05-20 16:22:31,391 - SMT_Solver - INFO - Inserter copper-plate_in_0_0_1 is locked (either overlaps or has no matching global belt).
+2025-05-20 16:22:31,391 - SMT_Solver - INFO - Inserter copper-plate_in_0_1_0 does not overlap but has matching item.
+2025-05-20 16:22:31,391 - SMT_Solver - INFO - Inserter copper-plate_in_0_1_1 does not overlap but has matching item.
+2025-05-20 16:22:31,392 - SMT_Solver - INFO - Inserter copper-plate_in_0_2_0 does not overlap but has matching item.
+2025-05-20 16:22:31,392 - SMT_Solver - INFO - Inserter copper-plate_in_0_2_1 does not overlap but has matching item.
+2025-05-20 16:22:31,393 - SMT_Solver - INFO - === Locking Initial Solution ===
+2025-05-20 16:22:31,393 - SMT_Solver - INFO - Locking assembler copper-cable_0_0 at (copper-cable_0_0_x, copper-cable_0_0_y).
+2025-05-20 16:22:31,393 - SMT_Solver - INFO - Inserter copper-plate_in_0_0_0 is free to move.
+2025-05-20 16:22:31,393 - SMT_Solver - INFO - Locking inserter copper-plate_in_0_0_1 at (copper-plate_in_0_0_1_x, copper-plate_in_0_0_1_y).
+2025-05-20 16:22:31,394 - SMT_Solver - INFO - Locking assembler copper-cable_0_1 at (copper-cable_0_1_x, copper-cable_0_1_y).
+2025-05-20 16:22:31,394 - SMT_Solver - INFO - Inserter copper-plate_in_0_1_0 is free to move.
+2025-05-20 16:22:31,394 - SMT_Solver - INFO - Inserter copper-plate_in_0_1_1 is free to move.
+2025-05-20 16:22:31,394 - SMT_Solver - INFO - Locking assembler copper-cable_0_2 at (copper-cable_0_2_x, copper-cable_0_2_y).
+2025-05-20 16:22:31,394 - SMT_Solver - INFO - Inserter copper-plate_in_0_2_0 is free to move.
+2025-05-20 16:22:31,394 - SMT_Solver - INFO - Inserter copper-plate_in_0_2_1 is free to move.
+2025-05-20 16:22:31,394 - SMT_Solver - INFO - === Minimizing Distance for Non-Overlapping Inserters ===
+2025-05-20 16:22:31,395 - SMT_Solver - INFO - Found 0 producing assemblers for item copper-plate.
+2025-05-20 16:22:31,395 - SMT_Solver - INFO - Inserter copper-plate_in_0_0_0 has 2 distances to matching global belts and 0 distances to assemblers producing copper-plate.
+2025-05-20 16:22:31,396 - SMT_Solver - INFO - Found 0 producing assemblers for item copper-plate.
+2025-05-20 16:22:31,396 - SMT_Solver - INFO - Inserter copper-plate_in_0_1_0 has 2 distances to matching global belts and 0 distances to assemblers producing copper-plate.
+2025-05-20 16:22:31,397 - SMT_Solver - INFO - Found 0 producing assemblers for item copper-plate.
+2025-05-20 16:22:31,397 - SMT_Solver - INFO - Inserter copper-plate_in_0_1_1 has 2 distances to matching global belts and 0 distances to assemblers producing copper-plate.
+2025-05-20 16:22:31,399 - SMT_Solver - INFO - Found 0 producing assemblers for item copper-plate.
+2025-05-20 16:22:31,399 - SMT_Solver - INFO - Inserter copper-plate_in_0_2_0 has 2 distances to matching global belts and 0 distances to assemblers producing copper-plate.
+2025-05-20 16:22:31,400 - SMT_Solver - INFO - Found 0 producing assemblers for item copper-plate.
+2025-05-20 16:22:31,400 - SMT_Solver - INFO - Inserter copper-plate_in_0_2_1 has 2 distances to matching global belts and 0 distances to assemblers producing copper-plate.
+2025-05-20 16:22:31,400 - SMT_Solver - INFO - Added minimization constraint for total distance.
+2025-05-20 16:22:31,499 - SMT_Solver - INFO - Successfully minimized inserter distances
+2025-05-20 16:22:31,500 - SMT_Solver - WARNING - Power poles are not enabled, skipping minimization.
+2025-05-20 16:22:31,500 - SMT_Solver - INFO - Final solver check result successful
+2025-05-20 16:22:31,594 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_0: invalid literal for int() with base 10: 'copper-cable_0_0_fluid_orientation'
+2025-05-20 16:22:31,594 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_1: invalid literal for int() with base 10: 'copper-cable_0_1_fluid_orientation'
+2025-05-20 16:22:31,594 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_2: invalid literal for int() with base 10: 'copper-cable_0_2_fluid_orientation'
+2025-05-20 16:22:31,755 - SMT_Solver - INFO - Successfully wrote model to SMT_Modules\solver_model_copper-cable_300.smt
+2025-05-20 16:22:31,755 - SMT_Solver - INFO - Model saved to SMT_Modules\solver_model_copper-cable_300.smt
+2025-05-20 16:22:31,844 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_0: invalid literal for int() with base 10: 'copper-cable_0_0_fluid_orientation'
+2025-05-20 16:22:31,845 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_1: invalid literal for int() with base 10: 'copper-cable_0_1_fluid_orientation'
+2025-05-20 16:22:31,845 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_2: invalid literal for int() with base 10: 'copper-cable_0_2_fluid_orientation'
+2025-05-20 16:22:31,937 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_0: invalid literal for int() with base 10: 'copper-cable_0_0_fluid_orientation'
+2025-05-20 16:22:31,938 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_1: invalid literal for int() with base 10: 'copper-cable_0_1_fluid_orientation'
+2025-05-20 16:22:31,938 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_2: invalid literal for int() with base 10: 'copper-cable_0_2_fluid_orientation'
+2025-05-20 16:22:32,085 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_0: invalid literal for int() with base 10: 'copper-cable_0_0_fluid_orientation'
+2025-05-20 16:22:32,086 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_1: invalid literal for int() with base 10: 'copper-cable_0_1_fluid_orientation'
+2025-05-20 16:22:32,086 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_2: invalid literal for int() with base 10: 'copper-cable_0_2_fluid_orientation'
+2025-05-20 16:22:32,137 - SMT_Solver - DEBUG - Loading JSON data from machine_data.json
+2025-05-20 16:22:32,137 - SMT_Solver - DEBUG - Loading JSON data from config.json
+2025-05-20 16:22:32,138 - SMT_Solver - INFO - Starting to add manual I/O constraints.
+2025-05-20 16:22:32,138 - SMT_Solver - DEBUG - Processing input item 'copper-plate' with data: {'input': (7, 0), 'output': (7, 0), 'paths': None}
+2025-05-20 16:22:32,138 - SMT_Solver - INFO - Adding input belt for item 'copper-plate' at position (7, 0)
+2025-05-20 16:22:32,138 - SMT_Solver - INFO - Adding output belt for item 'copper-plate' at position (7, 0)
+2025-05-20 16:22:32,139 - SMT_Solver - DEBUG - Processing output item 'copper-cable' with data: {'input': (0, 7), 'output': (0, 7), 'paths': None}
+2025-05-20 16:22:32,139 - SMT_Solver - INFO - Adding input belt for output item 'copper-cable' at position (0, 7)
+2025-05-20 16:22:32,139 - SMT_Solver - INFO - Adding output belt for output item 'copper-cable' at position (0, 7)
+2025-05-20 16:22:32,139 - SMT_Solver - INFO - Finished adding manual I/O constraints. Calling solver.
+2025-05-20 16:22:32,139 - SMT_Solver - WARNING - Power poles are not enabled, skipping setup.
+2025-05-20 16:22:32,140 - SMT_Solver - INFO - Solver check result: sat
+2025-05-20 16:22:32,140 - SMT_Solver - INFO - === Identifying Non-Overlapping Inserters ===
+2025-05-20 16:22:32,140 - SMT_Solver - INFO - === Locking Initial Solution ===
+2025-05-20 16:22:32,141 - SMT_Solver - INFO - === Minimizing Distance for Non-Overlapping Inserters ===
+2025-05-20 16:22:32,141 - SMT_Solver - WARNING - No distance constraints were added - no inserters to optimize
+2025-05-20 16:22:32,142 - SMT_Solver - INFO - Successfully minimized inserter distances
+2025-05-20 16:22:32,142 - SMT_Solver - WARNING - Power poles are not enabled, skipping minimization.
+2025-05-20 16:22:32,142 - SMT_Solver - INFO - Final solver check result successful
+2025-05-20 16:22:32,145 - SMT_Solver - INFO - Successfully wrote model to SMT_Modules\solver_model_copper-cable_300.smt
+2025-05-20 16:22:32,145 - SMT_Solver - INFO - Model saved to SMT_Modules\solver_model_copper-cable_300.smt
+2025-05-20 16:22:32,145 - SMT_Solver - INFO - Starting to create assemblers based on production data.
+2025-05-20 16:22:32,147 - SMT_Solver - DEBUG - Processing item 'copper-cable' with production data: {'amount_per_minute': 300, 'assemblers': 3, 'input_inserters': [{'id': 'copper-plate', 'inserters': 2, 'amount': 1}], 'belts': 1, 'capacity': 0}
+2025-05-20 16:22:32,147 - SMT_Solver - INFO - Using assembling-machine-1 for copper-cable with dimensions 3x3
+2025-05-20 16:22:32,147 - SMT_Solver - INFO - Creating assembler for item 'copper-cable', instance 0
+2025-05-20 16:22:32,147 - SMT_Solver - INFO - Item 'copper-plate' is solid
+2025-05-20 16:22:32,147 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_0_0
+2025-05-20 16:22:32,147 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_0_1
+2025-05-20 16:22:32,148 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_0 and input inserters: ['copper-plate_in_0_0_0', 'copper-plate_in_0_0_1']
+2025-05-20 16:22:32,148 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_0 with item = copper-cable
+2025-05-20 16:22:32,148 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_0 with capacity = 0
+2025-05-20 16:22:32,148 - SMT_Solver - INFO - Creating assembler for item 'copper-cable', instance 1
+2025-05-20 16:22:32,148 - SMT_Solver - INFO - Item 'copper-plate' is solid
+2025-05-20 16:22:32,148 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_1_0
+2025-05-20 16:22:32,148 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_1_1
+2025-05-20 16:22:32,148 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_1 and input inserters: ['copper-plate_in_0_1_0', 'copper-plate_in_0_1_1']
+2025-05-20 16:22:32,148 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_1 with item = copper-cable
+2025-05-20 16:22:32,148 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_1 with capacity = 0
+2025-05-20 16:22:32,148 - SMT_Solver - INFO - Creating assembler for item 'copper-cable', instance 2
+2025-05-20 16:22:32,149 - SMT_Solver - INFO - Item 'copper-plate' is solid
+2025-05-20 16:22:32,149 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_2_0
+2025-05-20 16:22:32,149 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_2_1
+2025-05-20 16:22:32,149 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_2 and input inserters: ['copper-plate_in_0_2_0', 'copper-plate_in_0_2_1']
+2025-05-20 16:22:32,149 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_2 with item = copper-cable
+2025-05-20 16:22:32,149 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_2 with capacity = 0
+2025-05-20 16:22:32,150 - SMT_Solver - DEBUG - Processing item 'copper-plate' with production data: {'amount_per_minute': 150.0, 'capacity': 0}
+2025-05-20 16:22:32,150 - SMT_Solver - INFO - Created 3 assemblers in total.
+2025-05-20 16:22:32,150 - SMT_Solver - INFO - Adding assembler overlap constraints to avoid global belts.
+2025-05-20 16:22:32,155 - SMT_Solver - INFO - Adding inserter overlap constraints to avoid global belts.
+2025-05-20 16:22:32,159 - SMT_Solver - INFO - Adding belt overlap constraints to avoid conflicts with global belts (different items only).
+2025-05-20 16:22:32,162 - SMT_Solver - INFO - Adding boundary constraints for assemblers.
+2025-05-20 16:22:32,162 - SMT_Solver - DEBUG - Setting boundary constraints for assembler ID copper-cable_0_0
+2025-05-20 16:22:32,162 - SMT_Solver - DEBUG - Setting boundary constraints for assembler ID copper-cable_0_1
+2025-05-20 16:22:32,162 - SMT_Solver - DEBUG - Setting boundary constraints for assembler ID copper-cable_0_2
+2025-05-20 16:22:32,163 - SMT_Solver - INFO - Adding boundary constraints for belts and inserters.
+2025-05-20 16:22:32,163 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_0_0 and belt ID copper-plate_end_0_0_0
+2025-05-20 16:22:32,164 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_0_1 and belt ID copper-plate_end_0_0_1
+2025-05-20 16:22:32,165 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_1_0 and belt ID copper-plate_end_0_1_0
+2025-05-20 16:22:32,165 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_1_1 and belt ID copper-plate_end_0_1_1
+2025-05-20 16:22:32,166 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_2_0 and belt ID copper-plate_end_0_2_0
+2025-05-20 16:22:32,167 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_2_1 and belt ID copper-plate_end_0_2_1
+2025-05-20 16:22:32,167 - SMT_Solver - INFO - Adding assembler overlap constraints to prevent assembler-assembler overlap.
+2025-05-20 16:22:32,170 - SMT_Solver - INFO - Adding assembler-inserter overlap constraints.
+2025-05-20 16:22:32,176 - SMT_Solver - INFO - Adding assembler-belt overlap constraints (excluding same-item belts).
+2025-05-20 16:22:32,182 - SMT_Solver - INFO - Adding inserter overlap constraints to prevent inserter-inserter overlap.
+2025-05-20 16:22:32,188 - SMT_Solver - INFO - Adding inserter-belt overlap constraints to prevent inserters from overlapping with belts.
+2025-05-20 16:22:32,192 - SMT_Solver - INFO - Adding belt overlap constraints to prevent belt-belt overlap (except same-item belts).
+2025-05-20 16:22:32,192 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_0_0 to be placed at any valid edge position
+2025-05-20 16:22:32,200 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_0_1 to be placed at any valid edge position
+2025-05-20 16:22:32,208 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_1_0 to be placed at any valid edge position
+2025-05-20 16:22:32,216 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_1_1 to be placed at any valid edge position
+2025-05-20 16:22:32,224 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_2_0 to be placed at any valid edge position
+2025-05-20 16:22:32,230 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_2_1 to be placed at any valid edge position
+2025-05-20 16:22:32,331 - SMT_Solver - INFO - Adding output space constraints for assembler copper-cable_0_0
+2025-05-20 16:22:32,425 - SMT_Solver - INFO - Adding output space constraints for assembler copper-cable_0_1
+2025-05-20 16:22:32,531 - SMT_Solver - INFO - Adding output space constraints for assembler copper-cable_0_2
+2025-05-20 16:22:32,532 - SMT_Solver - DEBUG - Adding constraints to merge input inserters with assembler edges for items with matching types.
+2025-05-20 16:22:32,534 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_0_0 and assembler copper-cable_0_1 with capcity: 0.
+2025-05-20 16:22:32,536 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_0_0 and assembler copper-cable_0_2 with capcity: 0.
+2025-05-20 16:22:32,538 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_0_1 and assembler copper-cable_0_1 with capcity: 0.
+2025-05-20 16:22:32,540 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_0_1 and assembler copper-cable_0_2 with capcity: 0.
+2025-05-20 16:22:32,542 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_1_0 and assembler copper-cable_0_0 with capcity: 0.
+2025-05-20 16:22:32,544 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_1_0 and assembler copper-cable_0_2 with capcity: 0.
+2025-05-20 16:22:32,545 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_1_1 and assembler copper-cable_0_0 with capcity: 0.
+2025-05-20 16:22:32,547 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_1_1 and assembler copper-cable_0_2 with capcity: 0.
+2025-05-20 16:22:32,550 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_2_0 and assembler copper-cable_0_0 with capcity: 0.
+2025-05-20 16:22:32,552 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_2_0 and assembler copper-cable_0_1 with capcity: 0.
+2025-05-20 16:22:32,554 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_2_1 and assembler copper-cable_0_0 with capcity: 0.
+2025-05-20 16:22:32,555 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_2_1 and assembler copper-cable_0_1 with capcity: 0.
+2025-05-20 16:22:32,555 - SMT_Solver - INFO - ===== Adding constraints to maximize belt overlaps =====
+2025-05-20 16:22:32,565 - SMT_Solver - INFO - Adding optimization goal to maximize belt overlaps.
+2025-05-20 16:22:32,569 - SMT_Solver - WARNING - Power poles are not enabled, skipping setup.
+2025-05-20 16:22:33,183 - SMT_Solver - INFO - Solver check result: sat
+2025-05-20 16:22:33,183 - SMT_Solver - INFO - === Identifying Non-Overlapping Inserters ===
+2025-05-20 16:22:33,183 - SMT_Solver - INFO - Inserter copper-plate_in_0_0_0 is locked (either overlaps or has no matching global belt).
+2025-05-20 16:22:33,184 - SMT_Solver - INFO - Inserter copper-plate_in_0_0_1 does not overlap but has matching item.
+2025-05-20 16:22:33,184 - SMT_Solver - INFO - Inserter copper-plate_in_0_1_0 does not overlap but has matching item.
+2025-05-20 16:22:33,185 - SMT_Solver - INFO - Inserter copper-plate_in_0_1_1 does not overlap but has matching item.
+2025-05-20 16:22:33,185 - SMT_Solver - INFO - Inserter copper-plate_in_0_2_0 does not overlap but has matching item.
+2025-05-20 16:22:33,185 - SMT_Solver - INFO - Inserter copper-plate_in_0_2_1 does not overlap but has matching item.
+2025-05-20 16:22:33,185 - SMT_Solver - INFO - === Locking Initial Solution ===
+2025-05-20 16:22:33,187 - SMT_Solver - INFO - Locking assembler copper-cable_0_0 at (copper-cable_0_0_x, copper-cable_0_0_y).
+2025-05-20 16:22:33,187 - SMT_Solver - INFO - Locking inserter copper-plate_in_0_0_0 at (copper-plate_in_0_0_0_x, copper-plate_in_0_0_0_y).
+2025-05-20 16:22:33,187 - SMT_Solver - INFO - Inserter copper-plate_in_0_0_1 is free to move.
+2025-05-20 16:22:33,188 - SMT_Solver - INFO - Locking assembler copper-cable_0_1 at (copper-cable_0_1_x, copper-cable_0_1_y).
+2025-05-20 16:22:33,188 - SMT_Solver - INFO - Inserter copper-plate_in_0_1_0 is free to move.
+2025-05-20 16:22:33,188 - SMT_Solver - INFO - Inserter copper-plate_in_0_1_1 is free to move.
+2025-05-20 16:22:33,188 - SMT_Solver - INFO - Locking assembler copper-cable_0_2 at (copper-cable_0_2_x, copper-cable_0_2_y).
+2025-05-20 16:22:33,189 - SMT_Solver - INFO - Inserter copper-plate_in_0_2_0 is free to move.
+2025-05-20 16:22:33,189 - SMT_Solver - INFO - Inserter copper-plate_in_0_2_1 is free to move.
+2025-05-20 16:22:33,189 - SMT_Solver - INFO - === Minimizing Distance for Non-Overlapping Inserters ===
+2025-05-20 16:22:33,190 - SMT_Solver - INFO - Found 0 producing assemblers for item copper-plate.
+2025-05-20 16:22:33,190 - SMT_Solver - INFO - Inserter copper-plate_in_0_0_1 has 2 distances to matching global belts and 0 distances to assemblers producing copper-plate.
+2025-05-20 16:22:33,191 - SMT_Solver - INFO - Found 0 producing assemblers for item copper-plate.
+2025-05-20 16:22:33,191 - SMT_Solver - INFO - Inserter copper-plate_in_0_1_0 has 2 distances to matching global belts and 0 distances to assemblers producing copper-plate.
+2025-05-20 16:22:33,192 - SMT_Solver - INFO - Found 0 producing assemblers for item copper-plate.
+2025-05-20 16:22:33,192 - SMT_Solver - INFO - Inserter copper-plate_in_0_1_1 has 2 distances to matching global belts and 0 distances to assemblers producing copper-plate.
+2025-05-20 16:22:33,193 - SMT_Solver - INFO - Found 0 producing assemblers for item copper-plate.
+2025-05-20 16:22:33,193 - SMT_Solver - INFO - Inserter copper-plate_in_0_2_0 has 2 distances to matching global belts and 0 distances to assemblers producing copper-plate.
+2025-05-20 16:22:33,194 - SMT_Solver - INFO - Found 0 producing assemblers for item copper-plate.
+2025-05-20 16:22:33,194 - SMT_Solver - INFO - Inserter copper-plate_in_0_2_1 has 2 distances to matching global belts and 0 distances to assemblers producing copper-plate.
+2025-05-20 16:22:33,194 - SMT_Solver - INFO - Added minimization constraint for total distance.
+2025-05-20 16:22:33,295 - SMT_Solver - INFO - Successfully minimized inserter distances
+2025-05-20 16:22:33,296 - SMT_Solver - WARNING - Power poles are not enabled, skipping minimization.
+2025-05-20 16:22:33,296 - SMT_Solver - INFO - Final solver check result successful
+2025-05-20 16:22:33,395 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_0: invalid literal for int() with base 10: 'copper-cable_0_0_fluid_orientation'
+2025-05-20 16:22:33,395 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_1: invalid literal for int() with base 10: 'copper-cable_0_1_fluid_orientation'
+2025-05-20 16:22:33,396 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_2: invalid literal for int() with base 10: 'copper-cable_0_2_fluid_orientation'
+2025-05-20 16:22:33,557 - SMT_Solver - INFO - Successfully wrote model to SMT_Modules\solver_model_copper-cable_300.smt
+2025-05-20 16:22:33,557 - SMT_Solver - INFO - Model saved to SMT_Modules\solver_model_copper-cable_300.smt
+2025-05-20 16:22:33,672 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_0: invalid literal for int() with base 10: 'copper-cable_0_0_fluid_orientation'
+2025-05-20 16:22:33,673 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_1: invalid literal for int() with base 10: 'copper-cable_0_1_fluid_orientation'
+2025-05-20 16:22:33,674 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_2: invalid literal for int() with base 10: 'copper-cable_0_2_fluid_orientation'
+2025-05-20 16:22:33,795 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_0: invalid literal for int() with base 10: 'copper-cable_0_0_fluid_orientation'
+2025-05-20 16:22:33,796 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_1: invalid literal for int() with base 10: 'copper-cable_0_1_fluid_orientation'
+2025-05-20 16:22:33,796 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_2: invalid literal for int() with base 10: 'copper-cable_0_2_fluid_orientation'
+2025-05-20 16:22:33,949 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_0: invalid literal for int() with base 10: 'copper-cable_0_0_fluid_orientation'
+2025-05-20 16:22:33,949 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_1: invalid literal for int() with base 10: 'copper-cable_0_1_fluid_orientation'
+2025-05-20 16:22:33,950 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_2: invalid literal for int() with base 10: 'copper-cable_0_2_fluid_orientation'
+2025-05-20 16:22:34,022 - SMT_Solver - DEBUG - Loading JSON data from machine_data.json
+2025-05-20 16:22:34,022 - SMT_Solver - DEBUG - Loading JSON data from config.json
+2025-05-20 16:22:34,023 - SMT_Solver - INFO - Starting to add manual I/O constraints.
+2025-05-20 16:22:34,023 - SMT_Solver - DEBUG - Processing input item 'copper-plate' with data: {'input': (7, 0), 'output': (7, 0), 'paths': None}
+2025-05-20 16:22:34,023 - SMT_Solver - INFO - Adding input belt for item 'copper-plate' at position (7, 0)
+2025-05-20 16:22:34,023 - SMT_Solver - INFO - Adding output belt for item 'copper-plate' at position (7, 0)
+2025-05-20 16:22:34,023 - SMT_Solver - DEBUG - Processing output item 'copper-cable' with data: {'input': (0, 7), 'output': (0, 7), 'paths': None}
+2025-05-20 16:22:34,023 - SMT_Solver - INFO - Adding input belt for output item 'copper-cable' at position (0, 7)
+2025-05-20 16:22:34,024 - SMT_Solver - INFO - Adding output belt for output item 'copper-cable' at position (0, 7)
+2025-05-20 16:22:34,024 - SMT_Solver - INFO - Finished adding manual I/O constraints. Calling solver.
+2025-05-20 16:22:34,024 - SMT_Solver - WARNING - Power poles are not enabled, skipping setup.
+2025-05-20 16:22:34,025 - SMT_Solver - INFO - Solver check result: sat
+2025-05-20 16:22:34,025 - SMT_Solver - INFO - === Identifying Non-Overlapping Inserters ===
+2025-05-20 16:22:34,025 - SMT_Solver - INFO - === Locking Initial Solution ===
+2025-05-20 16:22:34,025 - SMT_Solver - INFO - === Minimizing Distance for Non-Overlapping Inserters ===
+2025-05-20 16:22:34,026 - SMT_Solver - WARNING - No distance constraints were added - no inserters to optimize
+2025-05-20 16:22:34,026 - SMT_Solver - INFO - Successfully minimized inserter distances
+2025-05-20 16:22:34,026 - SMT_Solver - WARNING - Power poles are not enabled, skipping minimization.
+2025-05-20 16:22:34,026 - SMT_Solver - INFO - Final solver check result successful
+2025-05-20 16:22:34,030 - SMT_Solver - INFO - Successfully wrote model to SMT_Modules\solver_model_copper-cable_300.smt
+2025-05-20 16:22:34,030 - SMT_Solver - INFO - Model saved to SMT_Modules\solver_model_copper-cable_300.smt
+2025-05-20 16:22:34,030 - SMT_Solver - INFO - Starting to create assemblers based on production data.
+2025-05-20 16:22:34,032 - SMT_Solver - DEBUG - Processing item 'copper-cable' with production data: {'amount_per_minute': 300, 'assemblers': 3, 'input_inserters': [{'id': 'copper-plate', 'inserters': 2, 'amount': 1}], 'belts': 1, 'capacity': 0}
+2025-05-20 16:22:34,032 - SMT_Solver - INFO - Using assembling-machine-1 for copper-cable with dimensions 3x3
+2025-05-20 16:22:34,032 - SMT_Solver - INFO - Creating assembler for item 'copper-cable', instance 0
+2025-05-20 16:22:34,032 - SMT_Solver - INFO - Item 'copper-plate' is solid
+2025-05-20 16:22:34,032 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_0_0
+2025-05-20 16:22:34,032 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_0_1
+2025-05-20 16:22:34,032 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_0 and input inserters: ['copper-plate_in_0_0_0', 'copper-plate_in_0_0_1']
+2025-05-20 16:22:34,032 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_0 with item = copper-cable
+2025-05-20 16:22:34,032 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_0 with capacity = 0
+2025-05-20 16:22:34,032 - SMT_Solver - INFO - Creating assembler for item 'copper-cable', instance 1
+2025-05-20 16:22:34,032 - SMT_Solver - INFO - Item 'copper-plate' is solid
+2025-05-20 16:22:34,032 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_1_0
+2025-05-20 16:22:34,034 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_1_1
+2025-05-20 16:22:34,034 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_1 and input inserters: ['copper-plate_in_0_1_0', 'copper-plate_in_0_1_1']
+2025-05-20 16:22:34,034 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_1 with item = copper-cable
+2025-05-20 16:22:34,034 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_1 with capacity = 0
+2025-05-20 16:22:34,034 - SMT_Solver - INFO - Creating assembler for item 'copper-cable', instance 2
+2025-05-20 16:22:34,034 - SMT_Solver - INFO - Item 'copper-plate' is solid
+2025-05-20 16:22:34,034 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_2_0
+2025-05-20 16:22:34,034 - SMT_Solver - INFO - Creating input inserter for copper-plate at copper-plate_in_0_2_1
+2025-05-20 16:22:34,035 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_2 and input inserters: ['copper-plate_in_0_2_0', 'copper-plate_in_0_2_1']
+2025-05-20 16:22:34,035 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_2 with item = copper-cable
+2025-05-20 16:22:34,035 - SMT_Solver - DEBUG - Created assembler with ID: copper-cable_0_2 with capacity = 0
+2025-05-20 16:22:34,035 - SMT_Solver - DEBUG - Processing item 'copper-plate' with production data: {'amount_per_minute': 150.0, 'capacity': 0}
+2025-05-20 16:22:34,035 - SMT_Solver - INFO - Created 3 assemblers in total.
+2025-05-20 16:22:34,035 - SMT_Solver - INFO - Adding assembler overlap constraints to avoid global belts.
+2025-05-20 16:22:34,044 - SMT_Solver - INFO - Adding inserter overlap constraints to avoid global belts.
+2025-05-20 16:22:34,049 - SMT_Solver - INFO - Adding belt overlap constraints to avoid conflicts with global belts (different items only).
+2025-05-20 16:22:34,051 - SMT_Solver - INFO - Adding boundary constraints for assemblers.
+2025-05-20 16:22:34,051 - SMT_Solver - DEBUG - Setting boundary constraints for assembler ID copper-cable_0_0
+2025-05-20 16:22:34,052 - SMT_Solver - DEBUG - Setting boundary constraints for assembler ID copper-cable_0_1
+2025-05-20 16:22:34,052 - SMT_Solver - DEBUG - Setting boundary constraints for assembler ID copper-cable_0_2
+2025-05-20 16:22:34,053 - SMT_Solver - INFO - Adding boundary constraints for belts and inserters.
+2025-05-20 16:22:34,053 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_0_0 and belt ID copper-plate_end_0_0_0
+2025-05-20 16:22:34,053 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_0_1 and belt ID copper-plate_end_0_0_1
+2025-05-20 16:22:34,054 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_1_0 and belt ID copper-plate_end_0_1_0
+2025-05-20 16:22:34,054 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_1_1 and belt ID copper-plate_end_0_1_1
+2025-05-20 16:22:34,055 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_2_0 and belt ID copper-plate_end_0_2_0
+2025-05-20 16:22:34,056 - SMT_Solver - DEBUG - Setting boundary constraints for inserter ID copper-plate_in_0_2_1 and belt ID copper-plate_end_0_2_1
+2025-05-20 16:22:34,056 - SMT_Solver - INFO - Adding assembler overlap constraints to prevent assembler-assembler overlap.
+2025-05-20 16:22:34,059 - SMT_Solver - INFO - Adding assembler-inserter overlap constraints.
+2025-05-20 16:22:34,066 - SMT_Solver - INFO - Adding assembler-belt overlap constraints (excluding same-item belts).
+2025-05-20 16:22:34,072 - SMT_Solver - INFO - Adding inserter overlap constraints to prevent inserter-inserter overlap.
+2025-05-20 16:22:34,077 - SMT_Solver - INFO - Adding inserter-belt overlap constraints to prevent inserters from overlapping with belts.
+2025-05-20 16:22:34,081 - SMT_Solver - INFO - Adding belt overlap constraints to prevent belt-belt overlap (except same-item belts).
+2025-05-20 16:22:34,082 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_0_0 to be placed at any valid edge position
+2025-05-20 16:22:34,090 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_0_1 to be placed at any valid edge position
+2025-05-20 16:22:34,097 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_1_0 to be placed at any valid edge position
+2025-05-20 16:22:34,105 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_1_1 to be placed at any valid edge position
+2025-05-20 16:22:34,115 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_2_0 to be placed at any valid edge position
+2025-05-20 16:22:34,125 - SMT_Solver - INFO - Allowing solid inserter copper-plate_in_0_2_1 to be placed at any valid edge position
+2025-05-20 16:22:34,236 - SMT_Solver - INFO - Adding output space constraints for assembler copper-cable_0_0
+2025-05-20 16:22:34,333 - SMT_Solver - INFO - Adding output space constraints for assembler copper-cable_0_1
+2025-05-20 16:22:34,428 - SMT_Solver - INFO - Adding output space constraints for assembler copper-cable_0_2
+2025-05-20 16:22:34,429 - SMT_Solver - DEBUG - Adding constraints to merge input inserters with assembler edges for items with matching types.
+2025-05-20 16:22:34,431 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_0_0 and assembler copper-cable_0_1 with capcity: 0.
+2025-05-20 16:22:34,433 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_0_0 and assembler copper-cable_0_2 with capcity: 0.
+2025-05-20 16:22:34,435 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_0_1 and assembler copper-cable_0_1 with capcity: 0.
+2025-05-20 16:22:34,437 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_0_1 and assembler copper-cable_0_2 with capcity: 0.
+2025-05-20 16:22:34,439 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_1_0 and assembler copper-cable_0_0 with capcity: 0.
+2025-05-20 16:22:34,441 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_1_0 and assembler copper-cable_0_2 with capcity: 0.
+2025-05-20 16:22:34,443 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_1_1 and assembler copper-cable_0_0 with capcity: 0.
+2025-05-20 16:22:34,445 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_1_1 and assembler copper-cable_0_2 with capcity: 0.
+2025-05-20 16:22:34,447 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_2_0 and assembler copper-cable_0_0 with capcity: 0.
+2025-05-20 16:22:34,449 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_2_0 and assembler copper-cable_0_1 with capcity: 0.
+2025-05-20 16:22:34,451 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_2_1 and assembler copper-cable_0_0 with capcity: 0.
+2025-05-20 16:22:34,453 - SMT_Solver - DEBUG - dissallow merge for inserter copper-plate_in_0_2_1 and assembler copper-cable_0_1 with capcity: 0.
+2025-05-20 16:22:34,453 - SMT_Solver - INFO - ===== Adding constraints to maximize belt overlaps =====
+2025-05-20 16:22:34,462 - SMT_Solver - INFO - Adding optimization goal to maximize belt overlaps.
+2025-05-20 16:22:34,467 - SMT_Solver - WARNING - Power poles are not enabled, skipping setup.
+2025-05-20 16:22:35,197 - SMT_Solver - INFO - Solver check result: sat
+2025-05-20 16:22:35,198 - SMT_Solver - INFO - === Identifying Non-Overlapping Inserters ===
+2025-05-20 16:22:35,198 - SMT_Solver - INFO - Inserter copper-plate_in_0_0_0 does not overlap but has matching item.
+2025-05-20 16:22:35,199 - SMT_Solver - INFO - Inserter copper-plate_in_0_0_1 does not overlap but has matching item.
+2025-05-20 16:22:35,199 - SMT_Solver - INFO - Inserter copper-plate_in_0_1_0 does not overlap but has matching item.
+2025-05-20 16:22:35,199 - SMT_Solver - INFO - Inserter copper-plate_in_0_1_1 is locked (either overlaps or has no matching global belt).
+2025-05-20 16:22:35,200 - SMT_Solver - INFO - Inserter copper-plate_in_0_2_0 does not overlap but has matching item.
+2025-05-20 16:22:35,200 - SMT_Solver - INFO - Inserter copper-plate_in_0_2_1 does not overlap but has matching item.
+2025-05-20 16:22:35,200 - SMT_Solver - INFO - === Locking Initial Solution ===
+2025-05-20 16:22:35,201 - SMT_Solver - INFO - Locking assembler copper-cable_0_0 at (copper-cable_0_0_x, copper-cable_0_0_y).
+2025-05-20 16:22:35,201 - SMT_Solver - INFO - Inserter copper-plate_in_0_0_0 is free to move.
+2025-05-20 16:22:35,201 - SMT_Solver - INFO - Inserter copper-plate_in_0_0_1 is free to move.
+2025-05-20 16:22:35,201 - SMT_Solver - INFO - Locking assembler copper-cable_0_1 at (copper-cable_0_1_x, copper-cable_0_1_y).
+2025-05-20 16:22:35,201 - SMT_Solver - INFO - Inserter copper-plate_in_0_1_0 is free to move.
+2025-05-20 16:22:35,202 - SMT_Solver - INFO - Locking inserter copper-plate_in_0_1_1 at (copper-plate_in_0_1_1_x, copper-plate_in_0_1_1_y).
+2025-05-20 16:22:35,202 - SMT_Solver - INFO - Locking assembler copper-cable_0_2 at (copper-cable_0_2_x, copper-cable_0_2_y).
+2025-05-20 16:22:35,202 - SMT_Solver - INFO - Inserter copper-plate_in_0_2_0 is free to move.
+2025-05-20 16:22:35,203 - SMT_Solver - INFO - Inserter copper-plate_in_0_2_1 is free to move.
+2025-05-20 16:22:35,203 - SMT_Solver - INFO - === Minimizing Distance for Non-Overlapping Inserters ===
+2025-05-20 16:22:35,203 - SMT_Solver - INFO - Found 0 producing assemblers for item copper-plate.
+2025-05-20 16:22:35,204 - SMT_Solver - INFO - Inserter copper-plate_in_0_0_0 has 2 distances to matching global belts and 0 distances to assemblers producing copper-plate.
+2025-05-20 16:22:35,205 - SMT_Solver - INFO - Found 0 producing assemblers for item copper-plate.
+2025-05-20 16:22:35,205 - SMT_Solver - INFO - Inserter copper-plate_in_0_0_1 has 2 distances to matching global belts and 0 distances to assemblers producing copper-plate.
+2025-05-20 16:22:35,205 - SMT_Solver - INFO - Found 0 producing assemblers for item copper-plate.
+2025-05-20 16:22:35,205 - SMT_Solver - INFO - Inserter copper-plate_in_0_1_0 has 2 distances to matching global belts and 0 distances to assemblers producing copper-plate.
+2025-05-20 16:22:35,206 - SMT_Solver - INFO - Found 0 producing assemblers for item copper-plate.
+2025-05-20 16:22:35,206 - SMT_Solver - INFO - Inserter copper-plate_in_0_2_0 has 2 distances to matching global belts and 0 distances to assemblers producing copper-plate.
+2025-05-20 16:22:35,207 - SMT_Solver - INFO - Found 0 producing assemblers for item copper-plate.
+2025-05-20 16:22:35,208 - SMT_Solver - INFO - Inserter copper-plate_in_0_2_1 has 2 distances to matching global belts and 0 distances to assemblers producing copper-plate.
+2025-05-20 16:22:35,208 - SMT_Solver - INFO - Added minimization constraint for total distance.
+2025-05-20 16:22:35,334 - SMT_Solver - INFO - Successfully minimized inserter distances
+2025-05-20 16:22:35,334 - SMT_Solver - WARNING - Power poles are not enabled, skipping minimization.
+2025-05-20 16:22:35,334 - SMT_Solver - INFO - Final solver check result successful
+2025-05-20 16:22:35,452 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_0: invalid literal for int() with base 10: 'copper-cable_0_0_fluid_orientation'
+2025-05-20 16:22:35,452 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_1: invalid literal for int() with base 10: 'copper-cable_0_1_fluid_orientation'
+2025-05-20 16:22:35,453 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_2: invalid literal for int() with base 10: 'copper-cable_0_2_fluid_orientation'
+2025-05-20 16:22:35,616 - SMT_Solver - INFO - Successfully wrote model to SMT_Modules\solver_model_copper-cable_300.smt
+2025-05-20 16:22:35,616 - SMT_Solver - INFO - Model saved to SMT_Modules\solver_model_copper-cable_300.smt
+2025-05-20 16:22:35,732 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_0: invalid literal for int() with base 10: 'copper-cable_0_0_fluid_orientation'
+2025-05-20 16:22:35,733 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_1: invalid literal for int() with base 10: 'copper-cable_0_1_fluid_orientation'
+2025-05-20 16:22:35,733 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_2: invalid literal for int() with base 10: 'copper-cable_0_2_fluid_orientation'
+2025-05-20 16:22:35,864 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_0: invalid literal for int() with base 10: 'copper-cable_0_0_fluid_orientation'
+2025-05-20 16:22:35,864 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_1: invalid literal for int() with base 10: 'copper-cable_0_1_fluid_orientation'
+2025-05-20 16:22:35,865 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_2: invalid literal for int() with base 10: 'copper-cable_0_2_fluid_orientation'
+2025-05-20 16:22:36,079 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_0: invalid literal for int() with base 10: 'copper-cable_0_0_fluid_orientation'
+2025-05-20 16:22:36,079 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_1: invalid literal for int() with base 10: 'copper-cable_0_1_fluid_orientation'
+2025-05-20 16:22:36,080 - SMT_Solver - WARNING - Could not get orientation for copper-cable_0_2: invalid literal for int() with base 10: 'copper-cable_0_2_fluid_orientation'
