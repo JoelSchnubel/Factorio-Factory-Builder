@@ -1,6 +1,4 @@
 #! .venv\Scripts\python.exe
-
-#! .venv\Scripts\python.exe
 # filepath: e:\Programmieren\Bachelor-Thesis\solver_eval.py
 
 import os
@@ -8,37 +6,91 @@ import subprocess
 import time
 import glob
 import pandas as pd
-import re
+import sys
 
-# Define paths to solvers - update these paths to where you installed them
-SOLVER_PATHS = {
-    "z3": "C:\\SMT\\z3\\bin\\z3.exe",
-    "cvc5": "C:\\SMT\\cvc5\\bin\\cvc5.exe",
-    "yices-smt2": "C:\\SMT\\yices\\bin\\yices-smt2.exe",
-    "boolector": "C:\\SMT\\boolector\\bin\\boolector.exe"
-}
+# Define path to CVC5 solver
+CVC5_PATH = "C:\\SMT\\cvc5\\build\\bin\\cvc5.exe"
 
-def run_solver(solver_name, smt_file, timeout=300):
-    """Run a solver on an SMT file and return statistics and model if SAT."""
+def run_z3_api(smt_file, timeout=300):
+    """Run the SMT file using Z3 Python API."""
     start_time = time.time()
     
-    # Get the command for the solver with options to produce models
-    solver_path = SOLVER_PATHS.get(solver_name, solver_name)
-    
-    # Configure solver-specific commands to get models/solutions
-    if solver_name == "z3":
-        cmd = f'"{solver_path}" -model "{smt_file}"'
-    elif solver_name == "cvc5":
-        cmd = f'"{solver_path}" --produce-models "{smt_file}"'
-    elif solver_name == "yices-smt2":
-        cmd = f'"{solver_path}" -m "{smt_file}"'
-    elif solver_name == "boolector":
-        cmd = f'"{solver_path}" -m "{smt_file}"'
-    else:
-        cmd = f'"{solver_path}" "{smt_file}"'
+    try:
+        from z3 import Solver, parse_smt2_file, set_param
+        
+        # Set timeout in milliseconds
+        set_param("timeout", timeout * 1000)
+        
+        # Parse the SMT file
+        print(f"Parsing SMT file with Z3: {os.path.basename(smt_file)}")
+        formula = parse_smt2_file(smt_file)
+        
+        # Create solver and add the formula
+        solver = Solver()
+        solver.add(formula)
+        
+        # Check for satisfiability
+        result = solver.check()
+        status = str(result).lower()
+        
+        # Get model if satisfiable
+        model = None
+        if status == "sat":
+            model = solver.model()
+            model_str = str(model)
+        else:
+            model_str = None
+        
+        end_time = time.time()
+        
+        return {
+            "solver": "Z3 API",
+            "file": os.path.basename(smt_file),
+            "status": status,
+            "time": end_time - start_time,
+            "model": model_str
+        }
+    except ImportError:
+        print("Z3 Python API not available. Install with: pip install z3-solver")
+        return {
+            "solver": "Z3 API",
+            "file": os.path.basename(smt_file),
+            "status": "error",
+            "time": 0,
+            "model": None,
+            "error": "Z3 Python API not available"
+        }
+    except Exception as e:
+        end_time = time.time()
+        return {
+            "solver": "Z3 API",
+            "file": os.path.basename(smt_file),
+            "status": "error",
+            "time": end_time - start_time,
+            "model": None,
+            "error": str(e)
+        }
+
+def run_cvc5(smt_file, timeout=300):
+    """Run the SMT file using CVC5 executable."""
+    start_time = time.time()
     
     try:
+        # Check if CVC5 exists
+        if not os.path.exists(CVC5_PATH):
+            return {
+                "solver": "CVC5",
+                "file": os.path.basename(smt_file),
+                "status": "error",
+                "time": 0,
+                "model": None,
+                "error": f"CVC5 not found at {CVC5_PATH}"
+            }
+        
+        # Run CVC5 with model production
+        cmd = f'"{CVC5_PATH}" --produce-models "{smt_file}"'
         print(f"Executing: {cmd}")
+        
         result = subprocess.run(
             cmd,
             shell=True,
@@ -46,199 +98,120 @@ def run_solver(solver_name, smt_file, timeout=300):
             text=True,
             timeout=timeout
         )
+        
         end_time = time.time()
         
         # Determine status
-        if "sat" in result.stdout.lower() and "unsat" not in result.stdout.lower():
+        output = result.stdout.lower()
+        if "sat" in output and "unsat" not in output:
             status = "sat"
-        elif "unsat" in result.stdout.lower():
+        elif "unsat" in output:
             status = "unsat"
         else:
             status = "unknown"
         
-        # Extract model if sat
+        # Extract model if satisfiable
         model = None
         if status == "sat":
-            model = extract_model(solver_name, result.stdout)
+            # Simple extraction of model from output
+            model = result.stdout
         
         return {
-            "solver": solver_name,
+            "solver": "CVC5",
             "file": os.path.basename(smt_file),
             "status": status,
             "time": end_time - start_time,
             "model": model,
-            "stdout": result.stdout[:500] if len(result.stdout) > 500 else result.stdout,  # Truncate long outputs
-            "stderr": result.stderr[:500] if len(result.stderr) > 500 else result.stderr
+            "output": result.stdout,
+            "error": result.stderr
         }
     except subprocess.TimeoutExpired:
         return {
-            "solver": solver_name,
+            "solver": "CVC5",
             "file": os.path.basename(smt_file),
             "status": "timeout",
             "time": timeout,
             "model": None,
-            "stdout": "",
-            "stderr": "Timeout"
+            "error": "Timeout"
         }
     except Exception as e:
+        end_time = time.time()
         return {
-            "solver": solver_name,
+            "solver": "CVC5",
             "file": os.path.basename(smt_file),
             "status": "error",
-            "time": 0,
+            "time": end_time - start_time,
             "model": None,
-            "stdout": "",
-            "stderr": str(e)
+            "error": str(e)
         }
 
-def extract_model(solver_name, output):
-    """Extract model information from solver output."""
-    if solver_name == "z3":
-        # Z3 model format
-        if "(model" in output:
-            model_section = output.split("(model")[1]
-            if ")" in model_section:
-                model_section = model_section.split(")", 1)[0] + ")"
-                return "(model" + model_section
-    elif solver_name == "cvc5":
-        # CVC5 model format
-        model_lines = []
-        capturing = False
-        for line in output.splitlines():
-            if "MODEL" in line:
-                capturing = True
-                continue
-            if capturing:
-                if line.strip() == "":
-                    break
-                model_lines.append(line)
-        if model_lines:
-            return "\n".join(model_lines)
-    elif solver_name == "yices-smt2":
-        # Yices model format
-        model_lines = []
-        for line in output.splitlines():
-            if line.startswith("(="):
-                model_lines.append(line)
-        if model_lines:
-            return "\n".join(model_lines)
-    elif solver_name == "boolector":
-        # Boolector model format
-        if "sat" in output.lower():
-            model_section = output.split("sat")[1].strip()
-            return model_section
-    
-    # Return original output if no specific extraction pattern matches
-    return output
-
-def check_solver_installation():
-    """Check if solvers are properly installed and accessible."""
-    available_solvers = []
-    
-    for solver_name, path in SOLVER_PATHS.items():
-        try:
-            # Try running with --version or similar flag
-            if solver_name == "z3":
-                cmd = f'"{path}" --version'
-            elif solver_name == "cvc5":
-                cmd = f'"{path}" --version'
-            elif solver_name == "yices-smt2":
-                cmd = f'"{path}" --version'
-            elif solver_name == "boolector":
-                cmd = f'"{path}" -v'
-            
-            print(f"Checking {solver_name} installation...")
-            result = subprocess.run(
-                cmd,
-                shell=True,
-                capture_output=True,
-                text=True,
-                timeout=10
-            )
-            
-            if result.returncode == 0:
-                print(f"✓ {solver_name} is installed and working ({path})")
-                version_info = result.stdout.strip() or result.stderr.strip()
-                print(f"  Version: {version_info}")
-                available_solvers.append(solver_name)
-            else:
-                print(f"✗ {solver_name} returned error code {result.returncode}")
-                print(f"  Error: {result.stderr}")
-        except FileNotFoundError:
-            print(f"✗ {solver_name} not found at {path}")
-        except Exception as e:
-            print(f"✗ {solver_name} check failed: {e}")
-    
-    return available_solvers
-
-def save_models(results):
-    """Save models to separate files for analysis."""
-    os.makedirs("models", exist_ok=True)
-    
-    for idx, result in enumerate(results):
-        if result.get("model") and result["status"] == "sat":
-            filename = f"models/{result['file']}_{result['solver']}_model.txt"
-            with open(filename, "w") as f:
-                f.write(str(result["model"]))
-            print(f"Model for {result['file']} using {result['solver']} saved to {filename}")
+def save_model(solver, file, model):
+    """Save model to a file."""
+    if model:
+        os.makedirs("models", exist_ok=True)
+        filename = f"models/{os.path.basename(file)}_{solver}_model.txt"
+        with open(filename, "w") as f:
+            f.write(str(model))
+        print(f"Model saved to {filename}")
 
 def main():
-    # Check which solvers are available
-    print("Checking solver installations...")
-    available_solvers = check_solver_installation()
-    
-    if not available_solvers:
-        print("No SMT solvers found! Please install at least one solver.")
-        return
-        
-    print(f"Found {len(available_solvers)} available solvers: {', '.join(available_solvers)}")
-    
     # Get all SMT files
     smt_files = glob.glob("e:\\Programmieren\\Bachelor-Thesis\\SMT_Modules\\*.smt")
+    
     if not smt_files:
         print("No SMT files found!")
         return
-        
+    
     print(f"Found {len(smt_files)} SMT files to process")
     
     results = []
     
-    # Run each solver on each file
+    # Process each file with both solvers
     for smt_file in smt_files:
-        print(f"\nProcessing {os.path.basename(smt_file)}...")
-        for solver in available_solvers:
-            print(f"  Running {solver}...")
-            result = run_solver(solver, smt_file)
-            results.append(result)
-            print(f"  {solver} finished with status: {result['status']} in {result['time']:.2f}s")
-            
-            if result['status'] == 'sat':
-                print(f"  Solution found! First few values: {str(result['model'])[:100]}...")
-            elif result['status'] == 'error':
-                print(f"  Error: {result['stderr']}")
+        file_basename = os.path.basename(smt_file)
+        print(f"\nProcessing {file_basename}...")
+        
+        # Try Z3 API
+        print("Running with Z3 Python API...")
+        z3_result = run_z3_api(smt_file)
+        results.append(z3_result)
+        print(f"Z3 API status: {z3_result['status']} in {z3_result['time']:.2f}s")
+        if z3_result['status'] == 'sat' and z3_result['model']:
+            print(f"Z3 found a solution!")
+            save_model("Z3", file_basename, z3_result['model'])
+        
+        # Try CVC5
+        print("Running with CVC5...")
+        cvc5_result = run_cvc5(smt_file)
+        results.append(cvc5_result)
+        print(f"CVC5 status: {cvc5_result['status']} in {cvc5_result['time']:.2f}s")
+        if cvc5_result['status'] == 'sat' and cvc5_result['model']:
+            print(f"CVC5 found a solution!")
+            save_model("CVC5", file_basename, cvc5_result['model'])
     
-    # Save all models to files
-    save_models(results)
-    
-    # Convert to DataFrame for analysis
-    df = pd.DataFrame(results)
+    # Create summary DataFrame
+    df = pd.DataFrame([
+        {
+            "file": r["file"],
+            "solver": r["solver"],
+            "status": r["status"],
+            "time": r["time"],
+            "has_model": "Yes" if r.get("model") else "No"
+        }
+        for r in results
+    ])
     
     # Save results
-    df[['solver', 'file', 'status', 'time']].to_csv("solver_comparison_results.csv", index=False)
+    df.to_csv("solver_comparison_results.csv", index=False)
     
-    # Print summary
+    # Print summary table
     print("\nSummary:")
-    try:
-        summary = df.pivot_table(
-            index="file", 
-            columns="solver", 
-            values=["status", "time"],
-            aggfunc={"status": lambda x: x.iloc[0] if len(x) > 0 else "N/A", "time": "mean"}
-        )
-        print(summary)
-    except Exception as e:
-        print(f"Could not generate summary table: {e}")
-        print(df[['solver', 'file', 'status', 'time']])
+    summary = df.pivot_table(
+        index="file",
+        columns="solver",
+        values=["status", "time", "has_model"]
+    )
+    print(summary)
     
     print("\nResults saved to solver_comparison_results.csv")
     print("Models saved in 'models' directory")
