@@ -184,7 +184,7 @@
       "entity_name": "medium-electric-pole"
     },
     "big-electric-pole": {
-      "supply_area_radius": 1,
+      "supply_area_radius": 2,
       "wire_reach": 30,
       "dimensions": { "width": 2, "height": 2 },
       "entity_name": "big-electric-pole"

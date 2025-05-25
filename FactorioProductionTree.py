@@ -118,6 +118,9 @@ class FactorioProductionTree:
                     "allow_splitters": True,
                     "find_optimal_paths": True,
                     "max_tries": 3
+                },
+                "power": {
+                    "place_power_poles": True
                 }
             }
         
@@ -1404,7 +1407,7 @@ class FactorioProductionTree:
         for i in range(max_tries):
             logger.info(f'Try Number: {i}')
             
-            self.obstacle_map, belt_point_information, assembler_information, _, fluid_connection_info, power_pole_information = self.z3_solver.build_map()
+            self.obstacle_map, belt_point_information, assembler_information, inserter_information, fluid_connection_info, power_pole_information = self.z3_solver.build_map()
             
             # get rid of belts that are already connected -> overlap with other input and output belts set by user or overlap with assembler -> direct insertion
             belt_point_information = [belt for belt in belt_point_information if not self.detect_belt_overlap(belt)]
@@ -1442,13 +1445,14 @@ class FactorioProductionTree:
                     find_optimal_paths=self.config["pathfinding"]["find_optimal_paths"],
                     output_item=self.output_item,
                     pipe_underground_length=self.config["belts"]["underground_max_length"],
-                )
-
-                # Find paths for all items
+                )                # Find paths for all items
                 paths, inserters = pathfinder.find_paths_for_all_items()
                 
+                # Place power poles if enabled in config
+                if self.config.get("power", {}).get("place_power_poles", False):
+                    logger.info("Power pole placement is enabled, placing power poles...")
+                    self.place_power_poles()
                 
-              
                 return paths, inserters
             
             except Exception as e:
@@ -1541,7 +1545,44 @@ class FactorioProductionTree:
             traceback.print_exc()
             return False
             
-            
+    def place_power_poles(self):
+        """
+        Place power poles using the SMT solver to power assemblers and inserters.
+        """
+        
+        # Check if SMT solver exists
+        if not self.z3_solver:
+            logger.warning("Cannot place power poles: No SMT solver initialized")
+            return False
+        
+        logger.info("Setting up power poles using SMT solver")
+        
+        # Check if power poles are enabled in config
+        power_config = self.config.get("power", {})
+        if not power_config.get("place_power_poles", False):
+            logger.info("Power pole placement is disabled in config")
+            return False
+        
+        # Get the latest obstacle map and machine positions
+        obstacle_map, belt_point_information, assembler_information, inserter_information, fluid_connection_info, _ = self.z3_solver.build_map()
+        
+        # Set up power poles in the SMT solver
+        # This will create power pole variables and add constraints
+        self.z3_solver.setup_power_poles()
+        
+        # Minimize the number of power poles while ensuring coverage
+        logger.info("Minimizing number of power poles")
+        result = self.z3_solver.minimize_power_poles()
+        
+        if result:
+            logger.info("Power poles placed successfully")
+            # Get the latest map with power pole information
+            _, _, _, _, _, self.power_pole_information = self.z3_solver.build_map()
+            return True
+        else:
+            logger.warning("Failed to place power poles optimally")
+            return False
+    
     def store_data(self, file_path, paths, placed_inserter_information):
         try:
             obstacle_map, belt_point_information, assembler_information, inserter_information ,fluid_connection_info , self.power_pole_information= self.z3_solver.build_map()
@@ -1860,7 +1901,7 @@ class FactorioProductionTree:
                 pygame.draw.rect(window, BLACK, rect, 1)
         
         # Draw assemblers
-        for assembler_item, assembler_x, assembler_y,width,height,machine_type, orientation_idx  in assembler_information:
+        for assembler_item, assembler_x, assembler_y,width,height,machine_type,orientation_idx  in assembler_information:
             pixel_x = assembler_x * cell_size
             pixel_y = assembler_y * cell_size
             
@@ -1904,22 +1945,47 @@ class FactorioProductionTree:
                 # Choose specific pole image if available, otherwise use generic
                 pole_key = pole_type if pole_type in images else 'power-pole'
                 pole_img = images[pole_key]
+                  # First, draw a colored grid to show power coverage area
+                pole_radius = self.z3_solver.power_pole_radius if hasattr(self.z3_solver, 'power_pole_radius') else 2.5
+                # Get the center of the pole
+                center_x_cell = pole_x + self.z3_solver.power_pole_width // 2 if hasattr(self.z3_solver, 'power_pole_width') else pole_x
+                center_y_cell = pole_y + self.z3_solver.power_pole_height // 2 if hasattr(self.z3_solver, 'power_pole_height') else pole_y
                 
-                # Draw power pole
+                # Calculate the grid cells affected by this power pole
+                for dx in range(-int(pole_radius), int(pole_radius) + 1):
+                    for dy in range(-int(pole_radius), int(pole_radius) + 1):
+                        cell_x = center_x_cell + dx
+                        cell_y = center_y_cell + dy
+                        
+                        # Skip if out of bounds
+                        if cell_x < 0 or cell_x >= self.grid_width or cell_y < 0 or cell_y >= self.grid_height:
+                            continue
+                        
+                        # Create a rectangle for this cell
+                        cell_rect = pygame.Rect(cell_x * cell_size, cell_y * cell_size, cell_size, cell_size)
+                        
+                        # Color the cell with translucent blue to show power coverage
+                        coverage_surface = pygame.Surface((cell_size, cell_size), pygame.SRCALPHA)
+                        pygame.draw.rect(coverage_surface, (0, 100, 255, 40), (0, 0, cell_size, cell_size))
+                        window.blit(coverage_surface, (cell_x * cell_size, cell_y * cell_size))
+                        
+                        # Draw a border around the coverage cell
+                        pygame.draw.rect(window, (0, 100, 255, 100), cell_rect, 1)
+                
+                # Now draw the power pole itself on top
                 window.blit(pole_img, (pixel_x, pixel_y))
                 
-                # Draw a visual indication of power radius (as a translucent circle)
-                pole_radius = self.z3_solver.power_pole_radius if hasattr(self.z3_solver, 'power_pole_radius') else 2.5
+                # Draw a square outline to show the exact coverage area
                 radius_pixels = int(pole_radius * cell_size)
                 center_x = pixel_x + cell_size // 2
                 center_y = pixel_y + cell_size // 2
-                
-                # Create a transparent surface for the power radius
-                radius_surface = pygame.Surface((radius_pixels * 2, radius_pixels * 2), pygame.SRCALPHA)
-                pygame.draw.circle(radius_surface, (255, 255, 0, 30), (radius_pixels, radius_pixels), radius_pixels)
-                
-                # Blit the radius surface centered on the pole
-                window.blit(radius_surface, (center_x - radius_pixels, center_y - radius_pixels))
+                coverage_rect = pygame.Rect(
+                    center_x - radius_pixels,
+                    center_y - radius_pixels,
+                    radius_pixels * 2,
+                    radius_pixels * 2
+                )
+                pygame.draw.rect(window, (0, 100, 255, 150), coverage_rect, 2)
         # Draw inserters
         for inserter_data in inserter_information:
             if len(inserter_data) >= 3:  # Ensure we have at least item, x, y
@@ -2328,8 +2394,6 @@ class FactorioProductionTree:
                 if data['paths'] is not None and item in data['paths']:
                     for path_data in data['paths'][item]:
                         path = path_data['path']
-                        if not path or len(path) < 2:
-                            continue
                         
                         # Draw belts for each segment of the path
                         for i in range(len(path) - 2):
@@ -2339,7 +2403,6 @@ class FactorioProductionTree:
                             # Calculate direction vector
                             dx = next_node[0] - current[0]
                             dy = next_node[1] - current[1]
-                            
                             
                             # Calculate angle based on direction
                             if dx == 1:
@@ -2525,9 +2588,7 @@ class FactorioProductionTree:
         return assembler_counts
     
     
-    
-    
-  
+
     def create_blueprint(self, json_path, output_path):
         """
         Create a Factorio blueprint from saved factory data using Draftsman.
@@ -2687,13 +2748,18 @@ class FactorioProductionTree:
                             direction=direction
                         )
                         blueprint.entities.append(inserter)
-                        occupied_positions.add(src_tuple)
-
-            # Place belts from paths generated by the pathfinder
-            logger.info("4. Adding path belts...")
-            self._add_path_belts_to_blueprint(blueprint, occupied_positions)
-           
-            # Place belts for I/O paths with more detailed logger
+                        occupied_positions.add(src_tuple)            # Place belts from paths generated by the pathfinder
+            logger.info("4. Adding path belts...")            # Process all paths from the solver's belt information
+            if hasattr(self, 'paths') and self.paths:
+                logger.info(f"Found {len(self.paths.keys())} path items to process")
+                for item, item_paths in self.paths.items():
+                    logger.info(f"Processing {len(item_paths)} paths for item {item}")
+                    for path_data in item_paths:
+                        if 'path' in path_data:
+                            self._add_belt_path_to_blueprint(blueprint, path_data, item, occupied_positions)
+                        else:
+                            logger.warning(f"Skipping path_data without 'path' key for item {item}")
+           # Place belts for I/O paths with more detailed logger
             logger.info("5. Adding I/O belts...")
             self._add_io_belts_to_blueprint(blueprint, occupied_positions)
             
@@ -2725,21 +2791,85 @@ class FactorioProductionTree:
             import traceback
             traceback.print_exc()
             return False
-    
-    def _add_belt_path_to_blueprint(self, blueprint, path_data, item, occupied_positions):
+    def _add_io_belts_to_blueprint(self, blueprint, occupied_positions):
+        """Add user-defined I/O belts to the blueprint, avoiding overlaps"""
+        # Process input belts
+        if hasattr(self, 'input_information') and self.input_information:
+            logger.info(f"  - Processing {len(self.input_information)} input belt routes")
+            for item, data in self.input_information.items():
+                if isinstance(data, dict) and 'paths' in data and data['paths'] is not None and item in data['paths']:
+                    logger.info(f"    - Processing input paths for {item}")
+                    for path_data in data['paths'][item]:
+                        if isinstance(path_data, dict) and 'path' in path_data:
+                            self._add_belt_path_to_blueprint(blueprint, path_data, item, occupied_positions)
+                        else:
+                            logger.warning(f"    - Skipping input path_data without 'path' key for {item}")
+                else:
+                    logger.info(f"    - No valid path data found for input item {item}")
+        else:
+            logger.info("  - No input belt routes found")
         
+        # Process output belts
+        if hasattr(self, 'output_information') and self.output_information:
+            logger.info(f"  - Processing {len(self.output_information)} output belt routes")
+            for item, data in self.output_information.items():
+                if isinstance(data, dict) and 'paths' in data and data['paths'] is not None and item in data['paths']:
+                    logger.info(f"    - Processing output paths for {item}")
+                    for path_data in data['paths'][item]:
+                        if isinstance(path_data, dict) and 'path' in path_data:
+                            self._add_belt_path_to_blueprint(blueprint, path_data, item, occupied_positions)
+                        else:
+                            logger.warning(f"    - Skipping output path_data without 'path' key for {item}")
+                else:
+                    logger.info(f"    - No valid path data found for output item {item}")
+        else:
+            logger.info("  - No output belt routes found")
+            
+    def _get_belt_direction(self, orientation):
+        """Convert orientation tuple to Draftsman direction constant"""
+        dx, dy = orientation
+        
+        if dx == 0 and dy == -1:  # Up
+            return Direction.NORTH
+        elif dx == 1 and dy == 0:  # Right
+            return Direction.EAST
+        elif dx == 0 and dy == 1:  # Down
+            return Direction.SOUTH
+        elif dx == -1 and dy == 0:  # Left
+            return Direction.WEST
+        else:
+            # Default direction if orientation is invalid
+            return Direction.NORTH
+
+            
+    def _add_belt_path_to_blueprint(self, blueprint, path_data, item, occupied_positions):
+        """Add a specific belt path to the blueprint, avoiding overlaps.
+        
+        Args:
+            blueprint: The blueprint object to add belts to
+            path_data: Dictionary containing path information including 'path' list of coordinates
+            item: The item being transported on this belt path
+            occupied_positions: Set of positions already occupied by other entities
+        """
+        if not path_data or not isinstance(path_data, dict):
+            logger.warning(f"Invalid path_data for item {item}, skipping")
+            return
+            
+        # Determine if this is a fluid item
         is_fluid = self.is_fluid_item(item)
         
+        # Set belt types based on item type (fluid or not)
         if is_fluid:
             belt_type = self.config.get("pipes", {}).get("default_type", "pipe")
             underground_type = self.config.get("pipes", {}).get("underground_type", "pipe-to-ground")
         else:
             belt_type = self.config["belts"]["default_type"]
             underground_type = self.config["belts"]["underground_type"]
-            
-        """Add a specific belt path to the blueprint, avoiding overlaps"""
+        
+        # Get path points
         path = path_data.get('path', [])
         if not path or len(path) < 2:
+            logger.warning(f"Path for {item} has fewer than 2 points, skipping")
             return
         
         logger.info(f"  - Processing belt path for {item} with {len(path)} points")
@@ -3004,63 +3134,9 @@ class FactorioProductionTree:
                         )
                         blueprint.entities.append(pipe)  
                         occupied_positions.add(last_tuple)  # FIXED: Use last_tuple instead of current_tuple
-
-    def _add_io_belts_to_blueprint(self, blueprint, occupied_positions):
-        """Add user-defined I/O belts to the blueprint, avoiding overlaps"""
-        # Process input belts
-        if self.input_information:
-            logger.info(f"  - Processing {len(self.input_information)} input belt routes")
-            for item, data in self.input_information.items():
-                if data['paths'] is not None and item in data['paths']:
-                    for path_data in data['paths'][item]:
-                        self._add_belt_path_to_blueprint(blueprint, path_data, item, occupied_positions)
-        else:
-            logger.info("  - No input belt routes found")
         
-        # Process output belts
-        if self.output_information:
-            logger.info(f"  - Processing {len(self.output_information)} output belt routes")
-            for item, data in self.output_information.items():
-                if data['paths'] is not None and item in data['paths']:
-                    for path_data in data['paths'][item]:
-                        self._add_belt_path_to_blueprint(blueprint, path_data, item, occupied_positions)
-        else:
-            logger.info("  - No output belt routes found")
 
-    def _add_path_belts_to_blueprint(self, blueprint, occupied_positions):
-        """Add pathfinder-generated belts to the blueprint, avoiding overlaps"""
-        if not hasattr(self, 'paths'):
-            logger.info("  - No path data found")
-            return
         
-        path_count = sum(len(item_paths) for item_paths in self.paths.values())
-        logger.info(f"  - Processing {path_count} pathfinder-generated belt paths for {len(self.paths)} items")
-        
-        for item_key, item_paths in self.paths.items():
-            # Extract base item name
-            item_name = item_key.split('_')[0] if '_' in item_key else item_key
-            logger.info(f"  - Processing {len(item_paths)} paths for {item_name}")
-            
-            for path_data in item_paths:
-                self._add_belt_path_to_blueprint(blueprint, path_data, item_name, occupied_positions)
-
-
-    def _get_belt_direction(self, orientation):
-        """Convert orientation tuple to Draftsman direction constant"""
-        dx, dy = orientation
-        
-        if dx == 0 and dy == -1:  # Up
-            return Direction.NORTH
-        elif dx == 1 and dy == 0:  # Right
-            return Direction.EAST
-        elif dx == 0 and dy == 1:  # Down
-            return Direction.SOUTH
-        elif dx == -1 and dy == 0:  # Left
-            return Direction.WEST
-        else:
-            # Default direction if orientation is invalid
-            return Direction.NORTH
-
 
 def plot_csv_data(file_path):
     # Read the CSV file
@@ -3154,7 +3230,7 @@ def Simple_Run():
     logger.info("start")
     
     # Example item and amount
-    item_to_produce = "copper-cable"
+    item_to_produce = "electronic-circuit"
     amount_needed = 100
     solver_type = "z3"  # "gurobi" or "z3"
     input_items = []  # Using explicit input items
@@ -3326,7 +3402,7 @@ def Eval_Runs(item_to_produce, start, end, step, rep_per_step):
 
 
 if __name__ == "__main__":
-    #test_build_belts()
+
     
     # Prepare CSV file header if not exists
     #if not os.path.exists("execution_times.csv"):

@@ -1,115 +1,110 @@
-2025-05-24 16:08:29,463 - FactorioProductionTree - INFO - start
-2025-05-24 16:08:29,466 - FactorioProductionTree - INFO - Production data for {'copper-cable': {'amount_per_minute': 100, 'assemblers': 1, 'input_inserters': [{'id': 'copper-plate', 'inserters': 1, 'amount': 1}], 'belts': 1, 'capacity': 0}, 'copper-plate': {'amount_per_minute': 50.0, 'capacity': 0}}:
-2025-05-24 16:08:35,134 - FactorioProductionTree - INFO - Execution time for solve: 0.2459 seconds.
-2025-05-24 16:08:35,135 - FactorioProductionTree - INFO - Try Number: 0
-2025-05-24 16:08:35,141 - FactorioProductionTree - INFO - Belt at (2, 0) overlaps with input belt/path
-2025-05-24 16:08:35,141 - FactorioProductionTree - INFO - Finding output points for copper-cable
-2025-05-24 16:08:35,141 - FactorioProductionTree - INFO - Found existing output path with 10 points
-2025-05-24 16:08:35,141 - FactorioProductionTree - INFO - Using defined I/O points: input at (9, 15), output at (0, 15)
-2025-05-24 16:08:35,148 - FactorioProductionTree - DEBUG - Calculated 1 inserters for copper-cable (producing 100 items/min)
-2025-05-24 16:08:35,148 - FactorioProductionTree - INFO - Need 1 inserters for copper-cable at assembler 0
-2025-05-24 16:08:35,148 - FactorioProductionTree - DEBUG - Skipping belt position (2, -1) - not available
-2025-05-24 16:08:35,148 - FactorioProductionTree - DEBUG - Skipping belt position (3, -1) - not available
-2025-05-24 16:08:35,148 - FactorioProductionTree - DEBUG - Skipping belt position (4, -1) - not available
-2025-05-24 16:08:35,148 - FactorioProductionTree - DEBUG - Position (2, 5) has distance 13 to nearest destination
-2025-05-24 16:08:35,148 - FactorioProductionTree - DEBUG - Position (3, 5) has distance 12 to nearest destination
-2025-05-24 16:08:35,149 - FactorioProductionTree - DEBUG - Position (4, 5) has distance 11 to nearest destination
-2025-05-24 16:08:35,149 - FactorioProductionTree - DEBUG - Skipping belt position (0, 1) - not available
-2025-05-24 16:08:35,149 - FactorioProductionTree - DEBUG - Skipping inserter position (1, 2) - not available
-2025-05-24 16:08:35,149 - FactorioProductionTree - DEBUG - Skipping belt position (0, 3) - not available
-2025-05-24 16:08:35,149 - FactorioProductionTree - DEBUG - Position (6, 1) has distance 9 to nearest destination
-2025-05-24 16:08:35,149 - FactorioProductionTree - DEBUG - Position (6, 2) has distance 9 to nearest destination
-2025-05-24 16:08:35,149 - FactorioProductionTree - DEBUG - Position (6, 3) has distance 9 to nearest destination
-2025-05-24 16:08:35,149 - FactorioProductionTree - INFO - Creating retrieval point copper-cable_0_0
-2025-05-24 16:08:35,149 - FactorioProductionTree - DEBUG - Added potential inserter at (5, 1) with belt at (6, 1) to copper-cable_0_0
-2025-05-24 16:08:35,149 - FactorioProductionTree - DEBUG - Added potential inserter at (5, 2) with belt at (6, 2) to copper-cable_0_0
-2025-05-24 16:08:35,149 - FactorioProductionTree - DEBUG - Added potential inserter at (5, 3) with belt at (6, 3) to copper-cable_0_0
-2025-05-24 16:08:35,149 - FactorioProductionTree - DEBUG - Added potential inserter at (4, 4) with belt at (4, 5) to copper-cable_0_0
-2025-05-24 16:08:35,149 - FactorioProductionTree - DEBUG - Added potential inserter at (3, 4) with belt at (3, 5) to copper-cable_0_0
-2025-05-24 16:08:35,150 - FactorioProductionTree - DEBUG - Added potential inserter at (2, 4) with belt at (2, 5) to copper-cable_0_0
-2025-05-24 16:08:35,150 - FactorioProductionTree - INFO - Added 6 potential positions for copper-cable_0_0
-2025-05-24 16:08:35,150 - FactorioProductionTree - INFO - retrieval points: {'copper-cable_0_0': {'item': 'copper-cable', 'destination': [(15, 5), (15, 8), (15, 4), (15, 1), (15, 7), (15, 0), (15, 6), (15, 3), (15, 9), (15, 2)], 'start_points': [(6, 1), (6, 2), (6, 3), (4, 5), (3, 5), (2, 5)], 'inserter_mapping': {'(6, 1)': (5, 1), '(6, 2)': (5, 2), '(6, 3)': (5, 3), '(4, 5)': (4, 4), '(3, 5)': (3, 4), '(2, 5)': (2, 4)}, 'is_fluid': False}}
-2025-05-24 16:08:35,173 - FactorioProductionTree - INFO - Execution time for build_belts: 0.0376 seconds.
-2025-05-24 16:08:35,173 - FactorioProductionTree - INFO - saving data
-2025-05-24 16:08:35,182 - FactorioProductionTree - INFO - Production tree data successfully stored to Modules/copper-cable_100_[]_module.json
-2025-05-24 16:08:35,195 - FactorioProductionTree - INFO - Production tree data successfully loaded from Modules/copper-cable_100_[]_module.json
-2025-05-24 16:08:35,195 - FactorioProductionTree - INFO - Creating blueprint from Modules/copper-cable_100_[]_module.json
-2025-05-24 16:08:35,196 - FactorioProductionTree - INFO - 1. Placing assembling machines...
-2025-05-24 16:08:35,196 - FactorioProductionTree - INFO -   - Placing assembler for copper-cable at (3,2), facing 0
-2025-05-24 16:08:35,197 - FactorioProductionTree - INFO - 2. Placing inserters...
-2025-05-24 16:08:35,197 - FactorioProductionTree - INFO - east
-2025-05-24 16:08:35,197 - FactorioProductionTree - INFO -   - Placing inserter for copper-plate at (1,2) facing 12
-2025-05-24 16:08:35,198 - FactorioProductionTree - INFO - 3. Adding additional inserters...
-2025-05-24 16:08:35,198 - FactorioProductionTree - INFO -   - Adding placed output inserters...
-2025-05-24 16:08:35,198 - FactorioProductionTree - INFO -     - Processing output inserters for copper-cable_0_0
-2025-05-24 16:08:35,198 - FactorioProductionTree - INFO -     - Placing output inserter for copper-cable_0_0 at [5, 1] facing 12
-2025-05-24 16:08:35,198 - FactorioProductionTree - INFO - 4. Adding path belts...
-2025-05-24 16:08:35,199 - FactorioProductionTree - INFO -   - Processing 1 pathfinder-generated belt paths for 1 items
-2025-05-24 16:08:35,199 - FactorioProductionTree - INFO -   - Processing 1 paths for copper-cable
-2025-05-24 16:08:35,199 - FactorioProductionTree - INFO -   - Processing belt path for copper-cable with 10 points
-2025-05-24 16:08:35,199 - FactorioProductionTree - INFO -   - Adding destination splitter for copper-cable at [15, 1] facing [0, -1]
-2025-05-24 16:08:35,199 - FactorioProductionTree - INFO -   - Adding transport belt at [6, 1] facing 8
-2025-05-24 16:08:35,200 - FactorioProductionTree - INFO -   - Adding last transport belt at [14, 2] facing toward destination splitter
-2025-05-24 16:08:35,200 - FactorioProductionTree - INFO -   - Adding last transport belt at [14, 2] facing 0
-2025-05-24 16:08:35,200 - FactorioProductionTree - INFO -   - Adding transport belt at [6, 2] facing 4
-2025-05-24 16:08:35,201 - FactorioProductionTree - INFO -   - Adding transport belt at [7, 2] facing 4
-2025-05-24 16:08:35,201 - FactorioProductionTree - INFO -   - Adding transport belt at [8, 2] facing 4
-2025-05-24 16:08:35,202 - FactorioProductionTree - INFO -   - Adding transport belt at [9, 2] facing 4
-2025-05-24 16:08:35,202 - FactorioProductionTree - INFO -   - Adding transport belt at [10, 2] facing 4
-2025-05-24 16:08:35,202 - FactorioProductionTree - INFO -   - Adding transport belt at [11, 2] facing 4
-2025-05-24 16:08:35,204 - FactorioProductionTree - INFO -   - Adding transport belt at [12, 2] facing 4
-2025-05-24 16:08:35,204 - FactorioProductionTree - INFO -   - Adding transport belt at [13, 2] facing 4
-2025-05-24 16:08:35,205 - FactorioProductionTree - INFO - 5. Adding I/O belts...
-2025-05-24 16:08:35,205 - FactorioProductionTree - INFO -   - Processing 1 input belt routes
-2025-05-24 16:08:35,205 - FactorioProductionTree - INFO -   - Processing belt path for copper-plate with 10 points
-2025-05-24 16:08:35,205 - FactorioProductionTree - INFO -   - Adding transport belt at [0, 9] facing 0
-2025-05-24 16:08:35,206 - FactorioProductionTree - INFO -   - Adding last transport belt at [0, 0] facing 0
-2025-05-24 16:08:35,206 - FactorioProductionTree - INFO -   - Adding transport belt at [0, 8] facing 0
-2025-05-24 16:08:35,207 - FactorioProductionTree - INFO -   - Adding transport belt at [0, 7] facing 0
-2025-05-24 16:08:35,208 - FactorioProductionTree - INFO -   - Adding transport belt at [0, 6] facing 0
-2025-05-24 16:08:35,209 - FactorioProductionTree - INFO -   - Adding transport belt at [0, 5] facing 0
-2025-05-24 16:08:35,209 - FactorioProductionTree - INFO -   - Adding transport belt at [0, 4] facing 0
-2025-05-24 16:08:35,210 - FactorioProductionTree - INFO -   - Adding transport belt at [0, 3] facing 0
-2025-05-24 16:08:35,211 - FactorioProductionTree - INFO -   - Adding transport belt at [0, 2] facing 0
-2025-05-24 16:08:35,211 - FactorioProductionTree - INFO -   - Adding transport belt at [0, 1] facing 0
-2025-05-24 16:08:35,212 - FactorioProductionTree - INFO -   - Processing 1 output belt routes
-2025-05-24 16:08:35,212 - FactorioProductionTree - INFO -   - Processing belt path for copper-cable with 10 points
-2025-05-24 16:08:35,212 - FactorioProductionTree - INFO -   - Adding transport belt at [15, 9] facing 0
-2025-05-24 16:08:35,213 - FactorioProductionTree - INFO -   - Adding last transport belt at [15, 0] facing 0
-2025-05-24 16:08:35,214 - FactorioProductionTree - INFO -   - Adding transport belt at [15, 8] facing 0
-2025-05-24 16:08:35,214 - FactorioProductionTree - INFO -   - Adding transport belt at [15, 7] facing 0
-2025-05-24 16:08:35,215 - FactorioProductionTree - INFO -   - Adding transport belt at [15, 6] facing 0
-2025-05-24 16:08:35,215 - FactorioProductionTree - INFO -   - Adding transport belt at [15, 5] facing 0
-2025-05-24 16:08:35,217 - FactorioProductionTree - INFO -   - Adding transport belt at [15, 4] facing 0
-2025-05-24 16:08:35,218 - FactorioProductionTree - INFO -   - Adding transport belt at [15, 3] facing 0
-2025-05-24 16:08:35,218 - FactorioProductionTree - INFO -   - Adding transport belt at [15, 2] facing 0
-2025-05-24 16:08:35,219 - FactorioProductionTree - INFO -   - Skipping belt at [15, 1] due to overlap
-2025-05-24 16:08:35,220 - FactorioProductionTree - INFO - 6. Placing power poles...
-2025-05-24 16:08:35,220 - FactorioProductionTree - INFO - 7. Exporting blueprint...
-2025-05-24 16:08:35,220 - FactorioProductionTree - ERROR - Error creating blueprint: [Errno 2] No such file or directory: 'Blueprints/copper-cable_100_[]_module.txt'
-2025-05-24 16:08:35,221 - FactorioProductionTree - INFO - visualizing factory layout
-2025-05-24 16:08:35,443 - FactorioProductionTree - INFO - Drawing input/output points
-2025-05-24 16:08:35,443 - FactorioProductionTree - INFO - Input information available for 1 items: ['copper-plate']
-2025-05-24 16:08:35,443 - FactorioProductionTree - INFO - Drawing INPUT GREEN rect for copper-plate at (9,0)
-2025-05-24 16:08:35,443 - FactorioProductionTree - INFO - Drawing item image for copper-plate
-2025-05-24 16:08:35,443 - FactorioProductionTree - INFO - Drawing INPUT RED rect for copper-plate at (0,0)
-2025-05-24 16:08:35,444 - FactorioProductionTree - INFO - Drawing item image for copper-plate
-2025-05-24 16:08:35,444 - FactorioProductionTree - INFO - Output information available for 1 items: ['copper-cable']
-2025-05-24 16:08:35,444 - FactorioProductionTree - INFO - Output image loaded for copper-cable
-2025-05-24 16:08:35,444 - FactorioProductionTree - INFO - Drawing OUTPUT GREEN rect for copper-cable at (9,15)
-2025-05-24 16:08:35,444 - FactorioProductionTree - INFO - Drawing output image for copper-cable
-2025-05-24 16:08:35,444 - FactorioProductionTree - INFO - Drawing OUTPUT RED rect for copper-cable at (0,15)
-2025-05-24 16:08:35,444 - FactorioProductionTree - INFO - Drawing output image for copper-cable
-2025-05-24 16:08:35,468 - FactorioProductionTree - INFO - Drawing path: [(6, 1), (6, 2), (7, 2), (8, 2), (9, 2), (10, 2), (11, 2), (12, 2), (13, 2), (14, 2)]
-2025-05-24 16:08:35,468 - FactorioProductionTree - INFO - Underground segments: {}
-2025-05-24 16:08:35,468 - FactorioProductionTree - INFO - Is fluid: False
-2025-05-24 16:08:35,468 - FactorioProductionTree - INFO - Drawing belt at: (6, 1)
-2025-05-24 16:08:35,468 - FactorioProductionTree - INFO - Drawing belt at: (6, 2)
-2025-05-24 16:08:35,468 - FactorioProductionTree - INFO - Drawing belt at: (7, 2)
-2025-05-24 16:08:35,468 - FactorioProductionTree - INFO - Drawing belt at: (8, 2)
-2025-05-24 16:08:35,469 - FactorioProductionTree - INFO - Drawing belt at: (9, 2)
-2025-05-24 16:08:35,469 - FactorioProductionTree - INFO - Drawing belt at: (10, 2)
-2025-05-24 16:08:35,469 - FactorioProductionTree - INFO - Drawing belt at: (11, 2)
-2025-05-24 16:08:35,469 - FactorioProductionTree - INFO - Drawing belt at: (12, 2)
-2025-05-24 16:08:35,470 - FactorioProductionTree - INFO - Drawing belt at: (13, 2)
-2025-05-24 16:08:35,470 - FactorioProductionTree - INFO - Drawing final belt at: (14, 2) with angle: 270
+2025-05-25 15:47:28,019 - FactorioProductionTree - INFO - Production tree data successfully loaded from Modules/electronic-circuit_100_[]_module.json
+2025-05-25 15:47:28,022 - FactorioProductionTree - INFO - Creating blueprint from Modules/electronic-circuit_100_[]_module.json
+2025-05-25 15:47:28,028 - FactorioProductionTree - INFO - 1. Placing assembling machines...
+2025-05-25 15:47:28,029 - FactorioProductionTree - INFO -   - Placing assembler for electronic-circuit at (7,6), facing 0
+2025-05-25 15:47:28,032 - FactorioProductionTree - INFO -   - Placing assembler for electronic-circuit at (7,2), facing 0
+2025-05-25 15:47:28,033 - FactorioProductionTree - INFO -   - Placing assembler for copper-cable at (3,7), facing 0
+2025-05-25 15:47:28,034 - FactorioProductionTree - INFO -   - Placing assembler for copper-cable at (3,4), facing 0
+2025-05-25 15:47:28,036 - FactorioProductionTree - INFO -   - Placing assembler for copper-cable at (3,1), facing 0
+2025-05-25 15:47:28,039 - FactorioProductionTree - INFO - 2. Placing inserters...
+2025-05-25 15:47:28,040 - FactorioProductionTree - INFO - east
+2025-05-25 15:47:28,040 - FactorioProductionTree - INFO -   - Placing inserter for copper-cable at (5,7) facing 12
+2025-05-25 15:47:28,042 - FactorioProductionTree - INFO - east
+2025-05-25 15:47:28,043 - FactorioProductionTree - INFO -   - Placing inserter for copper-cable at (5,6) facing 12
+2025-05-25 15:47:28,045 - FactorioProductionTree - INFO - east
+2025-05-25 15:47:28,045 - FactorioProductionTree - INFO -   - Placing inserter for copper-cable at (5,5) facing 12
+2025-05-25 15:47:28,050 - FactorioProductionTree - INFO - west
+2025-05-25 15:47:28,051 - FactorioProductionTree - INFO -   - Placing inserter for iron-plate at (9,5) facing 4
+2025-05-25 15:47:28,055 - FactorioProductionTree - INFO - east
+2025-05-25 15:47:28,055 - FactorioProductionTree - INFO -   - Placing inserter for copper-cable at (5,3) facing 12
+2025-05-25 15:47:28,065 - FactorioProductionTree - INFO - east
+2025-05-25 15:47:28,069 - FactorioProductionTree - INFO -   - Placing inserter for copper-cable at (5,1) facing 12
+2025-05-25 15:47:28,072 - FactorioProductionTree - INFO - east
+2025-05-25 15:47:28,072 - FactorioProductionTree - INFO -   - Placing inserter for copper-cable at (5,2) facing 12
+2025-05-25 15:47:28,076 - FactorioProductionTree - INFO - west
+2025-05-25 15:47:28,083 - FactorioProductionTree - INFO -   - Placing inserter for iron-plate at (9,1) facing 4
+2025-05-25 15:47:28,088 - FactorioProductionTree - INFO - east
+2025-05-25 15:47:28,089 - FactorioProductionTree - INFO -   - Placing inserter for copper-plate at (1,7) facing 12
+2025-05-25 15:47:28,092 - FactorioProductionTree - INFO - east
+2025-05-25 15:47:28,107 - FactorioProductionTree - INFO -   - Placing inserter for copper-plate at (1,8) facing 12
+2025-05-25 15:47:28,111 - FactorioProductionTree - INFO - east
+2025-05-25 15:47:28,111 - FactorioProductionTree - INFO -   - Placing inserter for copper-plate at (1,4) facing 12
+2025-05-25 15:47:28,113 - FactorioProductionTree - INFO - east
+2025-05-25 15:47:28,114 - FactorioProductionTree - INFO -   - Placing inserter for copper-plate at (1,5) facing 12
+2025-05-25 15:47:28,117 - FactorioProductionTree - INFO - east
+2025-05-25 15:47:28,121 - FactorioProductionTree - INFO -   - Placing inserter for copper-plate at (1,1) facing 12
+2025-05-25 15:47:28,126 - FactorioProductionTree - INFO - east
+2025-05-25 15:47:28,128 - FactorioProductionTree - INFO -   - Placing inserter for copper-plate at (1,2) facing 12
+2025-05-25 15:47:28,130 - FactorioProductionTree - INFO - 3. Adding additional inserters...
+2025-05-25 15:47:28,131 - FactorioProductionTree - INFO -   - Adding placed output inserters...
+2025-05-25 15:47:28,131 - FactorioProductionTree - INFO -     - Processing output inserters for electronic-circuit_0_0
+2025-05-25 15:47:28,131 - FactorioProductionTree - INFO -     - Skipping output inserter at [9, 5] due to overlap
+2025-05-25 15:47:28,132 - FactorioProductionTree - INFO -     - Processing output inserters for electronic-circuit_1_0
+2025-05-25 15:47:28,134 - FactorioProductionTree - INFO -     - Placing output inserter for electronic-circuit_1_0 at [9, 2] facing 12
+2025-05-25 15:47:28,136 - FactorioProductionTree - INFO - 4. Adding path belts...
+2025-05-25 15:47:28,137 - FactorioProductionTree - INFO - Found 4 path items to process
+2025-05-25 15:47:28,137 - FactorioProductionTree - INFO - Processing 1 paths for item electronic-circuit_0_0
+2025-05-25 15:47:28,138 - FactorioProductionTree - INFO -   - Processing belt path for electronic-circuit_0_0 with 3 points
+2025-05-25 15:47:28,139 - FactorioProductionTree - INFO -   - Adding destination splitter for electronic-circuit_0_0 at [15, 6] facing [0, 1]
+2025-05-25 15:47:28,142 - FactorioProductionTree - INFO -   - Found 1 underground segments
+2025-05-25 15:47:28,143 - FactorioProductionTree - INFO -   - Adding underground belt segment from [10, 5] to [13, 5] facing 4
+2025-05-25 15:47:28,145 - FactorioProductionTree - INFO - Processing 1 paths for item electronic-circuit_1_0
+2025-05-25 15:47:28,146 - FactorioProductionTree - INFO -   - Processing belt path for electronic-circuit_1_0 with 3 points
+2025-05-25 15:47:28,146 - FactorioProductionTree - INFO -   - Adding destination splitter for electronic-circuit_1_0 at [15, 3] facing [0, 1]
+2025-05-25 15:47:28,147 - FactorioProductionTree - INFO -   - Found 1 underground segments
+2025-05-25 15:47:28,147 - FactorioProductionTree - INFO -   - Adding underground belt segment from [10, 2] to [13, 2] facing 4
+2025-05-25 15:47:28,150 - FactorioProductionTree - INFO - Processing 1 paths for item iron-plate_0
+2025-05-25 15:47:28,151 - FactorioProductionTree - INFO -   - Processing belt path for iron-plate_0 with 2 points
+2025-05-25 15:47:28,152 - FactorioProductionTree - INFO -   - Adding start splitter for iron-plate_0 at [12, 8] facing [0, -1]
+2025-05-25 15:47:28,154 - FactorioProductionTree - INFO -   - Adding transport belt at [11, 7] facing 12
+2025-05-25 15:47:28,157 - FactorioProductionTree - INFO -   - Adding last transport belt at [10, 7] facing 12
+2025-05-25 15:47:28,159 - FactorioProductionTree - INFO - Processing 1 paths for item iron-plate_1
+2025-05-25 15:47:28,160 - FactorioProductionTree - INFO -   - Processing belt path for iron-plate_1 with 2 points
+2025-05-25 15:47:28,160 - FactorioProductionTree - INFO -   - Adding start splitter for iron-plate_1 at [12, 2] facing [0, -1]
+2025-05-25 15:47:28,165 - FactorioProductionTree - INFO -   - Adding transport belt at [11, 1] facing 12
+2025-05-25 15:47:28,167 - FactorioProductionTree - INFO -   - Adding last transport belt at [10, 1] facing 12
+2025-05-25 15:47:28,169 - FactorioProductionTree - INFO - 5. Adding I/O belts...
+2025-05-25 15:47:28,169 - FactorioProductionTree - INFO -   - Processing 2 input belt routes
+2025-05-25 15:47:28,169 - FactorioProductionTree - INFO -     - Processing input paths for copper-plate
+2025-05-25 15:47:28,170 - FactorioProductionTree - INFO -   - Processing belt path for copper-plate with 10 points
+2025-05-25 15:47:28,170 - FactorioProductionTree - INFO -   - Adding transport belt at [0, 9] facing 0
+2025-05-25 15:47:28,172 - FactorioProductionTree - INFO -   - Adding last transport belt at [0, 0] facing 0
+2025-05-25 15:47:28,175 - FactorioProductionTree - INFO -   - Adding transport belt at [0, 8] facing 0
+2025-05-25 15:47:28,177 - FactorioProductionTree - INFO -   - Adding transport belt at [0, 7] facing 0
+2025-05-25 15:47:28,179 - FactorioProductionTree - INFO -   - Adding transport belt at [0, 6] facing 0
+2025-05-25 15:47:28,182 - FactorioProductionTree - INFO -   - Adding transport belt at [0, 5] facing 0
+2025-05-25 15:47:28,185 - FactorioProductionTree - INFO -   - Adding transport belt at [0, 4] facing 0
+2025-05-25 15:47:28,193 - FactorioProductionTree - INFO -   - Adding transport belt at [0, 3] facing 0
+2025-05-25 15:47:28,196 - FactorioProductionTree - INFO -   - Adding transport belt at [0, 2] facing 0
+2025-05-25 15:47:28,204 - FactorioProductionTree - INFO -   - Adding transport belt at [0, 1] facing 0
+2025-05-25 15:47:28,208 - FactorioProductionTree - INFO -     - Processing input paths for iron-plate
+2025-05-25 15:47:28,209 - FactorioProductionTree - INFO -   - Processing belt path for iron-plate with 10 points
+2025-05-25 15:47:28,209 - FactorioProductionTree - INFO -   - Adding transport belt at [12, 9] facing 0
+2025-05-25 15:47:28,211 - FactorioProductionTree - INFO -   - Adding last transport belt at [12, 0] facing 0
+2025-05-25 15:47:28,215 - FactorioProductionTree - INFO -   - Skipping belt at [12, 8] due to overlap
+2025-05-25 15:47:28,218 - FactorioProductionTree - INFO -   - Adding transport belt at [12, 7] facing 0
+2025-05-25 15:47:28,223 - FactorioProductionTree - INFO -   - Adding transport belt at [12, 6] facing 0
+2025-05-25 15:47:28,227 - FactorioProductionTree - INFO -   - Adding transport belt at [12, 5] facing 0
+2025-05-25 15:47:28,232 - FactorioProductionTree - INFO -   - Adding transport belt at [12, 4] facing 0
+2025-05-25 15:47:28,236 - FactorioProductionTree - INFO -   - Adding transport belt at [12, 3] facing 0
+2025-05-25 15:47:28,238 - FactorioProductionTree - INFO -   - Skipping belt at [12, 2] due to overlap
+2025-05-25 15:47:28,239 - FactorioProductionTree - INFO -   - Adding transport belt at [12, 1] facing 0
+2025-05-25 15:47:28,242 - FactorioProductionTree - INFO -   - Processing 1 output belt routes
+2025-05-25 15:47:28,242 - FactorioProductionTree - INFO -     - Processing output paths for electronic-circuit
+2025-05-25 15:47:28,243 - FactorioProductionTree - INFO -   - Processing belt path for electronic-circuit with 10 points
+2025-05-25 15:47:28,244 - FactorioProductionTree - INFO -   - Adding transport belt at [15, 0] facing 8
+2025-05-25 15:47:28,246 - FactorioProductionTree - INFO -   - Adding last transport belt at [15, 9] facing 8
+2025-05-25 15:47:28,248 - FactorioProductionTree - INFO -   - Adding transport belt at [15, 1] facing 8
+2025-05-25 15:47:28,250 - FactorioProductionTree - INFO -   - Adding transport belt at [15, 2] facing 8
+2025-05-25 15:47:28,251 - FactorioProductionTree - INFO -   - Skipping belt at [15, 3] due to overlap
+2025-05-25 15:47:28,252 - FactorioProductionTree - INFO -   - Adding transport belt at [15, 4] facing 8
+2025-05-25 15:47:28,254 - FactorioProductionTree - INFO -   - Adding transport belt at [15, 5] facing 8
+2025-05-25 15:47:28,256 - FactorioProductionTree - INFO -   - Skipping belt at [15, 6] due to overlap
+2025-05-25 15:47:28,256 - FactorioProductionTree - INFO -   - Adding transport belt at [15, 7] facing 8
+2025-05-25 15:47:28,259 - FactorioProductionTree - INFO -   - Adding transport belt at [15, 8] facing 8
+2025-05-25 15:47:28,261 - FactorioProductionTree - INFO - 6. Placing power poles...
+2025-05-25 15:47:28,261 - FactorioProductionTree - INFO -   - Placing medium-electric-pole at (4,9)
+2025-05-25 15:47:28,262 - FactorioProductionTree - INFO -   - Placing medium-electric-pole at (1,3)
+2025-05-25 15:47:28,263 - FactorioProductionTree - INFO -   - Placing medium-electric-pole at (8,4)
+2025-05-25 15:47:28,265 - FactorioProductionTree - INFO - 7. Exporting blueprint...
+2025-05-25 15:47:28,273 - FactorioProductionTree - INFO - Blueprint successfully exported to Blueprints/electronic-circuit_100_[]_module.txt

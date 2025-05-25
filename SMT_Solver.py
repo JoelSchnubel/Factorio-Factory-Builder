@@ -195,12 +195,12 @@ class SMTSolver:
         self.power_pole_radius = pole_data["supply_area_radius"]
         self.power_pole_width = pole_data["dimensions"]["width"]
         self.power_pole_height = pole_data["dimensions"]["height"]
-        
-        # Estimate number of poles needed based on grid size and pole coverage
-        if max_poles is None:
-            # Estimate based on grid area and pole coverage
+          # Estimate number of poles needed based on grid size and pole coverage
+        if max_poles is None:            
             grid_area = self.width * self.height
-            pole_coverage = math.pi * self.power_pole_radius * self.power_pole_radius
+            # Area covered by each pole is a square with sides of 2*radius+1
+            # Square coverage: side length is 2*radius+1 (to account for the radius on both sides plus the center)
+            pole_coverage = (2 * self.power_pole_radius + 1) * (2 * self.power_pole_radius + 1)
             max_poles = min(30, max(1, int(grid_area / pole_coverage * 1.5)))  # Add 50% extra for safety
         
         logger.info(f"Creating {max_poles} power poles of type {pole_type}")
@@ -251,8 +251,7 @@ class SMTSolver:
                     )
                 ))
             logger.debug(f"Added assembler overlap constraint for pole {pole.id}")
-        
-        # 3. Power poles must not overlap with each other
+          # 3. Power poles must not overlap with each other
         for i, pole1 in enumerate(self.power_poles):
             for j, pole2 in enumerate(self.power_poles[i+1:], i+1):  # Fixed: Only compare with later poles
                 self.solver.add(self.Implies(
@@ -265,6 +264,52 @@ class SMTSolver:
                     )
                 ))
             logger.debug(f"Added pole-pole overlap constraint for pole {pole1.id}")
+            
+        # 3b. Power poles must not overlap with inserters
+        for pole in self.power_poles:
+            for assembler in self.assemblers:
+                for inserter in assembler.inserters:
+                    self.solver.add(self.Implies(
+                        pole.is_used,
+                        self.Or(
+                            pole.x + self.power_pole_width <= inserter.x,
+                            pole.x > inserter.x,
+                            pole.y + self.power_pole_height <= inserter.y,
+                            pole.y > inserter.y
+                        )
+                    ))
+            logger.debug(f"Added inserter overlap constraint for pole {pole.id}")
+            
+        # 3c. Power poles must not overlap with belts
+        for pole in self.power_poles:
+            for assembler in self.assemblers:
+                for inserter in assembler.inserters:
+                    belt = inserter.belt
+                    if belt:
+                        self.solver.add(self.Implies(
+                            pole.is_used,
+                            self.Or(
+                                pole.x + self.power_pole_width <= belt.x,
+                                pole.x > belt.x,
+                                pole.y + self.power_pole_height <= belt.y,
+                                pole.y > belt.y
+                            )
+                        ))
+            logger.debug(f"Added belt overlap constraint for pole {pole.id}")
+            
+        # 3d. Power poles must not overlap with global belts
+        for pole in self.power_poles:
+            for belt in self.global_input_belts + self.global_output_belts:
+                self.solver.add(self.Implies(
+                    pole.is_used,
+                    self.Or(
+                        pole.x + self.power_pole_width <= belt.x,
+                        pole.x > belt.x,
+                        pole.y + self.power_pole_height <= belt.y,
+                        pole.y > belt.y
+                    )
+                ))
+            logger.debug(f"Added global belt overlap constraint for pole {pole.id}")
         
         logger.debug("Adding coverage variables for assemblers and inserters")
         # 4. Create coverage variables for each entity (assembler and inserter)
@@ -288,12 +333,13 @@ class SMTSolver:
                     assembler_tile_y = assembler.y + dy
                     
                     # For each pole, check if it could cover this tile
-                    for pole in self.power_poles:
+                    for pole in self.power_poles:                       
                         pole_center_x = pole.x + self.power_pole_width // 2
                         pole_center_y = pole.y + self.power_pole_height // 2
-                        
-                        coverage_radius = self.power_pole_radius * 5  # Very generous radius
-                        distance_constraint = Abs(assembler_tile_x - pole_center_x) + Abs(assembler_tile_y - pole_center_y) <= coverage_radius
+                        # Square coverage area: check if tile is within the supply area in both x and y directions
+                        x_distance_constraint = Abs(assembler_tile_x - pole_center_x) <= self.power_pole_radius
+                        y_distance_constraint = Abs(assembler_tile_y - pole_center_y) <= self.power_pole_radius
+                        distance_constraint = self.And(x_distance_constraint, y_distance_constraint)
                       
                         # Add coverage condition (pole is used AND distance is within radius)
                         assembler_coverage_conditions.append(self.And(pole.is_used, distance_constraint))
@@ -314,12 +360,13 @@ class SMTSolver:
             for inserter in assembler.inserters:
                 inserter_coverage_conditions = []
                 
-                for pole in self.power_poles:
+                for pole in self.power_poles:                    
                     pole_center_x = pole.x + self.power_pole_width // 2
                     pole_center_y = pole.y + self.power_pole_height // 2
-                    
-                    # More generous radius for inserters as well
-                    distance_constraint = Abs(inserter.x - pole_center_x) + Abs(inserter.y - pole_center_y) <= self.power_pole_radius * 3
+                    # Square coverage area for inserters as well
+                    x_distance_constraint = Abs(inserter.x - pole_center_x) <= self.power_pole_radius
+                    y_distance_constraint = Abs(inserter.y - pole_center_y) <= self.power_pole_radius
+                    distance_constraint = self.And(x_distance_constraint, y_distance_constraint)
                     
                     inserter_coverage_conditions.append(self.And(pole.is_used, distance_constraint))
                 

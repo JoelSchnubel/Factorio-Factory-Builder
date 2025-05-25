@@ -37,7 +37,7 @@
   },
   "power": {
     "default_type": "medium-electric-pole",
-    "place_power_poles": false,
+    "place_power_poles": true,
     "maximize_coverage": false
   }
 }
