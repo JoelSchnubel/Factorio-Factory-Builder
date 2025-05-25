@@ -1,0 +1,28 @@
+file,solver,logic,status,time,has_model
+solver_model_electronic-circuit_100.smt2,Z3 API,default,sat,1.8854255676269531,Yes
+solver_model_electronic-circuit_100.smt2,CVC5,default,sat,6.457247972488403,Yes
+solver_model_electronic-circuit_100.smt2,Yices,default,sat,0.289355993270874,Yes
+solver_model_electronic-circuit_100.smt2,Z3 API (QF_LIA),QF_LIA,unsat,0.3675248622894287,No
+solver_model_electronic-circuit_100.smt2,CVC5 (QF_LIA),QF_LIA,sat,5.681547403335571,Yes
+solver_model_electronic-circuit_100.smt2,Yices (QF_LIA),QF_LIA,sat,0.2993922233581543,Yes
+solver_model_electronic-circuit_100.smt2,Z3 API (QF_LRA),QF_LRA,unsat,0.47815942764282227,No
+solver_model_electronic-circuit_100.smt2,CVC5 (QF_LRA),QF_LRA,error,0.08772635459899902,No
+solver_model_electronic-circuit_100.smt2,Yices (QF_LRA),QF_LRA,error,0.07816243171691895,No
+solver_model_electronic-circuit_100.smt2,Z3 API (QF_UFLIA),QF_UFLIA,unsat,0.3833146095275879,No
+solver_model_electronic-circuit_100.smt2,CVC5 (QF_UFLIA),QF_UFLIA,sat,30.92328929901123,Yes
+solver_model_electronic-circuit_100.smt2,Yices (QF_UFLIA),QF_UFLIA,sat,0.8925504684448242,Yes
+solver_model_electronic-circuit_100.smt2,Z3 API (QF_IDL),QF_IDL,unsat,0.37398743629455566,No
+solver_model_electronic-circuit_100.smt2,CVC5 (QF_IDL),QF_IDL,sat,9.786309719085693,Yes
+solver_model_electronic-circuit_100.smt2,Yices (QF_IDL),QF_IDL,sat,0.27297496795654297,Yes
+solver_model_electronic-circuit_100.smt2,Z3 API (QF_RDL),QF_RDL,unsat,0.49382972717285156,No
+solver_model_electronic-circuit_100.smt2,CVC5 (QF_RDL),QF_RDL,error,0.08898353576660156,No
+solver_model_electronic-circuit_100.smt2,Yices (QF_RDL),QF_RDL,error,0.09160399436950684,No
+solver_model_electronic-circuit_100.smt2,Z3 API (QF_UF),QF_UF,unsat,0.416412353515625,No
+solver_model_electronic-circuit_100.smt2,CVC5 (QF_UF),QF_UF,error,0.08888006210327148,No
+solver_model_electronic-circuit_100.smt2,Yices (QF_UF),QF_UF,error,0.08752202987670898,No
+solver_model_electronic-circuit_100.smt2,Z3 API (QF_BV),QF_BV,unsat,0.42688608169555664,No
+solver_model_electronic-circuit_100.smt2,CVC5 (QF_BV),QF_BV,error,0.08652853965759277,No
+solver_model_electronic-circuit_100.smt2,Yices (QF_BV),QF_BV,error,0.08512067794799805,No
+solver_model_electronic-circuit_100.smt2,Z3 API (QF_AUFBV),QF_AUFBV,unsat,0.4295167922973633,No
+solver_model_electronic-circuit_100.smt2,CVC5 (QF_AUFBV),QF_AUFBV,error,0.08319234848022461,No
+solver_model_electronic-circuit_100.smt2,Yices (QF_AUFBV),QF_AUFBV,error,0.0830388069152832,No

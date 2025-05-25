@@ -6,6 +6,7 @@ import numpy as np
 from solver_wrapper import SolverFactory
 import json
 from logging_config import setup_logger
+import os
 
 set_param('parallel.enable',True)
 set_param('smt.threads', 8)
@@ -19,8 +20,7 @@ class Assembler:
         self.x = solver.Int(f'{id}_x')
         self.y = solver.Int(f'{id}_y')
         
-        
-        
+
         self.width = width
         self.height = height
         
@@ -667,7 +667,7 @@ class SMTSolver:
                        
     # user input/putput belts are allowed to overlap with belts that have the same item
     def add_global_belt_overlap_belt_constraint(self):
-        logger.info("Adding belt overlap constraints to avoid conflicts with global belts (different items only).")
+        logger.info("Adding belt overlap constraints to prevent conflicts with global belts (different items only).")
         belts = self.global_input_belts + self.global_output_belts
         for assembler in self.assemblers:
             for inserter in assembler.inserters:
@@ -1244,7 +1244,7 @@ class SMTSolver:
                 # Right edge (excluding corners)
                 for dy in range(1, asm.height - 1):
                     edge_positions.append((asm.x + asm.width - 1, asm.y + dy))
-                
+    
                 # Find minimum distance to any edge of the assembler
                 for edge_pos in edge_positions:
                     assembler_distances.append(Abs(belt.x - edge_pos[0]) + Abs(belt.y - edge_pos[1]))
@@ -1265,8 +1265,6 @@ class SMTSolver:
             else:
                 logger.warning(f"Inserter {inserter.id} has no matching global belts or assemblers producing {inserter.item}.")
 
-            
-
         if distance_constraints:
             self.solver.add(total_distance == self.Sum(distance_constraints))
             self.solver.minimize(total_distance)
@@ -1275,67 +1273,60 @@ class SMTSolver:
             logger.warning("No distance constraints were added - no inserters to optimize")
             
     
-    
     def solve(self):
-            """Initial solving step."""
+
+        
+        output_item = next(iter(self.production_data.keys()))
+        output_amount = 0
+        if output_item in self.production_data:
+            output_amount = self.production_data[output_item].get("amount_per_minute", 0)       
+        # Otherwise, use the original solving approach
+        os.makedirs("SMT_Modules", exist_ok=True)  # Create the directory if it doesn't exist
+        model_file = os.path.join("SMT_Modules", f"solver_model_{output_item}_{output_amount}.smt")
+        self.write_model_to_file(file_path=model_file)
+        
+        result = self.solver.check()
+        logger.info(f"Solver check result: {result}")
+
+        if result == self.sat:
+            self.model = self.solver.model() 
+
+         
+            #self.debug_print_model_values()
             
-            if self.config.get("power", {}).get("place_power_poles", True):
-                logger.info("Power poles are enabled, setting up power pole constraints.")
-                self.setup_power_poles()
-            else:
-                logger.warning("Power poles are not enabled, skipping setup.")
-                
-            result = self.solver.check()
-            logger.info(f"Solver check result: {result}")
-
-            if result == self.sat:
-                self.model = self.solver.model() 
-               
-                #self.debug_print_model_values()
-                
-                # Identify non-overlapping inserters
-                non_overlapping_inserters = self.find_non_overlapping_inserters()
-                # Add constraints to preserve the solved setup
-                self.lock_initial_solution(non_overlapping_inserters)
-                
-                self.minimize_non_overlapping_inserters(non_overlapping_inserters)
-                
-                
-                distance_result = self.solver.check()
-                if distance_result == self.sat:
-                    self.model = self.solver.model()
-                    logger.info("Successfully minimized inserter distances")
-                    
-                    # Now minimize power poles if enabled
-                    if hasattr(self, 'power_poles') and self.power_poles:
-                        self.minimize_power_poles()
-                    else:
-                        logger.warning("Power poles are not enabled, skipping minimization.")
-               
-                self.model = self.solver.model() 
-                logger.info(f"Final solver check result successful")
-                self.build_map()
-
-             
-                output_item = next(iter(self.production_data.keys()))
-                output_amount = 0
-                if output_item in self.production_data:
-                    output_amount = self.production_data[output_item].get("amount_per_minute", 0)
-                
-        
-                os.makedirs("Modules", exist_ok=True)  # Create the directory if it doesn't exist
-                model_file = os.path.join("SMT_Modules", f"solver_model_{output_item}_{output_amount}.smt")
-                self.write_model_to_file(file_path=model_file)
-        
-                return 
-                
-        
+            # Identify non-overlapping inserters
+            non_overlapping_inserters = self.find_non_overlapping_inserters()
+            # Add constraints to preserve the solved setup
+            self.lock_initial_solution(non_overlapping_inserters)
             
-            else:
-                logger.warning("Solver failed to find a solution.")
-                return result
+            self.minimize_non_overlapping_inserters(non_overlapping_inserters)
+            
+            
+            distance_result = self.solver.check()
+            if distance_result == self.sat:
+                self.model = self.solver.model()
+                logger.info("Successfully minimized inserter distances")
+                
+                # Now minimize power poles if enabled
+                # if hasattr(self, 'power_poles') and self.power_poles:
+                #     self.minimize_power_poles()
+                # else:
+                #     logger.warning("Power poles are not enabled, skipping minimization.")
+            
+            self.model = self.solver.model() 
+            logger.info(f"Final solver check result successful")
+            self.build_map()
 
-        
+            
+    
+           
+    
+            return 
+            
+        else:
+            logger.warning("Solver failed to find a solution.")
+            return result
+            
     def get_init_map(self):
         obstacle_map = np.zeros((self.height, self.width), dtype=int)
         for belt in self.global_input_belts:
@@ -1537,7 +1528,7 @@ class SMTSolver:
                     elif ix == x - 1 and iy >= y and iy <= y + 2:
                         direction = "east"   # Facing right toward the assembler
                     # Check if inserter is to the right of the assembler
-                    elif ix == x + 3 and iy >= y and iy <= y + 2:
+                    elif ix == x + 3 and iy >= y and iy + 2:
                         direction = "west"   # Facing left toward the assembler
                     
                     
@@ -1616,63 +1607,51 @@ class SMTSolver:
             logger.info("No valid configuration to restrict (solver state is not SAT).")
             
     
-    def write_model_to_file(self, file_path):
-        """Write the current constraint system to a file in SMT-LIB2 format"""
+    def write_model_to_file(self, file_path, logic="QF_LIA"):
+        """Write the current constraint system to a file in SMT-LIB2 format
+        
+        Args:
+            file_path: Path to save the SMT file
+            logic: SMT logic to use (default: QF_LIA)
+        """
         try:
             os.makedirs(os.path.dirname(file_path), exist_ok=True)  # Create directory if it doesn't exist
+              # Change extension to .smt2 if it's not already
+            if not file_path.lower().endswith('.smt2'):
+                file_path = file_path.replace('.smt', '.smt2')
             
+            # Get the base SMT-LIB2 expression from solver
+            smt_content = self.solver.sexpr()
+            
+            # Ensure the file has proper SMT-LIB2 format elements
+            formatted_content = []
+            
+            # Add the logic declaration at the beginning
+            formatted_content.append(f"(set-logic {logic})")
+            
+            # Add model-production option
+            formatted_content.append("(set-option :produce-models true)")
+            
+            # Add the original content, skipping any existing logic declarations
+            for line in smt_content.split('\n'):
+                if not line.strip().startswith("(set-logic") and not line.strip().startswith("(set-option"):
+                    formatted_content.append(line)
+            
+            # Add check-sat and get-model commands at the end
+            if "(check-sat)" not in smt_content:
+                formatted_content.append("(check-sat)")
+            
+            if "(get-model)" not in smt_content:
+                formatted_content.append("(get-model)")
+            
+            # Write the enhanced SMT-LIB2 content
             with open(file_path, 'w') as f:
-                    f.write(self.solver.sexpr())
+                f.write('\n'.join(formatted_content))
             
-            logger.info(f"Successfully wrote model to {file_path}")
-            logger.info(f"Model saved to {file_path}")
+            logger.info(f"Successfully wrote SMT-LIB2 model to {file_path} with logic {logic}")
             return True
         
         except Exception as e:
-            
-            logger.error(f"Failed to write model to file: {e}")
+            logger.error(f"Failed to write SMT-LIB2 model to file: {e}")
             return False
-    
-    def debug_print_model_values(self):
-        """Print all variable values from the current model for debugging"""
-        logger.info("=== DEBUG: Model Variable Values ===")
-        
-        if self.model is None:
-            logger.warning("No model available to debug")
-            return
-        
-        # Debug assembler positions
-        logger.info("Assembler positions:")
-        for assembler in self.assemblers:
-            try:
-                x_raw = self.model.evaluate(assembler.x)
-                y_raw = self.model.evaluate(assembler.y)
-                logger.info(f"Assembler {assembler.id}: Raw x={x_raw}, Raw y={y_raw}")
-                
-                if hasattr(x_raw, 'as_long'):
-                    x = x_raw.as_long()
-                    y = y_raw.as_long()
-                    logger.info(f"  After as_long: ({x}, {y})")
-                else:
-                    logger.info(f"  No as_long method available, raw types: x_type={type(x_raw)}, y_type={type(y_raw)}")
-            except Exception as e:
-                logger.error(f"Error evaluating assembler {assembler.id}: {e}")
-        
-        # Debug belt positions
-        logger.info("Belt positions:")
-        for belt in self.global_input_belts + self.global_output_belts:
-            try:
-                x_raw = self.model.evaluate(belt.x)
-                y_raw = self.model.evaluate(belt.y)
-                belt_type = "input" if belt in self.global_input_belts else "output"
-                logger.info(f"Belt {belt.id} ({belt_type}): Raw x={x_raw}, Raw y={y_raw}")
-                
-                if hasattr(x_raw, 'as_long'):
-                    x = x_raw.as_long()
-                    y = y_raw.as_long()
-                    logger.info(f"  After as_long: ({x}, {y})")
-                else:
-                    logger.info(f"  No as_long method available, raw types: x_type={type(x_raw)}, y_type={type(y_raw)}")
-            except Exception as e:
-                logger.error(f"Error evaluating belt {belt.id}: {e}")
-        
+   

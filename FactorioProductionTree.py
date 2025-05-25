@@ -3154,7 +3154,7 @@ def Simple_Run():
     logger.info("start")
     
     # Example item and amount
-    item_to_produce = "electronic-circuit"
+    item_to_produce = "copper-cable"
     amount_needed = 100
     solver_type = "z3"  # "gurobi" or "z3"
     input_items = []  # Using explicit input items
