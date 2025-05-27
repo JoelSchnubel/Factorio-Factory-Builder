@@ -394,7 +394,6 @@ class SMTSolver:
             self.solver.add(self.Or([pole.is_used for pole in self.power_poles]))
             logger.debug("Added constraint to ensure at least one pole is used")
         
-    
     def minimize_power_poles(self):
         """
         Minimize the number of power poles used while maintaining coverage.
@@ -423,6 +422,7 @@ class SMTSolver:
                 used_poles = sum(1 for pole in self.power_poles 
                             if self.model.evaluate(pole.is_used))
                 logger.info(f"Successfully minimized power poles: using {used_poles} poles")
+                
                 return True
             else:
                 logger.warning(f"Failed to minimize power poles: {final_result}")
@@ -1386,8 +1386,8 @@ class SMTSolver:
                 y = self.model.evaluate(belt.y).as_long()
                 obstacle_map[y][x] = 22
         return obstacle_map
-    
     def build_map(self):
+        
         
         obstacle_map = [[0 for _ in range(self.width)] for _ in range(self.height)]
 
@@ -1398,6 +1398,22 @@ class SMTSolver:
         power_pole_information = []
         
         if self.solver.check() == self.sat:
+            
+            # Process power poles
+            if hasattr(self, 'power_poles') and self.power_poles:
+                for pole in self.power_poles:
+                    if self.model.evaluate(pole.is_used):
+                        x = self.model.evaluate(pole.x).as_long()
+                        y = self.model.evaluate(pole.y).as_long()
+
+                        obstacle_map[y][x] = 55  
+                        
+                        # Add to power pole information
+                        power_pole_information.append([
+                            self.power_pole_type, x, y
+                        ])
+            
+            
             # Add input and output belts
             for belt in self.global_input_belts:
                 x = self.model.evaluate(belt.x).as_long()
@@ -1579,8 +1595,11 @@ class SMTSolver:
                         direction = "west"   # Facing left toward the assembler
                     
                     
-                    
                     inserter_information.append([inserter.item, ix, iy, direction])
+                    
+                    # Add special logging for iron-plate inserters at position (9, 5)
+                    if ix == 9 and iy == 5:
+                        logger.info(f"Critical inserter added: {inserter.item} at position (9, 5) with direction {direction}")
                     
                     # Mark inserter position as occupied
                     if inserter.type == "input":
@@ -1604,24 +1623,30 @@ class SMTSolver:
                             start_id = belt.id.split('_')[0]
                             belt_point_information.append([start_id, bx, by, belt.type])
                             
-            # Process power poles
-            if hasattr(self, 'power_poles') and self.power_poles:
-                for pole in self.power_poles:
-                    if self.model.evaluate(pole.is_used):
-                        x = self.model.evaluate(pole.x).as_long()
-                        y = self.model.evaluate(pole.y).as_long()
-
-                        obstacle_map[y][x] = 55  
+                    logger.debug(f"Added inserter {inserter.id} at ({ix}, {iy}) with direction {direction} and item {inserter.item}")   
+                    logger.debug(f"Added belt {belt.id} at ({bx}, {by}) with type {belt.type} and item {belt.item}")
                         
-                        # Add to power pole information
-                        power_pole_information.append([
-                            self.power_pole_type, x, y
-                        ])
+
     
         else:
             logger.info('not sat')
+            logger.info("=== Finished building map ===")
             
-        return obstacle_map, belt_point_information, assembler_information, inserter_information,fluid_connection_info,power_pole_information
+        logger.debug(f"Obstacle map size: {len(obstacle_map)}x{len(obstacle_map[0])}")
+        logger.debug(f"Belt point information: {belt_point_information}")
+        logger.debug(f"Assembler information: {assembler_information}")
+        logger.debug(f"Inserter information: {inserter_information}")
+        logger.debug(f"Power pole information: {power_pole_information}")
+       
+        # Store all information as instance variables for later use
+        self.obstacle_map = obstacle_map
+        self.belt_point_information = belt_point_information
+        self.assembler_information = assembler_information
+        self.inserter_information = inserter_information
+        self.fluid_connection_info = fluid_connection_info
+        self.power_pole_information = power_pole_information
+        
+        return obstacle_map, belt_point_information, assembler_information, inserter_information, fluid_connection_info, power_pole_information
 
     
         

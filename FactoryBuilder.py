@@ -1078,28 +1078,50 @@ class FactoryBuilder:
         for x in range(0, (self.final_x + 1) * cell_size, cell_size):
             pygame.draw.line(window, (200, 200, 200), (x, 0), (x, window_height))
         for y in range(0, (self.final_y + 1) * cell_size, cell_size):
-            pygame.draw.line(window, (200, 200, 200), (0, y), (window_width, y))
-        
-            # Draw inter-block paths first so they appear behind blocks
-        if False:
+            pygame.draw.line(window, (200, 200, 200), (0, y), (window_width, y))        # Draw inter-block paths first so they appear behind blocks
+        if self.inter_block_paths:
+            logger.info(f"Found {len(self.inter_block_paths)} inter-block path items to visualize")
             for item_key, path_data_list in self.inter_block_paths.items():
+                logger.info(f"Drawing paths for item: {item_key}, paths: {len(path_data_list)}")
                 for path_data in path_data_list:
-                    path = path_data.get('path', [])
+                    # Log what's in the path_data
+                    logger.info(f"  Path data keys: {list(path_data.keys())}")
+                    
+                    # First check if there's a path key
+                    if 'path' in path_data:
+                        path = path_data['path']
+                    # If not, try to use start and destination
+                    elif 'start' in path_data and 'destination' in path_data:
+                        path = [path_data['start'], path_data['destination']]
+                        logger.info(f"  Using start/destination for path: {path}")
+                    else:
+                        path = []
+                        logger.warning(f"  No valid path found for {item_key}")
+                    
                     underground_segments = path_data.get('underground_segments', {})
                     
                     # Draw regular path segments
                     for i in range(len(path) - 1):
                         start_x, start_y = path[i]
                         end_x, end_y = path[i + 1]
-                        
                         # Skip if part of underground segment
                         is_underground = False
                         for segment_id, segment in underground_segments.items():
-                            segment_path = segment['path']
-                            if (start_x, start_y) in segment_path and (end_x, end_y) in segment_path:
-                                idx1 = segment_path.index((start_x, start_y))
-                                idx2 = segment_path.index((end_x, end_y))
-                                if abs(idx1 - idx2) == 1:  # Adjacent in segment
+                            # Some segments have 'path' others have 'start'/'end'
+                            if 'path' in segment:
+                                segment_path = segment['path']
+                                if (start_x, start_y) in segment_path and (end_x, end_y) in segment_path:
+                                    idx1 = segment_path.index((start_x, start_y))
+                                    idx2 = segment_path.index((end_x, end_y))
+                                    if abs(idx1 - idx2) == 1:  # Adjacent in segment
+                                        is_underground = True
+                                        break
+                            elif 'start' in segment and 'end' in segment:
+                                # Check if this segment contains our points
+                                start_seg = segment['start']
+                                end_seg = segment['end']
+                                if ((start_x, start_y) == tuple(start_seg) and (end_x, end_y) == tuple(end_seg)) or \
+                                   ((start_x, start_y) == tuple(end_seg) and (end_x, end_y) == tuple(start_seg)):
                                     is_underground = True
                                     break
                         
@@ -1107,11 +1129,18 @@ class FactoryBuilder:
                             start_pos = (start_x * cell_size + cell_size // 2, start_y * cell_size + cell_size // 2)
                             end_pos = (end_x * cell_size + cell_size // 2, end_y * cell_size + cell_size // 2)
                             pygame.draw.line(window, BELT_COLOR, start_pos, end_pos, 3)
-                    
-                    # Draw underground segments
+                      # Draw underground segments
                     for segment_id, segment in underground_segments.items():
-                        start = segment['start']
-                        end = segment['end']
+                        # Some formats store start/end directly, others use a path
+                        if 'start' in segment and 'end' in segment:
+                            start = segment['start']
+                            end = segment['end']
+                        elif 'path' in segment and len(segment['path']) >= 2:
+                            start = segment['path'][0]
+                            end = segment['path'][-1]
+                        else:
+                            logger.warning(f"Skipping segment with invalid format: {segment}")
+                            continue
                         
                         # Draw underground entry
                         entry_rect = pygame.Rect(
@@ -1238,15 +1267,26 @@ class FactoryBuilder:
         if save_path:
             pygame.image.save(window, save_path)
             logger.info(f"Factory visualization saved to {save_path}")
-        
-        # Wait for user to close the window or run for a limited time
+          # Wait for user to close the window or run for a limited time
         waiting = True
         clock = pygame.time.Clock()
+        start_time = time.time()
+        max_display_time = 3.0  # Auto-close after 3 seconds if not testing
+        
+        if save_path:
+            # Save screenshot if a save path is provided
+            pygame.image.save(window, save_path)
+            logger.info(f"Factory visualization saved to: {save_path}")
+        
         while waiting:
             clock.tick(60)  # 60 FPS
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     waiting = False
+            
+            # Auto-close after max_display_time seconds
+            if time.time() - start_time > max_display_time:
+                waiting = False
         
         pygame.quit()
 
@@ -1897,7 +1937,7 @@ def manhattan_distance(p1, p2):
 def main():
     
     output_item = "electronic-circuit"
-    amount = 1200
+    amount = 10
     max_assembler_per_blueprint = 5
     
     start_width = 15

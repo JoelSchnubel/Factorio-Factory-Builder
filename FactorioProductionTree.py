@@ -13,10 +13,11 @@ from SMT_Solver  import SMTSolver
 from GurobiSolver import GurobiSolver
 import seaborn as sns
 import numpy as np
+from draftsman.data import entities
 from draftsman.blueprintable import Blueprint
 from draftsman.constants import Direction
 from draftsman.entity import Inserter, AssemblingMachine, TransportBelt, UndergroundBelt , Pipe,UndergroundPipe, ElectricPole
-
+from draftsman.utils import Vector
 from draftsman.entity import Splitter as BlueprintSplitter
 
 from MultiAgentPathfinder import MultiAgentPathfinder,Splitter
@@ -977,7 +978,13 @@ class FactorioProductionTree:
     
     def get_retrieval_points(self, belt_point_information, assembler_information):
         retrieval_points = {}  # Dictionary to store all retrieval points for each item
-
+        
+        # Track all belt positions to avoid overlaps
+        occupied_belt_positions = set()
+        for belt_item, belt_x, belt_y, _ in belt_point_information:
+            occupied_belt_positions.add((belt_x, belt_y))
+            
+        logger.info(f"Occupied belt positions: {occupied_belt_positions}")
 
         # Step 1: Check direct input points from `input_information`
         for i,(item, x, y, _) in enumerate(belt_point_information):
@@ -1023,19 +1030,29 @@ class FactorioProductionTree:
                 input_point = (input_point[1], input_point[0])  # Swap the coordinates
                 output_point = (output_point[1], output_point[0])  # Swap the coordinates
                 
-                # Add these points to the start_points list
-                retrieval_points[key]['start_points'].append(input_point)
-                retrieval_points[key]['start_points'].append(output_point)
+                # Add these points to the start_points list only if they're not occupied by other belts
+                if input_point not in occupied_belt_positions or input_point == (x, y):
+                    retrieval_points[key]['start_points'].append(input_point)
+                else:
+                    logger.info(f"Skipping input point {input_point} for {item} as it's already occupied")
                 
-                # Process path data directly if it exists
+                if output_point not in occupied_belt_positions or output_point == (x, y):
+                    retrieval_points[key]['start_points'].append(output_point)
+                else:
+                    logger.info(f"Skipping output point {output_point} for {item} as it's already occupied")
+                  # Process path data directly if it exists
                 if self.input_information[item]['paths'] is not None and item in self.input_information[item]['paths']:
                     for path_data in self.input_information[item]['paths'][item]:
                         path = path_data['path']
                         
                         # Add all points in the path as potential destinations
                         for pos in path:
-                            # Convert from (x, y) to (col, row) for consistency
-                            retrieval_points[key]["start_points"].append(pos)
+                            # Skip if this position is occupied by another belt
+                            if pos not in occupied_belt_positions or pos == (x, y):
+                                # Convert from (x, y) to (col, row) for consistency
+                                retrieval_points[key]["start_points"].append(pos)
+                            else:
+                                logger.info(f"Skipping path point {pos} for {item} as it's already occupied")
                 
                 continue  # Move to the next belt item after checking input information
                     
@@ -1135,7 +1152,7 @@ class FactorioProductionTree:
         return inserters_needed
     
     
-    def add_out_point_information(self, output_item, assembler_information):
+    def add_out_point_information(self, output_item, assembler_information,belt_point_information):
         retrieval_points = {}
         
         # Collect all the possible output positions from the output information
@@ -1172,8 +1189,14 @@ class FactorioProductionTree:
             output_path_positions.add(output_point)
             
         fluid_connection_positions = set()
-        _, _, _, _, fluid_connection_info, _ = self.z3_solver.build_map()
+        _, _, _, _, fluid_connection_info, _ = self.z3_solver.build_map()            # Create a set of occupied belt positions to avoid overlaps
+        occupied_belt_positions = set()
+        for asm_info in assembler_information:
+            for belt_item, belt_x, belt_y, _ in belt_point_information:
+                occupied_belt_positions.add((belt_x, belt_y))
         
+        logger.info(f"Occupied belt positions in output: {occupied_belt_positions}")
+            
         # Process each assembler that produces this item
         for i, (asm_item, assembler_x, assembler_y, width, height, machine_type, orientation_idx) in enumerate(assembler_information):
             if asm_item == output_item:
@@ -1251,10 +1274,15 @@ class FactorioProductionTree:
                         'inserter_mapping': {},
                         'is_fluid': self.is_fluid_item(output_item)
                     }
-                    
-
-                    # Add these positions to the retrieval point
+                            # Add these positions to the retrieval point
                     for _, inserter_pos, belt_pos in ranked_positions:
+                        belt_pos_tuple = tuple(belt_pos)
+                        
+                        # Check if this belt position is already occupied by another belt
+                        if belt_pos_tuple in occupied_belt_positions and belt_pos_tuple not in output_path_positions:
+                            logger.info(f"Skipping belt position {belt_pos} - already occupied by another belt")
+                            continue
+                            
                         retrieval_points[key]["inserter_mapping"][str(belt_pos)] = inserter_pos
                         retrieval_points[key]["start_points"].append(belt_pos)
                         logger.debug(f"Added potential inserter at {inserter_pos} with belt at {belt_pos} to {key}")
@@ -1409,6 +1437,13 @@ class FactorioProductionTree:
             
             self.obstacle_map, belt_point_information, assembler_information, inserter_information, fluid_connection_info, power_pole_information = self.z3_solver.build_map()
             
+            logger.debug(f"Building Belts")
+            
+            logger.debug(f"Obstacle map: {self.obstacle_map}")
+            logger.debug(f"Belt point information: {belt_point_information}")
+            logger.debug(f"Assembler information: {assembler_information}")
+            logger.debug(f"Inserter information: {inserter_information}")
+            
             # get rid of belts that are already connected -> overlap with other input and output belts set by user or overlap with assembler -> direct insertion
             belt_point_information = [belt for belt in belt_point_information if not self.detect_belt_overlap(belt)]
             
@@ -1420,7 +1455,7 @@ class FactorioProductionTree:
             
             
             # add output belt if needed to form all possible to all possible
-            retrieval_points.update(self.add_out_point_information(self.output_item,assembler_information))
+            retrieval_points.update(self.add_out_point_information(self.output_item,assembler_information,belt_point_information))
             
            
             
@@ -1447,11 +1482,6 @@ class FactorioProductionTree:
                     pipe_underground_length=self.config["belts"]["underground_max_length"],
                 )                # Find paths for all items
                 paths, inserters = pathfinder.find_paths_for_all_items()
-                
-                # Place power poles if enabled in config
-                if self.config.get("power", {}).get("place_power_poles", False):
-                    logger.info("Power pole placement is enabled, placing power poles...")
-                    self.place_power_poles()
                 
                 return paths, inserters
             
@@ -1544,10 +1574,12 @@ class FactorioProductionTree:
             import traceback
             traceback.print_exc()
             return False
-            
-    def place_power_poles(self):
+        
+    def place_power_poles(self,file_path):
         """
         Place power poles using the SMT solver to power assemblers and inserters.
+        The function also handles JSON serialization of power pole information 
+        and saves it directly to the specified JSON file.
         """
         
         # Check if SMT solver exists
@@ -1562,10 +1594,7 @@ class FactorioProductionTree:
         if not power_config.get("place_power_poles", False):
             logger.info("Power pole placement is disabled in config")
             return False
-        
-        # Get the latest obstacle map and machine positions
-        obstacle_map, belt_point_information, assembler_information, inserter_information, fluid_connection_info, _ = self.z3_solver.build_map()
-        
+    
         # Set up power poles in the SMT solver
         # This will create power pole variables and add constraints
         self.z3_solver.setup_power_poles()
@@ -1575,9 +1604,63 @@ class FactorioProductionTree:
         result = self.z3_solver.minimize_power_poles()
         
         if result:
-            logger.info("Power poles placed successfully")
-            # Get the latest map with power pole information
-            _, _, _, _, _, self.power_pole_information = self.z3_solver.build_map()
+            logger.info("Power poles placed successfully")            # Get the latest map with power pole information
+            _, _, _, _, _, power_pole_info = self.z3_solver.build_map()
+            
+            # Create serializable version of power pole information
+            serializable_power_poles = []
+            if power_pole_info:
+                for pole in power_pole_info:
+                    if isinstance(pole, tuple):
+                        serializable_power_poles.append(list(pole))
+                    else:
+                        serializable_power_poles.append(pole)
+                
+                # Store serializable power pole information directly
+                self.power_pole_information = serializable_power_poles
+                
+                logger.info(f"Retrieved and processed {len(serializable_power_poles)} power poles")
+                for pole in serializable_power_poles:
+                    logger.debug(f"Serialized Power pole: {pole}")
+            else:
+                logger.warning("No power pole information was retrieved")
+                # Initialize with empty list to ensure proper JSON serialization
+                self.power_pole_information = []
+            
+            # Save the power pole information directly to the JSON file if a file_path is provided
+            if file_path:
+                try:
+                    # If file exists, read existing data first
+                    data = {}
+                    if os.path.exists(file_path):
+                        try:
+                            with open(file_path, "r") as file:
+                                data = json.load(file)
+                                logger.info(f"Successfully loaded existing JSON data with {len(data.keys())} keys")
+                        except json.JSONDecodeError:
+                            logger.warning(f"Could not parse existing JSON file: {file_path}")
+                        except Exception as e:
+                            logger.warning(f"Error reading existing JSON file: {e}")
+                    else:
+                        logger.warning(f"JSON file does not exist yet: {file_path}")
+                    
+                    # Update only the power_pole_information key
+                    data["power_pole_information"] = self.power_pole_information
+                    
+                    # Ensure file path has a .json extension
+                    if not file_path.endswith('.json'):
+                        file_path += '.json'
+                    
+                    # Write the updated data back to the file
+                    with open(file_path, "w") as file:
+                        json.dump(data, file, indent=4)
+                    
+                    logger.info(f"Power pole information saved successfully to {file_path}")
+                except Exception as e:
+                    logger.error(f"Failed to save power pole information to file: {e}")
+                    import traceback
+                    traceback.print_exc()
+            
             return True
         else:
             logger.warning("Failed to place power poles optimally")
@@ -1585,7 +1668,26 @@ class FactorioProductionTree:
     
     def store_data(self, file_path, paths, placed_inserter_information):
         try:
-            obstacle_map, belt_point_information, assembler_information, inserter_information ,fluid_connection_info , self.power_pole_information= self.z3_solver.build_map()
+            # We want to preserve the power_pole_information that was created in place_power_poles
+            # So we'll store it temporarily if it exists
+            existing_power_poles = None
+            if hasattr(self, 'power_pole_information'):
+                existing_power_poles = self.power_pole_information
+                
+            # Get latest map
+            obstacle_map, belt_point_information, assembler_information, inserter_information, fluid_connection_info, latest_power_poles = self.z3_solver.build_map()
+            
+            # Restore existing power pole information if it was set, otherwise use the latest
+            if existing_power_poles is not None:
+                logger.info(f"Using pre-existing power pole information with {len(existing_power_poles)} poles")
+            else:
+                logger.info(f"Using latest power pole information with {len(latest_power_poles)} poles")
+                self.power_pole_information = latest_power_poles
+            
+            logger.debug(f"Storing data to {file_path}")
+            logger.debug(f"Belt point information: {belt_point_information}")
+            logger.debug(f"Assembler information: {assembler_information}")
+            logger.debug(f"Inserter information: {inserter_information}")
             
             # Convert NumPy array to list if needed
             serializable_obstacle_map = []
@@ -1744,7 +1846,7 @@ class FactorioProductionTree:
                     for pos_str, pos_tuple in inserters.items():
                         serializable_placed_inserters[item_key][pos_str] = list(pos_tuple)
             
-            # Create the data dictionary with all fields
+            # Create the data dictionary with all fields            # Create the data dictionary with all fields
             data = {
                 "output_item": self.output_item,
                 "max_ouput": self.calculate_max_output(),
@@ -1762,7 +1864,8 @@ class FactorioProductionTree:
                 "obstacle_map": serializable_obstacle_map,
                 "paths": serializable_paths,
                 "placed_inserter_information": serializable_placed_inserters,
-                "power_pole_information":self.power_pole_information
+                # Use the power pole information that was already serialized in place_power_poles()
+                "power_pole_information": self.power_pole_information if hasattr(self, 'power_pole_information') else []
             }
             
             # Ensure file path has a .json extension
@@ -1779,8 +1882,6 @@ class FactorioProductionTree:
             logger.info(f"Failed to store production tree data: {e}")
             import traceback
             traceback.print_exc()
-    
-
     def visualize_factory(self, paths=None, placed_inserter_information=None, cell_size=50, store=False, file_path=None):
         logger.info(f'visualizing factory layout')
         
@@ -1791,24 +1892,71 @@ class FactorioProductionTree:
         window = pygame.display.set_mode((window_width, window_height))
         pygame.display.set_caption('Factory Layout Visualization')
         clock = pygame.time.Clock()
+          # Always use stored data for visualization to ensure consistency
+        belt_point_information = self.belt_point_information if hasattr(self, 'belt_point_information') else []
+        assembler_information = self.assembler_information if hasattr(self, 'assembler_information') else []
+        inserter_information = self.inserter_information if hasattr(self, 'inserter_information') else []
+        fluid_connection_info = []  # Not stored in JSON
         
-        # Get factory layout data
-        _, belt_point_information, assembler_information, inserter_information ,fluid_connection_info ,power_pole_information = self.z3_solver.build_map()
+        # Make a copy of inserter_information to avoid modifying the original
+        inserter_information = list(inserter_information)
         
-        
+        # If we don't have stored data yet and the solver is available, get it from there
+        if (not belt_point_information or not assembler_information or not inserter_information) and self.z3_solver is not None:
+            logger.info("No stored data found, fetching from solver")
+            # Before getting data from the solver, check if we should preserve existing inserters
+            existing_inserters = {}
+            if hasattr(self, 'inserter_information') and self.inserter_information:
+                for inserter_data in self.inserter_information:
+                    if len(inserter_data) >= 3:
+                        pos = (inserter_data[1], inserter_data[2])
+                        existing_inserters[pos] = inserter_data
+            
+            # Get data from solver
+            _, belt_point_information, assembler_information, new_inserter_info, fluid_connection_info, power_pole_information = self.z3_solver.build_map()
+            
+            # Merge with existing inserters if applicable
+            if existing_inserters:
+                for inserter_data in new_inserter_info:
+                    if len(inserter_data) >= 3:
+                        pos = (inserter_data[1], inserter_data[2])
+                        existing_inserters.pop(pos, None)  # Remove from existing if found in new
                 
-        # Store power pole information for drawing
-        self.power_pole_information = power_pole_information
-        
-        # Process additional inserters from placed_inserter_information
+                # Add back any existing inserters that weren't in the new data
+                for pos, inserter_data in existing_inserters.items():
+                    new_inserter_info.append(inserter_data)
+                    logger.info(f"Preserving existing inserter: {inserter_data[0]} at position {pos}")
+            
+            # Store data for future use
+            self.belt_point_information = belt_point_information
+            self.assembler_information = assembler_information
+            self.inserter_information = new_inserter_info            # Store power pole information for drawing if not already set
+            # Always preserve existing power pole information if it exists
+            if not hasattr(self, 'power_pole_information') or not self.power_pole_information:
+                logger.info(f"Using new power pole information with {len(power_pole_information)} poles")
+                self.power_pole_information = power_pole_information
+            else:
+                logger.info(f"Preserving existing power pole information with {len(self.power_pole_information)} poles")
+          # Process additional inserters from placed_inserter_information
         if placed_inserter_information:
+            # Track existing inserter positions to avoid duplicates
+            existing_positions = set()
+            for inserter in inserter_information:
+                if len(inserter) >= 3:
+                    existing_positions.add((inserter[1], inserter[2]))
+            
             for item_key, inserters in placed_inserter_information.items():
                 # Extract base item name
                 item_name = item_key.split('_')[0] if '_' in item_key else item_key
                 
                 for pos_str, inserter_pos in inserters.items():
-                    # Add to inserter_information
-                    inserter_information.append((item_name, inserter_pos[0], inserter_pos[1]))
+                    # Only add if position is not already occupied
+                    if (inserter_pos[0], inserter_pos[1]) not in existing_positions:
+                        inserter_information.append((item_name, inserter_pos[0], inserter_pos[1]))
+                        existing_positions.add((inserter_pos[0], inserter_pos[1]))
+                        logger.info(f"Added placed inserter for {item_name} at position ({inserter_pos[0]}, {inserter_pos[1]})")
+                    else:
+                        logger.info(f"Skipped duplicate inserter at position ({inserter_pos[0]}, {inserter_pos[1]})")
         
         # Load and scale images
         images = self._load_factory_images(cell_size)
@@ -2572,9 +2720,7 @@ class FactorioProductionTree:
         assembler_count = self.production_data.get(self.output_item, {}).get('assemblers', 0)
         
         # Calculate and return the maximum output
-        return assembler_count * crafting_speed * cycles_per_minute * yield_per_recipe
- 
-    
+        return assembler_count * crafting_speed * cycles_per_minute * yield_per_recipe 
     def count_assemblers(self,production_data):
         assembler_counts = {}
     
@@ -2584,16 +2730,11 @@ class FactorioProductionTree:
                 assembler_counts[item] = data['assemblers']
             else:
                 assembler_counts[item] = 0  # Assume 0 assemblers if the field is not present
-        
         return assembler_counts
     
-    
-
     def create_blueprint(self, json_path, output_path):
         """
         Create a Factorio blueprint from saved factory data using Draftsman.
-        Takes into account that assemblers are 3x3 and centered on their placed position.
-        Properly handles splitters and prevents excessive inserters.
         """
         try:
             # Load the saved factory data
@@ -2647,7 +2788,9 @@ class FactorioProductionTree:
                     for dx in range(width):
                         for dy in range(height):
                             occupied_positions.add((x + dx, y + dy))
-            
+
+
+          
             logger.info("2. Placing inserters...")
             # Place inserters from inserter_information - check for overlaps and orient properly
             if hasattr(self, 'inserter_information'):
@@ -2695,7 +2838,7 @@ class FactorioProductionTree:
                     blueprint.entities.append(inserter)
                     occupied_positions.add((x, y))
                     
-                    
+                          
             logger.info("3. Adding additional inserters...")
             # Add placed output inserters from the blueprint data
             if hasattr(self, 'placed_inserter_information') and self.placed_inserter_information:
@@ -2711,9 +2854,7 @@ class FactorioProductionTree:
                                 logger.info(f"    - Skipping inserter due to invalid destination: {dest_str}")
                                 continue
                         else:
-                            dest_pos = dest_str
-                        
-                        # Skip if position is occupied
+                            dest_pos = dest_str                        # Skip if position is occupied
                         src_tuple = tuple(src_pos) if isinstance(src_pos, list) else src_pos
                         if src_tuple in occupied_positions:
                             logger.info(f"    - Skipping output inserter at {src_pos} due to overlap")
@@ -2739,27 +2880,22 @@ class FactorioProductionTree:
                             direction = Direction.NORTH
                         else:
                             direction = Direction.SOUTH
-                        
-                        # Create and place inserter
+                          # Create and place inserter
                         logger.info(f"    - Placing output inserter for {item_key} at {src_pos} facing {direction}")
                         inserter = Inserter(
                             name="inserter",
                             position=src_pos,
                             direction=direction
-                        )
+                            
+                        )   
                         blueprint.entities.append(inserter)
-                        occupied_positions.add(src_tuple)            # Place belts from paths generated by the pathfinder
-            logger.info("4. Adding path belts...")            # Process all paths from the solver's belt information
-            if hasattr(self, 'paths') and self.paths:
-                logger.info(f"Found {len(self.paths.keys())} path items to process")
-                for item, item_paths in self.paths.items():
-                    logger.info(f"Processing {len(item_paths)} paths for item {item}")
-                    for path_data in item_paths:
-                        if 'path' in path_data:
-                            self._add_belt_path_to_blueprint(blueprint, path_data, item, occupied_positions)
-                        else:
-                            logger.warning(f"Skipping path_data without 'path' key for item {item}")
-           # Place belts for I/O paths with more detailed logger
+                        occupied_positions.add(src_tuple)
+
+            # Place belts from paths generated by the pathfinder
+            logger.info("4. Adding path belts...")
+            self._add_path_belts_to_blueprint(blueprint, occupied_positions)
+           
+            # Place belts for I/O paths with more detailed logger
             logger.info("5. Adding I/O belts...")
             self._add_io_belts_to_blueprint(blueprint, occupied_positions)
             
@@ -2774,13 +2910,71 @@ class FactorioProductionTree:
                     )
                     blueprint.entities.append(power_pole)
                     occupied_positions.add((x, y))
-            # Add any additional power poles from the blueprint data        
+
+            # Add this code after placing all power poles in create_blueprint method
+
+            logger.info("6b. Connecting power poles...")
+            # Create a list to store all placed power poles for easier access
+            power_poles = []
+            for entity in blueprint.entities:
+                if isinstance(entity, ElectricPole):
+                    power_poles.append(entity)
+
+            # Connect each pole to nearby poles within its connection radius
+            if power_poles:
+                logger.info(f"  - Found {len(power_poles)} power poles to connect")
                 
+                # For each pole, find other poles within reach and connect them
+                for i, pole in enumerate(power_poles):
+                    # Get pole connection radius from entity data
+                    pole_name = pole.name
+                    connection_distance = entities.raw.get(pole_name, {}).get("maximum_wire_distance", 9)
+                    x, y = pole.position
+                    pole_pos = Vector(x, y)
+                    
+                    
+                    logger.info(f"  - Processing pole {i+1}/{len(power_poles)} at {pole_pos} with range {connection_distance}")
+                    
+                    # Find nearby poles to connect to
+                    connected = 0
+                    for other_pole in power_poles:
+                        # Skip connecting to self
+                        if other_pole is pole:
+                            continue
+                            
+                        
+                        other_x, other_y = other_pole.position
+                        other_pos = Vector(other_x, other_y)
+                        
+                        # Calculate distance between poles
+                        distance = ((pole_pos - other_pos).x ** 2 + (pole_pos - other_pos).y ** 2) ** 0.5
+                        
+                        # If in range and not already connected, connect them
+                        if distance <= connection_distance:
+                            try:
+                                # Check if they're already connected to avoid duplicates
+                                already_connected = False
+                                if hasattr(pole, 'connections') and pole.connections:
+                                    # Check if there's already a connection to this pole
+                                    if 'copper' in pole.connections:
+                                        for connection in pole.connections['copper']:
+                                            if 'entity_id' in connection and connection['entity_id'] == other_pole.entity_number:
+                                                already_connected = True
+                                                break
+                                
+                                if not already_connected:
+                                    pole.connect_power(other_pole)
+                                    connected += 1
+                                    logger.debug(f"    - Connected to pole at {other_pos} (distance: {distance:.2f})")
+                            except Exception as e:
+                                logger.warning(f"    - Failed to connect poles: {e}")
+                    
+                    logger.info(f"  - Pole at {pole_pos} connected to {connected} other poles")
+    
             # Export the blueprint to a file
             logger.info("7. Exporting blueprint...")
             with open(output_path, "w") as f:
                 f.write(blueprint.to_string())
-            
             
             
             logger.info(f"Blueprint successfully exported to {output_path}")
@@ -2791,88 +2985,27 @@ class FactorioProductionTree:
             import traceback
             traceback.print_exc()
             return False
-    def _add_io_belts_to_blueprint(self, blueprint, occupied_positions):
-        """Add user-defined I/O belts to the blueprint, avoiding overlaps"""
-        # Process input belts
-        if hasattr(self, 'input_information') and self.input_information:
-            logger.info(f"  - Processing {len(self.input_information)} input belt routes")
-            for item, data in self.input_information.items():
-                if isinstance(data, dict) and 'paths' in data and data['paths'] is not None and item in data['paths']:
-                    logger.info(f"    - Processing input paths for {item}")
-                    for path_data in data['paths'][item]:
-                        if isinstance(path_data, dict) and 'path' in path_data:
-                            self._add_belt_path_to_blueprint(blueprint, path_data, item, occupied_positions)
-                        else:
-                            logger.warning(f"    - Skipping input path_data without 'path' key for {item}")
-                else:
-                    logger.info(f"    - No valid path data found for input item {item}")
-        else:
-            logger.info("  - No input belt routes found")
         
-        # Process output belts
-        if hasattr(self, 'output_information') and self.output_information:
-            logger.info(f"  - Processing {len(self.output_information)} output belt routes")
-            for item, data in self.output_information.items():
-                if isinstance(data, dict) and 'paths' in data and data['paths'] is not None and item in data['paths']:
-                    logger.info(f"    - Processing output paths for {item}")
-                    for path_data in data['paths'][item]:
-                        if isinstance(path_data, dict) and 'path' in path_data:
-                            self._add_belt_path_to_blueprint(blueprint, path_data, item, occupied_positions)
-                        else:
-                            logger.warning(f"    - Skipping output path_data without 'path' key for {item}")
-                else:
-                    logger.info(f"    - No valid path data found for output item {item}")
-        else:
-            logger.info("  - No output belt routes found")
-            
-    def _get_belt_direction(self, orientation):
-        """Convert orientation tuple to Draftsman direction constant"""
-        dx, dy = orientation
-        
-        if dx == 0 and dy == -1:  # Up
-            return Direction.NORTH
-        elif dx == 1 and dy == 0:  # Right
-            return Direction.EAST
-        elif dx == 0 and dy == 1:  # Down
-            return Direction.SOUTH
-        elif dx == -1 and dy == 0:  # Left
-            return Direction.WEST
-        else:
-            # Default direction if orientation is invalid
-            return Direction.NORTH
-
-            
     def _add_belt_path_to_blueprint(self, blueprint, path_data, item, occupied_positions):
-        """Add a specific belt path to the blueprint, avoiding overlaps.
         
-        Args:
-            blueprint: The blueprint object to add belts to
-            path_data: Dictionary containing path information including 'path' list of coordinates
-            item: The item being transported on this belt path
-            occupied_positions: Set of positions already occupied by other entities
-        """
-        if not path_data or not isinstance(path_data, dict):
-            logger.warning(f"Invalid path_data for item {item}, skipping")
-            return
-            
-        # Determine if this is a fluid item
+        # Determine if this is an output path
+        is_output_path = item in self.output_information if hasattr(self, 'output_information') else False
+        
         is_fluid = self.is_fluid_item(item)
         
-        # Set belt types based on item type (fluid or not)
         if is_fluid:
             belt_type = self.config.get("pipes", {}).get("default_type", "pipe")
             underground_type = self.config.get("pipes", {}).get("underground_type", "pipe-to-ground")
         else:
             belt_type = self.config["belts"]["default_type"]
             underground_type = self.config["belts"]["underground_type"]
-        
-        # Get path points
+            
+        """Add a specific belt path to the blueprint, avoiding overlaps"""
         path = path_data.get('path', [])
-        if not path or len(path) < 2:
-            logger.warning(f"Path for {item} has fewer than 2 points, skipping")
+        if not path:
             return
         
-        logger.info(f"  - Processing belt path for {item} with {len(path)} points")
+        logger.info(f"  - Processing {'output' if is_output_path else 'input/regular'} belt path for {item} with {len(path)} points")
         
         # Get orientation information
         has_orientation = 'orientation' in path_data and path_data['orientation']
@@ -2880,6 +3013,40 @@ class FactorioProductionTree:
         # Handle splitters - check if they exist either as objects or boolean values
         start_splitter = path_data.get('start_splitter')
         dest_splitter = path_data.get('dest_splitter')
+        
+        # check if we have a dest splitter if so palce a tarnsport belt at the destination point, facing the splitter
+        if dest_splitter:
+            logger.info(f"  - Found destination splitter for {item}: {dest_splitter}")
+            dest_point = path_data.get('destination', None)
+            if dest_point:
+                logger.info(f"  - Destination point for {item} is {dest_point}")
+                dest_splitter_pos = dest_splitter.get('position', None)
+                dx = dest_splitter_pos[0] - dest_point[0]
+                dy = dest_splitter_pos[1] - dest_point[1]
+                
+                print(f"  - Destination splitter direction vector (dx={dx}, dy={dy})")
+                
+                if dx > 0:
+                    des_direction= Direction.SOUTH
+                elif dx < 0:
+                    des_direction = Direction.NORTH
+                elif dy > 0:
+                    des_direction = Direction.EAST
+                elif dy < 0:
+                    des_direction = Direction.WEST
+                else:
+                    des_direction = Direction.EAST
+                
+                
+                belt = TransportBelt(
+                    name=belt_type,
+                    position=tuple(dest_point),
+                    direction=des_direction
+                )
+                blueprint.entities.append(belt)
+                occupied_positions.add(tuple(dest_point))
+                    
+                
         
         blueprint_direction_start = None
         blueprint_direction_dest = None
@@ -2927,21 +3094,33 @@ class FactorioProductionTree:
                 splitter_pos = dest_splitter['position']
                 direction = dest_splitter['direction']
                 
+                # Debug output for dest_splitter processing
+                is_output_path = item in self.output_information if hasattr(self, 'output_information') else False
+                logger.info(f"  - DEBUG: Processing destination splitter for {'output path' if is_output_path else 'input/regular path'}")
+                logger.info(f"  - DEBUG: Destination splitter position: {splitter_pos}, direction: {direction}")
+                
                 splitter_tuple = tuple(splitter_pos) if isinstance(splitter_pos, list) else splitter_pos
                 splitter_positions.add(splitter_tuple)
                 
                 dx, dy = direction
+                logger.info(f"  - DEBUG: Destination splitter direction vector (dx={dx}, dy={dy})")
+                
                 if dx == 1 and dy == 0:  # Right
                     blueprint_direction_dest = Direction.EAST
+                    logger.info(f"  - DEBUG: Setting blueprint_direction_dest to EAST")
                 elif dx == -1 and dy == 0:  # Left
                     blueprint_direction_dest = Direction.WEST
+                    logger.info(f"  - DEBUG: Setting blueprint_direction_dest to WEST")
                 elif dx == 0 and dy == 1:  # Down
                     blueprint_direction_dest = Direction.SOUTH
+                    logger.info(f"  - DEBUG: Setting blueprint_direction_dest to SOUTH")
                 elif dx == 0 and dy == -1:  # Up
                     blueprint_direction_dest = Direction.NORTH
+                    logger.info(f"  - DEBUG: Setting blueprint_direction_dest to NORTH")
                 else:
                     # Default to EAST if we can't determine direction
                     blueprint_direction_dest = Direction.EAST
+                    logger.info(f"  - DEBUG: Setting blueprint_direction_dest to default EAST")
            
                
                 # place the splitter in the blueprint
@@ -3079,21 +3258,76 @@ class FactorioProductionTree:
                 )
                 blueprint.entities.append(pipe)
                 occupied_positions.add(current_tuple)
-            
-        
+                
             # Process the last belt in the path if it's not an underground belt or splitter
             if len(path) > 1:
+                
+                logger.debug(f"  - Processing last belt in path for {item}")
+                
                 last_pos = path[-1]
                 last_tuple = tuple(last_pos) if isinstance(last_pos, list) else tuple(last_pos)
                 
-                if last_tuple not in underground_positions and last_tuple not in splitter_positions and last_tuple not in occupied_positions:
-                    # Special case: If we have a destination splitter with a direction,
-                    # orient the last belt to match the splitter's input direction
-                    if blueprint_direction_dest is not None:
-                        # Reverse the direction to have belt feed into splitter
-                        direction = blueprint_direction_dest
-                        
-                        logger.info(f"  - Adding last transport belt at {last_pos} facing toward destination splitter")
+                # Check if we need to place a belt at the destination point
+                place_dest_belt = True
+                
+                # Check if this position is occupied
+                if last_tuple in occupied_positions:
+                    logger.info(f"  - Skipping last belt at {last_pos} due to overlap")
+                    place_dest_belt = False
+                
+                # Check if this is an underground entrance/exit
+                if last_tuple in underground_positions:
+                    logger.info(f"  - Skipping last belt at {last_pos} due to underground position")
+                    place_dest_belt = False                # Check if this is a splitter position
+                if last_tuple in splitter_positions:
+                    # Need to place a belt before the splitter to connect to it
+                    logger.info(f"  - Last point at {last_pos} is a splitter position")
+                    # We will place the belt, but with a direction facing the splitter
+                    # This is handled later in the special case for dest_splitter
+                
+                if place_dest_belt:
+                    # Determine the direction for the last belt
+                    
+                    # Special case: If we have a destination splitter,
+                    # orient the last belt to face the splitter's input
+                    if dest_splitter is not None and isinstance(dest_splitter, dict):
+                        # Get the splitter position and calculate direction toward it
+                        splitter_pos = dest_splitter.get('position')
+                        if splitter_pos:
+                            # Calculate vector from last belt to splitter
+                            dx = splitter_pos[0] - last_pos[0]
+                            dy = splitter_pos[1] - last_pos[1]
+                            
+                            # Enhanced debug logging
+                            logger.info(f"  - DEBUG: Last belt position: {last_pos}")
+                            logger.info(f"  - DEBUG: Destination splitter position: {splitter_pos}")
+                            logger.info(f"  - DEBUG: dx={dx}, dy={dy}")
+                            logger.info(f"  - DEBUG: Path is from {'output_information' if item in self.output_information else 'input_information or paths'}")
+                            
+                            # Set direction toward splitter
+                            if dx > 0:  # Splitter is to the right
+                                direction = Direction.EAST
+                                logger.info(f"  - DEBUG: Setting direction to EAST (splitter is to the right)")
+                            elif dx < 0:  # Splitter is to the left
+                                direction = Direction.WEST
+                                logger.info(f"  - DEBUG: Setting direction to WEST (splitter is to the left)")
+                            elif dy > 0:  # Splitter is below
+                                direction = Direction.SOUTH
+                                logger.info(f"  - DEBUG: Setting direction to SOUTH (splitter is below)")
+                            elif dy < 0:  # Splitter is above
+                                direction = Direction.NORTH
+                                logger.info(f"  - DEBUG: Setting direction to NORTH (splitter is above)")
+                            else:
+                                # Fallback to splitter direction if positions are the same
+                                direction = blueprint_direction_dest or Direction.EAST
+                                logger.info(f"  - DEBUG: Setting direction to fallback {direction}")
+                                
+                            logger.info(f"  - Adding last transport belt at {last_pos} facing toward splitter at {splitter_pos}")
+                        else:
+                            # If we can't determine splitter position, use blueprint direction
+                            direction = blueprint_direction_dest or Direction.EAST
+                            logger.info(f"  - DEBUG: Using blueprint_direction_dest due to missing splitter position: {direction}")
+                            logger.info(f"  - Adding last transport belt at {last_pos} with splitter direction {direction}")
                     else:
                         # Normal case: calculate direction based on path
                         second_last = path[-2]
@@ -3121,20 +3355,75 @@ class FactorioProductionTree:
                     if not is_fluid:
                         belt = TransportBelt(
                             name=belt_type,
-                            position=last_pos,  # FIXED: Use last_pos instead of current
+                            position=last_pos,
                             direction=direction
                         )
                         blueprint.entities.append(belt)
-                        occupied_positions.add(last_tuple)  # FIXED: Use last_tuple instead of current_tuple
+                        occupied_positions.add(last_tuple)
                     else:
                         pipe = Pipe(
                             name=belt_type,
-                            position=last_pos,  # FIXED: Use last_pos instead of current
+                            position=last_pos,
                             direction=direction
                         )
                         blueprint.entities.append(pipe)  
-                        occupied_positions.add(last_tuple)  # FIXED: Use last_tuple instead of current_tuple
+                        occupied_positions.add(last_tuple)
+
+    def _add_io_belts_to_blueprint(self, blueprint, occupied_positions):
+        """Add user-defined I/O belts to the blueprint, avoiding overlaps"""
+        # Process input belts
+        if self.input_information:
+            logger.info(f"  - Processing {len(self.input_information)} input belt routes")
+            for item, data in self.input_information.items():
+                if data['paths'] is not None and item in data['paths']:
+                    for path_data in data['paths'][item]:
+                        self._add_belt_path_to_blueprint(blueprint, path_data, item, occupied_positions)
+        else:
+            logger.info("  - No input belt routes found")
         
+        # Process output belts
+        if self.output_information:
+            logger.info(f"  - Processing {len(self.output_information)} output belt routes")
+            for item, data in self.output_information.items():
+                if data['paths'] is not None and item in data['paths']:
+                    for path_data in data['paths'][item]:
+                        self._add_belt_path_to_blueprint(blueprint, path_data, item, occupied_positions)
+        else:
+            logger.info("  - No output belt routes found")
+
+    def _add_path_belts_to_blueprint(self, blueprint, occupied_positions):
+        """Add pathfinder-generated belts to the blueprint, avoiding overlaps"""
+        if not hasattr(self, 'paths'):
+            logger.info("  - No path data found")
+            return
+        
+        path_count = sum(len(item_paths) for item_paths in self.paths.values())
+        logger.info(f"  - Processing {path_count} pathfinder-generated belt paths for {len(self.paths)} items")
+        
+        for item_key, item_paths in self.paths.items():
+            # Extract base item name
+            item_name = item_key.split('_')[0] if '_' in item_key else item_key
+            logger.info(f"  - Processing {len(item_paths)} paths for {item_name}")
+            
+            for path_data in item_paths:
+                self._add_belt_path_to_blueprint(blueprint, path_data, item_name, occupied_positions)
+
+
+    def _get_belt_direction(self, orientation):
+        """Convert orientation tuple to Draftsman direction constant"""
+        dx, dy = orientation
+        
+        if dx == 0 and dy == -1:  # Up
+            return Direction.NORTH
+        elif dx == 1 and dy == 0:  # Right
+            return Direction.EAST
+        elif dx == 0 and dy == 1:  # Down
+            return Direction.SOUTH
+        elif dx == -1 and dy == 0:  # Left
+            return Direction.WEST
+        else:
+            # Default direction if orientation is invalid
+            return Direction.NORTH
 
         
 
@@ -3217,10 +3506,10 @@ def log_method_time(item, amount, method_name, assembler_counts,start_time, end_
      
        
 def main():
-    #factory = FactorioProductionTree(16,10)
-    #factory.create_blueprint("Modules/electronic-circuit_120_[]_module.json", "electronic-circuit_120_[]_module.txt")
+    factory = FactorioProductionTree(16,10)
+    factory.create_blueprint("Modules/electronic-circuit_120_[]_module.json", "Blueprints/electronic-circuit_120_[]_module.txt")
     
-    Simple_Run()
+    #Simple_Run()
     
     #Eval_Runs("copper-cable",start=1,end=1,step=1,rep_per_step=10)
    
@@ -3230,13 +3519,14 @@ def Simple_Run():
     logger.info("start")
     
     # Example item and amount
-    item_to_produce = "electronic-circuit"
-    amount_needed = 100
+    item_to_produce = "electronic-circuit"  # "copper-cable" or "electronic-circuit"
+    amount_needed = 120
     solver_type = "z3"  # "gurobi" or "z3"
-    input_items = []  # Using explicit input items
+    input_items = []#['copper-cable']  # Using explicit input items
     
     
     # init 
+    #factorioProductionTree = FactorioProductionTree(10,8)
     factorioProductionTree = FactorioProductionTree(16,10)
     factorioProductionTree.amount = amount_needed
     production_data  = factorioProductionTree.calculate_production(item_to_produce,amount_needed,input_items=input_items) #60
@@ -3271,13 +3561,15 @@ def Simple_Run():
     log_method_time(item_to_produce, 1, "build_belts", assembler_counts, start_time, end_time,solver_type)
     
     
-    if(paths):
-        logger.info("saving data")
-        factorioProductionTree.store_data(f'Modules/{item_to_produce}_{amount_needed}_{input_items}_module',paths,placed_inserter_information)
+    
+    logger.info("saving data")
+    factorioProductionTree.store_data(f'Modules/{item_to_produce}_{amount_needed}_{input_items}_module',paths,placed_inserter_information)
+    
+    factorioProductionTree.place_power_poles(f'Modules/{item_to_produce}_{amount_needed}_{input_items}_module.json')
         
-        factorioProductionTree.create_blueprint(f'Modules/{item_to_produce}_{amount_needed}_{input_items}_module.json',f'Blueprints/{item_to_produce}_{amount_needed}_{input_items}_module.txt')
+    factorioProductionTree.create_blueprint(f'Modules/{item_to_produce}_{amount_needed}_{input_items}_module.json',f'Blueprints/{item_to_produce}_{amount_needed}_{input_items}_module.txt')
         
-        factorioProductionTree.visualize_factory(paths,placed_inserter_information,store=True,file_path=f'Modules/{item_to_produce}_{amount_needed}_{input_items}_module.png')
+    factorioProductionTree.visualize_factory(paths,placed_inserter_information,store=True,file_path=f'Modules/{item_to_produce}_{amount_needed}_{input_items}_module.png')
         
 
    
