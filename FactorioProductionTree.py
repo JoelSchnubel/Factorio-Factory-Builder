@@ -2118,22 +2118,23 @@ class FactorioProductionTree:
                         window.blit(coverage_surface, (cell_x * cell_size, cell_y * cell_size))
                         
                         # Draw a border around the coverage cell
-                        pygame.draw.rect(window, (0, 100, 255, 100), cell_rect, 1)
+                        #pygame.draw.rect(window, (0, 100, 255, 100), cell_rect, 1)
                 
                 # Now draw the power pole itself on top
                 window.blit(pole_img, (pixel_x, pixel_y))
                 
                 # Draw a square outline to show the exact coverage area
                 radius_pixels = int(pole_radius * cell_size)
-                center_x = pixel_x + cell_size // 2
-                center_y = pixel_y + cell_size // 2
+                center_x = pixel_x + cell_size 
+                center_y = pixel_y + cell_size 
                 coverage_rect = pygame.Rect(
                     center_x - radius_pixels,
                     center_y - radius_pixels,
                     radius_pixels * 2,
                     radius_pixels * 2
                 )
-                pygame.draw.rect(window, (0, 100, 255, 150), coverage_rect, 2)
+                #pygame.draw.rect(window, (0, 0, 139, 150) , coverage_rect, 2)
+                
         # Draw inserters
         for inserter_data in inserter_information:
             if len(inserter_data) >= 3:  # Ensure we have at least item, x, y
@@ -3506,10 +3507,10 @@ def log_method_time(item, amount, method_name, assembler_counts,start_time, end_
      
        
 def main():
-    factory = FactorioProductionTree(16,10)
-    factory.create_blueprint("Modules/electronic-circuit_120_[]_module.json", "Blueprints/electronic-circuit_120_[]_module.txt")
-    
-    #Simple_Run()
+    #factory = FactorioProductionTree(16,10)
+    #factory.create_blueprint("Modules/electronic-circuit_120_[]_module.json", "Blueprints/electronic-circuit_120_[]_module.txt")
+
+    Simple_Run()
     
     #Eval_Runs("copper-cable",start=1,end=1,step=1,rep_per_step=10)
    

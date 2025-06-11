@@ -1689,8 +1689,8 @@ class SMTSolver:
         try:
             os.makedirs(os.path.dirname(file_path), exist_ok=True)  # Create directory if it doesn't exist
               # Change extension to .smt2 if it's not already
-            if not file_path.lower().endswith('.smt2'):
-                file_path = file_path.replace('.smt', '.smt2')
+            #if not file_path.lower().endswith('.smt2'):
+            #    file_path = file_path.replace('.smt', '.smt2')
             
             # Get the base SMT-LIB2 expression from solver
             smt_content = self.solver.sexpr()
@@ -1699,7 +1699,7 @@ class SMTSolver:
             formatted_content = []
             
             # Add the logic declaration at the beginning
-            formatted_content.append(f"(set-logic {logic})")
+            #formatted_content.append(f"(set-logic {logic})")
             
             # Add model-production option
             formatted_content.append("(set-option :produce-models true)")

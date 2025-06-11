@@ -1,4 +1,3 @@
-(set-logic QF_LIA)
 (set-option :produce-models true)
 (declare-fun |copper-plate_(9, 0)_input_y| () Int)
 (declare-fun |copper-plate_(9, 0)_input_x| () Int)

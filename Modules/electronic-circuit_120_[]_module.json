@@ -1,10 +1,10 @@
 {
     "output_item": "electronic-circuit",
     "max_ouput": 120.0,
-    "amount": 100,
+    "amount": 120,
     "production_data": {
         "electronic-circuit": {
-            "amount_per_minute": 100,
+            "amount_per_minute": 120,
             "assemblers": 2,
             "input_inserters": [
                 {
@@ -22,7 +22,7 @@
             "capacity": 0
         },
         "copper-cable": {
-            "amount_per_minute": 300.0,
+            "amount_per_minute": 360.0,
             "assemblers": 3,
             "input_inserters": [
                 {
@@ -35,11 +35,11 @@
             "capacity": 2
         },
         "copper-plate": {
-            "amount_per_minute": 150.0,
+            "amount_per_minute": 180.0,
             "capacity": 0
         },
         "iron-plate": {
-            "amount_per_minute": 100.0,
+            "amount_per_minute": 120.0,
             "capacity": 0
         }
     },
@@ -408,7 +408,7 @@
         [
             "iron-plate",
             9,
-            5,
+            7,
             "west"
         ],
         [
@@ -494,7 +494,7 @@
         [
             "iron-plate",
             10,
-            5,
+            7,
             "end"
         ],
         [
@@ -918,7 +918,7 @@
         ],
         [
             1,
-            55,
+            0,
             33,
             33,
             33,
@@ -943,43 +943,7 @@
             0,
             0,
             0,
-            55,
             0,
-            0,
-            0,
-            1,
-            0,
-            0,
-            22
-        ],
-        [
-            99,
-            44,
-            33,
-            33,
-            33,
-            44,
-            33,
-            33,
-            33,
-            44,
-            99,
-            0,
-            1,
-            0,
-            0,
-            22
-        ],
-        [
-            1,
-            0,
-            33,
-            33,
-            33,
-            44,
-            33,
-            33,
-            33,
             0,
             0,
             0,
@@ -1007,6 +971,42 @@
             22
         ],
         [
+            1,
+            0,
+            33,
+            33,
+            33,
+            44,
+            33,
+            33,
+            33,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            22
+        ],
+        [
+            99,
+            44,
+            33,
+            33,
+            33,
+            44,
+            33,
+            33,
+            33,
+            44,
+            99,
+            0,
+            1,
+            0,
+            0,
+            22
+        ],
+        [
             99,
             44,
             33,
@@ -1029,7 +1029,7 @@
             0,
             0,
             0,
-            55,
+            0,
             0,
             0,
             0,
