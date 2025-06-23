@@ -36,6 +36,8 @@ class Block:
         self.spacing = {}
         self.default_spacing = 0
 
+    def __str__(self):
+        return f"Block(id={self.id}, x={self.x}, y={self.y}, width={self.width}, height={self.height})"
         
 class Gate:
     def __init__(self,id,relative_x,relative_y,item,type, is_fixed=False,edge=None):
@@ -50,6 +52,9 @@ class Gate:
         self.edge = edge # Edge information (e.g., North, South, East, West) only needed for fixed gates
     
         self.aligned_with = []  # List of compatible gates
+        
+        def __str__(self):
+           return f"Gate(id={self.id}, x={self.x}, y={self.y}, item={self.item}, type={self.type})"
 
 
 class FactoryZ3Solver:
@@ -164,13 +169,18 @@ class FactoryZ3Solver:
                 self.blocks.append(block)
                 logger.debug(f"Block {block.id} added to blocks list")
         self._analyze_block_compatibility()
-            
+        
     def _analyze_block_compatibility(self):
         """
         Pre-analyze which blocks should be connected based on their input/output patterns.
-        This allows us to drastically reduce the number of constraints.
+        This allows us to drastically reduce the number of constraints and determine
+        producer-consumer relationships for proper vertical ordering.
         """
         logger.info("Analyzing block compatibility")
+        
+        # Initialize producer-consumer relationships tracking
+        self.producers = {}  # Dictionary mapping consumer_id -> [producer_ids]
+        self.consumers = {}  # Dictionary mapping producer_id -> [consumer_ids]
         
         analyzed_pairs = set()
         
@@ -184,7 +194,7 @@ class FactoryZ3Solver:
                 
                 if not shared_items:
                     continue
-                    
+                
                 # Create a unique pair identifier (sorted to ensure consistency)
                 block_pair = tuple(sorted([producer.id, consumer.id]))
                 
@@ -240,8 +250,7 @@ class FactoryZ3Solver:
                 # Calculate required spacing (number of misaligned items minus aligned gates)
                 # but ensure it's at least 0
                 spacing_needed = max(0, len(misaligned_items) - aligned_gate_count)
-                
-                # Create compatibility info
+                  # Create compatibility info
                 if aligned_items or misaligned_items:
                     producer.compatible_blocks[consumer.id] = {
                         "aligned": len(aligned_items) > 0,
@@ -249,7 +258,8 @@ class FactoryZ3Solver:
                         "aligned_items": aligned_items,
                         "misaligned_items": misaligned_items,
                         "spacing_needed": spacing_needed,
-                        "aligned_gate_count": aligned_gate_count
+                        "aligned_gate_count": aligned_gate_count,
+                        "relation": "producer"  # This block is a producer for the consumer
                     }
                     
                     # Set the spacing value in the block's spacing dictionary
@@ -260,11 +270,21 @@ class FactoryZ3Solver:
                         "west": spacing_needed
                     }
                     
+                    # Track producer-consumer relationships
+                    if consumer.id not in self.producers:
+                        self.producers[consumer.id] = []
+                    self.producers[consumer.id].append(producer.id)
+                    
+                    if producer.id not in self.consumers:
+                        self.consumers[producer.id] = []
+                    self.consumers[producer.id].append(consumer.id)
+                    
                     logger.debug(f"Block {producer.id} can connect to {consumer.id}:")
                     logger.debug(f"  - Aligned items: {aligned_items}")
                     logger.debug(f"  - Misaligned items: {misaligned_items}")
                     logger.debug(f"  - Aligned gates: {aligned_gate_count}")
                     logger.debug(f"  - Spacing needed: {spacing_needed}")
+                    logger.debug(f"  - Relationship: Producer → Consumer")
     
     def add_simplified_block_alignment_constraints(self):
         """
@@ -295,18 +315,32 @@ class FactoryZ3Solver:
                 # Add implication for vertical alignment
                 self.solver.add(Implies(vertical_align, block.x == other_block.x))
                 
+                
+                # 
+                
                 # Add strong soft constraint to encourage vertical alignment
                 self.solver.add_soft(vertical_align, weight=1000)
-                
-                # Create variables for relative positions
+                  # Create variables for relative positions
                 block_above = Bool(f"above_{block.id}_{other_id}")
                 other_above = Bool(f"above_{other_id}_{block.id}")
                 
                 # Ensure only one direction is chosen
                 self.solver.add(Not(And(block_above, other_above)))
                 
-                # Force one of them to be true (one block must be above the other)
-                self.solver.add(Or(block_above, other_above))
+                # Determine the correct vertical ordering based on producer-consumer relationship
+                # Producers should be placed below consumers
+                if other_id in self.producers.get(block.id, []):
+                    # other_block is a producer for block, so other_block should be below
+                    self.solver.add(block_above)
+                    logger.debug(f"Enforcing {block.id} above {other_id} (producer below consumer)")
+                elif block.id in self.producers.get(other_id, []):
+                    # block is a producer for other_block, so block should be below
+                    self.solver.add(other_above)
+                    logger.debug(f"Enforcing {other_id} above {block.id} (producer below consumer)")
+                else:
+                    # No clear producer-consumer relationship, allow either arrangement
+                    self.solver.add(Or(block_above, other_above))
+                    logger.debug(f"No producer-consumer relationship between {block.id} and {other_id}, allowing either arrangement")
                 
          
                  # Get required spacing from the compatibility info or spacing dictionary
@@ -565,49 +599,77 @@ class FactoryZ3Solver:
             for output in outputs:
                 if not inputs:
                     break
-                    
-                # Prioritize gates that are vertically aligned
+                      # Prioritize gates that are vertically aligned
                 aligned_inputs = [inp for inp in inputs if inp["x"] == output["x"]]
                 
+                # Filter out inputs from the same block as the output (avoid self-connections)
+                if output["block"] is not None:
+                    aligned_inputs = [inp for inp in aligned_inputs if inp["block"] != output["block"]]
+                    
                 if aligned_inputs:
                     # Find closest aligned input by y-distance
                     best_input = min(aligned_inputs, 
                                     key=lambda inp: abs(inp["y"] - output["y"]))
-                    connections.append((output["gate"], best_input["gate"]))
+                    
+                    # Create enhanced connection tuple with positions
+                    connection_data = {
+                        "source": output["gate"],
+                        "target": best_input["gate"],
+                        "source_x": output["x"],
+                        "source_y": output["y"],
+                        "target_x": best_input["x"],
+                        "target_y": best_input["y"],
+                        "item": item
+                    }
+                    
+                    connections.append(connection_data)
                     inputs.remove(best_input)
-                    logger.debug(f"Connected aligned gates: {output['id']} → {best_input['id']}")
+                    logger.debug(f"Connected aligned gates: {output['id']} → {best_input['id']} with positions ({output['x']}, {output['y']}) → ({best_input['x']}, {best_input['y']})")
                 else:
-                    # If no aligned inputs, find closest by Manhattan distance
-                    best_input = min(inputs, 
-                                    key=lambda inp: manhattan_distance(
-                                        (output["x"], output["y"]), 
-                                        (inp["x"], inp["y"])
-                                    ))
-                    connections.append((output["gate"], best_input["gate"]))
-                    inputs.remove(best_input)
-                    logger.debug(f"Connected nearest gates: {output['id']} → {best_input['id']}")
+                    # Filter available inputs to exclude those from the same block
+                    available_inputs = inputs
+                    if output["block"] is not None:
+                        available_inputs = [inp for inp in inputs if inp["block"] != output["block"]]
+                    
+                    # If we have available inputs from different blocks, use them
+                    if available_inputs:
+                        # If no aligned inputs, find closest by Manhattan distance
+                        best_input = min(available_inputs, 
+                                        key=lambda inp: manhattan_distance(
+                                            (output["x"], output["y"]), 
+                                            (inp["x"], inp["y"])
+                                        ))
+                        
+                        # Create enhanced connection tuple with positions
+                        connection_data = {
+                            "source": output["gate"],
+                            "target": best_input["gate"],
+                            "source_x": output["x"],
+                            "source_y": output["y"],
+                            "target_x": best_input["x"],
+                            "target_y": best_input["y"],
+                            "item": item
+                        }
+                        
+                        connections.append(connection_data)
+                        inputs.remove(best_input)
+                        logger.debug(f"Connected nearest gates: {output['id']} → {best_input['id']} with positions ({output['x']}, {output['y']}) → ({best_input['x']}, {best_input['y']})")
+                    else:
+                        # Skip if there are no valid inputs from different blocks
+                        logger.debug(f"Skipped connection for {output['id']} as all inputs are from the same block")
         
         logger.info(f"Determined {len(connections)} optimal gate connections")
         return connections
     
     
     def get_block_for_gate(self, gate):
-        """Helper method to determine which block a gate belongs to"""
         for block in self.blocks:
             if gate in block.input_points or gate in block.output_points:
                 return block
         return None
 
+
     def determine_gate_connections(self, model):
-        """
-        Determine which gates should be connected after block positions are fixed.
-        
-        Args:
-            model: Z3 model with solved positions
-            
-        Returns:
-            List of gate connections (pairs of gates that should be connected)
-        """
         connections = []
         
         # Group gates by item type

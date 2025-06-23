@@ -16,7 +16,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from draftsman.blueprintable import Blueprint
 from draftsman.constants import Direction
-from draftsman.entity import Inserter, AssemblingMachine, TransportBelt, UndergroundBelt,ConstantCombinator
+from draftsman.entity import Inserter, AssemblingMachine, TransportBelt, UndergroundBelt , Pipe,UndergroundPipe, ElectricPole, ConstantCombinator
 from draftsman.entity import Splitter as BlueprintSplitter
 from logging_config import setup_logger
 logger = setup_logger("FactoryBuilder")
@@ -186,12 +186,12 @@ class FactoryBuilder:
                                 selected_items.remove(item)  # Deselect if already selected
                             else:
                                 selected_items.add(item)  # Select item
-                            print(f"Selected items: {selected_items}")
+                            logger.info(f"Selected items: {selected_items}")
                         y_pos += 50
 
         pygame.quit()
             
-        print(f"Selected items: {selected_items}")
+        logger.info(f"Selected items: {selected_items}")
         
         selected_items.add(self.output_item)
         
@@ -247,21 +247,21 @@ class FactoryBuilder:
         
         
         # Print input information (keys with input and output values)
-        print("Input Information:")
+        logger.info("Input Information:")
         for key, value in self.block_data[self.output_item]["tree"].input_information.items():
             if 'input' in value and 'output' in value:
-                print(f"{key}: input={value['input']}, output={value['output']}")
+                logger.info(f"{key}: input={value['input']}, output={value['output']}")
 
         # Print output information (keys with input and output values)
-        print("Output Information:")
+        logger.info("Output Information:")
         for key, value in self.block_data[self.output_item]["tree"].output_information.items():
             if 'input' in value and 'output' in value:
-                print(f"{key}: input={value['input']}, output={value['output']}")
+                logger.info(f"{key}: input={value['input']}, output={value['output']}")
 
        
         for item in selected_items:
             
-            print(f"building block for subitem {item}")
+            logger.info(f"building block for subitem {item}")
 
             if item not in self.block_data:
                 self.block_data[item] = {}
@@ -329,20 +329,20 @@ class FactoryBuilder:
         
             
     def solve_factory(self):
-        print("solving factory")
+        logger.info("solving factory")
         
         # Define external I/O points before creating the solver
         self.define_factory_io_points()
         
-        print("block data:")
-        print(self.block_data)
+        logger.info("block data:")
+        logger.info(self.block_data)
         
         self.z3_solver = FactoryZ3Solver(self.block_data, self.output_point)
         num_factories = 0
         for i, key in enumerate(self.block_data.keys()):
             num_factories += self.block_data[key]["num_factories"]
             
-        print(f'total number of modules: {num_factories}')
+        logger.info(f'total number of modules: {num_factories}')
         
         # Apply I/O constraints to solver
         self.apply_io_constraints_to_solver()
@@ -351,6 +351,9 @@ class FactoryBuilder:
         
         # Store gate connections along with block positions
         self.final_blocks, self.final_x, self.final_y, self.gate_connections = self.z3_solver.solve()
+        
+        
+        logger.debug(f"Gate connections: {self.gate_connections}")
         
         # Plan paths between connected gates
         if self.final_blocks:
@@ -366,9 +369,9 @@ class FactoryBuilder:
             self.visualize_factory(save_path=factory_img_path)
             
         
-        print(f"Factory dimensions: {self.final_x} x {self.final_y}")
-        print(f"Final blocks: {self.final_blocks}")
-        print(f"Gate connections: {self.gate_connections}")
+        logger.info(f"Factory dimensions: {self.final_x} x {self.final_y}")
+        logger.info(f"Final blocks: {self.final_blocks}")
+        logger.info(f"Gate connections: {self.gate_connections}")
 
 
     def add_paths_to_json(self, json_path,inter_block_paths):
@@ -446,7 +449,8 @@ class FactoryBuilder:
                 "inserters": [],
                 "belts": [],
                 "underground_belts": [],
-                "splitters": []
+                "splitters": [],
+                "power_poles": [],
             },
             "io_points": {
                 "inputs": [],
@@ -870,6 +874,22 @@ class FactoryBuilder:
                                         })
                                         logger.info(f"Added splitter {item_name} at {[abs_x, abs_y]} facing {direction} for block {block_id}")
                 
+                if "power_pole_information" in module_data:
+                    for power_pole in module_data["power_pole_information"]:
+                        item, rel_x, rel_y = power_pole[0], power_pole[1], power_pole[2]
+                        # Convert coordinates
+                        abs_x = block_x + rel_x
+                        abs_y = block_y + rel_y
+                        
+                        factory_data["entities"]["power_poles"].append({
+                            "item": item,
+                            "position": [abs_x, abs_y],
+                            "block_id": block_id
+                        })
+                        logger.info(f"Added power pole {item} at {[abs_x, abs_y]} for block {block_id}")
+                    
+                
+                
             except Exception as e:
                 logger.error(f"Error processing module JSON for {block_id}: {e}")
                 import traceback
@@ -993,7 +1013,7 @@ class FactoryBuilder:
             if os.path.exists(image_path):
                 self.images[block_key] = pygame.image.load(image_path)
             else:
-                print(f"Image not found for {base_name} at {image_path}")
+                logger.info(f"Image not found for {base_name} at {image_path}")
 
  
     
@@ -1017,7 +1037,7 @@ class FactoryBuilder:
                             (20, 20)  # Default size, will be scaled by cell_size
                         )
                     else:
-                        print(f"Warning: Image not found for {item} at {image_path}")
+                        logger.info(f"Warning: Image not found for {item} at {image_path}")
             
             # Load images for output points
             for gate in block_info['output_points']:
@@ -1031,7 +1051,7 @@ class FactoryBuilder:
                             (20, 20)  # Default size, will be scaled by cell_size
                         )
                     else:
-                        print(f"Warning: Image not found for {item} at {image_path}")
+                        logger.info(f"Warning: Image not found for {item} at {image_path}")
                         
     def visualize_factory(self, cell_size=20, save_path=None, json_path=None):
         """
@@ -1087,9 +1107,8 @@ class FactoryBuilder:
                         (block_info['width'] * cell_size, block_info['height'] * cell_size)
                     )
                     block_images[block_id] = image
-        
-        # Load item images for gates
-        self.w()
+          # Load item images for gates
+        self.load_item_images()
         
         # Define colors for belt paths
         BELT_COLOR = (255, 165, 0)  # Orange
@@ -1838,91 +1857,126 @@ class FactoryBuilder:
                 if 0 <= second_x < grid_width and 0 <= second_y < grid_height:
                     obstacle_map[second_y][second_x] = 1
         
-        # Create a visualization of the obstacle map for debugging
-        try:
-            import matplotlib.pyplot as plt
-            plt.figure(figsize=(10, 10))
-            plt.imshow(obstacle_map, cmap='binary', interpolation='none')
-            plt.title("Factory Layout - Detailed Obstacle Map")
-            plt.colorbar(label="Obstacle (1) vs Free (0)")
-            plt.grid(True, alpha=0.3)
-            plt.savefig("factory_detailed_obstacle_map.png")
-            plt.close()
-            logger.info("Saved detailed obstacle map visualization")
-        except Exception as e:
-            logger.warning(f"Could not create obstacle map visualization: {e}")
         
-        # Prepare connection points for the pathfinder
-        connection_points = {}
+            # Prepare connection points for the pathfinder
+            connection_points = {}
         
-        # Process all gate connections
+            # Process all gate connections        
         for i, connection in enumerate(self.gate_connections):
-            
             logger.debug(f"Processing connection {i}: {connection}")
             
-            # Ensure we have a valid connection tuple
-            if isinstance(connection, tuple) and len(connection) == 2:
-                source_gate, target_gate = connection
+            source_x, source_y, target_x, target_y = None, None, None, None
+            source_id, target_id, item = None, None, None
+            valid_connection = False
+          
+            if isinstance(connection, dict) and all(k in connection for k in ["source", "target", "source_x", "source_y", "target_x", "target_y", "item"]):
+                # Use the positions directly from the enhanced connection
+                source_gate = connection["source"]
+                target_gate = connection["target"]
+                source_x = connection["source_x"]
+                source_y = connection["source_y"]
+                target_x = connection["target_x"]
+                target_y = connection["target_y"]
+                item = connection["item"]
+                source_id = source_gate.id if hasattr(source_gate, 'id') else f"source_{i}"
+                target_id = target_gate.id if hasattr(target_gate, 'id') else f"target_{i}"
+                valid_connection = True
                 
+                logger.debug(f"Using pre-calculated positions for connection {i}: ({source_x}, {source_y}) → ({target_x}, {target_y})")
+                
+            # Fallback for older connection format (tuple)
+            elif isinstance(connection, tuple) and len(connection) == 2:
+                source_gate, target_gate = connection
                 try:
-                    # Handle both dictionary and Gate object formats
-                    if hasattr(source_gate, 'x') and hasattr(source_gate, 'y'):  # Gate object
-                        # Extract from Z3 solver model
-                        source_x = self.final_blocks[source_gate.id.split("_output")[0]]["x"] + source_gate.relative_x
-                        source_y = self.final_blocks[source_gate.id.split("_output")[0]]["y"] + source_gate.relative_y
-                    
+                    # Handle different formats of gate objects
+                    if hasattr(source_gate, 'item'):  # It's a Gate object from Z3 solver
+                        # Find the block that this gate belongs to in final_blocks
+                        # Get the block ID from the gate ID (format is typically "blockID_output_item_etc")
+                        block_id = None
+                        for bid in self.final_blocks.keys():
+                            if bid in source_gate.id:
+                                block_id = bid
+                                break
+                        
+                        if not block_id:
+                            logger.error(f"Could not find block ID for gate {source_gate.id}")
+                            continue
+                            
+                        # Now get the absolute position from the block's position and gate's relative position
+                        block_info = self.final_blocks[block_id]
+                        source_x = block_info["x"] + source_gate.relative_x
+                        source_y = block_info["y"] + source_gate.relative_y
                         item = source_gate.item
                         source_id = source_gate.id
-                    elif isinstance(source_gate, dict):  # Dictionary
+                        
+                    elif isinstance(source_gate, dict):  # Dictionary format
                         source_x = int(source_gate['x'])
                         source_y = int(source_gate['y'])
                         item = source_gate['item']
-                        source_id = source_gate.get('gate_id', f'unknown_source_{i}')
+                        source_id = source_gate.get('id', f'unknown_source_{i}')
                     else:
                         logger.error(f"Source gate has unsupported type: {type(source_gate)}")
                         continue
                     
                     # Handle both dictionary and Gate object formats for target
-                    if hasattr(target_gate, 'x') and hasattr(target_gate, 'y'):  # Gate object
-                        # Extract from Z3 solver model
-                        target_x = self.final_blocks[target_gate.id.split("_input")[0]]["x"] + target_gate.relative_x
-                        target_y = self.final_blocks[target_gate.id.split("_input")[0]]["y"] + target_gate.relative_y
+                    if hasattr(target_gate, 'item'):  # It's a Gate object from Z3 solver
+                        # Find the block that this gate belongs to
+                        block_id = None
+                        for bid in self.final_blocks.keys():
+                            if bid in target_gate.id:
+                                block_id = bid
+                                break
+                        
+                        if not block_id:
+                            logger.error(f"Could not find block ID for gate {target_gate.id}")
+                            continue
+                            
+                        block_info = self.final_blocks[block_id]
+                        target_x = block_info["x"] + target_gate.relative_x
+                        target_y = block_info["y"] + target_gate.relative_y
                         target_id = target_gate.id
-                    elif isinstance(target_gate, dict):  # Dictionary
+                    elif isinstance(target_gate, dict):  # Dictionary format
                         target_x = int(target_gate['x'])
                         target_y = int(target_gate['y'])
-                        target_id = target_gate.get('gate_id', f'unknown_target_{i}')
+                        target_id = target_gate.get('id', f'unknown_target_{i}')
                     else:
                         logger.error(f"Target gate has unsupported type: {type(target_gate)}")
                         continue
                     
-                    # Create connection ID
-                    connection_id = f"{item}_{i}"
-                    
-                    # Clear gate positions in the obstacle map for pathfinding
-                    if 0 <= source_x < grid_width and 0 <= source_y < grid_height:
-                        obstacle_map[source_y][source_x] = 0
-                    
-                    if 0 <= target_x < grid_width and 0 <= target_y < grid_height:
-                        obstacle_map[target_y][target_x] = 0
-                    
-                    # Create a path request with start/end points
-                    connection_points[connection_id] = {
-                        'item': item,
-                        'start_points': [(source_x, source_y)],
-                        'destination': [(target_x, target_y)],
-                        'source_id': source_id,
-                        'target_id': target_id
-                    }
-                    
-                    logger.debug(f"Added connection {connection_id}: {item} from {source_id} at ({source_x}, {source_y}) " +
-                                f"to {target_id} at ({target_x}, {target_y})")
-                    
+                    valid_connection = True
                 except (TypeError, KeyError, AttributeError) as e:
-                    logger.error(f"Error processing connection {i}: {e}")
+                    logger.error(f"Error processing old-style connection {i}: {e}")
                     continue
             else:
                 logger.warning(f"Invalid connection format at index {i}: {connection}")
+                continue
+                
+            # Only proceed if we successfully parsed the connection
+            if valid_connection and source_x is not None and target_x is not None and item is not None:
+                # Create connection ID
+                connection_id = f"{item}_{i}"
+                
+                # Clear gate positions in the obstacle map for pathfinding
+                if 0 <= source_x < grid_width and 0 <= source_y < grid_height:
+                    obstacle_map[source_y][source_x] = 0
+                
+                if 0 <= target_x < grid_width and 0 <= target_y < grid_height:
+                    obstacle_map[target_y][target_x] = 0
+                
+                # Create a path request with start/end points
+                connection_points[connection_id] = {
+                    'item': item,
+                    'start_points': [(source_x, source_y)],
+                    'destination': [(target_x, target_y)],
+                    'source_id': source_id,
+                    'target_id': target_id
+                }
+                
+                logger.debug(f"Added connection {connection_id}: {item} from {source_id} at ({source_x}, {source_y}) " +
+                            f"to {target_id} at ({target_x}, {target_y})")
+            elif valid_connection:
+                logger.warning(f"Connection {i} was valid but had missing coordinates or item information")
+
         
         # Process external I/O points
         if "io_points" in factory_data:
@@ -1932,9 +1986,8 @@ class FactoryBuilder:
                     pos_x, pos_y = point["position"]
                     if 0 <= pos_x < grid_width and 0 <= pos_y < grid_height:
                         obstacle_map[pos_y][pos_x] = 0
-        
         if not connection_points:
-            logger.warning("No valid connections to route!")
+            logger.warning("No valid connections to route! Please check your gate connections.")
             return {}, {}
         
         # Create and run the MultiAgentPathfinder
@@ -1947,10 +2000,12 @@ class FactoryBuilder:
                 find_optimal_paths=True,
                 output_item=self.output_item
             )
-            
-            # Find paths for all connections
+              # Find paths for all connections
             paths, inserters = pathfinder.find_paths_for_all_items()
-            logger.info(f"Found paths for {len(paths)} connections out of {len(connection_points)} requested")
+            if paths:
+                logger.info(f"Found paths for {len(paths)} connections out of {len(connection_points)} requested")
+            else:
+                logger.warning(f"No paths were found by the pathfinder. Check if the gates are positioned properly.")
             
             # Save the paths for later use
             self.inter_block_paths = paths
@@ -1958,9 +2013,10 @@ class FactoryBuilder:
             
             # Generate path visualizations
             try:
-                pathfinder.visualize_grid(filename="factory_detailed_obstacle_map_with_paths.png")
-                pathfinder.visualize_paths(filename_template="inter_block_path_detailed_{}.png")
-                logger.info("Path visualizations saved to disk")
+                pass
+                #pathfinder.visualize_grid(filename="factory_detailed_obstacle_map_with_paths.png")
+                #pathfinder.visualize_paths(filename_template="inter_block_path_detailed_{}.png")
+                #logger.info("Path visualizations saved to disk")
             except Exception as e:
                 logger.error(f"Failed to visualize paths: {e}")
             
@@ -2318,18 +2374,21 @@ def manhattan_distance(p1, p2):
         
 def main():
     
+    
+    visualize_json(json_path="Factorys/factory_electronic-circuit_100.json",save_path="Factorys/factory_electronic-circuit_100.png")
+    
+    return
     output_item = "electronic-circuit"
-    amount = 10
+    amount = 100
     max_assembler_per_blueprint = 5
     
     start_width = 15
     start_height = 15
 
-    
-    builder = FactoryBuilder(output_item,amount,max_assembler_per_blueprint,start_width,start_height,load_modules=True)
-    
-    #num_factories, production_data = builder.eval_split()
-    #print(f"Number of factories required: {num_factories}")
+    builder = FactoryBuilder(output_item, amount, max_assembler_per_blueprint, start_width, start_height, load_modules=True)
+
+    # num_factories, production_data = builder.eval_split()
+    # logger.info(f"Number of factories required: {num_factories}")
     
     builder.split_recipies()
     
@@ -2396,7 +2455,7 @@ def plot_csv_data(file_path):
     plt.savefig(box_plot_path)
     plt.close()  # Close the plot to prevent overlap with other subplots
 
-    print(f"Boxplot saved at: {box_plot_path}")
+    logger.info(f"Boxplot saved at: {box_plot_path}")
       
       
       
@@ -2431,7 +2490,7 @@ def create_blueprint_from_json(json_path, output_path=None):
         # Track assembler positions for orienting inserters
         assembler_positions = {}  # Maps (x, y) to assembler object
         
-        print("1. Placing assembling machines...")
+        logger.info("1. Placing assembling machines...")
         # Place assembling machines from the JSON data
         if "entities" in factory_data and "assemblers" in factory_data["entities"]:
             for assembler_data in factory_data["entities"]["assemblers"]:
@@ -2443,7 +2502,7 @@ def create_blueprint_from_json(json_path, output_path=None):
                 center_x = position[0] + 1
                 center_y = position[1] + 1
                 
-                print(f"  - Placing assembler for {item} at ({center_x},{center_y})")
+                logger.info(f"  - Placing assembler for {item} at ({center_x},{center_y})")
                 
                 # Create assembler entity
                 assembler = AssemblingMachine(
@@ -2460,7 +2519,7 @@ def create_blueprint_from_json(json_path, output_path=None):
                         assembler_positions[pos] = assembler
                         occupied_positions.add(pos)
         
-        print("2. Placing inserters...")
+        logger.info("2. Placing inserters...")
         # Place inserters from the JSON data
         if "entities" in factory_data and "inserters" in factory_data["entities"]:
             for inserter_data in factory_data["entities"]["inserters"]:
@@ -2470,7 +2529,7 @@ def create_blueprint_from_json(json_path, output_path=None):
                 
                 # Skip if position is occupied
                 if position in occupied_positions:
-                    print(f"  - Skipping inserter at {position} due to overlap")
+                    logger.info(f"  - Skipping inserter at {position} due to overlap")
                     continue
                 
                 # Convert direction string to draftsman Direction constant
@@ -2494,7 +2553,7 @@ def create_blueprint_from_json(json_path, output_path=None):
                     blueprint_direction = direction_map.get(direction, Direction.NORTH)
                 
                 # Create inserter entity
-                print(f"  - Placing inserter for {item} at {position} facing {blueprint_direction}")
+                logger.info(f"  - Placing inserter for {item} at {position} facing {blueprint_direction}")
                 inserter = Inserter(
                     name="inserter",
                     position=position,
@@ -2505,7 +2564,7 @@ def create_blueprint_from_json(json_path, output_path=None):
         
         
         
-        print("3. Placing underground belts...")
+        logger.info("3. Placing underground belts...")
         # Place underground belts from the JSON data
         if "entities" in factory_data and "underground_belts" in factory_data["entities"]:
             for ug_data in factory_data["entities"]["underground_belts"]:
@@ -2516,7 +2575,7 @@ def create_blueprint_from_json(json_path, output_path=None):
                 
                 # Skip if position is occupied
                 if position in occupied_positions:
-                    print(f"  - Skipping underground belt at {position} due to overlap")
+                    logger.info(f"  - Skipping underground belt at {position} due to overlap")
                     continue
                 
                 # Convert direction string to draftsman Direction constant
@@ -2532,7 +2591,7 @@ def create_blueprint_from_json(json_path, output_path=None):
                 ug_type = "input" if belt_type == "entrance" else "output"
                 
                 # Create underground belt entity
-                print(f"  - Placing underground belt for {item} at {position} facing {blueprint_direction}, type: {ug_type}")
+                logger.info(f"  - Placing underground belt for {item} at {position} facing {blueprint_direction}, type: {ug_type}")
                 ug_belt = UndergroundBelt(
                     name="underground-belt",
                     position=position,
@@ -2542,7 +2601,7 @@ def create_blueprint_from_json(json_path, output_path=None):
                 blueprint.entities.append(ug_belt)
                 occupied_positions.add(position)
         
-        print("4. Placing splitters...")
+        logger.info("4. Placing splitters...")
         # Place splitters from the JSON data
         if "entities" in factory_data and "splitters" in factory_data["entities"]:
             for splitter_data in factory_data["entities"]["splitters"]:
@@ -2552,7 +2611,7 @@ def create_blueprint_from_json(json_path, output_path=None):
                 
                 # Skip if position is occupied
                 if position in occupied_positions:
-                    print(f"  - Skipping splitter at {position} due to overlap")
+                    logger.info(f"  - Skipping splitter at {position} due to overlap")
                     continue
                 
                 # Convert direction string to draftsman Direction constant
@@ -2565,7 +2624,7 @@ def create_blueprint_from_json(json_path, output_path=None):
                 blueprint_direction = direction_map.get(direction, Direction.NORTH)
                 
                 # Create splitter entity
-                print(f"  - Placing splitter for {item} at {position} facing {blueprint_direction}")
+                logger.info(f"  - Placing splitter for {item} at {position} facing {blueprint_direction}")
                 splitter = BlueprintSplitter(
                     name="splitter",
                     position=position,
@@ -2585,7 +2644,7 @@ def create_blueprint_from_json(json_path, output_path=None):
         
         
                 
-        print("5. Placing transport belts...")
+        logger.info("5. Placing transport belts...")
         # Place regular belts from the JSON data
         if "entities" in factory_data and "belts" in factory_data["entities"]:
             for belt_data in factory_data["entities"]["belts"]:
@@ -2595,7 +2654,7 @@ def create_blueprint_from_json(json_path, output_path=None):
                 
                 # Skip if position is occupied
                 if position in occupied_positions:
-                    print(f"  - Skipping belt at {position} due to overlap")
+                    logger.info(f"  - Skipping belt at {position} due to overlap")
                     continue
                 
                 # Convert direction string to draftsman Direction constant
@@ -2608,7 +2667,7 @@ def create_blueprint_from_json(json_path, output_path=None):
                 blueprint_direction = direction_map.get(direction, Direction.NORTH)
                 
                 # Create transport belt entity
-                print(f"  - Placing transport belt for {item} at {position} facing {blueprint_direction}")
+                logger.info(f"  - Placing transport belt for {item} at {position} facing {blueprint_direction}")
                 belt = TransportBelt(
                     name="transport-belt",
                     position=position,
@@ -2617,70 +2676,83 @@ def create_blueprint_from_json(json_path, output_path=None):
                 blueprint.entities.append(belt)
                 occupied_positions.add(position)
         
-        print("6. Placing external I/O points as constant combinators...")
+        logger.info("6. Placing external I/O points as constant combinators...")
         if "io_points" in factory_data and "inputs" in factory_data["io_points"]:
-            for io_data in factory_data["io_points"]["inputs"]:
-                if io_data["external"]:
-                    item = io_data["item"]
-                    position = tuple(io_data["position"])
-                    
-                    # Skip if position is occupied
-                    if position in occupied_positions:
-                        print(f"  - Skipping input point at {position} due to overlap")
-                        continue                    
-                    # No constant combinators for I/O - we'll use a simpler approach instead
-                    # Just add a transport belt pointing inward to represent the input point
-                    belt = TransportBelt()
-                    belt.tile_position = position
-                    
-                    # Determine belt direction - should point inward based on edge
-                    edge = io_data.get("edge", "")
-                    if edge == "top":
-                        belt.direction = Direction.SOUTH  # Point downward
-                    elif edge == "bottom":
-                        belt.direction = Direction.NORTH  # Point upward
-                    elif edge == "left":
-                        belt.direction = Direction.EAST   # Point right
-                    elif edge == "right":
-                        belt.direction = Direction.WEST   # Point left
-                    else:
-                        belt.direction = Direction.SOUTH  # Default
+                for io_data in factory_data["io_points"]["inputs"]:
+                    if io_data["external"]:
+                        item = io_data["item"]
+                        position = tuple(io_data["position"])
                         
-                    belt.id = "input_" + item
-                    blueprint.entities.append(belt)
+                        # Skip if position is occupied
+                        if position in occupied_positions:
+                            logger.info(f"  - Skipping input point at {position} due to overlap")
+                            continue
                     
-                    occupied_positions.add(position)
-        
+                        logger.info(f"  - Placing input point for {item} at {position}")
+                        constant_combinator = ConstantCombinator()
+                        constant_combinator.tile_position = position
+                        constant_combinator.direction = Direction.SOUTH
+                        section = constant_combinator.add_section()
+                        section.filters = [{
+                                    "index": 1,
+                                    "name": item,  # The name should be at top level, not nested in signal
+                                    "count": 1,
+                                    "comparator": "=",
+                        }]
+                        constant_combinator.id = "output_" + item
+                        blueprint.entities.append(constant_combinator)
+                        
+                        occupied_positions.add(position)
+            
         if "io_points" in factory_data and "outputs" in factory_data["io_points"]:
-            for io_data in factory_data["io_points"]["outputs"]:
-                if io_data["external"]:
-                    item = io_data["item"]
-                    position = tuple(io_data["position"])
-                    
-                    # Skip if position is occupied
-                    if position in occupied_positions:
-                        print(f"  - Skipping output point at {position} due to overlap")
-                        continue
-    
-                    print(f"  - Placing output point for {item} at {position}")
-                    constant_combinator = ConstantCombinator()
-                    constant_combinator.tile_position = position
-                    constant_combinator.direction = Direction.SOUTH
-                    section = constant_combinator.add_section()
-                    section.filters = [{
-                                "index": 1,
-                                "name": item,  # The name should be at top level, not nested in signal
-                                "count": 1,
-                                "comparator": "="
-                    }]
-                    constant_combinator.id = "output_" + item
-                    
-                    blueprint.entities.append(constant_combinator)
-                    occupied_positions.add(position)
+                for io_data in factory_data["io_points"]["outputs"]:
+                    if io_data["external"]:
+                        item = io_data["item"]
+                        position = tuple(io_data["position"])
+                        
+                        # Skip if position is occupied
+                        if position in occupied_positions:
+                            logger.info(f"  - Skipping output point at {position} due to overlap")
+                            continue
         
-        
+                        logger.info(f"  - Placing output point for {item} at {position}")
+                        constant_combinator = ConstantCombinator()
+                        constant_combinator.tile_position = position
+                        constant_combinator.direction = Direction.SOUTH
+                        section = constant_combinator.add_section()
+                        section.filters = [{
+                                    "index": 1,
+                                    "name": item,  # The name should be at top level, not nested in signal
+                                    "count": 1,
+                                    "comparator": "="
+                        }]
+                        constant_combinator.id = "output_" + item
+                        
+                        blueprint.entities.append(constant_combinator)
+                        occupied_positions.add(position)
+            
+        logger.info("7. Placing power poles...")
+        if "entities" in factory_data and "power_poles" in factory_data["entities"]:
+            for power_pole_data in factory_data["entities"]["power_poles"]:
+                # Get power pole type and position
+                pole_type = power_pole_data["item"]
+                x, y = power_pole_data["position"]
+         
+                logger.info(f"  - Placing {pole_type} at ({x},{y})")
+                power_pole = ElectricPole(
+                    name=pole_type,
+                    position=(x, y)
+                )
+                logger.info(f"  - Placed {pole_type} at ({x},{y})")
+                blueprint.entities.append(power_pole)
+
+        logger.info("8. Placing inter-module paths...")
+        # Process inter-block paths
+        if "inter_block_paths" in factory_data:
+            _add_path_belts_to_blueprint(blueprint, occupied_positions,factory_data["inter_block_paths"])
+
         # Export the blueprint to a file
-        print(f"7. Exporting blueprint to {output_path}...")
+        logger.info(f"9. Exporting blueprint to {output_path}...")
         with open(output_path, "w") as f:
             f.write(blueprint.to_string())
             
@@ -2688,11 +2760,230 @@ def create_blueprint_from_json(json_path, output_path=None):
         return True
  
     except Exception as e:
-        print(f"Error creating blueprint: {e}")
+        logger.info(f"Error creating blueprint: {e}")
         import traceback
         traceback.print_exc()
         return False  
     
+
+def _add_path_belts_to_blueprint(blueprint, occupied_positions,paths):
+        """Add pathfinder-generated belts to the blueprint, avoiding overlaps"""
+
+        path_count = sum(len(item_paths) for item_paths in paths.values())
+        logger.info(f"  - Processing {path_count} pathfinder-generated belt paths for {len(paths)} items")
+
+        for item_key, item_paths in paths.items():
+            # Extract base item name
+            item_name = item_key.split('_')[0] if '_' in item_key else item_key
+            logger.info(f"  - Processing {len(item_paths)} paths for {item_name}")
+            
+            for path_data in item_paths:
+                _add_belt_path_to_blueprint(blueprint, path_data, item_name, occupied_positions)
+
+
+def _add_belt_path_to_blueprint(blueprint, path_data, item, occupied_positions):
+    
+        config = load_config()
+
+        items_data = load_json("recipes.json")
+ 
+        # Create a lookup dictionary for items by their ID
+        item_lookup = {item["id"]: item for item in items_data}
+        item = item_lookup.get(item, {})
+   
+        is_fluid = item.get("type", "") == "Liquid"
+        
+        if is_fluid:
+            belt_type = config.get("pipes", {}).get("default_type", "pipe")
+            underground_type = config.get("pipes", {}).get("underground_type", "pipe-to-ground")
+        else:
+            belt_type = config["belts"]["default_type"]
+            underground_type = config["belts"]["underground_type"]
+            
+        """Add a specific belt path to the blueprint, avoiding overlaps"""
+        path = path_data.get('path', [])
+        if not path:
+            return
+        
+    
+        # Get orientation information
+        has_orientation = 'orientation' in path_data and path_data['orientation']
+        
+        # Process underground segments
+        underground_positions = set()
+        if 'underground_segments' in path_data and path_data['underground_segments']:
+            logger.info(f"  - Found {len(path_data['underground_segments'])} underground segments")
+            for segment_id, segment in path_data['underground_segments'].items():
+                start_pos = segment['start']
+                end_pos = segment['end']
+                
+                # Skip if positions are occupied or are splitter positions
+                start_tuple = tuple(start_pos) if isinstance(start_pos, list) else tuple(start_pos)
+                end_tuple = tuple(end_pos) if isinstance(end_pos, list) else tuple(end_pos)
+        
+                # Calculate direction
+                dx = end_pos[0] - start_pos[0]
+                dy = end_pos[1] - start_pos[1]
+                
+                # Determine primary direction
+                if abs(dx) > abs(dy):
+                    direction = Direction.EAST if dx > 0 else Direction.WEST
+                else:
+                    direction = Direction.SOUTH if dy > 0 else Direction.NORTH
+                if not is_fluid:
+                    logger.info(f"  - Adding underground belt segment from {start_pos} to {end_pos} facing {direction}")
+                    
+                    # Create and place underground belt entrance
+                    entrance = UndergroundBelt(
+                        name=underground_type,
+                        position=start_pos,
+                        direction=direction,
+                        type="input"  # This is the entrance
+                    )
+                    blueprint.entities.append(entrance)
+                    occupied_positions.add(start_tuple)
+                    underground_positions.add(start_tuple)
+                    
+                    # Create and place underground belt exit
+                    exit_belt = UndergroundBelt(
+                        name=underground_type,
+                        position=end_pos,
+                        direction=direction,
+                        type="output"  # This is the exit
+                    )
+                    blueprint.entities.append(exit_belt)
+                    occupied_positions.add(end_tuple)
+                    underground_positions.add(end_tuple)
+                else:
+                    logger.info(f"  - Adding underground belt from {start_pos} to {end_pos} facing {direction}")
+                    
+                    # Create and place underground pipe entrance
+                    entrance = UndergroundPipe (
+                        name=underground_type,
+                        position=start_pos,
+                        direction=direction,
+                        type="input"  # This is the entrance
+                    )
+                    blueprint.entities.append(entrance)
+                    occupied_positions.add(start_tuple)
+                    underground_positions.add(start_tuple)
+                    
+                    # Create and place underground pipe exit
+                    exit_belt = UndergroundPipe(
+                        name=underground_type,
+                        position=end_pos,
+                        direction=direction,
+                        type="output"  # This is the exit
+                    )
+                    blueprint.entities.append(exit_belt)
+                    occupied_positions.add(end_tuple)
+                    underground_positions.add(end_tuple)
+            
+        # Process regular belt segments
+        for i in range(len(path) - 1):
+            current = path[i]
+            next_pos = path[i + 1]
+            
+            # Skip if this position is part of underground belt or a splitter
+            current_tuple = tuple(current) if isinstance(current, list) else tuple(current)
+            if current_tuple in underground_positions:
+                continue
+            
+            # Skip if position is occupied
+            if current_tuple in occupied_positions:
+                logger.info(f"  - Skipping belt at {current} due to overlap")
+                continue
+            
+            # Calculate direction
+            if has_orientation and path_data['orientation']:
+                # Convert current position to tuple if it's a list (to make it hashable)
+                current_key = str(tuple(current)) if isinstance(current, list) else str(current)
+                
+                # Check if this position has an orientation
+                if current_key in path_data['orientation']:
+                    direction = _get_belt_direction(path_data['orientation'][current_key])
+                else:
+                    # Calculate direction from current to next position
+                    dx = next_pos[0] - current[0]
+                    dy = next_pos[1] - current[1]
+                    direction = _get_belt_direction((dx, dy))
+            else:
+                # Calculate direction from current to next position
+                dx = next_pos[0] - current[0]
+                dy = next_pos[1] - current[1]
+                direction = _get_belt_direction((dx, dy))
+            
+            # Create and place transport belt
+            logger.info(f"  - Adding transport belt at {current} facing {direction}")
+            if not is_fluid:
+              
+                belt = TransportBelt(
+                    name=belt_type,
+                    position=current,
+                    direction=direction
+                )
+                blueprint.entities.append(belt)
+                occupied_positions.add(current_tuple)
+                
+            else:
+                pipe = Pipe(
+                    name=belt_type,
+                    position=current,
+                    direction=direction
+                )
+                blueprint.entities.append(pipe)
+                occupied_positions.add(current_tuple)
+                  # Process the last belt in the path if it's not an underground belt or splitter
+            if len(path) > 1:
+                logger.debug(f"  - Processing last belt in path for {item}")
+                
+                last_pos = path[-1]
+                last_tuple = tuple(last_pos) if isinstance(last_pos, list) else tuple(last_pos)
+                
+                # Skip if this position is part of underground belt or a splitter
+                if last_tuple in underground_positions or last_tuple in occupied_positions:
+                    logger.info(f"  - Skipping last belt at {last_pos} due to overlap or underground belt")
+                    return
+                    
+                second_last = path[-2]
+
+                # Calculate direction for last belt
+                direction = None
+                if has_orientation and path_data['orientation']:
+                    # Convert last position to tuple if it's a list
+                    last_pos_key = str(tuple(last_pos)) if isinstance(last_pos, list) else str(last_pos)
+                    
+                    if last_pos_key in path_data['orientation']:
+                        direction = _get_belt_direction(path_data['orientation'][last_pos_key])
+                    else:
+                        # Calculate direction from second-last to last
+                        dx = last_pos[0] - second_last[0]
+                        dy = last_pos[1] - second_last[1]
+                        direction = _get_belt_direction((dx, dy))
+                else:
+                    # Calculate direction from second-last to last
+                    dx = last_pos[0] - second_last[0]
+                    dy = last_pos[1] - second_last[1]
+                    direction = _get_belt_direction((dx, dy))
+                
+                # Create and place last transport belt
+                logger.info(f"  - Adding last transport belt at {last_pos} facing {direction}")
+                if not is_fluid:
+                    belt = TransportBelt(
+                        name=belt_type,
+                        position=last_pos,
+                        direction=direction
+                    )
+                    blueprint.entities.append(belt)
+                    occupied_positions.add(last_tuple)
+                else:
+                    pipe = Pipe(
+                        name=belt_type,
+                        position=last_pos,
+                        direction=direction
+                    )
+                    blueprint.entities.append(pipe)  
+                    occupied_positions.add(last_tuple)
 
 
 def visualize_json(json_path, cell_size=20, save_path=None):
@@ -3003,7 +3294,7 @@ def visualize_json(json_path, cell_size=20, save_path=None):
         # Save if requested
         if save_path:
             pygame.image.save(screen, save_path)
-            print(f"Visualization saved to {save_path}")
+            logger.info(f"Visualization saved to {save_path}")
         
         # Main loop to display the visualization
         running = True
@@ -3019,6 +3310,73 @@ def visualize_json(json_path, cell_size=20, save_path=None):
     except Exception as e:
         import traceback
         traceback.print_exc()
-        print(f"Error visualizing JSON: {e}")
+        logger.info(f"Error visualizing JSON: {e}")
         return False
 
+
+def load_config():
+        """Load the configuration file"""
+        try:
+            with open("config.json", "r") as file:
+                config = json.load(file)
+            return config
+        except FileNotFoundError:
+            # Return default config if file doesn't exist
+            return {
+                "grid": {"default_width": 16, "default_height": 10},
+                "machines": {
+                    "default_assembler": "assembling-machine-2",
+                    "default_furnace": "electric-furnace",
+                    "default_chemical_plant": "chemical-plant",
+                    "default_refinery": "oil-refinery"
+                },
+                "inserters": {
+                    "default_type": "inserter", 
+                    "input_type": "fast-inserter",
+                    "output_type": "fast-inserter"
+                },
+                "belts": {
+                    "default_type": "transport-belt",
+                    "underground_type": "underground-belt",
+                    "underground_max_length": 4
+                },
+                "visualization": {
+                    "cell_size": 50,
+                    "show_grid_lines": True,
+                    "save_images": True
+                },
+                "pathfinding": {
+                    "allow_underground": True,
+                    "allow_splitters": True,
+                    "find_optimal_paths": True,
+                    "max_tries": 3
+                },
+                "power": {
+                    "place_power_poles": True
+                }
+            }
+
+
+def load_json(recipe_file):
+        with open(recipe_file, "r") as file:
+                recipes = json.load(file)
+                return recipes
+
+
+def _get_belt_direction(orientation):
+        """Convert orientation tuple to Draftsman direction constant"""
+        dx, dy = orientation
+        
+        if dx == 0 and dy == -1:  # Up
+            return Direction.NORTH
+        elif dx == 1 and dy == 0:  # Right
+            return Direction.EAST
+        elif dx == 0 and dy == 1:  # Down
+            return Direction.SOUTH
+        elif dx == -1 and dy == 0:  # Left
+            return Direction.WEST
+        else:
+            # Default direction if orientation is invalid
+            return Direction.NORTH
+if __name__ == "__main__":
+    main()
