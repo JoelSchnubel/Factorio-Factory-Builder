@@ -344,7 +344,6 @@ class MultiAgentPathfinder:
             following_y = exit_y + dy
             following_pos = (following_x, following_y)
             
-            logger.debug(f"Checking underground path from {entry} to {exit_pos} with length {length-1}")
             
             # Check if exit is in bounds
             if not (0 <= exit_x < self.width and 0 <= exit_y < self.height):
@@ -662,19 +661,6 @@ class MultiAgentPathfinder:
     
     
     def find_paths_for_all_items(self,IO_paths=False):
-        """
-        Find paths for all items in the points dictionary.
-        
-        For each item, finds the path from the start point to destination with the best heuristic value.
-        If that fails, tries other pairs in order of increasing heuristic distance.
-        
-        Returns:
-            tuple: (paths, inserters, used_splitters) where:
-                - paths: dictionary of paths for each item
-                - inserters: dictionary of inserters that need to be placed
-                - used_splitters: dictionary of splitters used as I/O points
-        """
-        
         # Sort the points -> output items first
         # Separate output items from other items
         output_items = {}
@@ -706,10 +692,7 @@ class MultiAgentPathfinder:
         
         # Track which splitters are used for I/O
         used_splitters = {}
-        
-        # Process items in order (could use a priority system in the future)
-       
-       
+    
         
         for item_key in sorted_keys:
             
@@ -738,52 +721,6 @@ class MultiAgentPathfinder:
             
 
             
-            # if item is output item, add all other paths of this item to the destination points
-            if self.output_item and item_name == self.output_item:
-                    for other_item_key, other_paths in self.paths.items():
-                        for other_path_data in other_paths:  # Iterate through each path data in the list
-                            if other_item_key != item_key and other_path_data['item'] == item_name:
-                                # Get underground segments to exclude their endpoints
-                                underground_segments = other_path_data.get('underground_segments', {})
-                                underground_entries = []
-                                underground_exits = []
-                                
-                                # Collect all underground entry/exit points
-                                for segment in underground_segments.values():
-                                    underground_entries.append(segment['start'])
-                                    underground_exits.append(segment['end'])
-                                
-                                # Only add points that are not part of underground segments
-                                filtered_path = []
-                                for point in other_path_data['path']:
-                                    if point not in underground_entries and point not in underground_exits:
-                                        filtered_path.append(point)
-                                
-                                destinations.extend(filtered_path)
-                                logger.info(f"Added {len(filtered_path)} destination points from other item {other_item_key} (filtered out {len(other_path_data['path']) - len(filtered_path)} underground points)")
-                                        
-                            
-            # if the item is not the output item, add the destination points of all other paths with the same item to the start points
-            if item_name != self.output_item:
-                    for other_item_key, other_paths in self.paths.items():
-                        
-                        for other_path_data in other_paths:  # Iterate through each path data in the list
-                            if other_item_key != item_key and other_path_data['item'] == item_name:
-                                # point is not allowed to be a undground segment
-                                underground_segments = other_path_data.get('underground_segments', {})
-
-                                is_underground = True
-                                for segment in underground_segments.values():
-                                    if segment['end'] == other_path_data['destination'] or segment['start'] == other_path_data['destination']:
-                                       is_underground = False
-                                       break
-        
-                                if is_underground:
-                                    start_points.extend([other_path_data['destination']])
-                                    logger.info(f"Added start points from other item {other_item_key}")
-                    
-            
-            
             if self.allow_splitters and item_name in self.splitters and not is_fluid:
                 # Find splitters that are relevant to our start/destination points
                 relevant_start_splitters = []
@@ -804,6 +741,7 @@ class MultiAgentPathfinder:
                         if splitter.position == dest_point:
                             relevant_dest_splitters.append(splitter)
                             logger.info(f"Found splitter at destination point {dest_point}")
+                
                 
                 if len(relevant_start_splitters) > 0:
                     start_points = []
@@ -828,6 +766,58 @@ class MultiAgentPathfinder:
                             destinations.append(input_point)
                             logger.info(f"Added splitter input {input_point} as destination")
             
+            
+            
+            
+            # if item is output item, add all other paths of this item to the destination points
+            if self.output_item and item_name == self.output_item:
+                    for other_item_key, other_paths in self.paths.items():
+                        for other_path_data in other_paths:  # Iterate through each path data in the list
+                            if other_item_key != item_key and other_path_data['item'] == item_name:
+                                # Get underground segments to exclude their endpoints
+                                underground_segments = other_path_data.get('underground_segments', {})
+                                underground_entries = []
+                                underground_exits = []
+                                
+                                # Collect all underground entry/exit points
+                                for segment in underground_segments.values():
+                                    underground_entries.append(segment['start'])
+                                    underground_exits.append(segment['end'])
+                                
+                                # Only add points that are not part of underground segments
+                                filtered_path = []
+                                for point in other_path_data['path']:
+                                    if point not in underground_entries and point not in underground_exits:
+                                        filtered_path.append(point)
+                                
+                                destinations.extend(filtered_path)
+
+                                logger.info(f"Added {len(filtered_path)} destination points from other item {other_item_key} (filtered out {len(other_path_data['path']) - len(filtered_path)} underground points)")
+                                logger.debug(f"New destination points for {item_key}: {destinations}")
+                            
+                            
+            # if the item is not the output item, add the destination points of all other paths with the same item to the start points
+            if item_name != self.output_item:
+                    for other_item_key, other_paths in self.paths.items():
+                        
+                        for other_path_data in other_paths:  # Iterate through each path data in the list
+                            if other_item_key != item_key and other_path_data['item'] == item_name:
+                                # point is not allowed to be a undground segment
+                                underground_segments = other_path_data.get('underground_segments', {})
+
+                                is_underground = True
+                                for segment in underground_segments.values():
+                                    if segment['end'] == other_path_data['destination'] or segment['start'] == other_path_data['destination']:
+                                       is_underground = False
+                                       break
+        
+                                if is_underground:
+                                    start_points.extend([other_path_data['destination']])
+                                    logger.info(f"Added start points from other item {other_item_key}")
+                    
+            
+            
+   
                                 
             # check if start points and destination points have the same coordinates
             # -> skip then
@@ -1465,4 +1455,3 @@ class MultiAgentPathfinder:
         plt.close()
         
         return filename
-

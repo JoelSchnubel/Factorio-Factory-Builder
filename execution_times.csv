@@ -1332,3 +1332,22 @@ electronic-circuit,1,solve,"{'electronic-circuit': 2, 'copper-cable': 3, 'copper
 electronic-circuit,1,build_belts,"{'electronic-circuit': 2, 'copper-cable': 3, 'copper-plate': 0, 'iron-plate': 0}",0.9355571999913082,z3
 electronic-circuit,1,solve,"{'electronic-circuit': 2, 'copper-cable': 3, 'copper-plate': 0, 'iron-plate': 0}",19.683654699998442,z3
 electronic-circuit,1,build_belts,"{'electronic-circuit': 2, 'copper-cable': 3, 'copper-plate': 0, 'iron-plate': 0}",1.2135101999956532,z3
+copper-cable,1,solve,"{'copper-cable': 3, 'copper-plate': 0}",3.815958799998043,z3
+copper-cable,1,build_belts,"{'copper-cable': 3, 'copper-plate': 0}",0.3647456999970018,z3
+copper-cable,1,solve,"{'copper-cable': 3, 'copper-plate': 0}",3.7177077000014833,z3
+copper-cable,1,build_belts,"{'copper-cable': 3, 'copper-plate': 0}",0.38051899999845773,z3
+copper-cable,1,solve,"{'copper-cable': 3, 'copper-plate': 0}",2.9998269000061555,z3
+copper-cable,1,solve,"{'copper-cable': 3, 'copper-plate': 0}",3.1862106999979005,z3
+copper-cable,1,build_belts,"{'copper-cable': 3, 'copper-plate': 0}",0.21455579999746988,z3
+copper-cable,1,solve,"{'copper-cable': 3, 'copper-plate': 0}",2.44078140000056,z3
+copper-cable,1,build_belts,"{'copper-cable': 3, 'copper-plate': 0}",0.21037929999874905,z3
+copper-cable,1,solve,"{'copper-cable': 3, 'copper-plate': 0}",3.81672460000118,z3
+copper-cable,1,build_belts,"{'copper-cable': 3, 'copper-plate': 0}",0.38031790000241017,z3
+copper-cable,1,solve,"{'copper-cable': 3, 'copper-plate': 0}",3.9010667000038666,z3
+copper-cable,1,build_belts,"{'copper-cable': 3, 'copper-plate': 0}",0.6782104999947478,z3
+copper-cable,1,solve,"{'copper-cable': 3, 'copper-plate': 0}",3.044347700000799,z3
+copper-cable,1,build_belts,"{'copper-cable': 3, 'copper-plate': 0}",0.12531619999936083,z3
+copper-cable,1,solve,"{'copper-cable': 3, 'copper-plate': 0}",3.27052189999813,z3
+copper-cable,1,build_belts,"{'copper-cable': 3, 'copper-plate': 0}",0.23682649999682326,z3
+copper-cable,1,solve,"{'copper-cable': 3, 'copper-plate': 0}",3.630372100000386,z3
+copper-cable,1,build_belts,"{'copper-cable': 3, 'copper-plate': 0}",0.11408129999472294,z3

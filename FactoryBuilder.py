@@ -535,7 +535,7 @@ class FactoryBuilder:
                         item = item_id.split('_')[0]
                     
                         for pos_str, target_pos in inserters.items():
-                            # Parse the source position string "(10, 2)" -> [10, 2]
+                            # Parse the source position "(10, 2)" -> [10, 2]
                             pos_str = pos_str.strip('()')
                             source_x, source_y = map(int, pos_str.split(','))
                             
@@ -900,13 +900,17 @@ class FactoryBuilder:
 
         # If no path specified, use default
         if not output_json_path:
-            output_json_path = f"Factorys/factory_{self.output_item}_{self.amount}.json"
-        
-        # Save to file
+            output_json_path = f"Factorys/factory_{self.output_item}_{self.amount}.json"            # Save to file
         with open(output_json_path, 'w') as f:
             json.dump(factory_data, f, indent=2)
         
         logger.info(f"Factory JSON data saved to {output_json_path}")
+        
+        # Create a visualization from the JSON file
+        if output_json_path and hasattr(self, 'visualize_from_json'):
+            image_path = output_json_path.replace('.json', '.png')
+            self.visualize_from_json(output_json_path, save_path=image_path)
+            logger.info(f"Factory visualization saved to {image_path}")
         
         return factory_data, output_json_path
     
@@ -1029,14 +1033,34 @@ class FactoryBuilder:
                     else:
                         print(f"Warning: Image not found for {item} at {image_path}")
                         
-                        
-    def visualize_factory(self, cell_size=20, save_path=None):
-        """Visualize the factory layout with blocks and inter-block paths"""
+    def visualize_factory(self, cell_size=20, save_path=None, json_path=None):
+        """
+        Visualize the factory layout with blocks and inter-block paths
+        
+        Args:
+            cell_size (int): Size of each grid cell in pixels
+            save_path (str, optional): Path to save the visualization image
+            json_path (str, optional): Path to the factory JSON file to visualize
+        """
         pygame.init()
         
-        # Calculate window size with padding
-        window_width = (self.final_x + 2) * cell_size
-        window_height = (self.final_y + 2) * cell_size
+        # Use the JSON file if provided, otherwise use the internal state
+        if json_path:
+            return self.visualize_from_json(json_path, cell_size, save_path)
+        
+        # Calculate used area of the factory to determine appropriate window size
+        min_x, max_x, min_y, max_y = self.calculate_factory_bounds()
+        
+        # Add padding
+        padding = 2
+        min_x = max(0, min_x - padding)
+        min_y = max(0, min_y - padding)
+        max_x = min(self.final_x, max_x + padding)
+        max_y = min(self.final_y, max_y + padding)
+        
+        # Calculate window size
+        window_width = (max_x - min_x + 1) * cell_size
+        window_height = (max_y - min_y + 1) * cell_size
         
         # Create Pygame window
         window = pygame.display.set_mode((window_width, window_height))
@@ -1065,20 +1089,19 @@ class FactoryBuilder:
                     block_images[block_id] = image
         
         # Load item images for gates
-        self.load_item_images()
+        self.w()
         
         # Define colors for belt paths
         BELT_COLOR = (255, 165, 0)  # Orange
         UNDERGROUND_COLOR = (139, 69, 19)  # Brown
-        
-        # Clear the screen
+          # Clear the screen
         window.fill(WHITE)
         
-        # Draw grid lines
-        for x in range(0, (self.final_x + 1) * cell_size, cell_size):
+        # Draw grid lines - adjusted for visible area
+        for x in range(0, window_width, cell_size):
             pygame.draw.line(window, (200, 200, 200), (x, 0), (x, window_height))
-        for y in range(0, (self.final_y + 1) * cell_size, cell_size):
-            pygame.draw.line(window, (200, 200, 200), (0, y), (window_width, y))        # Draw inter-block paths first so they appear behind blocks
+        for y in range(0, window_height, cell_size):
+            pygame.draw.line(window, (200, 200, 200), (0, y), (window_width, y))# Draw inter-block paths first so they appear behind blocks
         if self.inter_block_paths:
             logger.info(f"Found {len(self.inter_block_paths)} inter-block path items to visualize")
             for item_key, path_data_list in self.inter_block_paths.items():
@@ -1190,28 +1213,48 @@ class FactoryBuilder:
             block_y = block_info['y']
             block_width = block_info['width']
             block_height = block_info['height']
+              # Extract the base item name from block_id
+            parts = block_id.split("_")
+            if len(parts) >= 3:
+                display_text = parts[1]  # Extract item name
+            else:
+                display_text = block_id
             
-            # Draw block with image if available
+            # Find the machine type if available
+            machine_type = None
+            if block_id in self.block_data and "machine_type" in self.block_data[block_id]:
+                machine_type = self.block_data[block_id]["machine_type"]
+            
+            # Try to find the matching image
+            image_found = False
             if block_id in block_images:
                 window.blit(block_images[block_id], (block_x * cell_size, block_y * cell_size))
-            else:
-                # Draw block as rectangle
+                image_found = True
+            elif machine_type:
+                # Try loading image for machine type
+                image_path = os.path.join('assets', f'{machine_type}.png')
+                if os.path.exists(image_path):
+                    image = pygame.image.load(image_path)
+                    image = pygame.transform.scale(
+                        image,
+                        (block_width * cell_size, block_height * cell_size)
+                    )
+                    window.blit(image, (block_x * cell_size, block_y * cell_size))
+                    image_found = True
+            
+            # If no image was found, draw a simple outline instead of a green block
+            if not image_found:
+                # Draw block outline
                 block_rect = pygame.Rect(
                     block_x * cell_size,
                     block_y * cell_size,
                     block_width * cell_size,
                     block_height * cell_size
                 )
-                pygame.draw.rect(window, GREEN, block_rect)
-                pygame.draw.rect(window, BLACK, block_rect, 2)  # Border
+                pygame.draw.rect(window, BLACK, block_rect, 2)  # Just a border
                 
                 # Draw block ID text
                 font = pygame.font.Font(None, 24)
-                parts = block_id.split("_")
-                if len(parts) >= 3:
-                    display_text = parts[1]  # Extract item name
-                else:
-                    display_text = block_id
                 text = font.render(display_text, True, BLACK)
                 text_rect = text.get_rect(center=(
                     block_x * cell_size + (block_width * cell_size) // 2,
@@ -1929,6 +1972,345 @@ class FactoryBuilder:
             traceback.print_exc()
             return {}, {}
 
+    def calculate_factory_bounds(self):
+        """
+        Calculate the minimum and maximum x and y coordinates of factory components.
+        This helps determine the occupied area of the factory for visualization.
+        
+        Returns:
+            tuple: (min_x, max_x, min_y, max_y) bounds of the factory
+        """
+        min_x = self.final_x
+        max_x = 0
+        min_y = self.final_y
+        max_y = 0
+        
+        # Check block positions
+        for block_id, block_info in self.final_blocks.items():
+            block_x = block_info['x']
+            block_y = block_info['y']
+            block_width = block_info['width']
+            block_height = block_info['height']
+            
+            # Update bounds
+            min_x = min(min_x, block_x)
+            max_x = max(max_x, block_x + block_width)
+            min_y = min(min_y, block_y)
+            max_y = max(max_y, block_y + block_height)
+            
+            # Check gate positions
+            for gate in block_info.get('input_points', []) + block_info.get('output_points', []):
+                gate_x = block_x + gate['x']
+                gate_y = block_y + gate['y']
+                
+                min_x = min(min_x, gate_x)
+                max_x = max(max_x, gate_x + 1)
+                min_y = min(min_y, gate_y)
+                max_y = max(max_y, gate_y + 1)
+        
+        # Check path positions
+        if hasattr(self, 'inter_block_paths') and self.inter_block_paths:
+            for item_key, path_data_list in self.inter_block_paths.items():
+                for path_data in path_data_list:
+                    if 'path' in path_data:
+                        for x, y in path_data['path']:
+                            min_x = min(min_x, x)
+                            max_x = max(max_x, x + 1)
+                            min_y = min(min_y, y)
+                            max_y = max(max_y, y + 1)
+                    
+                    if 'underground_segments' in path_data:
+                        for segment_id, segment in path_data['underground_segments'].items():
+                            if 'start' in segment and 'end' in segment:
+                                start_x, start_y = segment['start']
+                                end_x, end_y = segment['end']
+                                
+                                min_x = min(min_x, start_x, end_x)
+                                max_x = max(max_x, start_x + 1, end_x + 1)
+                                min_y = min(min_y, start_y, end_y)
+                                max_y = max(max_y, start_y + 1, end_y + 1)
+        
+        # Ensure we have at least some area even if no blocks are found
+        if min_x > max_x or min_y > max_y:
+            return 0, self.final_x, 0, self.final_y
+        
+        return min_x, max_x, min_y, max_y
+
+    def visualize_from_json(self, json_path, cell_size=20, save_path=None):
+        """
+        Visualize a factory from a JSON file
+        
+        Args:
+            json_path (str): Path to the factory JSON file
+            cell_size (int): Size of each grid cell in pixels
+            save_path (str, optional): Path to save the visualization image
+            
+        Returns:
+            bool: True if visualization was successful
+        """
+        import json
+        import os
+        
+        try:
+            # Load the JSON file
+            with open(json_path, 'r') as f:
+                data = json.load(f)
+            
+            # Define colors
+            WHITE = (255, 255, 255)
+            BLACK = (0, 0, 0)
+            BELT_COLOR = (255, 165, 0)  # Orange
+            UNDERGROUND_COLOR = (139, 69, 19)  # Brown
+            ASSEMBLER_COLOR = (150, 150, 200)  # Light blue
+            
+            # Calculate the bounds of the factory
+            min_x = float('inf')
+            max_x = float('-inf')
+            min_y = float('inf')
+            max_y = float('-inf')
+            
+            # Process blocks to find bounds
+            if 'assembler_information' in data:
+                for block in data['assembler_information']:
+                    x = block[1]
+                    y = block[2]
+                    width = block[3] 
+                    height = block[4]
+                    
+                    min_x = min(min_x, x)
+                    max_x = max(max_x, x + width)
+                    min_y = min(min_y, y)
+                    max_y = max(max_y, y + height)
+            
+            # Process paths to find bounds
+            if 'paths' in data:
+                for item_key, path_list in data['paths'].items():
+                    for path_data in path_list:
+                        if 'path' in path_data:
+                            for point in path_data['path']:
+                                x, y = point
+                                min_x = min(min_x, x)
+                                max_x = max(max_x, x + 1)
+                                min_y = min(min_y, y)
+                                max_y = max(max_y, y + 1)
+            
+            # Add padding
+            padding = 2
+            min_x = max(0, min_x - padding)
+            min_y = max(0, min_y - padding)
+            max_x = max_x + padding
+            max_y = max_y + padding
+            
+            # Calculate window dimensions
+            width = max_x - min_x
+            height = max_y - min_y
+            
+            # Create Pygame window
+            window_width = width * cell_size
+            window_height = height * cell_size
+            window = pygame.display.set_mode((window_width, window_height))
+            pygame.display.set_caption(f'Factory Visualization: {os.path.basename(json_path)}')
+            
+            # Fill the background
+            window.fill(WHITE)
+            
+            # Draw grid lines
+            for x in range(0, window_width, cell_size):
+                pygame.draw.line(window, (200, 200, 200), (x, 0), (x, window_height))
+            for y in range(0, window_height, cell_size):
+                pygame.draw.line(window, (200, 200, 200), (0, y), (window_width, y))
+            
+            # Draw assemblers
+            if 'assembler_information' in data:
+                for assembler in data['assembler_information']:
+                    item_type = assembler[0]
+                    x = (assembler[1] - min_x) * cell_size
+                    y = (assembler[2] - min_y) * cell_size
+                    width = assembler[3] * cell_size
+                    height = assembler[4] * cell_size
+                    machine_type = assembler[5]
+                    
+                    # Try to load image for assembler
+                    image_path = os.path.join('assets', f'{machine_type}.png')
+                    if os.path.exists(image_path):
+                        image = pygame.image.load(image_path)
+                        image = pygame.transform.scale(image, (width, height))
+                        window.blit(image, (x, y))
+                    else:
+                        # Draw rectangle if no image
+                        rect = pygame.Rect(x, y, width, height)
+                        pygame.draw.rect(window, ASSEMBLER_COLOR, rect)
+                        pygame.draw.rect(window, BLACK, rect, 2)
+                    
+                    # Draw label
+                    font = pygame.font.Font(None, 18)
+                    text = font.render(item_type, True, BLACK)
+                    text_rect = text.get_rect(center=(x + width/2, y + height/2))
+                    window.blit(text, text_rect)
+            
+            # Draw belts and inserters
+            if 'paths' in data:
+                for item_key, path_list in data['paths'].items():
+                    for path_data in path_list:
+                        if 'path' in path_data:
+                            # Draw path segments
+                            for i in range(len(path_data['path']) - 1):
+                                start_x, start_y = path_data['path'][i]
+                                end_x, end_y = path_data['path'][i + 1]
+                                
+                                # Skip if part of underground segment
+                                is_underground = False
+                                if 'underground_segments' in path_data:
+                                    for segment in path_data['underground_segments'].values():
+                                        if ('path' in segment and 
+                                            (start_x, start_y) in segment['path'] and 
+                                            (end_x, end_y) in segment['path']):
+                                            is_underground = True
+                                            break
+                                        elif ('start' in segment and 'end' in segment and 
+                                              ((start_x, start_y) == segment['start'] and 
+                                               (end_x, end_y) == segment['end']) or 
+                                              ((start_x, start_y) == segment['end'] and 
+                                               (end_x, end_y) == segment['start'])):
+                                            is_underground = True
+                                            break
+                                
+                                if not is_underground:
+                                    start_pos = ((start_x - min_x) * cell_size + cell_size // 2, 
+                                                (start_y - min_y) * cell_size + cell_size // 2)
+                                    end_pos = ((end_x - min_x) * cell_size + cell_size // 2, 
+                                              (end_y - min_y) * cell_size + cell_size // 2)
+                                    pygame.draw.line(window, BELT_COLOR, start_pos, end_pos, 3)
+                            
+                            # Draw underground segments
+                            if 'underground_segments' in path_data:
+                                for segment in path_data['underground_segments'].values():
+                                    if 'start' in segment and 'end' in segment:
+                                        start = segment['start']
+                                        end = segment['end']
+                                        
+                                        # Draw entry
+                                        entry_rect = pygame.Rect(
+                                            (start[0] - min_x) * cell_size + cell_size // 4,
+                                            (start[1] - min_y) * cell_size + cell_size // 4,
+                                            cell_size // 2,
+                                            cell_size // 2
+                                        )
+                                        pygame.draw.rect(window, UNDERGROUND_COLOR, entry_rect)
+                                        
+                                        # Draw exit
+                                        exit_rect = pygame.Rect(
+                                            (end[0] - min_x) * cell_size + cell_size // 4,
+                                            (end[1] - min_y) * cell_size + cell_size // 4,
+                                            cell_size // 2,
+                                            cell_size // 2
+                                        )
+                                        pygame.draw.rect(window, UNDERGROUND_COLOR, exit_rect)
+                                        
+                                        # Draw dotted connection line
+                                        start_pos = ((start[0] - min_x) * cell_size + cell_size // 2, 
+                                                    (start[1] - min_y) * cell_size + cell_size // 2)
+                                        end_pos = ((end[0] - min_x) * cell_size + cell_size // 2, 
+                                                  (end[1] - min_y) * cell_size + cell_size // 2)
+                                        
+                                        # Draw dashed line
+                                        dash_length = 5
+                                        gap_length = 5
+                                        dx = end_pos[0] - start_pos[0]
+                                        dy = end_pos[1] - start_pos[1]
+                                        dist = max(1, abs(dx) + abs(dy))
+                                        dx, dy = dx/dist, dy/dist
+                                        
+                                        pos = start_pos
+                                        dash_on = True
+                                        distance = 0
+                                        while distance < dist:
+                                            end = (pos[0] + dash_length * dx, pos[1] + dash_length * dy)
+                                            if dash_on:
+                                                pygame.draw.line(window, UNDERGROUND_COLOR, pos, end, 2)
+                                            pos = end
+                                            distance += dash_length
+                                            dash_on = not dash_on
+            
+            # Draw I/O points (without constant combinators)
+            RED = (255, 0, 0)  # Color for input gates
+            BLUE = (0, 0, 255)  # Color for output gates
+            
+            # Draw input gates
+            if 'input_information' in data:
+                for item, info in data['input_information'].items():
+                    if 'input' in info and info['input']:
+                        x, y = info['input']
+                        rect = pygame.Rect(
+                            (x - min_x) * cell_size,
+                            (y - min_y) * cell_size,
+                            cell_size,
+                            cell_size
+                        )
+                        pygame.draw.rect(window, RED, rect)
+                        
+                        # Label
+                        font = pygame.font.Font(None, 16)
+                        text = font.render(item, True, WHITE)
+                        text_rect = text.get_rect(center=(
+                            (x - min_x) * cell_size + cell_size // 2,
+                            (y - min_y) * cell_size + cell_size // 2
+                        ))
+                        window.blit(text, text_rect)
+            
+            # Draw output gates
+            if 'output_information' in data:
+                for item, info in data['output_information'].items():
+                    if 'output' in info and info['output']:
+                        x, y = info['output']
+                        rect = pygame.Rect(
+                            (x - min_x) * cell_size,
+                            (y - min_y) * cell_size,
+                            cell_size,
+                            cell_size
+                        )
+                        pygame.draw.rect(window, BLUE, rect)
+                        
+                        # Label
+                        font = pygame.font.Font(None, 16)
+                        text = font.render(item, True, WHITE)
+                        text_rect = text.get_rect(center=(
+                            (x - min_x) * cell_size + cell_size // 2,
+                            (y - min_y) * cell_size + cell_size // 2
+                        ))
+                        window.blit(text, text_rect)
+            
+            # Update display
+            pygame.display.flip()
+            
+            # Save the image if requested
+            if save_path:
+                pygame.image.save(window, save_path)
+                logger.info(f"Factory visualization saved to {save_path}")
+            
+            # Wait for user to close window
+            waiting = True
+            clock = pygame.time.Clock()
+            start_time = time.time()
+            max_display_time = 3.0  # Auto-close after 3 seconds
+            
+            while waiting:
+                clock.tick(60)
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        waiting = False
+                
+                if time.time() - start_time > max_display_time:
+                    waiting = False
+            
+            pygame.quit()
+            return True
+            
+        except Exception as e:
+            logger.error(f"Error visualizing factory from JSON: {e}")
+            import traceback
+            traceback.print_exc()
+            return False
 def manhattan_distance(p1, p2):
     """Calculate the Manhattan distance between two points."""
     return abs(p1[0] - p2[0]) + abs(p1[1] - p2[1])
@@ -2015,7 +2397,6 @@ def plot_csv_data(file_path):
     plt.close()  # Close the plot to prevent overlap with other subplots
 
     print(f"Boxplot saved at: {box_plot_path}")
-      
       
       
       
@@ -2246,21 +2627,27 @@ def create_blueprint_from_json(json_path, output_path=None):
                     # Skip if position is occupied
                     if position in occupied_positions:
                         print(f"  - Skipping input point at {position} due to overlap")
-                        continue
-                
-                    print(f"  - Placing input point for {item} at {position}")
-                    constant_combinator = ConstantCombinator()
-                    constant_combinator.tile_position = position
-                    constant_combinator.direction = Direction.SOUTH
-                    section = constant_combinator.add_section()
-                    section.filters = [{
-                                "index": 1,
-                                "name": item,  # The name should be at top level, not nested in signal
-                                "count": 1,
-                                "comparator": "=",
-                    }]
-                    constant_combinator.id = "output_" + item
-                    blueprint.entities.append(constant_combinator)
+                        continue                    
+                    # No constant combinators for I/O - we'll use a simpler approach instead
+                    # Just add a transport belt pointing inward to represent the input point
+                    belt = TransportBelt()
+                    belt.tile_position = position
+                    
+                    # Determine belt direction - should point inward based on edge
+                    edge = io_data.get("edge", "")
+                    if edge == "top":
+                        belt.direction = Direction.SOUTH  # Point downward
+                    elif edge == "bottom":
+                        belt.direction = Direction.NORTH  # Point upward
+                    elif edge == "left":
+                        belt.direction = Direction.EAST   # Point right
+                    elif edge == "right":
+                        belt.direction = Direction.WEST   # Point left
+                    else:
+                        belt.direction = Direction.SOUTH  # Default
+                        
+                    belt.id = "input_" + item
+                    blueprint.entities.append(belt)
                     
                     occupied_positions.add(position)
         
@@ -2634,15 +3021,4 @@ def visualize_json(json_path, cell_size=20, save_path=None):
         traceback.print_exc()
         print(f"Error visualizing JSON: {e}")
         return False
-
-
-if __name__ == "__main__":
-    #plot_csv_data("execution_times_big_factory.csv")
-    main()
-    
-    json_file_path = "Factorys/factory_electronic-circuit_200.json"
-    output_file_path = "Blueprints/factory_electronic-circuit_200.txt"
-    #save_image_path = "Factorys/Factory_visualization.png"
-    #create_blueprint_from_json(json_file_path, output_file_path)
-    #visualize_json(json_file_path, cell_size=30, save_path=save_image_patsh)
 

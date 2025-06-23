@@ -1480,7 +1480,9 @@ class FactorioProductionTree:
                     find_optimal_paths=self.config["pathfinding"]["find_optimal_paths"],
                     output_item=self.output_item,
                     pipe_underground_length=self.config["belts"]["underground_max_length"],
-                )                # Find paths for all items
+                )
+                                
+                # Find paths for all items
                 paths, inserters = pathfinder.find_paths_for_all_items()
                 
                 return paths, inserters
@@ -3520,8 +3522,8 @@ def Simple_Run():
     logger.info("start")
     
     # Example item and amount
-    item_to_produce = "electronic-circuit"  # "copper-cable" or "electronic-circuit"
-    amount_needed = 120
+    item_to_produce = "copper-cable"  # "copper-cable" or "electronic-circuit"
+    amount_needed = 300
     solver_type = "z3"  # "gurobi" or "z3"
     input_items = []#['copper-cable']  # Using explicit input items
     
