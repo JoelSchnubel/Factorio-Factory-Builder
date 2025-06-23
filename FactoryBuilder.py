@@ -1963,8 +1963,6 @@ def main():
 
     #builder.visualize_factory(save_path=f"Factorys/{output_item}_factory.png")
 
-    
-
 
 def log_method_time(item, amount, method_name,assemblers_per_recipie,num_subfactories,start_time, end_time):
     execution_time = end_time - start_time

@@ -1,7 +1,9 @@
 boto
 contourpy
 cycler
+fastapi
 fonttools
+jinja2
 kiwisolver
 matplotlib
 numpy
@@ -14,5 +16,7 @@ pytz
 six
 tk
 tzdata
+uvicorn
 z3-solver
+python-multipart
 dill
