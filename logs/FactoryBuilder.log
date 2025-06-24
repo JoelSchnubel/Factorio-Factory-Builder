@@ -1,1 +1,28 @@
-2025-06-23 16:25:07,724 - FactoryBuilder - INFO - Visualization saved to Factorys/factory_electronic-circuit_100.png
+2025-06-24 16:17:21,823 - FactoryBuilder - INFO - Loading image for assembler from assets/assembling-machine-1.png
+2025-06-24 16:17:21,827 - FactoryBuilder - INFO - Successfully loaded image for assembler
+2025-06-24 16:17:21,827 - FactoryBuilder - INFO - Loading image for inserter from assets/fast-inserter.png
+2025-06-24 16:17:21,828 - FactoryBuilder - INFO - Successfully loaded image for inserter
+2025-06-24 16:17:21,828 - FactoryBuilder - INFO - Loading image for conveyor from assets/transport-belt.png
+2025-06-24 16:17:21,829 - FactoryBuilder - INFO - Successfully loaded image for conveyor
+2025-06-24 16:17:21,829 - FactoryBuilder - INFO - Loading image for underground from assets/underground-belt.png
+2025-06-24 16:17:21,830 - FactoryBuilder - INFO - Successfully loaded image for underground
+2025-06-24 16:17:21,831 - FactoryBuilder - INFO - Loading image for splitter from assets/splitter.png
+2025-06-24 16:17:21,831 - FactoryBuilder - INFO - Successfully loaded image for splitter
+2025-06-24 16:17:21,831 - FactoryBuilder - INFO - Loading image for pipe from assets/pipe.png
+2025-06-24 16:17:21,834 - FactoryBuilder - INFO - Successfully loaded image for pipe
+2025-06-24 16:17:21,834 - FactoryBuilder - INFO - Loading image for pipe-underground from assets/pipe-to-ground.png
+2025-06-24 16:17:21,835 - FactoryBuilder - INFO - Successfully loaded image for pipe-underground
+2025-06-24 16:17:21,835 - FactoryBuilder - INFO - Loading image for chemical-plant from assets/chemical-plant.png
+2025-06-24 16:17:21,835 - FactoryBuilder - INFO - Successfully loaded image for chemical-plant
+2025-06-24 16:17:21,835 - FactoryBuilder - INFO - Loading image for oil-refinery from assets/oil-refinery.png
+2025-06-24 16:17:21,836 - FactoryBuilder - INFO - Successfully loaded image for oil-refinery
+2025-06-24 16:17:21,836 - FactoryBuilder - INFO - Loading image for small-electric-pole from assets/small-electric-pole.png
+2025-06-24 16:17:21,837 - FactoryBuilder - INFO - Successfully loaded image for small-electric-pole
+2025-06-24 16:17:21,837 - FactoryBuilder - INFO - Loading image for medium-electric-pole from assets/medium-electric-pole.png
+2025-06-24 16:17:21,838 - FactoryBuilder - INFO - Successfully loaded image for medium-electric-pole
+2025-06-24 16:17:21,838 - FactoryBuilder - INFO - Loading image for big-electric-pole from assets/big-electric-pole.png
+2025-06-24 16:17:21,839 - FactoryBuilder - INFO - Successfully loaded image for big-electric-pole
+2025-06-24 16:17:21,839 - FactoryBuilder - INFO - Loading image for substation from assets/substation.png
+2025-06-24 16:17:21,840 - FactoryBuilder - INFO - Successfully loaded image for substation
+2025-06-24 16:17:21,865 - FactoryBuilder - INFO - Drawing 4 inter-block paths
+2025-06-24 16:17:22,444 - FactoryBuilder - INFO - Visualization saved to Factorys/factory_electronic-circuit_100.png

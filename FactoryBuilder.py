@@ -18,6 +18,8 @@ from draftsman.blueprintable import Blueprint
 from draftsman.constants import Direction
 from draftsman.entity import Inserter, AssemblingMachine, TransportBelt, UndergroundBelt , Pipe,UndergroundPipe, ElectricPole, ConstantCombinator
 from draftsman.entity import Splitter as BlueprintSplitter
+import traceback
+    
 from logging_config import setup_logger
 logger = setup_logger("FactoryBuilder")
 
@@ -61,6 +63,9 @@ class FactoryBuilder:
         self.load_modules = load_modules
         
         self.external_io = None
+        
+        self.input_points = []
+        self.output_points = []
         
 
 
@@ -366,9 +371,8 @@ class FactoryBuilder:
             create_blueprint_from_json(path, output_path=blueprint_path)
             
             factory_img_path= f"Factorys/factory_{self.output_item}_{self.amount}.png"
-            self.visualize_factory(save_path=factory_img_path)
-            
-        
+            visualize_factory(json_path=path, save_path=factory_img_path)
+
         logger.info(f"Factory dimensions: {self.final_x} x {self.final_y}")
         logger.info(f"Final blocks: {self.final_blocks}")
         logger.info(f"Gate connections: {self.gate_connections}")
@@ -459,6 +463,9 @@ class FactoryBuilder:
             "inter_block_paths": [],
             "external_io": []
         }
+          # Initialize or reset input/output points
+        self.input_points = []
+        self.output_points = []
         
         # Process each block
         for block_id, block_info in self.final_blocks.items():
@@ -502,8 +509,8 @@ class FactoryBuilder:
                 # Process assemblers
                 if "assembler_information" in module_data:
                     for assembler in module_data["assembler_information"]:
-                        
-                            item, rel_x, rel_y = assembler[0], assembler[1], assembler[2]
+
+                            item, rel_x, rel_y,w,h,machine_type = assembler[0], assembler[1], assembler[2], assembler[3], assembler[4], assembler[5]
                             # Convert coordinates
                             abs_x = block_x + rel_x
                             abs_y = block_y + rel_y 
@@ -511,7 +518,9 @@ class FactoryBuilder:
                             factory_data["entities"]["assemblers"].append({
                                 "item": item,
                                 "position": [abs_x, abs_y],
-                                "block_id": block_id
+                                "block_id": block_id,
+                                "type": machine_type,
+                                "dimensions": [w, h]
                             })
                             
                             logger.info(f"Added assembler {item} at {[abs_x, abs_y]} for block {block_id}")
@@ -569,11 +578,40 @@ class FactoryBuilder:
                                 "block_id": block_id
                             })
                             
-                            logger.info(f"Added placed inserter for {item} at {[abs_x, abs_y]} facing {direction}")
-
-                # add I/O paths to the json file
+                            logger.info(f"Added placed inserter for {item} at {[abs_x, abs_y]} facing {direction}")                # add I/O paths to the json file and store input points for pathfinding
                 if "input_information" in module_data:
                     for item, data in module_data["input_information"].items():
+                        # Store the input points with absolute positions and block_id
+                        if 'input' in data and data['input'] is not None:
+                            # Convert from (y,x) to (x,y) format if needed
+                            if isinstance(data['input'], tuple) and len(data['input']) == 2:
+                                rel_y, rel_x = data['input']
+                            else:
+                                rel_x, rel_y = data['input'] if isinstance(data['input'], list) else (data['input'][0], data['input'][1])
+                            
+                            # Calculate absolute position
+                            abs_x = block_x + rel_x
+                            abs_y = block_y + rel_y
+                            
+                            # Add to the factory data io_points
+                            input_point = {
+                                "item": item,
+                                "position": [abs_x, abs_y],
+                                "block_id": block_id,
+                                "external": False
+                            }
+                            factory_data["io_points"]["inputs"].append(input_point)
+                            
+                            # Add to the self.input_points for pathfinding
+                            self.input_points.append({
+                                "item": item,
+                                "position": (abs_x, abs_y),
+                                "block_id": block_id
+                            })
+                            
+                            logger.info(f"Added input point for {item} at {[abs_x, abs_y]} for block {block_id}")
+                            
+                        # Process paths
                         if 'paths' in data and data['paths'] is not None and item in data['paths']:
                             for path_data in data['paths'][item]:
                                 if "path" in path_data:
@@ -638,11 +676,40 @@ class FactoryBuilder:
                                             })
                             logger.info(f"Added input belt route for {item} at {[abs_x, abs_y]} facing {direction}")
                 else:
-                    logger.info("  - No input belt routes found")
-
-                # Process output information paths similarly
+                    logger.info("  - No input belt routes found")                # Process output information paths similarly
                 if "output_information" in module_data:
                     for item, data in module_data["output_information"].items():
+                        # Store the output points with absolute positions and block_id
+                        if 'output' in data and data['output'] is not None:
+                            # Convert from (y,x) to (x,y) format if needed
+                            if isinstance(data['output'], tuple) and len(data['output']) == 2:
+                                rel_y, rel_x = data['output']
+                            else:
+                                rel_x, rel_y = data['output'] if isinstance(data['output'], list) else (data['output'][0], data['output'][1])
+                            
+                            # Calculate absolute position
+                            abs_x = block_x + rel_x
+                            abs_y = block_y + rel_y
+                            
+                            # Add to the factory data io_points
+                            output_point = {
+                                "item": item,
+                                "position": [abs_x, abs_y],
+                                "block_id": block_id,
+                                "external": False
+                            }
+                            factory_data["io_points"]["outputs"].append(output_point)
+                            
+                            # Add to the self.output_points for pathfinding
+                            self.output_points.append({
+                                "item": item,
+                                "position": (abs_x, abs_y),
+                                "block_id": block_id
+                            })
+                            
+                            logger.info(f"Added output point for {item} at {[abs_x, abs_y]} for block {block_id}")
+                        
+                        # Process paths
                         if 'paths' in data and data['paths'] is not None and item in data['paths']:
                             for path_data in data['paths'][item]:
                                 if "path" in path_data:
@@ -925,12 +992,7 @@ class FactoryBuilder:
             json.dump(factory_data, f, indent=2)
         
         logger.info(f"Factory JSON data saved to {output_json_path}")
-        
-        # Create a visualization from the JSON file
-        if output_json_path and hasattr(self, 'visualize_from_json'):
-            image_path = output_json_path.replace('.json', '.png')
-            self.visualize_from_json(output_json_path, save_path=image_path)
-            logger.info(f"Factory visualization saved to {image_path}")
+      
         
         return factory_data, output_json_path
     
@@ -1052,306 +1114,7 @@ class FactoryBuilder:
                         )
                     else:
                         logger.info(f"Warning: Image not found for {item} at {image_path}")
-                        
-    def visualize_factory(self, cell_size=20, save_path=None, json_path=None):
-        """
-        Visualize the factory layout with blocks and inter-block paths
-        
-        Args:
-            cell_size (int): Size of each grid cell in pixels
-            save_path (str, optional): Path to save the visualization image
-            json_path (str, optional): Path to the factory JSON file to visualize
-        """
-        pygame.init()
-        
-        # Use the JSON file if provided, otherwise use the internal state
-        if json_path:
-            return self.visualize_from_json(json_path, cell_size, save_path)
-        
-        # Calculate used area of the factory to determine appropriate window size
-        min_x, max_x, min_y, max_y = self.calculate_factory_bounds()
-        
-        # Add padding
-        padding = 2
-        min_x = max(0, min_x - padding)
-        min_y = max(0, min_y - padding)
-        max_x = min(self.final_x, max_x + padding)
-        max_y = min(self.final_y, max_y + padding)
-        
-        # Calculate window size
-        window_width = (max_x - min_x + 1) * cell_size
-        window_height = (max_y - min_y + 1) * cell_size
-        
-        # Create Pygame window
-        window = pygame.display.set_mode((window_width, window_height))
-        pygame.display.set_caption('Factory Layout with Paths')
-        
-        # Load block images
-        block_images = {}
-        for block_id, block_info in self.final_blocks.items():
-            # Extract the base item name from block_id
-            parts = block_id.split("_")
-            if len(parts) >= 3:
-                block_type = parts[1]  # Extract the item name
-            else:
-                block_type = block_id
-            
-            # Try to find image in the block data
-            if block_type in self.block_data and 'png' in self.block_data[block_type]:
-                image_path = self.block_data[block_type]['png']
-                if os.path.exists(image_path):
-                    image = pygame.image.load(image_path)
-                    # Scale image to block size
-                    image = pygame.transform.scale(
-                        image,
-                        (block_info['width'] * cell_size, block_info['height'] * cell_size)
-                    )
-                    block_images[block_id] = image
-          # Load item images for gates
-        self.load_item_images()
-        
-        # Define colors for belt paths
-        BELT_COLOR = (255, 165, 0)  # Orange
-        UNDERGROUND_COLOR = (139, 69, 19)  # Brown
-          # Clear the screen
-        window.fill(WHITE)
-        
-        # Draw grid lines - adjusted for visible area
-        for x in range(0, window_width, cell_size):
-            pygame.draw.line(window, (200, 200, 200), (x, 0), (x, window_height))
-        for y in range(0, window_height, cell_size):
-            pygame.draw.line(window, (200, 200, 200), (0, y), (window_width, y))# Draw inter-block paths first so they appear behind blocks
-        if self.inter_block_paths:
-            logger.info(f"Found {len(self.inter_block_paths)} inter-block path items to visualize")
-            for item_key, path_data_list in self.inter_block_paths.items():
-                logger.info(f"Drawing paths for item: {item_key}, paths: {len(path_data_list)}")
-                for path_data in path_data_list:
-                    # Log what's in the path_data
-                    logger.info(f"  Path data keys: {list(path_data.keys())}")
                     
-                    # First check if there's a path key
-                    if 'path' in path_data:
-                        path = path_data['path']
-                    # If not, try to use start and destination
-                    elif 'start' in path_data and 'destination' in path_data:
-                        path = [path_data['start'], path_data['destination']]
-                        logger.info(f"  Using start/destination for path: {path}")
-                    else:
-                        path = []
-                        logger.warning(f"  No valid path found for {item_key}")
-                    
-                    underground_segments = path_data.get('underground_segments', {})
-                    
-                    # Draw regular path segments
-                    for i in range(len(path) - 1):
-                        start_x, start_y = path[i]
-                        end_x, end_y = path[i + 1]
-                        # Skip if part of underground segment
-                        is_underground = False
-                        for segment_id, segment in underground_segments.items():
-                            # Some segments have 'path' others have 'start'/'end'
-                            if 'path' in segment:
-                                segment_path = segment['path']
-                                if (start_x, start_y) in segment_path and (end_x, end_y) in segment_path:
-                                    idx1 = segment_path.index((start_x, start_y))
-                                    idx2 = segment_path.index((end_x, end_y))
-                                    if abs(idx1 - idx2) == 1:  # Adjacent in segment
-                                        is_underground = True
-                                        break
-                            elif 'start' in segment and 'end' in segment:
-                                # Check if this segment contains our points
-                                start_seg = segment['start']
-                                end_seg = segment['end']
-                                if ((start_x, start_y) == tuple(start_seg) and (end_x, end_y) == tuple(end_seg)) or \
-                                   ((start_x, start_y) == tuple(end_seg) and (end_x, end_y) == tuple(start_seg)):
-                                    is_underground = True
-                                    break
-                        
-                        if not is_underground:
-                            start_pos = (start_x * cell_size + cell_size // 2, start_y * cell_size + cell_size // 2)
-                            end_pos = (end_x * cell_size + cell_size // 2, end_y * cell_size + cell_size // 2)
-                            pygame.draw.line(window, BELT_COLOR, start_pos, end_pos, 3)
-                      # Draw underground segments
-                    for segment_id, segment in underground_segments.items():
-                        # Some formats store start/end directly, others use a path
-                        if 'start' in segment and 'end' in segment:
-                            start = segment['start']
-                            end = segment['end']
-                        elif 'path' in segment and len(segment['path']) >= 2:
-                            start = segment['path'][0]
-                            end = segment['path'][-1]
-                        else:
-                            logger.warning(f"Skipping segment with invalid format: {segment}")
-                            continue
-                        
-                        # Draw underground entry
-                        entry_rect = pygame.Rect(
-                            start[0] * cell_size + cell_size // 4,
-                            start[1] * cell_size + cell_size // 4,
-                            cell_size // 2,
-                            cell_size // 2
-                        )
-                        pygame.draw.rect(window, UNDERGROUND_COLOR, entry_rect)
-                        
-                        # Draw underground exit
-                        exit_rect = pygame.Rect(
-                            end[0] * cell_size + cell_size // 4,
-                            end[1] * cell_size + cell_size // 4,
-                            cell_size // 2,
-                            cell_size // 2
-                        )
-                        pygame.draw.rect(window, UNDERGROUND_COLOR, exit_rect)
-                        
-                        # Draw dotted line connecting entry to exit
-                        start_pos = (start[0] * cell_size + cell_size // 2, start[1] * cell_size + cell_size // 2)
-                        end_pos = (end[0] * cell_size + cell_size // 2, end[1] * cell_size + cell_size // 2)
-                        
-                        # Draw dashed line
-                        dash_length = 5
-                        dash_gap = 5
-                        dx = end_pos[0] - start_pos[0]
-                        dy = end_pos[1] - start_pos[1]
-                        dist = max(1, abs(dx) + abs(dy))  # Prevent division by zero
-                        dx, dy = dx/dist, dy/dist
-                        
-                        # Draw dashed line
-                        pos = start_pos
-                        dash_on = True
-                        distance = 0
-                        while distance < dist:
-                            end = (pos[0] + dash_length * dx, pos[1] + dash_length * dy)
-                            if dash_on:
-                                pygame.draw.line(window, UNDERGROUND_COLOR, pos, end, 2)
-                            pos = end
-                            distance += dash_length
-                            dash_on = not dash_on
-        
-        # Draw blocks
-        for block_id, block_info in self.final_blocks.items():
-            block_x = block_info['x']
-            block_y = block_info['y']
-            block_width = block_info['width']
-            block_height = block_info['height']
-              # Extract the base item name from block_id
-            parts = block_id.split("_")
-            if len(parts) >= 3:
-                display_text = parts[1]  # Extract item name
-            else:
-                display_text = block_id
-            
-            # Find the machine type if available
-            machine_type = None
-            if block_id in self.block_data and "machine_type" in self.block_data[block_id]:
-                machine_type = self.block_data[block_id]["machine_type"]
-            
-            # Try to find the matching image
-            image_found = False
-            if block_id in block_images:
-                window.blit(block_images[block_id], (block_x * cell_size, block_y * cell_size))
-                image_found = True
-            elif machine_type:
-                # Try loading image for machine type
-                image_path = os.path.join('assets', f'{machine_type}.png')
-                if os.path.exists(image_path):
-                    image = pygame.image.load(image_path)
-                    image = pygame.transform.scale(
-                        image,
-                        (block_width * cell_size, block_height * cell_size)
-                    )
-                    window.blit(image, (block_x * cell_size, block_y * cell_size))
-                    image_found = True
-            
-            # If no image was found, draw a simple outline instead of a green block
-            if not image_found:
-                # Draw block outline
-                block_rect = pygame.Rect(
-                    block_x * cell_size,
-                    block_y * cell_size,
-                    block_width * cell_size,
-                    block_height * cell_size
-                )
-                pygame.draw.rect(window, BLACK, block_rect, 2)  # Just a border
-                
-                # Draw block ID text
-                font = pygame.font.Font(None, 24)
-                text = font.render(display_text, True, BLACK)
-                text_rect = text.get_rect(center=(
-                    block_x * cell_size + (block_width * cell_size) // 2,
-                    block_y * cell_size + (block_height * cell_size) // 2
-                ))
-                window.blit(text, text_rect)
-            
-            # Draw gates
-            for gate in block_info['input_points']:
-                gate_x = block_x + gate['x']
-                gate_y = block_y + gate['y']
-                
-                gate_rect = pygame.Rect(
-                    gate_x * cell_size,
-                    gate_y * cell_size,
-                    cell_size,
-                    cell_size
-                )
-                pygame.draw.rect(window, RED, gate_rect)
-                
-                # Draw item image if available
-                if gate['item'] in self.item_images:
-                    scaled_image = pygame.transform.scale(
-                        self.item_images[gate['item']], 
-                        (cell_size, cell_size)
-                    )
-                    window.blit(scaled_image, (gate_x * cell_size, gate_y * cell_size))
-            
-            for gate in block_info['output_points']:
-                gate_x = block_x + gate['x']
-                gate_y = block_y + gate['y']
-                
-                gate_rect = pygame.Rect(
-                    gate_x * cell_size,
-                    gate_y * cell_size,
-                    cell_size,
-                    cell_size
-                )
-                pygame.draw.rect(window, BLUE, gate_rect)
-                
-                # Draw item image if available
-                if gate['item'] in self.item_images:
-                    scaled_image = pygame.transform.scale(
-                        self.item_images[gate['item']], 
-                        (cell_size, cell_size)
-                    )
-                    window.blit(scaled_image, (gate_x * cell_size, gate_y * cell_size))
-        
-        # Update the display
-        pygame.display.flip()
-        
-        # Save the image if requested
-        if save_path:
-            pygame.image.save(window, save_path)
-            logger.info(f"Factory visualization saved to {save_path}")
-          # Wait for user to close the window or run for a limited time
-        waiting = True
-        clock = pygame.time.Clock()
-        start_time = time.time()
-        max_display_time = 3.0  # Auto-close after 3 seconds if not testing
-        
-        if save_path:
-            # Save screenshot if a save path is provided
-            pygame.image.save(window, save_path)
-            logger.info(f"Factory visualization saved to: {save_path}")
-        
-        while waiting:
-            clock.tick(60)  # 60 FPS
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    waiting = False
-            
-            # Auto-close after max_display_time seconds
-            if time.time() - start_time > max_display_time:
-                waiting = False
-        
-        pygame.quit()
-
     def define_factory_io_points(self):
         """
         Define external input/output points for the factory on the edges.
@@ -1785,15 +1548,6 @@ class FactoryBuilder:
             logger.info(f"Added fixed output gate {output_gate['id']} at position {output_gate['position']}")
 
     def plan_inter_block_paths(self, factory_data):
-        """
-        Plan paths between connected gates using the MultiAgentPathfinder and detailed factory data.
-        
-        Args:
-            factory_data (dict): The factory JSON data containing entity positions
-            
-        Returns:
-            tuple: (paths, inserters) - dictionaries of paths and inserters
-        """
         logger.info("Planning inter-block paths with detailed obstacles...")
         
         if not self.final_blocks or not self.gate_connections:
@@ -1809,12 +1563,14 @@ class FactoryBuilder:
         
         # Mark all entities in the factory data as obstacles
         if "entities" in factory_data:
-            # Mark assemblers (3x3 entities)
+           
             for assembler in factory_data["entities"].get("assemblers", []):
                 pos_x, pos_y = assembler["position"]
-                # Assemblers are 3x3
-                for dy in range(3):
-                    for dx in range(3):
+                # Assemblers are nxm
+                size_x, size_y = assembler.get("dimension", [3, 3])
+
+                for dy in range(size_y):
+                    for dx in range(size_x):
                         x, y = pos_x + dx, pos_y + dy
                         if 0 <= x < grid_width and 0 <= y < grid_height:
                             obstacle_map[y][x] = 1
@@ -1977,15 +1733,29 @@ class FactoryBuilder:
             elif valid_connection:
                 logger.warning(f"Connection {i} was valid but had missing coordinates or item information")
 
-        
-        # Process external I/O points
+          # Process external I/O points
         if "io_points" in factory_data:
-            # Clear I/O points in the obstacle map
+            # Mark I/O points as obstacles first to ensure proper pathing around them
             for io_type in ["inputs", "outputs"]:
                 for point in factory_data["io_points"].get(io_type, []):
                     pos_x, pos_y = point["position"]
+                    
+                    # Mark I/O points as obstacles
                     if 0 <= pos_x < grid_width and 0 <= pos_y < grid_height:
-                        obstacle_map[pos_y][pos_x] = 0
+                        obstacle_map[pos_y][pos_x] = 1  # Mark as obstacle
+                    
+            # Then, clear only the I/O points that are part of the current pathfinding request
+            # This is important as we only want to allow paths to enter/exit at their specific endpoints
+            for connection_id, connection_data in connection_points.items():
+                for start_point in connection_data['start_points']:
+                    start_x, start_y = start_point
+                    if 0 <= start_x < grid_width and 0 <= start_y < grid_height:
+                        obstacle_map[start_y][start_x] = 0  # Clear for pathfinding
+                        
+                for dest_point in connection_data['destination']:
+                    dest_x, dest_y = dest_point
+                    if 0 <= dest_x < grid_width and 0 <= dest_y < grid_height:
+                        obstacle_map[dest_y][dest_x] = 0  # Clear for pathfinding
         if not connection_points:
             logger.warning("No valid connections to route! Please check your gate connections.")
             return {}, {}
@@ -2090,283 +1860,9 @@ class FactoryBuilder:
         if min_x > max_x or min_y > max_y:
             return 0, self.final_x, 0, self.final_y
         
-        return min_x, max_x, min_y, max_y
-
-    def visualize_from_json(self, json_path, cell_size=20, save_path=None):
-        """
-        Visualize a factory from a JSON file
-        
-        Args:
-            json_path (str): Path to the factory JSON file
-            cell_size (int): Size of each grid cell in pixels
-            save_path (str, optional): Path to save the visualization image
-            
-        Returns:
-            bool: True if visualization was successful
-        """
-        import json
-        import os
-        
-        try:
-            # Load the JSON file
-            with open(json_path, 'r') as f:
-                data = json.load(f)
-            
-            # Define colors
-            WHITE = (255, 255, 255)
-            BLACK = (0, 0, 0)
-            BELT_COLOR = (255, 165, 0)  # Orange
-            UNDERGROUND_COLOR = (139, 69, 19)  # Brown
-            ASSEMBLER_COLOR = (150, 150, 200)  # Light blue
-            
-            # Calculate the bounds of the factory
-            min_x = float('inf')
-            max_x = float('-inf')
-            min_y = float('inf')
-            max_y = float('-inf')
-            
-            # Process blocks to find bounds
-            if 'assembler_information' in data:
-                for block in data['assembler_information']:
-                    x = block[1]
-                    y = block[2]
-                    width = block[3] 
-                    height = block[4]
-                    
-                    min_x = min(min_x, x)
-                    max_x = max(max_x, x + width)
-                    min_y = min(min_y, y)
-                    max_y = max(max_y, y + height)
-            
-            # Process paths to find bounds
-            if 'paths' in data:
-                for item_key, path_list in data['paths'].items():
-                    for path_data in path_list:
-                        if 'path' in path_data:
-                            for point in path_data['path']:
-                                x, y = point
-                                min_x = min(min_x, x)
-                                max_x = max(max_x, x + 1)
-                                min_y = min(min_y, y)
-                                max_y = max(max_y, y + 1)
-            
-            # Add padding
-            padding = 2
-            min_x = max(0, min_x - padding)
-            min_y = max(0, min_y - padding)
-            max_x = max_x + padding
-            max_y = max_y + padding
-            
-            # Calculate window dimensions
-            width = max_x - min_x
-            height = max_y - min_y
-            
-            # Create Pygame window
-            window_width = width * cell_size
-            window_height = height * cell_size
-            window = pygame.display.set_mode((window_width, window_height))
-            pygame.display.set_caption(f'Factory Visualization: {os.path.basename(json_path)}')
-            
-            # Fill the background
-            window.fill(WHITE)
-            
-            # Draw grid lines
-            for x in range(0, window_width, cell_size):
-                pygame.draw.line(window, (200, 200, 200), (x, 0), (x, window_height))
-            for y in range(0, window_height, cell_size):
-                pygame.draw.line(window, (200, 200, 200), (0, y), (window_width, y))
-            
-            # Draw assemblers
-            if 'assembler_information' in data:
-                for assembler in data['assembler_information']:
-                    item_type = assembler[0]
-                    x = (assembler[1] - min_x) * cell_size
-                    y = (assembler[2] - min_y) * cell_size
-                    width = assembler[3] * cell_size
-                    height = assembler[4] * cell_size
-                    machine_type = assembler[5]
-                    
-                    # Try to load image for assembler
-                    image_path = os.path.join('assets', f'{machine_type}.png')
-                    if os.path.exists(image_path):
-                        image = pygame.image.load(image_path)
-                        image = pygame.transform.scale(image, (width, height))
-                        window.blit(image, (x, y))
-                    else:
-                        # Draw rectangle if no image
-                        rect = pygame.Rect(x, y, width, height)
-                        pygame.draw.rect(window, ASSEMBLER_COLOR, rect)
-                        pygame.draw.rect(window, BLACK, rect, 2)
-                    
-                    # Draw label
-                    font = pygame.font.Font(None, 18)
-                    text = font.render(item_type, True, BLACK)
-                    text_rect = text.get_rect(center=(x + width/2, y + height/2))
-                    window.blit(text, text_rect)
-            
-            # Draw belts and inserters
-            if 'paths' in data:
-                for item_key, path_list in data['paths'].items():
-                    for path_data in path_list:
-                        if 'path' in path_data:
-                            # Draw path segments
-                            for i in range(len(path_data['path']) - 1):
-                                start_x, start_y = path_data['path'][i]
-                                end_x, end_y = path_data['path'][i + 1]
-                                
-                                # Skip if part of underground segment
-                                is_underground = False
-                                if 'underground_segments' in path_data:
-                                    for segment in path_data['underground_segments'].values():
-                                        if ('path' in segment and 
-                                            (start_x, start_y) in segment['path'] and 
-                                            (end_x, end_y) in segment['path']):
-                                            is_underground = True
-                                            break
-                                        elif ('start' in segment and 'end' in segment and 
-                                              ((start_x, start_y) == segment['start'] and 
-                                               (end_x, end_y) == segment['end']) or 
-                                              ((start_x, start_y) == segment['end'] and 
-                                               (end_x, end_y) == segment['start'])):
-                                            is_underground = True
-                                            break
-                                
-                                if not is_underground:
-                                    start_pos = ((start_x - min_x) * cell_size + cell_size // 2, 
-                                                (start_y - min_y) * cell_size + cell_size // 2)
-                                    end_pos = ((end_x - min_x) * cell_size + cell_size // 2, 
-                                              (end_y - min_y) * cell_size + cell_size // 2)
-                                    pygame.draw.line(window, BELT_COLOR, start_pos, end_pos, 3)
-                            
-                            # Draw underground segments
-                            if 'underground_segments' in path_data:
-                                for segment in path_data['underground_segments'].values():
-                                    if 'start' in segment and 'end' in segment:
-                                        start = segment['start']
-                                        end = segment['end']
-                                        
-                                        # Draw entry
-                                        entry_rect = pygame.Rect(
-                                            (start[0] - min_x) * cell_size + cell_size // 4,
-                                            (start[1] - min_y) * cell_size + cell_size // 4,
-                                            cell_size // 2,
-                                            cell_size // 2
-                                        )
-                                        pygame.draw.rect(window, UNDERGROUND_COLOR, entry_rect)
-                                        
-                                        # Draw exit
-                                        exit_rect = pygame.Rect(
-                                            (end[0] - min_x) * cell_size + cell_size // 4,
-                                            (end[1] - min_y) * cell_size + cell_size // 4,
-                                            cell_size // 2,
-                                            cell_size // 2
-                                        )
-                                        pygame.draw.rect(window, UNDERGROUND_COLOR, exit_rect)
-                                        
-                                        # Draw dotted connection line
-                                        start_pos = ((start[0] - min_x) * cell_size + cell_size // 2, 
-                                                    (start[1] - min_y) * cell_size + cell_size // 2)
-                                        end_pos = ((end[0] - min_x) * cell_size + cell_size // 2, 
-                                                  (end[1] - min_y) * cell_size + cell_size // 2)
-                                        
-                                        # Draw dashed line
-                                        dash_length = 5
-                                        gap_length = 5
-                                        dx = end_pos[0] - start_pos[0]
-                                        dy = end_pos[1] - start_pos[1]
-                                        dist = max(1, abs(dx) + abs(dy))
-                                        dx, dy = dx/dist, dy/dist
-                                        
-                                        pos = start_pos
-                                        dash_on = True
-                                        distance = 0
-                                        while distance < dist:
-                                            end = (pos[0] + dash_length * dx, pos[1] + dash_length * dy)
-                                            if dash_on:
-                                                pygame.draw.line(window, UNDERGROUND_COLOR, pos, end, 2)
-                                            pos = end
-                                            distance += dash_length
-                                            dash_on = not dash_on
-            
-            # Draw I/O points (without constant combinators)
-            RED = (255, 0, 0)  # Color for input gates
-            BLUE = (0, 0, 255)  # Color for output gates
-            
-            # Draw input gates
-            if 'input_information' in data:
-                for item, info in data['input_information'].items():
-                    if 'input' in info and info['input']:
-                        x, y = info['input']
-                        rect = pygame.Rect(
-                            (x - min_x) * cell_size,
-                            (y - min_y) * cell_size,
-                            cell_size,
-                            cell_size
-                        )
-                        pygame.draw.rect(window, RED, rect)
-                        
-                        # Label
-                        font = pygame.font.Font(None, 16)
-                        text = font.render(item, True, WHITE)
-                        text_rect = text.get_rect(center=(
-                            (x - min_x) * cell_size + cell_size // 2,
-                            (y - min_y) * cell_size + cell_size // 2
-                        ))
-                        window.blit(text, text_rect)
-            
-            # Draw output gates
-            if 'output_information' in data:
-                for item, info in data['output_information'].items():
-                    if 'output' in info and info['output']:
-                        x, y = info['output']
-                        rect = pygame.Rect(
-                            (x - min_x) * cell_size,
-                            (y - min_y) * cell_size,
-                            cell_size,
-                            cell_size
-                        )
-                        pygame.draw.rect(window, BLUE, rect)
-                        
-                        # Label
-                        font = pygame.font.Font(None, 16)
-                        text = font.render(item, True, WHITE)
-                        text_rect = text.get_rect(center=(
-                            (x - min_x) * cell_size + cell_size // 2,
-                            (y - min_y) * cell_size + cell_size // 2
-                        ))
-                        window.blit(text, text_rect)
-            
-            # Update display
-            pygame.display.flip()
-            
-            # Save the image if requested
-            if save_path:
-                pygame.image.save(window, save_path)
-                logger.info(f"Factory visualization saved to {save_path}")
-            
-            # Wait for user to close window
-            waiting = True
-            clock = pygame.time.Clock()
-            start_time = time.time()
-            max_display_time = 3.0  # Auto-close after 3 seconds
-            
-            while waiting:
-                clock.tick(60)
-                for event in pygame.event.get():
-                    if event.type == pygame.QUIT:
-                        waiting = False
-                
-                if time.time() - start_time > max_display_time:
-                    waiting = False
-            
-            pygame.quit()
-            return True
-            
-        except Exception as e:
-            logger.error(f"Error visualizing factory from JSON: {e}")
-            import traceback
-            traceback.print_exc()
-            return False
+        return min_x, max_x, min_y, max_y    
+    
+    
 def manhattan_distance(p1, p2):
     """Calculate the Manhattan distance between two points."""
     return abs(p1[0] - p2[0]) + abs(p1[1] - p2[1])
@@ -2375,9 +1871,8 @@ def manhattan_distance(p1, p2):
 def main():
     
     
-    visualize_json(json_path="Factorys/factory_electronic-circuit_100.json",save_path="Factorys/factory_electronic-circuit_100.png")
-    
-    return
+    #visualize_factory(json_path="Factorys/factory_electronic-circuit_100.json",save_path="Factorys/factory_electronic-circuit_100.png")
+
     output_item = "electronic-circuit"
     amount = 100
     max_assembler_per_blueprint = 5
@@ -2986,33 +2481,7 @@ def _add_belt_path_to_blueprint(blueprint, path_data, item, occupied_positions):
                     occupied_positions.add(last_tuple)
 
 
-def visualize_json(json_path, cell_size=20, save_path=None):
-    """
-    Visualize a factory JSON file using Pygame
-    
-    Args:
-        json_path (str): Path to the factory JSON file
-        cell_size (int): Size of each grid cell in pixels
-        save_path (str, optional): Path to save the visualization image
-    """
-    import json
-    import os
-    import pygame
-    
-    # Define colors
-    WHITE = (255, 255, 255)
-    BLACK = (0, 0, 0)
-    BLOCK_COLOR = (200, 230, 200)  # Light green for blocks
-    BLOCK_BORDER = (0, 100, 0)     # Dark green for block borders
-    ASSEMBLER_COLOR = (150, 150, 200)  # Light blue for assemblers
-    BELT_COLOR = (255, 165, 0)     # Orange for belts
-    INSERTER_COLOR = (255, 100, 100)  # Pink for inserters
-    UNDERGROUND_IN_COLOR = (139, 69, 19)  # Brown for underground belt entrances
-    UNDERGROUND_OUT_COLOR = (160, 82, 45)  # Sienna for underground belt exits
-    SPLITTER_COLOR = (255, 215, 0)  # Gold for splitters
-    INPUT_COLOR = (200, 0, 0)     # Red for input points
-    OUTPUT_COLOR = (0, 0, 200)    # Blue for output points
-    
+def visualize_factory(json_path, cell_size=20, save_path=None):
     try:
         # Load the JSON file
         with open(json_path, 'r') as f:
@@ -3021,275 +2490,730 @@ def visualize_json(json_path, cell_size=20, save_path=None):
         # Initialize Pygame
         pygame.init()
         
-        # Get factory dimensions
+        # Get original factory dimensions
         width = data["factory_dimensions"]["width"]
         height = data["factory_dimensions"]["height"]
         
-        # Create the display surface
-        screen_width = width * cell_size + 200  # Extra space for legend
-        screen_height = height * cell_size
-        screen = pygame.display.set_mode((screen_width, screen_height))
-        pygame.display.set_caption(f"Factory Visualization: {os.path.basename(json_path)}")
+        # Create grid occupancy maps to identify empty rows and columns
+        column_occupancy = [False] * width
+        row_occupancy = [False] * height
         
-        # Fill the background
-        screen.fill(WHITE)
+        # Load images
+        images = load_factory_images(cell_size)
+        item_images = load_item_images(cell_size)
         
-        # Draw grid
-        for x in range(0, width * cell_size, cell_size):
-            pygame.draw.line(screen, (220, 220, 220), (x, 0), (x, height * cell_size))
-        for y in range(0, height * cell_size, cell_size):
-            pygame.draw.line(screen, (220, 220, 220), (0, y), (width * cell_size, y))
+        # Mark occupied cells from all entities
+        def mark_occupied(x, y, w=1, h=1):
+            for dx in range(w):
+                for dy in range(h):
+                    col = x + dx
+                    row = y + dy
+                    if 0 <= col < width and 0 <= row < height:
+                        column_occupancy[col] = True
+                        row_occupancy[row] = True
         
-        # Draw blocks
+        # Mark blocks
         for block_id, block in data["blocks"].items():
-            x = block["position"][0] * cell_size
-            y = block["position"][1] * cell_size
-            w = block["dimensions"][0] * cell_size
-            h = block["dimensions"][1] * cell_size
-            
-            # Draw block background
-            pygame.draw.rect(screen, BLOCK_COLOR, (x, y, w, h))
-            pygame.draw.rect(screen, BLOCK_BORDER, (x, y, w, h), 2)
-            
-            # Draw block label
-            font = pygame.font.SysFont(None, 24)
-            text = font.render(block["type"], True, BLACK)
-            text_rect = text.get_rect(center=(x + w/2, y + h/2))
-            screen.blit(text, text_rect)
+            x = block["position"][0]
+            y = block["position"][1]
+            w = block["dimensions"][0]
+            h = block["dimensions"][1]
+            mark_occupied(x, y, w, h)
         
-        # Draw entities
+        # Mark entities
         if "entities" in data:
-            # Draw assemblers
+            # Mark assemblers
             for assembler in data["entities"].get("assemblers", []):
-                x = assembler["position"][0] * cell_size
-                y = assembler["position"][1] * cell_size
-                pygame.draw.rect(screen, ASSEMBLER_COLOR, (x, y, cell_size*3, cell_size*3))
-                pygame.draw.rect(screen, BLACK, (x, y, cell_size*3, cell_size*3), 1)
+                pos = assembler.get("position")
+                w, h = assembler.get("dimensions")
                 
-                # Label with item
-                small_font = pygame.font.SysFont(None, 18)
-                text = small_font.render(assembler["item"], True, BLACK)
-                screen.blit(text, (x + 5, y + 5))
-            
-            # Draw belts
+                # Handle both list and single value position formats
+                if isinstance(pos, list) and len(pos) >= 2:
+                    mark_occupied(pos[0], pos[1], w, h)
+                else:
+                    # Assuming pos might be a single number in some cases
+                    logger.warning(f"Found unusual assembler position: {pos}")
+                    
+            # Mark inserters
+            for inserter in data["entities"].get("inserters", []):
+                if "position" in inserter:
+                    pos = inserter.get("position")
+                    if isinstance(pos, list) and len(pos) >= 2:
+                        mark_occupied(pos[0], pos[1])
+                
+            # Mark belts
             for belt in data["entities"].get("belts", []):
-                x = belt["position"][0] * cell_size
-                y = belt["position"][1] * cell_size
+                if "position" in belt:
+                    pos = belt["position"]
+                    if isinstance(pos, list) and len(pos) >= 2:
+                        mark_occupied(pos[0], pos[1])
                 
-                direction = belt.get("direction", "north")
-                arrow_points = []
+            # Mark underground belts
+            for underground_belt in data["entities"].get("underground_belts", []):
+                if "position" in underground_belt:
+                    pos = underground_belt["position"]
+                    if isinstance(pos, list) and len(pos) >= 2:
+                        mark_occupied(pos[0], pos[1])
                 
-                # Calculate arrow points based on direction
-                if direction == "north" or direction == "up":
-                    arrow_points = [
-                        (x + cell_size/2, y + cell_size/4),
-                        (x + cell_size/4, y + 3*cell_size/4),
-                        (x + 3*cell_size/4, y + 3*cell_size/4)
-                    ]
-                elif direction == "east" or direction == "right":
-                    arrow_points = [
-                        (x + 3*cell_size/4, y + cell_size/2),
-                        (x + cell_size/4, y + cell_size/4),
-                        (x + cell_size/4, y + 3*cell_size/4)
-                    ]
-                elif direction == "south" or direction == "down":
-                    arrow_points = [
-                        (x + cell_size/2, y + 3*cell_size/4),
-                        (x + cell_size/4, y + cell_size/4),
-                        (x + 3*cell_size/4, y + cell_size/4)
-                    ]
-                elif direction == "west" or direction == "left":
-                    arrow_points = [
-                        (x + cell_size/4, y + cell_size/2),
-                        (x + 3*cell_size/4, y + cell_size/4),
-                        (x + 3*cell_size/4, y + 3*cell_size/4)
-                    ]
+            # Mark power poles
+            for power_pole in data["entities"].get("power_poles", []):
+                if "position" in power_pole:
+                    pos = power_pole["position"]
+                    if isinstance(pos, list) and len(pos) >= 2:
+                        mark_occupied(pos[0], pos[1])
                 
-                # Draw belt background and arrow
-                pygame.draw.rect(screen, BELT_COLOR, (x, y, cell_size, cell_size))
-                pygame.draw.polygon(screen, BLACK, arrow_points)
+            # Mark splitters (2x1 or 1x2)
+            for splitter in data["entities"].get("splitters", []):
+                if "position" in splitter:
+                    pos = splitter["position"]
+                    if isinstance(pos, list) and len(pos) >= 2:
+                        direction = splitter.get("direction", "north")
+                        if direction in ["east", "west"]:
+                            mark_occupied(pos[0], pos[1], 1, 2)
+                        else:
+                            mark_occupied(pos[0], pos[1], 2, 1)
+        
+        # Mark I/O points
+        if "io_points" in data:
+            inputs = data["io_points"].get("inputs")
+            outputs = data["io_points"].get("outputs")
+            
+            if inputs:
+                for input_point in inputs:
+                    if "position" in input_point:
+                        pos = input_point["position"]
+                        mark_occupied(pos[0], pos[1])
+                      
+            if outputs:
+                for output_point in outputs:
+                    if "position" in output_point:
+                        pos = output_point["position"]
+                        mark_occupied(pos[0], pos[1])
+        
+        # Mark paths in inter-block paths
+        if "inter_block_paths" in data:
+            for path_data in data["inter_block_paths"]:
+                if "path" in path_data:
+                    for position in path_data["path"]:
+                        if isinstance(position, list) and len(position) >= 2:
+                            mark_occupied(position[0], position[1])
+        
+        # Create mapping from original to compressed coordinates
+        x_map = []
+        compressed_x = 0
+        for x in range(width):
+            if column_occupancy[x]:
+                x_map.append(compressed_x)
+                compressed_x += 1
+            else:
+                x_map.append(-1)  # Mark skipped columns
+        
+        y_map = []
+        compressed_y = 0
+        for y in range(height):
+            if row_occupancy[y]:
+                y_map.append(compressed_y)
+                compressed_y += 1
+            else:
+                y_map.append(-1)  # Mark skipped rows
+        
+        # Calculate new dimensions
+        compressed_width = sum(1 for x in column_occupancy if x)
+        compressed_height = sum(1 for y in row_occupancy if y)
+        
+        # Create the display surface with the compressed dimensions
+        screen_width = compressed_width * cell_size 
+        screen_height = compressed_height * cell_size
+        
+        # Create a surface with the proper dimensions to draw on
+        screen = pygame.Surface((screen_width, screen_height))
+        screen.fill((255, 255, 255))  # White background
+        
+        # Draw grid lines if needed
+        for y in range(compressed_height):
+            for x in range(compressed_width):
+                rect = pygame.Rect(x * cell_size, y * cell_size, cell_size, cell_size)
+                pygame.draw.rect(screen, (200, 200, 200), rect, 1)
+        
+        # Map to store (compressed_x, compressed_y) to (original_x, original_y)
+        reverse_map = {}
+        for orig_x, comp_x in enumerate(x_map):
+            if comp_x != -1:
+                for orig_y, comp_y in enumerate(y_map):
+                    if comp_y != -1:
+                        reverse_map[(comp_x, comp_y)] = (orig_x, orig_y)        
+                        
+                        
+        if "inter_block_paths" in data:
+            logger.info(f"Drawing {len(data['inter_block_paths'])} inter-block paths")
+            paths = data.get("inter_block_paths")
+            
+            # Draw inter-block paths
+            for path_data in paths:
+                item = path_data.get("item")
+                path = path_data.get("path", [])
+                underground_segments = path_data.get("underground_segments", {})
+                
+                # Skip if path is empty
+                if not path:
+                    logger.warning(f"Skipping empty path for {item}")
+                    continue
+                
+                # Create a set of positions that are part of underground segments
+                underground_positions = set()
+                for segment_id, segment in underground_segments.items():
+                    start_pos = tuple(segment["start"])
+                    end_pos = tuple(segment["end"])
+                    underground_positions.add(start_pos)
+                    underground_positions.add(end_pos)
+                    
+                    # Also add intermediate positions for underground segments
+                    if start_pos[0] == end_pos[0]:  # Vertical underground
+                        min_y = min(start_pos[1], end_pos[1])
+                        max_y = max(start_pos[1], end_pos[1])
+                        for y in range(min_y + 1, max_y):
+                            underground_positions.add((start_pos[0], y))
+                    elif start_pos[1] == end_pos[1]:  # Horizontal underground
+                        min_x = min(start_pos[0], end_pos[0])
+                        max_x = max(start_pos[0], end_pos[0])
+                        for x in range(min_x + 1, max_x):
+                            underground_positions.add((x, start_pos[1]))
+                
+                # Draw regular belt segments
+                for i in range(len(path) - 1):
+                    current = path[i]
+                    next_pos = path[i + 1]
+                    current_tuple = tuple(current)
+                    
+                    # Skip if position is part of an underground belt segment
+                    if current_tuple in underground_positions:
+                        continue
+                    
+                    # Skip if position is outside the grid or in a skipped row/column
+                    orig_x, orig_y = current
+                    if orig_x >= len(x_map) or orig_y >= len(y_map) or x_map[orig_x] == -1 or y_map[orig_y] == -1:
+                        continue
+                    
+                    # Get compressed coordinates
+                    compressed_x = x_map[orig_x]
+                    compressed_y = y_map[orig_y]
+                    
+                    pixel_x = compressed_x * cell_size
+                    pixel_y = compressed_y * cell_size
+                    
+                    # Calculate direction from current to next
+                    dx = next_pos[0] - current[0]
+                    dy = next_pos[1] - current[1]
+                    
+                    # Calculate angle based on direction
+                    if dx == 1 and dy == 0:     # Right
+                        angle = 270
+                    elif dx == -1 and dy == 0:   # Left
+                        angle = 90
+                    elif dx == 0 and dy == 1:    # Down
+                        angle = 180
+                    elif dx == 0 and dy == -1:   # Up
+                        angle = 0
+                    else:
+                        continue  # Skip diagonal connections
+                    
+                    # Use pipe image for fluid items, conveyor for others
+                    if is_fluid_item(item):
+                        belt_image = pygame.transform.rotate(images['pipe'], angle)
+                    else:
+                        belt_image = pygame.transform.rotate(images['conveyor'], angle)
+                    
+                    # Draw the belt
+                    screen.blit(belt_image, (pixel_x, pixel_y))
+                    
+                    # Draw small item icon on the belt if available
+                    if item in item_images:
+                        small_size = (item_images[item].get_width() // 3, item_images[item].get_height() // 3)
+                        small_item = pygame.transform.scale(item_images[item], small_size)
+                        corner_x = pixel_x + (cell_size - small_size[0]) // 2
+                        corner_y = pixel_y + (cell_size - small_size[1]) // 2
+                        screen.blit(small_item, (corner_x, corner_y))
+                
+                # Draw the last position in the path
+                if path:
+                    last_pos = path[-1]
+                    last_tuple = tuple(last_pos)
+                    
+                    # Skip if position is part of an underground belt segment
+                    if last_tuple in underground_positions:
+                        continue
+                    
+                    # Skip if position is outside the grid or in a skipped row/column
+                    orig_x, orig_y = last_pos
+                    if orig_x >= len(x_map) or orig_y >= len(y_map) or x_map[orig_x] == -1 or y_map[orig_y] == -1:
+                        continue
+                    
+                    # Get compressed coordinates
+                    compressed_x = x_map[orig_x]
+                    compressed_y = y_map[orig_y]
+                    
+                    pixel_x = compressed_x * cell_size
+                    pixel_y = compressed_y * cell_size
+                    
+                    # Calculate direction based on second-last to last position
+                    if len(path) > 1:
+                        second_last = path[-2]
+                        dx = last_pos[0] - second_last[0]
+                        dy = last_pos[1] - second_last[1]
+                        
+                        if dx == 1 and dy == 0:     # Right
+                            angle = 270
+                        elif dx == -1 and dy == 0:   # Left
+                            angle = 90
+                        elif dx == 0 and dy == 1:    # Down
+                            angle = 180
+                        elif dx == 0 and dy == -1:   # Up
+                            angle = 0
+                        else:
+                            angle = 0  # Default
+                            
+                        # Use pipe image for fluid items, conveyor for others
+                        if is_fluid_item(item):
+                            belt_image = pygame.transform.rotate(images['pipe'], angle)
+                        else:
+                            belt_image = pygame.transform.rotate(images['conveyor'], angle)
+                        
+                        # Draw the belt
+                        screen.blit(belt_image, (pixel_x, pixel_y))
+                        
+                        # Draw small item icon on the belt if available
+                        if item in item_images:
+                            small_size = (item_images[item].get_width() // 3, item_images[item].get_height() // 3)
+                            small_item = pygame.transform.scale(item_images[item], small_size)
+                            corner_x = pixel_x + (cell_size - small_size[0]) // 2
+                            corner_y = pixel_y + (cell_size - small_size[1]) // 2
+                            screen.blit(small_item, (corner_x, corner_y))
+                  # Draw underground belt segments
+                for segment_id, segment in underground_segments.items():
+                    start_pos = segment["start"]
+                    end_pos = segment["end"]
+                    
+                    # Skip if positions are outside the grid or in skipped rows/columns
+                    start_x, start_y = start_pos
+                    end_x, end_y = end_pos
+                    
+                    # Skip if start position is invalid
+                    if start_x >= len(x_map) or start_y >= len(y_map) or x_map[start_x] == -1 or y_map[start_y] == -1:
+                        logger.warning(f"Skipping invalid underground segment start: ({start_x}, {start_y})")
+                        continue
+                        
+                    # Skip if end position is invalid
+                    if end_x >= len(x_map) or end_y >= len(y_map) or x_map[end_x] == -1 or y_map[end_y] == -1:
+                        logger.warning(f"Skipping invalid underground segment end: ({end_x}, {end_y})")
+                        continue
+                    
+                    # Get compressed coordinates
+                    start_compressed_x = x_map[start_x]
+                    start_compressed_y = y_map[start_y]
+                    end_compressed_x = x_map[end_x]
+                    end_compressed_y = y_map[end_y]
+                    
+                    start_pixel_x = start_compressed_x * cell_size
+                    start_pixel_y = start_compressed_y * cell_size
+                    end_pixel_x = end_compressed_x * cell_size
+                    end_pixel_y = end_compressed_y * cell_size
+                    
+                    # Calculate direction
+                    dx = end_pos[0] - start_pos[0]
+                    dy = end_pos[1] - start_pos[1]
+                    
+                    logger.info(f"Underground segment from ({start_x}, {start_y}) to ({end_x}, {end_y}) - dx={dx}, dy={dy}")
+                    
+                    # Determine primary direction
+                    if abs(dx) > abs(dy):
+                        if dx > 0:  # Right
+                            start_angle = 270
+                            end_angle = 90
+                        else:  # Left
+                            start_angle = 90
+                            end_angle = 270
+                    else:
+                        if dy > 0:  # Down
+                            start_angle = 180
+                            end_angle = 0
+                        else:  # Up
+                            start_angle = 0
+                            end_angle = 180
+                            
+                    logger.info(f"Underground segment angles: start={start_angle}, end={end_angle}")
+                    
+                    # Choose the appropriate images
+                    if is_fluid_item(item):
+                        # For fluids, use pipe-underground
+                        if 'pipe-underground' in images:
+                            underground_img = images['pipe-underground']
+                        else:
+                            logger.warning("pipe-underground image not found, using fallback")
+                            underground_img = pygame.Surface((cell_size, cell_size))
+                            underground_img.fill((100, 100, 255))  # Blue for pipes
+                    else:
+                        # For solids, use underground belt
+                        if 'underground' in images:
+                            underground_img = images['underground']
+                        else:
+                            logger.warning("underground image not found, using fallback")
+                            underground_img = pygame.Surface((cell_size, cell_size))
+                            underground_img.fill((200, 150, 100))  # Brown for belts
+                    
+                    # Draw the underground belt entrance with base belt/pipe underneath
+                    if not is_fluid_item(item) and 'conveyor' in images:
+                        # Draw a regular belt underneath
+                        base_img = pygame.transform.rotate(images['conveyor'], start_angle)
+                        screen.blit(base_img, (start_pixel_x, start_pixel_y))
+                    elif is_fluid_item(item) and 'pipe' in images:
+                        # Draw a pipe underneath
+                        base_img = images['pipe']
+                        screen.blit(base_img, (start_pixel_x, start_pixel_y))
+                    
+                    # Draw the underground belt entrance
+                    entrance_img = pygame.transform.rotate(underground_img, start_angle)
+                    screen.blit(entrance_img, (start_pixel_x, start_pixel_y))
+                    
+                    # Draw exit with base belt/pipe underneath
+                    if not is_fluid_item(item) and 'conveyor' in images:
+                        # Draw a regular belt underneath
+                        base_img = pygame.transform.rotate(images['conveyor'], end_angle)
+                        screen.blit(base_img, (end_pixel_x, end_pixel_y))
+                    elif is_fluid_item(item) and 'pipe' in images:
+                        # Draw a pipe underneath
+                        base_img = images['pipe']
+                        screen.blit(base_img, (end_pixel_x, end_pixel_y))
+                    
+                    # Draw the underground belt exit
+                    exit_img = pygame.transform.rotate(underground_img, end_angle)
+                    screen.blit(exit_img, (end_pixel_x, end_pixel_y))
+                    
+                    # Draw item icons on underground belts
+                    if item in item_images:
+                        small_size = (item_images[item].get_width() // 3, item_images[item].get_height() // 3)
+                        small_item = pygame.transform.scale(item_images[item], small_size)
+                        
+                        # Entrance icon
+                        corner_x = start_pixel_x + (cell_size - small_size[0]) // 2
+                        corner_y = start_pixel_y + (cell_size - small_size[1]) // 2
+                        screen.blit(small_item, (corner_x, corner_y))
+                        
+                        # Exit icon
+                        corner_x = end_pixel_x + (cell_size - small_size[0]) // 2
+                        corner_y = end_pixel_y + (cell_size - small_size[1]) // 2
+                        screen.blit(small_item, (corner_x, corner_y))
+                        
+                    # Draw a dashed line connecting underground segments to help visualize the connection
+                    if dx == 0:  # Vertical underground
+                        # Draw vertical dashed line
+                        line_x = start_pixel_x + cell_size // 2
+                        start_line_y = start_pixel_y + cell_size
+                        end_line_y = end_pixel_y
+                        dash_length = 4
+                        
+                        for y in range(int(start_line_y), int(end_line_y), dash_length * 2):
+                            if y + dash_length < end_line_y:
+                                pygame.draw.line(screen, (150, 150, 150), 
+                                                (line_x, y), 
+                                                (line_x, min(y + dash_length, end_line_y)), 
+                                                2)
+                            
+                    elif dy == 0:  # Horizontal underground
+                        # Draw horizontal dashed line
+                        line_y = start_pixel_y + cell_size // 2
+                        start_line_x = start_pixel_x + cell_size
+                        end_line_x = end_pixel_x
+                        dash_length = 4
+                        
+                        for x in range(int(start_line_x), int(end_line_x), dash_length * 2):
+                            if x + dash_length < end_line_x:
+                                pygame.draw.line(screen, (150, 150, 150), 
+                                                (x, line_y), 
+                                                (min(x + dash_length, end_line_x), line_y),
+                                                2)
+            # Draw entities on the compressed grid
+        # Draw assemblers
+        if "entities" in data:
+            for assembler in data["entities"].get("assemblers", []):
+                pos = assembler.get("position")
+                item = assembler.get("item")
+                machine_type = assembler.get("machine_type")
+                
+                if not isinstance(pos, list) or len(pos) < 2:
+                    continue
+                
+                # Skip if position is outside the grid or in a skipped row/column
+                orig_x, orig_y = pos[0], pos[1]
+                if orig_x >= len(x_map) or orig_y >= len(y_map) or x_map[orig_x] == -1 or y_map[orig_y] == -1:
+                    continue
+                
+                # Get compressed coordinates
+                compressed_x = x_map[orig_x]
+                compressed_y = y_map[orig_y]
+                
+                pixel_x = compressed_x * cell_size
+                pixel_y = compressed_y * cell_size
+                
+                # Choose the correct image based on machine_type
+                if machine_type == "chemical-plant" and "chemical-plant" in images:
+                    machine_image = images["chemical-plant"]
+                elif machine_type == "oil-refinery" and "oil-refinery" in images:
+                    machine_image = images["oil-refinery"]
+                elif machine_type in images:
+                    # Use specific machine image if available
+                    machine_image = images[machine_type]
+                else:
+                    # Fall back to default assembler
+                    machine_image = images['assembler']
+                
+                screen.blit(machine_image, (pixel_x, pixel_y))
+                
+                # Draw item icon on top of assembler
+                if item in item_images:
+                    screen.blit(item_images[item], (pixel_x, pixel_y))
             
             # Draw inserters
             for inserter in data["entities"].get("inserters", []):
-                x = inserter["position"][0] * cell_size
-                y = inserter["position"][1] * cell_size
-                direction = inserter.get("direction", "north")
-                
-                # Draw inserter base
-                pygame.draw.rect(screen, INSERTER_COLOR, (x, y, cell_size, cell_size))
-                
-                # Draw arrow indicating direction
-                if direction == "north" or direction == "up":
-                    pygame.draw.line(screen, BLACK, (x + cell_size/2, y + 3*cell_size/4), 
-                                     (x + cell_size/2, y + cell_size/4), 2)
-                    pygame.draw.polygon(screen, BLACK, [(x + cell_size/2, y + cell_size/4), 
-                                                      (x + cell_size/3, y + cell_size/2), 
-                                                      (x + 2*cell_size/3, y + cell_size/2)])
-                elif direction == "east" or direction == "right":
-                    pygame.draw.line(screen, BLACK, (x + cell_size/4, y + cell_size/2), 
-                                     (x + 3*cell_size/4, y + cell_size/2), 2)
-                    pygame.draw.polygon(screen, BLACK, [(x + 3*cell_size/4, y + cell_size/2), 
-                                                      (x + cell_size/2, y + cell_size/3), 
-                                                      (x + cell_size/2, y + 2*cell_size/3)])
-                elif direction == "south" or direction == "down":
-                    pygame.draw.line(screen, BLACK, (x + cell_size/2, y + cell_size/4), 
-                                     (x + cell_size/2, y + 3*cell_size/4), 2)
-                    pygame.draw.polygon(screen, BLACK, [(x + cell_size/2, y + 3*cell_size/4), 
-                                                      (x + cell_size/3, y + cell_size/2), 
-                                                      (x + 2*cell_size/3, y + cell_size/2)])
-                elif direction == "west" or direction == "left":
-                    pygame.draw.line(screen, BLACK, (x + 3*cell_size/4, y + cell_size/2), 
-                                     (x + cell_size/4, y + cell_size/2), 2)
-                    pygame.draw.polygon(screen, BLACK, [(x + cell_size/4, y + cell_size/2), 
-                                                      (x + cell_size/2, y + cell_size/3), 
-                                                      (x + cell_size/2, y + 2*cell_size/3)])
+                if "position" in inserter:
+                    pos = inserter.get("position")
+                    if not isinstance(pos, list) or len(pos) < 2:
+                        continue
+                    
+                    # Skip if position is outside the grid or in a skipped row/column
+                    orig_x, orig_y = pos[0], pos[1]
+                    if orig_x >= len(x_map) or orig_y >= len(y_map) or x_map[orig_x] == -1 or y_map[orig_y] == -1:
+                        continue
+                    
+                    # Get compressed coordinates
+                    compressed_x = x_map[orig_x]
+                    compressed_y = y_map[orig_y]
+                    
+                    pixel_x = compressed_x * cell_size
+                    pixel_y = compressed_y * cell_size
+                    
+                    item = inserter.get("item")
+                    
+                    screen.blit(images['inserter'], (pixel_x, pixel_y))
+                    if item in item_images:
+                        original_image = item_images[item]
+                        quarter_size = (original_image.get_width() // 2, original_image.get_height() // 2)
+                        scaled_image = pygame.transform.scale(original_image, quarter_size)
+                        
+                        # Position in bottom-right corner of inserter
+                        inserter_width = images['inserter'].get_width()
+                        inserter_height = images['inserter'].get_height()
+                        scaled_width = scaled_image.get_width()
+                        scaled_height = scaled_image.get_height()
+                        corner_x = pixel_x + inserter_width - scaled_width
+                        corner_y = pixel_y + inserter_height - scaled_height
+                        screen.blit(scaled_image, (corner_x, corner_y))
+            
+            # Draw belts
+            for belt in data["entities"].get("belts", []):
+                if "position" in belt:
+                    pos = belt["position"]
+                    if not isinstance(pos, list) or len(pos) < 2:
+                        continue
+                    
+                    # Skip if position is outside the grid or in a skipped row/column
+                    orig_x, orig_y = pos[0], pos[1]
+                    if orig_x >= len(x_map) or orig_y >= len(y_map) or x_map[orig_x] == -1 or y_map[orig_y] == -1:
+                        continue
+                    
+                    # Get compressed coordinates
+                    compressed_x = x_map[orig_x]
+                    compressed_y = y_map[orig_y]
+                    
+                    pixel_x = compressed_x * cell_size
+                    pixel_y = compressed_y * cell_size
+                    
+                    direction = belt.get("direction", "north")
+                    item = belt.get("item")
+                    
+                    angle = get_angle_from_orientation(direction)
+                    
+                    if is_fluid_item(item):
+                        # Use pipe image for fluid items
+                        belt_image = pygame.transform.rotate(images['pipe'], angle)
+                    else:
+                        belt_image = pygame.transform.rotate(images['conveyor'], angle)
+                    
+                    screen.blit(belt_image, (pixel_x, pixel_y))
             
             # Draw underground belts
-            for ug in data["entities"].get("underground_belts", []):
-                x = ug["position"][0] * cell_size
-                y = ug["position"][1] * cell_size
-                belt_type = ug["type"]
-                color = UNDERGROUND_IN_COLOR if belt_type == "entrance" else UNDERGROUND_OUT_COLOR
-                
-                # Draw underground belt
-                pygame.draw.rect(screen, color, (x, y, cell_size, cell_size))
-                
-                # Draw symbol based on type
-                if belt_type == "entrance":
-                    pygame.draw.rect(screen, BLACK, (x + cell_size/4, y + cell_size/4, cell_size/2, cell_size/2), 1)
-                    pygame.draw.line(screen, BLACK, (x + cell_size/4, y + cell_size/2), 
-                                     (x + 3*cell_size/4, y + cell_size/2), 2)
-                else:  # exit
-                    pygame.draw.rect(screen, BLACK, (x + cell_size/4, y + cell_size/4, cell_size/2, cell_size/2), 1)
-                    pygame.draw.circle(screen, BLACK, (x + cell_size/2, y + cell_size/2), cell_size/6)
+            for underground_belt in data["entities"].get("underground_belts", []):
+                if "position" in underground_belt:
+                    pos = underground_belt["position"]
+                    if not isinstance(pos, list) or len(pos) < 2:
+                        continue
+                    
+                    # Skip if position is outside the grid or in a skipped row/column
+                    orig_x, orig_y = pos[0], pos[1]
+                    if orig_x >= len(x_map) or orig_y >= len(y_map) or x_map[orig_x] == -1 or y_map[orig_y] == -1:
+                        continue
+                    
+                    # Get compressed coordinates
+                    compressed_x = x_map[orig_x]
+                    compressed_y = y_map[orig_y]
+                    
+                    pixel_x = compressed_x * cell_size
+                    pixel_y = compressed_y * cell_size
+                    
+                    direction = underground_belt.get("direction")
+                    angle = get_angle_from_orientation(direction)
+                    belt_image = pygame.transform.rotate(images['underground'], angle)
+                    
+                    screen.blit(belt_image, (pixel_x, pixel_y))
+            
+            # Draw power poles
+            for power_pole in data["entities"].get("power_poles", []):
+                if "position" in power_pole:
+                    pos = power_pole["position"]
+                    if not isinstance(pos, list) or len(pos) < 2:
+                        continue
+                    
+                    # Skip if position is outside the grid or in a skipped row/column
+                    orig_x, orig_y = pos[0], pos[1]
+                    if orig_x >= len(x_map) or orig_y >= len(y_map) or x_map[orig_x] == -1 or y_map[orig_y] == -1:
+                        continue
+                    
+                    # Get compressed coordinates
+                    compressed_x = x_map[orig_x]
+                    compressed_y = y_map[orig_y]
+                    
+                    pixel_x = compressed_x * cell_size
+                    pixel_y = compressed_y * cell_size
+                    
+                    pole_type = power_pole.get("item")
+                    
+                    if pole_type in images:
+                        screen.blit(images[pole_type], (pixel_x, pixel_y))
+                    else:
+                        logger.warning(f"Power pole image not found for {pole_type}")
             
             # Draw splitters
             for splitter in data["entities"].get("splitters", []):
-                x = splitter["position"][0] * cell_size
-                y = splitter["position"][1] * cell_size
-                direction = splitter.get("direction", "north")
-                
-                # Splitters are 2x1 or 1x2 based on orientation
-                if direction in ["north", "south", "up", "down"]:
-                    # Horizontal splitter (takes up two horizontal tiles)
-                    pygame.draw.rect(screen, SPLITTER_COLOR, (x, y, cell_size*2, cell_size))
-                    pygame.draw.rect(screen, BLACK, (x, y, cell_size*2, cell_size), 1)
-                    # Draw splitter divider line
-                    pygame.draw.line(screen, BLACK, (x + cell_size, y), (x + cell_size, y + cell_size), 1)
-                else:
-                    # Vertical splitter (takes up two vertical tiles)
-                    pygame.draw.rect(screen, SPLITTER_COLOR, (x, y, cell_size, cell_size*2))
-                    pygame.draw.rect(screen, BLACK, (x, y, cell_size, cell_size*2), 1)
-                    # Draw splitter divider line
-                    pygame.draw.line(screen, BLACK, (x, y + cell_size), (x + cell_size, y + cell_size), 1)
+                if "position" in splitter:
+                    pos = splitter["position"]
+                    if not isinstance(pos, list) or len(pos) < 2:
+                        continue
+                    
+                    # Skip if position is outside the grid or in a skipped row/column
+                    orig_x, orig_y = pos[0], pos[1]
+                    if orig_x >= len(x_map) or orig_y >= len(y_map) or x_map[orig_x] == -1 or y_map[orig_y] == -1:
+                        continue
+                    
+                    # Get compressed coordinates
+                    compressed_x = x_map[orig_x]
+                    compressed_y = y_map[orig_y]
+                    
+                    pixel_x = compressed_x * cell_size
+                    pixel_y = compressed_y * cell_size
+                    
+                    direction = splitter.get("direction", "north")
+                    angle = get_angle_from_orientation(direction)
+                    
+                    splitter_img = pygame.transform.scale(images['splitter'], (cell_size, cell_size))
+                    rotated_splitter = pygame.transform.rotate(splitter_img, angle)
+                    
+                    # Calculate pixel coordinates based on rotation
+                    if angle == 0 or angle == 180:  # Horizontal orientation
+                        splitter_x = pixel_x
+                        splitter_y = pixel_y
+                    else:  # Vertical orientation (90 or 270)
+                        # For vertical orientation, center the splitter on the position
+                        splitter_x = pixel_x - cell_size // 2
+                        splitter_y = pixel_y
+                    
+                    # Draw the splitter
+                    screen.blit(rotated_splitter, (splitter_x, splitter_y))
+                    
+                    item = splitter.get("item")
+                    rot_width, rot_height = rotated_splitter.get_size()
+                    
+                    if item in item_images:
+                        # Scale down the item image
+                        original_image = item_images[item]
+                        quarter_size = (original_image.get_width() // 2, original_image.get_height() // 2)
+                        scaled_image = pygame.transform.scale(original_image, quarter_size)
+                        
+                        # Position the item icon on the center of the splitter
+                        icon_x = splitter_x + (rot_width - scaled_image.get_width()) // 2
+                        icon_y = splitter_y + (rot_height - scaled_image.get_height()) // 2
+                        screen.blit(scaled_image, (icon_x, icon_y))
         
         # Draw I/O points
+        GREEN = (0, 255, 0)
+        RED = (255, 0, 0)
+
+            
+            
         if "io_points" in data:
             # Draw inputs
-            for input_point in data["io_points"].get("inputs", []):
-                x = input_point["position"][0] * cell_size
-                y = input_point["position"][1] * cell_size
-                pygame.draw.rect(screen, INPUT_COLOR, (x, y, cell_size, cell_size))
-                
-                # Draw small item label
-                tiny_font = pygame.font.SysFont(None, 16)
-                text = tiny_font.render(input_point["item"], True, WHITE)
-                screen.blit(text, (x + 2, y + 2))
+            inputs = data["io_points"].get("inputs")
+            if inputs:
+                for input_point in inputs:
+                    if "position" in input_point:
+                        pos = input_point["position"]
+                        item = input_point.get("item")
+                        
+                        # Skip if position is outside the grid or in a skipped row/column
+                        orig_x, orig_y = pos[0], pos[1]
+                        if orig_x >= len(x_map) or orig_y >= len(y_map) or x_map[orig_x] == -1 or y_map[orig_y] == -1:
+                            continue
+                        
+                        # Get compressed coordinates
+                        compressed_x = x_map[orig_x]
+                        compressed_y = y_map[orig_y]
+                        
+                        pixel_x = compressed_x * cell_size
+                        pixel_y = compressed_y * cell_size
+                        
+                        # Draw green background for input
+                        rect = pygame.Rect(pixel_x, pixel_y, cell_size, cell_size)
+                        pygame.draw.rect(screen, GREEN, rect)
+                        
+                        # Draw item icon
+                        if item in item_images:
+                            screen.blit(item_images[item], (pixel_x, pixel_y))
             
             # Draw outputs
-            for output_point in data["io_points"].get("outputs", []):
-                x = output_point["position"][0] * cell_size
-                y = output_point["position"][1] * cell_size
-                pygame.draw.rect(screen, OUTPUT_COLOR, (x, y, cell_size, cell_size))
-                
-                # Draw small item label
-                tiny_font = pygame.font.SysFont(None, 16)
-                text = tiny_font.render(output_point["item"], True, WHITE)
-                screen.blit(text, (x + 2, y + 2))
+            outputs = data["io_points"].get("outputs")
+            if outputs:
+                for output_point in outputs:
+                    if "position" in output_point:
+                        pos = output_point["position"]
+                        item = output_point.get("item")
+                        
+                        # Skip if position is outside the grid or in a skipped row/column
+                        orig_x, orig_y = pos[0], pos[1]
+                        if orig_x >= len(x_map) or orig_y >= len(y_map) or x_map[orig_x] == -1 or y_map[orig_y] == -1:
+                            continue
+                        
+                        # Get compressed coordinates
+                        compressed_x = x_map[orig_x]
+                        compressed_y = y_map[orig_y]
+                        
+                        pixel_x = compressed_x * cell_size
+                        pixel_y = compressed_y * cell_size
+                        
+                        # Draw red background for output
+                        rect = pygame.Rect(pixel_x, pixel_y, cell_size, cell_size)
+                        pygame.draw.rect(screen, RED, rect)
+                        
+                        # Draw item icon
+                        if item in item_images:
+                            screen.blit(item_images[item], (pixel_x, pixel_y))
         
-        # Draw connections between I/O points
-        if "connections" in data:
-            for conn in data["connections"]:
-                source = conn["source"]["position"]
-                target = conn["target"]["position"]
-                
-                # Calculate pixel positions (center of cells)
-                start_x = source[0] * cell_size + cell_size/2
-                start_y = source[1] * cell_size + cell_size/2
-                end_x = target[0] * cell_size + cell_size/2
-                end_y = target[1] * cell_size + cell_size/2
-                
-                # Draw dotted line for connection
-                dash_length = 5
-                space_length = 5
-                dx = end_x - start_x
-                dy = end_y - start_y
-                steps = max(1, int((abs(dx) + abs(dy)) / (dash_length + space_length)))
-                
-                for i in range(steps):
-                    t1 = i / steps
-                    t2 = min(1, (i + 0.5) / steps)
-                    
-                    x1 = start_x + dx * t1
-                    y1 = start_y + dy * t1
-                    x2 = start_x + dx * t2
-                    y2 = start_y + dy * t2
-                    
-                    pygame.draw.line(screen, BLACK, (x1, y1), (x2, y2), 1)
         
-        # Draw legend
-        legend_x = width * cell_size + 20
-        legend_y = 20
-        legend_font = pygame.font.SysFont(None, 24)
+
         
-        # Legend title
-        title = legend_font.render("Legend", True, BLACK)
-        screen.blit(title, (legend_x, legend_y))
-        legend_y += 30
         
-        # Block
-        pygame.draw.rect(screen, BLOCK_COLOR, (legend_x, legend_y, cell_size*2, cell_size))
-        pygame.draw.rect(screen, BLOCK_BORDER, (legend_x, legend_y, cell_size*2, cell_size), 2)
-        text = legend_font.render("Block", True, BLACK)
-        screen.blit(text, (legend_x + cell_size*2 + 10, legend_y))
-        legend_y += 30
-        
-        # Assembler
-        pygame.draw.rect(screen, ASSEMBLER_COLOR, (legend_x, legend_y, cell_size*2, cell_size))
-        text = legend_font.render("Assembler", True, BLACK)
-        screen.blit(text, (legend_x + cell_size*2 + 10, legend_y))
-        legend_y += 30
-        
-        # Belt
-        pygame.draw.rect(screen, BELT_COLOR, (legend_x, legend_y, cell_size*2, cell_size))
-        text = legend_font.render("Belt", True, BLACK)
-        screen.blit(text, (legend_x + cell_size*2 + 10, legend_y))
-        legend_y += 30
-        
-        # Inserter
-        pygame.draw.rect(screen, INSERTER_COLOR, (legend_x, legend_y, cell_size*2, cell_size))
-        text = legend_font.render("Inserter", True, BLACK)
-        screen.blit(text, (legend_x + cell_size*2 + 10, legend_y))
-        legend_y += 30
-        
-        # Underground Belt
-        pygame.draw.rect(screen, UNDERGROUND_IN_COLOR, (legend_x, legend_y, cell_size, cell_size))
-        pygame.draw.rect(screen, UNDERGROUND_OUT_COLOR, (legend_x + cell_size, legend_y, cell_size, cell_size))
-        text = legend_font.render("Underground", True, BLACK)
-        screen.blit(text, (legend_x + cell_size*2 + 10, legend_y))
-        legend_y += 30
-        
-        # Splitter
-        pygame.draw.rect(screen, SPLITTER_COLOR, (legend_x, legend_y, cell_size*2, cell_size))
-        text = legend_font.render("Splitter", True, BLACK)
-        screen.blit(text, (legend_x + cell_size*2 + 10, legend_y))
-        legend_y += 30
-        
-        # I/O Points
-        pygame.draw.rect(screen, INPUT_COLOR, (legend_x, legend_y, cell_size, cell_size))
-        pygame.draw.rect(screen, OUTPUT_COLOR, (legend_x + cell_size, legend_y, cell_size, cell_size))
-        text = legend_font.render("I/O Points", True, BLACK)
-        screen.blit(text, (legend_x + cell_size*2 + 10, legend_y))
+        # Create visible window for display
+        window = pygame.display.set_mode((screen_width, screen_height))
+        pygame.display.set_caption(f"Factory Visualization: {os.path.basename(json_path)}")
+        window.blit(screen, (0, 0))
+        pygame.display.flip()
         
         # Save if requested
         if save_path:
@@ -3308,10 +3232,120 @@ def visualize_json(json_path, cell_size=20, save_path=None):
         return True
         
     except Exception as e:
-        import traceback
         traceback.print_exc()
         logger.info(f"Error visualizing JSON: {e}")
         return False
+
+
+
+def load_factory_images(cell_size):
+        """Load and scale factory element images."""
+        images = {}
+        config = load_config()
+        
+        # Load basic factory elements
+        image_files = {
+            'assembler': f'assets/{config["machines"]["default_assembler"]}.png',
+            'inserter': f'assets/{config["inserters"]["input_type"]}.png',
+            'conveyor': f"assets/{config['belts']['default_type']}.png",
+            'underground': f"assets/{config['belts']['underground_type']}.png",
+            'splitter': 'assets/splitter.png',
+            'pipe': 'assets/pipe.png',  
+            'pipe-underground': 'assets/pipe-to-ground.png',  
+            'chemical-plant': 'assets/chemical-plant.png',  
+            'oil-refinery': 'assets/oil-refinery.png',
+            'small-electric-pole': 'assets/small-electric-pole.png',
+            'medium-electric-pole': 'assets/medium-electric-pole.png',
+            'big-electric-pole': 'assets/big-electric-pole.png',
+            'substation': 'assets/substation.png'
+        }
+        
+        # Create special fallback colors for different types of entities
+        fallback_colors = {
+            'assembler': (200, 50, 50),       # Red for assemblers
+            'inserter': (50, 200, 50),        # Green for inserters
+            'conveyor': (220, 170, 50),       # Yellow/brown for belts
+            'underground': (180, 140, 40),    # Darker yellow/brown for underground belts
+            'splitter': (200, 150, 50),       # Similar to belts but different
+            'pipe': (100, 100, 255),          # Blue for pipes
+            'pipe-underground': (80, 80, 200),# Darker blue for underground pipes
+            'chemical-plant': (50, 200, 200), # Cyan for chemical plants
+            'oil-refinery': (200, 50, 200),   # Purple for refineries
+            'pole': (100, 100, 100)           # Grey for power poles
+        }
+        
+        for key, path in image_files.items():
+            try:
+                logger.info(f"Loading image for {key} from {path}")
+                image = pygame.image.load(path)
+                
+                # Scale based on entity type
+                if key == 'assembler' or key == 'chemical-plant' or key == 'oil-refinery':
+                    images[key] = pygame.transform.scale(image, (3 * cell_size, 3 * cell_size))
+                elif key == 'splitter':
+                    # Splitter will be scaled when used based on orientation
+                    images[key] = image
+                else:
+                    images[key] = pygame.transform.scale(image, (cell_size, cell_size))
+                    
+                logger.info(f"Successfully loaded image for {key}")
+            except Exception as e:
+                logger.warning(f"Could not load image for {key} from {path}: {e}")
+                
+                # Create appropriate fallback based on entity type
+                fallback_color = None
+                for type_key, color in fallback_colors.items():
+                    if type_key in key:
+                        fallback_color = color
+                        break
+                
+                # Default to grey if no matching color found
+                if not fallback_color:
+                    fallback_color = (150, 150, 150)
+                
+                # Create fallback surface with appropriate size
+                if key == 'assembler' or key == 'chemical-plant' or key == 'oil-refinery':
+                    size = (3 * cell_size, 3 * cell_size)
+                else:
+                    size = (cell_size, cell_size)
+                    
+                fallback = pygame.Surface(size, pygame.SRCALPHA)
+                fallback.fill(fallback_color + (200,))  # Add alpha for semi-transparency
+                
+                # Add visual indicators based on entity type
+                if "pole" in key:
+                    # Draw power pole lines
+                    pygame.draw.line(fallback, (50, 50, 50, 255), (size[0]//2, 0), (size[0]//2, size[1]), 2)
+                    pygame.draw.line(fallback, (50, 50, 50, 255), (0, size[1]//2), (size[0], size[1]//2), 2)
+                elif "pipe" in key:
+                    # Draw pipe connections
+                    pygame.draw.circle(fallback, (50, 50, 200, 255), (size[0]//2, size[1]//2), size[0]//3, 3)
+                elif "belt" in key or "conveyor" in key or "underground" in key:
+                    # Draw belt direction indicator
+                    arrow_points = [(size[0]//2, size[1]//4), (size[0]//4, size[1]*3//4), (size[0]*3//4, size[1]*3//4)]
+                    pygame.draw.polygon(fallback, (50, 50, 50, 255), arrow_points, 2)
+                else:
+                    # Generic border for other entities
+                    pygame.draw.rect(fallback, (0, 0, 0, 100), (0, 0, size[0], size[1]), 2)
+                
+                images[key] = fallback
+                logger.info(f"Created fallback image for {key}")
+        
+        return images
+
+def load_item_images(cell_size):
+        """Load and scale item images."""
+        item_images = {}
+        assets_folder = 'assets'
+        excluded_images = {'assembler.png', 'inserter.png', 'conveyor.png', 'underground_belt.png', 'splitter.png'}
+        
+        for filename in os.listdir(assets_folder):
+            if filename.endswith('.png') and filename not in excluded_images:
+                item_path = os.path.join(assets_folder, filename)
+                image = pygame.image.load(item_path)
+                item_images[filename[:-4]] = pygame.transform.scale(image, (cell_size, cell_size))
+        
+        return item_images
 
 
 def load_config():
@@ -3364,19 +3398,46 @@ def load_json(recipe_file):
 
 
 def _get_belt_direction(orientation):
-        """Convert orientation tuple to Draftsman direction constant"""
-        dx, dy = orientation
-        
-        if dx == 0 and dy == -1:  # Up
-            return Direction.NORTH
-        elif dx == 1 and dy == 0:  # Right
-            return Direction.EAST
-        elif dx == 0 and dy == 1:  # Down
-            return Direction.SOUTH
-        elif dx == -1 and dy == 0:  # Left
+
+    dx, dy = orientation
+
+    if dx == 0 and dy == -1:  # Up
+        return Direction.NORTH
+    elif dx == 1 and dy == 0:  # Right
+        return Direction.EAST
+    elif dx == 0 and dy == 1:  # Down
+        return Direction.SOUTH
+    elif dx == -1 and dy == 0:  # Left
             return Direction.WEST
-        else:
-            # Default direction if orientation is invalid
-            return Direction.NORTH
+    else:
+        # Default direction if orientation is invalid
+        return Direction.NORTH
+    
+def get_angle_from_orientation(orientation):
+    """Convert orientation to angle in degrees."""
+    if orientation == "north":
+        return 0    # Up direction in Pygame (0 degrees)
+    elif orientation == "east":
+        return 270  # Right direction (270 degrees clockwise)
+    elif orientation == "south":
+        return 180  # Down direction (180 degrees)
+    elif orientation == "west":
+        return 90   # Left direction (90 degrees)
+    else:
+        return 0    # Default to north/up
+
+
+def is_fluid_item(item_id):
+    
+        items_data = load_json("recipes.json")
+        
+        item_lookup = {item["id"]: item for item in items_data}
+        
+        # Look up item in the recipe data
+        item = item_lookup.get(item_id, {})
+        # Check if the item type is "Liquid"
+        return item.get("type", "") == "Liquid"
+    
+    
 if __name__ == "__main__":
     main()

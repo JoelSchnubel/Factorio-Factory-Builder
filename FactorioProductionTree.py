@@ -1892,7 +1892,7 @@ class FactorioProductionTree:
         window_width = self.grid_width * cell_size
         window_height = self.grid_height * cell_size
         window = pygame.display.set_mode((window_width, window_height))
-        pygame.display.set_caption('Factory Layout Visualization')
+        pygame.display.set_caption('Module Layout Visualization')
         clock = pygame.time.Clock()
           # Always use stored data for visualization to ensure consistency
         belt_point_information = self.belt_point_information if hasattr(self, 'belt_point_information') else []
@@ -2055,7 +2055,7 @@ class FactorioProductionTree:
             pixel_x = assembler_x * cell_size
             pixel_y = assembler_y * cell_size
             
-                # Choose the correct image based on machine_type
+            # Choose the correct image based on machine_type
             if machine_type == "chemical-plant" and "chemical-plant" in images:
                 machine_image = images["chemical-plant"]
             elif machine_type == "oil-refinery" and "oil-refinery" in images:
