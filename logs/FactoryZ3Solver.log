@@ -1,0 +1,84 @@
+2025-06-25 16:55:13,468 - FactoryZ3Solver - INFO - FactoryZ3Solver
+2025-06-25 16:55:13,468 - FactoryZ3Solver - DEBUG - block data: {'electronic-circuit': {'tree': <FactorioProductionTree.FactorioProductionTree object at 0x000001F67BFBF440>, 'production_data': {'electronic-circuit': {'amount_per_minute': 120, 'assemblers': 2, 'input_inserters': [{'id': 'copper-cable', 'inserters': 3, 'amount': 3}, {'id': 'iron-plate', 'inserters': 1, 'amount': 1}], 'belts': 1, 'capacity': 0}, 'copper-cable': {'amount_per_minute': 360.0, 'capacity': 0}, 'iron-plate': {'amount_per_minute': 120.0, 'capacity': 0}}, 'num_factories': 1, 'png': "E:/Programmieren/Bachelor-Thesis/Modules/electronic-circuit_120_['copper-cable']_module.png", 'json': "E:/Programmieren/Bachelor-Thesis/Modules/electronic-circuit_120_['copper-cable']_module.json"}, 'copper-cable': {'tree': <FactorioProductionTree.FactorioProductionTree object at 0x000001F67BF62ED0>, 'production_data': {'copper-cable': {'amount_per_minute': 300, 'assemblers': 3, 'input_inserters': [{'id': 'copper-plate', 'inserters': 2, 'amount': 1}], 'belts': 1, 'capacity': 0}, 'copper-plate': {'amount_per_minute': 150.0, 'capacity': 0}}, 'num_factories': 1, 'png': 'E:/Programmieren/Bachelor-Thesis/Modules/copper-cable_300_[]_module.png', 'json': 'E:/Programmieren/Bachelor-Thesis/Modules/copper-cable_300_[]_module.json'}}
+2025-06-25 16:55:13,478 - FactoryZ3Solver - INFO - Loaded recipe data successfully
+2025-06-25 16:55:13,479 - FactoryZ3Solver - INFO - Calculating item complexity rankings
+2025-06-25 16:55:13,480 - FactoryZ3Solver - INFO - Calculated complexity for 214 items
+2025-06-25 16:55:13,480 - FactoryZ3Solver - DEBUG - Solver and data structures initialized
+2025-06-25 16:55:13,482 - FactoryZ3Solver - INFO - Added fixed input gate for iron-plate at (1, 29)
+2025-06-25 16:55:13,484 - FactoryZ3Solver - INFO - Added fixed input gate for copper-plate at (3, 29)
+2025-06-25 16:55:13,485 - FactoryZ3Solver - INFO - Added fixed output gate for electronic-circuit at (7, 29)
+2025-06-25 16:55:13,485 - FactoryZ3Solver - INFO - Building constraints
+2025-06-25 16:55:13,485 - FactoryZ3Solver - INFO - Building blocks
+2025-06-25 16:55:13,485 - FactoryZ3Solver - DEBUG - Processing block electronic-circuit
+2025-06-25 16:55:13,485 - FactoryZ3Solver - DEBUG - Block electronic-circuit dimensions: width=16, height=10, num_factories=1
+2025-06-25 16:55:13,486 - FactoryZ3Solver - DEBUG - Created Block with ID Block_electronic-circuit_0_0
+2025-06-25 16:55:13,486 - FactoryZ3Solver - DEBUG - Added input gate electronic-circuit_input_copper-cable_0_0 for item copper-cable
+2025-06-25 16:55:13,486 - FactoryZ3Solver - DEBUG - Added output gate electronic-circuit_output_copper-cable_0_0 for item copper-cable
+2025-06-25 16:55:13,486 - FactoryZ3Solver - DEBUG - Added input gate electronic-circuit_input_iron-plate_0_0 for item iron-plate
+2025-06-25 16:55:13,487 - FactoryZ3Solver - DEBUG - Added output gate electronic-circuit_output_iron-plate_0_0 for item iron-plate
+2025-06-25 16:55:13,487 - FactoryZ3Solver - DEBUG - Added input gate electronic-circuit_input_electronic-circuit_0_0 for item electronic-circuit
+2025-06-25 16:55:13,487 - FactoryZ3Solver - DEBUG - Added output gate electronic-circuit_output_electronic-circuit_0_0 for item electronic-circuit
+2025-06-25 16:55:13,488 - FactoryZ3Solver - DEBUG - Block Block_electronic-circuit_0_0 added to blocks list
+2025-06-25 16:55:13,488 - FactoryZ3Solver - DEBUG - Processing block copper-cable
+2025-06-25 16:55:13,488 - FactoryZ3Solver - DEBUG - Block copper-cable dimensions: width=16, height=10, num_factories=1
+2025-06-25 16:55:13,488 - FactoryZ3Solver - DEBUG - Created Block with ID Block_copper-cable_1_0
+2025-06-25 16:55:13,488 - FactoryZ3Solver - DEBUG - Added input gate copper-cable_input_copper-plate_1_0 for item copper-plate
+2025-06-25 16:55:13,489 - FactoryZ3Solver - DEBUG - Added output gate copper-cable_output_copper-plate_1_0 for item copper-plate
+2025-06-25 16:55:13,489 - FactoryZ3Solver - DEBUG - Added input gate copper-cable_input_copper-cable_1_0 for item copper-cable
+2025-06-25 16:55:13,489 - FactoryZ3Solver - DEBUG - Added output gate copper-cable_output_copper-cable_1_0 for item copper-cable
+2025-06-25 16:55:13,490 - FactoryZ3Solver - DEBUG - Block Block_copper-cable_1_0 added to blocks list
+2025-06-25 16:55:13,490 - FactoryZ3Solver - INFO - Analyzing block compatibility
+2025-06-25 16:55:13,490 - FactoryZ3Solver - DEBUG -   Item copper-cable:
+2025-06-25 16:55:13,490 - FactoryZ3Solver - DEBUG -     Producer Block_electronic-circuit_0_0 output x-positions: [0]
+2025-06-25 16:55:13,490 - FactoryZ3Solver - DEBUG -     Consumer Block_copper-cable_1_0 input x-positions: [15]
+2025-06-25 16:55:13,490 - FactoryZ3Solver - DEBUG -     Misaligned: output_x=0 != input_x=15
+2025-06-25 16:55:13,499 - FactoryZ3Solver - DEBUG - Block Block_electronic-circuit_0_0 can connect to Block_copper-cable_1_0:
+2025-06-25 16:55:13,499 - FactoryZ3Solver - DEBUG -   - Aligned items: []
+2025-06-25 16:55:13,500 - FactoryZ3Solver - DEBUG -   - Misaligned items: ['copper-cable']
+2025-06-25 16:55:13,500 - FactoryZ3Solver - DEBUG -   - Aligned gates: 0
+2025-06-25 16:55:13,500 - FactoryZ3Solver - DEBUG -   - Spacing needed: 1
+2025-06-25 16:55:13,502 - FactoryZ3Solver - DEBUG - Skipping already analyzed pair: ('Block_copper-cable_1_0', 'Block_electronic-circuit_0_0')
+2025-06-25 16:55:13,503 - FactoryZ3Solver - INFO - Adding bound constraints
+2025-06-25 16:55:13,509 - FactoryZ3Solver - DEBUG - Added bound constraints for all blocks
+2025-06-25 16:55:13,509 - FactoryZ3Solver - INFO - Adding overlap constraints
+2025-06-25 16:55:13,510 - FactoryZ3Solver - DEBUG - Added non-overlapping constraints between blocks fixed_block_external_input_iron-plate and fixed_block_external_input_copper-plate
+2025-06-25 16:55:13,512 - FactoryZ3Solver - DEBUG - Added non-overlapping constraints between blocks fixed_block_external_input_iron-plate and fixed_block_external_output_electronic-circuit
+2025-06-25 16:55:13,514 - FactoryZ3Solver - DEBUG - Added non-overlapping constraints between blocks fixed_block_external_input_iron-plate and Block_electronic-circuit_0_0
+2025-06-25 16:55:13,516 - FactoryZ3Solver - DEBUG - Added non-overlapping constraints between blocks fixed_block_external_input_iron-plate and Block_copper-cable_1_0
+2025-06-25 16:55:13,518 - FactoryZ3Solver - DEBUG - Added non-overlapping constraints between blocks fixed_block_external_input_copper-plate and fixed_block_external_output_electronic-circuit
+2025-06-25 16:55:13,520 - FactoryZ3Solver - DEBUG - Added non-overlapping constraints between blocks fixed_block_external_input_copper-plate and Block_electronic-circuit_0_0
+2025-06-25 16:55:13,522 - FactoryZ3Solver - DEBUG - Added non-overlapping constraints between blocks fixed_block_external_input_copper-plate and Block_copper-cable_1_0
+2025-06-25 16:55:13,524 - FactoryZ3Solver - DEBUG - Added non-overlapping constraints between blocks fixed_block_external_output_electronic-circuit and Block_electronic-circuit_0_0
+2025-06-25 16:55:13,526 - FactoryZ3Solver - DEBUG - Added non-overlapping constraints between blocks fixed_block_external_output_electronic-circuit and Block_copper-cable_1_0
+2025-06-25 16:55:13,527 - FactoryZ3Solver - DEBUG - Added non-overlapping constraints between blocks Block_electronic-circuit_0_0 and Block_copper-cable_1_0
+2025-06-25 16:55:13,528 - FactoryZ3Solver - INFO - Adding gate relative position constraints
+2025-06-25 16:55:13,529 - FactoryZ3Solver - DEBUG - Added relative position constraints for input gate external_input_iron-plate in block fixed_block_external_input_iron-plate
+2025-06-25 16:55:13,530 - FactoryZ3Solver - DEBUG - Added relative position constraints for input gate external_input_copper-plate in block fixed_block_external_input_copper-plate
+2025-06-25 16:55:13,530 - FactoryZ3Solver - DEBUG - Added relative position constraints for output gate external_output_electronic-circuit in block fixed_block_external_output_electronic-circuit
+2025-06-25 16:55:13,531 - FactoryZ3Solver - DEBUG - Added relative position constraints for input gate electronic-circuit_input_copper-cable_0_0 in block Block_electronic-circuit_0_0
+2025-06-25 16:55:13,532 - FactoryZ3Solver - DEBUG - Added relative position constraints for input gate electronic-circuit_input_iron-plate_0_0 in block Block_electronic-circuit_0_0
+2025-06-25 16:55:13,533 - FactoryZ3Solver - DEBUG - Added relative position constraints for input gate electronic-circuit_input_electronic-circuit_0_0 in block Block_electronic-circuit_0_0
+2025-06-25 16:55:13,534 - FactoryZ3Solver - DEBUG - Added relative position constraints for output gate electronic-circuit_output_copper-cable_0_0 in block Block_electronic-circuit_0_0
+2025-06-25 16:55:13,535 - FactoryZ3Solver - DEBUG - Added relative position constraints for output gate electronic-circuit_output_iron-plate_0_0 in block Block_electronic-circuit_0_0
+2025-06-25 16:55:13,536 - FactoryZ3Solver - DEBUG - Added relative position constraints for output gate electronic-circuit_output_electronic-circuit_0_0 in block Block_electronic-circuit_0_0
+2025-06-25 16:55:13,537 - FactoryZ3Solver - DEBUG - Added relative position constraints for input gate copper-cable_input_copper-plate_1_0 in block Block_copper-cable_1_0
+2025-06-25 16:55:13,538 - FactoryZ3Solver - DEBUG - Added relative position constraints for input gate copper-cable_input_copper-cable_1_0 in block Block_copper-cable_1_0
+2025-06-25 16:55:13,539 - FactoryZ3Solver - DEBUG - Added relative position constraints for output gate copper-cable_output_copper-plate_1_0 in block Block_copper-cable_1_0
+2025-06-25 16:55:13,540 - FactoryZ3Solver - DEBUG - Added relative position constraints for output gate copper-cable_output_copper-cable_1_0 in block Block_copper-cable_1_0
+2025-06-25 16:55:13,540 - FactoryZ3Solver - INFO - Adding simplified block alignment constraints
+2025-06-25 16:55:13,542 - FactoryZ3Solver - DEBUG - Enforcing Block_copper-cable_1_0 above Block_electronic-circuit_0_0 (producer below consumer)
+2025-06-25 16:55:13,544 - FactoryZ3Solver - INFO - Added alignment constraints for 1 block pairs
+2025-06-25 16:55:13,544 - FactoryZ3Solver - INFO - Solving factory layout with Z3 using simplified constraints...
+2025-06-25 16:55:13,568 - FactoryZ3Solver - INFO - Z3 solver finished in 0.02 seconds with result: sat
+2025-06-25 16:55:13,570 - FactoryZ3Solver - DEBUG - Block fixed_block_external_input_iron-plate position: (1, 29), size: 1x1
+2025-06-25 16:55:13,571 - FactoryZ3Solver - DEBUG - Block fixed_block_external_input_copper-plate position: (3, 29), size: 1x1
+2025-06-25 16:55:13,572 - FactoryZ3Solver - DEBUG - Block fixed_block_external_output_electronic-circuit position: (7, 29), size: 1x1
+2025-06-25 16:55:13,574 - FactoryZ3Solver - DEBUG - Block Block_electronic-circuit_0_0 position: (0, 19), size: 16x10
+2025-06-25 16:55:13,575 - FactoryZ3Solver - DEBUG - Block Block_copper-cable_1_0 position: (0, 8), size: 16x10
+2025-06-25 16:55:13,576 - FactoryZ3Solver - INFO - Post-processing: Determining optimal gate connections with complexity prioritization
+2025-06-25 16:55:13,579 - FactoryZ3Solver - INFO - Connection priority order based on complexity: ['iron-plate', 'copper-plate', 'copper-cable', 'electronic-circuit']
+2025-06-25 16:55:13,579 - FactoryZ3Solver - DEBUG - Connecting item 'iron-plate' (complexity: 1)
+2025-06-25 16:55:13,581 - FactoryZ3Solver - DEBUG - Connecting item 'copper-plate' (complexity: 1)
+2025-06-25 16:55:13,582 - FactoryZ3Solver - DEBUG - Connecting item 'copper-cable' (complexity: 2)
+2025-06-25 16:55:13,585 - FactoryZ3Solver - DEBUG - Connecting item 'electronic-circuit' (complexity: 3)
+2025-06-25 16:55:13,587 - FactoryZ3Solver - INFO - Determined 5 optimal gate connections

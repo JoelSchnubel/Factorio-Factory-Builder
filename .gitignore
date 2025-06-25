@@ -3,3 +3,5 @@
 __pychache__
 /ModRef23-Factorio
 factory_log.log
+*.csv
+FactorioProductionTree

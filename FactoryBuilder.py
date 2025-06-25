@@ -64,9 +64,8 @@ class FactoryBuilder:
         
         self.external_io = None
         
-        self.input_points = []
-        self.output_points = []
-        
+        self.module_input_points = []
+        self.module_output_points = []
 
 
     def load_json(self,recipe_file):
@@ -461,12 +460,30 @@ class FactoryBuilder:
                 "outputs": []
             },
             "inter_block_paths": [],
-            "external_io": []
         }
-          # Initialize or reset input/output points
-        self.input_points = []
-        self.output_points = []
         
+        # Add external I/O points defined by the user
+        if hasattr(self, 'external_io') and self.external_io:
+            # Add external input gates to outputs (they provide items to the factory)
+            for input_gate in self.external_io.get("input_gates", []):
+                factory_data["io_points"]["outputs"].append({
+                    "item": input_gate["item"],
+                    "position": self._get_absolute_position(input_gate),
+                    "block_id": input_gate["id"],
+                    "external": True
+                })
+                logger.info(f"Added external input gate for {input_gate['item']} at {input_gate['position']} as an output point")
+            
+            # Add external output gates to inputs (they receive items from the factory)
+            for output_gate in self.external_io.get("output_gates", []):
+                factory_data["io_points"]["inputs"].append({
+                    "item": output_gate["item"],
+                    "position": self._get_absolute_position(output_gate),
+                    "block_id": output_gate["id"],
+                    "external": True
+                })
+                logger.info(f"Added external output gate for {output_gate['item']} at {output_gate['position']} as an input point")
+                
         # Process each block
         for block_id, block_info in self.final_blocks.items():
             block_x = block_info['x']
@@ -578,40 +595,12 @@ class FactoryBuilder:
                                 "block_id": block_id
                             })
                             
-                            logger.info(f"Added placed inserter for {item} at {[abs_x, abs_y]} facing {direction}")                # add I/O paths to the json file and store input points for pathfinding
+                            logger.info(f"Added placed inserter for {item} at {[abs_x, abs_y]} facing {direction}")
+
+                logger.debug(f"Module data for block {block_id}: {module_data}")
+                
                 if "input_information" in module_data:
                     for item, data in module_data["input_information"].items():
-                        # Store the input points with absolute positions and block_id
-                        if 'input' in data and data['input'] is not None:
-                            # Convert from (y,x) to (x,y) format if needed
-                            if isinstance(data['input'], tuple) and len(data['input']) == 2:
-                                rel_y, rel_x = data['input']
-                            else:
-                                rel_x, rel_y = data['input'] if isinstance(data['input'], list) else (data['input'][0], data['input'][1])
-                            
-                            # Calculate absolute position
-                            abs_x = block_x + rel_x
-                            abs_y = block_y + rel_y
-                            
-                            # Add to the factory data io_points
-                            input_point = {
-                                "item": item,
-                                "position": [abs_x, abs_y],
-                                "block_id": block_id,
-                                "external": False
-                            }
-                            factory_data["io_points"]["inputs"].append(input_point)
-                            
-                            # Add to the self.input_points for pathfinding
-                            self.input_points.append({
-                                "item": item,
-                                "position": (abs_x, abs_y),
-                                "block_id": block_id
-                            })
-                            
-                            logger.info(f"Added input point for {item} at {[abs_x, abs_y]} for block {block_id}")
-                            
-                        # Process paths
                         if 'paths' in data and data['paths'] is not None and item in data['paths']:
                             for path_data in data['paths'][item]:
                                 if "path" in path_data:
@@ -675,41 +664,36 @@ class FactoryBuilder:
                                                 "block_id": block_id
                                             })
                             logger.info(f"Added input belt route for {item} at {[abs_x, abs_y]} facing {direction}")
-                else:
-                    logger.info("  - No input belt routes found")                # Process output information paths similarly
-                if "output_information" in module_data:
-                    for item, data in module_data["output_information"].items():
-                        # Store the output points with absolute positions and block_id
-                        if 'output' in data and data['output'] is not None:
-                            # Convert from (y,x) to (x,y) format if needed
-                            if isinstance(data['output'], tuple) and len(data['output']) == 2:
-                                rel_y, rel_x = data['output']
-                            else:
-                                rel_x, rel_y = data['output'] if isinstance(data['output'], list) else (data['output'][0], data['output'][1])
                             
-                            # Calculate absolute position
-                            abs_x = block_x + rel_x
-                            abs_y = block_y + rel_y
+                        
+                        if 'input' in data and 'output' in data:
+                            input_pos = data.get("input")
+                            output_pos = data.get("output")
+                        
+                            # Add input point to factory data
+                            input_abs_x = block_x + input_pos[0]
+                            input_abs_y = block_y + input_pos[1]
+                            factory_data["io_points"]["inputs"].append({
+                                    "item": item,
+                                    "position": [input_abs_x, input_abs_y],
+                                    "block_id": block_id,
+                                    "external": False
+                                })
+                            logger.info(f"Added input point for {item} at {[input_abs_x, input_abs_y]} for block {block_id}")
                             
-                            # Add to the factory data io_points
-                            output_point = {
+                            # Add output point to factory data
+                            output_abs_x = block_x + output_pos[0]
+                            output_abs_y = block_y + output_pos[1]
+                            factory_data["io_points"]["outputs"].append({
                                 "item": item,
-                                "position": [abs_x, abs_y],
+                                "position": [output_abs_x, output_abs_y],
                                 "block_id": block_id,
                                 "external": False
-                            }
-                            factory_data["io_points"]["outputs"].append(output_point)
-                            
-                            # Add to the self.output_points for pathfinding
-                            self.output_points.append({
-                                "item": item,
-                                "position": (abs_x, abs_y),
-                                "block_id": block_id
                             })
-                            
-                            logger.info(f"Added output point for {item} at {[abs_x, abs_y]} for block {block_id}")
-                        
-                        # Process paths
+                            logger.info(f"Added output point for {item} at {[output_abs_x, output_abs_y]} for block {block_id}")
+
+                if "output_information" in module_data:
+                    for item, data in module_data["output_information"].items():
                         if 'paths' in data and data['paths'] is not None and item in data['paths']:
                             for path_data in data['paths'][item]:
                                 if "path" in path_data:
@@ -774,9 +758,33 @@ class FactoryBuilder:
                                                 "block_id": block_id
                                             })
                             logger.info(f"Added output belt route for {item} at {[abs_x, abs_y]} facing {direction}")
-                else:
-                    logger.info("  - No output belt routes found")
+                        
+                       
+                        if 'input' in data and 'output' in data:
+                            input_pos = data.get("input")
+                            output_pos = data.get("output")
                             
+                            # Add input point to factory data
+                            input_abs_x = block_x + input_pos[0]
+                            input_abs_y = block_y + input_pos[1]
+                            factory_data["io_points"]["inputs"].append({
+                                    "item": item,
+                                    "position": [input_abs_x, input_abs_y],
+                                    "block_id": block_id,
+                                    "external": False
+                                })
+                            logger.info(f"Added input point for {item} at {[input_abs_x, input_abs_y]} for block {block_id}")
+                            
+                            # Add output point to factory data
+                            output_abs_x = block_x + output_pos[0]
+                            output_abs_y = block_y + output_pos[1]
+                            factory_data["io_points"]["outputs"].append({
+                                "item": item,
+                                "position": [output_abs_x, output_abs_y],
+                                "block_id": block_id,
+                                "external": False
+                            })
+                            logger.info(f"Added output point for {item} at {[output_abs_x, output_abs_y]} for block {block_id}")
                 
                 # Process paths which include underground belts and splitters
                 if "paths" in module_data:
@@ -962,28 +970,9 @@ class FactoryBuilder:
                 import traceback
                 traceback.print_exc()
         
-        # Add external I/O points if available
-        if hasattr(self, 'external_io') and self.external_io:
-            for input_gate in self.external_io.get("input_gates", []):
-                factory_data["io_points"]["inputs"].append({
-                    "item": input_gate["item"],
-                    "position": list(input_gate["position"]),
-                    "edge": input_gate["edge"],
-                    "gate_id": input_gate["id"],
-                    "external": True
-                })
-                logger.info(f"Added external input gate {input_gate['item']} at {input_gate['position']}")
-            
-            for output_gate in self.external_io.get("output_gates", []):
-                factory_data["io_points"]["outputs"].append({
-                    "item": output_gate["item"],
-                    "position": list(output_gate["position"]),
-                    "edge": output_gate["edge"],
-                    "gate_id": output_gate["id"],
-                    "external": True
-                })
-                logger.info(f"Added external output gate {output_gate['item']} at {output_gate['position']}")
         
+            
+         
 
         # If no path specified, use default
         if not output_json_path:
@@ -1005,7 +994,7 @@ class FactoryBuilder:
         for block_id, block_info in self.final_blocks.items():
             # Process output gates
             for gate in block_info['output_points']:
-                item = gate['item']
+                item = gate['id']
                 if item not in gates_by_item:
                     gates_by_item[item] = {"input": [], "output": []}
                 
@@ -1020,7 +1009,7 @@ class FactoryBuilder:
             
             # Process input gates
             for gate in block_info['input_points']:
-                item = gate['item']
+                item = gate['id']
                 if item not in gates_by_item:
                     gates_by_item[item] = {"input": [], "output": []}
                 
@@ -1547,6 +1536,109 @@ class FactoryBuilder:
             
             logger.info(f"Added fixed output gate {output_gate['id']} at position {output_gate['position']}")
 
+    def create_point_connections(self, factory_data):
+        """
+        Create connections between output and input points with the same item type.
+        Prioritize the closest connections until all valid pairs are created.
+        
+        Rules:
+        1. Connect output points to input points with the same item
+        2. Once points are in a pair, they cannot be connected again
+        3. Points from the same block cannot be connected
+        
+        Args:
+            factory_data (dict): Factory data with io_points
+            
+        Returns:
+            list: List of connection pairs, each containing source and target points
+        """
+        logger.info("Creating point connections for inter module paths")
+        
+        # Extract all input and output points
+        input_points = factory_data["io_points"]["inputs"]
+        output_points = factory_data["io_points"]["outputs"]
+        
+        # Group points by item type
+        inputs_by_item = {}
+        outputs_by_item = {}
+        
+        for input_point in input_points:
+            item = input_point["item"]
+            if item not in inputs_by_item:
+                inputs_by_item[item] = []
+            inputs_by_item[item].append(input_point)
+        
+        for output_point in output_points:
+            item = output_point["item"]
+            if item not in outputs_by_item:
+                outputs_by_item[item] = []
+            outputs_by_item[item].append(output_point)
+        
+        # Create connections by finding the closest pairs
+        connections = []
+        
+        # For each item type, find the closest valid pairs
+        for item, outputs in outputs_by_item.items():
+            # Skip if no inputs for this item
+            if item not in inputs_by_item:
+                logger.warning(f"No input points found for item {item}")
+                continue
+            
+            available_inputs = inputs_by_item[item].copy()
+            available_outputs = outputs.copy()
+            
+            # Keep finding pairs until no more valid ones can be created
+            while available_inputs and available_outputs:
+                closest_pair = None
+                closest_distance = float('inf')
+                
+                # Find the closest valid pair
+                for output in available_outputs:
+                    output_block = output["block_id"]
+                    output_pos = output["position"]
+                    
+                    for input_point in available_inputs:
+                        input_block = input_point["block_id"]
+                        input_pos = input_point["position"]
+                        
+                        # Skip if points are in the same block
+                        if output_block == input_block:
+                            continue
+                        
+                        # Calculate Manhattan distance
+                        distance = abs(output_pos[0] - input_pos[0]) + abs(output_pos[1] - input_pos[1])
+                        
+                        if distance < closest_distance:
+                            closest_distance = distance
+                            closest_pair = (output, input_point)
+                
+                # If a valid pair was found, add it to connections and remove from available points
+                if closest_pair:
+                    source, target = closest_pair
+                    connections.append({
+                        "item": item,
+                        "source": {
+                            "position": source["position"],
+                            "block_id": source["block_id"]
+                        },
+                        "target": {
+                            "position": target["position"],
+                            "block_id": target["block_id"]
+                        },
+                        "distance": closest_distance
+                    })
+                    
+                    available_outputs.remove(source)
+                    available_inputs.remove(target)
+                    
+                    logger.info(f"Created connection for {item} from {source['block_id']} to {target['block_id']}, distance: {closest_distance}")
+                else:
+                    # No more valid pairs can be created
+                    break
+        
+        logger.info(f"Created {len(connections)} point connections")
+        return connections
+
     def plan_inter_block_paths(self, factory_data):
         logger.info("Planning inter-block paths with detailed obstacles...")
         
@@ -1615,147 +1707,13 @@ class FactoryBuilder:
         
         
             # Prepare connection points for the pathfinder
+            # TODO
             connection_points = {}
         
-            # Process all gate connections        
-        for i, connection in enumerate(self.gate_connections):
-            logger.debug(f"Processing connection {i}: {connection}")
-            
-            source_x, source_y, target_x, target_y = None, None, None, None
-            source_id, target_id, item = None, None, None
-            valid_connection = False
-          
-            if isinstance(connection, dict) and all(k in connection for k in ["source", "target", "source_x", "source_y", "target_x", "target_y", "item"]):
-                # Use the positions directly from the enhanced connection
-                source_gate = connection["source"]
-                target_gate = connection["target"]
-                source_x = connection["source_x"]
-                source_y = connection["source_y"]
-                target_x = connection["target_x"]
-                target_y = connection["target_y"]
-                item = connection["item"]
-                source_id = source_gate.id if hasattr(source_gate, 'id') else f"source_{i}"
-                target_id = target_gate.id if hasattr(target_gate, 'id') else f"target_{i}"
-                valid_connection = True
-                
-                logger.debug(f"Using pre-calculated positions for connection {i}: ({source_x}, {source_y}) → ({target_x}, {target_y})")
-                
-            # Fallback for older connection format (tuple)
-            elif isinstance(connection, tuple) and len(connection) == 2:
-                source_gate, target_gate = connection
-                try:
-                    # Handle different formats of gate objects
-                    if hasattr(source_gate, 'item'):  # It's a Gate object from Z3 solver
-                        # Find the block that this gate belongs to in final_blocks
-                        # Get the block ID from the gate ID (format is typically "blockID_output_item_etc")
-                        block_id = None
-                        for bid in self.final_blocks.keys():
-                            if bid in source_gate.id:
-                                block_id = bid
-                                break
-                        
-                        if not block_id:
-                            logger.error(f"Could not find block ID for gate {source_gate.id}")
-                            continue
-                            
-                        # Now get the absolute position from the block's position and gate's relative position
-                        block_info = self.final_blocks[block_id]
-                        source_x = block_info["x"] + source_gate.relative_x
-                        source_y = block_info["y"] + source_gate.relative_y
-                        item = source_gate.item
-                        source_id = source_gate.id
-                        
-                    elif isinstance(source_gate, dict):  # Dictionary format
-                        source_x = int(source_gate['x'])
-                        source_y = int(source_gate['y'])
-                        item = source_gate['item']
-                        source_id = source_gate.get('id', f'unknown_source_{i}')
-                    else:
-                        logger.error(f"Source gate has unsupported type: {type(source_gate)}")
-                        continue
-                    
-                    # Handle both dictionary and Gate object formats for target
-                    if hasattr(target_gate, 'item'):  # It's a Gate object from Z3 solver
-                        # Find the block that this gate belongs to
-                        block_id = None
-                        for bid in self.final_blocks.keys():
-                            if bid in target_gate.id:
-                                block_id = bid
-                                break
-                        
-                        if not block_id:
-                            logger.error(f"Could not find block ID for gate {target_gate.id}")
-                            continue
-                            
-                        block_info = self.final_blocks[block_id]
-                        target_x = block_info["x"] + target_gate.relative_x
-                        target_y = block_info["y"] + target_gate.relative_y
-                        target_id = target_gate.id
-                    elif isinstance(target_gate, dict):  # Dictionary format
-                        target_x = int(target_gate['x'])
-                        target_y = int(target_gate['y'])
-                        target_id = target_gate.get('id', f'unknown_target_{i}')
-                    else:
-                        logger.error(f"Target gate has unsupported type: {type(target_gate)}")
-                        continue
-                    
-                    valid_connection = True
-                except (TypeError, KeyError, AttributeError) as e:
-                    logger.error(f"Error processing old-style connection {i}: {e}")
-                    continue
-            else:
-                logger.warning(f"Invalid connection format at index {i}: {connection}")
-                continue
-                
-            # Only proceed if we successfully parsed the connection
-            if valid_connection and source_x is not None and target_x is not None and item is not None:
-                # Create connection ID
-                connection_id = f"{item}_{i}"
-                
-                # Clear gate positions in the obstacle map for pathfinding
-                if 0 <= source_x < grid_width and 0 <= source_y < grid_height:
-                    obstacle_map[source_y][source_x] = 0
-                
-                if 0 <= target_x < grid_width and 0 <= target_y < grid_height:
-                    obstacle_map[target_y][target_x] = 0
-                
-                # Create a path request with start/end points
-                connection_points[connection_id] = {
-                    'item': item,
-                    'start_points': [(source_x, source_y)],
-                    'destination': [(target_x, target_y)],
-                    'source_id': source_id,
-                    'target_id': target_id
-                }
-                
-                logger.debug(f"Added connection {connection_id}: {item} from {source_id} at ({source_x}, {source_y}) " +
-                            f"to {target_id} at ({target_x}, {target_y})")
-            elif valid_connection:
-                logger.warning(f"Connection {i} was valid but had missing coordinates or item information")
+              
+       
 
-          # Process external I/O points
-        if "io_points" in factory_data:
-            # Mark I/O points as obstacles first to ensure proper pathing around them
-            for io_type in ["inputs", "outputs"]:
-                for point in factory_data["io_points"].get(io_type, []):
-                    pos_x, pos_y = point["position"]
-                    
-                    # Mark I/O points as obstacles
-                    if 0 <= pos_x < grid_width and 0 <= pos_y < grid_height:
-                        obstacle_map[pos_y][pos_x] = 1  # Mark as obstacle
-                    
-            # Then, clear only the I/O points that are part of the current pathfinding request
-            # This is important as we only want to allow paths to enter/exit at their specific endpoints
-            for connection_id, connection_data in connection_points.items():
-                for start_point in connection_data['start_points']:
-                    start_x, start_y = start_point
-                    if 0 <= start_x < grid_width and 0 <= start_y < grid_height:
-                        obstacle_map[start_y][start_x] = 0  # Clear for pathfinding
-                        
-                for dest_point in connection_data['destination']:
-                    dest_x, dest_y = dest_point
-                    if 0 <= dest_x < grid_width and 0 <= dest_y < grid_height:
-                        obstacle_map[dest_y][dest_x] = 0  # Clear for pathfinding
+
         if not connection_points:
             logger.warning("No valid connections to route! Please check your gate connections.")
             return {}, {}
@@ -1872,7 +1830,7 @@ def main():
     
     
     #visualize_factory(json_path="Factorys/factory_electronic-circuit_100.json",save_path="Factorys/factory_electronic-circuit_100.png")
-
+    
     output_item = "electronic-circuit"
     amount = 100
     max_assembler_per_blueprint = 5
@@ -2592,11 +2550,12 @@ def visualize_factory(json_path, cell_size=20, save_path=None):
         
         # Mark paths in inter-block paths
         if "inter_block_paths" in data:
-            for path_data in data["inter_block_paths"]:
-                if "path" in path_data:
-                    for position in path_data["path"]:
-                        if isinstance(position, list) and len(position) >= 2:
-                            mark_occupied(position[0], position[1])
+            for item_key, path_data_list in data["inter_block_paths"].items():
+                for path_data in path_data_list:
+                    if 'path' in path_data:
+                        for position in path_data['path']:
+                            if isinstance(position, list) and len(position) >= 2:
+                                mark_occupied(position[0], position[1])
         
         # Create mapping from original to compressed coordinates
         x_map = []
@@ -2641,11 +2600,11 @@ def visualize_factory(json_path, cell_size=20, save_path=None):
             if comp_x != -1:
                 for orig_y, comp_y in enumerate(y_map):
                     if comp_y != -1:
-                        reverse_map[(comp_x, comp_y)] = (orig_x, orig_y)        
-                        
-                        
+                        reverse_map[(comp_x, comp_y)] = (orig_x, orig_y)
+
+        # Draw inter-block paths
         if "inter_block_paths" in data:
-            logger.info(f"Drawing {len(data['inter_block_paths'])} inter-block paths")
+            
             paths = data.get("inter_block_paths")
             
             # Draw inter-block paths
@@ -2656,7 +2615,6 @@ def visualize_factory(json_path, cell_size=20, save_path=None):
                 
                 # Skip if path is empty
                 if not path:
-                    logger.warning(f"Skipping empty path for {item}")
                     continue
                 
                 # Create a set of positions that are part of underground segments
@@ -2788,7 +2746,8 @@ def visualize_factory(json_path, cell_size=20, save_path=None):
                             corner_x = pixel_x + (cell_size - small_size[0]) // 2
                             corner_y = pixel_y + (cell_size - small_size[1]) // 2
                             screen.blit(small_item, (corner_x, corner_y))
-                  # Draw underground belt segments
+                
+                # Draw underground belt segments
                 for segment_id, segment in underground_segments.items():
                     start_pos = segment["start"]
                     end_pos = segment["end"]
@@ -2799,12 +2758,10 @@ def visualize_factory(json_path, cell_size=20, save_path=None):
                     
                     # Skip if start position is invalid
                     if start_x >= len(x_map) or start_y >= len(y_map) or x_map[start_x] == -1 or y_map[start_y] == -1:
-                        logger.warning(f"Skipping invalid underground segment start: ({start_x}, {start_y})")
                         continue
                         
                     # Skip if end position is invalid
                     if end_x >= len(x_map) or end_y >= len(y_map) or x_map[end_x] == -1 or y_map[end_y] == -1:
-                        logger.warning(f"Skipping invalid underground segment end: ({end_x}, {end_y})")
                         continue
                     
                     # Get compressed coordinates
@@ -2822,8 +2779,6 @@ def visualize_factory(json_path, cell_size=20, save_path=None):
                     dx = end_pos[0] - start_pos[0]
                     dy = end_pos[1] - start_pos[1]
                     
-                    logger.info(f"Underground segment from ({start_x}, {start_y}) to ({end_x}, {end_y}) - dx={dx}, dy={dy}")
-                    
                     # Determine primary direction
                     if abs(dx) > abs(dy):
                         if dx > 0:  # Right
@@ -2840,49 +2795,17 @@ def visualize_factory(json_path, cell_size=20, save_path=None):
                             start_angle = 0
                             end_angle = 180
                             
-                    logger.info(f"Underground segment angles: start={start_angle}, end={end_angle}")
-                    
                     # Choose the appropriate images
                     if is_fluid_item(item):
                         # For fluids, use pipe-underground
-                        if 'pipe-underground' in images:
-                            underground_img = images['pipe-underground']
-                        else:
-                            logger.warning("pipe-underground image not found, using fallback")
-                            underground_img = pygame.Surface((cell_size, cell_size))
-                            underground_img.fill((100, 100, 255))  # Blue for pipes
+                        underground_img = images['pipe-underground']
                     else:
                         # For solids, use underground belt
-                        if 'underground' in images:
-                            underground_img = images['underground']
-                        else:
-                            logger.warning("underground image not found, using fallback")
-                            underground_img = pygame.Surface((cell_size, cell_size))
-                            underground_img.fill((200, 150, 100))  # Brown for belts
-                    
-                    # Draw the underground belt entrance with base belt/pipe underneath
-                    if not is_fluid_item(item) and 'conveyor' in images:
-                        # Draw a regular belt underneath
-                        base_img = pygame.transform.rotate(images['conveyor'], start_angle)
-                        screen.blit(base_img, (start_pixel_x, start_pixel_y))
-                    elif is_fluid_item(item) and 'pipe' in images:
-                        # Draw a pipe underneath
-                        base_img = images['pipe']
-                        screen.blit(base_img, (start_pixel_x, start_pixel_y))
+                        underground_img = images['underground']
                     
                     # Draw the underground belt entrance
                     entrance_img = pygame.transform.rotate(underground_img, start_angle)
                     screen.blit(entrance_img, (start_pixel_x, start_pixel_y))
-                    
-                    # Draw exit with base belt/pipe underneath
-                    if not is_fluid_item(item) and 'conveyor' in images:
-                        # Draw a regular belt underneath
-                        base_img = pygame.transform.rotate(images['conveyor'], end_angle)
-                        screen.blit(base_img, (end_pixel_x, end_pixel_y))
-                    elif is_fluid_item(item) and 'pipe' in images:
-                        # Draw a pipe underneath
-                        base_img = images['pipe']
-                        screen.blit(base_img, (end_pixel_x, end_pixel_y))
                     
                     # Draw the underground belt exit
                     exit_img = pygame.transform.rotate(underground_img, end_angle)
@@ -2902,35 +2825,6 @@ def visualize_factory(json_path, cell_size=20, save_path=None):
                         corner_x = end_pixel_x + (cell_size - small_size[0]) // 2
                         corner_y = end_pixel_y + (cell_size - small_size[1]) // 2
                         screen.blit(small_item, (corner_x, corner_y))
-                        
-                    # Draw a dashed line connecting underground segments to help visualize the connection
-                    if dx == 0:  # Vertical underground
-                        # Draw vertical dashed line
-                        line_x = start_pixel_x + cell_size // 2
-                        start_line_y = start_pixel_y + cell_size
-                        end_line_y = end_pixel_y
-                        dash_length = 4
-                        
-                        for y in range(int(start_line_y), int(end_line_y), dash_length * 2):
-                            if y + dash_length < end_line_y:
-                                pygame.draw.line(screen, (150, 150, 150), 
-                                                (line_x, y), 
-                                                (line_x, min(y + dash_length, end_line_y)), 
-                                                2)
-                            
-                    elif dy == 0:  # Horizontal underground
-                        # Draw horizontal dashed line
-                        line_y = start_pixel_y + cell_size // 2
-                        start_line_x = start_pixel_x + cell_size
-                        end_line_x = end_pixel_x
-                        dash_length = 4
-                        
-                        for x in range(int(start_line_x), int(end_line_x), dash_length * 2):
-                            if x + dash_length < end_line_x:
-                                pygame.draw.line(screen, (150, 150, 150), 
-                                                (x, line_y), 
-                                                (min(x + dash_length, end_line_x), line_y),
-                                                2)
             # Draw entities on the compressed grid
         # Draw assemblers
         if "entities" in data:
@@ -3260,76 +3154,31 @@ def load_factory_images(cell_size):
             'substation': 'assets/substation.png'
         }
         
-        # Create special fallback colors for different types of entities
-        fallback_colors = {
-            'assembler': (200, 50, 50),       # Red for assemblers
-            'inserter': (50, 200, 50),        # Green for inserters
-            'conveyor': (220, 170, 50),       # Yellow/brown for belts
-            'underground': (180, 140, 40),    # Darker yellow/brown for underground belts
-            'splitter': (200, 150, 50),       # Similar to belts but different
-            'pipe': (100, 100, 255),          # Blue for pipes
-            'pipe-underground': (80, 80, 200),# Darker blue for underground pipes
-            'chemical-plant': (50, 200, 200), # Cyan for chemical plants
-            'oil-refinery': (200, 50, 200),   # Purple for refineries
-            'pole': (100, 100, 100)           # Grey for power poles
-        }
-        
         for key, path in image_files.items():
             try:
-                logger.info(f"Loading image for {key} from {path}")
                 image = pygame.image.load(path)
-                
-                # Scale based on entity type
-                if key == 'assembler' or key == 'chemical-plant' or key == 'oil-refinery':
+                if key == 'assembler':
                     images[key] = pygame.transform.scale(image, (3 * cell_size, 3 * cell_size))
                 elif key == 'splitter':
                     # Splitter will be scaled when used based on orientation
                     images[key] = image
                 else:
                     images[key] = pygame.transform.scale(image, (cell_size, cell_size))
-                    
-                logger.info(f"Successfully loaded image for {key}")
             except Exception as e:
-                logger.warning(f"Could not load image for {key} from {path}: {e}")
-                
-                # Create appropriate fallback based on entity type
-                fallback_color = None
-                for type_key, color in fallback_colors.items():
-                    if type_key in key:
-                        fallback_color = color
-                        break
-                
-                # Default to grey if no matching color found
-                if not fallback_color:
-                    fallback_color = (150, 150, 150)
-                
-                # Create fallback surface with appropriate size
-                if key == 'assembler' or key == 'chemical-plant' or key == 'oil-refinery':
-                    size = (3 * cell_size, 3 * cell_size)
-                else:
-                    size = (cell_size, cell_size)
-                    
-                fallback = pygame.Surface(size, pygame.SRCALPHA)
-                fallback.fill(fallback_color + (200,))  # Add alpha for semi-transparency
-                
-                # Add visual indicators based on entity type
+                logger.info(f"Could not load image for {key}: {e}")
+                # Create fallback image      
                 if "pole" in key:
-                    # Draw power pole lines
-                    pygame.draw.line(fallback, (50, 50, 50, 255), (size[0]//2, 0), (size[0]//2, size[1]), 2)
-                    pygame.draw.line(fallback, (50, 50, 50, 255), (0, size[1]//2), (size[0], size[1]//2), 2)
-                elif "pipe" in key:
-                    # Draw pipe connections
-                    pygame.draw.circle(fallback, (50, 50, 200, 255), (size[0]//2, size[1]//2), size[0]//3, 3)
-                elif "belt" in key or "conveyor" in key or "underground" in key:
-                    # Draw belt direction indicator
-                    arrow_points = [(size[0]//2, size[1]//4), (size[0]//4, size[1]*3//4), (size[0]*3//4, size[1]*3//4)]
-                    pygame.draw.polygon(fallback, (50, 50, 50, 255), arrow_points, 2)
+                    fallback = pygame.Surface((cell_size, cell_size), pygame.SRCALPHA)
+                    pygame.draw.rect(fallback, (100, 100, 100, 255), (cell_size//4, cell_size//4, cell_size//2, cell_size//2))
+                    pygame.draw.line(fallback, (50, 50, 50, 255), (cell_size//2, 0), (cell_size//2, cell_size), 2)
+                    pygame.draw.line(fallback, (50, 50, 50, 255), (0, cell_size//2), (cell_size, cell_size//2), 2)
+                    images[key] = fallback
                 else:
-                    # Generic border for other entities
-                    pygame.draw.rect(fallback, (0, 0, 0, 100), (0, 0, size[0], size[1]), 2)
-                
-                images[key] = fallback
-                logger.info(f"Created fallback image for {key}")
+                    # Generic fallback for other entities
+                    fallback = pygame.Surface((cell_size, cell_size))
+                    fallback.fill((200, 200, 200))  # Light gray
+                    pygame.draw.rect(fallback, (100, 100, 100), (0, 0, cell_size, cell_size), 1)
+                    images[key] = fallback
         
         return images
 
@@ -3435,6 +3284,7 @@ def is_fluid_item(item_id):
         
         # Look up item in the recipe data
         item = item_lookup.get(item_id, {})
+   
         # Check if the item type is "Liquid"
         return item.get("type", "") == "Liquid"
     
