@@ -526,41 +526,39 @@ class FactoryBuilder:
                 # Process assemblers
                 if "assembler_information" in module_data:
                     for assembler in module_data["assembler_information"]:
-
-                            item, rel_x, rel_y,w,h,machine_type = assembler[0], assembler[1], assembler[2], assembler[3], assembler[4], assembler[5]
-                            # Convert coordinates
-                            abs_x = block_x + rel_x
-                            abs_y = block_y + rel_y 
-                            
-                            factory_data["entities"]["assemblers"].append({
-                                "item": item,
-                                "position": [abs_x, abs_y],
-                                "block_id": block_id,
-                                "type": machine_type,
-                                "dimensions": [w, h]
-                            })
-                            
-                            logger.info(f"Added assembler {item} at {[abs_x, abs_y]} for block {block_id}")
+                        item, rel_x, rel_y, w, h, machine_type = assembler[0], assembler[1], assembler[2], assembler[3], assembler[4], assembler[5]
+                        # Convert coordinates
+                        abs_x = block_x + rel_x
+                        abs_y = block_y + rel_y 
+                        
+                        factory_data["entities"]["assemblers"].append({
+                            "item": item,
+                            "position": [abs_x, abs_y],
+                            "block_id": block_id,
+                            "type": machine_type,
+                            "dimensions": [w, h]
+                        })
+                        
+                        logger.info(f"Added assembler {item} at {[abs_x, abs_y]} for block {block_id}")
                 
                 # Process inserters
                 if "inserter_information" in module_data:
                     for inserter in module_data["inserter_information"]:
-                
-                            item, rel_x, rel_y, direction = inserter[0], inserter[1], inserter[2], inserter[3]
-                            # Convert coordinates
-                            abs_x = block_x + rel_x
-                            abs_y = block_y + rel_y
-                            
-                            factory_data["entities"]["inserters"].append({
-                                "item": item,
-                                "position": [abs_x, abs_y],
-                                "direction": direction,
-                                "block_id": block_id
-                            })
-                            logger.info(f"Added inserter {item} at {[abs_x, abs_y]} facing {direction} for block {block_id}")
+                        item, rel_x, rel_y, direction = inserter[0], inserter[1], inserter[2], inserter[3]
+                        # Convert coordinates
+                        abs_x = block_x + rel_x
+                        abs_y = block_y + rel_y
+                        
+                        factory_data["entities"]["inserters"].append({
+                            "item": item,
+                            "position": [abs_x, abs_y],
+                            "direction": direction,
+                            "block_id": block_id
+                        })
+                        logger.info(f"Added inserter {item} at {[abs_x, abs_y]} facing {direction} for block {block_id}")
                             
                 if "placed_inserter_information" in module_data:
-                  for item_id, inserters in module_data["placed_inserter_information"].items():
+                    for item_id, inserters in module_data["placed_inserter_information"].items():
                         # Extract the item name from the ID (e.g., "electronic-circuit_0" -> "electronic-circuit")
                         item = item_id.split('_')[0]
                     
@@ -585,7 +583,6 @@ class FactoryBuilder:
                             # Convert to absolute coordinates
                             abs_x = block_x + target_x
                             abs_y = block_y + target_y
-            
                             
                             # Add to corrected entities
                             factory_data["entities"]["inserters"].append({

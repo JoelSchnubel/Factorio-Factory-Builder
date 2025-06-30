@@ -1,0 +1,469 @@
+2025-06-30 10:35:29,701 - Pathfinder - INFO - Processing items in order: ['electronic-circuit_4', 'copper-plate_0', 'iron-plate_1', 'copper-cable_2', 'copper-cable_3']
+2025-06-30 10:35:29,701 - Pathfinder - INFO - Placing output inserter for item electronic-circuit
+2025-06-30 10:35:29,701 - Pathfinder - DEBUG - Skipping copper-plate_0 as it's not the output item electronic-circuit
+2025-06-30 10:35:29,702 - Pathfinder - DEBUG - Skipping iron-plate_1 as it's not the output item electronic-circuit
+2025-06-30 10:35:29,702 - Pathfinder - DEBUG - Skipping copper-cable_2 as it's not the output item electronic-circuit
+2025-06-30 10:35:29,702 - Pathfinder - DEBUG - Skipping copper-cable_3 as it's not the output item electronic-circuit
+2025-06-30 10:35:29,702 - Pathfinder - INFO - Found output item match: electronic-circuit_4
+2025-06-30 10:35:29,703 - Pathfinder - DEBUG - Start points for electronic-circuit_4: [(9, 20)]
+2025-06-30 10:35:29,703 - Pathfinder - DEBUG - Destination points for electronic-circuit_4: [(8, 29)]
+2025-06-30 10:35:29,703 - Pathfinder - DEBUG - Inserter mapping for electronic-circuit_4: {}
+2025-06-30 10:35:29,703 - Pathfinder - WARNING - No inserter mapping defined for electronic-circuit_4, cannot place output inserter
+2025-06-30 10:35:29,704 - Pathfinder - WARNING - Failed to place any output inserters
+2025-06-30 10:35:29,704 - Pathfinder - INFO - Finding path for electronic-circuit_4
+2025-06-30 10:35:29,706 - Pathfinder - DEBUG - Working grid:
+[[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 1]
+ [1 1 1 1 1 1 1 0 0 0 0 0 1 1 0 1]
+ [1 1 1 1 1 0 1 0 0 0 0 0 1 0 0 1]
+ [1 1 1 1 1 1 1 1 1 1 0 0 1 1 1 1]
+ [1 1 1 1 1 0 1 1 1 1 1 1 1 0 0 1]
+ [1 1 1 1 1 1 1 0 0 0 0 0 1 1 0 1]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [1 0 1 1 1 1 1 0 0 0 0 0 0 0 0 1]
+ [1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 1]
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+ [1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 1]
+ [1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 1]
+ [1 0 1 1 1 1 1 0 0 0 0 0 0 0 0 1]
+ [1 0 0 0 0 0 1 0 0 0 0 0 0 0 0 1]
+ [1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 1]
+ [1 0 1 1 1 1 1 0 0 0 0 0 0 0 0 1]
+ [1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 1]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]]
+2025-06-30 10:35:29,708 - Pathfinder - DEBUG - All pairs sorted by heuristic distance: [(10, (9, 20), (8, 29), None, None)]
+2025-06-30 10:35:29,709 - Pathfinder - DEBUG - Exit (9, 17) rejected because it doesn't get closer to goal
+2025-06-30 10:35:29,709 - Pathfinder - DEBUG - Exit (9, 16) rejected because it doesn't get closer to goal
+2025-06-30 10:35:29,709 - Pathfinder - DEBUG - Exit (9, 15) rejected because it doesn't get closer to goal
+2025-06-30 10:35:29,710 - Pathfinder - DEBUG - Exit (8, 17) rejected because it doesn't get closer to goal
+2025-06-30 10:35:29,710 - Pathfinder - DEBUG - Exit (8, 16) rejected because it doesn't get closer to goal
+2025-06-30 10:35:29,710 - Pathfinder - DEBUG - Exit (8, 15) rejected because it doesn't get closer to goal
+2025-06-30 10:35:29,711 - Pathfinder - DEBUG - Exit (8, 17) rejected because it doesn't get closer to goal
+2025-06-30 10:35:29,711 - Pathfinder - DEBUG - Exit (8, 16) rejected because it doesn't get closer to goal
+2025-06-30 10:35:29,711 - Pathfinder - DEBUG - Exit (5, 22) rejected because it doesn't get closer to goal
+2025-06-30 10:35:29,711 - Pathfinder - DEBUG - Exit (4, 22) rejected because it doesn't get closer to goal
+2025-06-30 10:35:29,712 - Pathfinder - DEBUG - Exit (3, 22) rejected because it doesn't get closer to goal
+2025-06-30 10:35:29,712 - Pathfinder - DEBUG - Exit (8, 17) rejected because it doesn't get closer to goal
+2025-06-30 10:35:29,713 - Pathfinder - DEBUG - Path found: [(9, 20), (8, 20), (8, 21), (8, 22), (8, 23), (8, 24), (8, 25), (8, 26), (8, 27), (8, 28), (8, 29)] with underground segments: {}
+2025-06-30 10:35:29,713 - Pathfinder - INFO - Found better path for electronic-circuit_4 from (9, 20) to (8, 29) with length 11
+2025-06-30 10:35:29,713 - Pathfinder - DEBUG - path_foundTrue for electronic-circuit_4 from (9, 20) to (8, 29)
+2025-06-30 10:35:29,713 - Pathfinder - DEBUG - Adding path for electronic-circuit_4 from (9, 20) to (8, 29)
+2025-06-30 10:35:29,714 - Pathfinder - DEBUG - ======================================================
+2025-06-30 10:35:29,714 - Pathfinder - DEBUG - Marking path on grid for electronic-circuit_4 from (9, 20) to (8, 29)
+2025-06-30 10:35:29,716 - Pathfinder - DEBUG - BEFORE :Working grid:
+[[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 1]
+ [1 1 1 1 1 1 1 0 0 0 0 0 1 1 0 1]
+ [1 1 1 1 1 0 1 0 0 0 0 0 1 0 0 1]
+ [1 1 1 1 1 1 1 1 1 1 0 0 1 1 1 1]
+ [1 1 1 1 1 0 1 1 1 1 1 1 1 0 0 1]
+ [1 1 1 1 1 1 1 0 0 0 0 0 1 1 0 1]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [1 0 1 1 1 1 1 0 0 0 0 0 0 0 0 1]
+ [1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 1]
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+ [1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 1]
+ [1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 1]
+ [1 0 1 1 1 1 1 0 0 0 0 0 0 0 0 1]
+ [1 0 0 0 0 0 1 0 0 0 0 0 0 0 0 1]
+ [1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 1]
+ [1 0 1 1 1 1 1 0 0 0 0 0 0 0 0 1]
+ [1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 1]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]]
+2025-06-30 10:35:29,718 - Pathfinder - DEBUG - AFTER: Working grid:
+[[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 1]
+ [1 1 1 1 1 1 1 0 0 0 0 0 1 1 0 1]
+ [1 1 1 1 1 0 1 0 0 0 0 0 1 0 0 1]
+ [1 1 1 1 1 1 1 1 1 1 0 0 1 1 1 1]
+ [1 1 1 1 1 0 1 1 1 1 1 1 1 0 0 1]
+ [1 1 1 1 1 1 1 0 0 0 0 0 1 1 0 1]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [1 0 1 1 1 1 1 0 0 0 0 0 0 0 0 1]
+ [1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 1]
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+ [1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 1]
+ [1 1 1 1 1 1 1 0 1 1 0 0 0 0 0 1]
+ [1 0 1 1 1 1 1 0 1 0 0 0 0 0 0 1]
+ [1 0 0 0 0 0 1 0 1 0 0 0 0 0 0 1]
+ [1 1 1 1 1 1 1 0 1 0 0 0 0 0 0 1]
+ [1 0 1 1 1 1 1 0 1 0 0 0 0 0 0 1]
+ [1 1 1 1 1 1 1 0 1 0 0 0 0 0 0 1]
+ [0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0]]
+2025-06-30 10:35:29,719 - Pathfinder - DEBUG - ======================================================
+2025-06-30 10:35:29,720 - Pathfinder - INFO - Finding path for copper-plate_0
+2025-06-30 10:35:29,722 - Pathfinder - DEBUG - Working grid:
+[[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 1]
+ [1 1 1 1 1 1 1 0 0 0 0 0 1 1 0 1]
+ [1 1 1 1 1 0 1 0 0 0 0 0 1 0 0 1]
+ [1 1 1 1 1 1 1 1 1 1 0 0 1 1 1 1]
+ [1 1 1 1 1 0 1 1 1 1 1 1 1 0 0 1]
+ [1 1 1 1 1 1 1 0 0 0 0 0 1 1 0 1]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [1 0 1 1 1 1 1 0 0 0 0 0 0 0 0 1]
+ [1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 1]
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+ [1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 1]
+ [1 1 1 1 1 1 1 0 1 1 0 0 0 0 0 1]
+ [1 0 1 1 1 1 1 0 1 0 0 0 0 0 0 1]
+ [1 0 0 0 0 0 1 0 1 0 0 0 0 0 0 1]
+ [1 1 1 1 1 1 1 0 1 0 0 0 0 0 0 1]
+ [1 0 1 1 1 1 1 0 1 0 0 0 0 0 0 1]
+ [1 1 1 1 1 1 1 0 1 0 0 0 0 0 0 1]
+ [0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0]]
+2025-06-30 10:35:29,723 - Pathfinder - DEBUG - All pairs sorted by heuristic distance: [(21, (1, 29), (9, 16), None, None)]
+2025-06-30 10:35:29,724 - Pathfinder - DEBUG - Found valid underground path from (1, 27) to (1, 22) with obstacle? True
+2025-06-30 10:35:29,724 - Pathfinder - DEBUG - Exit (1, 26) rejected because it doesn't get closer to goal
+2025-06-30 10:35:29,724 - Pathfinder - DEBUG - Found valid underground path from (1, 21) to (1, 16) with obstacle? True
+2025-06-30 10:35:29,725 - Pathfinder - DEBUG - Exit (1, 21) rejected because it doesn't get closer to goal
+2025-06-30 10:35:29,725 - Pathfinder - DEBUG - Exit (1, 26) rejected because it doesn't get closer to goal
+2025-06-30 10:35:29,725 - Pathfinder - DEBUG - Exit (1, 27) rejected because it doesn't get closer to goal
+2025-06-30 10:35:29,725 - Pathfinder - DEBUG - Found valid underground path from (1, 26) to (1, 22) with obstacle? True
+2025-06-30 10:35:29,726 - Pathfinder - DEBUG - Exit (2, 26) rejected because it doesn't get closer to goal
+2025-06-30 10:35:29,726 - Pathfinder - DEBUG - Exit (2, 27) rejected because it doesn't get closer to goal
+2025-06-30 10:35:29,726 - Pathfinder - DEBUG - Exit (3, 26) rejected because it doesn't get closer to goal
+2025-06-30 10:35:29,726 - Pathfinder - DEBUG - Exit (3, 27) rejected because it doesn't get closer to goal
+2025-06-30 10:35:29,726 - Pathfinder - DEBUG - Found valid underground path from (4, 22) to (9, 22) with obstacle? True
+2025-06-30 10:35:29,728 - Pathfinder - DEBUG - Exit (4, 26) rejected because it doesn't get closer to goal
+2025-06-30 10:35:29,728 - Pathfinder - DEBUG - Exit (4, 27) rejected because it doesn't get closer to goal
+2025-06-30 10:35:29,728 - Pathfinder - DEBUG - Found valid underground path from (4, 26) to (9, 26) with obstacle? True
+2025-06-30 10:35:29,728 - Pathfinder - DEBUG - Found valid underground path from (4, 27) to (9, 27) with obstacle? True
+2025-06-30 10:35:29,729 - Pathfinder - DEBUG - Found valid underground path from (4, 28) to (9, 28) with obstacle? True
+2025-06-30 10:35:29,729 - Pathfinder - DEBUG - Found valid underground path from (4, 29) to (9, 29) with obstacle? True
+2025-06-30 10:35:29,729 - Pathfinder - DEBUG - Found valid underground path from (5, 22) to (9, 22) with obstacle? True
+2025-06-30 10:35:29,730 - Pathfinder - DEBUG - Exit (5, 26) rejected because it doesn't get closer to goal
+2025-06-30 10:35:29,730 - Pathfinder - DEBUG - Exit (5, 27) rejected because it doesn't get closer to goal
+2025-06-30 10:35:29,730 - Pathfinder - DEBUG - Found valid underground path from (5, 26) to (9, 26) with obstacle? True
+2025-06-30 10:35:29,730 - Pathfinder - DEBUG - Found valid underground path from (5, 27) to (9, 27) with obstacle? True
+2025-06-30 10:35:29,731 - Pathfinder - DEBUG - Found valid underground path from (5, 28) to (9, 28) with obstacle? True
+2025-06-30 10:35:29,731 - Pathfinder - DEBUG - Found valid underground path from (5, 29) to (9, 29) with obstacle? True
+2025-06-30 10:35:29,731 - Pathfinder - DEBUG - Found valid underground path from (6, 26) to (9, 26) with obstacle? True
+2025-06-30 10:35:29,732 - Pathfinder - DEBUG - Found valid underground path from (6, 27) to (9, 27) with obstacle? True
+2025-06-30 10:35:29,732 - Pathfinder - DEBUG - Found valid underground path from (6, 28) to (9, 28) with obstacle? True
+2025-06-30 10:35:29,732 - Pathfinder - DEBUG - Found valid underground path from (6, 29) to (9, 29) with obstacle? True
+2025-06-30 10:35:29,732 - Pathfinder - DEBUG - Found valid underground path from (7, 26) to (9, 26) with obstacle? True
+2025-06-30 10:35:29,733 - Pathfinder - DEBUG - Found valid underground path from (7, 25) to (9, 25) with obstacle? True
+2025-06-30 10:35:29,733 - Pathfinder - DEBUG - Found valid underground path from (7, 24) to (9, 24) with obstacle? True
+2025-06-30 10:35:29,733 - Pathfinder - DEBUG - Found valid underground path from (7, 23) to (9, 23) with obstacle? True
+2025-06-30 10:35:29,734 - Pathfinder - DEBUG - Found valid underground path from (7, 22) to (9, 22) with obstacle? True
+2025-06-30 10:35:29,734 - Pathfinder - DEBUG - Exit (5, 22) rejected because it doesn't get closer to goal
+2025-06-30 10:35:29,734 - Pathfinder - DEBUG - Exit (4, 22) rejected because it doesn't get closer to goal
+2025-06-30 10:35:29,735 - Pathfinder - DEBUG - Exit (3, 22) rejected because it doesn't get closer to goal
+2025-06-30 10:35:29,735 - Pathfinder - DEBUG - Exit (2, 22) rejected because it doesn't get closer to goal
+2025-06-30 10:35:29,735 - Pathfinder - DEBUG - Found valid underground path from (7, 22) to (7, 17) with obstacle? True
+2025-06-30 10:35:29,735 - Pathfinder - DEBUG - Exit (7, 19) rejected because it doesn't get closer to goal
+2025-06-30 10:35:29,736 - Pathfinder - DEBUG - Exit (7, 20) rejected because it doesn't get closer to goal
+2025-06-30 10:35:29,736 - Pathfinder - DEBUG - Exit (7, 21) rejected because it doesn't get closer to goal
+2025-06-30 10:35:29,736 - Pathfinder - DEBUG - Exit (7, 19) rejected because it doesn't get closer to goal
+2025-06-30 10:35:29,737 - Pathfinder - DEBUG - Exit (7, 20) rejected because it doesn't get closer to goal
+2025-06-30 10:35:29,737 - Pathfinder - DEBUG - Exit (7, 21) rejected because it doesn't get closer to goal
+2025-06-30 10:35:29,737 - Pathfinder - DEBUG - Exit (7, 22) rejected because it doesn't get closer to goal
+2025-06-30 10:35:29,737 - Pathfinder - DEBUG - Found valid underground path from (7, 21) to (9, 21) with obstacle? True
+2025-06-30 10:35:29,738 - Pathfinder - DEBUG - Found valid underground path from (7, 21) to (7, 17) with obstacle? True
+2025-06-30 10:35:29,738 - Pathfinder - DEBUG - Found valid underground path from (7, 20) to (10, 20) with obstacle? True
+2025-06-30 10:35:29,738 - Pathfinder - DEBUG - Found valid underground path from (7, 20) to (7, 17) with obstacle? True
+2025-06-30 10:35:29,738 - Pathfinder - DEBUG - Found valid underground path from (7, 19) to (7, 17) with obstacle? True
+2025-06-30 10:35:29,738 - Pathfinder - DEBUG - Found valid underground path from (7, 27) to (9, 27) with obstacle? True
+2025-06-30 10:35:29,739 - Pathfinder - DEBUG - Found valid underground path from (7, 28) to (9, 28) with obstacle? True
+2025-06-30 10:35:29,739 - Pathfinder - DEBUG - Found valid underground path from (7, 29) to (9, 29) with obstacle? True
+2025-06-30 10:35:29,739 - Pathfinder - DEBUG - Found valid underground path from (8, 19) to (8, 17) with obstacle? True
+2025-06-30 10:35:29,740 - Pathfinder - DEBUG - Path found: [(1, 29), (1, 28), (1, 27), (1, 26), (2, 26), (3, 26), (4, 26), (5, 26), (6, 26), (7, 26), (7, 25), (7, 24), (7, 23), (7, 22), (7, 17), (7, 16), (8, 16), (9, 16)] with underground segments: {'segment_0': {'start': (7, 22), 'end': (7, 17)}}
+2025-06-30 10:35:29,740 - Pathfinder - INFO - Found better path for copper-plate_0 from (1, 29) to (9, 16) with length 18
+2025-06-30 10:35:29,740 - Pathfinder - DEBUG - path_foundTrue for copper-plate_0 from (1, 29) to (9, 16)
+2025-06-30 10:35:29,740 - Pathfinder - DEBUG - Adding path for copper-plate_0 from (1, 29) to (9, 16)
+2025-06-30 10:35:29,741 - Pathfinder - DEBUG - ======================================================
+2025-06-30 10:35:29,741 - Pathfinder - DEBUG - Marking path on grid for copper-plate_0 from (1, 29) to (9, 16)
+2025-06-30 10:35:29,743 - Pathfinder - DEBUG - BEFORE :Working grid:
+[[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 1]
+ [1 1 1 1 1 1 1 0 0 0 0 0 1 1 0 1]
+ [1 1 1 1 1 0 1 0 0 0 0 0 1 0 0 1]
+ [1 1 1 1 1 1 1 1 1 1 0 0 1 1 1 1]
+ [1 1 1 1 1 0 1 1 1 1 1 1 1 0 0 1]
+ [1 1 1 1 1 1 1 0 0 0 0 0 1 1 0 1]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [1 0 1 1 1 1 1 0 0 0 0 0 0 0 0 1]
+ [1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 1]
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+ [1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 1]
+ [1 1 1 1 1 1 1 0 1 1 0 0 0 0 0 1]
+ [1 0 1 1 1 1 1 0 1 0 0 0 0 0 0 1]
+ [1 0 0 0 0 0 1 0 1 0 0 0 0 0 0 1]
+ [1 1 1 1 1 1 1 0 1 0 0 0 0 0 0 1]
+ [1 0 1 1 1 1 1 0 1 0 0 0 0 0 0 1]
+ [1 1 1 1 1 1 1 0 1 0 0 0 0 0 0 1]
+ [0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0]]
+2025-06-30 10:35:29,746 - Pathfinder - DEBUG - AFTER: Working grid:
+[[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 1]
+ [1 1 1 1 1 1 1 0 0 0 0 0 1 1 0 1]
+ [1 1 1 1 1 0 1 0 0 0 0 0 1 0 0 1]
+ [1 1 1 1 1 1 1 1 1 1 0 0 1 1 1 1]
+ [1 1 1 1 1 0 1 1 1 1 1 1 1 0 0 1]
+ [1 1 1 1 1 1 1 0 0 0 0 0 1 1 0 1]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [1 0 1 1 1 1 1 1 1 1 0 0 0 0 0 1]
+ [1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 1]
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+ [1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 1]
+ [1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 1]
+ [1 0 1 1 1 1 1 1 1 0 0 0 0 0 0 1]
+ [1 0 0 0 0 0 1 1 1 0 0 0 0 0 0 1]
+ [1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 1]
+ [1 0 1 1 1 1 1 1 1 0 0 0 0 0 0 1]
+ [1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 1]
+ [0 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0]
+ [0 1 0 0 0 0 0 0 1 0 0 0 0 0 0 0]
+ [0 1 0 0 0 0 0 0 1 0 0 0 0 0 0 0]
+ [0 1 0 0 0 0 0 0 1 0 0 0 0 0 0 0]]
+2025-06-30 10:35:29,746 - Pathfinder - DEBUG - ======================================================
+2025-06-30 10:35:29,746 - Pathfinder - INFO - Finding path for iron-plate_1
+2025-06-30 10:35:29,750 - Pathfinder - DEBUG - Working grid:
+[[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 1]
+ [1 1 1 1 1 1 1 0 0 0 0 0 1 1 0 1]
+ [1 1 1 1 1 0 1 0 0 0 0 0 1 0 0 1]
+ [1 1 1 1 1 1 1 1 1 1 0 0 1 1 1 1]
+ [1 1 1 1 1 0 1 1 1 1 1 1 1 0 0 1]
+ [1 1 1 1 1 1 1 0 0 0 0 0 1 1 0 1]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [1 0 1 1 1 1 1 1 1 1 0 0 0 0 0 1]
+ [1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 1]
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+ [1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 1]
+ [1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 1]
+ [1 0 1 1 1 1 1 1 1 0 0 0 0 0 0 1]
+ [1 0 0 0 0 0 1 1 1 0 0 0 0 0 0 1]
+ [1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 1]
+ [1 0 1 1 1 1 1 1 1 0 0 0 0 0 0 1]
+ [1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 1]
+ [0 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0]
+ [0 1 0 0 0 0 0 0 1 0 0 0 0 0 0 0]
+ [0 1 0 0 0 0 0 0 1 0 0 0 0 0 0 0]
+ [0 1 0 0 0 0 0 0 1 0 0 0 0 0 0 0]]
+2025-06-30 10:35:29,750 - Pathfinder - DEBUG - All pairs sorted by heuristic distance: [(16, (5, 29), (9, 17), None, None)]
+2025-06-30 10:35:29,751 - Pathfinder - DEBUG - Found valid underground path from (5, 29) to (9, 29) with obstacle? True
+2025-06-30 10:35:29,751 - Pathfinder - DEBUG - Found valid underground path from (5, 28) to (9, 28) with obstacle? True
+2025-06-30 10:35:29,751 - Pathfinder - DEBUG - Found valid underground path from (5, 27) to (9, 27) with obstacle? True
+2025-06-30 10:35:29,752 - Pathfinder - DEBUG - Found valid underground path from (6, 27) to (9, 27) with obstacle? True
+2025-06-30 10:35:29,752 - Pathfinder - DEBUG - Found valid underground path from (6, 28) to (9, 28) with obstacle? True
+2025-06-30 10:35:29,752 - Pathfinder - DEBUG - Found valid underground path from (6, 29) to (9, 29) with obstacle? True
+2025-06-30 10:35:29,753 - Pathfinder - DEBUG - Found valid underground path from (7, 27) to (9, 27) with obstacle? True
+2025-06-30 10:35:29,753 - Pathfinder - DEBUG - Found valid underground path from (7, 28) to (9, 28) with obstacle? True
+2025-06-30 10:35:29,753 - Pathfinder - DEBUG - Found valid underground path from (7, 29) to (9, 29) with obstacle? True
+2025-06-30 10:35:29,753 - Pathfinder - DEBUG - Exit (7, 27) rejected because it doesn't get closer to goal
+2025-06-30 10:35:29,754 - Pathfinder - DEBUG - Exit (6, 27) rejected because it doesn't get closer to goal
+2025-06-30 10:35:29,754 - Pathfinder - DEBUG - Exit (5, 27) rejected because it doesn't get closer to goal
+2025-06-30 10:35:29,754 - Pathfinder - DEBUG - Exit (4, 27) rejected because it doesn't get closer to goal
+2025-06-30 10:35:29,755 - Pathfinder - DEBUG - Exit (5, 22) rejected because it doesn't get closer to goal
+2025-06-30 10:35:29,755 - Pathfinder - DEBUG - Exit (4, 22) rejected because it doesn't get closer to goal
+2025-06-30 10:35:29,755 - Pathfinder - DEBUG - Found valid underground path directly to goal from (9, 22) to (9, 17)
+2025-06-30 10:35:29,756 - Pathfinder - DEBUG - Path found: [(5, 29), (5, 28), (5, 27), (9, 27), (9, 26), (9, 25), (9, 24), (9, 23), (9, 22), (9, 17)] with underground segments: {'segment_0': {'start': (5, 27), 'end': (9, 27)}, 'segment_1': {'start': (9, 22), 'end': (9, 17)}}
+2025-06-30 10:35:29,756 - Pathfinder - INFO - Found better path for iron-plate_1 from (5, 29) to (9, 17) with length 10
+2025-06-30 10:35:29,756 - Pathfinder - DEBUG - path_foundTrue for iron-plate_1 from (5, 29) to (9, 17)
+2025-06-30 10:35:29,756 - Pathfinder - DEBUG - Adding path for iron-plate_1 from (5, 29) to (9, 17)
+2025-06-30 10:35:29,756 - Pathfinder - DEBUG - ======================================================
+2025-06-30 10:35:29,756 - Pathfinder - DEBUG - Marking path on grid for iron-plate_1 from (5, 29) to (9, 17)
+2025-06-30 10:35:29,760 - Pathfinder - DEBUG - BEFORE :Working grid:
+[[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 1]
+ [1 1 1 1 1 1 1 0 0 0 0 0 1 1 0 1]
+ [1 1 1 1 1 0 1 0 0 0 0 0 1 0 0 1]
+ [1 1 1 1 1 1 1 1 1 1 0 0 1 1 1 1]
+ [1 1 1 1 1 0 1 1 1 1 1 1 1 0 0 1]
+ [1 1 1 1 1 1 1 0 0 0 0 0 1 1 0 1]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [1 0 1 1 1 1 1 1 1 1 0 0 0 0 0 1]
+ [1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 1]
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+ [1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 1]
+ [1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 1]
+ [1 0 1 1 1 1 1 1 1 0 0 0 0 0 0 1]
+ [1 0 0 0 0 0 1 1 1 0 0 0 0 0 0 1]
+ [1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 1]
+ [1 0 1 1 1 1 1 1 1 0 0 0 0 0 0 1]
+ [1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 1]
+ [0 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0]
+ [0 1 0 0 0 0 0 0 1 0 0 0 0 0 0 0]
+ [0 1 0 0 0 0 0 0 1 0 0 0 0 0 0 0]
+ [0 1 0 0 0 0 0 0 1 0 0 0 0 0 0 0]]
+2025-06-30 10:35:29,763 - Pathfinder - DEBUG - AFTER: Working grid:
+[[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 1]
+ [1 1 1 1 1 1 1 0 0 0 0 0 1 1 0 1]
+ [1 1 1 1 1 0 1 0 0 0 0 0 1 0 0 1]
+ [1 1 1 1 1 1 1 1 1 1 0 0 1 1 1 1]
+ [1 1 1 1 1 0 1 1 1 1 1 1 1 0 0 1]
+ [1 1 1 1 1 1 1 0 0 0 0 0 1 1 0 1]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [1 0 1 1 1 1 1 1 1 1 0 0 0 0 0 1]
+ [1 1 1 1 1 1 1 1 0 1 0 0 0 0 0 1]
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+ [1 1 1 1 1 1 1 1 0 1 0 0 0 0 0 1]
+ [1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 1]
+ [1 0 1 1 1 1 1 1 1 1 0 0 0 0 0 1]
+ [1 0 0 0 0 0 1 1 1 1 0 0 0 0 0 1]
+ [1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 1]
+ [1 0 1 1 1 1 1 1 1 1 0 0 0 0 0 1]
+ [1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 1]
+ [0 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0]
+ [0 1 0 0 0 1 1 1 1 1 0 0 0 0 0 0]
+ [0 1 0 0 0 1 0 0 1 0 0 0 0 0 0 0]
+ [0 1 0 0 0 1 0 0 1 0 0 0 0 0 0 0]]
+2025-06-30 10:35:29,764 - Pathfinder - DEBUG - ======================================================
+2025-06-30 10:35:29,764 - Pathfinder - INFO - Finding path for copper-cable_2
+2025-06-30 10:35:29,766 - Pathfinder - DEBUG - Working grid:
+[[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 1]
+ [1 1 1 1 1 1 1 0 0 0 0 0 1 1 0 1]
+ [1 1 1 1 1 0 1 0 0 0 0 0 1 0 0 1]
+ [1 1 1 1 1 1 1 1 1 1 0 0 1 1 1 1]
+ [1 1 1 1 1 0 1 1 1 1 1 1 1 0 0 1]
+ [1 1 1 1 1 1 1 0 0 0 0 0 1 1 0 1]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [1 0 1 1 1 1 1 1 1 1 0 0 0 0 0 1]
+ [1 1 1 1 1 1 1 1 0 1 0 0 0 0 0 1]
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+ [1 1 1 1 1 1 1 1 0 1 0 0 0 0 0 1]
+ [1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 1]
+ [1 0 1 1 1 1 1 1 1 1 0 0 0 0 0 1]
+ [1 0 0 0 0 0 1 1 1 1 0 0 0 0 0 1]
+ [1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 1]
+ [1 0 1 1 1 1 1 1 1 1 0 0 0 0 0 1]
+ [1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 1]
+ [0 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0]
+ [0 1 0 0 0 1 1 1 1 1 0 0 0 0 0 0]
+ [0 1 0 0 0 1 0 0 1 0 0 0 0 0 0 0]
+ [0 1 0 0 0 1 0 0 1 0 0 0 0 0 0 0]]
+2025-06-30 10:35:29,767 - Pathfinder - DEBUG - All pairs sorted by heuristic distance: []
+2025-06-30 10:35:29,767 - Pathfinder - WARNING - No path found for copper-cable_2 with any start-destination pair
+2025-06-30 10:35:29,767 - Pathfinder - INFO - Finding path for copper-cable_3
+2025-06-30 10:35:29,769 - Pathfinder - DEBUG - Working grid:
+[[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 1]
+ [1 1 1 1 1 1 1 0 0 0 0 0 1 1 0 1]
+ [1 1 1 1 1 0 1 0 0 0 0 0 1 0 0 1]
+ [1 1 1 1 1 1 1 1 1 1 0 0 1 1 1 1]
+ [1 1 1 1 1 0 1 1 1 1 1 1 1 0 0 1]
+ [1 1 1 1 1 1 1 0 0 0 0 0 1 1 0 1]
+ [1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [1 0 1 1 1 1 1 1 1 1 0 0 0 0 0 1]
+ [1 1 1 1 1 1 1 1 0 1 0 0 0 0 0 1]
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+ [1 1 1 1 1 1 1 1 0 1 0 0 0 0 0 1]
+ [1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 1]
+ [1 0 1 1 1 1 1 1 1 1 0 0 0 0 0 1]
+ [1 0 0 0 0 0 1 1 1 1 0 0 0 0 0 1]
+ [1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 1]
+ [1 0 1 1 1 1 1 1 1 1 0 0 0 0 0 1]
+ [1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 1]
+ [0 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0]
+ [0 1 0 0 0 1 1 1 1 1 0 0 0 0 0 0]
+ [0 1 0 0 0 1 0 0 1 0 0 0 0 0 0 0]
+ [0 1 0 0 0 1 0 0 1 0 0 0 0 0 0 0]]
+2025-06-30 10:35:29,770 - Pathfinder - DEBUG - All pairs sorted by heuristic distance: []
+2025-06-30 10:35:29,770 - Pathfinder - WARNING - No path found for copper-cable_3 with any start-destination pair

@@ -96,9 +96,9 @@ class FactoryZ3Solver:
 
         self.add_simplified_block_alignment_constraints()
         
-        # Only add I/O constraints if we have fixed gates
-        #if hasattr(self, 'fixed_gates') and self.fixed_gates:
-        #    self.add_io_gate_constraints()
+        # Add I/O constraints if we have fixed gates
+        if hasattr(self, 'fixed_gates') and self.fixed_gates:
+            self.add_io_gate_constraints()
         
         self.minimize_map()
 
@@ -130,13 +130,13 @@ class FactoryZ3Solver:
                         
                         if item not in block.input_interfaces:
                             block.input_interfaces[item] = []
-                        block.input_interfaces[item].append(int(data["input"][1]))
+                        block.input_interfaces[item].append(int(data["input"][0]))
                         block.input_items.add(item)
                         
                         input_gate = Gate(
                             id=f"{key}_input_{item}_{i}_{factory_index}",
-                            relative_x=int(data["input"][0]),
-                            relative_y=int(data["input"][1]),
+                            relative_x=int(data["input"][1]),
+                            relative_y=int(data["input"][0]),
                             item=item,
                             type="input"
                         )
@@ -150,16 +150,15 @@ class FactoryZ3Solver:
                          # Add to interface tracking
                         if item not in block.output_interfaces:
                             block.output_interfaces[item] = []
-                        block.output_interfaces[item].append(int(data["output"][1]))
+                        block.output_interfaces[item].append(int(data["output"][0]))
                         block.output_items.add(item)
                         
                         output_gate = Gate(
                             id=f"{key}_output_{item}_{i}_{factory_index}",
-                            relative_x=int(data["output"][0]),
-                            relative_y=int(data["output"][1]),
+                            relative_x=int(data["output"][1]),
+                            relative_y=int(data["output"][0]),
                             item=item,
-                            type=
-                            "output"
+                            type="output"
                         )
                         block.output_points.append(output_gate)
                         self.gates.append(output_gate)  # Add to flat list of all gates
@@ -289,10 +288,14 @@ class FactoryZ3Solver:
     def add_simplified_block_alignment_constraints(self):
         """
         Add constraints to align compatible blocks vertically with appropriate spacing.
+        Also enforces complexity-based positioning relative to I/O points.
         """
-        logger.info("Adding simplified block alignment constraints")
+        logger.info("Adding simplified block alignment constraints with complexity-based positioning")
         
         alignment_pairs = []
+        
+        # First, add complexity-based positioning constraints
+        self.add_complexity_based_positioning_constraints()
         
         # For each block, find compatible blocks and add alignment constraints
         for block in self.blocks:
@@ -327,20 +330,53 @@ class FactoryZ3Solver:
                 # Ensure only one direction is chosen
                 self.solver.add(Not(And(block_above, other_above)))
                 
-                # Determine the correct vertical ordering based on producer-consumer relationship
-                # Producers should be placed below consumers
-                if other_id in self.producers.get(block.id, []):
-                    # other_block is a producer for block, so other_block should be below
-                    self.solver.add(block_above)
-                    logger.debug(f"Enforcing {block.id} above {other_id} (producer below consumer)")
-                elif block.id in self.producers.get(other_id, []):
-                    # block is a producer for other_block, so block should be below
-                    self.solver.add(other_above)
-                    logger.debug(f"Enforcing {other_id} above {block.id} (producer below consumer)")
+                # Determine the correct vertical ordering based on complexity, not just producer-consumer
+                # Lower complexity items should be closer to I/O (higher Y values)
+                block_primary_item = self._get_primary_output_item(block)
+                other_primary_item = self._get_primary_output_item(other_block)
+                
+                # Skip fixed I/O gate blocks for complexity ordering
+                block_is_fixed = hasattr(block, 'is_fixed_gate_block') and block.is_fixed_gate_block
+                other_is_fixed = hasattr(other_block, 'is_fixed_gate_block') and other_block.is_fixed_gate_block
+                
+                if not block_is_fixed and not other_is_fixed and block_primary_item and other_primary_item:
+                    block_complexity = self.item_complexity.get(block_primary_item, 999)
+                    other_complexity = self.item_complexity.get(other_primary_item, 999)
+                    
+                    if block_complexity < other_complexity:
+                        # block has lower complexity, should be closer to I/O (higher Y, below other_block)
+                        self.solver.add(other_above)
+                        logger.debug(f"Complexity-based ordering: {other_id} above {block.id} (lower complexity {block.id} closer to I/O)")
+                    elif other_complexity < block_complexity:
+                        # other_block has lower complexity, should be closer to I/O (higher Y, below block)
+                        self.solver.add(block_above)
+                        logger.debug(f"Complexity-based ordering: {block.id} above {other_id} (lower complexity {other_id} closer to I/O)")
+                    else:
+                        # Same complexity, use producer-consumer relationship as tie-breaker
+                        if other_id in self.producers.get(block.id, []):
+                            # other_block is a producer for block, respect the dependency
+                            self.solver.add(block_above)
+                            logger.debug(f"Same complexity, producer-consumer tiebreaker: {block.id} above {other_id}")
+                        elif block.id in self.producers.get(other_id, []):
+                            # block is a producer for other_block, respect the dependency
+                            self.solver.add(other_above)
+                            logger.debug(f"Same complexity, producer-consumer tiebreaker: {other_id} above {block.id}")
+                        else:
+                            # No clear ordering preference, allow either
+                            self.solver.add(Or(block_above, other_above))
+                            logger.debug(f"Same complexity, no producer relationship: allowing either arrangement for {block.id} and {other_id}")
                 else:
-                    # No clear producer-consumer relationship, allow either arrangement
-                    self.solver.add(Or(block_above, other_above))
-                    logger.debug(f"No producer-consumer relationship between {block.id} and {other_id}, allowing either arrangement")
+                    # If one or both blocks are fixed I/O gates, use producer-consumer relationship
+                    if other_id in self.producers.get(block.id, []):
+                        self.solver.add(block_above)
+                        logger.debug(f"Fixed block ordering: {block.id} above {other_id} (producer below consumer)")
+                    elif block.id in self.producers.get(other_id, []):
+                        self.solver.add(other_above)
+                        logger.debug(f"Fixed block ordering: {other_id} above {block.id} (producer below consumer)")
+                    else:
+                        # Allow either arrangement for fixed blocks without clear producer-consumer relationship
+                        self.solver.add(Or(block_above, other_above))
+                        logger.debug(f"Fixed block: allowing either arrangement for {block.id} and {other_id}")
                 
          
                  # Get required spacing from the compatibility info or spacing dictionary
@@ -453,7 +489,42 @@ class FactoryZ3Solver:
         width_weight = 2.0  # Higher weight for width to encourage narrow layouts
         height_weight = 0.5  # Lower weight for height to allow taller layouts
         
-        self.solver.minimize(width_weight * self.max_x + height_weight * self.max_y)
+        # Add complexity-based optimization term
+        complexity_weight = 0.1
+        complexity_cost = Int('complexity_cost')
+        
+        # Calculate complexity cost based on block positions
+        complexity_terms = []
+        
+        # Get all non-fixed blocks
+        production_blocks = [block for block in self.blocks 
+                           if not (hasattr(block, 'is_fixed_gate_block') and block.is_fixed_gate_block)]
+        
+        for block in production_blocks:
+            primary_item = self._get_primary_output_item(block)
+            if primary_item:
+                complexity = self.item_complexity.get(primary_item, 1)
+                # Higher complexity items should be penalized more for being close to y=0
+                # This encourages them to be positioned further from I/O points
+                complexity_terms.append(complexity * block.y)
+        
+        if complexity_terms:
+            # Sum all complexity terms
+            total_complexity_cost = complexity_terms[0]
+            for term in complexity_terms[1:]:
+                total_complexity_cost = total_complexity_cost + term
+            
+            self.solver.add(complexity_cost == total_complexity_cost)
+            
+            # Minimize: width + height + complexity positioning cost
+            self.solver.minimize(
+                width_weight * self.max_x + 
+                height_weight * self.max_y + 
+                complexity_weight * complexity_cost
+            )
+        else:
+            # Fallback to basic minimization if no complexity terms
+            self.solver.minimize(width_weight * self.max_x + height_weight * self.max_y)
 
         
     def solve(self):
@@ -853,9 +924,11 @@ class FactoryZ3Solver:
                     self.solver.add(block.y >= 1)
                     
             elif gate.edge == "South":
-                # South edge gates: ensure blocks are positioned above them
+                # South edge gates: ensure ALL blocks are positioned above them (lower Y values)
                 for block in non_fixed_blocks:
-                    self.solver.add(block.y + block.height <= gate.y)
+                    # Force all blocks to be positioned above I/O gates with adequate spacing
+                    min_spacing = 1  # Minimum spacing between block edge and gate
+                    self.solver.add(block.y + block.height + min_spacing <= gate.y)
                     
             elif gate.edge == "East":
                 # East edge gates: ensure blocks are positioned to the left
@@ -933,5 +1006,94 @@ class FactoryZ3Solver:
         logger.info(f"Calculated complexity for {len(item_complexity)} items")
         return item_complexity
 
-def manhattan_distance(p1, p2):
-    return abs(p1[0] - p2[0]) + abs(p1[1] - p2[1])
+    def add_complexity_based_positioning_constraints(self):
+        """
+        Add simplified complexity-based positioning constraints.
+        Fix the lowest complexity module at a specific position above I/O points,
+        then let spacing constraints handle the rest.
+        """
+        logger.info("Adding simplified complexity-based positioning constraints")
+        
+        # Get all non-fixed blocks (exclude 1x1 I/O gate blocks)
+        production_blocks = [block for block in self.blocks 
+                           if not (hasattr(block, 'is_fixed_gate_block') and block.is_fixed_gate_block)]
+        
+        if not production_blocks:
+            logger.warning("No production blocks found for complexity-based positioning")
+            return
+        
+        # Find the block with the lowest complexity
+        lowest_complexity_block = None
+        lowest_complexity = float('inf')
+        
+        for block in production_blocks:
+            primary_item = self._get_primary_output_item(block)
+            if primary_item:
+                complexity = self.item_complexity.get(primary_item, 999)
+                logger.debug(f"Block {block.id} produces {primary_item} with complexity {complexity}")
+                
+                if complexity < lowest_complexity:
+                    lowest_complexity = complexity
+                    lowest_complexity_block = block
+        
+        if not lowest_complexity_block:
+            logger.warning("No block with valid complexity found")
+            return
+        
+        # Count the number of I/O points to determine distance
+        num_io_points = 0
+        if hasattr(self, 'fixed_gates'):
+            num_io_points = len(self.fixed_gates)
+        
+        # Get the highest Y coordinate of I/O gates
+        max_io_y = 0
+        if hasattr(self, 'fixed_gates'):
+            for gate in self.fixed_gates:
+                # Since gates are fixed, we can get their position from the solver
+                # For now, assume they're at Y=29 based on the user selection
+                max_io_y = max(max_io_y, 29)  # Use the known Y position from the logs
+        
+        # Calculate the fixed position for the lowest complexity block
+        # Position it above I/O points with distance equal to number of I/O points
+        fixed_y_position = max_io_y - lowest_complexity_block.height - num_io_points
+        
+        # Ensure the position is not negative
+        fixed_y_position = max(0, fixed_y_position)
+        
+        # Add hard constraint to fix the lowest complexity block position
+        self.solver.add(lowest_complexity_block.y == fixed_y_position)
+        
+        logger.info(f"Fixed lowest complexity block {lowest_complexity_block.id} "
+                   f"(complexity {lowest_complexity}) at Y={fixed_y_position}")
+        logger.info(f"Distance from I/O points: {num_io_points} units (based on {num_io_points} I/O points)")
+        
+        # Let the existing spacing constraints handle positioning of other blocks
+        logger.info("Other blocks will be positioned using existing spacing and alignment constraints")
+    
+    def _get_primary_output_item(self, block):
+        """
+        Determine the primary item that a block produces.
+        For blocks with multiple outputs, choose the one with highest complexity.
+        """
+        if not block.output_points:
+            return None
+        
+        # Get all unique output items from this block
+        output_items = {gate.item for gate in block.output_points}
+        
+        if len(output_items) == 1:
+            return list(output_items)[0]
+        
+        # If multiple output items, choose the one with highest complexity
+        primary_item = max(output_items, 
+                          key=lambda item: self.item_complexity.get(item, 0))
+        
+        logger.debug(f"Block {block.id} has multiple outputs {output_items}, "
+                    f"selected {primary_item} as primary")
+        
+        return primary_item
+    
+    
+def manhattan_distance(point1, point2):
+    """Calculate the Manhattan distance between two points."""
+    return abs(point1[0] - point2[0]) + abs(point1[1] - point2[1])

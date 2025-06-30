@@ -4,10 +4,10 @@
     "height": 30
   },
   "blocks": {
-    "fixed_block_external_input_iron-plate": {
+    "fixed_block_external_input_copper-plate": {
       "type": "block",
       "position": [
-        0,
+        1,
         29
       ],
       "dimensions": [
@@ -15,10 +15,10 @@
         1
       ]
     },
-    "fixed_block_external_input_copper-plate": {
+    "fixed_block_external_input_iron-plate": {
       "type": "block",
       "position": [
-        3,
+        5,
         29
       ],
       "dimensions": [
@@ -29,7 +29,7 @@
     "fixed_block_external_output_electronic-circuit": {
       "type": "block",
       "position": [
-        6,
+        8,
         29
       ],
       "dimensions": [
@@ -41,7 +41,7 @@
       "type": "electronic-circuit",
       "position": [
         0,
-        15
+        5
       ],
       "dimensions": [
         16,
@@ -52,7 +52,7 @@
       "type": "copper-cable",
       "position": [
         0,
-        4
+        16
       ],
       "dimensions": [
         16,
@@ -66,7 +66,7 @@
         "item": "electronic-circuit",
         "position": [
           2,
-          21
+          11
         ],
         "block_id": "Block_electronic-circuit_0_0",
         "type": "assembling-machine-1",
@@ -79,7 +79,7 @@
         "item": "electronic-circuit",
         "position": [
           2,
-          18
+          8
         ],
         "block_id": "Block_electronic-circuit_0_0",
         "type": "assembling-machine-1",
@@ -92,7 +92,7 @@
         "item": "copper-cable",
         "position": [
           2,
-          4
+          16
         ],
         "block_id": "Block_copper-cable_1_0",
         "type": "assembling-machine-1",
@@ -105,7 +105,7 @@
         "item": "copper-cable",
         "position": [
           2,
-          7
+          19
         ],
         "block_id": "Block_copper-cable_1_0",
         "type": "assembling-machine-1",
@@ -118,7 +118,7 @@
         "item": "copper-cable",
         "position": [
           2,
-          11
+          23
         ],
         "block_id": "Block_copper-cable_1_0",
         "type": "assembling-machine-1",
@@ -133,205 +133,142 @@
         "item": "copper-cable",
         "position": [
           1,
-          23
-        ],
-        "direction": "east",
-        "block_id": "Block_electronic-circuit_0_0"
-      },
-      {
-        "item": "copper-cable",
-        "position": [
-          1,
-          21
-        ],
-        "direction": "east",
-        "block_id": "Block_electronic-circuit_0_0"
-      },
-      {
-        "item": "copper-cable",
-        "position": [
-          1,
-          22
-        ],
-        "direction": "east",
-        "block_id": "Block_electronic-circuit_0_0"
-      },
-      {
-        "item": "iron-plate",
-        "position": [
-          5,
-          23
-        ],
-        "direction": "west",
-        "block_id": "Block_electronic-circuit_0_0"
-      },
-      {
-        "item": "copper-cable",
-        "position": [
-          1,
-          20
-        ],
-        "direction": "east",
-        "block_id": "Block_electronic-circuit_0_0"
-      },
-      {
-        "item": "copper-cable",
-        "position": [
-          1,
-          18
-        ],
-        "direction": "east",
-        "block_id": "Block_electronic-circuit_0_0"
-      },
-      {
-        "item": "copper-cable",
-        "position": [
-          1,
-          19
-        ],
-        "direction": "east",
-        "block_id": "Block_electronic-circuit_0_0"
-      },
-      {
-        "item": "iron-plate",
-        "position": [
-          5,
-          18
-        ],
-        "direction": "west",
-        "block_id": "Block_electronic-circuit_0_0"
-      },
-      {
-        "item": "electronic-circuit",
-        "position": [
-          5,
-          21
-        ],
-        "direction": "east",
-        "block_id": "Block_electronic-circuit_0_0"
-      },
-      {
-        "item": "electronic-circuit",
-        "position": [
-          5,
-          19
-        ],
-        "direction": "east",
-        "block_id": "Block_electronic-circuit_0_0"
-      },
-      {
-        "item": "copper-plate",
-        "position": [
-          1,
-          6
-        ],
-        "direction": "east",
-        "block_id": "Block_copper-cable_1_0"
-      },
-      {
-        "item": "copper-plate",
-        "position": [
-          1,
-          5
-        ],
-        "direction": "east",
-        "block_id": "Block_copper-cable_1_0"
-      },
-      {
-        "item": "copper-plate",
-        "position": [
-          1,
-          7
-        ],
-        "direction": "east",
-        "block_id": "Block_copper-cable_1_0"
-      },
-      {
-        "item": "copper-plate",
-        "position": [
-          1,
-          8
-        ],
-        "direction": "east",
-        "block_id": "Block_copper-cable_1_0"
-      },
-      {
-        "item": "copper-plate",
-        "position": [
-          1,
           13
         ],
         "direction": "east",
-        "block_id": "Block_copper-cable_1_0"
+        "block_id": "Block_electronic-circuit_0_0"
       },
       {
-        "item": "copper-plate",
+        "item": "copper-cable",
         "position": [
           1,
           11
         ],
         "direction": "east",
-        "block_id": "Block_copper-cable_1_0"
+        "block_id": "Block_electronic-circuit_0_0"
       },
       {
         "item": "copper-cable",
         "position": [
-          5,
-          4
+          1,
+          12
         ],
         "direction": "east",
-        "block_id": "Block_copper-cable_1_0"
+        "block_id": "Block_electronic-circuit_0_0"
+      },
+      {
+        "item": "iron-plate",
+        "position": [
+          5,
+          13
+        ],
+        "direction": "west",
+        "block_id": "Block_electronic-circuit_0_0"
       },
       {
         "item": "copper-cable",
         "position": [
-          5,
-          5
+          1,
+          10
         ],
         "direction": "east",
-        "block_id": "Block_copper-cable_1_0"
+        "block_id": "Block_electronic-circuit_0_0"
       },
       {
         "item": "copper-cable",
         "position": [
-          5,
-          6
+          1,
+          8
         ],
         "direction": "east",
-        "block_id": "Block_copper-cable_1_0"
+        "block_id": "Block_electronic-circuit_0_0"
       },
       {
         "item": "copper-cable",
         "position": [
-          5,
-          7
+          1,
+          9
         ],
         "direction": "east",
-        "block_id": "Block_copper-cable_1_0"
+        "block_id": "Block_electronic-circuit_0_0"
       },
       {
-        "item": "copper-cable",
+        "item": "iron-plate",
         "position": [
           5,
           8
         ],
-        "direction": "east",
-        "block_id": "Block_copper-cable_1_0"
+        "direction": "west",
+        "block_id": "Block_electronic-circuit_0_0"
       },
       {
-        "item": "copper-cable",
+        "item": "electronic-circuit",
+        "position": [
+          5,
+          11
+        ],
+        "direction": "east",
+        "block_id": "Block_electronic-circuit_0_0"
+      },
+      {
+        "item": "electronic-circuit",
         "position": [
           5,
           9
         ],
         "direction": "east",
+        "block_id": "Block_electronic-circuit_0_0"
+      },
+      {
+        "item": "copper-plate",
+        "position": [
+          1,
+          18
+        ],
+        "direction": "east",
         "block_id": "Block_copper-cable_1_0"
       },
       {
-        "item": "copper-cable",
+        "item": "copper-plate",
         "position": [
-          5,
-          11
+          1,
+          17
+        ],
+        "direction": "east",
+        "block_id": "Block_copper-cable_1_0"
+      },
+      {
+        "item": "copper-plate",
+        "position": [
+          1,
+          19
+        ],
+        "direction": "east",
+        "block_id": "Block_copper-cable_1_0"
+      },
+      {
+        "item": "copper-plate",
+        "position": [
+          1,
+          20
+        ],
+        "direction": "east",
+        "block_id": "Block_copper-cable_1_0"
+      },
+      {
+        "item": "copper-plate",
+        "position": [
+          1,
+          25
+        ],
+        "direction": "east",
+        "block_id": "Block_copper-cable_1_0"
+      },
+      {
+        "item": "copper-plate",
+        "position": [
+          1,
+          23
         ],
         "direction": "east",
         "block_id": "Block_copper-cable_1_0"
@@ -340,7 +277,7 @@
         "item": "copper-cable",
         "position": [
           5,
-          12
+          16
         ],
         "direction": "east",
         "block_id": "Block_copper-cable_1_0"
@@ -349,7 +286,70 @@
         "item": "copper-cable",
         "position": [
           5,
-          13
+          17
+        ],
+        "direction": "east",
+        "block_id": "Block_copper-cable_1_0"
+      },
+      {
+        "item": "copper-cable",
+        "position": [
+          5,
+          18
+        ],
+        "direction": "east",
+        "block_id": "Block_copper-cable_1_0"
+      },
+      {
+        "item": "copper-cable",
+        "position": [
+          5,
+          19
+        ],
+        "direction": "east",
+        "block_id": "Block_copper-cable_1_0"
+      },
+      {
+        "item": "copper-cable",
+        "position": [
+          5,
+          20
+        ],
+        "direction": "east",
+        "block_id": "Block_copper-cable_1_0"
+      },
+      {
+        "item": "copper-cable",
+        "position": [
+          5,
+          21
+        ],
+        "direction": "east",
+        "block_id": "Block_copper-cable_1_0"
+      },
+      {
+        "item": "copper-cable",
+        "position": [
+          5,
+          23
+        ],
+        "direction": "east",
+        "block_id": "Block_copper-cable_1_0"
+      },
+      {
+        "item": "copper-cable",
+        "position": [
+          5,
+          24
+        ],
+        "direction": "east",
+        "block_id": "Block_copper-cable_1_0"
+      },
+      {
+        "item": "copper-cable",
+        "position": [
+          5,
+          25
         ],
         "direction": "east",
         "block_id": "Block_copper-cable_1_0"
@@ -360,7 +360,7 @@
         "item": "copper-cable",
         "position": [
           0,
-          24
+          14
         ],
         "direction": "north",
         "block_id": "Block_electronic-circuit_0_0"
@@ -369,7 +369,7 @@
         "item": "copper-cable",
         "position": [
           0,
-          23
+          13
         ],
         "direction": "north",
         "block_id": "Block_electronic-circuit_0_0"
@@ -378,7 +378,7 @@
         "item": "copper-cable",
         "position": [
           0,
-          22
+          12
         ],
         "direction": "north",
         "block_id": "Block_electronic-circuit_0_0"
@@ -387,7 +387,7 @@
         "item": "copper-cable",
         "position": [
           0,
-          21
+          11
         ],
         "direction": "north",
         "block_id": "Block_electronic-circuit_0_0"
@@ -396,7 +396,7 @@
         "item": "copper-cable",
         "position": [
           0,
-          20
+          10
         ],
         "direction": "north",
         "block_id": "Block_electronic-circuit_0_0"
@@ -405,7 +405,7 @@
         "item": "copper-cable",
         "position": [
           0,
-          19
+          9
         ],
         "direction": "north",
         "block_id": "Block_electronic-circuit_0_0"
@@ -414,7 +414,7 @@
         "item": "copper-cable",
         "position": [
           0,
-          18
+          8
         ],
         "direction": "north",
         "block_id": "Block_electronic-circuit_0_0"
@@ -423,7 +423,7 @@
         "item": "copper-cable",
         "position": [
           0,
-          17
+          7
         ],
         "direction": "north",
         "block_id": "Block_electronic-circuit_0_0"
@@ -432,7 +432,7 @@
         "item": "copper-cable",
         "position": [
           0,
-          16
+          6
         ],
         "direction": "north",
         "block_id": "Block_electronic-circuit_0_0"
@@ -441,7 +441,7 @@
         "item": "copper-cable",
         "position": [
           0,
-          15
+          5
         ],
         "direction": "north",
         "block_id": "Block_electronic-circuit_0_0"
@@ -450,7 +450,7 @@
         "item": "iron-plate",
         "position": [
           12,
-          24
+          14
         ],
         "direction": "north",
         "block_id": "Block_electronic-circuit_0_0"
@@ -459,7 +459,7 @@
         "item": "iron-plate",
         "position": [
           12,
-          23
+          13
         ],
         "direction": "north",
         "block_id": "Block_electronic-circuit_0_0"
@@ -468,7 +468,7 @@
         "item": "iron-plate",
         "position": [
           12,
-          22
+          12
         ],
         "direction": "north",
         "block_id": "Block_electronic-circuit_0_0"
@@ -477,7 +477,7 @@
         "item": "iron-plate",
         "position": [
           12,
-          21
+          11
         ],
         "direction": "north",
         "block_id": "Block_electronic-circuit_0_0"
@@ -486,7 +486,7 @@
         "item": "iron-plate",
         "position": [
           12,
-          20
+          10
         ],
         "direction": "north",
         "block_id": "Block_electronic-circuit_0_0"
@@ -495,7 +495,7 @@
         "item": "iron-plate",
         "position": [
           12,
-          19
+          9
         ],
         "direction": "north",
         "block_id": "Block_electronic-circuit_0_0"
@@ -504,7 +504,7 @@
         "item": "iron-plate",
         "position": [
           12,
-          18
+          8
         ],
         "direction": "north",
         "block_id": "Block_electronic-circuit_0_0"
@@ -513,7 +513,7 @@
         "item": "iron-plate",
         "position": [
           12,
-          17
+          7
         ],
         "direction": "north",
         "block_id": "Block_electronic-circuit_0_0"
@@ -522,7 +522,7 @@
         "item": "iron-plate",
         "position": [
           12,
-          16
+          6
         ],
         "direction": "north",
         "block_id": "Block_electronic-circuit_0_0"
@@ -531,7 +531,7 @@
         "item": "iron-plate",
         "position": [
           12,
-          15
+          5
         ],
         "direction": "north",
         "block_id": "Block_electronic-circuit_0_0"
@@ -540,7 +540,7 @@
         "item": "electronic-circuit",
         "position": [
           15,
-          15
+          5
         ],
         "direction": "south",
         "block_id": "Block_electronic-circuit_0_0"
@@ -549,7 +549,7 @@
         "item": "electronic-circuit",
         "position": [
           15,
-          16
+          6
         ],
         "direction": "south",
         "block_id": "Block_electronic-circuit_0_0"
@@ -558,7 +558,7 @@
         "item": "electronic-circuit",
         "position": [
           15,
-          17
+          7
         ],
         "direction": "south",
         "block_id": "Block_electronic-circuit_0_0"
@@ -567,7 +567,7 @@
         "item": "electronic-circuit",
         "position": [
           15,
-          18
+          8
         ],
         "direction": "south",
         "block_id": "Block_electronic-circuit_0_0"
@@ -576,7 +576,7 @@
         "item": "electronic-circuit",
         "position": [
           15,
-          19
+          9
         ],
         "direction": "south",
         "block_id": "Block_electronic-circuit_0_0"
@@ -585,7 +585,7 @@
         "item": "electronic-circuit",
         "position": [
           15,
-          20
+          10
         ],
         "direction": "south",
         "block_id": "Block_electronic-circuit_0_0"
@@ -594,7 +594,7 @@
         "item": "electronic-circuit",
         "position": [
           15,
-          21
+          11
         ],
         "direction": "south",
         "block_id": "Block_electronic-circuit_0_0"
@@ -603,7 +603,7 @@
         "item": "electronic-circuit",
         "position": [
           15,
-          22
+          12
         ],
         "direction": "south",
         "block_id": "Block_electronic-circuit_0_0"
@@ -612,7 +612,7 @@
         "item": "electronic-circuit",
         "position": [
           15,
-          23
+          13
         ],
         "direction": "south",
         "block_id": "Block_electronic-circuit_0_0"
@@ -621,7 +621,7 @@
         "item": "electronic-circuit",
         "position": [
           15,
-          24
+          14
         ],
         "direction": "south",
         "block_id": "Block_electronic-circuit_0_0"
@@ -630,7 +630,7 @@
         "item": "electronic-circuit",
         "position": [
           6,
-          21
+          11
         ],
         "direction": "east",
         "block_id": "Block_electronic-circuit_0_0"
@@ -639,7 +639,7 @@
         "item": "electronic-circuit",
         "position": [
           7,
-          21
+          11
         ],
         "direction": "east",
         "block_id": "Block_electronic-circuit_0_0"
@@ -648,7 +648,7 @@
         "item": "electronic-circuit",
         "position": [
           8,
-          21
+          11
         ],
         "direction": "east",
         "block_id": "Block_electronic-circuit_0_0"
@@ -657,7 +657,7 @@
         "item": "electronic-circuit",
         "position": [
           9,
-          21
+          11
         ],
         "direction": "east",
         "block_id": "Block_electronic-circuit_0_0"
@@ -666,7 +666,7 @@
         "item": "electronic-circuit",
         "position": [
           13,
-          21
+          11
         ],
         "direction": "east",
         "block_id": "Block_electronic-circuit_0_0"
@@ -675,7 +675,7 @@
         "item": "electronic-circuit",
         "position": [
           14,
-          21
+          11
         ],
         "direction": "south",
         "block_id": "Block_electronic-circuit_0_0"
@@ -684,7 +684,7 @@
         "item": "electronic-circuit",
         "position": [
           6,
-          19
+          9
         ],
         "direction": "south",
         "block_id": "Block_electronic-circuit_0_0"
@@ -693,7 +693,7 @@
         "item": "electronic-circuit",
         "position": [
           6,
-          20
+          10
         ],
         "direction": "south",
         "block_id": "Block_electronic-circuit_0_0"
@@ -702,7 +702,7 @@
         "item": "iron-plate",
         "position": [
           11,
-          22
+          12
         ],
         "direction": "west",
         "block_id": "Block_electronic-circuit_0_0"
@@ -711,7 +711,7 @@
         "item": "iron-plate",
         "position": [
           10,
-          22
+          12
         ],
         "direction": "west",
         "block_id": "Block_electronic-circuit_0_0"
@@ -720,7 +720,7 @@
         "item": "iron-plate",
         "position": [
           9,
-          22
+          12
         ],
         "direction": "west",
         "block_id": "Block_electronic-circuit_0_0"
@@ -729,7 +729,7 @@
         "item": "iron-plate",
         "position": [
           8,
-          22
+          12
         ],
         "direction": "west",
         "block_id": "Block_electronic-circuit_0_0"
@@ -738,7 +738,7 @@
         "item": "iron-plate",
         "position": [
           7,
-          22
+          12
         ],
         "direction": "west",
         "block_id": "Block_electronic-circuit_0_0"
@@ -747,7 +747,7 @@
         "item": "iron-plate",
         "position": [
           6,
-          22
+          12
         ],
         "direction": "south",
         "block_id": "Block_electronic-circuit_0_0"
@@ -756,151 +756,232 @@
         "item": "iron-plate",
         "position": [
           6,
+          13
+        ],
+        "direction": "south",
+        "block_id": "Block_electronic-circuit_0_0"
+      },
+      {
+        "item": "iron-plate",
+        "position": [
+          11,
+          8
+        ],
+        "direction": "west",
+        "block_id": "Block_electronic-circuit_0_0"
+      },
+      {
+        "item": "iron-plate",
+        "position": [
+          10,
+          8
+        ],
+        "direction": "west",
+        "block_id": "Block_electronic-circuit_0_0"
+      },
+      {
+        "item": "iron-plate",
+        "position": [
+          9,
+          8
+        ],
+        "direction": "west",
+        "block_id": "Block_electronic-circuit_0_0"
+      },
+      {
+        "item": "iron-plate",
+        "position": [
+          8,
+          8
+        ],
+        "direction": "west",
+        "block_id": "Block_electronic-circuit_0_0"
+      },
+      {
+        "item": "iron-plate",
+        "position": [
+          7,
+          8
+        ],
+        "direction": "west",
+        "block_id": "Block_electronic-circuit_0_0"
+      },
+      {
+        "item": "iron-plate",
+        "position": [
+          6,
+          8
+        ],
+        "direction": "west",
+        "block_id": "Block_electronic-circuit_0_0"
+      },
+      {
+        "item": "copper-plate",
+        "position": [
+          0,
+          25
+        ],
+        "direction": "north",
+        "block_id": "Block_copper-cable_1_0"
+      },
+      {
+        "item": "copper-plate",
+        "position": [
+          0,
+          24
+        ],
+        "direction": "north",
+        "block_id": "Block_copper-cable_1_0"
+      },
+      {
+        "item": "copper-plate",
+        "position": [
+          0,
           23
         ],
-        "direction": "south",
-        "block_id": "Block_electronic-circuit_0_0"
+        "direction": "north",
+        "block_id": "Block_copper-cable_1_0"
       },
       {
-        "item": "iron-plate",
+        "item": "copper-plate",
         "position": [
-          11,
+          0,
+          22
+        ],
+        "direction": "north",
+        "block_id": "Block_copper-cable_1_0"
+      },
+      {
+        "item": "copper-plate",
+        "position": [
+          0,
+          21
+        ],
+        "direction": "north",
+        "block_id": "Block_copper-cable_1_0"
+      },
+      {
+        "item": "copper-plate",
+        "position": [
+          0,
+          20
+        ],
+        "direction": "north",
+        "block_id": "Block_copper-cable_1_0"
+      },
+      {
+        "item": "copper-plate",
+        "position": [
+          0,
+          19
+        ],
+        "direction": "north",
+        "block_id": "Block_copper-cable_1_0"
+      },
+      {
+        "item": "copper-plate",
+        "position": [
+          0,
           18
         ],
-        "direction": "west",
-        "block_id": "Block_electronic-circuit_0_0"
+        "direction": "north",
+        "block_id": "Block_copper-cable_1_0"
       },
       {
-        "item": "iron-plate",
+        "item": "copper-plate",
         "position": [
-          10,
+          0,
+          17
+        ],
+        "direction": "north",
+        "block_id": "Block_copper-cable_1_0"
+      },
+      {
+        "item": "copper-plate",
+        "position": [
+          0,
+          16
+        ],
+        "direction": "north",
+        "block_id": "Block_copper-cable_1_0"
+      },
+      {
+        "item": "copper-cable",
+        "position": [
+          15,
+          25
+        ],
+        "direction": "north",
+        "block_id": "Block_copper-cable_1_0"
+      },
+      {
+        "item": "copper-cable",
+        "position": [
+          15,
+          24
+        ],
+        "direction": "north",
+        "block_id": "Block_copper-cable_1_0"
+      },
+      {
+        "item": "copper-cable",
+        "position": [
+          15,
+          23
+        ],
+        "direction": "north",
+        "block_id": "Block_copper-cable_1_0"
+      },
+      {
+        "item": "copper-cable",
+        "position": [
+          15,
+          22
+        ],
+        "direction": "north",
+        "block_id": "Block_copper-cable_1_0"
+      },
+      {
+        "item": "copper-cable",
+        "position": [
+          15,
+          21
+        ],
+        "direction": "north",
+        "block_id": "Block_copper-cable_1_0"
+      },
+      {
+        "item": "copper-cable",
+        "position": [
+          15,
+          20
+        ],
+        "direction": "north",
+        "block_id": "Block_copper-cable_1_0"
+      },
+      {
+        "item": "copper-cable",
+        "position": [
+          15,
+          19
+        ],
+        "direction": "north",
+        "block_id": "Block_copper-cable_1_0"
+      },
+      {
+        "item": "copper-cable",
+        "position": [
+          15,
           18
         ],
-        "direction": "west",
-        "block_id": "Block_electronic-circuit_0_0"
-      },
-      {
-        "item": "iron-plate",
-        "position": [
-          9,
-          18
-        ],
-        "direction": "west",
-        "block_id": "Block_electronic-circuit_0_0"
-      },
-      {
-        "item": "iron-plate",
-        "position": [
-          8,
-          18
-        ],
-        "direction": "west",
-        "block_id": "Block_electronic-circuit_0_0"
-      },
-      {
-        "item": "iron-plate",
-        "position": [
-          7,
-          18
-        ],
-        "direction": "west",
-        "block_id": "Block_electronic-circuit_0_0"
-      },
-      {
-        "item": "iron-plate",
-        "position": [
-          6,
-          18
-        ],
-        "direction": "west",
-        "block_id": "Block_electronic-circuit_0_0"
-      },
-      {
-        "item": "copper-plate",
-        "position": [
-          0,
-          13
-        ],
         "direction": "north",
         "block_id": "Block_copper-cable_1_0"
       },
       {
-        "item": "copper-plate",
+        "item": "copper-cable",
         "position": [
-          0,
-          12
-        ],
-        "direction": "north",
-        "block_id": "Block_copper-cable_1_0"
-      },
-      {
-        "item": "copper-plate",
-        "position": [
-          0,
-          11
-        ],
-        "direction": "north",
-        "block_id": "Block_copper-cable_1_0"
-      },
-      {
-        "item": "copper-plate",
-        "position": [
-          0,
-          10
-        ],
-        "direction": "north",
-        "block_id": "Block_copper-cable_1_0"
-      },
-      {
-        "item": "copper-plate",
-        "position": [
-          0,
-          9
-        ],
-        "direction": "north",
-        "block_id": "Block_copper-cable_1_0"
-      },
-      {
-        "item": "copper-plate",
-        "position": [
-          0,
-          8
-        ],
-        "direction": "north",
-        "block_id": "Block_copper-cable_1_0"
-      },
-      {
-        "item": "copper-plate",
-        "position": [
-          0,
-          7
-        ],
-        "direction": "north",
-        "block_id": "Block_copper-cable_1_0"
-      },
-      {
-        "item": "copper-plate",
-        "position": [
-          0,
-          6
-        ],
-        "direction": "north",
-        "block_id": "Block_copper-cable_1_0"
-      },
-      {
-        "item": "copper-plate",
-        "position": [
-          0,
-          5
-        ],
-        "direction": "north",
-        "block_id": "Block_copper-cable_1_0"
-      },
-      {
-        "item": "copper-plate",
-        "position": [
-          0,
-          4
+          15,
+          17
         ],
         "direction": "north",
         "block_id": "Block_copper-cable_1_0"
@@ -909,88 +990,7 @@
         "item": "copper-cable",
         "position": [
           15,
-          13
-        ],
-        "direction": "north",
-        "block_id": "Block_copper-cable_1_0"
-      },
-      {
-        "item": "copper-cable",
-        "position": [
-          15,
-          12
-        ],
-        "direction": "north",
-        "block_id": "Block_copper-cable_1_0"
-      },
-      {
-        "item": "copper-cable",
-        "position": [
-          15,
-          11
-        ],
-        "direction": "north",
-        "block_id": "Block_copper-cable_1_0"
-      },
-      {
-        "item": "copper-cable",
-        "position": [
-          15,
-          10
-        ],
-        "direction": "north",
-        "block_id": "Block_copper-cable_1_0"
-      },
-      {
-        "item": "copper-cable",
-        "position": [
-          15,
-          9
-        ],
-        "direction": "north",
-        "block_id": "Block_copper-cable_1_0"
-      },
-      {
-        "item": "copper-cable",
-        "position": [
-          15,
-          8
-        ],
-        "direction": "north",
-        "block_id": "Block_copper-cable_1_0"
-      },
-      {
-        "item": "copper-cable",
-        "position": [
-          15,
-          7
-        ],
-        "direction": "north",
-        "block_id": "Block_copper-cable_1_0"
-      },
-      {
-        "item": "copper-cable",
-        "position": [
-          15,
-          6
-        ],
-        "direction": "north",
-        "block_id": "Block_copper-cable_1_0"
-      },
-      {
-        "item": "copper-cable",
-        "position": [
-          15,
-          5
-        ],
-        "direction": "north",
-        "block_id": "Block_copper-cable_1_0"
-      },
-      {
-        "item": "copper-cable",
-        "position": [
-          15,
-          4
+          16
         ],
         "direction": "north",
         "block_id": "Block_copper-cable_1_0"
@@ -999,7 +999,7 @@
         "item": "copper-cable",
         "position": [
           6,
-          4
+          16
         ],
         "direction": "south",
         "block_id": "Block_copper-cable_1_0"
@@ -1008,7 +1008,7 @@
         "item": "copper-cable",
         "position": [
           6,
-          5
+          17
         ],
         "direction": "south",
         "block_id": "Block_copper-cable_1_0"
@@ -1017,7 +1017,7 @@
         "item": "copper-cable",
         "position": [
           6,
-          6
+          18
         ],
         "direction": "east",
         "block_id": "Block_copper-cable_1_0"
@@ -1026,7 +1026,7 @@
         "item": "copper-cable",
         "position": [
           7,
-          6
+          18
         ],
         "direction": "east",
         "block_id": "Block_copper-cable_1_0"
@@ -1035,7 +1035,7 @@
         "item": "copper-cable",
         "position": [
           8,
-          6
+          18
         ],
         "direction": "east",
         "block_id": "Block_copper-cable_1_0"
@@ -1044,7 +1044,7 @@
         "item": "copper-cable",
         "position": [
           9,
-          6
+          18
         ],
         "direction": "east",
         "block_id": "Block_copper-cable_1_0"
@@ -1053,7 +1053,7 @@
         "item": "copper-cable",
         "position": [
           10,
-          6
+          18
         ],
         "direction": "east",
         "block_id": "Block_copper-cable_1_0"
@@ -1062,7 +1062,7 @@
         "item": "copper-cable",
         "position": [
           11,
-          6
+          18
         ],
         "direction": "east",
         "block_id": "Block_copper-cable_1_0"
@@ -1071,7 +1071,7 @@
         "item": "copper-cable",
         "position": [
           12,
-          6
+          18
         ],
         "direction": "east",
         "block_id": "Block_copper-cable_1_0"
@@ -1080,7 +1080,7 @@
         "item": "copper-cable",
         "position": [
           13,
-          6
+          18
         ],
         "direction": "east",
         "block_id": "Block_copper-cable_1_0"
@@ -1089,7 +1089,7 @@
         "item": "copper-cable",
         "position": [
           14,
-          6
+          18
         ],
         "direction": "north",
         "block_id": "Block_copper-cable_1_0"
@@ -1098,7 +1098,7 @@
         "item": "copper-cable",
         "position": [
           6,
-          7
+          19
         ],
         "direction": "north",
         "block_id": "Block_copper-cable_1_0"
@@ -1107,7 +1107,7 @@
         "item": "copper-cable",
         "position": [
           6,
-          8
+          20
         ],
         "direction": "north",
         "block_id": "Block_copper-cable_1_0"
@@ -1116,7 +1116,7 @@
         "item": "copper-cable",
         "position": [
           6,
-          9
+          21
         ],
         "direction": "north",
         "block_id": "Block_copper-cable_1_0"
@@ -1125,7 +1125,7 @@
         "item": "copper-cable",
         "position": [
           6,
-          11
+          23
         ],
         "direction": "north",
         "block_id": "Block_copper-cable_1_0"
@@ -1134,7 +1134,7 @@
         "item": "copper-cable",
         "position": [
           6,
-          10
+          22
         ],
         "direction": "north",
         "block_id": "Block_copper-cable_1_0"
@@ -1143,7 +1143,7 @@
         "item": "copper-cable",
         "position": [
           6,
-          12
+          24
         ],
         "direction": "north",
         "block_id": "Block_copper-cable_1_0"
@@ -1152,7 +1152,7 @@
         "item": "copper-cable",
         "position": [
           6,
-          13
+          25
         ],
         "direction": "north",
         "block_id": "Block_copper-cable_1_0"
@@ -1163,7 +1163,7 @@
         "item": "electronic-circuit",
         "position": [
           9,
-          21
+          11
         ],
         "type": "entrance",
         "direction": "east",
@@ -1173,7 +1173,7 @@
         "item": "electronic-circuit",
         "position": [
           13,
-          21
+          11
         ],
         "type": "exit",
         "direction": "east",
@@ -1185,7 +1185,7 @@
         "item": "electronic-circuit",
         "position": [
           15,
-          22
+          12
         ],
         "direction": "south",
         "block_id": "Block_electronic-circuit_0_0"
@@ -1194,7 +1194,7 @@
         "item": "iron-plate",
         "position": [
           12,
-          23
+          13
         ],
         "direction": "north",
         "block_id": "Block_electronic-circuit_0_0"
@@ -1203,7 +1203,7 @@
         "item": "iron-plate",
         "position": [
           12,
-          19
+          9
         ],
         "direction": "north",
         "block_id": "Block_electronic-circuit_0_0"
@@ -1212,7 +1212,7 @@
         "item": "copper-cable",
         "position": [
           15,
-          5
+          17
         ],
         "direction": "north",
         "block_id": "Block_copper-cable_1_0"
@@ -1223,7 +1223,7 @@
         "item": "medium-electric-pole",
         "position": [
           2,
-          17
+          7
         ],
         "block_id": "Block_electronic-circuit_0_0"
       },
@@ -1231,7 +1231,7 @@
         "item": "medium-electric-pole",
         "position": [
           2,
-          24
+          14
         ],
         "block_id": "Block_electronic-circuit_0_0"
       },
@@ -1239,7 +1239,7 @@
         "item": "medium-electric-pole",
         "position": [
           1,
-          4
+          16
         ],
         "block_id": "Block_copper-cable_1_0"
       },
@@ -1247,7 +1247,7 @@
         "item": "medium-electric-pole",
         "position": [
           1,
-          10
+          22
         ],
         "block_id": "Block_copper-cable_1_0"
       }
@@ -1258,7 +1258,7 @@
       {
         "item": "electronic-circuit",
         "position": [
-          6,
+          8,
           29
         ],
         "block_id": "external_output_electronic-circuit",
@@ -1268,7 +1268,7 @@
         "item": "copper-cable",
         "position": [
           9,
-          15
+          5
         ],
         "block_id": "Block_electronic-circuit_0_0",
         "external": false
@@ -1277,7 +1277,7 @@
         "item": "iron-plate",
         "position": [
           9,
-          27
+          17
         ],
         "block_id": "Block_electronic-circuit_0_0",
         "external": false
@@ -1286,7 +1286,7 @@
         "item": "electronic-circuit",
         "position": [
           0,
-          30
+          20
         ],
         "block_id": "Block_electronic-circuit_0_0",
         "external": false
@@ -1295,7 +1295,7 @@
         "item": "copper-plate",
         "position": [
           9,
-          4
+          16
         ],
         "block_id": "Block_copper-cable_1_0",
         "external": false
@@ -1304,7 +1304,7 @@
         "item": "copper-cable",
         "position": [
           9,
-          19
+          31
         ],
         "block_id": "Block_copper-cable_1_0",
         "external": false
@@ -1312,28 +1312,28 @@
     ],
     "outputs": [
       {
-        "item": "iron-plate",
-        "position": [
-          0,
-          29
-        ],
-        "block_id": "external_input_iron-plate",
-        "external": true
-      },
-      {
         "item": "copper-plate",
         "position": [
-          3,
+          1,
           29
         ],
         "block_id": "external_input_copper-plate",
         "external": true
       },
       {
+        "item": "iron-plate",
+        "position": [
+          5,
+          29
+        ],
+        "block_id": "external_input_iron-plate",
+        "external": true
+      },
+      {
         "item": "copper-cable",
         "position": [
           0,
-          15
+          5
         ],
         "block_id": "Block_electronic-circuit_0_0",
         "external": false
@@ -1342,7 +1342,7 @@
         "item": "iron-plate",
         "position": [
           0,
-          27
+          17
         ],
         "block_id": "Block_electronic-circuit_0_0",
         "external": false
@@ -1351,7 +1351,7 @@
         "item": "electronic-circuit",
         "position": [
           9,
-          30
+          20
         ],
         "block_id": "Block_electronic-circuit_0_0",
         "external": false
@@ -1360,7 +1360,7 @@
         "item": "copper-plate",
         "position": [
           0,
-          4
+          16
         ],
         "block_id": "Block_copper-cable_1_0",
         "external": false
@@ -1369,7 +1369,7 @@
         "item": "copper-cable",
         "position": [
           0,
-          19
+          31
         ],
         "block_id": "Block_copper-cable_1_0",
         "external": false
@@ -1378,257 +1378,206 @@
   },
   "inter_block_paths": [
     {
-      "item": "iron-plate",
-      "connection_id": "iron-plate_0",
+      "item": "electronic-circuit",
+      "connection_id": "electronic-circuit_4",
       "path": [
         [
-          0,
-          29
+          9,
+          20
         ],
         [
-          0,
-          28
+          8,
+          20
         ],
         [
-          0,
-          27
+          8,
+          21
         ],
         [
-          1,
-          27
+          8,
+          22
         ],
         [
-          2,
-          27
+          8,
+          23
         ],
         [
-          3,
-          27
+          8,
+          24
         ],
         [
-          4,
-          27
+          8,
+          25
         ],
         [
-          5,
-          27
-        ],
-        [
-          6,
-          27
-        ],
-        [
-          7,
-          27
+          8,
+          26
         ],
         [
           8,
           27
         ],
         [
-          9,
-          27
+          8,
+          28
+        ],
+        [
+          8,
+          29
         ]
       ],
       "underground_segments": {}
     },
     {
       "item": "copper-plate",
-      "connection_id": "copper-plate_1",
+      "connection_id": "copper-plate_0",
       "path": [
         [
-          3,
+          1,
           29
         ],
         [
-          3,
+          1,
           28
         ],
         [
-          4,
-          28
-        ],
-        [
-          5,
-          28
-        ],
-        [
-          6,
-          28
-        ],
-        [
-          7,
-          28
-        ],
-        [
-          8,
-          28
-        ],
-        [
-          9,
-          28
-        ],
-        [
-          10,
-          28
-        ],
-        [
-          10,
+          1,
           27
         ],
         [
-          10,
+          1,
           26
         ],
         [
-          10,
-          21
+          2,
+          26
         ],
         [
-          10,
+          3,
+          26
+        ],
+        [
+          4,
+          26
+        ],
+        [
+          5,
+          26
+        ],
+        [
+          6,
+          26
+        ],
+        [
+          7,
+          26
+        ],
+        [
+          7,
+          25
+        ],
+        [
+          7,
+          24
+        ],
+        [
+          7,
+          23
+        ],
+        [
+          7,
+          22
+        ],
+        [
+          7,
           17
         ],
         [
-          10,
+          7,
           16
         ],
         [
-          10,
-          15
+          8,
+          16
         ],
         [
           9,
-          15
-        ],
-        [
-          9,
-          14
-        ],
-        [
-          9,
-          13
-        ],
-        [
-          9,
-          12
-        ],
-        [
-          9,
-          11
-        ],
-        [
-          9,
-          10
-        ],
-        [
-          9,
-          5
-        ],
-        [
-          9,
-          4
+          16
         ]
       ],
       "underground_segments": {
         "segment_0": {
           "start": [
-            10,
-            26
+            7,
+            22
           ],
           "end": [
-            10,
-            21
-          ]
-        },
-        "segment_1": {
-          "start": [
-            9,
-            10
-          ],
-          "end": [
-            9,
-            5
+            7,
+            17
           ]
         }
       }
     },
     {
-      "item": "copper-cable",
-      "connection_id": "copper-cable_2",
+      "item": "iron-plate",
+      "connection_id": "iron-plate_1",
       "path": [
         [
-          0,
-          15
-        ],
-        [
-          1,
-          15
-        ],
-        [
-          2,
-          15
-        ],
-        [
-          3,
-          15
-        ],
-        [
-          4,
-          15
+          5,
+          29
         ],
         [
           5,
-          15
+          28
         ],
         [
-          6,
-          15
-        ],
-        [
-          7,
-          15
-        ],
-        [
-          8,
-          15
-        ],
-        [
-          8,
-          19
+          5,
+          27
         ],
         [
           9,
-          19
-        ]
-      ],
-      "underground_segments": {}
-    },
-    {
-      "item": "copper-cable",
-      "connection_id": "copper-cable_3",
-      "path": [
+          27
+        ],
         [
           9,
-          19
+          26
+        ],
+        [
+          9,
+          25
+        ],
+        [
+          9,
+          24
+        ],
+        [
+          9,
+          23
+        ],
+        [
+          9,
+          22
         ],
         [
           9,
           17
-        ],
-        [
-          9,
-          16
-        ],
-        [
-          9,
-          15
         ]
       ],
       "underground_segments": {
         "segment_0": {
           "start": [
+            5,
+            27
+          ],
+          "end": [
             9,
-            19
+            27
+          ]
+        },
+        "segment_1": {
+          "start": [
+            9,
+            22
           ],
           "end": [
             9,
