@@ -1531,7 +1531,7 @@ class FactoryBuilder:
                 item=output_gate["item"],
                 position=output_gate["position"],
                 gate_type="output",
-                edge=input_gate["edge"]
+                edge=output_gate["edge"]
             )
             
             logger.info(f"Added fixed output gate {output_gate['id']} at position {output_gate['position']}")
@@ -1597,20 +1597,44 @@ class FactoryBuilder:
                     output_block = output["block_id"]
                     output_pos = output["position"]
                     
+                    # Check if this is an external input (should go to internal points)
+                    is_external_input = output.get("external", False)
+                    
                     for input_point in available_inputs:
                         input_block = input_point["block_id"]
                         input_pos = input_point["position"]
+                        is_external_output = input_point.get("external", False)
                         
                         # Skip if points are in the same block
                         if output_block == input_block:
                             continue
                         
-                        # Calculate Manhattan distance
-                        distance = abs(output_pos[0] - input_pos[0]) + abs(output_pos[1] - input_pos[1])
+                        # Skip connections between two external points
+                        if is_external_input and is_external_output:
+                            continue
                         
-                        if distance < closest_distance:
-                            closest_distance = distance
-                            closest_pair = (output, input_point)
+                        # Ensure positions are lists
+                        if isinstance(output_pos, tuple):
+                            output_pos = list(output_pos)
+                        if isinstance(input_pos, tuple):
+                            input_pos = list(input_pos)
+                        
+                        # Make sure we're dealing with numeric positions
+                        if not (isinstance(output_pos, list) and len(output_pos) >= 2 and 
+                                isinstance(input_pos, list) and len(input_pos) >= 2):
+                            logger.warning(f"Invalid position format: output={output_pos}, input={input_pos}")
+                            continue
+                            
+                        try:
+                            # Calculate Manhattan distance
+                            distance = abs(output_pos[0] - input_pos[0]) + abs(output_pos[1] - input_pos[1])
+                            
+                            if distance < closest_distance:
+                                closest_distance = distance
+                                closest_pair = (output, input_point)
+                        except Exception as e:
+                            logger.error(f"Error calculating distance: {e} for output_pos={output_pos}, input_pos={input_pos}")
+                            continue
                 
                 # If a valid pair was found, add it to connections and remove from available points
                 if closest_pair:
@@ -1619,11 +1643,13 @@ class FactoryBuilder:
                         "item": item,
                         "source": {
                             "position": source["position"],
-                            "block_id": source["block_id"]
+                            "block_id": source["block_id"],
+                            "external": source.get("external", False)
                         },
                         "target": {
                             "position": target["position"],
-                            "block_id": target["block_id"]
+                            "block_id": target["block_id"],
+                            "external": target.get("external", False)
                         },
                         "distance": closest_distance
                     })
@@ -1707,13 +1733,42 @@ class FactoryBuilder:
         
         
             # Prepare connection points for the pathfinder
-            # TODO
             connection_points = {}
         
-              
-       
-
-
+            # Create connections from the point connection data
+            point_connections = self.create_point_connections(factory_data)
+            
+            # Process each connection to add to connection_points
+            for idx, connection in enumerate(point_connections):
+                item = connection["item"]
+                source = connection["source"]
+                target = connection["target"]
+                
+                # Get source and target positions and ensure they are lists
+                source_pos = source["position"]
+                target_pos = target["position"]
+                
+                # Convert positions to tuples if they are lists (pathfinder needs tuples as hashable keys)
+                if isinstance(source_pos, list):
+                    source_pos = tuple(source_pos)
+                if isinstance(target_pos, list):
+                    target_pos = tuple(target_pos)
+                
+                # Create a unique key for this connection
+                conn_key = f"{item}_{idx}"
+                
+                # Add to connection_points in the format expected by MultiAgentPathfinder
+                connection_points[conn_key] = {
+                    "item": item,
+                    "start_points": [source_pos],  # MultiAgentPathfinder expects this key
+                    "destination": [target_pos],   # MultiAgentPathfinder expects this key
+                    "source_external": source.get("external", False),
+                    "target_external": target.get("external", False),
+                    "is_fluid": False  # Default to false, can be updated based on item type
+                }
+                
+                logger.info(f"Added connection point for {item}: {source_pos} -> {target_pos}")
+        
         if not connection_points:
             logger.warning("No valid connections to route! Please check your gate connections.")
             return {}, {}
@@ -1794,14 +1849,25 @@ class FactoryBuilder:
         
         # Check path positions
         if hasattr(self, 'inter_block_paths') and self.inter_block_paths:
-            for item_key, path_data_list in self.inter_block_paths.items():
-                for path_data in path_data_list:
+            # Handle both list and dict formats
+            if isinstance(self.inter_block_paths, list):
+                for path_data in self.inter_block_paths:
                     if 'path' in path_data:
                         for x, y in path_data['path']:
                             min_x = min(min_x, x)
                             max_x = max(max_x, x + 1)
                             min_y = min(min_y, y)
                             max_y = max(max_y, y + 1)
+            else:
+                # Original dict format
+                for item_key, path_data_list in self.inter_block_paths.items():
+                    for path_data in path_data_list:
+                        if 'path' in path_data:
+                            for x, y in path_data['path']:
+                                min_x = min(min_x, x)
+                                max_x = max(max_x, x + 1)
+                                min_y = min(min_y, y)
+                                max_y = max(max_y, y + 1)
                     
                     if 'underground_segments' in path_data:
                         for segment_id, segment in path_data['underground_segments'].items():
@@ -1820,6 +1886,56 @@ class FactoryBuilder:
         
         return min_x, max_x, min_y, max_y    
     
+    def _get_absolute_position(self, gate):
+        """
+        Calculate absolute position for an external gate based on edge placement.
+        
+        Args:
+            gate: Gate object with edge and position information
+            
+        Returns:
+            list: Absolute [x, y] position
+        """
+        # For external gates, we need to calculate position based on edge
+        if "edge" in gate:
+            edge = gate["edge"]
+            position = gate["position"]
+            
+            # Ensure position is a number
+            if isinstance(position, (list, tuple)):
+                position = position[0]  # Use first element if it's a list/tuple
+            
+            # Get factory dimensions
+            grid_width = self.final_x
+            grid_height = self.final_y
+            
+            # Calculate position based on edge
+            if edge == "North":
+                return [int(position), 0]  # Top edge
+            elif edge == "South":
+                return [int(position), grid_height - 1]  # Bottom edge
+            elif edge == "East":
+                return [grid_width - 1, int(position)]  # Right edge
+            elif edge == "West":
+                return [0, int(position)]  # Left edge
+            else:
+                logger.error(f"Unknown edge type: {edge}")
+                return [0, 0]
+        
+        # For normal gates, return position directly - this shouldn't be called
+        elif "position" in gate:
+            pos = gate["position"]
+            # Convert to list if it's a tuple
+            if isinstance(pos, tuple):
+                return list(pos)
+            elif isinstance(pos, list):
+                return pos
+            else:
+                logger.error(f"Unexpected position format: {pos}")
+                return [0, 0]
+        else:
+            logger.error(f"Malformed gate object: {gate}")
+            return [0, 0]
     
 def manhattan_distance(p1, p2):
     """Calculate the Manhattan distance between two points."""
@@ -2219,18 +2335,30 @@ def create_blueprint_from_json(json_path, output_path=None):
         return False  
     
 
-def _add_path_belts_to_blueprint(blueprint, occupied_positions,paths):
+def _add_path_belts_to_blueprint(blueprint, occupied_positions, paths):
         """Add pathfinder-generated belts to the blueprint, avoiding overlaps"""
 
-        path_count = sum(len(item_paths) for item_paths in paths.values())
-        logger.info(f"  - Processing {path_count} pathfinder-generated belt paths for {len(paths)} items")
-
-        for item_key, item_paths in paths.items():
-            # Extract base item name
-            item_name = item_key.split('_')[0] if '_' in item_key else item_key
-            logger.info(f"  - Processing {len(item_paths)} paths for {item_name}")
+        # Handle both list and dict formats for paths
+        if isinstance(paths, list):
+            path_count = len(paths)
+            logger.info(f"  - Processing {path_count} pathfinder-generated belt paths")
             
-            for path_data in item_paths:
+            for path_data in paths:
+                item_name = path_data.get("item", "unknown")
+                logger.info(f"  - Processing path for {item_name}")
+                _add_belt_path_to_blueprint(blueprint, path_data, item_name, occupied_positions)
+        else:
+            # Original dict format
+            path_count = sum(len(item_paths) for item_paths in paths.values())
+            logger.info(f"  - Processing {path_count} pathfinder-generated belt paths for {len(paths)} items")
+
+            for item_key, item_paths in paths.items():
+                # Extract base item name
+                item_name = item_key.split('_')[0] if '_' in item_key else item_key
+                logger.info(f"  - Processing {len(item_paths)} paths for {item_name}")
+                
+                for path_data in item_paths:
+                    _add_belt_path_to_blueprint(blueprint, path_data, item_name, occupied_positions)
                 _add_belt_path_to_blueprint(blueprint, path_data, item_name, occupied_positions)
 
 
@@ -2550,12 +2678,21 @@ def visualize_factory(json_path, cell_size=20, save_path=None):
         
         # Mark paths in inter-block paths
         if "inter_block_paths" in data:
-            for item_key, path_data_list in data["inter_block_paths"].items():
-                for path_data in path_data_list:
+            # Handle both list and dict formats
+            if isinstance(data["inter_block_paths"], list):
+                for path_data in data["inter_block_paths"]:
                     if 'path' in path_data:
                         for position in path_data['path']:
                             if isinstance(position, list) and len(position) >= 2:
                                 mark_occupied(position[0], position[1])
+            else:
+                # Original dict format
+                for item_key, path_data_list in data["inter_block_paths"].items():
+                    for path_data in path_data_list:
+                        if 'path' in path_data:
+                            for position in path_data['path']:
+                                if isinstance(position, list) and len(position) >= 2:
+                                    mark_occupied(position[0], position[1])
         
         # Create mapping from original to compressed coordinates
         x_map = []
