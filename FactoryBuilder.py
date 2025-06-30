@@ -667,27 +667,27 @@ class FactoryBuilder:
                             input_pos = data.get("input")
                             output_pos = data.get("output")
                         
-                            # Add input point to factory data
-                            input_abs_x = block_x + input_pos[0]
-                            input_abs_y = block_y + input_pos[1]
-                            factory_data["io_points"]["inputs"].append({
-                                    "item": item,
-                                    "position": [input_abs_x, input_abs_y],
-                                    "block_id": block_id,
-                                    "external": False
-                                })
-                            logger.info(f"Added input point for {item} at {[input_abs_x, input_abs_y]} for block {block_id}")
+                            # For input_information: 
+                            # - "input" position is where this module receives the item (external connection point)
+                            # - "output" position is internal flow, not used for inter-module connections
                             
-                            # Add output point to factory data
-                            output_abs_x = block_x + output_pos[0]
-                            output_abs_y = block_y + output_pos[1]
-                            factory_data["io_points"]["outputs"].append({
-                                "item": item,
-                                "position": [output_abs_x, output_abs_y],
-                                "block_id": block_id,
-                                "external": False
-                            })
-                            logger.info(f"Added output point for {item} at {[output_abs_x, output_abs_y]} for block {block_id}")
+                            # Validate coordinates before adding
+                            input_abs_x = block_x + input_pos[1]
+                            input_abs_y = block_y + input_pos[0]
+                            
+                            # Check bounds
+                            if (0 <= input_abs_x < self.final_x and 0 <= input_abs_y < self.final_y):
+                                
+                                # Only add input connection point (where the module receives the item from external)
+                                factory_data["io_points"]["inputs"].append({
+                                        "item": item,
+                                        "position": [input_abs_x, input_abs_y],
+                                        "block_id": block_id,
+                                        "external": False
+                                    })
+                                logger.info(f"Added input connection point for {item} at {[input_abs_x, input_abs_y]} for block {block_id}")
+                            else:
+                                logger.warning(f"Skipping out-of-bounds input point for {item} in block {block_id}: input={[input_abs_x, input_abs_y]}, bounds=[{self.final_x}, {self.final_y}]")
 
                 if "output_information" in module_data:
                     for item, data in module_data["output_information"].items():
@@ -761,27 +761,27 @@ class FactoryBuilder:
                             input_pos = data.get("input")
                             output_pos = data.get("output")
                             
-                            # Add input point to factory data
-                            input_abs_x = block_x + input_pos[0]
-                            input_abs_y = block_y + input_pos[1]
-                            factory_data["io_points"]["inputs"].append({
+                            # For output_information:
+                            # - "input" position is internal flow, not used for inter-module connections
+                            # - "output" position is where the item exits the module (external connection point)
+                            
+                            # Validate coordinates before adding
+                            output_abs_x = block_x + output_pos[1]
+                            output_abs_y = block_y + output_pos[0]
+                            
+                            # Check bounds
+                            if (0 <= output_abs_x < self.final_x and 0 <= output_abs_y < self.final_y):
+                                
+                                # Only add output connection point (where the item exits the module)
+                                factory_data["io_points"]["outputs"].append({
                                     "item": item,
-                                    "position": [input_abs_x, input_abs_y],
+                                    "position": [output_abs_x, output_abs_y],
                                     "block_id": block_id,
                                     "external": False
                                 })
-                            logger.info(f"Added input point for {item} at {[input_abs_x, input_abs_y]} for block {block_id}")
-                            
-                            # Add output point to factory data
-                            output_abs_x = block_x + output_pos[0]
-                            output_abs_y = block_y + output_pos[1]
-                            factory_data["io_points"]["outputs"].append({
-                                "item": item,
-                                "position": [output_abs_x, output_abs_y],
-                                "block_id": block_id,
-                                "external": False
-                            })
-                            logger.info(f"Added output point for {item} at {[output_abs_x, output_abs_y]} for block {block_id}")
+                                logger.info(f"Added output connection point for {item} at {[output_abs_x, output_abs_y]} for block {block_id}")
+                            else:
+                                logger.warning(f"Skipping out-of-bounds output point for {item} in block {block_id}: output={[output_abs_x, output_abs_y]}, bounds=[{self.final_x}, {self.final_y}]")
                 
                 # Process paths which include underground belts and splitters
                 if "paths" in module_data:
@@ -1539,9 +1539,10 @@ class FactoryBuilder:
         Prioritize the closest connections until all valid pairs are created.
         
         Rules:
-        1. Connect output points to input points with the same item
+        1. Connect OUTPUT points (sources) to INPUT points (destinations) with the same item
         2. Once points are in a pair, they cannot be connected again
         3. Points from the same block cannot be connected
+        4. No output-to-output or input-to-input connections allowed
         
         Args:
             factory_data (dict): Factory data with io_points
@@ -1555,68 +1556,91 @@ class FactoryBuilder:
         input_points = factory_data["io_points"]["inputs"]
         output_points = factory_data["io_points"]["outputs"]
         
+        # Filter out points at the top row (y=0) and other boundary conditions
+        def is_valid_connection_point(point):
+            pos = point.get("position", [])
+            if not isinstance(pos, list) or len(pos) < 2:
+                return False
+            
+            # Skip points at the top row (y=0)
+            if pos[1] == 0:
+                logger.debug(f"Skipping point at top row: {point['item']} at {pos}")
+                return False
+            
+            return True
+        
+        # Filter the points
+        filtered_input_points = [p for p in input_points if is_valid_connection_point(p)]
+        filtered_output_points = [p for p in output_points if is_valid_connection_point(p)]
+        
+        logger.info(f"Filtered points: {len(input_points)} -> {len(filtered_input_points)} inputs, {len(output_points)} -> {len(filtered_output_points)} outputs")
+        
         # Group points by item type
         inputs_by_item = {}
         outputs_by_item = {}
         
-        for input_point in input_points:
+        for input_point in filtered_input_points:
             item = input_point["item"]
             if item not in inputs_by_item:
                 inputs_by_item[item] = []
             inputs_by_item[item].append(input_point)
         
-        for output_point in output_points:
+        for output_point in filtered_output_points:
             item = output_point["item"]
             if item not in outputs_by_item:
                 outputs_by_item[item] = []
             outputs_by_item[item].append(output_point)
         
-        # Create connections by finding the closest pairs
+        # Create connections by finding the closest valid pairs
         connections = []
         
-        # For each item type, find the closest valid pairs
-        for item, outputs in outputs_by_item.items():
+        # For each item type, connect OUTPUT points (sources) to INPUT points (destinations)
+        for item, output_list in outputs_by_item.items():
             # Skip if no inputs for this item
             if item not in inputs_by_item:
                 logger.warning(f"No input points found for item {item}")
                 continue
             
             available_inputs = inputs_by_item[item].copy()
-            available_outputs = outputs.copy()
+            available_outputs = output_list.copy()
+            
+            logger.debug(f"Processing {item}: {len(available_outputs)} outputs, {len(available_inputs)} inputs")
             
             # Keep finding pairs until no more valid ones can be created
             while available_inputs and available_outputs:
                 closest_pair = None
                 closest_distance = float('inf')
                 
-                # Find the closest valid pair
-                for output in available_outputs:
-                    output_block = output["block_id"]
-                    output_pos = output["position"]
-                    
-                    # Check if this is an external input (should go to internal points)
-                    is_external_input = output.get("external", False)
+                # Find the closest valid pair: OUTPUT (source) -> INPUT (destination)
+                for output_point in available_outputs:
+                    output_block = output_point["block_id"]
+                    output_pos = output_point["position"]
+                    is_output_external = output_point.get("external", False)
                     
                     for input_point in available_inputs:
                         input_block = input_point["block_id"]
                         input_pos = input_point["position"]
-                        is_external_output = input_point.get("external", False)
+                        is_input_external = input_point.get("external", False)
                         
-                        # Skip if points are in the same block
+                        # VALIDATION RULES:
+                        
+                        # Rule 1: Skip if points are in the same block
                         if output_block == input_block:
+                            logger.debug(f"Skipping same-block connection: {output_block}")
                             continue
                         
-                        # Skip connections between two external points
-                        if is_external_input and is_external_output:
+                        # Rule 2: Skip connections between two external points
+                        if is_output_external and is_input_external:
+                            logger.debug(f"Skipping external-to-external connection for {item}")
                             continue
                         
-                        # Ensure positions are lists
+                        # Rule 3: Ensure positions are valid lists
                         if isinstance(output_pos, tuple):
                             output_pos = list(output_pos)
                         if isinstance(input_pos, tuple):
                             input_pos = list(input_pos)
                         
-                        # Make sure we're dealing with numeric positions
+                        # Rule 4: Make sure we're dealing with numeric positions
                         if not (isinstance(output_pos, list) and len(output_pos) >= 2 and 
                                 isinstance(input_pos, list) and len(input_pos) >= 2):
                             logger.warning(f"Invalid position format: output={output_pos}, input={input_pos}")
@@ -1628,38 +1652,48 @@ class FactoryBuilder:
                             
                             if distance < closest_distance:
                                 closest_distance = distance
-                                closest_pair = (output, input_point)
+                                closest_pair = (output_point, input_point)
+                                
                         except Exception as e:
                             logger.error(f"Error calculating distance: {e} for output_pos={output_pos}, input_pos={input_pos}")
                             continue
                 
                 # If a valid pair was found, add it to connections and remove from available points
                 if closest_pair:
-                    source, target = closest_pair
-                    connections.append({
-                        "item": item,
-                        "source": {
-                            "position": source["position"],
-                            "block_id": source["block_id"],
-                            "external": source.get("external", False)
-                        },
-                        "target": {
-                            "position": target["position"],
-                            "block_id": target["block_id"],
-                            "external": target.get("external", False)
-                        },
-                        "distance": closest_distance
-                    })
+                    source_output, target_input = closest_pair
                     
-                    available_outputs.remove(source)
-                    available_inputs.remove(target)
-                    
-                    logger.info(f"Created connection for {item} from {source['block_id']} to {target['block_id']}, distance: {closest_distance}")
+                    # Validate that we have OUTPUT -> INPUT connection
+                    if source_output in available_outputs and target_input in available_inputs:
+                        connections.append({
+                            "item": item,
+                            "source": {
+                                "position": source_output["position"],
+                                "block_id": source_output["block_id"],
+                                "external": source_output.get("external", False),
+                                "type": "output"  # Source is an output point
+                            },
+                            "target": {
+                                "position": target_input["position"],
+                                "block_id": target_input["block_id"],
+                                "external": target_input.get("external", False),
+                                "type": "input"   # Target is an input point
+                            },
+                            "distance": closest_distance
+                        })
+                        
+                        available_outputs.remove(source_output)
+                        available_inputs.remove(target_input)
+                        
+                        logger.info(f"Created valid OUTPUT->INPUT connection for {item}: {source_output['block_id']} -> {target_input['block_id']}, distance: {closest_distance}")
+                    else:
+                        logger.error(f"Invalid pair found - points not in available lists!")
+                        break
                 else:
                     # No more valid pairs can be created
+                    logger.debug(f"No more valid pairs for {item}")
                     break
         
-        logger.info(f"Created {len(connections)} point connections")
+        logger.info(f"Created {len(connections)} valid OUTPUT->INPUT point connections")
         return connections
 
     def plan_inter_block_paths(self, factory_data):
@@ -1770,6 +1804,8 @@ class FactoryBuilder:
             logger.warning("No valid connections to route! Please check your gate connections.")
             return {}, {}
         
+        
+        logger.debug(f"Connection points for pathfinding: {connection_points}")
         # Create and run the MultiAgentPathfinder
         try:
             pathfinder = MultiAgentPathfinder(
@@ -3425,3 +3461,5 @@ def is_fluid_item(item_id):
     
 if __name__ == "__main__":
     main()
+    
+     

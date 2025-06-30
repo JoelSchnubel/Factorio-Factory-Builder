@@ -1,318 +1,341 @@
-2025-06-30 10:35:15,266 - FactoryBuilder - INFO - Selected items: {'copper-cable'}
-2025-06-30 10:35:16,217 - FactoryBuilder - INFO - Selected items: {'copper-cable'}
-2025-06-30 10:35:23,518 - FactoryBuilder - INFO - solving factory
-2025-06-30 10:35:23,518 - FactoryBuilder - INFO - Defining factory I/O points
-2025-06-30 10:35:23,518 - FactoryBuilder - INFO - External inputs: {'copper-plate', 'iron-plate'}
-2025-06-30 10:35:23,518 - FactoryBuilder - INFO - External outputs: {'electronic-circuit'}
-2025-06-30 10:35:23,519 - FactoryBuilder - INFO - Internal items: {'copper-cable'}
-2025-06-30 10:35:26,725 - FactoryBuilder - DEBUG - Selected South at position (1, 29) for copper-plate
-2025-06-30 10:35:27,910 - FactoryBuilder - DEBUG - Selected South at position (5, 29) for iron-plate
-2025-06-30 10:35:27,988 - FactoryBuilder - INFO - Created fixed input gate for copper-plate at position (1, 29) on South edge
-2025-06-30 10:35:27,989 - FactoryBuilder - INFO - Created fixed input gate for iron-plate at position (5, 29) on South edge
-2025-06-30 10:35:29,371 - FactoryBuilder - DEBUG - Selected South at position (8, 29) for electronic-circuit
-2025-06-30 10:35:29,467 - FactoryBuilder - INFO - Created fixed output gate for electronic-circuit at position (8, 29) on South edge
-2025-06-30 10:35:29,467 - FactoryBuilder - INFO - block data:
-2025-06-30 10:35:29,467 - FactoryBuilder - INFO - {'electronic-circuit': {'tree': <FactorioProductionTree.FactorioProductionTree object at 0x000002C088F3EA20>, 'production_data': {'electronic-circuit': {'amount_per_minute': 120, 'assemblers': 2, 'input_inserters': [{'id': 'copper-cable', 'inserters': 3, 'amount': 3}, {'id': 'iron-plate', 'inserters': 1, 'amount': 1}], 'belts': 1, 'capacity': 0}, 'copper-cable': {'amount_per_minute': 360.0, 'capacity': 0}, 'iron-plate': {'amount_per_minute': 120.0, 'capacity': 0}}, 'num_factories': 1, 'png': "E:/Programmieren/Bachelor-Thesis/Modules/electronic-circuit_120_['copper-cable']_module.png", 'json': "E:/Programmieren/Bachelor-Thesis/Modules/electronic-circuit_120_['copper-cable']_module.json"}, 'copper-cable': {'tree': <FactorioProductionTree.FactorioProductionTree object at 0x000002C088F7A2D0>, 'production_data': {'copper-cable': {'amount_per_minute': 300, 'assemblers': 3, 'input_inserters': [{'id': 'copper-plate', 'inserters': 2, 'amount': 1}], 'belts': 1, 'capacity': 0}, 'copper-plate': {'amount_per_minute': 150.0, 'capacity': 0}}, 'num_factories': 1, 'png': 'E:/Programmieren/Bachelor-Thesis/Modules/copper-cable_300_[]_module.png', 'json': 'E:/Programmieren/Bachelor-Thesis/Modules/copper-cable_300_[]_module.json'}}
-2025-06-30 10:35:29,483 - FactoryBuilder - INFO - total number of modules: 2
-2025-06-30 10:35:29,485 - FactoryBuilder - INFO - Added fixed input gate external_input_copper-plate at position (1, 29)
-2025-06-30 10:35:29,487 - FactoryBuilder - INFO - Added fixed input gate external_input_iron-plate at position (5, 29)
-2025-06-30 10:35:29,488 - FactoryBuilder - INFO - Added fixed output gate external_output_electronic-circuit at position (8, 29)
-2025-06-30 10:35:29,644 - FactoryBuilder - DEBUG - Gate connections: [{'source': <FactoryZ3Solver.Gate object at 0x000002C08914F350>, 'target': <FactoryZ3Solver.Gate object at 0x000002C08914E9F0>, 'source_x': 0, 'source_y': 16, 'target_x': 1, 'target_y': 29, 'item': 'copper-plate'}, {'source': <FactoryZ3Solver.Gate object at 0x000002C08914EEA0>, 'target': <FactoryZ3Solver.Gate object at 0x000002C08914FE60>, 'source_x': 12, 'source_y': 5, 'target_x': 5, 'target_y': 29, 'item': 'iron-plate'}, {'source': <FactoryZ3Solver.Gate object at 0x000002C08914ECC0>, 'target': <FactoryZ3Solver.Gate object at 0x000002C08914E060>, 'source_x': 0, 'source_y': 5, 'target_x': 15, 'target_y': 25, 'item': 'copper-cable'}, {'source': <FactoryZ3Solver.Gate object at 0x000002C08914E000>, 'target': <FactoryZ3Solver.Gate object at 0x000002C08914E990>, 'source_x': 15, 'source_y': 16, 'target_x': 0, 'target_y': 14, 'item': 'copper-cable'}, {'source': <FactoryZ3Solver.Gate object at 0x000002C08914FF50>, 'target': <FactoryZ3Solver.Gate object at 0x000002C08914EF30>, 'source_x': 8, 'source_y': 29, 'target_x': 15, 'target_y': 5, 'item': 'electronic-circuit'}]
-2025-06-30 10:35:29,645 - FactoryBuilder - INFO - Added external input gate for copper-plate at (1, 29) as an output point
-2025-06-30 10:35:29,645 - FactoryBuilder - INFO - Added external input gate for iron-plate at (5, 29) as an output point
-2025-06-30 10:35:29,645 - FactoryBuilder - INFO - Added external output gate for electronic-circuit at (8, 29) as an input point
-2025-06-30 10:35:29,646 - FactoryBuilder - WARNING - Module JSON not found for fixed_block_external_input_copper-plate (type: block), skipping
-2025-06-30 10:35:29,646 - FactoryBuilder - ERROR - Error processing module JSON for fixed_block_external_input_copper-plate: expected str, bytes or os.PathLike object, not NoneType
-2025-06-30 10:35:29,647 - FactoryBuilder - WARNING - Module JSON not found for fixed_block_external_input_iron-plate (type: block), skipping
-2025-06-30 10:35:29,648 - FactoryBuilder - ERROR - Error processing module JSON for fixed_block_external_input_iron-plate: expected str, bytes or os.PathLike object, not NoneType
-2025-06-30 10:35:29,650 - FactoryBuilder - WARNING - Module JSON not found for fixed_block_external_output_electronic-circuit (type: block), skipping
-2025-06-30 10:35:29,650 - FactoryBuilder - ERROR - Error processing module JSON for fixed_block_external_output_electronic-circuit: expected str, bytes or os.PathLike object, not NoneType
-2025-06-30 10:35:29,655 - FactoryBuilder - INFO - Processing module data from E:/Programmieren/Bachelor-Thesis/Modules/electronic-circuit_120_['copper-cable']_module.json for block Block_electronic-circuit_0_0
-2025-06-30 10:35:29,655 - FactoryBuilder - INFO - Added assembler electronic-circuit at [2, 11] for block Block_electronic-circuit_0_0
-2025-06-30 10:35:29,655 - FactoryBuilder - INFO - Added assembler electronic-circuit at [2, 8] for block Block_electronic-circuit_0_0
-2025-06-30 10:35:29,656 - FactoryBuilder - INFO - Added inserter copper-cable at [1, 13] facing east for block Block_electronic-circuit_0_0
-2025-06-30 10:35:29,656 - FactoryBuilder - INFO - Added inserter copper-cable at [1, 11] facing east for block Block_electronic-circuit_0_0
-2025-06-30 10:35:29,656 - FactoryBuilder - INFO - Added inserter copper-cable at [1, 12] facing east for block Block_electronic-circuit_0_0
-2025-06-30 10:35:29,657 - FactoryBuilder - INFO - Added inserter iron-plate at [5, 13] facing west for block Block_electronic-circuit_0_0
-2025-06-30 10:35:29,657 - FactoryBuilder - INFO - Added inserter copper-cable at [1, 10] facing east for block Block_electronic-circuit_0_0
-2025-06-30 10:35:29,657 - FactoryBuilder - INFO - Added inserter copper-cable at [1, 8] facing east for block Block_electronic-circuit_0_0
-2025-06-30 10:35:29,657 - FactoryBuilder - INFO - Added inserter copper-cable at [1, 9] facing east for block Block_electronic-circuit_0_0
-2025-06-30 10:35:29,657 - FactoryBuilder - INFO - Added inserter iron-plate at [5, 8] facing west for block Block_electronic-circuit_0_0
-2025-06-30 10:35:29,658 - FactoryBuilder - INFO - Added placed inserter for electronic-circuit at [5, 11] facing east
-2025-06-30 10:35:29,658 - FactoryBuilder - INFO - Added placed inserter for electronic-circuit at [5, 9] facing east
-2025-06-30 10:35:29,658 - FactoryBuilder - DEBUG - Module data for block Block_electronic-circuit_0_0: {'output_item': 'electronic-circuit', 'max_ouput': 120.0, 'amount': 120, 'production_data': {'electronic-circuit': {'amount_per_minute': 120, 'assemblers': 2, 'input_inserters': [{'id': 'copper-cable', 'inserters': 3, 'amount': 3}, {'id': 'iron-plate', 'inserters': 1, 'amount': 1}], 'belts': 1, 'capacity': 0}, 'copper-cable': {'amount_per_minute': 360.0, 'capacity': 0}, 'iron-plate': {'amount_per_minute': 120.0, 'capacity': 0}}, 'grid_width': 16, 'grid_height': 10, 'input_items': ['copper-cable', 'iron-plate'], 'input_information': {'copper-cable': {'input': [9, 0], 'output': [0, 0], 'paths': {'copper-cable': [{'path': [[0, 9], [0, 8], [0, 7], [0, 6], [0, 5], [0, 4], [0, 3], [0, 2], [0, 1], [0, 0]], 'start': [0, 9], 'destination': [0, 0], 'underground_segments': {}, 'start_splitter': False, 'dest_splitter': False, 'orientation': {'(0, 9)': [0, -1], '(0, 8)': [0, -1], '(0, 7)': [0, -1], '(0, 6)': [0, -1], '(0, 5)': [0, -1], '(0, 4)': [0, -1], '(0, 3)': [0, -1], '(0, 2)': [0, -1], '(0, 1)': [0, -1], '(0, 0)': [0, -1]}}]}}, 'iron-plate': {'input': [9, 12], 'output': [0, 12], 'paths': {'iron-plate': [{'path': [[12, 9], [12, 8], [12, 7], [12, 6], [12, 5], [12, 4], [12, 3], [12, 2], [12, 1], [12, 0]], 'start': [12, 9], 'destination': [12, 0], 'underground_segments': {}, 'start_splitter': False, 'dest_splitter': False, 'orientation': {'(12, 9)': [0, -1], '(12, 8)': [0, -1], '(12, 7)': [0, -1], '(12, 6)': [0, -1], '(12, 5)': [0, -1], '(12, 4)': [0, -1], '(12, 3)': [0, -1], '(12, 2)': [0, -1], '(12, 1)': [0, -1], '(12, 0)': [0, -1]}}]}}}, 'output_information': {'electronic-circuit': {'input': [0, 15], 'output': [9, 15], 'paths': {'electronic-circuit': [{'path': [[15, 0], [15, 1], [15, 2], [15, 3], [15, 4], [15, 5], [15, 6], [15, 7], [15, 8], [15, 9]], 'start': [15, 0], 'destination': [15, 9], 'underground_segments': {}, 'start_splitter': None, 'dest_splitter': None, 'orientation': {'(15, 0)': [0, 1], '(15, 1)': [0, 1], '(15, 2)': [0, 1], '(15, 3)': [0, 1], '(15, 4)': [0, 1], '(15, 5)': [0, 1], '(15, 6)': [0, 1], '(15, 7)': [0, 1], '(15, 8)': [0, 1], '(15, 9)': [0, 1]}}]}}}, 'inserter_information': [['copper-cable', 1, 8, 'east'], ['copper-cable', 1, 6, 'east'], ['copper-cable', 1, 7, 'east'], ['iron-plate', 5, 8, 'west'], ['copper-cable', 1, 5, 'east'], ['copper-cable', 1, 3, 'east'], ['copper-cable', 1, 4, 'east'], ['iron-plate', 5, 3, 'west']], 'belt_point_information': [['copper-cable', 0, 8, 'end'], ['copper-cable', 0, 6, 'end'], ['copper-cable', 0, 7, 'end'], ['iron-plate', 6, 8, 'end'], ['copper-cable', 0, 5, 'end'], ['copper-cable', 0, 3, 'end'], ['copper-cable', 0, 4, 'end'], ['iron-plate', 6, 3, 'end']], 'assembler_information': [['electronic-circuit', 2, 6, 3, 3, 'assembling-machine-1', 0], ['electronic-circuit', 2, 3, 3, 3, 'assembling-machine-1', 0]], 'retrieval_points': {'electronic-circuit_0_0': {'item': 'electronic-circuit', 'destination': [[15, 5], [15, 8], [15, 4], [15, 1], [15, 7], [15, 0], [15, 6], [15, 3], [15, 9], [15, 2]], 'start_points': [[6, 6]], 'inserter_mapping': {'(6, 6)': [5, 6], '(6, 7)': [5, 7]}}, 'electronic-circuit_1_0': {'item': 'electronic-circuit', 'destination': [[15, 5], [15, 8], [15, 4], [15, 1], [15, 7], [15, 0], [15, 6], [15, 3], [15, 9], [15, 2]], 'start_points': [[6, 4]], 'inserter_mapping': {'(6, 4)': [5, 4], '(6, 5)': [5, 5], '(4, 1)': [4, 2], '(3, 1)': [3, 2], '(2, 1)': [2, 2]}}, 'iron-plate_0': {'item': 'iron-plate', 'destination': [[6, 8]], 'start_points': [[12, 9], [12, 0], [12, 9], [12, 8], [12, 7], [12, 6], [12, 5], [12, 4], [12, 3], [12, 2], [12, 1], [12, 0]], 'inserter_mapping': None}, 'iron-plate_1': {'item': 'iron-plate', 'destination': [[6, 3]], 'start_points': [[12, 9], [12, 0], [12, 9], [12, 8], [12, 7], [12, 6], [12, 5], [12, 4], [12, 3], [12, 2], [12, 1], [12, 0]], 'inserter_mapping': None}}, 'obstacle_map': [[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 22], [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 22], [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 22], [99, 44, 33, 33, 33, 44, 99, 0, 0, 0, 0, 0, 1, 0, 0, 22], [99, 44, 33, 33, 33, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 22], [99, 44, 33, 33, 33, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 22], [99, 44, 33, 33, 33, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 22], [99, 44, 33, 33, 33, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 22], [99, 44, 33, 33, 33, 44, 99, 0, 0, 0, 0, 0, 1, 0, 0, 22], [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 22]], 'paths': {'electronic-circuit_0_0': [{'path': [[6, 6], [7, 6], [8, 6], [9, 6], [13, 6], [14, 6]], 'start': [6, 6], 'destination': [14, 6], 'underground_segments': {'segment_0': {'start': [9, 6], 'end': [13, 6]}}, 'start_splitter': None, 'dest_splitter': {'item': 'electronic-circuit', 'position': [15, 7], 'next_position': [14, 7], 'direction': [0, 1], 'inputs': [[14, 6]], 'outputs': [[14, 8]]}}], 'electronic-circuit_1_0': [{'path': [[6, 4], [6, 5], [6, 6]], 'start': [6, 4], 'destination': [6, 6], 'underground_segments': {}, 'start_splitter': None, 'dest_splitter': None}], 'iron-plate_0': [{'path': [[11, 7], [10, 7], [9, 7], [8, 7], [7, 7], [6, 7], [6, 8]], 'start': [11, 7], 'destination': [6, 8], 'underground_segments': {}, 'start_splitter': {'item': 'iron-plate', 'position': [12, 8], 'next_position': [11, 8], 'direction': [0, -1], 'inputs': [[11, 9]], 'outputs': [[11, 7]]}, 'dest_splitter': None}], 'iron-plate_1': [{'path': [[11, 3], [10, 3], [9, 3], [8, 3], [7, 3], [6, 3]], 'start': [11, 3], 'destination': [6, 3], 'underground_segments': {}, 'start_splitter': {'item': 'iron-plate', 'position': [12, 4], 'next_position': [11, 4], 'direction': [0, -1], 'inputs': [[11, 5]], 'outputs': [[11, 3]]}, 'dest_splitter': None}]}, 'placed_inserter_information': {'electronic-circuit_0_0': {'(6, 6)': [5, 6]}, 'electronic-circuit_1_0': {'(6, 4)': [5, 4]}}, 'power_pole_information': [['medium-electric-pole', 2, 2], ['medium-electric-pole', 2, 9]]}
-2025-06-30 10:35:29,660 - FactoryBuilder - INFO - Added input belt route for copper-cable at [0, 5] facing north
-2025-06-30 10:35:29,660 - FactoryBuilder - INFO - Added input point for copper-cable at [9, 5] for block Block_electronic-circuit_0_0
-2025-06-30 10:35:29,660 - FactoryBuilder - INFO - Added output point for copper-cable at [0, 5] for block Block_electronic-circuit_0_0
-2025-06-30 10:35:29,661 - FactoryBuilder - INFO - Added input belt route for iron-plate at [12, 5] facing north
-2025-06-30 10:35:29,661 - FactoryBuilder - INFO - Added input point for iron-plate at [9, 17] for block Block_electronic-circuit_0_0
-2025-06-30 10:35:29,661 - FactoryBuilder - INFO - Added output point for iron-plate at [0, 17] for block Block_electronic-circuit_0_0
-2025-06-30 10:35:29,662 - FactoryBuilder - INFO - Added output belt route for electronic-circuit at [15, 14] facing south
-2025-06-30 10:35:29,662 - FactoryBuilder - INFO - Added input point for electronic-circuit at [0, 20] for block Block_electronic-circuit_0_0
-2025-06-30 10:35:29,662 - FactoryBuilder - INFO - Added output point for electronic-circuit at [9, 20] for block Block_electronic-circuit_0_0
-2025-06-30 10:35:29,663 - FactoryBuilder - INFO - Added belt electronic-circuit at [6, 11] facing east for block Block_electronic-circuit_0_0
-2025-06-30 10:35:29,663 - FactoryBuilder - INFO - Added belt electronic-circuit at [7, 11] facing east for block Block_electronic-circuit_0_0
-2025-06-30 10:35:29,663 - FactoryBuilder - INFO - Added belt electronic-circuit at [8, 11] facing east for block Block_electronic-circuit_0_0
-2025-06-30 10:35:29,664 - FactoryBuilder - INFO - Added belt electronic-circuit at [9, 11] facing east for block Block_electronic-circuit_0_0
-2025-06-30 10:35:29,664 - FactoryBuilder - INFO - Added belt electronic-circuit at [13, 11] facing east for block Block_electronic-circuit_0_0
-2025-06-30 10:35:29,664 - FactoryBuilder - INFO - Added belt electronic-circuit at [14, 11] facing south for block Block_electronic-circuit_0_0
-2025-06-30 10:35:29,664 - FactoryBuilder - INFO - Added underground belt segment electronic-circuit from [9, 11] to [13, 11] for block Block_electronic-circuit_0_0
-2025-06-30 10:35:29,665 - FactoryBuilder - INFO - Added splitter electronic-circuit at [15, 12] facing south for block Block_electronic-circuit_0_0
-2025-06-30 10:35:29,665 - FactoryBuilder - INFO - Added belt electronic-circuit at [6, 9] facing south for block Block_electronic-circuit_0_0
-2025-06-30 10:35:29,666 - FactoryBuilder - INFO - Added belt electronic-circuit at [6, 10] facing south for block Block_electronic-circuit_0_0
-2025-06-30 10:35:29,666 - FactoryBuilder - INFO - Added belt iron-plate at [11, 12] facing west for block Block_electronic-circuit_0_0
-2025-06-30 10:35:29,666 - FactoryBuilder - INFO - Added belt iron-plate at [10, 12] facing west for block Block_electronic-circuit_0_0
-2025-06-30 10:35:29,666 - FactoryBuilder - INFO - Added belt iron-plate at [9, 12] facing west for block Block_electronic-circuit_0_0
-2025-06-30 10:35:29,668 - FactoryBuilder - INFO - Added belt iron-plate at [8, 12] facing west for block Block_electronic-circuit_0_0
-2025-06-30 10:35:29,668 - FactoryBuilder - INFO - Added belt iron-plate at [7, 12] facing west for block Block_electronic-circuit_0_0
-2025-06-30 10:35:29,668 - FactoryBuilder - INFO - Added belt iron-plate at [6, 12] facing south for block Block_electronic-circuit_0_0
-2025-06-30 10:35:29,669 - FactoryBuilder - INFO - Added belt iron-plate at [6, 13] facing south for block Block_electronic-circuit_0_0
-2025-06-30 10:35:29,669 - FactoryBuilder - INFO - Added splitter iron-plate at [12, 13] facing north for block Block_electronic-circuit_0_0
-2025-06-30 10:35:29,670 - FactoryBuilder - INFO - Added belt iron-plate at [11, 8] facing west for block Block_electronic-circuit_0_0
-2025-06-30 10:35:29,670 - FactoryBuilder - INFO - Added belt iron-plate at [10, 8] facing west for block Block_electronic-circuit_0_0
-2025-06-30 10:35:29,670 - FactoryBuilder - INFO - Added belt iron-plate at [9, 8] facing west for block Block_electronic-circuit_0_0
-2025-06-30 10:35:29,671 - FactoryBuilder - INFO - Added belt iron-plate at [8, 8] facing west for block Block_electronic-circuit_0_0
-2025-06-30 10:35:29,671 - FactoryBuilder - INFO - Added belt iron-plate at [7, 8] facing west for block Block_electronic-circuit_0_0
-2025-06-30 10:35:29,671 - FactoryBuilder - INFO - Added belt iron-plate at [6, 8] facing west for block Block_electronic-circuit_0_0
-2025-06-30 10:35:29,672 - FactoryBuilder - INFO - Added splitter iron-plate at [12, 9] facing north for block Block_electronic-circuit_0_0
-2025-06-30 10:35:29,672 - FactoryBuilder - INFO - Added power pole medium-electric-pole at [2, 7] for block Block_electronic-circuit_0_0
-2025-06-30 10:35:29,672 - FactoryBuilder - INFO - Added power pole medium-electric-pole at [2, 14] for block Block_electronic-circuit_0_0
-2025-06-30 10:35:29,674 - FactoryBuilder - INFO - Processing module data from E:/Programmieren/Bachelor-Thesis/Modules/copper-cable_300_[]_module.json for block Block_copper-cable_1_0
-2025-06-30 10:35:29,674 - FactoryBuilder - INFO - Added assembler copper-cable at [2, 16] for block Block_copper-cable_1_0
-2025-06-30 10:35:29,674 - FactoryBuilder - INFO - Added assembler copper-cable at [2, 19] for block Block_copper-cable_1_0
-2025-06-30 10:35:29,674 - FactoryBuilder - INFO - Added assembler copper-cable at [2, 23] for block Block_copper-cable_1_0
-2025-06-30 10:35:29,675 - FactoryBuilder - INFO - Added inserter copper-plate at [1, 18] facing east for block Block_copper-cable_1_0
-2025-06-30 10:35:29,675 - FactoryBuilder - INFO - Added inserter copper-plate at [1, 17] facing east for block Block_copper-cable_1_0
-2025-06-30 10:35:29,675 - FactoryBuilder - INFO - Added inserter copper-plate at [1, 19] facing east for block Block_copper-cable_1_0
-2025-06-30 10:35:29,675 - FactoryBuilder - INFO - Added inserter copper-plate at [1, 20] facing east for block Block_copper-cable_1_0
-2025-06-30 10:35:29,676 - FactoryBuilder - INFO - Added inserter copper-plate at [1, 25] facing east for block Block_copper-cable_1_0
-2025-06-30 10:35:29,676 - FactoryBuilder - INFO - Added inserter copper-plate at [1, 23] facing east for block Block_copper-cable_1_0
-2025-06-30 10:35:29,676 - FactoryBuilder - INFO - Added placed inserter for copper-cable at [5, 16] facing east
-2025-06-30 10:35:29,677 - FactoryBuilder - INFO - Added placed inserter for copper-cable at [5, 17] facing east
-2025-06-30 10:35:29,677 - FactoryBuilder - INFO - Added placed inserter for copper-cable at [5, 18] facing east
-2025-06-30 10:35:29,677 - FactoryBuilder - INFO - Added placed inserter for copper-cable at [5, 19] facing east
-2025-06-30 10:35:29,678 - FactoryBuilder - INFO - Added placed inserter for copper-cable at [5, 20] facing east
-2025-06-30 10:35:29,678 - FactoryBuilder - INFO - Added placed inserter for copper-cable at [5, 21] facing east
-2025-06-30 10:35:29,678 - FactoryBuilder - INFO - Added placed inserter for copper-cable at [5, 23] facing east
-2025-06-30 10:35:29,678 - FactoryBuilder - INFO - Added placed inserter for copper-cable at [5, 24] facing east
-2025-06-30 10:35:29,678 - FactoryBuilder - INFO - Added placed inserter for copper-cable at [5, 25] facing east
-2025-06-30 10:35:29,679 - FactoryBuilder - DEBUG - Module data for block Block_copper-cable_1_0: {'output_item': 'copper-cable', 'max_ouput': 360.0, 'amount': 300, 'production_data': {'copper-cable': {'amount_per_minute': 300, 'assemblers': 3, 'input_inserters': [{'id': 'copper-plate', 'inserters': 2, 'amount': 1}], 'belts': 1, 'capacity': 0}, 'copper-plate': {'amount_per_minute': 150.0, 'capacity': 0}}, 'grid_width': 16, 'grid_height': 10, 'input_items': ['copper-plate'], 'input_information': {'copper-plate': {'input': [9, 0], 'output': [0, 0], 'paths': {'copper-plate': [{'path': [[0, 9], [0, 8], [0, 7], [0, 6], [0, 5], [0, 4], [0, 3], [0, 2], [0, 1], [0, 0]], 'start': [0, 9], 'destination': [0, 0], 'underground_segments': {}, 'start_splitter': False, 'dest_splitter': False, 'orientation': {'(0, 9)': [0, -1], '(0, 8)': [0, -1], '(0, 7)': [0, -1], '(0, 6)': [0, -1], '(0, 5)': [0, -1], '(0, 4)': [0, -1], '(0, 3)': [0, -1], '(0, 2)': [0, -1], '(0, 1)': [0, -1], '(0, 0)': [0, -1]}}]}}}, 'output_information': {'copper-cable': {'input': [9, 15], 'output': [0, 15], 'paths': {'copper-cable': [{'path': [[15, 9], [15, 8], [15, 7], [15, 6], [15, 5], [15, 4], [15, 3], [15, 2], [15, 1], [15, 0]], 'start': [15, 9], 'destination': [15, 0], 'underground_segments': {}, 'start_splitter': None, 'dest_splitter': None, 'orientation': {'(15, 9)': [0, -1], '(15, 8)': [0, -1], '(15, 7)': [0, -1], '(15, 6)': [0, -1], '(15, 5)': [0, -1], '(15, 4)': [0, -1], '(15, 3)': [0, -1], '(15, 2)': [0, -1], '(15, 1)': [0, -1], '(15, 0)': [0, -1]}}]}}}, 'inserter_information': [['copper-plate', 1, 2, 'east'], ['copper-plate', 1, 1, 'east'], ['copper-plate', 1, 3, 'east'], ['copper-plate', 1, 4, 'east'], ['copper-plate', 1, 9, 'east'], ['copper-plate', 1, 7, 'east']], 'belt_point_information': [['copper-plate', 0, 2, 'end'], ['copper-plate', 0, 1, 'end'], ['copper-plate', 0, 3, 'end'], ['copper-plate', 0, 4, 'end'], ['copper-plate', 0, 9, 'end'], ['copper-plate', 0, 7, 'end']], 'assembler_information': [['copper-cable', 2, 0, 3, 3, 'assembling-machine-1', 0], ['copper-cable', 2, 3, 3, 3, 'assembling-machine-1', 0], ['copper-cable', 2, 7, 3, 3, 'assembling-machine-1', 0]], 'retrieval_points': {'copper-cable_0_0': {'item': 'copper-cable', 'destination': [[15, 5], [15, 8], [15, 4], [15, 1], [15, 7], [15, 0], [15, 6], [15, 3], [15, 9], [15, 2]], 'start_points': [[6, 0]], 'inserter_mapping': {'(6, 0)': [5, 0], '(6, 1)': [5, 1], '(6, 2)': [5, 2]}}, 'copper-cable_0_1': {'item': 'copper-cable', 'destination': [[15, 5], [15, 8], [15, 4], [15, 1], [15, 7], [15, 0], [15, 6], [15, 3], [15, 9], [15, 2]], 'start_points': [[6, 1]], 'inserter_mapping': {'(6, 0)': [5, 0], '(6, 1)': [5, 1], '(6, 2)': [5, 2]}}, 'copper-cable_0_2': {'item': 'copper-cable', 'destination': [[15, 5], [15, 8], [15, 4], [15, 1], [15, 7], [15, 0], [15, 6], [15, 3], [15, 9], [15, 2]], 'start_points': [[6, 2]], 'inserter_mapping': {'(6, 0)': [5, 0], '(6, 1)': [5, 1], '(6, 2)': [5, 2]}}, 'copper-cable_1_0': {'item': 'copper-cable', 'destination': [[15, 5], [15, 8], [15, 4], [15, 1], [15, 7], [15, 0], [15, 6], [15, 3], [15, 9], [15, 2]], 'start_points': [[6, 3]], 'inserter_mapping': {'(6, 3)': [5, 3], '(6, 4)': [5, 4], '(6, 5)': [5, 5]}}, 'copper-cable_1_1': {'item': 'copper-cable', 'destination': [[15, 5], [15, 8], [15, 4], [15, 1], [15, 7], [15, 0], [15, 6], [15, 3], [15, 9], [15, 2]], 'start_points': [[6, 4]], 'inserter_mapping': {'(6, 3)': [5, 3], '(6, 4)': [5, 4], '(6, 5)': [5, 5]}}, 'copper-cable_1_2': {'item': 'copper-cable', 'destination': [[15, 5], [15, 8], [15, 4], [15, 1], [15, 7], [15, 0], [15, 6], [15, 3], [15, 9], [15, 2]], 'start_points': [[6, 5]], 'inserter_mapping': {'(6, 3)': [5, 3], '(6, 4)': [5, 4], '(6, 5)': [5, 5]}}, 'copper-cable_2_0': {'item': 'copper-cable', 'destination': [[15, 5], [15, 8], [15, 4], [15, 1], [15, 7], [15, 0], [15, 6], [15, 3], [15, 9], [15, 2]], 'start_points': [[6, 7]], 'inserter_mapping': {'(6, 7)': [5, 7], '(6, 8)': [5, 8], '(6, 9)': [5, 9]}}, 'copper-cable_2_1': {'item': 'copper-cable', 'destination': [[15, 5], [15, 8], [15, 4], [15, 1], [15, 7], [15, 0], [15, 6], [15, 3], [15, 9], [15, 2]], 'start_points': [[6, 8]], 'inserter_mapping': {'(6, 7)': [5, 7], '(6, 8)': [5, 8], '(6, 9)': [5, 9]}}, 'copper-cable_2_2': {'item': 'copper-cable', 'destination': [[15, 5], [15, 8], [15, 4], [15, 1], [15, 7], [15, 0], [15, 6], [15, 3], [15, 9], [15, 2]], 'start_points': [[6, 9]], 'inserter_mapping': {'(6, 7)': [5, 7], '(6, 8)': [5, 8], '(6, 9)': [5, 9]}}}, 'obstacle_map': [[1, 0, 33, 33, 33, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 22], [99, 44, 33, 33, 33, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 22], [99, 44, 33, 33, 33, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 22], [99, 44, 33, 33, 33, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 22], [99, 44, 33, 33, 33, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 22], [1, 0, 33, 33, 33, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 22], [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 22], [99, 44, 33, 33, 33, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 22], [1, 0, 33, 33, 33, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 22], [99, 44, 33, 33, 33, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 22]], 'paths': {'copper-cable_0_0': [{'path': [[6, 0], [6, 1], [6, 2], [7, 2], [8, 2], [9, 2], [10, 2], [11, 2], [12, 2], [13, 2], [14, 2]], 'start': [6, 0], 'destination': [14, 2], 'underground_segments': {}, 'start_splitter': None, 'dest_splitter': {'item': 'copper-cable', 'position': [15, 1], 'next_position': [14, 1], 'direction': [0, -1], 'inputs': [[14, 2]], 'outputs': [[14, 0]]}}], 'copper-cable_1_0': [{'path': [[6, 3], [6, 2]], 'start': [6, 3], 'destination': [6, 2], 'underground_segments': {}, 'start_splitter': None, 'dest_splitter': None}], 'copper-cable_1_1': [{'path': [[6, 4], [6, 3]], 'start': [6, 4], 'destination': [6, 3], 'underground_segments': {}, 'start_splitter': None, 'dest_splitter': None}], 'copper-cable_1_2': [{'path': [[6, 5], [6, 4]], 'start': [6, 5], 'destination': [6, 4], 'underground_segments': {}, 'start_splitter': None, 'dest_splitter': None}], 'copper-cable_2_0': [{'path': [[6, 7], [6, 6], [6, 5]], 'start': [6, 7], 'destination': [6, 5], 'underground_segments': {}, 'start_splitter': None, 'dest_splitter': None}], 'copper-cable_2_1': [{'path': [[6, 8], [6, 7]], 'start': [6, 8], 'destination': [6, 7], 'underground_segments': {}, 'start_splitter': None, 'dest_splitter': None}], 'copper-cable_2_2': [{'path': [[6, 9], [6, 8]], 'start': [6, 9], 'destination': [6, 8], 'underground_segments': {}, 'start_splitter': None, 'dest_splitter': None}]}, 'placed_inserter_information': {'copper-cable_0_0': {'(6, 0)': [5, 0]}, 'copper-cable_0_1': {'(6, 1)': [5, 1]}, 'copper-cable_0_2': {'(6, 2)': [5, 2]}, 'copper-cable_1_0': {'(6, 3)': [5, 3]}, 'copper-cable_1_1': {'(6, 4)': [5, 4]}, 'copper-cable_1_2': {'(6, 5)': [5, 5]}, 'copper-cable_2_0': {'(6, 7)': [5, 7]}, 'copper-cable_2_1': {'(6, 8)': [5, 8]}, 'copper-cable_2_2': {'(6, 9)': [5, 9]}}, 'power_pole_information': [['medium-electric-pole', 1, 0], ['medium-electric-pole', 1, 6]]}
-2025-06-30 10:35:29,680 - FactoryBuilder - INFO - Added input belt route for copper-plate at [0, 16] facing north
-2025-06-30 10:35:29,681 - FactoryBuilder - INFO - Added input point for copper-plate at [9, 16] for block Block_copper-cable_1_0
-2025-06-30 10:35:29,681 - FactoryBuilder - INFO - Added output point for copper-plate at [0, 16] for block Block_copper-cable_1_0
-2025-06-30 10:35:29,682 - FactoryBuilder - INFO - Added output belt route for copper-cable at [15, 16] facing north
-2025-06-30 10:35:29,682 - FactoryBuilder - INFO - Added input point for copper-cable at [9, 31] for block Block_copper-cable_1_0
-2025-06-30 10:35:29,682 - FactoryBuilder - INFO - Added output point for copper-cable at [0, 31] for block Block_copper-cable_1_0
-2025-06-30 10:35:29,683 - FactoryBuilder - INFO - Added belt copper-cable at [6, 16] facing south for block Block_copper-cable_1_0
-2025-06-30 10:35:29,683 - FactoryBuilder - INFO - Added belt copper-cable at [6, 17] facing south for block Block_copper-cable_1_0
-2025-06-30 10:35:29,683 - FactoryBuilder - INFO - Added belt copper-cable at [6, 18] facing east for block Block_copper-cable_1_0
-2025-06-30 10:35:29,684 - FactoryBuilder - INFO - Added belt copper-cable at [7, 18] facing east for block Block_copper-cable_1_0
-2025-06-30 10:35:29,684 - FactoryBuilder - INFO - Added belt copper-cable at [8, 18] facing east for block Block_copper-cable_1_0
-2025-06-30 10:35:29,684 - FactoryBuilder - INFO - Added belt copper-cable at [9, 18] facing east for block Block_copper-cable_1_0
-2025-06-30 10:35:29,684 - FactoryBuilder - INFO - Added belt copper-cable at [10, 18] facing east for block Block_copper-cable_1_0
-2025-06-30 10:35:29,685 - FactoryBuilder - INFO - Added belt copper-cable at [11, 18] facing east for block Block_copper-cable_1_0
-2025-06-30 10:35:29,685 - FactoryBuilder - INFO - Added belt copper-cable at [12, 18] facing east for block Block_copper-cable_1_0
-2025-06-30 10:35:29,685 - FactoryBuilder - INFO - Added belt copper-cable at [13, 18] facing east for block Block_copper-cable_1_0
-2025-06-30 10:35:29,685 - FactoryBuilder - INFO - Added belt copper-cable at [14, 18] facing north for block Block_copper-cable_1_0
-2025-06-30 10:35:29,686 - FactoryBuilder - INFO - Added splitter copper-cable at [15, 17] facing north for block Block_copper-cable_1_0
-2025-06-30 10:35:29,686 - FactoryBuilder - INFO - Added belt copper-cable at [6, 19] facing north for block Block_copper-cable_1_0
-2025-06-30 10:35:29,686 - FactoryBuilder - INFO - Added belt copper-cable at [6, 20] facing north for block Block_copper-cable_1_0
-2025-06-30 10:35:29,686 - FactoryBuilder - INFO - Added belt copper-cable at [6, 21] facing north for block Block_copper-cable_1_0
-2025-06-30 10:35:29,688 - FactoryBuilder - INFO - Added belt copper-cable at [6, 23] facing north for block Block_copper-cable_1_0
-2025-06-30 10:35:29,688 - FactoryBuilder - INFO - Added belt copper-cable at [6, 22] facing north for block Block_copper-cable_1_0
-2025-06-30 10:35:29,688 - FactoryBuilder - INFO - Added belt copper-cable at [6, 24] facing north for block Block_copper-cable_1_0
-2025-06-30 10:35:29,689 - FactoryBuilder - INFO - Added belt copper-cable at [6, 25] facing north for block Block_copper-cable_1_0
-2025-06-30 10:35:29,689 - FactoryBuilder - INFO - Added power pole medium-electric-pole at [1, 16] for block Block_copper-cable_1_0
-2025-06-30 10:35:29,689 - FactoryBuilder - INFO - Added power pole medium-electric-pole at [1, 22] for block Block_copper-cable_1_0
-2025-06-30 10:35:29,697 - FactoryBuilder - INFO - Factory JSON data saved to Factorys/factory_electronic-circuit_100.json
-2025-06-30 10:35:29,697 - FactoryBuilder - INFO - Planning inter-block paths with detailed obstacles...
-2025-06-30 10:35:29,698 - FactoryBuilder - INFO - Creating point connections for inter module paths
-2025-06-30 10:35:29,698 - FactoryBuilder - INFO - Created connection for copper-plate from external_input_copper-plate to Block_copper-cable_1_0, distance: 21
-2025-06-30 10:35:29,698 - FactoryBuilder - INFO - Created connection for iron-plate from external_input_iron-plate to Block_electronic-circuit_0_0, distance: 16
-2025-06-30 10:35:29,698 - FactoryBuilder - INFO - Created connection for copper-cable from Block_electronic-circuit_0_0 to Block_copper-cable_1_0, distance: 35
-2025-06-30 10:35:29,698 - FactoryBuilder - INFO - Created connection for copper-cable from Block_copper-cable_1_0 to Block_electronic-circuit_0_0, distance: 35
-2025-06-30 10:35:29,698 - FactoryBuilder - INFO - Created connection for electronic-circuit from Block_electronic-circuit_0_0 to external_output_electronic-circuit, distance: 10
-2025-06-30 10:35:29,699 - FactoryBuilder - INFO - Created 5 point connections
-2025-06-30 10:35:29,699 - FactoryBuilder - INFO - Added connection point for copper-plate: (1, 29) -> (9, 16)
-2025-06-30 10:35:29,699 - FactoryBuilder - INFO - Added connection point for iron-plate: (5, 29) -> (9, 17)
-2025-06-30 10:35:29,700 - FactoryBuilder - INFO - Added connection point for copper-cable: (0, 5) -> (9, 31)
-2025-06-30 10:35:29,700 - FactoryBuilder - INFO - Added connection point for copper-cable: (0, 31) -> (9, 5)
-2025-06-30 10:35:29,700 - FactoryBuilder - INFO - Added connection point for electronic-circuit: (9, 20) -> (8, 29)
-2025-06-30 10:35:29,771 - FactoryBuilder - INFO - Found paths for 3 connections out of 5 requested
-2025-06-30 10:35:29,784 - FactoryBuilder - INFO - Adding 3 inter-block paths to Factorys/factory_electronic-circuit_100.json
-2025-06-30 10:35:29,792 - FactoryBuilder - INFO - Successfully added 3 inter-block paths to Factorys/factory_electronic-circuit_100.json
-2025-06-30 10:35:29,806 - FactoryBuilder - INFO - Creating blueprint from Factorys/factory_electronic-circuit_100.json
-2025-06-30 10:35:29,808 - FactoryBuilder - INFO - 1. Placing assembling machines...
-2025-06-30 10:35:29,808 - FactoryBuilder - INFO -   - Placing assembler for electronic-circuit at (3,12)
-2025-06-30 10:35:29,809 - FactoryBuilder - INFO -   - Placing assembler for electronic-circuit at (3,9)
-2025-06-30 10:35:29,809 - FactoryBuilder - INFO -   - Placing assembler for copper-cable at (3,17)
-2025-06-30 10:35:29,810 - FactoryBuilder - INFO -   - Placing assembler for copper-cable at (3,20)
-2025-06-30 10:35:29,811 - FactoryBuilder - INFO -   - Placing assembler for copper-cable at (3,24)
-2025-06-30 10:35:29,812 - FactoryBuilder - INFO - 2. Placing inserters...
-2025-06-30 10:35:29,813 - FactoryBuilder - INFO -   - Placing inserter for copper-cable at (1, 13) facing 12
-2025-06-30 10:35:29,815 - FactoryBuilder - INFO -   - Placing inserter for copper-cable at (1, 11) facing 12
-2025-06-30 10:35:29,820 - FactoryBuilder - INFO -   - Placing inserter for copper-cable at (1, 12) facing 12
-2025-06-30 10:35:29,822 - FactoryBuilder - INFO -   - Placing inserter for iron-plate at (5, 13) facing 4
-2025-06-30 10:35:29,823 - FactoryBuilder - INFO -   - Placing inserter for copper-cable at (1, 10) facing 12
-2025-06-30 10:35:29,824 - FactoryBuilder - INFO -   - Placing inserter for copper-cable at (1, 8) facing 12
-2025-06-30 10:35:29,826 - FactoryBuilder - INFO -   - Placing inserter for copper-cable at (1, 9) facing 12
-2025-06-30 10:35:29,828 - FactoryBuilder - INFO -   - Placing inserter for iron-plate at (5, 8) facing 4
-2025-06-30 10:35:29,829 - FactoryBuilder - INFO -   - Placing inserter for electronic-circuit at (5, 11) facing 12
-2025-06-30 10:35:29,831 - FactoryBuilder - INFO -   - Placing inserter for electronic-circuit at (5, 9) facing 12
-2025-06-30 10:35:29,833 - FactoryBuilder - INFO -   - Placing inserter for copper-plate at (1, 18) facing 12
-2025-06-30 10:35:29,834 - FactoryBuilder - INFO -   - Placing inserter for copper-plate at (1, 17) facing 12
-2025-06-30 10:35:29,836 - FactoryBuilder - INFO -   - Placing inserter for copper-plate at (1, 19) facing 12
-2025-06-30 10:35:29,837 - FactoryBuilder - INFO -   - Placing inserter for copper-plate at (1, 20) facing 12
-2025-06-30 10:35:29,838 - FactoryBuilder - INFO -   - Placing inserter for copper-plate at (1, 25) facing 12
-2025-06-30 10:35:29,839 - FactoryBuilder - INFO -   - Placing inserter for copper-plate at (1, 23) facing 12
-2025-06-30 10:35:29,840 - FactoryBuilder - INFO -   - Placing inserter for copper-cable at (5, 16) facing 12
-2025-06-30 10:35:29,842 - FactoryBuilder - INFO -   - Placing inserter for copper-cable at (5, 17) facing 12
-2025-06-30 10:35:29,844 - FactoryBuilder - INFO -   - Placing inserter for copper-cable at (5, 18) facing 12
-2025-06-30 10:35:29,845 - FactoryBuilder - INFO -   - Placing inserter for copper-cable at (5, 19) facing 12
-2025-06-30 10:35:29,846 - FactoryBuilder - INFO -   - Placing inserter for copper-cable at (5, 20) facing 12
-2025-06-30 10:35:29,849 - FactoryBuilder - INFO -   - Placing inserter for copper-cable at (5, 21) facing 12
-2025-06-30 10:35:29,850 - FactoryBuilder - INFO -   - Placing inserter for copper-cable at (5, 23) facing 12
-2025-06-30 10:35:29,851 - FactoryBuilder - INFO -   - Placing inserter for copper-cable at (5, 24) facing 12
-2025-06-30 10:35:29,853 - FactoryBuilder - INFO -   - Placing inserter for copper-cable at (5, 25) facing 12
-2025-06-30 10:35:29,855 - FactoryBuilder - INFO - 3. Placing underground belts...
-2025-06-30 10:35:29,855 - FactoryBuilder - INFO -   - Placing underground belt for electronic-circuit at (9, 11) facing 4, type: input
-2025-06-30 10:35:29,856 - FactoryBuilder - INFO -   - Placing underground belt for electronic-circuit at (13, 11) facing 4, type: output
-2025-06-30 10:35:29,858 - FactoryBuilder - INFO - 4. Placing splitters...
-2025-06-30 10:35:29,858 - FactoryBuilder - INFO -   - Placing splitter for electronic-circuit at (15, 12) facing 8
-2025-06-30 10:35:29,859 - FactoryBuilder - INFO -   - Placing splitter for iron-plate at (12, 13) facing 0
-2025-06-30 10:35:29,860 - FactoryBuilder - INFO -   - Placing splitter for iron-plate at (12, 9) facing 0
-2025-06-30 10:35:29,861 - FactoryBuilder - INFO -   - Placing splitter for copper-cable at (15, 17) facing 0
-2025-06-30 10:35:29,862 - FactoryBuilder - INFO - 5. Placing transport belts...
-2025-06-30 10:35:29,862 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (0, 14) facing 0
-2025-06-30 10:35:29,865 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (0, 13) facing 0
-2025-06-30 10:35:29,866 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (0, 12) facing 0
-2025-06-30 10:35:29,868 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (0, 11) facing 0
-2025-06-30 10:35:29,870 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (0, 10) facing 0
-2025-06-30 10:35:29,872 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (0, 9) facing 0
-2025-06-30 10:35:29,874 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (0, 8) facing 0
-2025-06-30 10:35:29,876 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (0, 7) facing 0
-2025-06-30 10:35:29,877 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (0, 6) facing 0
-2025-06-30 10:35:29,878 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (0, 5) facing 0
-2025-06-30 10:35:29,879 - FactoryBuilder - INFO -   - Placing transport belt for iron-plate at (12, 14) facing 0
-2025-06-30 10:35:29,881 - FactoryBuilder - INFO -   - Skipping belt at (12, 13) due to overlap
-2025-06-30 10:35:29,882 - FactoryBuilder - INFO -   - Placing transport belt for iron-plate at (12, 12) facing 0
-2025-06-30 10:35:29,883 - FactoryBuilder - INFO -   - Placing transport belt for iron-plate at (12, 11) facing 0
-2025-06-30 10:35:29,884 - FactoryBuilder - INFO -   - Placing transport belt for iron-plate at (12, 10) facing 0
-2025-06-30 10:35:29,886 - FactoryBuilder - INFO -   - Skipping belt at (12, 9) due to overlap
-2025-06-30 10:35:29,886 - FactoryBuilder - INFO -   - Placing transport belt for iron-plate at (12, 8) facing 0
-2025-06-30 10:35:29,887 - FactoryBuilder - INFO -   - Placing transport belt for iron-plate at (12, 7) facing 0
-2025-06-30 10:35:29,889 - FactoryBuilder - INFO -   - Placing transport belt for iron-plate at (12, 6) facing 0
-2025-06-30 10:35:29,890 - FactoryBuilder - INFO -   - Placing transport belt for iron-plate at (12, 5) facing 0
-2025-06-30 10:35:29,891 - FactoryBuilder - INFO -   - Placing transport belt for electronic-circuit at (15, 5) facing 8
-2025-06-30 10:35:29,892 - FactoryBuilder - INFO -   - Placing transport belt for electronic-circuit at (15, 6) facing 8
-2025-06-30 10:35:29,893 - FactoryBuilder - INFO -   - Placing transport belt for electronic-circuit at (15, 7) facing 8
-2025-06-30 10:35:29,895 - FactoryBuilder - INFO -   - Placing transport belt for electronic-circuit at (15, 8) facing 8
-2025-06-30 10:35:29,897 - FactoryBuilder - INFO -   - Placing transport belt for electronic-circuit at (15, 9) facing 8
-2025-06-30 10:35:29,898 - FactoryBuilder - INFO -   - Placing transport belt for electronic-circuit at (15, 10) facing 8
-2025-06-30 10:35:29,900 - FactoryBuilder - INFO -   - Placing transport belt for electronic-circuit at (15, 11) facing 8
-2025-06-30 10:35:29,901 - FactoryBuilder - INFO -   - Skipping belt at (15, 12) due to overlap
-2025-06-30 10:35:29,901 - FactoryBuilder - INFO -   - Placing transport belt for electronic-circuit at (15, 13) facing 8
-2025-06-30 10:35:29,903 - FactoryBuilder - INFO -   - Placing transport belt for electronic-circuit at (15, 14) facing 8
-2025-06-30 10:35:29,905 - FactoryBuilder - INFO -   - Placing transport belt for electronic-circuit at (6, 11) facing 4
-2025-06-30 10:35:29,906 - FactoryBuilder - INFO -   - Placing transport belt for electronic-circuit at (7, 11) facing 4
-2025-06-30 10:35:29,909 - FactoryBuilder - INFO -   - Placing transport belt for electronic-circuit at (8, 11) facing 4
-2025-06-30 10:35:29,912 - FactoryBuilder - INFO -   - Skipping belt at (9, 11) due to overlap
-2025-06-30 10:35:29,912 - FactoryBuilder - INFO -   - Skipping belt at (13, 11) due to overlap
-2025-06-30 10:35:29,913 - FactoryBuilder - INFO -   - Placing transport belt for electronic-circuit at (14, 11) facing 8
-2025-06-30 10:35:29,914 - FactoryBuilder - INFO -   - Placing transport belt for electronic-circuit at (6, 9) facing 8
-2025-06-30 10:35:29,916 - FactoryBuilder - INFO -   - Placing transport belt for electronic-circuit at (6, 10) facing 8
-2025-06-30 10:35:29,918 - FactoryBuilder - INFO -   - Placing transport belt for iron-plate at (11, 12) facing 12
-2025-06-30 10:35:29,920 - FactoryBuilder - INFO -   - Placing transport belt for iron-plate at (10, 12) facing 12
-2025-06-30 10:35:29,922 - FactoryBuilder - INFO -   - Placing transport belt for iron-plate at (9, 12) facing 12
-2025-06-30 10:35:29,924 - FactoryBuilder - INFO -   - Placing transport belt for iron-plate at (8, 12) facing 12
-2025-06-30 10:35:29,926 - FactoryBuilder - INFO -   - Placing transport belt for iron-plate at (7, 12) facing 12
-2025-06-30 10:35:29,930 - FactoryBuilder - INFO -   - Placing transport belt for iron-plate at (6, 12) facing 8
-2025-06-30 10:35:29,932 - FactoryBuilder - INFO -   - Placing transport belt for iron-plate at (6, 13) facing 8
-2025-06-30 10:35:29,935 - FactoryBuilder - INFO -   - Placing transport belt for iron-plate at (11, 8) facing 12
-2025-06-30 10:35:29,938 - FactoryBuilder - INFO -   - Placing transport belt for iron-plate at (10, 8) facing 12
-2025-06-30 10:35:29,940 - FactoryBuilder - INFO -   - Placing transport belt for iron-plate at (9, 8) facing 12
-2025-06-30 10:35:29,942 - FactoryBuilder - INFO -   - Placing transport belt for iron-plate at (8, 8) facing 12
-2025-06-30 10:35:29,945 - FactoryBuilder - INFO -   - Placing transport belt for iron-plate at (7, 8) facing 12
-2025-06-30 10:35:29,948 - FactoryBuilder - INFO -   - Placing transport belt for iron-plate at (6, 8) facing 12
-2025-06-30 10:35:29,951 - FactoryBuilder - INFO -   - Placing transport belt for copper-plate at (0, 25) facing 0
-2025-06-30 10:35:29,952 - FactoryBuilder - INFO -   - Placing transport belt for copper-plate at (0, 24) facing 0
-2025-06-30 10:35:29,954 - FactoryBuilder - INFO -   - Placing transport belt for copper-plate at (0, 23) facing 0
-2025-06-30 10:35:29,955 - FactoryBuilder - INFO -   - Placing transport belt for copper-plate at (0, 22) facing 0
-2025-06-30 10:35:29,956 - FactoryBuilder - INFO -   - Placing transport belt for copper-plate at (0, 21) facing 0
-2025-06-30 10:35:29,959 - FactoryBuilder - INFO -   - Placing transport belt for copper-plate at (0, 20) facing 0
-2025-06-30 10:35:29,961 - FactoryBuilder - INFO -   - Placing transport belt for copper-plate at (0, 19) facing 0
-2025-06-30 10:35:29,964 - FactoryBuilder - INFO -   - Placing transport belt for copper-plate at (0, 18) facing 0
-2025-06-30 10:35:29,966 - FactoryBuilder - INFO -   - Placing transport belt for copper-plate at (0, 17) facing 0
-2025-06-30 10:35:29,968 - FactoryBuilder - INFO -   - Placing transport belt for copper-plate at (0, 16) facing 0
-2025-06-30 10:35:29,972 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (15, 25) facing 0
-2025-06-30 10:35:29,973 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (15, 24) facing 0
-2025-06-30 10:35:29,974 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (15, 23) facing 0
-2025-06-30 10:35:29,976 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (15, 22) facing 0
-2025-06-30 10:35:29,978 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (15, 21) facing 0
-2025-06-30 10:35:29,979 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (15, 20) facing 0
-2025-06-30 10:35:29,980 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (15, 19) facing 0
-2025-06-30 10:35:29,981 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (15, 18) facing 0
-2025-06-30 10:35:29,982 - FactoryBuilder - INFO -   - Skipping belt at (15, 17) due to overlap
-2025-06-30 10:35:29,983 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (15, 16) facing 0
-2025-06-30 10:35:29,985 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (6, 16) facing 8
-2025-06-30 10:35:29,989 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (6, 17) facing 8
-2025-06-30 10:35:29,992 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (6, 18) facing 4
-2025-06-30 10:35:29,994 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (7, 18) facing 4
-2025-06-30 10:35:29,996 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (8, 18) facing 4
-2025-06-30 10:35:29,998 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (9, 18) facing 4
-2025-06-30 10:35:29,999 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (10, 18) facing 4
-2025-06-30 10:35:30,001 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (11, 18) facing 4
-2025-06-30 10:35:30,003 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (12, 18) facing 4
-2025-06-30 10:35:30,005 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (13, 18) facing 4
-2025-06-30 10:35:30,006 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (14, 18) facing 0
-2025-06-30 10:35:30,008 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (6, 19) facing 0
-2025-06-30 10:35:30,011 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (6, 20) facing 0
-2025-06-30 10:35:30,013 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (6, 21) facing 0
-2025-06-30 10:35:30,015 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (6, 23) facing 0
-2025-06-30 10:35:30,018 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (6, 22) facing 0
-2025-06-30 10:35:30,020 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (6, 24) facing 0
-2025-06-30 10:35:30,022 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (6, 25) facing 0
-2025-06-30 10:35:30,024 - FactoryBuilder - INFO - 6. Placing external I/O points as constant combinators...
-2025-06-30 10:35:30,024 - FactoryBuilder - INFO -   - Placing input point for electronic-circuit at (8, 29)
-2025-06-30 10:35:30,026 - FactoryBuilder - INFO -   - Placing output point for copper-plate at (1, 29)
-2025-06-30 10:35:30,028 - FactoryBuilder - INFO -   - Placing output point for iron-plate at (5, 29)
-2025-06-30 10:35:30,030 - FactoryBuilder - INFO - 7. Placing power poles...
-2025-06-30 10:35:30,030 - FactoryBuilder - INFO -   - Placing medium-electric-pole at (2,7)
-2025-06-30 10:35:30,031 - FactoryBuilder - INFO -   - Placed medium-electric-pole at (2,7)
-2025-06-30 10:35:30,032 - FactoryBuilder - INFO -   - Placing medium-electric-pole at (2,14)
-2025-06-30 10:35:30,033 - FactoryBuilder - INFO -   - Placed medium-electric-pole at (2,14)
-2025-06-30 10:35:30,034 - FactoryBuilder - INFO -   - Placing medium-electric-pole at (1,16)
-2025-06-30 10:35:30,035 - FactoryBuilder - INFO -   - Placed medium-electric-pole at (1,16)
-2025-06-30 10:35:30,038 - FactoryBuilder - INFO -   - Placing medium-electric-pole at (1,22)
-2025-06-30 10:35:30,038 - FactoryBuilder - INFO -   - Placed medium-electric-pole at (1,22)
-2025-06-30 10:35:30,040 - FactoryBuilder - INFO - 8. Placing inter-module paths...
-2025-06-30 10:35:30,040 - FactoryBuilder - INFO -   - Processing 3 pathfinder-generated belt paths
-2025-06-30 10:35:30,041 - FactoryBuilder - INFO -   - Processing path for electronic-circuit
-2025-06-30 10:35:30,045 - FactoryBuilder - INFO -   - Adding transport belt at [9, 20] facing 12
-2025-06-30 10:35:30,046 - FactoryBuilder - DEBUG -   - Processing last belt in path for {'id': 'electronic-circuit', 'name': 'Electronic circuit', 'type': 'Intermediate product', 'wiki_link': 'https://wiki.factorio.com/Electronic_circuit', 'category': 'Intermediate product', 'recipe': {'time': 0.5, 'yield': 1, 'ingredients': [{'id': 'copper-cable', 'amount': 3}, {'id': 'iron-plate', 'amount': 1}]}}
-2025-06-30 10:35:30,048 - FactoryBuilder - INFO -   - Skipping last belt at [8, 29] due to overlap or underground belt
-2025-06-30 10:35:30,048 - FactoryBuilder - INFO -   - Processing path for copper-plate
-2025-06-30 10:35:30,052 - FactoryBuilder - INFO -   - Found 1 underground segments
-2025-06-30 10:35:30,052 - FactoryBuilder - INFO -   - Adding underground belt segment from [7, 22] to [7, 17] facing 0
-2025-06-30 10:35:30,056 - FactoryBuilder - INFO -   - Skipping belt at [1, 29] due to overlap
-2025-06-30 10:35:30,058 - FactoryBuilder - INFO -   - Adding transport belt at [1, 28] facing 0
-2025-06-30 10:35:30,059 - FactoryBuilder - DEBUG -   - Processing last belt in path for {'id': 'copper-plate', 'name': 'Copper plate', 'type': 'Intermediate product', 'wiki_link': 'https://wiki.factorio.com/Copper_plate', 'category': 'Intermediate product', 'recipe': {'time': None, 'yield': None, 'ingredients': []}}
-2025-06-30 10:35:30,060 - FactoryBuilder - INFO -   - Adding last transport belt at [9, 16] facing 4
-2025-06-30 10:35:30,062 - FactoryBuilder - INFO -   - Adding transport belt at [1, 27] facing 0
-2025-06-30 10:35:30,063 - FactoryBuilder - DEBUG -   - Processing last belt in path for {'id': 'copper-plate', 'name': 'Copper plate', 'type': 'Intermediate product', 'wiki_link': 'https://wiki.factorio.com/Copper_plate', 'category': 'Intermediate product', 'recipe': {'time': None, 'yield': None, 'ingredients': []}}
-2025-06-30 10:35:30,064 - FactoryBuilder - INFO -   - Skipping last belt at [9, 16] due to overlap or underground belt
-2025-06-30 10:35:30,064 - FactoryBuilder - INFO -   - Processing path for iron-plate
-2025-06-30 10:35:30,067 - FactoryBuilder - INFO -   - Found 2 underground segments
-2025-06-30 10:35:30,068 - FactoryBuilder - INFO -   - Adding underground belt segment from [5, 27] to [9, 27] facing 4
-2025-06-30 10:35:30,069 - FactoryBuilder - INFO -   - Adding underground belt segment from [9, 22] to [9, 17] facing 0
-2025-06-30 10:35:30,073 - FactoryBuilder - INFO -   - Skipping belt at [5, 29] due to overlap
-2025-06-30 10:35:30,073 - FactoryBuilder - INFO -   - Adding transport belt at [5, 28] facing 0
-2025-06-30 10:35:30,074 - FactoryBuilder - DEBUG -   - Processing last belt in path for {'id': 'iron-plate', 'name': 'Iron plate', 'type': 'Intermediate product', 'wiki_link': 'https://wiki.factorio.com/Iron_plate', 'category': 'Intermediate product', 'recipe': {'time': None, 'yield': None, 'ingredients': []}}
-2025-06-30 10:35:30,075 - FactoryBuilder - INFO -   - Skipping last belt at [9, 17] due to overlap or underground belt
-2025-06-30 10:35:30,075 - FactoryBuilder - INFO - 9. Exporting blueprint to Blueprints/blueprint_electronic-circuit_100.txt...
-2025-06-30 10:35:30,082 - FactoryBuilder - INFO - Blueprint successfully exported to Blueprints/blueprint_electronic-circuit_100.txt
-2025-06-30 10:35:30,893 - FactoryBuilder - INFO - Visualization saved to Factorys/factory_electronic-circuit_100.png
-2025-06-30 10:35:34,990 - FactoryBuilder - INFO - Factory dimensions: 16 x 30
-2025-06-30 10:35:34,991 - FactoryBuilder - INFO - Final blocks: {'fixed_block_external_input_copper-plate': {'x': 1, 'y': 29, 'width': 1, 'height': 1, 'input_points': [{'id': 'external_input_copper-plate', 'item': 'copper-plate', 'type': 'input', 'x': 1, 'y': 29}], 'output_points': [], 'module_json': None, 'block_type': 'block'}, 'fixed_block_external_input_iron-plate': {'x': 5, 'y': 29, 'width': 1, 'height': 1, 'input_points': [{'id': 'external_input_iron-plate', 'item': 'iron-plate', 'type': 'input', 'x': 5, 'y': 29}], 'output_points': [], 'module_json': None, 'block_type': 'block'}, 'fixed_block_external_output_electronic-circuit': {'x': 8, 'y': 29, 'width': 1, 'height': 1, 'input_points': [], 'output_points': [{'id': 'external_output_electronic-circuit', 'item': 'electronic-circuit', 'type': 'output', 'x': 8, 'y': 29}], 'module_json': None, 'block_type': 'block'}, 'Block_electronic-circuit_0_0': {'x': 0, 'y': 5, 'width': 16, 'height': 10, 'input_points': [{'id': 'electronic-circuit_input_copper-cable_0_0', 'item': 'copper-cable', 'type': 'input', 'x': 0, 'y': 14}, {'id': 'electronic-circuit_input_iron-plate_0_0', 'item': 'iron-plate', 'type': 'input', 'x': 12, 'y': 14}, {'id': 'electronic-circuit_input_electronic-circuit_0_0', 'item': 'electronic-circuit', 'type': 'input', 'x': 15, 'y': 5}], 'output_points': [{'id': 'electronic-circuit_output_copper-cable_0_0', 'item': 'copper-cable', 'type': 'output', 'x': 0, 'y': 5}, {'id': 'electronic-circuit_output_iron-plate_0_0', 'item': 'iron-plate', 'type': 'output', 'x': 12, 'y': 5}, {'id': 'electronic-circuit_output_electronic-circuit_0_0', 'item': 'electronic-circuit', 'type': 'output', 'x': 15, 'y': 14}], 'module_json': "E:/Programmieren/Bachelor-Thesis/Modules/electronic-circuit_120_['copper-cable']_module.json", 'block_type': 'electronic-circuit'}, 'Block_copper-cable_1_0': {'x': 0, 'y': 16, 'width': 16, 'height': 10, 'input_points': [{'id': 'copper-cable_input_copper-plate_1_0', 'item': 'copper-plate', 'type': 'input', 'x': 0, 'y': 25}, {'id': 'copper-cable_input_copper-cable_1_0', 'item': 'copper-cable', 'type': 'input', 'x': 15, 'y': 25}], 'output_points': [{'id': 'copper-cable_output_copper-plate_1_0', 'item': 'copper-plate', 'type': 'output', 'x': 0, 'y': 16}, {'id': 'copper-cable_output_copper-cable_1_0', 'item': 'copper-cable', 'type': 'output', 'x': 15, 'y': 16}], 'module_json': 'E:/Programmieren/Bachelor-Thesis/Modules/copper-cable_300_[]_module.json', 'block_type': 'copper-cable'}}
-2025-06-30 10:35:34,992 - FactoryBuilder - INFO - Gate connections: [{'source': <FactoryZ3Solver.Gate object at 0x000002C08914F350>, 'target': <FactoryZ3Solver.Gate object at 0x000002C08914E9F0>, 'source_x': 0, 'source_y': 16, 'target_x': 1, 'target_y': 29, 'item': 'copper-plate'}, {'source': <FactoryZ3Solver.Gate object at 0x000002C08914EEA0>, 'target': <FactoryZ3Solver.Gate object at 0x000002C08914FE60>, 'source_x': 12, 'source_y': 5, 'target_x': 5, 'target_y': 29, 'item': 'iron-plate'}, {'source': <FactoryZ3Solver.Gate object at 0x000002C08914ECC0>, 'target': <FactoryZ3Solver.Gate object at 0x000002C08914E060>, 'source_x': 0, 'source_y': 5, 'target_x': 15, 'target_y': 25, 'item': 'copper-cable'}, {'source': <FactoryZ3Solver.Gate object at 0x000002C08914E000>, 'target': <FactoryZ3Solver.Gate object at 0x000002C08914E990>, 'source_x': 15, 'source_y': 16, 'target_x': 0, 'target_y': 14, 'item': 'copper-cable'}, {'source': <FactoryZ3Solver.Gate object at 0x000002C08914FF50>, 'target': <FactoryZ3Solver.Gate object at 0x000002C08914EF30>, 'source_x': 8, 'source_y': 29, 'target_x': 15, 'target_y': 5, 'item': 'electronic-circuit'}]
-2025-06-30 10:35:34,992 - FactoryBuilder - INFO - Execution time for solve: 11.4748 seconds.
+2025-06-30 11:19:19,559 - FactoryBuilder - INFO - Selected items: {'copper-cable'}
+2025-06-30 11:19:20,431 - FactoryBuilder - INFO - Selected items: {'copper-cable'}
+2025-06-30 11:19:27,971 - FactoryBuilder - INFO - solving factory
+2025-06-30 11:19:27,971 - FactoryBuilder - INFO - Defining factory I/O points
+2025-06-30 11:19:27,971 - FactoryBuilder - INFO - External inputs: {'copper-plate', 'iron-plate'}
+2025-06-30 11:19:27,972 - FactoryBuilder - INFO - External outputs: {'electronic-circuit'}
+2025-06-30 11:19:27,972 - FactoryBuilder - INFO - Internal items: {'copper-cable'}
+2025-06-30 11:19:30,076 - FactoryBuilder - DEBUG - Selected South at position (1, 29) for copper-plate
+2025-06-30 11:19:31,269 - FactoryBuilder - DEBUG - Selected South at position (4, 29) for iron-plate
+2025-06-30 11:19:31,341 - FactoryBuilder - INFO - Created fixed input gate for copper-plate at position (1, 29) on South edge
+2025-06-30 11:19:31,341 - FactoryBuilder - INFO - Created fixed input gate for iron-plate at position (4, 29) on South edge
+2025-06-30 11:19:32,720 - FactoryBuilder - DEBUG - Selected South at position (7, 29) for electronic-circuit
+2025-06-30 11:19:32,803 - FactoryBuilder - INFO - Created fixed output gate for electronic-circuit at position (7, 29) on South edge
+2025-06-30 11:19:32,804 - FactoryBuilder - INFO - block data:
+2025-06-30 11:19:32,804 - FactoryBuilder - INFO - {'electronic-circuit': {'tree': <FactorioProductionTree.FactorioProductionTree object at 0x000001A7C39ABBC0>, 'production_data': {'electronic-circuit': {'amount_per_minute': 120, 'assemblers': 2, 'input_inserters': [{'id': 'copper-cable', 'inserters': 3, 'amount': 3}, {'id': 'iron-plate', 'inserters': 1, 'amount': 1}], 'belts': 1, 'capacity': 0}, 'copper-cable': {'amount_per_minute': 360.0, 'capacity': 0}, 'iron-plate': {'amount_per_minute': 120.0, 'capacity': 0}}, 'num_factories': 1, 'png': "E:/Programmieren/Bachelor-Thesis/Modules/electronic-circuit_120_['copper-cable']_module.png", 'json': "E:/Programmieren/Bachelor-Thesis/Modules/electronic-circuit_120_['copper-cable']_module.json"}, 'copper-cable': {'tree': <FactorioProductionTree.FactorioProductionTree object at 0x000001A7C39A86E0>, 'production_data': {'copper-cable': {'amount_per_minute': 300, 'assemblers': 3, 'input_inserters': [{'id': 'copper-plate', 'inserters': 2, 'amount': 1}], 'belts': 1, 'capacity': 0}, 'copper-plate': {'amount_per_minute': 150.0, 'capacity': 0}}, 'num_factories': 1, 'png': 'E:/Programmieren/Bachelor-Thesis/Modules/copper-cable_300_[]_module.png', 'json': 'E:/Programmieren/Bachelor-Thesis/Modules/copper-cable_300_[]_module.json'}}
+2025-06-30 11:19:32,816 - FactoryBuilder - INFO - total number of modules: 2
+2025-06-30 11:19:32,818 - FactoryBuilder - INFO - Added fixed input gate external_input_copper-plate at position (1, 29)
+2025-06-30 11:19:32,820 - FactoryBuilder - INFO - Added fixed input gate external_input_iron-plate at position (4, 29)
+2025-06-30 11:19:32,822 - FactoryBuilder - INFO - Added fixed output gate external_output_electronic-circuit at position (7, 29)
+2025-06-30 11:19:32,975 - FactoryBuilder - DEBUG - Gate connections: [{'source': <FactoryZ3Solver.Gate object at 0x000001A7C3B793A0>, 'target': <FactoryZ3Solver.Gate object at 0x000001A7C3B7A7E0>, 'source_x': 0, 'source_y': 16, 'target_x': 1, 'target_y': 29, 'item': 'copper-plate'}, {'source': <FactoryZ3Solver.Gate object at 0x000001A7C3B7A450>, 'target': <FactoryZ3Solver.Gate object at 0x000001A7C3B78DD0>, 'source_x': 12, 'source_y': 5, 'target_x': 4, 'target_y': 29, 'item': 'iron-plate'}, {'source': <FactoryZ3Solver.Gate object at 0x000001A7C3B78EF0>, 'target': <FactoryZ3Solver.Gate object at 0x000001A7C3B79490>, 'source_x': 0, 'source_y': 5, 'target_x': 15, 'target_y': 25, 'item': 'copper-cable'}, {'source': <FactoryZ3Solver.Gate object at 0x000001A7C3B79580>, 'target': <FactoryZ3Solver.Gate object at 0x000001A7C3B79040>, 'source_x': 15, 'source_y': 16, 'target_x': 0, 'target_y': 14, 'item': 'copper-cable'}, {'source': <FactoryZ3Solver.Gate object at 0x000001A7C3B78D40>, 'target': <FactoryZ3Solver.Gate object at 0x000001A7C3B7A630>, 'source_x': 7, 'source_y': 29, 'target_x': 15, 'target_y': 5, 'item': 'electronic-circuit'}]
+2025-06-30 11:19:32,975 - FactoryBuilder - INFO - Added external input gate for copper-plate at (1, 29) as an output point
+2025-06-30 11:19:32,976 - FactoryBuilder - INFO - Added external input gate for iron-plate at (4, 29) as an output point
+2025-06-30 11:19:32,976 - FactoryBuilder - INFO - Added external output gate for electronic-circuit at (7, 29) as an input point
+2025-06-30 11:19:32,976 - FactoryBuilder - WARNING - Module JSON not found for fixed_block_external_input_copper-plate (type: block), skipping
+2025-06-30 11:19:32,976 - FactoryBuilder - ERROR - Error processing module JSON for fixed_block_external_input_copper-plate: expected str, bytes or os.PathLike object, not NoneType
+2025-06-30 11:19:32,978 - FactoryBuilder - WARNING - Module JSON not found for fixed_block_external_input_iron-plate (type: block), skipping
+2025-06-30 11:19:32,979 - FactoryBuilder - ERROR - Error processing module JSON for fixed_block_external_input_iron-plate: expected str, bytes or os.PathLike object, not NoneType
+2025-06-30 11:19:32,980 - FactoryBuilder - WARNING - Module JSON not found for fixed_block_external_output_electronic-circuit (type: block), skipping
+2025-06-30 11:19:32,981 - FactoryBuilder - ERROR - Error processing module JSON for fixed_block_external_output_electronic-circuit: expected str, bytes or os.PathLike object, not NoneType
+2025-06-30 11:19:32,986 - FactoryBuilder - INFO - Processing module data from E:/Programmieren/Bachelor-Thesis/Modules/electronic-circuit_120_['copper-cable']_module.json for block Block_electronic-circuit_0_0
+2025-06-30 11:19:32,986 - FactoryBuilder - INFO - Added assembler electronic-circuit at [2, 11] for block Block_electronic-circuit_0_0
+2025-06-30 11:19:32,987 - FactoryBuilder - INFO - Added assembler electronic-circuit at [2, 8] for block Block_electronic-circuit_0_0
+2025-06-30 11:19:32,987 - FactoryBuilder - INFO - Added inserter copper-cable at [1, 13] facing east for block Block_electronic-circuit_0_0
+2025-06-30 11:19:32,987 - FactoryBuilder - INFO - Added inserter copper-cable at [1, 11] facing east for block Block_electronic-circuit_0_0
+2025-06-30 11:19:32,987 - FactoryBuilder - INFO - Added inserter copper-cable at [1, 12] facing east for block Block_electronic-circuit_0_0
+2025-06-30 11:19:32,988 - FactoryBuilder - INFO - Added inserter iron-plate at [5, 13] facing west for block Block_electronic-circuit_0_0
+2025-06-30 11:19:32,988 - FactoryBuilder - INFO - Added inserter copper-cable at [1, 10] facing east for block Block_electronic-circuit_0_0
+2025-06-30 11:19:32,988 - FactoryBuilder - INFO - Added inserter copper-cable at [1, 8] facing east for block Block_electronic-circuit_0_0
+2025-06-30 11:19:32,988 - FactoryBuilder - INFO - Added inserter copper-cable at [1, 9] facing east for block Block_electronic-circuit_0_0
+2025-06-30 11:19:32,989 - FactoryBuilder - INFO - Added inserter iron-plate at [5, 8] facing west for block Block_electronic-circuit_0_0
+2025-06-30 11:19:32,989 - FactoryBuilder - INFO - Added placed inserter for electronic-circuit at [5, 11] facing east
+2025-06-30 11:19:32,989 - FactoryBuilder - INFO - Added placed inserter for electronic-circuit at [5, 9] facing east
+2025-06-30 11:19:32,990 - FactoryBuilder - DEBUG - Module data for block Block_electronic-circuit_0_0: {'output_item': 'electronic-circuit', 'max_ouput': 120.0, 'amount': 120, 'production_data': {'electronic-circuit': {'amount_per_minute': 120, 'assemblers': 2, 'input_inserters': [{'id': 'copper-cable', 'inserters': 3, 'amount': 3}, {'id': 'iron-plate', 'inserters': 1, 'amount': 1}], 'belts': 1, 'capacity': 0}, 'copper-cable': {'amount_per_minute': 360.0, 'capacity': 0}, 'iron-plate': {'amount_per_minute': 120.0, 'capacity': 0}}, 'grid_width': 16, 'grid_height': 10, 'input_items': ['copper-cable', 'iron-plate'], 'input_information': {'copper-cable': {'input': [9, 0], 'output': [0, 0], 'paths': {'copper-cable': [{'path': [[0, 9], [0, 8], [0, 7], [0, 6], [0, 5], [0, 4], [0, 3], [0, 2], [0, 1], [0, 0]], 'start': [0, 9], 'destination': [0, 0], 'underground_segments': {}, 'start_splitter': False, 'dest_splitter': False, 'orientation': {'(0, 9)': [0, -1], '(0, 8)': [0, -1], '(0, 7)': [0, -1], '(0, 6)': [0, -1], '(0, 5)': [0, -1], '(0, 4)': [0, -1], '(0, 3)': [0, -1], '(0, 2)': [0, -1], '(0, 1)': [0, -1], '(0, 0)': [0, -1]}}]}}, 'iron-plate': {'input': [9, 12], 'output': [0, 12], 'paths': {'iron-plate': [{'path': [[12, 9], [12, 8], [12, 7], [12, 6], [12, 5], [12, 4], [12, 3], [12, 2], [12, 1], [12, 0]], 'start': [12, 9], 'destination': [12, 0], 'underground_segments': {}, 'start_splitter': False, 'dest_splitter': False, 'orientation': {'(12, 9)': [0, -1], '(12, 8)': [0, -1], '(12, 7)': [0, -1], '(12, 6)': [0, -1], '(12, 5)': [0, -1], '(12, 4)': [0, -1], '(12, 3)': [0, -1], '(12, 2)': [0, -1], '(12, 1)': [0, -1], '(12, 0)': [0, -1]}}]}}}, 'output_information': {'electronic-circuit': {'input': [0, 15], 'output': [9, 15], 'paths': {'electronic-circuit': [{'path': [[15, 0], [15, 1], [15, 2], [15, 3], [15, 4], [15, 5], [15, 6], [15, 7], [15, 8], [15, 9]], 'start': [15, 0], 'destination': [15, 9], 'underground_segments': {}, 'start_splitter': None, 'dest_splitter': None, 'orientation': {'(15, 0)': [0, 1], '(15, 1)': [0, 1], '(15, 2)': [0, 1], '(15, 3)': [0, 1], '(15, 4)': [0, 1], '(15, 5)': [0, 1], '(15, 6)': [0, 1], '(15, 7)': [0, 1], '(15, 8)': [0, 1], '(15, 9)': [0, 1]}}]}}}, 'inserter_information': [['copper-cable', 1, 8, 'east'], ['copper-cable', 1, 6, 'east'], ['copper-cable', 1, 7, 'east'], ['iron-plate', 5, 8, 'west'], ['copper-cable', 1, 5, 'east'], ['copper-cable', 1, 3, 'east'], ['copper-cable', 1, 4, 'east'], ['iron-plate', 5, 3, 'west']], 'belt_point_information': [['copper-cable', 0, 8, 'end'], ['copper-cable', 0, 6, 'end'], ['copper-cable', 0, 7, 'end'], ['iron-plate', 6, 8, 'end'], ['copper-cable', 0, 5, 'end'], ['copper-cable', 0, 3, 'end'], ['copper-cable', 0, 4, 'end'], ['iron-plate', 6, 3, 'end']], 'assembler_information': [['electronic-circuit', 2, 6, 3, 3, 'assembling-machine-1', 0], ['electronic-circuit', 2, 3, 3, 3, 'assembling-machine-1', 0]], 'retrieval_points': {'electronic-circuit_0_0': {'item': 'electronic-circuit', 'destination': [[15, 5], [15, 8], [15, 4], [15, 1], [15, 7], [15, 0], [15, 6], [15, 3], [15, 9], [15, 2]], 'start_points': [[6, 6]], 'inserter_mapping': {'(6, 6)': [5, 6], '(6, 7)': [5, 7]}}, 'electronic-circuit_1_0': {'item': 'electronic-circuit', 'destination': [[15, 5], [15, 8], [15, 4], [15, 1], [15, 7], [15, 0], [15, 6], [15, 3], [15, 9], [15, 2]], 'start_points': [[6, 4]], 'inserter_mapping': {'(6, 4)': [5, 4], '(6, 5)': [5, 5], '(4, 1)': [4, 2], '(3, 1)': [3, 2], '(2, 1)': [2, 2]}}, 'iron-plate_0': {'item': 'iron-plate', 'destination': [[6, 8]], 'start_points': [[12, 9], [12, 0], [12, 9], [12, 8], [12, 7], [12, 6], [12, 5], [12, 4], [12, 3], [12, 2], [12, 1], [12, 0]], 'inserter_mapping': None}, 'iron-plate_1': {'item': 'iron-plate', 'destination': [[6, 3]], 'start_points': [[12, 9], [12, 0], [12, 9], [12, 8], [12, 7], [12, 6], [12, 5], [12, 4], [12, 3], [12, 2], [12, 1], [12, 0]], 'inserter_mapping': None}}, 'obstacle_map': [[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 22], [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 22], [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 22], [99, 44, 33, 33, 33, 44, 99, 0, 0, 0, 0, 0, 1, 0, 0, 22], [99, 44, 33, 33, 33, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 22], [99, 44, 33, 33, 33, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 22], [99, 44, 33, 33, 33, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 22], [99, 44, 33, 33, 33, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 22], [99, 44, 33, 33, 33, 44, 99, 0, 0, 0, 0, 0, 1, 0, 0, 22], [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 22]], 'paths': {'electronic-circuit_0_0': [{'path': [[6, 6], [7, 6], [8, 6], [9, 6], [13, 6], [14, 6]], 'start': [6, 6], 'destination': [14, 6], 'underground_segments': {'segment_0': {'start': [9, 6], 'end': [13, 6]}}, 'start_splitter': None, 'dest_splitter': {'item': 'electronic-circuit', 'position': [15, 7], 'next_position': [14, 7], 'direction': [0, 1], 'inputs': [[14, 6]], 'outputs': [[14, 8]]}}], 'electronic-circuit_1_0': [{'path': [[6, 4], [6, 5], [6, 6]], 'start': [6, 4], 'destination': [6, 6], 'underground_segments': {}, 'start_splitter': None, 'dest_splitter': None}], 'iron-plate_0': [{'path': [[11, 7], [10, 7], [9, 7], [8, 7], [7, 7], [6, 7], [6, 8]], 'start': [11, 7], 'destination': [6, 8], 'underground_segments': {}, 'start_splitter': {'item': 'iron-plate', 'position': [12, 8], 'next_position': [11, 8], 'direction': [0, -1], 'inputs': [[11, 9]], 'outputs': [[11, 7]]}, 'dest_splitter': None}], 'iron-plate_1': [{'path': [[11, 3], [10, 3], [9, 3], [8, 3], [7, 3], [6, 3]], 'start': [11, 3], 'destination': [6, 3], 'underground_segments': {}, 'start_splitter': {'item': 'iron-plate', 'position': [12, 4], 'next_position': [11, 4], 'direction': [0, -1], 'inputs': [[11, 5]], 'outputs': [[11, 3]]}, 'dest_splitter': None}]}, 'placed_inserter_information': {'electronic-circuit_0_0': {'(6, 6)': [5, 6]}, 'electronic-circuit_1_0': {'(6, 4)': [5, 4]}}, 'power_pole_information': [['medium-electric-pole', 2, 2], ['medium-electric-pole', 2, 9]]}
+2025-06-30 11:19:32,991 - FactoryBuilder - INFO - Added input belt route for copper-cable at [0, 5] facing north
+2025-06-30 11:19:32,991 - FactoryBuilder - INFO - Added input connection point for copper-cable at [0, 14] for block Block_electronic-circuit_0_0
+2025-06-30 11:19:32,992 - FactoryBuilder - INFO - Added output connection point for copper-cable at [0, 5] for block Block_electronic-circuit_0_0
+2025-06-30 11:19:32,992 - FactoryBuilder - INFO - Added input belt route for iron-plate at [12, 5] facing north
+2025-06-30 11:19:32,992 - FactoryBuilder - INFO - Added input connection point for iron-plate at [12, 14] for block Block_electronic-circuit_0_0
+2025-06-30 11:19:32,993 - FactoryBuilder - INFO - Added output connection point for iron-plate at [12, 5] for block Block_electronic-circuit_0_0
+2025-06-30 11:19:32,993 - FactoryBuilder - INFO - Added output belt route for electronic-circuit at [15, 14] facing south
+2025-06-30 11:19:32,994 - FactoryBuilder - INFO - Added internal input point for electronic-circuit at [15, 5] for block Block_electronic-circuit_0_0
+2025-06-30 11:19:32,995 - FactoryBuilder - INFO - Added external output point for electronic-circuit at [15, 14] for block Block_electronic-circuit_0_0
+2025-06-30 11:19:32,995 - FactoryBuilder - INFO - Added belt electronic-circuit at [6, 11] facing east for block Block_electronic-circuit_0_0
+2025-06-30 11:19:32,995 - FactoryBuilder - INFO - Added belt electronic-circuit at [7, 11] facing east for block Block_electronic-circuit_0_0
+2025-06-30 11:19:32,996 - FactoryBuilder - INFO - Added belt electronic-circuit at [8, 11] facing east for block Block_electronic-circuit_0_0
+2025-06-30 11:19:32,996 - FactoryBuilder - INFO - Added belt electronic-circuit at [9, 11] facing east for block Block_electronic-circuit_0_0
+2025-06-30 11:19:32,996 - FactoryBuilder - INFO - Added belt electronic-circuit at [13, 11] facing east for block Block_electronic-circuit_0_0
+2025-06-30 11:19:32,997 - FactoryBuilder - INFO - Added belt electronic-circuit at [14, 11] facing south for block Block_electronic-circuit_0_0
+2025-06-30 11:19:32,997 - FactoryBuilder - INFO - Added underground belt segment electronic-circuit from [9, 11] to [13, 11] for block Block_electronic-circuit_0_0
+2025-06-30 11:19:32,998 - FactoryBuilder - INFO - Added splitter electronic-circuit at [15, 12] facing south for block Block_electronic-circuit_0_0
+2025-06-30 11:19:32,999 - FactoryBuilder - INFO - Added belt electronic-circuit at [6, 9] facing south for block Block_electronic-circuit_0_0
+2025-06-30 11:19:32,999 - FactoryBuilder - INFO - Added belt electronic-circuit at [6, 10] facing south for block Block_electronic-circuit_0_0
+2025-06-30 11:19:32,999 - FactoryBuilder - INFO - Added belt iron-plate at [11, 12] facing west for block Block_electronic-circuit_0_0
+2025-06-30 11:19:33,000 - FactoryBuilder - INFO - Added belt iron-plate at [10, 12] facing west for block Block_electronic-circuit_0_0
+2025-06-30 11:19:33,000 - FactoryBuilder - INFO - Added belt iron-plate at [9, 12] facing west for block Block_electronic-circuit_0_0
+2025-06-30 11:19:33,001 - FactoryBuilder - INFO - Added belt iron-plate at [8, 12] facing west for block Block_electronic-circuit_0_0
+2025-06-30 11:19:33,001 - FactoryBuilder - INFO - Added belt iron-plate at [7, 12] facing west for block Block_electronic-circuit_0_0
+2025-06-30 11:19:33,001 - FactoryBuilder - INFO - Added belt iron-plate at [6, 12] facing south for block Block_electronic-circuit_0_0
+2025-06-30 11:19:33,002 - FactoryBuilder - INFO - Added belt iron-plate at [6, 13] facing south for block Block_electronic-circuit_0_0
+2025-06-30 11:19:33,002 - FactoryBuilder - INFO - Added splitter iron-plate at [12, 13] facing north for block Block_electronic-circuit_0_0
+2025-06-30 11:19:33,003 - FactoryBuilder - INFO - Added belt iron-plate at [11, 8] facing west for block Block_electronic-circuit_0_0
+2025-06-30 11:19:33,003 - FactoryBuilder - INFO - Added belt iron-plate at [10, 8] facing west for block Block_electronic-circuit_0_0
+2025-06-30 11:19:33,003 - FactoryBuilder - INFO - Added belt iron-plate at [9, 8] facing west for block Block_electronic-circuit_0_0
+2025-06-30 11:19:33,004 - FactoryBuilder - INFO - Added belt iron-plate at [8, 8] facing west for block Block_electronic-circuit_0_0
+2025-06-30 11:19:33,004 - FactoryBuilder - INFO - Added belt iron-plate at [7, 8] facing west for block Block_electronic-circuit_0_0
+2025-06-30 11:19:33,004 - FactoryBuilder - INFO - Added belt iron-plate at [6, 8] facing west for block Block_electronic-circuit_0_0
+2025-06-30 11:19:33,005 - FactoryBuilder - INFO - Added splitter iron-plate at [12, 9] facing north for block Block_electronic-circuit_0_0
+2025-06-30 11:19:33,005 - FactoryBuilder - INFO - Added power pole medium-electric-pole at [2, 7] for block Block_electronic-circuit_0_0
+2025-06-30 11:19:33,006 - FactoryBuilder - INFO - Added power pole medium-electric-pole at [2, 14] for block Block_electronic-circuit_0_0
+2025-06-30 11:19:33,007 - FactoryBuilder - INFO - Processing module data from E:/Programmieren/Bachelor-Thesis/Modules/copper-cable_300_[]_module.json for block Block_copper-cable_1_0
+2025-06-30 11:19:33,007 - FactoryBuilder - INFO - Added assembler copper-cable at [2, 16] for block Block_copper-cable_1_0
+2025-06-30 11:19:33,007 - FactoryBuilder - INFO - Added assembler copper-cable at [2, 19] for block Block_copper-cable_1_0
+2025-06-30 11:19:33,008 - FactoryBuilder - INFO - Added assembler copper-cable at [2, 23] for block Block_copper-cable_1_0
+2025-06-30 11:19:33,008 - FactoryBuilder - INFO - Added inserter copper-plate at [1, 18] facing east for block Block_copper-cable_1_0
+2025-06-30 11:19:33,009 - FactoryBuilder - INFO - Added inserter copper-plate at [1, 17] facing east for block Block_copper-cable_1_0
+2025-06-30 11:19:33,009 - FactoryBuilder - INFO - Added inserter copper-plate at [1, 19] facing east for block Block_copper-cable_1_0
+2025-06-30 11:19:33,009 - FactoryBuilder - INFO - Added inserter copper-plate at [1, 20] facing east for block Block_copper-cable_1_0
+2025-06-30 11:19:33,010 - FactoryBuilder - INFO - Added inserter copper-plate at [1, 25] facing east for block Block_copper-cable_1_0
+2025-06-30 11:19:33,010 - FactoryBuilder - INFO - Added inserter copper-plate at [1, 23] facing east for block Block_copper-cable_1_0
+2025-06-30 11:19:33,010 - FactoryBuilder - INFO - Added placed inserter for copper-cable at [5, 16] facing east
+2025-06-30 11:19:33,011 - FactoryBuilder - INFO - Added placed inserter for copper-cable at [5, 17] facing east
+2025-06-30 11:19:33,011 - FactoryBuilder - INFO - Added placed inserter for copper-cable at [5, 18] facing east
+2025-06-30 11:19:33,011 - FactoryBuilder - INFO - Added placed inserter for copper-cable at [5, 19] facing east
+2025-06-30 11:19:33,012 - FactoryBuilder - INFO - Added placed inserter for copper-cable at [5, 20] facing east
+2025-06-30 11:19:33,012 - FactoryBuilder - INFO - Added placed inserter for copper-cable at [5, 21] facing east
+2025-06-30 11:19:33,012 - FactoryBuilder - INFO - Added placed inserter for copper-cable at [5, 23] facing east
+2025-06-30 11:19:33,013 - FactoryBuilder - INFO - Added placed inserter for copper-cable at [5, 24] facing east
+2025-06-30 11:19:33,013 - FactoryBuilder - INFO - Added placed inserter for copper-cable at [5, 25] facing east
+2025-06-30 11:19:33,014 - FactoryBuilder - DEBUG - Module data for block Block_copper-cable_1_0: {'output_item': 'copper-cable', 'max_ouput': 360.0, 'amount': 300, 'production_data': {'copper-cable': {'amount_per_minute': 300, 'assemblers': 3, 'input_inserters': [{'id': 'copper-plate', 'inserters': 2, 'amount': 1}], 'belts': 1, 'capacity': 0}, 'copper-plate': {'amount_per_minute': 150.0, 'capacity': 0}}, 'grid_width': 16, 'grid_height': 10, 'input_items': ['copper-plate'], 'input_information': {'copper-plate': {'input': [9, 0], 'output': [0, 0], 'paths': {'copper-plate': [{'path': [[0, 9], [0, 8], [0, 7], [0, 6], [0, 5], [0, 4], [0, 3], [0, 2], [0, 1], [0, 0]], 'start': [0, 9], 'destination': [0, 0], 'underground_segments': {}, 'start_splitter': False, 'dest_splitter': False, 'orientation': {'(0, 9)': [0, -1], '(0, 8)': [0, -1], '(0, 7)': [0, -1], '(0, 6)': [0, -1], '(0, 5)': [0, -1], '(0, 4)': [0, -1], '(0, 3)': [0, -1], '(0, 2)': [0, -1], '(0, 1)': [0, -1], '(0, 0)': [0, -1]}}]}}}, 'output_information': {'copper-cable': {'input': [9, 15], 'output': [0, 15], 'paths': {'copper-cable': [{'path': [[15, 9], [15, 8], [15, 7], [15, 6], [15, 5], [15, 4], [15, 3], [15, 2], [15, 1], [15, 0]], 'start': [15, 9], 'destination': [15, 0], 'underground_segments': {}, 'start_splitter': None, 'dest_splitter': None, 'orientation': {'(15, 9)': [0, -1], '(15, 8)': [0, -1], '(15, 7)': [0, -1], '(15, 6)': [0, -1], '(15, 5)': [0, -1], '(15, 4)': [0, -1], '(15, 3)': [0, -1], '(15, 2)': [0, -1], '(15, 1)': [0, -1], '(15, 0)': [0, -1]}}]}}}, 'inserter_information': [['copper-plate', 1, 2, 'east'], ['copper-plate', 1, 1, 'east'], ['copper-plate', 1, 3, 'east'], ['copper-plate', 1, 4, 'east'], ['copper-plate', 1, 9, 'east'], ['copper-plate', 1, 7, 'east']], 'belt_point_information': [['copper-plate', 0, 2, 'end'], ['copper-plate', 0, 1, 'end'], ['copper-plate', 0, 3, 'end'], ['copper-plate', 0, 4, 'end'], ['copper-plate', 0, 9, 'end'], ['copper-plate', 0, 7, 'end']], 'assembler_information': [['copper-cable', 2, 0, 3, 3, 'assembling-machine-1', 0], ['copper-cable', 2, 3, 3, 3, 'assembling-machine-1', 0], ['copper-cable', 2, 7, 3, 3, 'assembling-machine-1', 0]], 'retrieval_points': {'copper-cable_0_0': {'item': 'copper-cable', 'destination': [[15, 5], [15, 8], [15, 4], [15, 1], [15, 7], [15, 0], [15, 6], [15, 3], [15, 9], [15, 2]], 'start_points': [[6, 0]], 'inserter_mapping': {'(6, 0)': [5, 0], '(6, 1)': [5, 1], '(6, 2)': [5, 2]}}, 'copper-cable_0_1': {'item': 'copper-cable', 'destination': [[15, 5], [15, 8], [15, 4], [15, 1], [15, 7], [15, 0], [15, 6], [15, 3], [15, 9], [15, 2]], 'start_points': [[6, 1]], 'inserter_mapping': {'(6, 0)': [5, 0], '(6, 1)': [5, 1], '(6, 2)': [5, 2]}}, 'copper-cable_0_2': {'item': 'copper-cable', 'destination': [[15, 5], [15, 8], [15, 4], [15, 1], [15, 7], [15, 0], [15, 6], [15, 3], [15, 9], [15, 2]], 'start_points': [[6, 2]], 'inserter_mapping': {'(6, 0)': [5, 0], '(6, 1)': [5, 1], '(6, 2)': [5, 2]}}, 'copper-cable_1_0': {'item': 'copper-cable', 'destination': [[15, 5], [15, 8], [15, 4], [15, 1], [15, 7], [15, 0], [15, 6], [15, 3], [15, 9], [15, 2]], 'start_points': [[6, 3]], 'inserter_mapping': {'(6, 3)': [5, 3], '(6, 4)': [5, 4], '(6, 5)': [5, 5]}}, 'copper-cable_1_1': {'item': 'copper-cable', 'destination': [[15, 5], [15, 8], [15, 4], [15, 1], [15, 7], [15, 0], [15, 6], [15, 3], [15, 9], [15, 2]], 'start_points': [[6, 4]], 'inserter_mapping': {'(6, 3)': [5, 3], '(6, 4)': [5, 4], '(6, 5)': [5, 5]}}, 'copper-cable_1_2': {'item': 'copper-cable', 'destination': [[15, 5], [15, 8], [15, 4], [15, 1], [15, 7], [15, 0], [15, 6], [15, 3], [15, 9], [15, 2]], 'start_points': [[6, 5]], 'inserter_mapping': {'(6, 3)': [5, 3], '(6, 4)': [5, 4], '(6, 5)': [5, 5]}}, 'copper-cable_2_0': {'item': 'copper-cable', 'destination': [[15, 5], [15, 8], [15, 4], [15, 1], [15, 7], [15, 0], [15, 6], [15, 3], [15, 9], [15, 2]], 'start_points': [[6, 7]], 'inserter_mapping': {'(6, 7)': [5, 7], '(6, 8)': [5, 8], '(6, 9)': [5, 9]}}, 'copper-cable_2_1': {'item': 'copper-cable', 'destination': [[15, 5], [15, 8], [15, 4], [15, 1], [15, 7], [15, 0], [15, 6], [15, 3], [15, 9], [15, 2]], 'start_points': [[6, 8]], 'inserter_mapping': {'(6, 7)': [5, 7], '(6, 8)': [5, 8], '(6, 9)': [5, 9]}}, 'copper-cable_2_2': {'item': 'copper-cable', 'destination': [[15, 5], [15, 8], [15, 4], [15, 1], [15, 7], [15, 0], [15, 6], [15, 3], [15, 9], [15, 2]], 'start_points': [[6, 9]], 'inserter_mapping': {'(6, 7)': [5, 7], '(6, 8)': [5, 8], '(6, 9)': [5, 9]}}}, 'obstacle_map': [[1, 0, 33, 33, 33, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 22], [99, 44, 33, 33, 33, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 22], [99, 44, 33, 33, 33, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 22], [99, 44, 33, 33, 33, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 22], [99, 44, 33, 33, 33, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 22], [1, 0, 33, 33, 33, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 22], [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 22], [99, 44, 33, 33, 33, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 22], [1, 0, 33, 33, 33, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 22], [99, 44, 33, 33, 33, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 22]], 'paths': {'copper-cable_0_0': [{'path': [[6, 0], [6, 1], [6, 2], [7, 2], [8, 2], [9, 2], [10, 2], [11, 2], [12, 2], [13, 2], [14, 2]], 'start': [6, 0], 'destination': [14, 2], 'underground_segments': {}, 'start_splitter': None, 'dest_splitter': {'item': 'copper-cable', 'position': [15, 1], 'next_position': [14, 1], 'direction': [0, -1], 'inputs': [[14, 2]], 'outputs': [[14, 0]]}}], 'copper-cable_1_0': [{'path': [[6, 3], [6, 2]], 'start': [6, 3], 'destination': [6, 2], 'underground_segments': {}, 'start_splitter': None, 'dest_splitter': None}], 'copper-cable_1_1': [{'path': [[6, 4], [6, 3]], 'start': [6, 4], 'destination': [6, 3], 'underground_segments': {}, 'start_splitter': None, 'dest_splitter': None}], 'copper-cable_1_2': [{'path': [[6, 5], [6, 4]], 'start': [6, 5], 'destination': [6, 4], 'underground_segments': {}, 'start_splitter': None, 'dest_splitter': None}], 'copper-cable_2_0': [{'path': [[6, 7], [6, 6], [6, 5]], 'start': [6, 7], 'destination': [6, 5], 'underground_segments': {}, 'start_splitter': None, 'dest_splitter': None}], 'copper-cable_2_1': [{'path': [[6, 8], [6, 7]], 'start': [6, 8], 'destination': [6, 7], 'underground_segments': {}, 'start_splitter': None, 'dest_splitter': None}], 'copper-cable_2_2': [{'path': [[6, 9], [6, 8]], 'start': [6, 9], 'destination': [6, 8], 'underground_segments': {}, 'start_splitter': None, 'dest_splitter': None}]}, 'placed_inserter_information': {'copper-cable_0_0': {'(6, 0)': [5, 0]}, 'copper-cable_0_1': {'(6, 1)': [5, 1]}, 'copper-cable_0_2': {'(6, 2)': [5, 2]}, 'copper-cable_1_0': {'(6, 3)': [5, 3]}, 'copper-cable_1_1': {'(6, 4)': [5, 4]}, 'copper-cable_1_2': {'(6, 5)': [5, 5]}, 'copper-cable_2_0': {'(6, 7)': [5, 7]}, 'copper-cable_2_1': {'(6, 8)': [5, 8]}, 'copper-cable_2_2': {'(6, 9)': [5, 9]}}, 'power_pole_information': [['medium-electric-pole', 1, 0], ['medium-electric-pole', 1, 6]]}
+2025-06-30 11:19:33,015 - FactoryBuilder - INFO - Added input belt route for copper-plate at [0, 16] facing north
+2025-06-30 11:19:33,016 - FactoryBuilder - INFO - Added input connection point for copper-plate at [0, 25] for block Block_copper-cable_1_0
+2025-06-30 11:19:33,016 - FactoryBuilder - INFO - Added output connection point for copper-plate at [0, 16] for block Block_copper-cable_1_0
+2025-06-30 11:19:33,016 - FactoryBuilder - INFO - Added output belt route for copper-cable at [15, 16] facing north
+2025-06-30 11:19:33,017 - FactoryBuilder - INFO - Added internal input point for copper-cable at [15, 25] for block Block_copper-cable_1_0
+2025-06-30 11:19:33,017 - FactoryBuilder - INFO - Added external output point for copper-cable at [15, 16] for block Block_copper-cable_1_0
+2025-06-30 11:19:33,017 - FactoryBuilder - INFO - Added belt copper-cable at [6, 16] facing south for block Block_copper-cable_1_0
+2025-06-30 11:19:33,017 - FactoryBuilder - INFO - Added belt copper-cable at [6, 17] facing south for block Block_copper-cable_1_0
+2025-06-30 11:19:33,018 - FactoryBuilder - INFO - Added belt copper-cable at [6, 18] facing east for block Block_copper-cable_1_0
+2025-06-30 11:19:33,018 - FactoryBuilder - INFO - Added belt copper-cable at [7, 18] facing east for block Block_copper-cable_1_0
+2025-06-30 11:19:33,018 - FactoryBuilder - INFO - Added belt copper-cable at [8, 18] facing east for block Block_copper-cable_1_0
+2025-06-30 11:19:33,019 - FactoryBuilder - INFO - Added belt copper-cable at [9, 18] facing east for block Block_copper-cable_1_0
+2025-06-30 11:19:33,019 - FactoryBuilder - INFO - Added belt copper-cable at [10, 18] facing east for block Block_copper-cable_1_0
+2025-06-30 11:19:33,019 - FactoryBuilder - INFO - Added belt copper-cable at [11, 18] facing east for block Block_copper-cable_1_0
+2025-06-30 11:19:33,020 - FactoryBuilder - INFO - Added belt copper-cable at [12, 18] facing east for block Block_copper-cable_1_0
+2025-06-30 11:19:33,020 - FactoryBuilder - INFO - Added belt copper-cable at [13, 18] facing east for block Block_copper-cable_1_0
+2025-06-30 11:19:33,020 - FactoryBuilder - INFO - Added belt copper-cable at [14, 18] facing north for block Block_copper-cable_1_0
+2025-06-30 11:19:33,021 - FactoryBuilder - INFO - Added splitter copper-cable at [15, 17] facing north for block Block_copper-cable_1_0
+2025-06-30 11:19:33,021 - FactoryBuilder - INFO - Added belt copper-cable at [6, 19] facing north for block Block_copper-cable_1_0
+2025-06-30 11:19:33,022 - FactoryBuilder - INFO - Added belt copper-cable at [6, 20] facing north for block Block_copper-cable_1_0
+2025-06-30 11:19:33,023 - FactoryBuilder - INFO - Added belt copper-cable at [6, 21] facing north for block Block_copper-cable_1_0
+2025-06-30 11:19:33,023 - FactoryBuilder - INFO - Added belt copper-cable at [6, 23] facing north for block Block_copper-cable_1_0
+2025-06-30 11:19:33,023 - FactoryBuilder - INFO - Added belt copper-cable at [6, 22] facing north for block Block_copper-cable_1_0
+2025-06-30 11:19:33,024 - FactoryBuilder - INFO - Added belt copper-cable at [6, 24] facing north for block Block_copper-cable_1_0
+2025-06-30 11:19:33,024 - FactoryBuilder - INFO - Added belt copper-cable at [6, 25] facing north for block Block_copper-cable_1_0
+2025-06-30 11:19:33,025 - FactoryBuilder - INFO - Added power pole medium-electric-pole at [1, 16] for block Block_copper-cable_1_0
+2025-06-30 11:19:33,025 - FactoryBuilder - INFO - Added power pole medium-electric-pole at [1, 22] for block Block_copper-cable_1_0
+2025-06-30 11:19:33,032 - FactoryBuilder - INFO - Factory JSON data saved to Factorys/factory_electronic-circuit_100.json
+2025-06-30 11:19:33,033 - FactoryBuilder - INFO - Planning inter-block paths with detailed obstacles...
+2025-06-30 11:19:33,034 - FactoryBuilder - INFO - Creating point connections for inter module paths
+2025-06-30 11:19:33,034 - FactoryBuilder - INFO - Filtered points: 6 -> 6 inputs, 7 -> 7 outputs
+2025-06-30 11:19:33,034 - FactoryBuilder - DEBUG - Processing copper-plate: 2 outputs, 1 inputs
+2025-06-30 11:19:33,035 - FactoryBuilder - DEBUG - Skipping same-block connection: Block_copper-cable_1_0
+2025-06-30 11:19:33,035 - FactoryBuilder - INFO - Created valid OUTPUT->INPUT connection for copper-plate: external_input_copper-plate -> Block_copper-cable_1_0, distance: 5
+2025-06-30 11:19:33,035 - FactoryBuilder - DEBUG - Processing iron-plate: 2 outputs, 1 inputs
+2025-06-30 11:19:33,036 - FactoryBuilder - DEBUG - Skipping same-block connection: Block_electronic-circuit_0_0
+2025-06-30 11:19:33,036 - FactoryBuilder - INFO - Created valid OUTPUT->INPUT connection for iron-plate: external_input_iron-plate -> Block_electronic-circuit_0_0, distance: 23
+2025-06-30 11:19:33,037 - FactoryBuilder - DEBUG - Processing copper-cable: 2 outputs, 2 inputs
+2025-06-30 11:19:33,037 - FactoryBuilder - DEBUG - Skipping same-block connection: Block_electronic-circuit_0_0
+2025-06-30 11:19:33,037 - FactoryBuilder - DEBUG - Skipping same-block connection: Block_copper-cable_1_0
+2025-06-30 11:19:33,037 - FactoryBuilder - INFO - Created valid OUTPUT->INPUT connection for copper-cable: Block_copper-cable_1_0 -> Block_electronic-circuit_0_0, distance: 17
+2025-06-30 11:19:33,038 - FactoryBuilder - INFO - Created valid OUTPUT->INPUT connection for copper-cable: Block_electronic-circuit_0_0 -> Block_copper-cable_1_0, distance: 35
+2025-06-30 11:19:33,038 - FactoryBuilder - DEBUG - Processing electronic-circuit: 1 outputs, 2 inputs
+2025-06-30 11:19:33,038 - FactoryBuilder - DEBUG - Skipping same-block connection: Block_electronic-circuit_0_0
+2025-06-30 11:19:33,039 - FactoryBuilder - INFO - Created valid OUTPUT->INPUT connection for electronic-circuit: Block_electronic-circuit_0_0 -> external_output_electronic-circuit, distance: 23
+2025-06-30 11:19:33,039 - FactoryBuilder - INFO - Created 5 valid OUTPUT->INPUT point connections
+2025-06-30 11:19:33,039 - FactoryBuilder - INFO - Added connection point for copper-plate: (1, 29) -> (0, 25)
+2025-06-30 11:19:33,039 - FactoryBuilder - INFO - Added connection point for iron-plate: (4, 29) -> (12, 14)
+2025-06-30 11:19:33,040 - FactoryBuilder - INFO - Added connection point for copper-cable: (15, 16) -> (0, 14)
+2025-06-30 11:19:33,040 - FactoryBuilder - INFO - Added connection point for copper-cable: (0, 5) -> (15, 25)
+2025-06-30 11:19:33,040 - FactoryBuilder - INFO - Added connection point for electronic-circuit: (15, 14) -> (7, 29)
+2025-06-30 11:19:33,041 - FactoryBuilder - DEBUG - Connection points for pathfinding: {'copper-plate_0': {'item': 'copper-plate', 'start_points': [(1, 29)], 'destination': [(0, 25)], 'source_external': True, 'target_external': False, 'is_fluid': False}, 'iron-plate_1': {'item': 'iron-plate', 'start_points': [(4, 29)], 'destination': [(12, 14)], 'source_external': True, 'target_external': False, 'is_fluid': False}, 'copper-cable_2': {'item': 'copper-cable', 'start_points': [(15, 16)], 'destination': [(0, 14)], 'source_external': False, 'target_external': False, 'is_fluid': False}, 'copper-cable_3': {'item': 'copper-cable', 'start_points': [(0, 5)], 'destination': [(15, 25)], 'source_external': False, 'target_external': False, 'is_fluid': False}, 'electronic-circuit_4': {'item': 'electronic-circuit', 'start_points': [(15, 14)], 'destination': [(7, 29)], 'source_external': False, 'target_external': True, 'is_fluid': False}}
+2025-06-30 11:19:33,272 - FactoryBuilder - INFO - Found paths for 5 connections out of 5 requested
+2025-06-30 11:19:33,285 - FactoryBuilder - INFO - Adding 5 inter-block paths to Factorys/factory_electronic-circuit_100.json
+2025-06-30 11:19:33,294 - FactoryBuilder - INFO - Successfully added 5 inter-block paths to Factorys/factory_electronic-circuit_100.json
+2025-06-30 11:19:33,308 - FactoryBuilder - INFO - Creating blueprint from Factorys/factory_electronic-circuit_100.json
+2025-06-30 11:19:33,310 - FactoryBuilder - INFO - 1. Placing assembling machines...
+2025-06-30 11:19:33,310 - FactoryBuilder - INFO -   - Placing assembler for electronic-circuit at (3,12)
+2025-06-30 11:19:33,311 - FactoryBuilder - INFO -   - Placing assembler for electronic-circuit at (3,9)
+2025-06-30 11:19:33,312 - FactoryBuilder - INFO -   - Placing assembler for copper-cable at (3,17)
+2025-06-30 11:19:33,313 - FactoryBuilder - INFO -   - Placing assembler for copper-cable at (3,20)
+2025-06-30 11:19:33,314 - FactoryBuilder - INFO -   - Placing assembler for copper-cable at (3,24)
+2025-06-30 11:19:33,315 - FactoryBuilder - INFO - 2. Placing inserters...
+2025-06-30 11:19:33,315 - FactoryBuilder - INFO -   - Placing inserter for copper-cable at (1, 13) facing 12
+2025-06-30 11:19:33,316 - FactoryBuilder - INFO -   - Placing inserter for copper-cable at (1, 11) facing 12
+2025-06-30 11:19:33,317 - FactoryBuilder - INFO -   - Placing inserter for copper-cable at (1, 12) facing 12
+2025-06-30 11:19:33,319 - FactoryBuilder - INFO -   - Placing inserter for iron-plate at (5, 13) facing 4
+2025-06-30 11:19:33,320 - FactoryBuilder - INFO -   - Placing inserter for copper-cable at (1, 10) facing 12
+2025-06-30 11:19:33,321 - FactoryBuilder - INFO -   - Placing inserter for copper-cable at (1, 8) facing 12
+2025-06-30 11:19:33,323 - FactoryBuilder - INFO -   - Placing inserter for copper-cable at (1, 9) facing 12
+2025-06-30 11:19:33,324 - FactoryBuilder - INFO -   - Placing inserter for iron-plate at (5, 8) facing 4
+2025-06-30 11:19:33,325 - FactoryBuilder - INFO -   - Placing inserter for electronic-circuit at (5, 11) facing 12
+2025-06-30 11:19:33,326 - FactoryBuilder - INFO -   - Placing inserter for electronic-circuit at (5, 9) facing 12
+2025-06-30 11:19:33,328 - FactoryBuilder - INFO -   - Placing inserter for copper-plate at (1, 18) facing 12
+2025-06-30 11:19:33,330 - FactoryBuilder - INFO -   - Placing inserter for copper-plate at (1, 17) facing 12
+2025-06-30 11:19:33,332 - FactoryBuilder - INFO -   - Placing inserter for copper-plate at (1, 19) facing 12
+2025-06-30 11:19:33,333 - FactoryBuilder - INFO -   - Placing inserter for copper-plate at (1, 20) facing 12
+2025-06-30 11:19:33,335 - FactoryBuilder - INFO -   - Placing inserter for copper-plate at (1, 25) facing 12
+2025-06-30 11:19:33,336 - FactoryBuilder - INFO -   - Placing inserter for copper-plate at (1, 23) facing 12
+2025-06-30 11:19:33,337 - FactoryBuilder - INFO -   - Placing inserter for copper-cable at (5, 16) facing 12
+2025-06-30 11:19:33,338 - FactoryBuilder - INFO -   - Placing inserter for copper-cable at (5, 17) facing 12
+2025-06-30 11:19:33,339 - FactoryBuilder - INFO -   - Placing inserter for copper-cable at (5, 18) facing 12
+2025-06-30 11:19:33,341 - FactoryBuilder - INFO -   - Placing inserter for copper-cable at (5, 19) facing 12
+2025-06-30 11:19:33,342 - FactoryBuilder - INFO -   - Placing inserter for copper-cable at (5, 20) facing 12
+2025-06-30 11:19:33,344 - FactoryBuilder - INFO -   - Placing inserter for copper-cable at (5, 21) facing 12
+2025-06-30 11:19:33,346 - FactoryBuilder - INFO -   - Placing inserter for copper-cable at (5, 23) facing 12
+2025-06-30 11:19:33,349 - FactoryBuilder - INFO -   - Placing inserter for copper-cable at (5, 24) facing 12
+2025-06-30 11:19:33,350 - FactoryBuilder - INFO -   - Placing inserter for copper-cable at (5, 25) facing 12
+2025-06-30 11:19:33,351 - FactoryBuilder - INFO - 3. Placing underground belts...
+2025-06-30 11:19:33,352 - FactoryBuilder - INFO -   - Placing underground belt for electronic-circuit at (9, 11) facing 4, type: input
+2025-06-30 11:19:33,353 - FactoryBuilder - INFO -   - Placing underground belt for electronic-circuit at (13, 11) facing 4, type: output
+2025-06-30 11:19:33,353 - FactoryBuilder - INFO - 4. Placing splitters...
+2025-06-30 11:19:33,354 - FactoryBuilder - INFO -   - Placing splitter for electronic-circuit at (15, 12) facing 8
+2025-06-30 11:19:33,355 - FactoryBuilder - INFO -   - Placing splitter for iron-plate at (12, 13) facing 0
+2025-06-30 11:19:33,356 - FactoryBuilder - INFO -   - Placing splitter for iron-plate at (12, 9) facing 0
+2025-06-30 11:19:33,356 - FactoryBuilder - INFO -   - Placing splitter for copper-cable at (15, 17) facing 0
+2025-06-30 11:19:33,358 - FactoryBuilder - INFO - 5. Placing transport belts...
+2025-06-30 11:19:33,358 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (0, 14) facing 0
+2025-06-30 11:19:33,360 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (0, 13) facing 0
+2025-06-30 11:19:33,362 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (0, 12) facing 0
+2025-06-30 11:19:33,363 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (0, 11) facing 0
+2025-06-30 11:19:33,365 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (0, 10) facing 0
+2025-06-30 11:19:33,367 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (0, 9) facing 0
+2025-06-30 11:19:33,368 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (0, 8) facing 0
+2025-06-30 11:19:33,370 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (0, 7) facing 0
+2025-06-30 11:19:33,371 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (0, 6) facing 0
+2025-06-30 11:19:33,373 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (0, 5) facing 0
+2025-06-30 11:19:33,374 - FactoryBuilder - INFO -   - Placing transport belt for iron-plate at (12, 14) facing 0
+2025-06-30 11:19:33,375 - FactoryBuilder - INFO -   - Skipping belt at (12, 13) due to overlap
+2025-06-30 11:19:33,376 - FactoryBuilder - INFO -   - Placing transport belt for iron-plate at (12, 12) facing 0
+2025-06-30 11:19:33,376 - FactoryBuilder - INFO -   - Placing transport belt for iron-plate at (12, 11) facing 0
+2025-06-30 11:19:33,378 - FactoryBuilder - INFO -   - Placing transport belt for iron-plate at (12, 10) facing 0
+2025-06-30 11:19:33,380 - FactoryBuilder - INFO -   - Skipping belt at (12, 9) due to overlap
+2025-06-30 11:19:33,380 - FactoryBuilder - INFO -   - Placing transport belt for iron-plate at (12, 8) facing 0
+2025-06-30 11:19:33,382 - FactoryBuilder - INFO -   - Placing transport belt for iron-plate at (12, 7) facing 0
+2025-06-30 11:19:33,383 - FactoryBuilder - INFO -   - Placing transport belt for iron-plate at (12, 6) facing 0
+2025-06-30 11:19:33,384 - FactoryBuilder - INFO -   - Placing transport belt for iron-plate at (12, 5) facing 0
+2025-06-30 11:19:33,385 - FactoryBuilder - INFO -   - Placing transport belt for electronic-circuit at (15, 5) facing 8
+2025-06-30 11:19:33,386 - FactoryBuilder - INFO -   - Placing transport belt for electronic-circuit at (15, 6) facing 8
+2025-06-30 11:19:33,387 - FactoryBuilder - INFO -   - Placing transport belt for electronic-circuit at (15, 7) facing 8
+2025-06-30 11:19:33,388 - FactoryBuilder - INFO -   - Placing transport belt for electronic-circuit at (15, 8) facing 8
+2025-06-30 11:19:33,389 - FactoryBuilder - INFO -   - Placing transport belt for electronic-circuit at (15, 9) facing 8
+2025-06-30 11:19:33,390 - FactoryBuilder - INFO -   - Placing transport belt for electronic-circuit at (15, 10) facing 8
+2025-06-30 11:19:33,391 - FactoryBuilder - INFO -   - Placing transport belt for electronic-circuit at (15, 11) facing 8
+2025-06-30 11:19:33,392 - FactoryBuilder - INFO -   - Skipping belt at (15, 12) due to overlap
+2025-06-30 11:19:33,393 - FactoryBuilder - INFO -   - Placing transport belt for electronic-circuit at (15, 13) facing 8
+2025-06-30 11:19:33,394 - FactoryBuilder - INFO -   - Placing transport belt for electronic-circuit at (15, 14) facing 8
+2025-06-30 11:19:33,395 - FactoryBuilder - INFO -   - Placing transport belt for electronic-circuit at (6, 11) facing 4
+2025-06-30 11:19:33,398 - FactoryBuilder - INFO -   - Placing transport belt for electronic-circuit at (7, 11) facing 4
+2025-06-30 11:19:33,399 - FactoryBuilder - INFO -   - Placing transport belt for electronic-circuit at (8, 11) facing 4
+2025-06-30 11:19:33,402 - FactoryBuilder - INFO -   - Skipping belt at (9, 11) due to overlap
+2025-06-30 11:19:33,402 - FactoryBuilder - INFO -   - Skipping belt at (13, 11) due to overlap
+2025-06-30 11:19:33,402 - FactoryBuilder - INFO -   - Placing transport belt for electronic-circuit at (14, 11) facing 8
+2025-06-30 11:19:33,404 - FactoryBuilder - INFO -   - Placing transport belt for electronic-circuit at (6, 9) facing 8
+2025-06-30 11:19:33,405 - FactoryBuilder - INFO -   - Placing transport belt for electronic-circuit at (6, 10) facing 8
+2025-06-30 11:19:33,407 - FactoryBuilder - INFO -   - Placing transport belt for iron-plate at (11, 12) facing 12
+2025-06-30 11:19:33,408 - FactoryBuilder - INFO -   - Placing transport belt for iron-plate at (10, 12) facing 12
+2025-06-30 11:19:33,410 - FactoryBuilder - INFO -   - Placing transport belt for iron-plate at (9, 12) facing 12
+2025-06-30 11:19:33,412 - FactoryBuilder - INFO -   - Placing transport belt for iron-plate at (8, 12) facing 12
+2025-06-30 11:19:33,415 - FactoryBuilder - INFO -   - Placing transport belt for iron-plate at (7, 12) facing 12
+2025-06-30 11:19:33,416 - FactoryBuilder - INFO -   - Placing transport belt for iron-plate at (6, 12) facing 8
+2025-06-30 11:19:33,419 - FactoryBuilder - INFO -   - Placing transport belt for iron-plate at (6, 13) facing 8
+2025-06-30 11:19:33,420 - FactoryBuilder - INFO -   - Placing transport belt for iron-plate at (11, 8) facing 12
+2025-06-30 11:19:33,423 - FactoryBuilder - INFO -   - Placing transport belt for iron-plate at (10, 8) facing 12
+2025-06-30 11:19:33,424 - FactoryBuilder - INFO -   - Placing transport belt for iron-plate at (9, 8) facing 12
+2025-06-30 11:19:33,426 - FactoryBuilder - INFO -   - Placing transport belt for iron-plate at (8, 8) facing 12
+2025-06-30 11:19:33,430 - FactoryBuilder - INFO -   - Placing transport belt for iron-plate at (7, 8) facing 12
+2025-06-30 11:19:33,432 - FactoryBuilder - INFO -   - Placing transport belt for iron-plate at (6, 8) facing 12
+2025-06-30 11:19:33,434 - FactoryBuilder - INFO -   - Placing transport belt for copper-plate at (0, 25) facing 0
+2025-06-30 11:19:33,435 - FactoryBuilder - INFO -   - Placing transport belt for copper-plate at (0, 24) facing 0
+2025-06-30 11:19:33,437 - FactoryBuilder - INFO -   - Placing transport belt for copper-plate at (0, 23) facing 0
+2025-06-30 11:19:33,438 - FactoryBuilder - INFO -   - Placing transport belt for copper-plate at (0, 22) facing 0
+2025-06-30 11:19:33,440 - FactoryBuilder - INFO -   - Placing transport belt for copper-plate at (0, 21) facing 0
+2025-06-30 11:19:33,441 - FactoryBuilder - INFO -   - Placing transport belt for copper-plate at (0, 20) facing 0
+2025-06-30 11:19:33,443 - FactoryBuilder - INFO -   - Placing transport belt for copper-plate at (0, 19) facing 0
+2025-06-30 11:19:33,445 - FactoryBuilder - INFO -   - Placing transport belt for copper-plate at (0, 18) facing 0
+2025-06-30 11:19:33,447 - FactoryBuilder - INFO -   - Placing transport belt for copper-plate at (0, 17) facing 0
+2025-06-30 11:19:33,449 - FactoryBuilder - INFO -   - Placing transport belt for copper-plate at (0, 16) facing 0
+2025-06-30 11:19:33,453 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (15, 25) facing 0
+2025-06-30 11:19:33,454 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (15, 24) facing 0
+2025-06-30 11:19:33,455 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (15, 23) facing 0
+2025-06-30 11:19:33,456 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (15, 22) facing 0
+2025-06-30 11:19:33,457 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (15, 21) facing 0
+2025-06-30 11:19:33,458 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (15, 20) facing 0
+2025-06-30 11:19:33,460 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (15, 19) facing 0
+2025-06-30 11:19:33,461 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (15, 18) facing 0
+2025-06-30 11:19:33,462 - FactoryBuilder - INFO -   - Skipping belt at (15, 17) due to overlap
+2025-06-30 11:19:33,462 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (15, 16) facing 0
+2025-06-30 11:19:33,465 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (6, 16) facing 8
+2025-06-30 11:19:33,468 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (6, 17) facing 8
+2025-06-30 11:19:33,470 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (6, 18) facing 4
+2025-06-30 11:19:33,472 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (7, 18) facing 4
+2025-06-30 11:19:33,474 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (8, 18) facing 4
+2025-06-30 11:19:33,476 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (9, 18) facing 4
+2025-06-30 11:19:33,478 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (10, 18) facing 4
+2025-06-30 11:19:33,480 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (11, 18) facing 4
+2025-06-30 11:19:33,481 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (12, 18) facing 4
+2025-06-30 11:19:33,482 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (13, 18) facing 4
+2025-06-30 11:19:33,484 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (14, 18) facing 0
+2025-06-30 11:19:33,485 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (6, 19) facing 0
+2025-06-30 11:19:33,487 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (6, 20) facing 0
+2025-06-30 11:19:33,489 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (6, 21) facing 0
+2025-06-30 11:19:33,491 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (6, 23) facing 0
+2025-06-30 11:19:33,494 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (6, 22) facing 0
+2025-06-30 11:19:33,496 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (6, 24) facing 0
+2025-06-30 11:19:33,499 - FactoryBuilder - INFO -   - Placing transport belt for copper-cable at (6, 25) facing 0
+2025-06-30 11:19:33,500 - FactoryBuilder - INFO - 6. Placing external I/O points as constant combinators...
+2025-06-30 11:19:33,500 - FactoryBuilder - INFO -   - Placing input point for electronic-circuit at (7, 29)
+2025-06-30 11:19:33,502 - FactoryBuilder - INFO -   - Placing output point for copper-plate at (1, 29)
+2025-06-30 11:19:33,504 - FactoryBuilder - INFO -   - Placing output point for iron-plate at (4, 29)
+2025-06-30 11:19:33,505 - FactoryBuilder - INFO - 7. Placing power poles...
+2025-06-30 11:19:33,506 - FactoryBuilder - INFO -   - Placing medium-electric-pole at (2,7)
+2025-06-30 11:19:33,506 - FactoryBuilder - INFO -   - Placed medium-electric-pole at (2,7)
+2025-06-30 11:19:33,507 - FactoryBuilder - INFO -   - Placing medium-electric-pole at (2,14)
+2025-06-30 11:19:33,508 - FactoryBuilder - INFO -   - Placed medium-electric-pole at (2,14)
+2025-06-30 11:19:33,509 - FactoryBuilder - INFO -   - Placing medium-electric-pole at (1,16)
+2025-06-30 11:19:33,510 - FactoryBuilder - INFO -   - Placed medium-electric-pole at (1,16)
+2025-06-30 11:19:33,513 - FactoryBuilder - INFO -   - Placing medium-electric-pole at (1,22)
+2025-06-30 11:19:33,513 - FactoryBuilder - INFO -   - Placed medium-electric-pole at (1,22)
+2025-06-30 11:19:33,515 - FactoryBuilder - INFO - 8. Placing inter-module paths...
+2025-06-30 11:19:33,515 - FactoryBuilder - INFO -   - Processing 5 pathfinder-generated belt paths
+2025-06-30 11:19:33,515 - FactoryBuilder - INFO -   - Processing path for electronic-circuit
+2025-06-30 11:19:33,519 - FactoryBuilder - INFO -   - Found 1 underground segments
+2025-06-30 11:19:33,519 - FactoryBuilder - INFO -   - Adding underground belt segment from [13, 14] to [13, 19] facing 8
+2025-06-30 11:19:33,523 - FactoryBuilder - INFO -   - Skipping belt at [15, 14] due to overlap
+2025-06-30 11:19:33,523 - FactoryBuilder - INFO -   - Adding transport belt at [14, 14] facing 12
+2025-06-30 11:19:33,525 - FactoryBuilder - DEBUG -   - Processing last belt in path for {'id': 'electronic-circuit', 'name': 'Electronic circuit', 'type': 'Intermediate product', 'wiki_link': 'https://wiki.factorio.com/Electronic_circuit', 'category': 'Intermediate product', 'recipe': {'time': 0.5, 'yield': 1, 'ingredients': [{'id': 'copper-cable', 'amount': 3}, {'id': 'iron-plate', 'amount': 1}]}}
+2025-06-30 11:19:33,526 - FactoryBuilder - INFO -   - Skipping last belt at [7, 29] due to overlap or underground belt
+2025-06-30 11:19:33,526 - FactoryBuilder - INFO -   - Processing path for copper-plate
+2025-06-30 11:19:33,529 - FactoryBuilder - INFO -   - Skipping belt at [1, 29] due to overlap
+2025-06-30 11:19:33,529 - FactoryBuilder - INFO -   - Adding transport belt at [0, 29] facing 0
+2025-06-30 11:19:33,531 - FactoryBuilder - DEBUG -   - Processing last belt in path for {'id': 'copper-plate', 'name': 'Copper plate', 'type': 'Intermediate product', 'wiki_link': 'https://wiki.factorio.com/Copper_plate', 'category': 'Intermediate product', 'recipe': {'time': None, 'yield': None, 'ingredients': []}}
+2025-06-30 11:19:33,532 - FactoryBuilder - INFO -   - Skipping last belt at [0, 25] due to overlap or underground belt
+2025-06-30 11:19:33,532 - FactoryBuilder - INFO -   - Processing path for iron-plate
+2025-06-30 11:19:33,535 - FactoryBuilder - INFO -   - Found 2 underground segments
+2025-06-30 11:19:33,535 - FactoryBuilder - INFO -   - Adding underground belt segment from [4, 26] to [8, 26] facing 4
+2025-06-30 11:19:33,538 - FactoryBuilder - INFO -   - Adding underground belt segment from [8, 25] to [8, 20] facing 0
+2025-06-30 11:19:33,542 - FactoryBuilder - INFO -   - Skipping belt at [4, 29] due to overlap
+2025-06-30 11:19:33,542 - FactoryBuilder - INFO -   - Adding transport belt at [4, 28] facing 0
+2025-06-30 11:19:33,543 - FactoryBuilder - DEBUG -   - Processing last belt in path for {'id': 'iron-plate', 'name': 'Iron plate', 'type': 'Intermediate product', 'wiki_link': 'https://wiki.factorio.com/Iron_plate', 'category': 'Intermediate product', 'recipe': {'time': None, 'yield': None, 'ingredients': []}}
+2025-06-30 11:19:33,544 - FactoryBuilder - INFO -   - Skipping last belt at [12, 14] due to overlap or underground belt
+2025-06-30 11:19:33,544 - FactoryBuilder - INFO -   - Processing path for copper-cable
+2025-06-30 11:19:33,548 - FactoryBuilder - INFO -   - Skipping belt at [15, 16] due to overlap
+2025-06-30 11:19:33,548 - FactoryBuilder - INFO -   - Adding transport belt at [15, 15] facing 0
+2025-06-30 11:19:33,550 - FactoryBuilder - DEBUG -   - Processing last belt in path for {'id': 'copper-cable', 'name': 'Copper cable', 'type': 'Intermediate product', 'wiki_link': 'https://wiki.factorio.com/Copper_cable', 'category': 'Intermediate product', 'recipe': {'time': 0.5, 'yield': 2, 'ingredients': [{'id': 'copper-plate', 'amount': 1}]}}
+2025-06-30 11:19:33,550 - FactoryBuilder - INFO -   - Skipping last belt at [0, 14] due to overlap or underground belt
+2025-06-30 11:19:33,551 - FactoryBuilder - INFO -   - Processing path for copper-cable
+2025-06-30 11:19:33,555 - FactoryBuilder - INFO -   - Found 3 underground segments
+2025-06-30 11:19:33,555 - FactoryBuilder - INFO -   - Adding underground belt segment from [7, 14] to [7, 16] facing 8
+2025-06-30 11:19:33,562 - FactoryBuilder - INFO -   - Adding underground belt segment from [7, 16] to [7, 19] facing 8
+2025-06-30 11:19:33,568 - FactoryBuilder - INFO -   - Adding underground belt segment from [9, 19] to [9, 22] facing 8
+2025-06-30 11:19:33,570 - FactoryBuilder - INFO -   - Skipping belt at [0, 14] due to overlap
+2025-06-30 11:19:33,571 - FactoryBuilder - INFO -   - Adding transport belt at [1, 14] facing 4
+2025-06-30 11:19:33,574 - FactoryBuilder - DEBUG -   - Processing last belt in path for {'id': 'copper-cable', 'name': 'Copper cable', 'type': 'Intermediate product', 'wiki_link': 'https://wiki.factorio.com/Copper_cable', 'category': 'Intermediate product', 'recipe': {'time': 0.5, 'yield': 2, 'ingredients': [{'id': 'copper-plate', 'amount': 1}]}}
+2025-06-30 11:19:33,575 - FactoryBuilder - INFO -   - Skipping last belt at [15, 25] due to overlap or underground belt
+2025-06-30 11:19:33,575 - FactoryBuilder - INFO - 9. Exporting blueprint to Blueprints/blueprint_electronic-circuit_100.txt...
+2025-06-30 11:19:33,583 - FactoryBuilder - INFO - Blueprint successfully exported to Blueprints/blueprint_electronic-circuit_100.txt
+2025-06-30 11:19:34,505 - FactoryBuilder - INFO - Visualization saved to Factorys/factory_electronic-circuit_100.png
+2025-06-30 11:19:38,545 - FactoryBuilder - INFO - Factory dimensions: 16 x 30
+2025-06-30 11:19:38,547 - FactoryBuilder - INFO - Final blocks: {'fixed_block_external_input_copper-plate': {'x': 1, 'y': 29, 'width': 1, 'height': 1, 'input_points': [{'id': 'external_input_copper-plate', 'item': 'copper-plate', 'type': 'input', 'x': 1, 'y': 29}], 'output_points': [], 'module_json': None, 'block_type': 'block'}, 'fixed_block_external_input_iron-plate': {'x': 4, 'y': 29, 'width': 1, 'height': 1, 'input_points': [{'id': 'external_input_iron-plate', 'item': 'iron-plate', 'type': 'input', 'x': 4, 'y': 29}], 'output_points': [], 'module_json': None, 'block_type': 'block'}, 'fixed_block_external_output_electronic-circuit': {'x': 7, 'y': 29, 'width': 1, 'height': 1, 'input_points': [], 'output_points': [{'id': 'external_output_electronic-circuit', 'item': 'electronic-circuit', 'type': 'output', 'x': 7, 'y': 29}], 'module_json': None, 'block_type': 'block'}, 'Block_electronic-circuit_0_0': {'x': 0, 'y': 5, 'width': 16, 'height': 10, 'input_points': [{'id': 'electronic-circuit_input_copper-cable_0_0', 'item': 'copper-cable', 'type': 'input', 'x': 0, 'y': 14}, {'id': 'electronic-circuit_input_iron-plate_0_0', 'item': 'iron-plate', 'type': 'input', 'x': 12, 'y': 14}, {'id': 'electronic-circuit_input_electronic-circuit_0_0', 'item': 'electronic-circuit', 'type': 'input', 'x': 15, 'y': 5}], 'output_points': [{'id': 'electronic-circuit_output_copper-cable_0_0', 'item': 'copper-cable', 'type': 'output', 'x': 0, 'y': 5}, {'id': 'electronic-circuit_output_iron-plate_0_0', 'item': 'iron-plate', 'type': 'output', 'x': 12, 'y': 5}, {'id': 'electronic-circuit_output_electronic-circuit_0_0', 'item': 'electronic-circuit', 'type': 'output', 'x': 15, 'y': 14}], 'module_json': "E:/Programmieren/Bachelor-Thesis/Modules/electronic-circuit_120_['copper-cable']_module.json", 'block_type': 'electronic-circuit'}, 'Block_copper-cable_1_0': {'x': 0, 'y': 16, 'width': 16, 'height': 10, 'input_points': [{'id': 'copper-cable_input_copper-plate_1_0', 'item': 'copper-plate', 'type': 'input', 'x': 0, 'y': 25}, {'id': 'copper-cable_input_copper-cable_1_0', 'item': 'copper-cable', 'type': 'input', 'x': 15, 'y': 25}], 'output_points': [{'id': 'copper-cable_output_copper-plate_1_0', 'item': 'copper-plate', 'type': 'output', 'x': 0, 'y': 16}, {'id': 'copper-cable_output_copper-cable_1_0', 'item': 'copper-cable', 'type': 'output', 'x': 15, 'y': 16}], 'module_json': 'E:/Programmieren/Bachelor-Thesis/Modules/copper-cable_300_[]_module.json', 'block_type': 'copper-cable'}}
+2025-06-30 11:19:38,547 - FactoryBuilder - INFO - Gate connections: [{'source': <FactoryZ3Solver.Gate object at 0x000001A7C3B793A0>, 'target': <FactoryZ3Solver.Gate object at 0x000001A7C3B7A7E0>, 'source_x': 0, 'source_y': 16, 'target_x': 1, 'target_y': 29, 'item': 'copper-plate'}, {'source': <FactoryZ3Solver.Gate object at 0x000001A7C3B7A450>, 'target': <FactoryZ3Solver.Gate object at 0x000001A7C3B78DD0>, 'source_x': 12, 'source_y': 5, 'target_x': 4, 'target_y': 29, 'item': 'iron-plate'}, {'source': <FactoryZ3Solver.Gate object at 0x000001A7C3B78EF0>, 'target': <FactoryZ3Solver.Gate object at 0x000001A7C3B79490>, 'source_x': 0, 'source_y': 5, 'target_x': 15, 'target_y': 25, 'item': 'copper-cable'}, {'source': <FactoryZ3Solver.Gate object at 0x000001A7C3B79580>, 'target': <FactoryZ3Solver.Gate object at 0x000001A7C3B79040>, 'source_x': 15, 'source_y': 16, 'target_x': 0, 'target_y': 14, 'item': 'copper-cable'}, {'source': <FactoryZ3Solver.Gate object at 0x000001A7C3B78D40>, 'target': <FactoryZ3Solver.Gate object at 0x000001A7C3B7A630>, 'source_x': 7, 'source_y': 29, 'target_x': 15, 'target_y': 5, 'item': 'electronic-circuit'}]
+2025-06-30 11:19:38,548 - FactoryBuilder - INFO - Execution time for solve: 10.5775 seconds.

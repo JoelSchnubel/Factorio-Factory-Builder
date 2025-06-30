@@ -18,7 +18,7 @@
     "fixed_block_external_input_iron-plate": {
       "type": "block",
       "position": [
-        5,
+        4,
         29
       ],
       "dimensions": [
@@ -29,7 +29,7 @@
     "fixed_block_external_output_electronic-circuit": {
       "type": "block",
       "position": [
-        8,
+        7,
         29
       ],
       "dimensions": [
@@ -1258,7 +1258,7 @@
       {
         "item": "electronic-circuit",
         "position": [
-          8,
+          7,
           29
         ],
         "block_id": "external_output_electronic-circuit",
@@ -1267,8 +1267,8 @@
       {
         "item": "copper-cable",
         "position": [
-          9,
-          5
+          0,
+          14
         ],
         "block_id": "Block_electronic-circuit_0_0",
         "external": false
@@ -1276,8 +1276,8 @@
       {
         "item": "iron-plate",
         "position": [
-          9,
-          17
+          12,
+          14
         ],
         "block_id": "Block_electronic-circuit_0_0",
         "external": false
@@ -1285,8 +1285,8 @@
       {
         "item": "electronic-circuit",
         "position": [
-          0,
-          20
+          15,
+          5
         ],
         "block_id": "Block_electronic-circuit_0_0",
         "external": false
@@ -1294,8 +1294,8 @@
       {
         "item": "copper-plate",
         "position": [
-          9,
-          16
+          0,
+          25
         ],
         "block_id": "Block_copper-cable_1_0",
         "external": false
@@ -1303,8 +1303,8 @@
       {
         "item": "copper-cable",
         "position": [
-          9,
-          31
+          15,
+          25
         ],
         "block_id": "Block_copper-cable_1_0",
         "external": false
@@ -1323,7 +1323,7 @@
       {
         "item": "iron-plate",
         "position": [
-          5,
+          4,
           29
         ],
         "block_id": "external_input_iron-plate",
@@ -1341,8 +1341,8 @@
       {
         "item": "iron-plate",
         "position": [
-          0,
-          17
+          12,
+          5
         ],
         "block_id": "Block_electronic-circuit_0_0",
         "external": false
@@ -1350,8 +1350,8 @@
       {
         "item": "electronic-circuit",
         "position": [
-          9,
-          20
+          15,
+          14
         ],
         "block_id": "Block_electronic-circuit_0_0",
         "external": false
@@ -1368,8 +1368,8 @@
       {
         "item": "copper-cable",
         "position": [
-          0,
-          31
+          15,
+          16
         ],
         "block_id": "Block_copper-cable_1_0",
         "external": false
@@ -1382,51 +1382,98 @@
       "connection_id": "electronic-circuit_4",
       "path": [
         [
-          9,
+          15,
+          14
+        ],
+        [
+          14,
+          14
+        ],
+        [
+          13,
+          14
+        ],
+        [
+          13,
+          19
+        ],
+        [
+          13,
           20
         ],
         [
-          8,
-          20
+          13,
+          21
+        ],
+        [
+          12,
+          21
+        ],
+        [
+          11,
+          21
+        ],
+        [
+          10,
+          21
+        ],
+        [
+          9,
+          21
         ],
         [
           8,
           21
         ],
         [
-          8,
+          7,
+          21
+        ],
+        [
+          7,
           22
         ],
         [
-          8,
+          7,
           23
         ],
         [
-          8,
+          7,
           24
         ],
         [
-          8,
+          7,
           25
         ],
         [
-          8,
+          7,
           26
         ],
         [
-          8,
+          7,
           27
         ],
         [
-          8,
+          7,
           28
         ],
         [
-          8,
+          7,
           29
         ]
       ],
-      "underground_segments": {}
+      "underground_segments": {
+        "segment_0": {
+          "start": [
+            13,
+            14
+          ],
+          "end": [
+            13,
+            19
+          ]
+        }
+      }
     },
     {
       "item": "copper-plate",
@@ -1437,122 +1484,222 @@
           29
         ],
         [
-          1,
+          0,
+          29
+        ],
+        [
+          0,
           28
         ],
         [
-          1,
+          0,
           27
         ],
         [
-          1,
+          0,
           26
         ],
         [
-          2,
-          26
-        ],
-        [
-          3,
-          26
-        ],
-        [
-          4,
-          26
-        ],
-        [
-          5,
-          26
-        ],
-        [
-          6,
-          26
-        ],
-        [
-          7,
-          26
-        ],
-        [
-          7,
+          0,
           25
-        ],
-        [
-          7,
-          24
-        ],
-        [
-          7,
-          23
-        ],
-        [
-          7,
-          22
-        ],
-        [
-          7,
-          17
-        ],
-        [
-          7,
-          16
-        ],
-        [
-          8,
-          16
-        ],
-        [
-          9,
-          16
         ]
       ],
-      "underground_segments": {
-        "segment_0": {
-          "start": [
-            7,
-            22
-          ],
-          "end": [
-            7,
-            17
-          ]
-        }
-      }
+      "underground_segments": {}
     },
     {
       "item": "iron-plate",
       "connection_id": "iron-plate_1",
       "path": [
         [
-          5,
+          4,
           29
         ],
         [
-          5,
+          4,
           28
         ],
         [
-          5,
+          4,
           27
         ],
         [
-          9,
-          27
-        ],
-        [
-          9,
+          4,
           26
         ],
         [
-          9,
+          8,
+          26
+        ],
+        [
+          8,
           25
         ],
         [
-          9,
-          24
+          8,
+          20
+        ],
+        [
+          8,
+          17
+        ],
+        [
+          8,
+          16
+        ],
+        [
+          8,
+          15
+        ],
+        [
+          8,
+          14
         ],
         [
           9,
-          23
+          14
+        ],
+        [
+          10,
+          14
+        ],
+        [
+          11,
+          14
+        ],
+        [
+          12,
+          14
+        ]
+      ],
+      "underground_segments": {
+        "segment_0": {
+          "start": [
+            4,
+            26
+          ],
+          "end": [
+            8,
+            26
+          ]
+        },
+        "segment_1": {
+          "start": [
+            8,
+            25
+          ],
+          "end": [
+            8,
+            20
+          ]
+        }
+      }
+    },
+    {
+      "item": "copper-cable",
+      "connection_id": "copper-cable_2",
+      "path": [
+        [
+          15,
+          16
+        ],
+        [
+          15,
+          15
+        ],
+        [
+          12,
+          15
+        ],
+        [
+          7,
+          15
+        ],
+        [
+          6,
+          15
+        ],
+        [
+          5,
+          15
+        ],
+        [
+          4,
+          15
+        ],
+        [
+          3,
+          15
+        ],
+        [
+          2,
+          15
+        ],
+        [
+          1,
+          15
+        ],
+        [
+          0,
+          15
+        ],
+        [
+          0,
+          14
+        ]
+      ],
+      "underground_segments": {}
+    },
+    {
+      "item": "copper-cable",
+      "connection_id": "copper-cable_3",
+      "path": [
+        [
+          0,
+          14
+        ],
+        [
+          1,
+          14
+        ],
+        [
+          2,
+          14
+        ],
+        [
+          3,
+          14
+        ],
+        [
+          4,
+          14
+        ],
+        [
+          5,
+          14
+        ],
+        [
+          6,
+          14
+        ],
+        [
+          7,
+          14
+        ],
+        [
+          7,
+          16
+        ],
+        [
+          7,
+          19
+        ],
+        [
+          8,
+          19
+        ],
+        [
+          9,
+          19
         ],
         [
           9,
@@ -1560,28 +1707,70 @@
         ],
         [
           9,
-          17
+          23
+        ],
+        [
+          9,
+          24
+        ],
+        [
+          9,
+          25
+        ],
+        [
+          10,
+          25
+        ],
+        [
+          11,
+          25
+        ],
+        [
+          12,
+          25
+        ],
+        [
+          13,
+          25
+        ],
+        [
+          14,
+          25
+        ],
+        [
+          15,
+          25
         ]
       ],
       "underground_segments": {
         "segment_0": {
           "start": [
-            5,
-            27
+            7,
+            14
           ],
           "end": [
-            9,
-            27
+            7,
+            16
           ]
         },
         "segment_1": {
           "start": [
+            7,
+            16
+          ],
+          "end": [
+            7,
+            19
+          ]
+        },
+        "segment_2": {
+          "start": [
             9,
-            22
+            19
           ],
           "end": [
             9,
-            17
+            22
           ]
         }
       }
