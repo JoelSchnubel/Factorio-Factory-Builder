@@ -1,0 +1,56 @@
+{% extends "base.html" %} {% block content %}
+<div class="card">
+  <div class="card-header">
+    <h2>SMT Solver Evaluation</h2>
+  </div>
+  <div class="card-body">
+    <form action="/run-solver-eval" method="post">
+      <div class="mb-3">
+        <label class="form-label">Solvers to Evaluate</label>
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            id="solver_z3"
+            name="solvers"
+            value="z3"
+            checked
+          />
+          <label class="form-check-label" for="solver_z3">Z3</label>
+        </div>
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            id="solver_cvc5"
+            name="solvers"
+            value="cvc5"
+          />
+          <label class="form-check-label" for="solver_cvc5">CVC5</label>
+        </div>
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            id="solver_yices"
+            name="solvers"
+            value="yices"
+          />
+          <label class="form-check-label" for="solver_yices">Yices</label>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">Run Evaluation</button>
+    </form>
+  </div>
+</div>
+
+{% if result %}
+<div class="card mt-4">
+  <div class="card-header">
+    <h3>Evaluation Results</h3>
+  </div>
+  <div class="card-body">
+    <pre>{{ result }}</pre>
+  </div>
+</div>
+{% endif %} {% endblock %}

@@ -1,0 +1,43 @@
+{
+  "grid": {
+    "default_width": 16,
+    "default_height": 10
+  },
+  "machines": {
+    "default_assembler": "assembling-machine-1",
+    "default_furnace": "electric-furnace",
+    "default_chemical_plant": "chemical-plant",
+    "default_refinery": "oil-refinery"
+  },
+  "inserters": {
+    "default_type": "inserter",
+    "input_type": "fast-inserter",
+    "output_type": "fast-inserter"
+  },
+  "belts": {
+    "default_type": "transport-belt",
+    "underground_type": "underground-belt",
+    "underground_max_length": 4
+  },
+  "visualization": {
+    "cell_size": 50,
+    "show_grid_lines": true,
+    "save_images": true
+  },
+  "pathfinding": {
+    "allow_underground": true,
+    "allow_splitters": true,
+    "find_optimal_paths": true,
+    "max_tries": 3
+  },
+  "pipes": {
+    "default_type": "pipe",
+    "underground_type": "pipe-to-ground",
+    "underground_max_length": 8
+  },
+  "power": {
+    "default_type": "medium-electric-pole",
+    "place_power_poles": true,
+    "maximize_coverage": false
+  }
+}

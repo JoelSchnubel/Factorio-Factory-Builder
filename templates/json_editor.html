@@ -1,0 +1,152 @@
+{% extends "base.html" %} {% block content %}
+<div class="card">
+  <div class="card-header">
+    <h2>JSON Editor</h2>
+  </div>
+  <div class="card-body">
+    <div class="mb-3">
+      <label for="json_file" class="form-label">Select JSON File</label>
+      <select class="form-select" id="json_file" onchange="loadJsonFile()">
+        <option value="machine_data.json">machine_data.json</option>
+        <option value="recipes.json">recipes.json</option>
+        <option value="config.json">config.json</option>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <div
+        id="jsonEditor"
+        class="json-editor"
+        style="
+          height: 600px;
+          width: 100%;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+        "
+      ></div>
+      <div class="text-muted mt-2">
+        <small
+          >Press <kbd>F2</kbd> to format JSON | <kbd>Ctrl+F</kbd> to search |
+          <kbd>Ctrl+Space</kbd> for autocomplete</small
+        >
+      </div>
+    </div>
+
+    <button onclick="saveJson()" class="btn btn-primary">Save Changes</button>
+    <div id="saveStatus" class="mt-2"></div>
+  </div>
+</div>
+{% endblock %} {% block scripts %}
+<script>
+  let editor;
+  let currentFile;
+  document.addEventListener("DOMContentLoaded", function () {
+    // Initialize the Ace editor with improved configuration
+    editor = ace.edit("jsonEditor");
+    editor.setTheme("ace/theme/monokai");
+    editor.session.setMode("ace/mode/json");
+
+    // Configure editor for better JSON editing experience
+    editor.setOptions({
+      tabSize: 2,
+      useSoftTabs: true,
+      showPrintMargin: false,
+      fontSize: "14px",
+      wrap: true,
+      enableBasicAutocompletion: true,
+      enableLiveAutocompletion: true,
+      enableSnippets: true,
+    });
+
+    // Add key binding for formatting JSON with F2 key
+    editor.commands.addCommand({
+      name: "formatJson",
+      bindKey: { win: "F2", mac: "F2" },
+      exec: function (editor) {
+        try {
+          const content = editor.getValue();
+          const jsonObj = JSON.parse(content);
+          const formatted = JSON.stringify(jsonObj, null, 4);
+          editor.setValue(formatted);
+          editor.clearSelection();
+        } catch (e) {
+          console.error("Error formatting JSON:", e);
+        }
+      },
+    });
+
+    // Load the default file
+    loadJsonFile();
+  });
+  function loadJsonFile() {
+    currentFile = document.getElementById("json_file").value;
+    fetch(`/api/json/${currentFile}`)
+      .then((response) => response.json()) // Parse JSON directly from response
+      .then((jsonObj) => {
+        // Format the JSON with proper indentation
+        const formatted = JSON.stringify(jsonObj, null, 4);
+        editor.setValue(formatted);
+        editor.clearSelection();
+
+        // Set cursor position to the start
+        editor.gotoLine(1, 0);
+
+        // Automatically adjust editor settings for better JSON editing
+        editor.setOptions({
+          tabSize: 2,
+          useSoftTabs: true,
+          showPrintMargin: false,
+        });
+      })
+      .catch((error) => {
+        console.error("Error loading JSON file:", error);
+        editor.setValue(`Error loading file: ${error.message}`);
+      });
+  }
+  function saveJson() {
+    const jsonContent = editor.getValue();
+    const statusElement = document.getElementById("saveStatus");
+    statusElement.innerHTML = ""; // Clear previous status messages
+
+    // Show spinner while saving
+    statusElement.innerHTML = `
+      <div class="alert alert-info">
+        <div class="spinner-border spinner-border-sm" role="status">
+          <span class="visually-hidden">Saving...</span>
+        </div>
+        Saving changes...
+      </div>
+    `;
+
+    // Validate and format JSON before saving
+    try {
+      const jsonObj = JSON.parse(jsonContent);
+      const formatted = JSON.stringify(jsonObj, null, 4);
+      editor.setValue(formatted);
+      editor.clearSelection();
+    } catch (e) {
+      statusElement.innerHTML = `<div class="alert alert-danger">Invalid JSON: ${e.message}</div>`;
+      return;
+    }
+
+    fetch(`/api/json/${currentFile}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: editor.getValue(), // Use the formatted value
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          statusElement.innerHTML = `<div class="alert alert-success">File saved successfully!</div>`;
+        } else {
+          statusElement.innerHTML = `<div class="alert alert-danger">Error: ${data.message}</div>`;
+        }
+      })
+      .catch((error) => {
+        statusElement.innerHTML = `<div class="alert alert-danger">Error: ${error.message}</div>`;
+      });
+  }
+</script>
+{% endblock %}

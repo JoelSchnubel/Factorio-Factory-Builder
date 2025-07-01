@@ -1,0 +1,62 @@
+{% extends "base.html" %} {% block content %}
+<div class="row">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h3>Module Builde</h3>
+      </div>
+      <div class="card-body">
+        <p>
+          Generate blueprints for specific items with specified production
+          rates.
+        </p>
+        <a href="/production-tree" class="btn btn-primary"
+          >Go to Module Builder</a
+        >
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h3>Factory Builder</h3>
+      </div>
+      <div class="card-body">
+        <p>Build complete factories by combining multiple blueprint modules.</p>
+        <a href="/factory-builder" class="btn btn-primary"
+          >Go to Factory Builder</a
+        >
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row mt-4">
+  <!--
+    <div class="col-md-6">
+        <div class="card">
+        <div class="card-header">
+            <h3>Solver Evaluation</h3>
+        </div>
+        <div class="card-body">
+            <p>Evaluate and compare different SMT solvers.</p>
+            <a href="/solver-eval" class="btn btn-primary"
+            >Go to Solver Evaluation</a
+            >
+        </div>
+        </div>
+    </div>
+    -->
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h3>JSON Editor</h3>
+      </div>
+      <div class="card-body">
+        <p>Edit machine_data.json and recipes.json files.</p>
+        <a href="/json-editor" class="btn btn-primary">Go to JSON Editor</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

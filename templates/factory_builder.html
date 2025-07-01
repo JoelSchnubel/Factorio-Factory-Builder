@@ -1,0 +1,63 @@
+{% extends "base.html" %} {% block content %}
+<div class="card">
+  <div class="card-header">
+    <h2>Generate Factory Blueprint</h2>
+  </div>
+  <div class="card-body">
+    <form action="/run-factory-builder" method="post">
+      <div class="mb-3">
+        <label for="output_item" class="form-label">Output Item</label>
+        <input
+          type="text"
+          class="form-control"
+          id="output_item"
+          name="output_item"
+          value="electronic-circuit"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <label for="amount" class="form-label">Amount Per Minute</label>
+        <input
+          type="number"
+          class="form-control"
+          id="amount"
+          name="amount"
+          value="10"
+          required
+        />
+      </div>
+      <button type="submit" class="btn btn-primary">Generate Factory</button>
+    </form>
+  </div>
+</div>
+
+{% if result %}
+<div class="card mt-4">
+  <div class="card-header">
+    <h3>Result</h3>
+  </div>
+  <div class="card-body">
+    <div class="alert alert-{{ 'success' if success else 'danger' }}">
+      {{ result }}
+    </div>
+
+    {% if factory_path %}
+    <div class="mb-3">
+      <h4>Factory Details:</h4>
+      <p>Factory saved to: {{ factory_path }}</p>
+      <img
+        src="{{ factory_path }}"
+        class="img-fluid mt-3"
+        alt="Factory Image"
+      />
+    </div>
+    {% endif %} {% if execution_time %}
+    <div class="mb-3">
+      <h4>Performance:</h4>
+      <p>Total execution time: {{ execution_time }} seconds</p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endif %} {% endblock %}

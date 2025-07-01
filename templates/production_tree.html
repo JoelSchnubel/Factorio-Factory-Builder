@@ -1,0 +1,102 @@
+{% extends "base.html" %} {% block content %}
+<div class="card">
+  <div class="card-header">
+    <h2>Generate Module Blueprint</h2>
+  </div>
+  <div class="card-body">
+    <form action="/run-production-tree" method="post">
+      <div class="mb-3">
+        <label for="item" class="form-label">Item to Produce</label>
+        <input
+          type="text"
+          class="form-control"
+          id="item"
+          name="item"
+          value="electronic-circuit"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <label for="amount" class="form-label">Amount Per Minute</label>
+        <input
+          type="number"
+          class="form-control"
+          id="amount"
+          name="amount"
+          value="120"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <label for="width" class="form-label">Blueprint Width</label>
+        <input
+          type="number"
+          class="form-control"
+          id="width"
+          name="width"
+          value="16"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <label for="height" class="form-label">Blueprint Height</label>
+        <input
+          type="number"
+          class="form-control"
+          id="height"
+          name="height"
+          value="10"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <label for="input_items" class="form-label"
+          >Input Items (comma separated)</label
+        >
+        <input
+          type="text"
+          class="form-control"
+          id="input_items"
+          name="input_items"
+          value=""
+        />
+        <div class="form-text">
+          Leave empty for automatic calculation, or specify items like
+          'copper-cable,iron-plate'
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">Generate Blueprint</button>
+    </form>
+  </div>
+</div>
+
+{% if result %}
+<div class="card mt-4">
+  <div class="card-header">
+    <h3>Result</h3>
+  </div>
+  <div class="card-body">
+    <div class="alert alert-{{ 'success' if success else 'danger' }}">
+      {{ result }}
+    </div>
+
+    {% if blueprint_path %}
+    <div class="mb-3">
+      <h4>Blueprint Details:</h4>
+      <p>Blueprint saved to: {{ blueprint_path }}</p>
+      <p>Blueprint string file: {{ blueprint_string_path }}</p>
+      <img
+        src="{{ blueprint_path }}"
+        class="img-fluid mt-3"
+        alt="Blueprint Image"
+      />
+    </div>
+    {% endif %} {% if execution_time %}
+    <div class="mb-3">
+      <h4>Performance:</h4>
+      <p>Total execution time: {{ execution_time }} seconds</p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endif %} {% endblock %}
