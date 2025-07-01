@@ -669,16 +669,19 @@ class FactoryBuilder:
                         
                             # For input_information: 
                             # - "input" position is where this module receives the item (external connection point)
-                            # - "output" position is internal flow, not used for inter-module connections
+                            # - "output" position is where the item flows into the module's internal systems
                             
                             # Validate coordinates before adding
                             input_abs_x = block_x + input_pos[1]
                             input_abs_y = block_y + input_pos[0]
+                            output_abs_x = block_x + output_pos[1]
+                            output_abs_y = block_y + output_pos[0]
                             
                             # Check bounds
-                            if (0 <= input_abs_x < self.final_x and 0 <= input_abs_y < self.final_y):
+                            if (0 <= input_abs_x < self.final_x and 0 <= input_abs_y < self.final_y and
+                                0 <= output_abs_x < self.final_x and 0 <= output_abs_y < self.final_y):
                                 
-                                # Only add input connection point (where the module receives the item from external)
+                                # Add input connection point (where the module receives the item from external)
                                 factory_data["io_points"]["inputs"].append({
                                         "item": item,
                                         "position": [input_abs_x, input_abs_y],
@@ -686,8 +689,17 @@ class FactoryBuilder:
                                         "external": False
                                     })
                                 logger.info(f"Added input connection point for {item} at {[input_abs_x, input_abs_y]} for block {block_id}")
+                                
+                                # Add output connection point (where the item flows out of this connection)
+                                factory_data["io_points"]["outputs"].append({
+                                    "item": item,
+                                    "position": [output_abs_x, output_abs_y],
+                                    "block_id": block_id,
+                                    "external": False
+                                })
+                                logger.info(f"Added output connection point for {item} at {[output_abs_x, output_abs_y]} for block {block_id}")
                             else:
-                                logger.warning(f"Skipping out-of-bounds input point for {item} in block {block_id}: input={[input_abs_x, input_abs_y]}, bounds=[{self.final_x}, {self.final_y}]")
+                                logger.warning(f"Skipping out-of-bounds I/O points for {item} in block {block_id}: input={[input_abs_x, input_abs_y]}, output={[output_abs_x, output_abs_y]}, bounds=[{self.final_x}, {self.final_y}]")
 
                 if "output_information" in module_data:
                     for item, data in module_data["output_information"].items():
@@ -762,26 +774,38 @@ class FactoryBuilder:
                             output_pos = data.get("output")
                             
                             # For output_information:
-                            # - "input" position is internal flow, not used for inter-module connections
+                            # - "input" position is where the item comes from within the module 
                             # - "output" position is where the item exits the module (external connection point)
                             
                             # Validate coordinates before adding
+                            input_abs_x = block_x + input_pos[1]
+                            input_abs_y = block_y + input_pos[0]
                             output_abs_x = block_x + output_pos[1]
                             output_abs_y = block_y + output_pos[0]
                             
                             # Check bounds
-                            if (0 <= output_abs_x < self.final_x and 0 <= output_abs_y < self.final_y):
+                            if (0 <= input_abs_x < self.final_x and 0 <= input_abs_y < self.final_y and
+                                0 <= output_abs_x < self.final_x and 0 <= output_abs_y < self.final_y):
                                 
-                                # Only add output connection point (where the item exits the module)
+                                # Add input connection point (where the item comes from within the module)
+                                factory_data["io_points"]["inputs"].append({
+                                        "item": item,
+                                        "position": [input_abs_x, input_abs_y],
+                                        "block_id": block_id,
+                                        "external": False
+                                    })
+                                logger.info(f"Added internal input point for {item} at {[input_abs_x, input_abs_y]} for block {block_id}")
+                                
+                                # Add output connection point (where the item exits the module)
                                 factory_data["io_points"]["outputs"].append({
                                     "item": item,
                                     "position": [output_abs_x, output_abs_y],
                                     "block_id": block_id,
                                     "external": False
                                 })
-                                logger.info(f"Added output connection point for {item} at {[output_abs_x, output_abs_y]} for block {block_id}")
+                                logger.info(f"Added external output point for {item} at {[output_abs_x, output_abs_y]} for block {block_id}")
                             else:
-                                logger.warning(f"Skipping out-of-bounds output point for {item} in block {block_id}: output={[output_abs_x, output_abs_y]}, bounds=[{self.final_x}, {self.final_y}]")
+                                logger.warning(f"Skipping out-of-bounds I/O points for {item} in block {block_id}: input={[input_abs_x, input_abs_y]}, output={[output_abs_x, output_abs_y]}, bounds=[{self.final_x}, {self.final_y}]")
                 
                 # Process paths which include underground belts and splitters
                 if "paths" in module_data:
@@ -1634,13 +1658,26 @@ class FactoryBuilder:
                             logger.debug(f"Skipping external-to-external connection for {item}")
                             continue
                         
-                        # Rule 3: Ensure positions are valid lists
+                        # Rule 3: Complexity check - only allow connections from lower/equal complexity to higher/equal complexity
+                        output_item_type = self.get_block_item_type(output_block)
+                        input_item_type = self.get_block_item_type(input_block)
+                        
+                        if output_item_type and input_item_type:
+                            output_complexity = self.calculate_item_complexity(output_item_type)
+                            input_complexity = self.calculate_item_complexity(input_item_type)
+                            
+                            # Only allow connections where output complexity <= input complexity
+                            if output_complexity > input_complexity:
+                                logger.debug(f"Skipping connection: {output_item_type}(complexity:{output_complexity}) -> {input_item_type}(complexity:{input_complexity})")
+                                continue
+                        
+                        # Rule 4: Ensure positions are valid lists
                         if isinstance(output_pos, tuple):
                             output_pos = list(output_pos)
                         if isinstance(input_pos, tuple):
                             input_pos = list(input_pos)
                         
-                        # Rule 4: Make sure we're dealing with numeric positions
+                        # Rule 5: Make sure we're dealing with numeric positions
                         if not (isinstance(output_pos, list) and len(output_pos) >= 2 and 
                                 isinstance(input_pos, list) and len(input_pos) >= 2):
                             logger.warning(f"Invalid position format: output={output_pos}, input={input_pos}")
@@ -1920,15 +1957,6 @@ class FactoryBuilder:
         return min_x, max_x, min_y, max_y    
     
     def _get_absolute_position(self, gate):
-        """
-        Calculate absolute position for an external gate based on edge placement.
-        
-        Args:
-            gate: Gate object with edge and position information
-            
-        Returns:
-            list: Absolute [x, y] position
-        """
         # For external gates, we need to calculate position based on edge
         if "edge" in gate:
             edge = gate["edge"]
@@ -1970,6 +1998,86 @@ class FactoryBuilder:
             logger.error(f"Malformed gate object: {gate}")
             return [0, 0]
     
+    def calculate_item_complexity(self, item_name):
+        """
+        Calculate the complexity of an item based on its position in the recipe tree.
+        Base materials (no recipe) have complexity 0.
+        Each level of crafting adds 1 to complexity.
+        
+        Args:
+            item_name (str): The name of the item
+            
+        Returns:
+            int: The complexity level of the item (0 = base material, higher = more complex)
+        """
+        if not hasattr(self, '_complexity_cache'):
+            self._complexity_cache = {}
+            
+        if item_name in self._complexity_cache:
+            return self._complexity_cache[item_name]
+        
+        try:
+            recipes = load_json("recipes.json")
+            
+            # Find the recipe for this item
+            item_recipe = None
+            for recipe in recipes:
+                if recipe.get("id") == item_name:
+                    item_recipe = recipe
+                    break
+            
+            # If no recipe found, it's a base material
+            if not item_recipe:
+                self._complexity_cache[item_name] = 0
+                return 0
+            
+            # If recipe has no ingredients, it's also a base material
+            ingredients = item_recipe.get("ingredients", [])
+            if not ingredients:
+                self._complexity_cache[item_name] = 0
+                return 0
+            
+            # Calculate complexity as 1 + max complexity of ingredients
+            max_ingredient_complexity = 0
+            for ingredient in ingredients:
+                ingredient_name = ingredient.get("id") if isinstance(ingredient, dict) else ingredient
+                if ingredient_name and ingredient_name != item_name:  # Avoid circular references
+                    ingredient_complexity = self.calculate_item_complexity(ingredient_name)
+                    max_ingredient_complexity = max(max_ingredient_complexity, ingredient_complexity)
+            
+            complexity = max_ingredient_complexity + 1
+            self._complexity_cache[item_name] = complexity
+            return complexity
+            
+        except Exception as e:
+            logger.error(f"Error calculating complexity for {item_name}: {e}")
+            # Default to complexity 0 on error
+            self._complexity_cache[item_name] = 0
+            return 0
+
+    def get_block_item_type(self, block_id):
+        """
+        Extract the item type from a block ID.
+        
+        Args:
+            block_id (str): The block ID (e.g., "Block_copper-cable_0_0")
+            
+        Returns:
+            str: The item type or None if it can't be determined
+        """
+        # Handle external blocks
+        if "external_input_" in block_id:
+            return block_id.replace("external_input_", "")
+        elif "external_output_" in block_id:
+            return block_id.replace("external_output_", "")
+        
+        # Handle regular blocks (format: "Block_<item>_<x>_<y>")
+        if block_id.startswith("Block_"):
+            parts = block_id.split("_")
+            if len(parts) >= 2:
+                return parts[1]  # Return the item type part
+        
+        return None
 def manhattan_distance(p1, p2):
     """Calculate the Manhattan distance between two points."""
     return abs(p1[0] - p2[0]) + abs(p1[1] - p2[1])
@@ -2441,9 +2549,16 @@ def _add_belt_path_to_blueprint(blueprint, path_data, item, occupied_positions):
                 
                 # Determine primary direction
                 if abs(dx) > abs(dy):
-                    direction = Direction.EAST if dx > 0 else Direction.WEST
+                    if dx > 0:  # Moving right (east)
+                        direction = Direction.EAST
+                    else:  # Moving left (west)
+                        direction = Direction.WEST
                 else:
-                    direction = Direction.SOUTH if dy > 0 else Direction.NORTH
+                    if dy > 0:  # Moving down (south)
+                        direction = Direction.SOUTH
+                    else:  # Moving up (north)
+                        direction = Direction.NORTH
+                
                 if not is_fluid:
                     logger.info(f"  - Adding underground belt segment from {start_pos} to {end_pos} facing {direction}")
                     
@@ -2949,21 +3064,26 @@ def visualize_factory(json_path, cell_size=20, save_path=None):
                     dx = end_pos[0] - start_pos[0]
                     dy = end_pos[1] - start_pos[1]
                     
-                    # Determine primary direction
+                    # Determine direction and rotation angles for entrance and exit
+                    # Underground belts point in the direction of travel
                     if abs(dx) > abs(dy):
-                        if dx > 0:  # Right
-                            start_angle = 270
-                            end_angle = 90
-                        else:  # Left
-                            start_angle = 90
-                            end_angle = 270
+                        if dx > 0:  # Moving right (east)
+                            start_angle = 270  # Entrance faces east
+                            end_angle = 270    # Exit faces east
+                            direction = "east"
+                        else:  # Moving left (west)
+                            start_angle = 90   # Entrance faces west
+                            end_angle = 90     # Exit faces west
+                            direction = "west"
                     else:
-                        if dy > 0:  # Down
-                            start_angle = 180
-                            end_angle = 0
-                        else:  # Up
-                            start_angle = 0
-                            end_angle = 180
+                        if dy > 0:  # Moving down (south)
+                            start_angle = 180  # Entrance faces south
+                            end_angle = 180    # Exit faces south
+                            direction = "south"
+                        else:  # Moving up (north)
+                            start_angle = 0    # Entrance faces north
+                            end_angle = 0      # Exit faces north
+                            direction = "north"
                             
                     # Choose the appropriate images
                     if is_fluid_item(item):
@@ -3124,10 +3244,24 @@ def visualize_factory(json_path, cell_size=20, save_path=None):
                     pixel_y = compressed_y * cell_size
                     
                     direction = underground_belt.get("direction")
+                    belt_type = underground_belt.get("type", "entrance")
+                    
+                    # Get the correct rotation angle based on direction
                     angle = get_angle_from_orientation(direction)
                     belt_image = pygame.transform.rotate(images['underground'], angle)
                     
+                    # Draw the underground belt
                     screen.blit(belt_image, (pixel_x, pixel_y))
+                    
+                    # Add visual indicator for entrance vs exit
+                    if belt_type == "entrance":
+                        # Draw a small green circle for entrance
+                        pygame.draw.circle(screen, (0, 255, 0), 
+                                         (pixel_x + cell_size//4, pixel_y + cell_size//4), 3)
+                    else:  # exit
+                        # Draw a small red circle for exit
+                        pygame.draw.circle(screen, (255, 0, 0), 
+                                         (pixel_x + cell_size//4, pixel_y + cell_size//4), 3)
             
             # Draw power poles
             for power_pole in data["entities"].get("power_poles", []):
@@ -3155,7 +3289,7 @@ def visualize_factory(json_path, cell_size=20, save_path=None):
                     else:
                         logger.warning(f"Power pole image not found for {pole_type}")
             
-            # Draw splitters
+            # Draw splitters (2x1 entities)
             for splitter in data["entities"].get("splitters", []):
                 if "position" in splitter:
                     pos = splitter["position"]
@@ -3175,35 +3309,50 @@ def visualize_factory(json_path, cell_size=20, save_path=None):
                     pixel_y = compressed_y * cell_size
                     
                     direction = splitter.get("direction", "north")
-                    angle = get_angle_from_orientation(direction)
+                    item = splitter.get("item")
                     
-                    splitter_img = pygame.transform.scale(images['splitter'], (cell_size, cell_size))
-                    rotated_splitter = pygame.transform.rotate(splitter_img, angle)
+                    # Splitters are 2x1 entities - determine their size and orientation correctly
+                    # In Factorio: north/south splitters are 1 wide, 2 tall; east/west splitters are 2 wide, 1 tall
+                    if direction in ["north", "south"]:
+                        # Vertical orientation: splitter is 1 wide, 2 tall
+                        splitter_width = cell_size
+                        splitter_height = 2 * cell_size
+                        angle = 0  # Default orientation for vertical splitters
+                    else:  # east or west
+                        # Horizontal orientation: splitter is 2 wide, 1 tall
+                        splitter_width = 2 * cell_size
+                        splitter_height = cell_size
+                        angle = 90  # Rotate 90 degrees for horizontal splitters
                     
-                    # Calculate pixel coordinates based on rotation
-                    if angle == 0 or angle == 180:  # Horizontal orientation
-                        splitter_x = pixel_x
-                        splitter_y = pixel_y
-                    else:  # Vertical orientation (90 or 270)
-                        # For vertical orientation, center the splitter on the position
-                        splitter_x = pixel_x - cell_size // 2
-                        splitter_y = pixel_y
+                    # Create and scale the splitter image first
+                    base_splitter = pygame.transform.scale(images['splitter'], (splitter_width, splitter_height))
+                    
+                    # Apply rotation if needed
+                    if angle != 0:
+                        rotated_splitter = pygame.transform.rotate(base_splitter, angle)
+                    else:
+                        rotated_splitter = base_splitter
+                    
+                    # Calculate the actual size after rotation
+                    actual_width, actual_height = rotated_splitter.get_size()
+                    
+                    # Position the splitter at the given coordinates
+                    splitter_x = pixel_x
+                    splitter_y = pixel_y
                     
                     # Draw the splitter
                     screen.blit(rotated_splitter, (splitter_x, splitter_y))
                     
-                    item = splitter.get("item")
-                    rot_width, rot_height = rotated_splitter.get_size()
-                    
+                    # Draw item icon on the splitter
                     if item in item_images:
                         # Scale down the item image
                         original_image = item_images[item]
                         quarter_size = (original_image.get_width() // 2, original_image.get_height() // 2)
                         scaled_image = pygame.transform.scale(original_image, quarter_size)
                         
-                        # Position the item icon on the center of the splitter
-                        icon_x = splitter_x + (rot_width - scaled_image.get_width()) // 2
-                        icon_y = splitter_y + (rot_height - scaled_image.get_height()) // 2
+                        # Position the item icon in the center of the splitter
+                        icon_x = splitter_x + (actual_width - scaled_image.get_width()) // 2
+                        icon_y = splitter_y + (actual_height - scaled_image.get_height()) // 2
                         screen.blit(scaled_image, (icon_x, icon_y))
         
         # Draw I/O points
@@ -3461,5 +3610,4 @@ def is_fluid_item(item_id):
     
 if __name__ == "__main__":
     main()
-    
-     
+
