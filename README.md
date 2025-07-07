@@ -24,7 +24,6 @@ This project tackles the challenging problem of automated factory layout optimiz
 - [Architecture](#-architecture)
 - [API Reference](#-api-reference)
 - [Configuration](#-configuration)
-- [Examples](#-examples)
 - [Performance](#-performance)
 - [Contributing](#-contributing)
 - [License](#-license)
@@ -219,67 +218,6 @@ Contains all Factorio recipes with ingredients, crafting times, and machine requ
 
 Defines machine capabilities, crafting speeds, and transport specifications.
 
-## 📝 Examples
-
-### Basic Electronic Circuit Factory
-
-```python
-# Create a factory for electronic circuits
-factory = FactorioProductionTree(20, 15)
-production_data = factory.calculate_production("electronic-circuit", 60,
-                                             input_items=["iron-plate", "copper-cable"])
-
-# Manual I/O configuration
-factory.manual_Input()  # Interactive GUI for input placement
-factory.manual_Output()  # Interactive GUI for output placement
-
-# Optimize and build
-factory.solve(production_data, "z3")
-paths, inserters = factory.build_belts()
-factory.visualize_factory(paths, inserters, store=True)
-```
-
-### Advanced Multi-Module Factory
-
-```python
-from FactoryBuilder import FactoryBuilder
-
-# Build a complex factory with multiple modules
-builder = FactoryBuilder("advanced-circuit", 30, max_assembler_per_blueprint=5)
-builder.split_recipies()  # Decompose into manageable modules
-builder.solve_factory()   # Optimize entire factory layout
-```
-
-## 🧪 Testing
-
-Run the test suite:
-
-```bash
-python -m pytest tests/
-```
-
-## 📄 File Structure
-
-```
-Bachelor-Thesis/
-├── assets/                    # Game asset images
-├── Blueprints/               # Generated blueprint files
-├── Factorys/                 # Factory layout images
-├── logs/                     # Application logs
-├── Modules/                  # Module definitions
-├── Plots/                    # Performance analysis plots
-├── results/                  # Solver evaluation results
-├── SMT_Modules/              # SMT problem instances
-├── static/                   # Web interface assets
-├── svg/                      # SVG visualizations
-├── templates/                # HTML templates
-├── config.json               # Main configuration
-├── machine_data.json         # Machine specifications
-├── recipes.json              # Recipe database
-├── requirements.txt          # Python dependencies
-└── README.md                 # This file
-```
-
 ## 🤝 Contributing
 
 Contributions are welcome! Please follow these steps:
@@ -303,17 +241,7 @@ This project is part of a Bachelor's thesis: "Optimization of Factorio Factory L
 
 ### Citation
 
-If you use this software in your research, please cite:
-
-```bibtex
-@thesis{schnubel2025factorio,
-  title={Optimization of Factorio Factory Layouts: An SMT-Solver Approach},
-  author={Schnubel, Joel},
-  year={2025},
-  school={University of Saarland},
-  type={Bachelor's thesis}
-}
-```
+If you use this software in your research, please cite using GitHubs cite feature:
 
 ## 📜 License
 
@@ -326,22 +254,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **SMT solver developers** (Z3, CVC5, Yices teams)
 - **Open source contributors** for foundational libraries
 
-## 🐛 Known Issues
 
-- CVC5 solver may require specific logic configurations for optimal performance
-- Large factory layouts may require significant memory for pathfinding
-- Blueprint generation requires specific Factorio game version compatibility
-
-## 🔮 Future Work
-
-- Integration with additional constraint solvers
-- Real-time factory optimization
-- Machine learning-based layout prediction
-- Extended support for modded Factorio content
-
----
-
-**Project Status**: ✅ Complete (Bachelor's Thesis)  
-**Maintainer**: Joel Schnubel  
-**Institution**: University of Saarland  
-**Year**: 2025
