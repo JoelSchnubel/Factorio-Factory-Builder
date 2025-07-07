@@ -1,0 +1,44 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+title: "SMT Solver Evaluation Framework"
+abstract: "Creating factory layouts is a challenging issue with real-world applications in logistics and automated manufacturing. Factory layouts occur in numerous environments, from real-world warehouses to games like Factorio. However, creating layouts is computationally hard as it's closely linked to NP-hard problems like the orthogonal packing problem. Previous approaches employ constraint solvers to generate factory layouts. Due to the complexity, state-of-the-art approaches do not scale beyond a handful of machines. We present optimizations that enable the synthesis of larger-scale factories. By leveraging independent subproblems and compositional construction of layouts, we outperform previous techniques by up to 97 times. Furthermore, we identify efficiently solvable components within the synthesis task, allowing us to apply known polynomial-time algorithms to parts of the optimization process."
+authors:
+  - family-names: "Schnubel"
+    given-names: "Joel"
+    affiliation: "University of Saarland"
+date-released: "2025-07-09"
+version: "1.0.0"
+license: MIT
+repository-code: "https://github.com/JoelSchnubel/Bachelor-Thesis"
+keywords:
+  - "SMT solvers"
+  - "Z3"
+  - "CVC5"
+  - "Yices"
+  - "satisfiability modulo theories"
+  - "automated reasoning"
+  - "benchmark evaluation"
+  - "solver comparison"
+  - "bachelor thesis"
+  - "academic research"
+references:
+  - type: thesis
+    title: "Optimization of Factorio Factory Layouts: An SMT-Solver Approach"
+    authors:
+      - family-names: "Schnubel"
+        given-names: "Joel"
+    institution: "University of Saarland"
+    thesis-type: "Bachelor's thesis"
+    year: 2025
+    month: 7
+preferred-citation:
+  type: thesis
+  title: "Optimization of Factorio Factory Layouts: An SMT-Solver Approach"
+  authors:
+    - family-names: "Schnubel"
+      given-names: "Joel"
+  institution: "University of Saarland"
+  thesis-type: "Bachelor's thesis"
+  year: 2025
+  month: 7

@@ -1,27 +1,104 @@
 #! .venv\Scripts\python.exe
+
+"""
+Multi-Agent Pathfinding Module
+
+This module provides a sophisticated multi-agent pathfinding system designed for factory
+layout optimization in Factorio-style games. It handles complex pathfinding scenarios
+including underground belt routing, splitter management, and optimal path selection for
+multiple item types with different constraints.
+
+Main Components:
+- Splitter: Represents belt splitters with input/output routing capabilities
+- MultiAgentPathfinder: Main pathfinding engine with A* algorithm and extensions
+
+Key Features:
+- Multi-agent pathfinding for multiple item types simultaneously
+- Underground belt support with configurable lengths
+- Belt splitter integration for complex routing scenarios
+- Fluid item handling with expanded positioning options
+- Optimal path selection with distance and complexity optimization
+- Conflict resolution between different item paths
+- Inserter placement and management
+- Grid-based obstacle avoidance
+
+Pathfinding Capabilities:
+- A* algorithm implementation with heuristic optimization
+- Underground path detection and routing
+- Splitter-aware path planning
+- Output item prioritization for material flow
+- Dynamic grid modification for path conflicts
+- Multiple start/destination point handling
+
+The pathfinding system is designed to work with factory layouts where:
+- Items need to be transported from production modules to consumers
+- Underground belts can cross obstacles with length limitations
+- Splitters can route items to multiple destinations
+- Fluid items require pipe networks with different constraints
+- Optimal routing minimizes belt usage and path conflicts
+
+"""
+
 import heapq
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib as mpl
 from logging_config import setup_logger
 logger = setup_logger("Pathfinder")
 
 
 
 class Splitter:
-    def __init__(self, item ,position, direction):
-        self.item = item
-        self.position = position # belt point/ anchor point
-        self.next_position = None # point next to the belt point depending on orientation
-        self.direction = direction
-        self.inputs = []
-        self.outputs = []
-
+    """
+    Represents a belt splitter in the factory layout system.
+    
+    A Splitter is a factory component that can route a single input item stream
+    to multiple output destinations. It has a main position on the belt grid
+    and a secondary position for proper belt connectivity.
+    
+    Attributes:
+        item (str): The item type this splitter handles
+        position (tuple): Primary position (x, y) - the main belt connection point
+        next_position (tuple): Secondary position for belt orientation
+        direction (str): Orientation direction of the splitter
+        inputs (list): List of input connection points
+        outputs (list): List of output connection points
+    """
+    
+    def __init__(self, item, position, direction):
+        """
+        Initialize a Splitter with item type, position, and orientation.
         
+        Args:
+            item (str): The item type this splitter will handle
+            position (tuple): Primary position (x, y) coordinates
+            direction (str): Orientation direction for the splitter
+        """
+        logger.debug(f"Creating Splitter for item '{item}' at position {position} with direction '{direction}'")
+        
+        self.item = item
+        self.position = position  # Belt point/anchor point
+        self.next_position = None  # Point next to the belt point depending on orientation
+        self.direction = direction
+        self.inputs = []   # List of input connection points
+        self.outputs = []  # List of output connection points
+        
+        logger.debug(f"Splitter created successfully: {self}")
+
     def __str__(self):
+        """String representation of the Splitter for debugging purposes."""
         return f"Splitter(item={self.item}, position={self.position}, direction={self.direction})"
     
     def to_dict(self):
-        return {
+        """
+        Convert the Splitter to a dictionary for serialization.
+        
+        Returns:
+            dict: Dictionary representation containing all splitter properties
+        """
+        logger.debug(f"Converting Splitter {self} to dictionary")
+        
+        splitter_dict = {
             'item': self.item,
             'position': self.position,
             'next_position': self.next_position,
@@ -29,135 +106,296 @@ class Splitter:
             'inputs': self.inputs,
             'outputs': self.outputs
         }
+        
+        logger.debug(f"Splitter dictionary created with {len(self.inputs)} inputs and {len(self.outputs)} outputs")
+        return splitter_dict
 
     @classmethod
     def from_dict(cls, data):
-      
+        """
+        Create a Splitter instance from a dictionary representation.
+        
+        Args:
+            data (dict): Dictionary containing splitter configuration data
+            
+        Returns:
+            Splitter: New Splitter instance with properties from the dictionary
+        """
+        logger.debug(f"Creating Splitter from dictionary: {data}")
+        
+        # Create the basic splitter instance
         splitter = cls(
             item=data['item'],
             position=data['position'],
             direction=data['direction']
         )
+        
+        # Set optional properties with defaults
         splitter.next_position = data.get('next_position')
         splitter.inputs = data.get('inputs', [])
         splitter.outputs = data.get('outputs', [])
+        
+        logger.debug(f"Splitter created from dictionary: {splitter}")
+        logger.debug(f"Loaded {len(splitter.inputs)} inputs and {len(splitter.outputs)} outputs")
+        
         return splitter
     
 
 class MultiAgentPathfinder:
     """
-    A multi-agent pathfinding algorithm that finds paths for multiple items
-    from their respective start points to their destinations.
+    Advanced multi-agent pathfinding system for factory layout optimization.
+    
+    This class implements a sophisticated pathfinding algorithm designed for complex
+    factory scenarios where multiple item types need to be routed simultaneously
+    from various production points to consumption points while avoiding obstacles
+    and optimizing for minimal path conflicts.
+    
+    Key Features:
+    - Multi-agent A* pathfinding with conflict resolution
+    - Underground belt support for crossing obstacles
+    - Belt splitter integration for complex routing
+    - Fluid item handling with expanded connection options
+    - Output item prioritization for material flow optimization
+    - Dynamic grid modification for path optimization
+    - Inserter placement and management
+    
+    Pathfinding Modes:
+    - Standard pathfinding: Basic A* with obstacle avoidance
+    - Underground pathfinding: Extended A* with underground belt segments
+    - Splitter-aware pathfinding: Routes through belt splitters
+    - Optimal pathfinding: Finds shortest paths when enabled
+    
+    Grid Management:
+    - Obstacle map: Static obstacles that cannot be crossed
+    - Working grid: Dynamic grid modified during pathfinding
+    - Path marking: Marks successful paths as obstacles for future paths
+    
+    Attributes:
+        obstacle_map (list): Original obstacle grid (read-only)
+        working_grid (list): Modified grid used during pathfinding
+        points (dict): Dictionary of item routing information
+        paths (dict): Dictionary storing found paths for each item
+        inserters (dict): Dictionary storing inserter placements
+        allow_underground (bool): Whether underground belts are permitted
+        allow_splitters (bool): Whether belt splitters are enabled
+        find_optimal_paths (bool): Whether to find shortest paths
+        output_item (str): Priority item for output routing
+        width (int): Grid width
+        height (int): Grid height
+        underground_length (int): Maximum underground belt length
+        pipe_underground_length (int): Maximum underground pipe length
+        splitters (dict): Dictionary of available splitters by item type
+        directions (list): Valid movement directions for pathfinding
     """
     
-    def __init__(self, obstacle_map, points, allow_underground=False, underground_length=3,allow_splitters=False,splitters={},find_optimal_paths=False,output_item=None,pipe_underground_length=8):
+    def __init__(self, obstacle_map, points, allow_underground=False, underground_length=3, 
+                 allow_splitters=False, splitters={}, find_optimal_paths=False, 
+                 output_item=None, pipe_underground_length=8):
         """
-        Initialize the pathfinder with an obstacle map and points to connect.
+        Initialize the MultiAgentPathfinder with configuration and constraints.
+        
+        Sets up the pathfinding environment including obstacle processing, grid
+        initialization, and configuration of various pathfinding features.
         
         Args:
             obstacle_map (list): 2D grid where non-zero values represent obstacles
-            points (dict): Dictionary with item information including start points and destinations
+            points (dict): Dictionary mapping item keys to routing information:
+                          - item: item type name
+                          - start_points: list of starting positions
+                          - destination: list of destination positions
+                          - is_fluid: whether item is fluid (optional)
+                          - inserter_mapping: mapping of positions to inserters (optional)
+            allow_underground (bool, optional): Enable underground belt pathfinding. Defaults to False.
+            underground_length (int, optional): Maximum underground belt length. Defaults to 3.
+            allow_splitters (bool, optional): Enable belt splitter routing. Defaults to False.
+            splitters (dict, optional): Dictionary of splitters by item type. Defaults to {}.
+            find_optimal_paths (bool, optional): Find shortest paths instead of first valid. Defaults to False.
+            output_item (str, optional): Priority item for output routing. Defaults to None.
+            pipe_underground_length (int, optional): Maximum underground pipe length. Defaults to 8.
         """
+        logger.info("Initializing MultiAgentPathfinder")
+        logger.debug(f"Grid dimensions: {len(obstacle_map[0]) if obstacle_map else 0}x{len(obstacle_map)}")
+        logger.debug(f"Number of items to route: {len(points)}")
+        logger.debug(f"Underground enabled: {allow_underground}, Splitters enabled: {allow_splitters}")
+        logger.debug(f"Optimal paths: {find_optimal_paths}, Output item: {output_item}")
+        
+        # Process obstacle map - convert non-zero values to 1 (obstacle) and zero to 0 (free)
         self.obstacle_map = [[1 if cell > 0 else 0 for cell in row] for row in obstacle_map]
+        
+        # Store grid dimensions
         self.height = len(obstacle_map)
         self.width = len(obstacle_map[0]) if self.height > 0 else 0
+        logger.debug(f"Processed obstacle map: {self.width}x{self.height}")
+        
+        # Store routing configuration
         self.points = points
+        
+        # Underground belt configuration
         self.allow_underground = allow_underground
         self.underground_length = underground_length
-        self.pipe_underground_length = pipe_underground_length  #
+        self.pipe_underground_length = pipe_underground_length
+        logger.debug(f"Underground configuration: belt={underground_length}, pipe={pipe_underground_length}")
         
+        # Splitter configuration
         self.allow_splitters = allow_splitters
         self.splitters = splitters
+        if allow_splitters:
+            logger.debug(f"Splitters available for {len(splitters)} item types")
+        
+        # Output prioritization
         self.output_item = output_item
+        if output_item:
+            logger.info(f"Output item prioritization enabled for: {output_item}")
         
+        # Pathfinding optimization setting
         self.find_optimal_paths = find_optimal_paths
+        if find_optimal_paths:
+            logger.info("Optimal pathfinding enabled - will find shortest paths")
         
-        # Working grid - initially a copy of the obstacle map
+        # Initialize working grid as a copy of the obstacle map
         self.working_grid = [row[:] for row in obstacle_map]
+        logger.debug("Working grid initialized as copy of obstacle map")
         
-        # Store the final paths for each item
-        self.paths = {}
+        # Initialize result storage
+        self.paths = {}      # Store final paths for each item
+        self.inserters = {}  # Store inserter placements
         
-        # Store the inserters that need to be placed
-        self.inserters = {}
-        
-        # Directions for adjacent moves (right, down, left, up)
+        # Define movement directions for pathfinding (right, down, left, up)
         self.directions = [(1, 0), (0, 1), (-1, 0), (0, -1)]
+        
+        logger.info("MultiAgentPathfinder initialization completed successfully")
         
         
     def is_valid_position(self, position):
-        """Check if a position is within bounds and not an obstacle."""
+        """
+        Check if a position is valid for pathfinding.
+        
+        A position is considered valid if it's within the grid bounds and
+        not occupied by an obstacle in the current working grid.
+        
+        Args:
+            position (tuple): Position coordinates (x, y) to check
+            
+        Returns:
+            bool: True if position is valid for pathfinding, False otherwise
+        """
         x, y = position
         
-        return (0 <= x < self.width and 
-                0 <= y < self.height and 
-                self.working_grid[y][x] == 0)
+        # Check bounds and obstacle status
+        is_valid = (0 <= x < self.width and 
+                   0 <= y < self.height and 
+                   self.working_grid[y][x] == 0)
+        
+        logger.debug(f"Position {position} validity check: {is_valid}")
+        return is_valid
     
     def heuristic(self, a, b):
-        """Calculate Manhattan distance heuristic between points a and b."""
-        return abs(a[0] - b[0]) + abs(a[1] - b[1])
+        """
+        Calculate Manhattan distance heuristic between two points.
+        
+        The Manhattan distance is used as the heuristic function for A* pathfinding.
+        It provides an optimistic estimate of the cost to reach the goal from a given position.
+        
+        Args:
+            a (tuple): Starting position (x, y)
+            b (tuple): Goal position (x, y)
+            
+        Returns:
+            int: Manhattan distance between the two points
+        """
+        distance = abs(a[0] - b[0]) + abs(a[1] - b[1])
+        logger.debug(f"Heuristic distance from {a} to {b}: {distance}")
+        return distance
     
     
     def expand_fluid_positions(self, positions):
         """
-        For fluid items, expand the valid starting to be all adjacent tiles.
+        Expand valid starting positions for fluid items to include adjacent tiles.
+        
+        For fluid items (like oil or water), pipe connections can be made from any
+        adjacent tile to the specified position. This method expands the list of
+        valid starting positions to include all adjacent non-obstacle tiles.
         
         Args:
-            positions (list): List of position tuples (x, y)
+            positions (list): List of original position tuples (x, y)
             
         Returns:
-            list: Expanded list of positions including adjacent tiles
+            list: Expanded list of positions including all valid adjacent tiles
         """
+        logger.info(f"Expanding fluid positions from {len(positions)} original positions")
+        logger.debug(f"Original positions: {positions}")
+        
         expanded_positions = []
         
+        # Process each original position
         for pos in positions:
+            logger.debug(f"Processing position {pos} for fluid expansion")
+            
             # Check all four adjacent directions
             for dx, dy in self.directions:
                 adjacent_pos = (pos[0] + dx, pos[1] + dy)
-                # Make sure position is in bounds and not an obstacle
+                
+                # Validate the adjacent position
                 if (0 <= adjacent_pos[0] < self.width and 
                     0 <= adjacent_pos[1] < self.height and 
                     self.working_grid[adjacent_pos[1]][adjacent_pos[0]] == 0 and
                     adjacent_pos not in expanded_positions):
+                    
                     expanded_positions.append(adjacent_pos)
-                    logger.info(f"Added adjacent position {adjacent_pos} for fluid item")
+                    logger.debug(f"Added adjacent position {adjacent_pos} for fluid item")
+                else:
+                    logger.debug(f"Rejected adjacent position {adjacent_pos} (out of bounds, obstacle, or duplicate)")
         
+        logger.info(f"Fluid position expansion completed: {len(positions)} -> {len(expanded_positions)} positions")
         return expanded_positions
 
-    def find_path(self, start, goal,is_fluid=False):
+    def find_path(self, start, goal, is_fluid=False):
         """
-        Find a path from start to goal using A* algorithm with support for underground paths.
+        Find an optimal path from start to goal using A* algorithm with underground support.
+        
+        This method implements an enhanced A* pathfinding algorithm that can handle
+        both standard surface paths and underground belt/pipe segments. The algorithm
+        automatically chooses the best routing method based on obstacles and configuration.
         
         Args:
             start (tuple): Starting position (x, y)
             goal (tuple): Goal position (x, y)
+            is_fluid (bool, optional): Whether this is a fluid item requiring pipes. Defaults to False.
             
         Returns:
-            list: List of positions [(x, y), ...] forming the path, or None if no path exists
-            dict: Dictionary of underground segments {'start': (x, y), 'end': (x, y)} or empty if none used
+            tuple: A 2-tuple containing:
+                - path (list): List of positions [(x, y), ...] forming the path, or None if no path exists
+                - underground_segments (dict): Dictionary of underground segments with format:
+                  {'segment_0': {'start': (x, y), 'end': (x, y)}, ...} or empty if none used
         """
+        logger.info(f"Finding path from {start} to {goal} (fluid: {is_fluid})")
         
-        
-        # If underground paths are not allowed, just use the standard A*
+        # If underground paths are not allowed, use standard A* algorithm
         if not self.allow_underground:
+            logger.debug("Underground disabled, using standard A* pathfinding")
             path = self.find_path_astar(start, goal)
+            if path:
+                logger.info(f"Standard A* found path with length {len(path)}")
+            else:
+                logger.warning("Standard A* failed to find path")
             return path, {}
         
-        # Priority queue for A*
+        logger.debug("Using enhanced A* with underground support")
+        
+        # Priority queue for A* algorithm
+        # Format: (f_score, position, underground_segments_list)
         open_set = []
-        heapq.heappush(open_set, (0, start, []))  # (f_score, position, underground_segments)
+        heapq.heappush(open_set, (0, start, []))
         
-        # Dictionary to track where we came from
-        came_from = {}
+        # Pathfinding data structures
+        came_from = {}                    # Track parent nodes for path reconstruction
+        g_score = {start: 0}             # Cost from start to each node
+        f_score = {start: self.heuristic(start, goal)}  # Estimated total cost via each node
+        underground_segments = {start: []}  # Track underground segments for each node
         
-        # Dictionary to track the cost from start to each node
-        g_score = {start: 0}
+        logger.debug(f"A* search initialized with start={start}, goal={goal}")
         
-        # Dictionary to track the estimated total cost from start to goal via each node
-        f_score = {start: self.heuristic(start, goal)}
-        
-        # Dictionary to track underground segments for each node
-        underground_segments = {start: []}
+        # Main A* search loop
         
         while open_set:
             # Get the node with lowest f_score
@@ -270,19 +508,48 @@ class MultiAgentPathfinder:
         # No path found
         return None, {}
 
-    def can_build_underground(self, position, dx, dy, goal,is_fluid):
+    def can_build_underground(self, position, dx, dy, goal, is_fluid):
         """
         Check if we can build an underground path from the given position in the specified direction.
         
+        This method determines whether an underground belt or pipe segment can be constructed
+        to bypass obstacles. It validates the path length, checks for obstacles to cross,
+        ensures proper spacing between segments, and confirms the exit position is valid.
+        
+        Underground Path Requirements:
+        - Must have at least one obstacle to cross (otherwise surface path is preferred)
+        - Exit position must be free and within grid bounds
+        - Following position after exit must be free (for belt continuation)
+        - Cannot create segments that connect directly to other segment endpoints
+        - Must move the path closer to the goal to avoid backtracking
+        
         Args:
-            position (tuple): Starting position (x, y)
-            dx (int): X direction (-1, 0, 1)
-            dy (int): Y direction (-1, 0, 1)
-            goal (tuple): The ultimate goal position
+            position (tuple): Starting position (x, y) for the underground segment
+            dx (int): X direction vector (-1, 0, 1) for underground direction
+            dy (int): Y direction vector (-1, 0, 1) for underground direction
+            goal (tuple): The ultimate goal position for pathfinding
+            is_fluid (bool): Whether this is a fluid item (affects underground length)
             
         Returns:
-            tuple: (can_build, entry_position, exit_position) - whether underground path is possible and positions
+            tuple: A 4-tuple containing:
+                - can_build (bool): Whether underground path is possible
+                - entry_position (tuple): Entry point of underground segment (same as position)
+                - exit_position (tuple): Exit point of underground segment
+                - following_position (tuple): Position after exit for path continuation
         """
+        logger.debug(f"Checking underground path from {position} in direction ({dx}, {dy})")
+        
+        # Determine underground length based on item type
+        underground_length = self.pipe_underground_length if is_fluid else self.underground_length
+        logger.debug(f"Underground length limit: {underground_length} ({'fluid' if is_fluid else 'belt'})")
+        
+        x, y = position
+        entry = (x, y)  # The entry position is the current position
+        
+        # Don't allow diagonal movement for undergrounds
+        if dx != 0 and dy != 0:
+            logger.debug("Diagonal underground movement not allowed")
+            return False, None, None, None
         
         underground_length = self.pipe_underground_length if is_fluid else self.underground_length
         
@@ -295,7 +562,9 @@ class MultiAgentPathfinder:
         
         # Check if the current position was just used as an underground exit in the same direction
         # This avoids having underground segments directly connected to each other
-        # Check previous segments in our 'pipe_underground_max_length'
+        logger.debug("Checking for conflicting underground segments")
+        
+        # Check previous segments in existing paths
         for segment_dict in self.paths.values():
             for path_data in segment_dict:
                 if 'underground_segments' in path_data and path_data['underground_segments']:
@@ -314,10 +583,12 @@ class MultiAgentPathfinder:
                             
                             # If the direction is the same, don't allow another underground
                             if prev_dx == dx and prev_dy == dy:
+                                logger.debug(f"Underground blocked: position {position} already used as exit in same direction")
                                 return False, None, None, None
         
         # Track segment ends to avoid placing segments right next to each other
-        # This avoids case where segment_1 ends at position A and segment_2 starts at position A
+        # This prevents cases where one segment ends at position A and another starts at position A
+        logger.debug("Collecting existing segment endpoints")
         segment_ends = []
         for segment_dict in self.paths.values():
             for path_data in segment_dict:
@@ -327,32 +598,38 @@ class MultiAgentPathfinder:
                         
         # Don't start a new underground from a position that's already an end point
         if position in segment_ends:
+            logger.debug(f"Underground blocked: position {position} is already an endpoint of another segment")
             return False, None, None, None
         
         # Check if there's at least one obstacle in the path that needs to be crossed
         has_obstacle = False
+        logger.debug("Searching for valid underground exit points")
         
         # Look for a valid exit point within the underground length
-        #for length in range(underground_length+1, 2, -1):
-        for length in range(2, underground_length+1, 1):   
+        # Try increasing lengths from minimum (2) to maximum allowed
+        for length in range(2, underground_length + 1):
+            logger.debug(f"Trying underground length {length}")
             
+            # Calculate potential exit position
             exit_x = x + dx * length
             exit_y = y + dy * length
             exit_pos = (exit_x, exit_y)
             
+            # Calculate the position after the exit (needed for belt continuation)
             following_x = exit_x + dx
             following_y = exit_y + dy
             following_pos = (following_x, following_y)
             
-            
-            # Check if exit is in bounds
+            # Check if exit is within grid bounds
             if not (0 <= exit_x < self.width and 0 <= exit_y < self.height):
+                logger.debug(f"Exit position {exit_pos} out of bounds")
                 continue
-                
                 
             # Special case: If the exit is the goal itself, we don't need to check the following position
             if exit_pos == goal:
-                # We still need to check for obstacles between current and goal
+                logger.debug(f"Exit position {exit_pos} is the goal itself")
+                
+                # We still need to check for obstacles between current position and goal
                 for i in range(1, length):
                     check_x = x + dx * i
                     check_y = y + dy * i
@@ -362,29 +639,36 @@ class MultiAgentPathfinder:
                         cell_value = self.working_grid[check_y][check_x]
                         if cell_value != 0:
                             has_obstacle = True
+                            logger.debug(f"Found obstacle at ({check_x}, {check_y}) - underground justified")
                             break
                 
                 # If there's at least one obstacle, this is a valid underground to the goal
                 if has_obstacle:
-                    logger.debug(f"Found valid underground path directly to goal from {entry} to {exit_pos}")
+                    logger.debug(f"Valid underground path directly to goal from {entry} to {exit_pos}")
                     return True, entry, exit_pos, goal
+                else:
+                    logger.debug("No obstacles found - surface path would be better")
                 continue
             
             # Normal case: Check the position following the exit
-            # Check if following position is in bounds (needed for underground belt)
+            # The following position is needed for belt continuation after underground exit
             if not (0 <= following_x < self.width and 0 <= following_y < self.height):
+                logger.debug(f"Following position {following_pos} out of bounds")
                 continue
             
             # Check if exit position is free
             if self.working_grid[exit_y][exit_x] != 0:
+                logger.debug(f"Exit position {exit_pos} is occupied")
                 continue
                 
             # Check if following position is free
             if self.working_grid[following_y][following_x] != 0:
+                logger.debug(f"Following position {following_pos} is occupied")
                 continue
             
             # Check if there's at least one obstacle between the current position and the exit
             # that would require an underground path
+            has_obstacle = False
             for i in range(1, length):
                 check_x = x + dx * i
                 check_y = y + dy * i
@@ -394,10 +678,12 @@ class MultiAgentPathfinder:
                     cell_value = self.working_grid[check_y][check_x]
                     if cell_value != 0:
                         has_obstacle = True
+                        logger.debug(f"Found obstacle at ({check_x}, {check_y}) - underground justified")
                         break
             
             # If there's no obstacle to cross, don't use an underground
             if not has_obstacle:
+                logger.debug("No obstacles found - surface path would be better")
                 continue
             
             # Check if this exit is closer to the goal (to avoid backtracking)
@@ -405,6 +691,8 @@ class MultiAgentPathfinder:
             exit_distance = self.heuristic(exit_pos, goal)
             
             if exit_distance < current_distance:
+                logger.debug(f"Exit {exit_pos} is closer to goal (distance: {exit_distance} vs {current_distance})")
+                
                 # Ensure exit point isn't already an entry point for another segment
                 is_valid_exit = True
                 for segment_dict in self.paths.values():
@@ -418,7 +706,7 @@ class MultiAgentPathfinder:
                 
                 if is_valid_exit:
                     # This is a valid exit that's closer to the goal
-                    logger.debug(f"Found valid underground path from {entry} to {exit_pos} with obstacle? {has_obstacle}")
+                    logger.debug(f"Valid underground path found from {entry} to {exit_pos}")
                     return True, entry, exit_pos, following_pos
                 else:
                     logger.debug(f"Exit {exit_pos} rejected because it's already an entry point")
@@ -426,6 +714,7 @@ class MultiAgentPathfinder:
                 logger.debug(f"Exit {exit_pos} rejected because it doesn't get closer to goal")
         
         # No valid exit found
+        logger.debug("No valid underground exit found")
         return False, None, None, None
 
     
@@ -435,42 +724,69 @@ class MultiAgentPathfinder:
     
     # This is a simpler version without underground handling for use when undergrounds are disabled
     def find_path_astar(self, start, goal):
-        """Basic A* algorithm without underground support."""
-        # Priority queue for A*
+        """
+        Standard A* pathfinding algorithm without underground belt support.
+        
+        This method implements the classic A* pathfinding algorithm for finding
+        the shortest path between two points on a grid. It's used as a fallback
+        when underground paths are disabled or as a component of the enhanced
+        pathfinding system.
+        
+        Algorithm Details:
+        - Uses Manhattan distance as the heuristic function
+        - Explores nodes in order of lowest f-score (g + h)
+        - Reconstructs path by backtracking through parent nodes
+        - Only considers orthogonal movement (no diagonal)
+        
+        Args:
+            start (tuple): Starting position (x, y)
+            goal (tuple): Goal position (x, y)
+            
+        Returns:
+            list: List of positions [(x, y), ...] forming the path, or None if no path exists
+        """
+        logger.debug(f"Starting standard A* pathfinding from {start} to {goal}")
+        
+        # Priority queue for A* - stores (f_score, position)
         open_set = []
         heapq.heappush(open_set, (0, start))
         
-        # Dictionary to track where we came from
+        # Track parent nodes for path reconstruction
         came_from = {}
         
-        # Dictionary to track the cost from start to each node
+        # Track actual cost from start to each node
         g_score = {start: 0}
         
-        # Dictionary to track the estimated total cost from start to goal via each node
+        # Track estimated total cost from start to goal via each node
         f_score = {start: self.heuristic(start, goal)}
         
+        logger.debug(f"Initial heuristic distance: {f_score[start]}")
+        
+        # Main A* search loop
         while open_set:
             # Get the node with lowest f_score
-            _, current = heapq.heappop(open_set)
+            current_f, current = heapq.heappop(open_set)
             
             # If we reached the goal, reconstruct and return the path
             if current == goal:
+                logger.debug("Goal reached, reconstructing path")
                 path = [current]
                 while current in came_from:
                     current = came_from[current]
                     path.append(current)
                 path.reverse()
+                logger.info(f"Standard A* found path with length {len(path)}")
                 return path
             
-            # Check all adjacent nodes
+            # Explore all adjacent nodes
             for dx, dy in self.directions:
                 neighbor = (current[0] + dx, current[1] + dy)
                 
-                # Skip invalid positions
+                # Skip invalid positions (out of bounds or obstacles)
                 if not self.is_valid_position(neighbor):
                     continue
                 
-                # Calculate tentative g_score
+                # Calculate tentative g_score (cost from start to neighbor via current)
                 tentative_g_score = g_score[current] + 1  # Cost of 1 for each step
                 
                 # If we found a better path to this neighbor, update our records
@@ -484,36 +800,61 @@ class MultiAgentPathfinder:
                         heapq.heappush(open_set, (f_score[neighbor], neighbor))
         
         # No path found
+        logger.warning(f"Standard A* failed to find path from {start} to {goal}")
         return None
-    def mark_path_on_grid(self, path, value=1, underground_segments=None, start_splitter=None, dest_splitter=None,inserter=None):
+    def mark_path_on_grid(self, path, value=1, underground_segments=None, start_splitter=None, dest_splitter=None, inserter=None):
         """
         Mark a path and its associated components on the working grid with the specified value.
         
+        This method updates the working grid to mark a completed path as occupied,
+        preventing future paths from using the same positions. It handles all
+        components of a path including the surface route, underground segments,
+        splitter positions, and inserter locations.
+        
+        Grid Marking Strategy:
+        - Surface path: All positions marked as obstacles
+        - Underground segments: Entry/exit points and intermediate positions marked
+        - Splitter positions: Both main and secondary positions marked
+        - Inserter positions: Marked to prevent conflicts
+        
         Args:
-            path (list): List of (x, y) positions in the path
-            value (int): Value to mark on the grid (default: 1 for obstacle)
-            underground_segments (dict): Dictionary of underground segments to mark
-            start_splitter (Splitter): Starting splitter object if any
-            dest_splitter (Splitter): Destination splitter object if any
+            path (list): List of (x, y) positions in the surface path
+            value (int, optional): Value to mark on the grid. Defaults to 1 (obstacle).
+            underground_segments (dict, optional): Dictionary of underground segments to mark.
+                                                  Format: {'segment_0': {'start': (x, y), 'end': (x, y)}}
+            start_splitter (Splitter, optional): Starting splitter object to mark
+            dest_splitter (Splitter, optional): Destination splitter object to mark
+            inserter (tuple, optional): Inserter position (x, y) to mark
         """
+        logger.debug(f"Marking path on grid with value {value}")
+        
+        # Handle empty path
         if path is None:
+            logger.warning("Cannot mark empty path on grid")
             return
         
-        # Mark the entire path
-        for x, y in path:
-            self.working_grid[y][x] = value
+        # Mark the entire surface path
+        logger.debug(f"Marking {len(path)} surface path positions")
+        for i, (x, y) in enumerate(path):
+            if 0 <= x < self.width and 0 <= y < self.height:
+                prev_value = self.working_grid[y][x]
+                self.working_grid[y][x] = value
+                logger.debug(f"Marked position ({x}, {y}) with value {value} (was {prev_value})")
         
         # Mark underground segments
         if underground_segments:
-            for _, segment in underground_segments.items():
+            logger.debug(f"Marking {len(underground_segments)} underground segments")
+            for segment_id, segment in underground_segments.items():
                 start_x, start_y = segment['start']
                 end_x, end_y = segment['end']
                 
-                # Mark the entrance and exit
+                logger.debug(f"Marking underground segment {segment_id} from ({start_x}, {start_y}) to ({end_x}, {end_y})")
+                
+                # Mark the entrance and exit points
                 self.working_grid[start_y][start_x] = value
                 self.working_grid[end_y][end_x] = value
                 
-                # Mark the path between entrance and exit
+                # Mark all intermediate positions along the underground route
                 dir_x = 0 if start_x == end_x else (end_x - start_x) // abs(end_x - start_x)
                 dir_y = 0 if start_y == end_y else (end_y - start_y) // abs(end_y - start_y)
                 
@@ -523,60 +864,92 @@ class MultiAgentPathfinder:
                     curr_y += dir_y
                     if (curr_x, curr_y) != (end_x, end_y):  # Don't mark the end point twice
                         self.working_grid[curr_y][curr_x] = value
+                        logger.debug(f"Marked underground intermediate position ({curr_x}, {curr_y})")
         
         # Mark splitter positions
         if start_splitter:
+            logger.debug(f"Marking start splitter at {start_splitter.position}")
             pos_x, pos_y = start_splitter.position
             self.working_grid[pos_y][pos_x] = value
             
             if start_splitter.next_position:
                 next_x, next_y = start_splitter.next_position
                 self.working_grid[next_y][next_x] = value
+                logger.debug(f"Marked start splitter secondary position at ({next_x}, {next_y})")
         
         if dest_splitter:
+            logger.debug(f"Marking destination splitter at {dest_splitter.position}")
             pos_x, pos_y = dest_splitter.position
             self.working_grid[pos_y][pos_x] = value
             
             if dest_splitter.next_position:
                 next_x, next_y = dest_splitter.next_position
                 self.working_grid[next_y][next_x] = value
-                
+                logger.debug(f"Marked destination splitter secondary position at ({next_x}, {next_y})")
+        
+        # Mark inserter position
         if inserter:
             inserter_x, inserter_y = inserter
-            self.working_grid[inserter_y][inserter_x] = value
+            if 0 <= inserter_x < self.width and 0 <= inserter_y < self.height:
+                prev_value = self.working_grid[inserter_y][inserter_x]
+                self.working_grid[inserter_y][inserter_x] = value
+                logger.debug(f"Marked inserter at ({inserter_x}, {inserter_y}) with value {value} (was {prev_value})")
+        
+        logger.debug("Path marking completed successfully")
     
                             
     def place_output_inserter(self):
         """
-        Place inserters at the output item locations if defined.
-        Handles multiple output items that might share inserter positions.
+        Place inserters at the output item locations for priority routing.
+        
+        This method handles the placement of inserters for output items, which are
+        items that need to be extracted from the factory system. It manages cases
+        where multiple output items might share inserter positions and ensures
+        proper inserter placement validation.
+        
+        Output Item Processing:
+        - Identifies all items matching the designated output item type
+        - Validates inserter positions are within bounds and available
+        - Handles shared inserter positions between multiple outputs
+        - Updates the working grid to mark inserter positions as occupied
+        - Prioritizes start points based on inserter availability
+        
+        Inserter Placement Strategy:
+        - Prefer unused inserter positions over shared ones
+        - Validate inserter positions are not occupied by obstacles
+        - Update item start points to prioritize valid inserter placements
+        - Store inserter mappings for later use in path generation
+        
+        Returns:
+            set: Set of used inserter position strings, or None if no output item defined
         """
         if not self.output_item:
             logger.info("No output item defined, skipping output inserter placement")
             return None
         
-        logger.info(f"Placing output inserter for item {self.output_item}")
+        logger.info(f"Placing output inserters for item type: {self.output_item}")
         
         # Track which inserter positions have already been used
         used_inserters = set()
         
-        # Process each output item
+        # Process each item that matches the output item type
         for item_key, item_data in self.points.items():
             if item_data.get('item') != self.output_item:
-                logger.debug(f"Skipping {item_key} as it's not the output item {self.output_item}")
+                logger.debug(f"Skipping {item_key} - not an output item (type: {item_data.get('item')})")
                 continue
                 
-            logger.info(f"Found output item match: {item_key}")
+            logger.info(f"Processing output item: {item_key}")
             
-            # Get start points, destinations, and inserter mapping
+            # Extract item configuration
             start_points = item_data.get('start_points', [])
             destinations = item_data.get('destination', [])
             inserter_mapping = item_data.get('inserter_mapping', {})
             
             logger.debug(f"Start points for {item_key}: {start_points}")
             logger.debug(f"Destination points for {item_key}: {destinations}")
-            logger.debug(f"Inserter mapping for {item_key}: {inserter_mapping}")
+            logger.debug(f"Inserter mapping entries: {len(inserter_mapping)}")
             
+            # Validate item configuration
             if not start_points:
                 logger.warning(f"No start points defined for {item_key}, cannot place output inserter")
                 continue
@@ -590,6 +963,7 @@ class MultiAgentPathfinder:
                 continue
             
             # Generate all valid start points with their inserters
+            logger.debug(f"Evaluating inserter placements for {len(start_points)} start points")
             valid_starts = []
             
             for start_pos in start_points:
@@ -602,9 +976,11 @@ class MultiAgentPathfinder:
                 inserter_pos = inserter_mapping[start_pos_str]
                 inserter_pos_str = str(inserter_pos)
                 
-                # Check if inserter position is in bounds
+                # Check if inserter position is within grid bounds
                 ix, iy = inserter_pos
                 if not (0 <= ix < self.width and 0 <= iy < self.height):
+                    logger.warning(f"Inserter position {inserter_pos} is out of bounds, skipping")
+                    continue
                     logger.warning(f"Inserter position {inserter_pos} is out of bounds, skipping")
                     continue
                 
@@ -612,57 +988,97 @@ class MultiAgentPathfinder:
                 if inserter_pos_str in used_inserters:
                     # This inserter is already placed - it's still valid, just mark it
                     valid_starts.append((start_pos, inserter_pos, True))
-                    logger.info(f"Inserter already exists at {inserter_pos} for {start_pos}")
+                    logger.debug(f"Inserter already exists at {inserter_pos} for {start_pos}")
                 else:
                     # Check if the position is free in the working grid
                     if self.working_grid[iy][ix] == 0:
                         valid_starts.append((start_pos, inserter_pos, False))
-                        logger.info(f"Found valid inserter placement at {inserter_pos} for start {start_pos}")
+                        logger.debug(f"Found valid inserter placement at {inserter_pos} for start {start_pos}")
                     else:
-                        logger.warning(f"Inserter position {inserter_pos} is not valid (value: {self.working_grid[iy][ix]}), skipping")
+                        logger.warning(f"Inserter position {inserter_pos} is occupied (value: {self.working_grid[iy][ix]})")
             
             # Sort valid starts: unused inserters first, then used ones
+            # This prioritizes fresh inserter placements over shared ones
             valid_starts.sort(key=lambda x: x[2])  # False (unused) comes first
+            logger.debug(f"Found {len(valid_starts)} valid inserter placements for {item_key}")
             
             if not valid_starts:
                 logger.warning(f"No valid inserter placements found for {item_key}")
                 continue
             
-            # Use the first valid start
+            # Use the first valid start (prioritizing unused inserters)
             start_pos, inserter_pos, already_used = valid_starts[0]
+            logger.info(f"Selected inserter placement: {inserter_pos} for start {start_pos} (already used: {already_used})")
             
             # Place the inserter if it hasn't been placed already
             if not already_used:
                 ix, iy = inserter_pos
                 prev_value = self.working_grid[iy][ix]
                 self.working_grid[iy][ix] = 1
-                logger.info(f"Marked inserter at {inserter_pos} as obstacle (previous value: {prev_value})")
+                logger.info(f"Placed inserter at {inserter_pos} (previous grid value: {prev_value})")
                 used_inserters.add(str(inserter_pos))
+            else:
+                logger.debug(f"Inserter at {inserter_pos} already placed, reusing")
             
-            # Update the start points to prioritize this one
+            # Update the start points to prioritize the selected one
             old_start_points = self.points[item_key]['start_points']
             self.points[item_key]['start_points'] = [start_pos]
-            logger.info(f"Updated start_points for {item_key} from {old_start_points} to {[start_pos]}")
+            logger.info(f"Updated start_points for {item_key}: {old_start_points} -> {[start_pos]}")
             
             # Store the inserter in our collection
             if item_key not in self.inserters:
                 self.inserters[item_key] = {}
                 
             self.inserters[item_key][str(start_pos)] = inserter_pos
-            logger.info(f"Stored inserter {inserter_pos} for {item_key} at start position {start_pos}")
+            logger.debug(f"Stored inserter mapping: {item_key}[{start_pos}] -> {inserter_pos}")
         
+        # Return results
         if not used_inserters:
             logger.warning("Failed to place any output inserters")
             return None
             
-        logger.info(f"Successfully placed {len(used_inserters)} inserters")
+        logger.info(f"Successfully placed {len(used_inserters)} unique inserters")
         return used_inserters
       
     
     
-    def find_paths_for_all_items(self,IO_paths=False):
-        # Sort the points -> output items first
-        # Separate output items from other items
+    def find_paths_for_all_items(self, IO_paths=False):
+        """
+        Find optimal paths for all items in the factory layout.
+        
+        This is the main pathfinding method that coordinates the routing of all
+        items from their production points to consumption points. It handles
+        prioritization, conflict resolution, and optimization across multiple
+        item types while respecting various constraints.
+        
+        Processing Strategy:
+        1. Sort items with output items processed first (priority routing)
+        2. Place output inserters for priority items
+        3. Process splitters to determine I/O points
+        4. Find paths for each item in priority order
+        5. Handle fluid item expansion for pipe connections
+        6. Manage splitter routing for complex belt networks
+        7. Resolve conflicts between overlapping paths
+        
+        Path Selection Algorithm:
+        - Evaluates all possible start-destination pairs
+        - Sorts by heuristic distance for efficiency
+        - Attempts paths in order of increasing complexity
+        - Marks successful paths to prevent conflicts
+        - Supports optimal path finding when enabled
+        
+        Args:
+            IO_paths (bool, optional): Whether to create I/O specific paths. Defaults to False.
+            
+        Returns:
+            tuple: A 2-tuple containing:
+                - paths (dict): Dictionary mapping item keys to their path data
+                - inserters (dict): Dictionary mapping item keys to their inserter positions
+        """
+        logger.info("Starting pathfinding for all items")
+        logger.debug(f"Input/Output paths mode: {IO_paths}")
+        
+        # Separate output items from other items for priority processing
         output_items = {}
         other_items = {}
         
@@ -672,61 +1088,60 @@ class MultiAgentPathfinder:
             else:
                 other_items[item_key] = item_data
     
-        # Create a sorted processing order - output items first
+        # Create processing order - output items first for priority routing
         sorted_keys = list(output_items.keys()) + list(other_items.keys())
-        logger.info(f"Processing items in order: {sorted_keys}")
-    
+        logger.info(f"Processing {len(sorted_keys)} items in priority order")
+        logger.debug(f"Output items: {len(output_items)}, Other items: {len(other_items)}")
         
-        
-        # place output inserter if output item is defined
+        # Place output inserters if output item is defined
         if self.output_item:
+            logger.info("Placing output inserters for priority routing")
             self.place_output_inserter()
         
-    
         # Process all splitters first to determine positions and I/O points
         if self.allow_splitters:
+            logger.info("Processing splitters for belt routing")
             self.process_splitters()
         
-
-        all_previous_paths = {}
+        # Initialize tracking variables
+        all_previous_paths = {}   # Track paths for merging with same item types
+        used_splitters = {}       # Track which splitters are used for I/O
         
-        # Track which splitters are used for I/O
-        used_splitters = {}
-    
-        
+        # Main pathfinding loop for each item
         for item_key in sorted_keys:
+            item_data = self.points[item_key]
             
+            logger.info(f"=== Processing item: {item_key} ===")
+            logger.debug(f"Item data: {item_data}")
             
-            item_data = self.points[item_key] 
-            
-            logger.info(f"Finding path for {item_key}")
-            logger.debug(f"Working grid:\n{np.array(self.working_grid)}")
-            
+            # Check if this is a fluid item (affects pathfinding behavior)
             is_fluid = item_data.get('is_fluid', False)
+            logger.debug(f"Item {item_key} is fluid: {is_fluid}")
             
-          
-            
-            # Extract item information
+            # Extract basic item information
             start_points = item_data['start_points'].copy()
             destinations = item_data['destination'].copy()
             inserter_mapping = item_data.get('inserter_mapping', None)
             item_name = item_data['item']
-    
+            
+            logger.debug(f"Initial start points: {start_points}")
+            logger.debug(f"Initial destinations: {destinations}")
+            logger.debug(f"Has inserter mapping: {inserter_mapping is not None}")
+            
+            # Handle fluid item expansion (pipes can connect from adjacent tiles)
             if is_fluid and not IO_paths:
-                logger.info(f"Processing fluid item {item_key}, expanding start positions")
-                original_starts = start_points.copy()
+                logger.info(f"Expanding fluid connection points for {item_key}")
+                original_count = len(start_points)
                 start_points = self.expand_fluid_positions(start_points)
-                logger.info(f"Expanded start positions for {item_key} from {len(original_starts)} to {len(start_points)}")
+                logger.info(f"Fluid expansion: {original_count} -> {len(start_points)} start points")
             
-            
-
-            
+            # Handle splitter routing for belt networks (non-fluid items only)
             if self.allow_splitters and item_name in self.splitters and not is_fluid:
+                logger.info(f"Processing splitter routing for {item_key}")
+                
                 # Find splitters that are relevant to our start/destination points
                 relevant_start_splitters = []
                 relevant_dest_splitters = []
-                
-                
                 
                 # Check each splitter to see if it's positioned at one of our start/destination points
                 for splitter in self.splitters[item_name]:
@@ -734,125 +1149,132 @@ class MultiAgentPathfinder:
                     for start_point in item_data['start_points']:
                         if splitter.position == start_point:
                             relevant_start_splitters.append(splitter)
-                            logger.info(f"Found splitter at start point {start_point}")
+                            logger.debug(f"Found splitter at start point {start_point}")
                     
                     # A splitter is relevant to destination points if its position matches a destination
                     for dest_point in item_data['destination']:
                         if splitter.position == dest_point:
                             relevant_dest_splitters.append(splitter)
-                            logger.info(f"Found splitter at destination point {dest_point}")
+                            logger.debug(f"Found splitter at destination point {dest_point}")
                 
+                logger.debug(f"Found {len(relevant_start_splitters)} start splitters and {len(relevant_dest_splitters)} destination splitters")
                 
+                # If we have start splitters, replace start points with their outputs
                 if len(relevant_start_splitters) > 0:
+                    logger.info("Replacing start points with splitter outputs")
                     start_points = []
                 
+                # If we have destination splitters, replace destinations with their inputs
                 if len(relevant_dest_splitters) > 0:
+                    logger.info("Replacing destinations with splitter inputs")
                     destinations = []
                 
-                
-       
-                                
                 # Add output points from start splitters as start points
                 for splitter in relevant_start_splitters:
                     for output_point in splitter.outputs:
                         if self.is_valid_position(output_point):
                             start_points.append(output_point)
-                            logger.info(f"Added splitter output {output_point} as start point")
+                            logger.debug(f"Added splitter output {output_point} as start point")
                 
                 # Add input points from destination splitters as destinations
                 for splitter in relevant_dest_splitters:
                     for input_point in splitter.inputs:
                         if self.is_valid_position(input_point):
                             destinations.append(input_point)
-                            logger.info(f"Added splitter input {input_point} as destination")
+                            logger.debug(f"Added splitter input {input_point} as destination")
             
             
             
-            
-            # if item is output item, add all other paths of this item to the destination points
+            # Handle output item merging (merge existing paths of same item type as destinations)
             if self.output_item and item_name == self.output_item:
-                    for other_item_key, other_paths in self.paths.items():
-                        for other_path_data in other_paths:  # Iterate through each path data in the list
-                            if other_item_key != item_key and other_path_data['item'] == item_name:
-                                # Get underground segments to exclude their endpoints
-                                underground_segments = other_path_data.get('underground_segments', {})
-                                underground_entries = []
-                                underground_exits = []
-                                
-                                # Collect all underground entry/exit points
-                                for segment in underground_segments.values():
-                                    underground_entries.append(segment['start'])
-                                    underground_exits.append(segment['end'])
-                                
-                                # Only add points that are not part of underground segments
-                                filtered_path = []
-                                for point in other_path_data['path']:
-                                    if point not in underground_entries and point not in underground_exits:
-                                        filtered_path.append(point)
-                                
-                                destinations.extend(filtered_path)
-
-                                logger.info(f"Added {len(filtered_path)} destination points from other item {other_item_key} (filtered out {len(other_path_data['path']) - len(filtered_path)} underground points)")
-                                logger.debug(f"New destination points for {item_key}: {destinations}")
+                logger.info(f"Processing output item {item_key} - merging existing paths as destinations")
+                
+                for other_item_key, other_paths in self.paths.items():
+                    for other_path_data in other_paths:  # Iterate through each path data in the list
+                        if other_item_key != item_key and other_path_data['item'] == item_name:
+                            logger.debug(f"Merging path from {other_item_key} with same item type")
                             
+                            # Get underground segments to exclude their endpoints
+                            underground_segments = other_path_data.get('underground_segments', {})
+                            underground_entries = []
+                            underground_exits = []
                             
-            # if the item is not the output item, add the destination points of all other paths with the same item to the start points
-            if item_name != self.output_item:
-                    for other_item_key, other_paths in self.paths.items():
-                        
-                        for other_path_data in other_paths:  # Iterate through each path data in the list
-                            if other_item_key != item_key and other_path_data['item'] == item_name:
-                                # point is not allowed to be a undground segment
-                                underground_segments = other_path_data.get('underground_segments', {})
-
-                                is_underground = True
-                                for segment in underground_segments.values():
-                                    if segment['end'] == other_path_data['destination'] or segment['start'] == other_path_data['destination']:
-                                       is_underground = False
-                                       break
-        
-                                if is_underground:
-                                    start_points.extend([other_path_data['destination']])
-                                    logger.info(f"Added start points from other item {other_item_key}")
-                    
-            
-            
-   
+                            # Collect all underground entry/exit points
+                            for segment in underground_segments.values():
+                                underground_entries.append(segment['start'])
+                                underground_exits.append(segment['end'])
+                            
+                            # Only add points that are not part of underground segments
+                            filtered_path = []
+                            for point in other_path_data['path']:
+                                if point not in underground_entries and point not in underground_exits:
+                                    filtered_path.append(point)
+                            
+                            destinations.extend(filtered_path)
+                            logger.debug(f"Added {len(filtered_path)} destination points from {other_item_key} "
+                                       f"(filtered out {len(other_path_data['path']) - len(filtered_path)} underground points)")
+                            
+            # Handle non-output item merging (merge destinations of same item type as start points)
+            elif item_name != self.output_item:
+                logger.debug(f"Processing non-output item {item_key} - merging destinations as start points")
+                
+                for other_item_key, other_paths in self.paths.items():
+                    for other_path_data in other_paths:  # Iterate through each path data in the list
+                        if other_item_key != item_key and other_path_data['item'] == item_name:
+                            logger.debug(f"Checking path from {other_item_key} for destination merging")
+                            
+                            # Check if destination is not part of an underground segment
+                            underground_segments = other_path_data.get('underground_segments', {})
+                            destination_is_underground = False
+                            
+                            for segment in underground_segments.values():
+                                if (segment['end'] == other_path_data['destination'] or 
+                                    segment['start'] == other_path_data['destination']):
+                                    destination_is_underground = True
+                                    break
+                            
+                            if not destination_is_underground:
+                                start_points.extend([other_path_data['destination']])
+                                logger.debug(f"Added destination from {other_item_key} as start point")
                                 
-            # check if start points and destination points have the same coordinates
-            # -> skip then
+            # Check if start points and destination points have the same coordinates
+            # If so, skip pathfinding and just handle inserter placement
             finished = False
             for point in start_points:
                 if point in destinations:
                     finished = True
-                    logger.debug(f"Start point {point} is also a destination, skipping pathfinding for this item")
+                    logger.info(f"Start point {point} is also a destination - no pathfinding needed")
                     
-                    # check if we need to place an inserter aswell
+                    # Check if we need to place an inserter at the shared point
                     if inserter_mapping and str(point) in inserter_mapping:
                         inserter = inserter_mapping[str(point)]
-                        logger.info(f"Found inserter at {inserter} for start/destination point {point}")
+                        logger.info(f"Placing inserter at {inserter} for shared start/destination point {point}")
                         
-                        
-                        # Check if inserter position is in bounds
+                        # Check if inserter position is within bounds
                         ix, iy = inserter
                         if 0 <= ix < self.width and 0 <= iy < self.height:
                             # Mark inserter position as obstacle
                             prev_value = self.working_grid[iy][ix]
                             self.working_grid[iy][ix] = 1
+                            
+                            # Store inserter reference
                             if item_key not in self.inserters:
                                 self.inserters[item_key] = {}
-                            
                             self.inserters[item_key][str(point)] = inserter
+                            
                             logger.info(f"Marked inserter at {inserter} as obstacle (previous value: {prev_value})")
+                        else:
+                            logger.warning(f"Inserter position {inserter} is out of bounds")
                     
                     break
             
-            
+            # Skip pathfinding if start and destination are the same
             if finished:
+                logger.info(f"Skipping pathfinding for {item_key} - start and destination are the same")
                 continue
             
-            
-            # Always mark start and destination points as valid (set to 0) temporarily
+            # Ensure start and destination points are valid on the working grid
+            logger.debug("Temporarily marking start and destination points as valid")
             for start in start_points:
                 x, y = start
                 if 0 <= x < self.width and 0 <= y < self.height:
@@ -864,6 +1286,7 @@ class MultiAgentPathfinder:
                     self.working_grid[y][x] = 0  # Mark as valid
             
             # Create a list of all possible start-destination pairs with their heuristic distance
+            logger.debug(f"Generating start-destination pairs: {len(start_points)} starts × {len(destinations)} destinations")
             all_pairs = []
             for start in start_points:
                 # Skip out of bounds start points
@@ -1057,12 +1480,31 @@ class MultiAgentPathfinder:
         return self.paths, self.inserters
         
     def visualize_grid(self, filename='grid.png'):
-        """Visualize the current state of the grid."""
+        """
+        Visualize the current state of the working grid.
+        
+        Creates a visual representation of the working grid showing obstacles,
+        paths, and other marked positions. This is useful for debugging and
+        understanding the pathfinding results.
+        
+        Visualization Features:
+        - Color-coded cell types using viridis colormap
+        - Grid lines for position reference
+        - Obstacle positions clearly marked
+        - Path positions shown as marked cells
+        - Colorbar legend for cell type interpretation
+        
+        Args:
+            filename (str, optional): Output filename for the visualization. Defaults to 'grid.png'.
+            
+        Returns:
+            str: The filename of the saved visualization
+        """
+        logger.info(f"Creating grid visualization: {filename}")
         plt.figure(figsize=(10, 10))
         
         # Create a colormap (updated to avoid deprecation warning)
         import matplotlib as mpl
-        
         cmap = mpl.colormaps['viridis'].resampled(15)
         
         # Plot the grid
@@ -1071,7 +1513,7 @@ class MultiAgentPathfinder:
         # Add a colorbar
         plt.colorbar(label='Cell Type')
         
-        # Add grid lines
+        # Add grid lines for position reference
         plt.grid(True, color='black', linewidth=0.5, alpha=0.3)
         
         # Adjust the grid to match the cell centers
@@ -1079,10 +1521,16 @@ class MultiAgentPathfinder:
         plt.gca().set_yticks(np.arange(-0.5, self.height, 1), minor=True)
         plt.gca().grid(which='minor', color='black', linestyle='-', linewidth=0.5, alpha=0.3)
         
+        # Add title and labels
+        plt.title('Factory Layout Grid')
+        plt.xlabel('X Coordinate')
+        plt.ylabel('Y Coordinate')
+        
         # Save the figure
         plt.savefig(filename)
         plt.close()
         
+        logger.info(f"Grid visualization saved as {filename}")
         return filename
 
     def visualize_paths(self, filename_template='path_{}.png'):

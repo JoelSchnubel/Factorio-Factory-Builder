@@ -32,72 +32,182 @@ BLUE = (0, 0, 255)  # Color for output gates
 GREEN = (0, 255, 0)  # Color for blocks
 
 class FactoryBuilder:
+    """
+    Multi-module factory builder for complex Factorio production systems.
     
-    def __init__(self,output_item,amount,max_assembler_per_blueprint,start_width,start_height,load_modules) -> None:
+    This class manages the creation of large-scale factories by breaking down
+    complex production chains into smaller, manageable modules. Each module
+    is optimized individually and then connected together to form a complete
+    production system.
+    
+    The class handles:
+    - Splitting complex recipes into smaller sub-factories
+    - Managing inter-module connections and material flows
+    - Optimizing overall factory layout using SMT solvers
+    - Generating blueprints and visualizations for multi-module systems
+    
+    Attributes:
+        output_item (str): Target item to produce
+        amount (float): Target production amount
+        max_assembler_per_blueprint (int): Maximum assemblers per module
+        start_width (int): Initial width for module layouts
+        start_height (int): Initial height for module layouts
+        block_data (dict): Data for each production module
+        final_blocks (dict): Optimized block positions and connections
+        z3_solver (FactoryZ3Solver): SMT solver for multi-module optimization
+    """
+    
+    def __init__(self, output_item, amount, max_assembler_per_blueprint, start_width, start_height, load_modules) -> None:
+        """
+        Initialize the FactoryBuilder with production parameters and constraints.
         
+        Args:
+            output_item (str): The item to produce (e.g., "electronic-circuit")
+            amount (float): Target production amount per minute
+            max_assembler_per_blueprint (int): Maximum assemblers allowed per module
+            start_width (int): Initial grid width for module layouts
+            start_height (int): Initial grid height for module layouts
+            load_modules (bool): Whether to load existing modules or create new ones
+        """
+        logger.info(f"Initializing FactoryBuilder for {output_item}: {amount} units/min")
+        logger.info(f"Max assemblers per module: {max_assembler_per_blueprint}")
+        logger.info(f"Initial module grid size: {start_width}x{start_height}")
+        
+        # Production target parameters
         self.output_item = output_item
         self.amount = amount
         self.max_assembler_per_blueprint = max_assembler_per_blueprint
         
+        # Module layout parameters  
         self.start_width = start_width
         self.start_height = start_height
         
-        self.output_point = (0,0)
+        # Factory layout coordinates
+        self.output_point = (0,0)    # Main factory output point
     
-        self.z3_solver = None
-        self.AStar = None
+        # Solvers and algorithms (initialized when needed)
+        self.z3_solver = None        # SMT solver for multi-module layout
+        self.AStar = None            # Pathfinding for inter-module connections
         
-        self.block_data = {}
-
+        # Module and factory data
+        self.block_data = {}         # Data for each production module
+        
+        # Load recipe data for production calculations
         self.items_data = self.load_json("recipes.json")
+        logger.info(f"Loaded {len(self.items_data)} recipes")
         
-        self.final_x = None
-        self.final_y = None
-        self.final_blocks = None
-        self.gate_connections = None
-        self.inter_block_paths = None
+        # Final optimized layout results
+        self.final_x = None              # Final factory width
+        self.final_y = None              # Final factory height  
+        self.final_blocks = None         # Optimized block positions
+        self.gate_connections = None     # Inter-module connections
+        self.inter_block_paths = None    # Paths between modules
   
-        
+        # Visualization assets
         self.images = {}
         
-        self.load_modules = load_modules
+        # Configuration flags
+        self.load_modules = load_modules  # Whether to load existing module files
         
+        # External I/O configuration
         self.external_io = None
-        
         self.module_input_points = []
         self.module_output_points = []
+        
+        logger.info("FactoryBuilder initialization complete")
 
 
-    def load_json(self,recipe_file):
-        with open(recipe_file, "r") as file:
+    def load_json(self, recipe_file):
+        """
+        Load and parse JSON recipe data.
+        
+        Args:
+            recipe_file (str): Path to the recipe JSON file
+            
+        Returns:
+            dict: Dictionary mapping item IDs to recipe data
+            
+        Raises:
+            FileNotFoundError: If the recipe file doesn't exist
+            json.JSONDecodeError: If the file contains invalid JSON
+        """
+        logger.info(f"Loading recipe data from {recipe_file}")
+        try:
+            with open(recipe_file, "r") as file:
                 recipes = json.load(file)
-                return {item["id"]: item for item in recipes}
+            logger.info(f"Successfully loaded {len(recipes)} recipes")
+            return {item["id"]: item for item in recipes}
+        except FileNotFoundError:
+            logger.error(f"Recipe file not found: {recipe_file}")
+            raise
+        except json.JSONDecodeError as e:
+            logger.error(f"Invalid JSON in recipe file: {e}")
+            raise
         
 
-    # gets a list of production_data and evals each for number of assemblers
-    # if number of assemblers > than limit -> split the production data in half 
-    def eval_split(self,production_data,input_items):
+    def eval_split(self, production_data, input_items):
+        """
+        Evaluate if production data needs to be split into multiple modules.
+        
+        This method checks if the current production requirements exceed the
+        maximum assembler limit per module. If so, it recursively splits the
+        production amount in half until each module is within limits.
+        
+        Args:
+            production_data (dict): Current production requirements
+            input_items (list): List of external input items
+            
+        Returns:
+            tuple: (updated_production_data, number_of_modules_needed)
+        """
+        logger.info(f"Evaluating split for {self.count_assembler(production_data)} assemblers")
+        logger.info(f"Maximum allowed per module: {self.max_assembler_per_blueprint}")
+        
         num_factories = 1
-        factorioProductionTree = FactorioProductionTree(grid_width=self.start_width,grid_height=self.start_height)
+        factorioProductionTree = FactorioProductionTree(
+            grid_width=self.start_width, 
+            grid_height=self.start_height
+        )
         
         amount = self.amount
         
+        # Keep splitting until assembler count is within limits
         while self.count_assembler(production_data) > self.max_assembler_per_blueprint:
+            logger.info(f"Splitting: {self.count_assembler(production_data)} > {self.max_assembler_per_blueprint}")
             
             amount = amount/2
+            logger.info(f"Reduced amount to {amount}")
             
-            # split in half and check again 
-            production_data  = factorioProductionTree.calculate_production(self.output_item , amount,input_items) 
-            
+            # Recalculate production data with reduced amount
+            production_data = factorioProductionTree.calculate_production(
+                self.output_item, amount, input_items
+            )
             production_data = factorioProductionTree.set_capacities(production_data)
-            num_factories +=1 
+            num_factories += 1 
 
-
+        logger.info(f"Split evaluation complete: {num_factories} modules needed")
+        logger.info(f"Final assembler count per module: {self.count_assembler(production_data)}")
         
-        return production_data,num_factories
+        return production_data, num_factories
     
     
-    # count the number of assemblers in the production data
+    def count_assembler(self, production_data) -> int:
+        """
+        Count the total number of assemblers required in production data.
+        
+        Args:
+            production_data (dict): Production requirements with assembler counts
+            
+        Returns:
+            int: Total number of assemblers needed
+        """
+        total_assemblers = 0
+        for key, value in production_data.items():
+            if 'assemblers' in value:
+                total_assemblers += value['assemblers']
+        
+        logger.debug(f"Total assemblers counted: {total_assemblers}")
+        return total_assemblers
     def count_assembler(self,production_data) -> int:
         total_assemblers = 0
         for key, value in production_data.items():
@@ -2129,6 +2239,18 @@ def log_method_time(item, amount, method_name,assemblers_per_recipie,num_subfact
         
  
 def plot_csv_data(file_path):
+    # Configure matplotlib for LaTeX output with better font handling
+    plt.rcParams.update({
+        'font.family': 'serif',
+        'font.size': 12,
+        'axes.titlesize': 14,
+        'axes.labelsize': 12,
+        'xtick.labelsize': 10,
+        'ytick.labelsize': 10,
+        'legend.fontsize': 10,
+        'pgf.rcfonts': True,  # Use matplotlib's font system
+        'pgf.preamble': r'\usepackage{amsmath}\usepackage{amssymb}'
+    })
 
     df = pd.read_csv(file_path, header=None, names=["item", "steps", "action", "param1", "param2", "solve_time"])
 
@@ -2155,14 +2277,14 @@ def plot_csv_data(file_path):
     ax.set_yscale('log')
 
     # Labels and title
-    plt.title("Electronic Circuit - Solve Time (Boxplot)")
+    plt.title("Electronic Circuit - Solve Time")
     plt.xlabel("Number of Modules")
     plt.ylabel("Execution Time (seconds)")
     plt.grid(True)
 
-    # Save the boxplot
-    box_plot_path = os.path.join(plot_dir, "electronic_circuit_solve_box_plot.png")
-    plt.savefig(box_plot_path)
+    # Save the boxplot as PGF for LaTeX
+    box_plot_path = os.path.join(plot_dir, "electronic_circuit_solve_box_plot.pgf")
+    plt.savefig(box_plot_path, format='pgf', bbox_inches='tight')
     plt.close()  # Close the plot to prevent overlap with other subplots
 
     logger.info(f"Boxplot saved at: {box_plot_path}")
@@ -3609,5 +3731,7 @@ def is_fluid_item(item_id):
     
     
 if __name__ == "__main__":
-    main()
+    
+    plot_csv_data("execution_times_big_factory.csv")
+    #main()
 
