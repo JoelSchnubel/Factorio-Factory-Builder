@@ -10,7 +10,7 @@ authors:
 date-released: "2025-07-09"
 version: "1.0.0"
 license: MIT
-repository-code: "https://github.com/JoelSchnubel/Bachelor-Thesis"
+repository-code: "https://github.com/JoelSchnubel/Factorio-Factory-Builder"
 keywords:
   - "SMT solvers"
   - "Z3"
@@ -41,4 +41,4 @@ preferred-citation:
   institution: "University of Saarland"
   thesis-type: "Bachelor's thesis"
   year: 2025
-  url: "https://github.com/JoelSchnubel/Bachelor-Thesis"
+  url: "https://github.com/JoelSchnubel/Factorio-Factory-Builder"
