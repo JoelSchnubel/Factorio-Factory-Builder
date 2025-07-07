@@ -1,5 +1,33 @@
 #! .venv\Scripts\python.exe
 
+"""
+Factorio Production Tree Module
+
+This module provides a comprehensive framework for calculating, optimizing, and visualizing
+Factorio production layouts. It handles the entire pipeline from recipe analysis to factory
+visualization and blueprint generation.
+
+Main Components:
+- FactorioProductionTree: Core class for production planning and optimization
+- Production calculation and recipe analysis
+- SMT solver integration for layout optimization
+- Multi-agent pathfinding for belt and pipe routing
+- Pygame-based interactive GUI for manual I/O configuration
+- Draftsman integration for Factorio blueprint generation
+- PNG visualization and plotting capabilities
+
+Key Features:
+- Recursive production tree calculation with assembler, inserter, and belt requirements
+- Factory layout optimization using Z3 SMT
+- Automatic belt and pipe network generation with pathfinding
+- Support for both fluid and solid item transport systems
+- Power pole placement optimization
+- Interactive manual configuration of input/output points
+- Blueprint export compatible with Factorio game
+- Performance analysis and execution time logging
+- High-quality PNG plot generation for analysis and documentation
+"""
+
 import json
 import pygame
 import math
@@ -25,9 +53,9 @@ from logging_config import setup_logger
 
 logger = setup_logger("FactorioProductionTree")
 
-# Define constants for colors
+# Define constants for colors and GUI elements
 side_panel_width = 300
-CELL_SIZE = 50  # Assuming a default cell size
+CELL_SIZE = 50  # Default cell size for visualization
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 GREEN = (0, 255, 0)  
@@ -48,50 +76,105 @@ BELT_COLOR_MAP = {
 
 
 class FactorioProductionTree:
+    """
+    Main class for calculating, optimizing, and visualizing Factorio production layouts.
+    
+    This class handles the entire pipeline from recipe analysis to factory visualization:
+    - Calculates production requirements for items
+    - Optimizes factory layouts using SMT solvers
+    - Generates belt networks and pathfinding
+    - Creates visualizations and blueprints
+    - Exports data for analysis
+    
+    Attributes:
+        grid_width (int): Width of the factory grid
+        grid_height (int): Height of the factory grid
+        config (dict): Configuration settings loaded from config.json
+        item_lookup (dict): Mapping of item IDs to their recipe data
+        production_data (dict): Calculated production requirements
+        z3_solver (SMTSolver): SMT solver for factory optimization
+        AStar (MultiAgentPathfinder): Pathfinding algorithm for belt routing
+        input_information (dict): Input/output points configuration
+        output_information (dict): Output points configuration
+    """
+    
     def __init__(self,grid_width=15,grid_height=15) -> None:
+        """
+        Initialize the FactorioProductionTree with specified grid dimensions.
         
+        Sets up the factory grid, loads configuration and recipe data, and initializes
+        the necessary data structures for production planning.
+        
+        Args:
+            grid_width (int, optional): Width of the factory grid. Defaults to 15.
+            grid_height (int, optional): Height of the factory grid. Defaults to 15.
+        """
+        logger.info(f"Initializing FactorioProductionTree with grid size {grid_width}x{grid_height}")
+        
+        # Load configuration from config.json
         self.config = self.load_config()
+        logger.info("Configuration loaded successfully")
         
-        
+        # Set grid dimensions, use config defaults if not specified
         self.grid_width = grid_width if grid_width is not None else self.config["grid"]["default_width"]
         self.grid_height = grid_height if grid_height is not None else self.config["grid"]["default_height"]
+        logger.info(f"Grid dimensions set to {self.grid_width}x{self.grid_height}")
         
-        # Load the data from JSON
+        # Load recipe and machine data from JSON files
         items_data = self.load_json("recipes.json")
+        self.machines_data = self.load_json("machine_data.json")
+        logger.info("Recipe and machine data loaded successfully")
         
-        self.machines_data = self.load_json("machine_data.json")  # Machine speeds and capacities
-        
+        # Initialize the factory grid (2D array for layout planning)
         self.grid = [[0 for _ in range(grid_width)] for _ in range(grid_height)]
-
         
-        # Create a lookup dictionary for items by their ID
+        # Create lookup dictionary for efficient item access
         self.item_lookup = {item["id"]: item for item in items_data}
+        logger.info(f"Item lookup created with {len(self.item_lookup)} items")
 
-        # info for input items with belts
-        self.input_items=[]
-        self.input_information = None
+        # Initialize production planning variables
+        self.input_items=[]           # List of input items (raw materials)
+        self.input_information = None # Input belt/pipe configurations
         
-        self.amount = 0
-        self.output_item = None
-        self.output_information = None
+        self.amount = 0               # Target production amount
+        self.output_item = None       # Main output item being produced
+        self.output_information = None # Output belt/pipe configurations
         
-        # init after calulation of production data
-        self.z3_solver = None
-        self.AStar = None
+        # Initialize solvers and pathfinding (created later when needed)
+        self.z3_solver = None         # SMT solver for layout optimization
+        self.AStar = None             # Multi-agent pathfinding algorithm
         
-        self.obstacle_map = None
+        self.obstacle_map = None      # Map of obstacles for pathfinding
         
+        # Production data dictionary (populated by calculate_production)
         self.production_data = {}
+        
+        logger.info("FactorioProductionTree initialization complete")
     
     def load_config(self):
-        """Load the configuration file"""
+        """
+        Load configuration settings from config.json file.
+        
+        Loads factory configuration including grid dimensions, machine types,
+        belt settings, and other parameters. Falls back to default values
+        if the config file is not found.
+        
+        Returns:
+            dict: Configuration dictionary with all settings
+            
+        Raises:
+            FileNotFoundError: If config.json is missing (handled gracefully)
+        """
+        logger.info("Loading configuration from config.json")
         try:
             with open("config.json", "r") as file:
                 config = json.load(file)
+            logger.info("Configuration file loaded successfully")
             return config
         except FileNotFoundError:
+            logger.warning("config.json not found, using default configuration")
             # Return default config if file doesn't exist
-            return {
+            default_config = {
                 "grid": {"default_width": 16, "default_height": 10},
                 "machines": {
                     "default_assembler": "assembling-machine-2",
@@ -124,38 +207,91 @@ class FactorioProductionTree:
                     "place_power_poles": True
                 }
             }
+            logger.info("Default configuration created")
+            return default_config
         
-    def load_json(self,recipe_file):
-        with open(recipe_file, "r") as file:
-                recipes = json.load(file)
-                return recipes
+    def load_json(self, recipe_file):
+        """
+        Load JSON data from a specified file.
+        
+        Generic JSON loader used for recipes, machine data, and other
+        configuration files.
+        
+        Args:
+            recipe_file (str): Path to the JSON file to load
             
-    
+        Returns:
+            list or dict: Parsed JSON data
+            
+        Raises:
+            FileNotFoundError: If the specified file doesn't exist
+            json.JSONDecodeError: If the file contains invalid JSON
+        """
+        logger.info(f"Loading JSON data from {recipe_file}")
+        try:
+            with open(recipe_file, "r") as file:
+                recipes = json.load(file)
+            logger.info(f"Successfully loaded {recipe_file}")
+            return recipes
+        except FileNotFoundError:
+            logger.error(f"JSON file not found: {recipe_file}")
+            raise
+        except json.JSONDecodeError as e:
+            logger.error(f"Invalid JSON in {recipe_file}: {e}")
+            raise
+            
     def destroy_solver(self):
+        """
+        Clean up and destroy the current SMT solver instance.
+        
+        Used to reset the solver state between different optimization runs
+        or when changing problem parameters.
+        """
+        logger.info("Destroying current solver instance")
         self.z3_solver = None
+        logger.info("Solver instance destroyed")
     
-    # Recursively calculate the production requirements, including assemblers, inserters, and belts.
- 
-    def calculate_production(self, item_id, items_per_minute,input_items=[],first=True):
+    def calculate_production(self, item_id, items_per_minute, input_items=[], first=True):
+        """
+        Recursively calculate production requirements for a given item and production rate.
         
+        This method analyzes the recipe tree for the target item and calculates the
+        required production rates, machine counts, and material flows for the entire
+        production chain.
         
+        Args:
+            item_id (str): ID of the item to produce
+            items_per_minute (float): Target production rate in items per minute
+            input_items (list, optional): List of items to treat as external inputs
+            first (bool, optional): Whether this is the top-level call
+            
+        Returns:
+            dict: Dictionary containing production data for all items in the chain,
+                 with structure: {item_id: {amount_per_minute: float, assemblers: int, ...}}
+        """
+        logger.info(f"Calculating production for {item_id}: {items_per_minute} items/minute")
         
+        # Set output item and input items list on first call
         if first:
             self.output_item = item_id
             self.input_items += input_items
+            logger.info(f"Set output item to {item_id}, input items: {input_items}")
+        
+        # Look up the item in the recipe database
         item = self.item_lookup.get(item_id)
         
-        # If the item doesn't exist or there's no recipe, return the required amount as it is.
+        # If the item doesn't exist, has no recipe, or is in input_items, treat as external input
         if not item or "recipe" not in item or item in input_items:
+            logger.info(f"{item_id} treated as external input (no recipe or in input_items)")
             return {item_id: {"amount_per_minute": items_per_minute}}
 
         recipe = item["recipe"]
         time_per_unit = recipe.get("time")
         yield_per_recipe = recipe.get("yield")
 
-        # If the recipe has no ingredients (e.g "iron-plate"), just return the target amount. -> ground insert inputs
-        # If you want to set an item as possible Input for the system -> set Ingredients to []
+        # If recipe has no ingredients or missing parameters, treat as base material
         if time_per_unit is None or yield_per_recipe is None or not recipe["ingredients"]:
+            logger.info(f"{item_id} treated as base material (no ingredients or missing recipe data)")
             self.input_items.append(item_id)
             return {item_id: {"amount_per_minute": items_per_minute}}
 
@@ -220,18 +356,34 @@ class FactorioProductionTree:
         
         
     def set_capacities(self,production_data):
-        # create a reverse map of all the items in the production data
+        """
+        Calculate production capacities for all items in the production chain.
+        
+        This method creates a reverse mapping of ingredient dependencies and calculates
+        the capacity of each item based on the ratio of its assemblers to the total
+        assemblers that consume it. This is used for belt balancing and throughput
+        optimization.
+        
+        Args:
+            production_data (dict): Dictionary containing production data for all items,
+                                  including assembler counts and input/output inserters
+        
+        Returns:
+            dict: Updated production_data with capacity values added to each item
+        """
+        logger.info("Calculating production capacities for all items")
+        
+        # Create a reverse map of all the items in the production data
         reverse_mapping = {}
         
-         # Collect ingredients used in production data
+        # Collect ingredients used in production data
         for item_id, data in production_data.items():
-            # Skip items that don't have recipes
+            # Skip items that don't have recipes (raw materials or outputs)
             if "input_inserters" not in data:
                 continue
 
-            
+            # Process each ingredient that this item requires
             for ingredient in data["input_inserters"]:
-                
                 ingredient_id = ingredient["id"]
                 
                 # Only include items that are in the production data (i.e., their capacities will be calculated)
@@ -239,14 +391,16 @@ class FactorioProductionTree:
                     if ingredient_id not in reverse_mapping:
                         reverse_mapping[ingredient_id] = []
                     reverse_mapping[ingredient_id].append(item_id)
-            
-        # for each item calculate the capacity using the map as the number of its assemblers devided by the number of other assemblers
-        # only do if both items are in the production data and the item is not the output item else set to 0 
+                    
+        logger.info(f"Created reverse mapping for {len(reverse_mapping)} items")
         
+        # For each item, calculate the capacity using the map as the number of its assemblers
+        # divided by the number of other assemblers that consume it
         for item_id, data in production_data.items():
             # Skip if this item is already an output product (it shouldn't calculate capacity for itself)
             if "input_inserters" not in data:
                 data['capacity'] = 0
+                logger.debug(f"Set capacity to 0 for output item {item_id}")
                 continue
 
             # Get the number of assemblers for this item
@@ -263,35 +417,77 @@ class FactorioProductionTree:
                     data['capacity'] = round(item_assemblers / total_assemblers_needed)
                 else:
                     data['capacity'] = 0
+                    
+                logger.debug(f"Item {item_id}: {item_assemblers} assemblers, "
+                           f"{total_assemblers_needed} total needed, capacity: {data['capacity']}")
             else:
                 # If no items are using this as an ingredient, set the capacity to 0
                 data['capacity'] = 0
+                logger.debug(f"No consumers for item {item_id}, capacity set to 0")
+                
+        logger.info("Production capacities calculated successfully")
         return production_data
 
-    # Calculate how many assemblers are needed to produce the required amount per minute.
     def _calculate_assemblers(self, time_per_unit, recipe_runs_needed_per_minute,item_id):
+        """
+        Calculate the number of assemblers needed to produce the required amount per minute.
+        
+        This method determines the appropriate machine type for the recipe and calculates
+        how many machines are needed based on the production rate and machine speed.
+        
+        Args:
+            time_per_unit (float): Time in seconds required to produce one unit of the item
+            recipe_runs_needed_per_minute (float): Number of recipe runs needed per minute
+            item_id (str): ID of the item being produced
+            
+        Returns:
+            float: Number of assemblers needed (may be fractional)
+        """
+        logger.debug(f"Calculating assemblers for {item_id}: {recipe_runs_needed_per_minute} runs/min")
         
         machine_type = self._get_machine_type_for_recipe(item_id)
-          # Get machine info from the machine data
+        
+        # Get machine info from the machine data
         if machine_type in self.machines_data["assemblers"]:
             machine_info = self.machines_data["assemblers"][machine_type]
             crafting_speed = machine_info["crafting_speed"]
+            logger.debug(f"Using machine type {machine_type} with crafting speed {crafting_speed}")
         else:
             # Fall back to default if not found
             default_type = self.config["machines"]["default_assembler"]
             crafting_speed = self.machines_data["assemblers"][default_type]["crafting_speed"]
+            logger.warning(f"Machine type {machine_type} not found, using default {default_type}")
     
         items_per_second_per_assembler = crafting_speed / time_per_unit
         items_per_minute_per_assembler = items_per_second_per_assembler * 60
-        return recipe_runs_needed_per_minute / items_per_minute_per_assembler
+        assemblers_needed = recipe_runs_needed_per_minute / items_per_minute_per_assembler
+        
+        logger.debug(f"Assemblers needed for {item_id}: {assemblers_needed}")
+        return assemblers_needed
     
     
     def _get_machine_type_for_recipe(self, recipe_id):
+        """
+        Determine the appropriate machine type for a given recipe.
+        
+        This method checks the recipe-to-machine mapping and returns the correct
+        machine type based on the recipe requirements and configuration.
+        
+        Args:
+            recipe_id (str): ID of the recipe to get machine type for
+            
+        Returns:
+            str: Machine type identifier (e.g., "assembling-machine-2", "chemical-plant")
+        """
+        logger.debug(f"Getting machine type for recipe {recipe_id}")
+        
         # Check the recipe machine mapping in machine_data.json
         if "recipe_machine_mapping" in self.machines_data:
             recipes = self.machines_data["recipe_machine_mapping"].get("recipes", {})
             if recipe_id in recipes:
-                return recipes[recipe_id]
+                machine_type = recipes[recipe_id]
+                logger.debug(f"Found mapped machine type {machine_type} for recipe {recipe_id}")
+                return machine_type
         
         # If no specific mapping, use the appropriate default based on config
         if recipe_id in self.machines_data.get("production_recipes", {}) and "required_machine" in self.machines_data["production_recipes"][recipe_id]:
@@ -304,25 +500,71 @@ class FactorioProductionTree:
                 return self.config["machines"]["default_furnace"]
         
         # Default to the standard assembler
-        return self.config["machines"]["default_assembler"]
+        default_machine = self.config["machines"]["default_assembler"]
+        logger.debug(f"Using default machine type {default_machine} for recipe {recipe_id}")
+        return default_machine
 
-    # Calculate how many inserters are needed to move the required amount of items per minute.
     def _calculate_inserters(self, recipe_runs_needed_per_minute):
+        """
+        Calculate the number of inserters needed to move the required amount of items per minute.
+        
+        This method determines how many inserters are required to handle the material
+        flow for a given production rate.
+        
+        Args:
+            recipe_runs_needed_per_minute (float): Number of recipe runs needed per minute
+            
+        Returns:
+            float: Number of inserters needed (may be fractional)
+        """
+        logger.debug(f"Calculating inserters for {recipe_runs_needed_per_minute} recipe runs/min")
+        
         inserter_type = self.config["inserters"]["input_type"]
         items_per_second_per_inserter = self.machines_data["inserters"][inserter_type]["items_per_second"]
         items_per_minute_per_inserter = items_per_second_per_inserter * 60
-        return recipe_runs_needed_per_minute / items_per_minute_per_inserter
+        inserters_needed = recipe_runs_needed_per_minute / items_per_minute_per_inserter
+        
+        logger.debug(f"Inserters needed: {inserters_needed} (type: {inserter_type})")
+        return inserters_needed
     
-    # Calculate how many belts are needed to move the required amount of items per minute.
     def _calculate_belts(self, total_items_needed_per_minute):
+        """
+        Calculate the number of belts needed to move the required amount of items per minute.
+        
+        This method determines how many transport belts are required to handle the
+        material throughput for a given production rate.
+        
+        Args:
+            total_items_needed_per_minute (float): Total items that need to be transported per minute
+            
+        Returns:
+            float: Number of belts needed (may be fractional)
+        """
+        logger.debug(f"Calculating belts for {total_items_needed_per_minute} items/min")
+        
         belt_type = self.config["belts"]["default_type"]
         items_per_second_per_belt = self.machines_data["belts"][belt_type]["items_per_second"]
         items_per_minute_per_belt = items_per_second_per_belt * 60
-        return total_items_needed_per_minute / items_per_minute_per_belt
+        belts_needed = total_items_needed_per_minute / items_per_minute_per_belt
+        
+        logger.debug(f"Belts needed: {belts_needed} (type: {belt_type})")
+        return belts_needed
     
 
-    # TODO rework
     def calculate_minimal_grid_size(self,production_output):
+        """
+        Calculate the minimal grid size needed to accommodate all production facilities.
+        
+        This method estimates the minimum grid dimensions required based on the
+        total number of assemblers, inserters, and belts needed for production.
+        
+        Args:
+            production_output (dict): Dictionary containing production data with facility counts
+            
+        Returns:
+            tuple: (width, height) of the minimal grid size needed
+        """
+        logger.info("Calculating minimal grid size for production layout")
 
         total_assemblers = 0
         total_inserters = 0
@@ -332,6 +574,8 @@ class FactorioProductionTree:
             total_assemblers += requirements.get('assemblers', 0)
             total_inserters += requirements.get('inserters', 0)
             total_belts += requirements.get('belts', 0)
+        
+        logger.debug(f"Total facilities: {total_assemblers} assemblers, {total_inserters} inserters, {total_belts} belts")
         
         # Each assembler takes a 3x3 space
         assembler_height = total_assemblers * 3
@@ -346,22 +590,50 @@ class FactorioProductionTree:
         self.grid_width = width
         self.grid_height = height
         
+        logger.info(f"Calculated minimal grid size: {width}x{height}")
         return width, height
 
     
     
     def eval(self):
-        return self.grid_height * self.grid_width + sum(row.count(2) for row in self.grid)
+        """
+        Evaluate the current factory layout for optimization purposes.
+        
+        This method calculates a fitness score for the current layout based on
+        grid size and the number of occupied cells. Used by optimization algorithms.
+        
+        Returns:
+            int: Fitness score (lower is better)
+        """
+        occupied_cells = sum(row.count(2) for row in self.grid)
+        score = self.grid_height * self.grid_width + occupied_cells
+        logger.debug(f"Layout evaluation: grid size {self.grid_width}x{self.grid_height}, "
+                    f"occupied cells: {occupied_cells}, score: {score}")
+        return score
 
     
     def manual_Output(self, Title="Manual Output"):
+        """
+        Interactive GUI for manually configuring output belt positions.
+        
+        This method provides a graphical interface for the user to select where
+        output belts should be placed on the factory grid. The user can click
+        on grid positions to place output points for the target item.
+        
+        Args:
+            Title (str, optional): Title for the GUI window. Defaults to "Manual Output".
+        """
+        logger.info(f"Starting manual output configuration for {self.output_item}")
+        
+        # GUI configuration constants
         side_panel_width = 300
-        CELL_SIZE = 50  # Assuming a default cell size
+        CELL_SIZE = 50
         WHITE = (255, 255, 255)
         BLACK = (0, 0, 0)
         GREEN = (0, 255, 0)  # Green for input
         RED = (255, 0, 0)  # Red for output
         
+        # Load and scale output item image
         output_image = pygame.image.load(f"assets/{self.output_item}.png")
         output_image = pygame.transform.scale(output_image, (CELL_SIZE, CELL_SIZE))
         
@@ -378,9 +650,11 @@ class FactorioProductionTree:
 
         output_information = {self.output_item:{'input': None, 'output': None, 'paths': None}}
         setting_input = True
-        # build obstacle map
+        
+        # Build obstacle map for pathfinding
         grid_astar = [[0 for _ in range(self.grid_width)] for _ in range(self.grid_height)]
-                                        
+        
+        logger.debug("Creating obstacle map from existing input paths")
         # Mark existing paths from input_information as obstacles
         for item, data in input_information.items():
             if data['paths'] is not None and item in data['paths']:
@@ -608,15 +882,42 @@ class FactorioProductionTree:
         pygame.quit()
     
     def is_fluid_item(self, item_id):
-        """Check if an item is a fluid based on its type in recipes data"""
+        """
+        Check if an item is a fluid based on its type in recipes data.
+        
+        This method determines whether an item should be transported via pipes
+        instead of belts by checking its type in the recipe data.
+        
+        Args:
+            item_id (str): ID of the item to check
+            
+        Returns:
+            bool: True if the item is a fluid, False otherwise
+        """
         # Look up item in the recipe data
         item = self.item_lookup.get(item_id, {})
         # Check if the item type is "Liquid"
-        return item.get("type", "") == "Liquid"
+        is_fluid = item.get("type", "") == "Liquid"
+        logger.debug(f"Item {item_id} is fluid: {is_fluid}")
+        return is_fluid
     
     def manual_Input(self, Title="Manual Input"):
+        """
+        Interactive GUI for manually configuring input belt positions.
+        
+        This method provides a graphical interface for the user to select where
+        input belts should be placed on the factory grid for raw materials.
+        The user can cycle through different input items and place both input
+        and output points for each item.
+        
+        Args:
+            Title (str, optional): Title for the GUI window. Defaults to "Manual Input".
+        """
+        logger.info(f"Starting manual input configuration for items: {self.input_items}")
+        
+        # GUI configuration constants
         side_panel_width = 300
-        CELL_SIZE = 50  # Assuming a default cell size
+        CELL_SIZE = 50
         WHITE = (255, 255, 255)
         BLACK = (0, 0, 0)
         GREEN = (0, 255, 0)  # Green for input
@@ -857,28 +1158,90 @@ class FactorioProductionTree:
         pygame.quit()
         self.input_information = input_information
 
-    def solve(self,production_data,solver_type):
+    def solve(self, production_data, solver_type):
+        """
+        Solve the factory layout optimization problem using the specified solver.
         
-        # Initialize solver with grid size and production data
+        This method initializes the appropriate solver (Z3 SMT or Gurobi) and
+        optimizes the placement of assemblers, inserters, and other factory
+        components to minimize space usage while satisfying all constraints.
+        
+        Args:
+            production_data (dict): Production requirements including assemblers,
+                                  inserters, and material flows for each item
+            solver_type (str): Type of solver to use ("z3" or "gurobi")
+            
+        Returns:
+            None: Results are stored in the solver instance and can be accessed
+                 through self.z3_solver
+                 
+        Raises:
+            ValueError: If solver_type is not "z3" or "gurobi"
+            RuntimeError: If solver fails to find a solution
+        """
+        logger.info(f"Starting factory layout optimization with {solver_type} solver")
+        logger.info(f"Grid size: {self.grid_width}x{self.grid_height}")
+        logger.info(f"Production items: {list(production_data.keys())}")
+        
+        # Initialize the appropriate solver based on type
         if self.z3_solver is None and solver_type == "z3":
-            self.z3_solver = SMTSolver(self.grid_width,self.grid_height, production_data,solver_type)
+            logger.info("Initializing Z3 SMT solver")
+            self.z3_solver = SMTSolver(self.grid_width, self.grid_height, production_data, solver_type)
         
-        if self.z3_solver is None and solver_type == "gurobi":
-            self.z3_solver = GurobiSolver(self.grid_width,self.grid_height, production_data)
-        # Process the input to place assemblers
+        elif self.z3_solver is None and solver_type == "gurobi":
+            logger.info("Initializing Gurobi optimization solver")
+            self.z3_solver = GurobiSolver(self.grid_width, self.grid_height, production_data)
+        
+        elif self.z3_solver is not None:
+            logger.info(f"Using existing {solver_type} solver instance")
+        
+        else:
+            logger.error(f"Invalid solver type: {solver_type}")
+            raise ValueError(f"Solver type must be 'z3' or 'gurobi', got '{solver_type}'")
 
+        # Build optimization constraints
+        logger.info("Building optimization constraints")
         self.z3_solver.build_constraints()
-        self.z3_solver.solve()
         
-    def add_manual_IO_constraints(self,production_data,solver_type):
+        # Solve the optimization problem
+        logger.info("Solving optimization problem")
+        try:
+            solution_found = self.z3_solver.solve()
+            if solution_found:
+                logger.info("Factory layout optimization completed successfully")
+            else:
+                logger.warning("Solver could not find a valid solution")
+        except Exception as e:
+            logger.error(f"Solver error: {e}")
+            raise RuntimeError(f"Solver failed: {e}")
         
+    def add_manual_IO_constraints(self, production_data, solver_type):
+        """
+        Add manually configured input/output constraints to the solver.
         
+        This method integrates user-defined input and output points into the
+        optimization problem, ensuring that material flows respect the
+        manual I/O configuration.
         
+        Args:
+            production_data (dict): Production requirements data
+            solver_type (str): Type of solver to use ("z3" or "gurobi")
+            
+        Returns:
+            None: Constraints are added to the solver instance
+        """
+        logger.info(f"Adding manual I/O constraints with {solver_type} solver")
+        
+        # Initialize solver if not already created
         if self.z3_solver is None and solver_type == "z3":
-            self.z3_solver = SMTSolver(self.grid_width,self.grid_height, production_data,solver_type)
+            logger.info("Initializing Z3 solver for I/O constraints")
+            self.z3_solver = SMTSolver(self.grid_width, self.grid_height, production_data, solver_type)
         
-        if self.z3_solver is None and solver_type == "gurobi":
-            self.z3_solver = GurobiSolver(self.grid_width,self.grid_height, production_data)
+        elif self.z3_solver is None and solver_type == "gurobi":
+            logger.info("Initializing Gurobi solver for I/O constraints")
+            self.z3_solver = GurobiSolver(self.grid_width, self.grid_height, production_data)
+        
+        logger.info("Manual I/O constraints integration completed")
         
         
         self.z3_solver.add_manuel_IO_constraints(self.input_information,self.output_information)
@@ -946,23 +1309,50 @@ class FactorioProductionTree:
         return overlap
 
     def detect_assembler_overlap(self,belt,assembler_information):
-        belt_coords = (belt[1], belt[2]) 
+        """
+        Check if a belt position overlaps with any assembler.
+        
+        This method determines whether a proposed belt position would conflict
+        with existing assembler placements in the factory layout.
+        
+        Args:
+            belt: A tuple of (item, x, y, _) representing the belt position
+            assembler_information: List of assembler data with positions and dimensions
+            
+        Returns:
+            bool: True if there's an overlap, False otherwise
+        """
+        belt_coords = (belt[1], belt[2])
+        logger.debug(f"Checking belt at {belt_coords} for assembler overlap")
         
         for assembler in assembler_information:
             assembler_item, assembler_x, assembler_y, width, height, machine_type, orientation_idx = assembler
             
-            # Check if the belt's coordinates overlap with the assembler's 3x3 area
+            # Check if the belt's coordinates overlap with the assembler's area
             for dx in range(width):  
                 for dy in range(height):  
                     assembler_coords = (assembler_x + dx, assembler_y + dy)
                     
                     # If the belt's coordinates overlap with any of the assembler's coordinates
                     if belt_coords == assembler_coords:
+                        logger.debug(f"Belt at {belt_coords} overlaps with assembler at {assembler_coords}")
                         return True  # There is an overlap
         return False  # No overlap detected
         
 
     def is_position_available(self, pos):
+        """
+        Check if a position is available (not occupied by obstacles).
+        
+        This method checks the obstacle map to determine if a given position
+        is free for placement of factory components.
+        
+        Args:
+            pos: Tuple of (x, y) coordinates to check
+            
+        Returns:
+            bool: True if position is available, False otherwise
+        """
         x, y = pos
         # Check if position is within bounds of the obstacle_map and if it's free (0)
         if 0 <= y < len(self.obstacle_map) and 0 <= x < len(self.obstacle_map[0]):
@@ -970,13 +1360,42 @@ class FactorioProductionTree:
         return False  # Out-of-bounds positions are considered unavailable
     
     def is_fluid_item(self, item_id):
-        """Check if an item is a fluid based on its type in recipes data"""
+        """
+        Check if an item is a fluid based on its type in recipes data.
+        
+        This method determines whether an item should be transported via pipes
+        instead of belts by checking its type in the recipe data.
+        
+        Args:
+            item_id (str): ID of the item to check
+            
+        Returns:
+            bool: True if the item is a fluid, False otherwise
+        """
         # Look up item in the recipe data
         item = self.item_lookup.get(item_id, {})
         # Check if the item type is "Liquid"
-        return item.get("type", "") == "Liquid"
+        is_fluid = item.get("type", "") == "Liquid"
+        logger.debug(f"Item {item_id} is fluid: {is_fluid}")
+        return is_fluid
     
     def get_retrieval_points(self, belt_point_information, assembler_information):
+        """
+        Generate retrieval points for material transport pathfinding.
+        
+        This method creates a mapping of where materials need to be picked up
+        and delivered, considering both input sources and assembler outputs.
+        It handles both belt-based and pipe-based transport systems.
+        
+        Args:
+            belt_point_information: List of belt positions and their associated items
+            assembler_information: List of assembler data with positions and outputs
+            
+        Returns:
+            dict: Dictionary mapping retrieval point keys to their configuration data
+        """
+        logger.info("Generating retrieval points for material transport")
+        
         retrieval_points = {}  # Dictionary to store all retrieval points for each item
         
         # Track all belt positions to avoid overlaps
@@ -1125,6 +1544,21 @@ class FactorioProductionTree:
 
     
     def get_num_inserters(self, item):
+        """
+        Calculate the number of inserters needed for a given item based on throughput.
+        
+        This method determines how many inserters are required to handle the material
+        flow for a specific item, considering both fluid connections and belt-based
+        transport systems.
+        
+        Args:
+            item (str): ID of the item to calculate inserter count for
+            
+        Returns:
+            int: Number of inserters needed (1-3 for items, 1 for fluids)
+        """
+        logger.debug(f"Calculating inserter count for item {item}")
+        
         # Check if the item is a fluid
         if self.is_fluid_item(item):
             logger.debug(f"Item {item} is a fluid, using 1 fluid connection")
@@ -1145,7 +1579,7 @@ class FactorioProductionTree:
         # Calculate number of inserters needed based on throughput
         inserters_needed = math.ceil(items_per_minute / inserter_capacity)
         
-        # Cap at 1-3 inserters
+        # Cap at 1-3 inserters (practical limit for assembler connections)
         inserters_needed = max(1, min(3, inserters_needed))
         
         logger.debug(f"Calculated {inserters_needed} inserters for {item} (producing {items_per_minute} items/min)")
@@ -1153,6 +1587,23 @@ class FactorioProductionTree:
     
     
     def add_out_point_information(self, output_item, assembler_information,belt_point_information):
+        """
+        Add output point information for the main factory output item.
+        
+        This method creates retrieval points for the factory's main output item,
+        determining where output belts should connect to assemblers and where
+        they should lead to external connections.
+        
+        Args:
+            output_item (str): ID of the main output item
+            assembler_information: List of assembler data with positions and outputs
+            belt_point_information: List of belt positions and their associated items
+            
+        Returns:
+            dict: Dictionary of retrieval points for the output item
+        """
+        logger.info(f"Adding output point information for {output_item}")
+        
         retrieval_points = {}
         
         # Collect all the possible output positions from the output information
@@ -1294,15 +1745,50 @@ class FactorioProductionTree:
         
     
     def rearrange_dict(self,input_dict, target_item):
+        """
+        Rearrange a dictionary to prioritize entries for a specific target item.
+        
+        This method reorders the retrieval points dictionary to place all entries
+        for the target item (usually the main output) at the beginning, which
+        helps with pathfinding prioritization.
+        
+        Args:
+            input_dict (dict): Dictionary to rearrange
+            target_item (str): Item ID to prioritize
+            
+        Returns:
+            dict: Rearranged dictionary with target item entries first
+        """
+        logger.debug(f"Rearranging dictionary to prioritize {target_item}")
+        
         # Separate items based on the 'item' value
         target_items = {key: value for key, value in input_dict.items() if value.get('item') == target_item}
         other_items = {key: value for key, value in input_dict.items() if value.get('item') != target_item}
         
         # Combine the dictionaries with target items first
         rearranged_dict = {**target_items, **other_items}
+        
+        logger.debug(f"Rearranged dictionary: {len(target_items)} target items, {len(other_items)} other items")
         return rearranged_dict
     
     def prepare_splitter_information(self, input_information, output_information):
+        """
+        Prepare splitter information for complex belt routing scenarios.
+        
+        This method analyzes input and output paths to identify locations where
+        belt splitters can be placed to optimize material distribution. It creates
+        orientation data for each path segment and generates potential splitter
+        positions.
+        
+        Args:
+            input_information (dict): Dictionary containing input belt configurations
+            output_information (dict): Dictionary containing output belt configurations
+            
+        Returns:
+            dict: Dictionary mapping item IDs to lists of potential splitter positions
+        """
+        logger.info("Preparing splitter information for belt routing")
+        
         splitters = {}
         
         # Process input information
@@ -1430,43 +1916,83 @@ class FactorioProductionTree:
         return splitters
     
     
-    # need to solve once before you can execute this
     def build_belts(self, max_tries):
-        for i in range(max_tries):
-            logger.info(f'Try Number: {i}')
+        """
+        Build and optimize belt networks for material transport in the factory.
+        
+        This method constructs the belt and pipe networks that connect assemblers,
+        inserters, and I/O points. It uses multi-agent pathfinding to route
+        materials efficiently while avoiding conflicts and minimizing crossings.
+        
+        The method attempts multiple times to find optimal solutions, using
+        different strategies and configurations if initial attempts fail.
+        
+        Args:
+            max_tries (int): Maximum number of attempts to build successful belt networks
             
-            self.obstacle_map, belt_point_information, assembler_information, inserter_information, fluid_connection_info, power_pole_information = self.z3_solver.build_map()
+        Returns:
+            tuple: (paths_dict, placed_inserter_information)
+                - paths_dict: Dictionary mapping items to their transport paths
+                - placed_inserter_information: Details of additional inserters placed
+                
+        Raises:
+            RuntimeError: If belt building fails after max_tries attempts
+            ValueError: If solver hasn't been run prior to calling this method
+        """
+        logger.info(f"Starting belt network construction with max {max_tries} attempts")
+        
+        if self.z3_solver is None:
+            logger.error("Cannot build belts: solver not initialized or run")
+            raise ValueError("Must call solve() before build_belts()")
             
-            logger.debug(f"Building Belts")
+        for attempt in range(max_tries):
+            logger.info(f'Belt building attempt {attempt + 1}/{max_tries}')
             
-            logger.debug(f"Obstacle map: {self.obstacle_map}")
-            logger.debug(f"Belt point information: {belt_point_information}")
-            logger.debug(f"Assembler information: {assembler_information}")
-            logger.debug(f"Inserter information: {inserter_information}")
+            # Extract factory layout information from solver
+            logger.info("Extracting factory layout from solver")
+            layout_data = self.z3_solver.build_map()
+            (self.obstacle_map, belt_point_information, assembler_information, 
+             inserter_information, fluid_connection_info, power_pole_information) = layout_data
             
-            # get rid of belts that are already connected -> overlap with other input and output belts set by user or overlap with assembler -> direct insertion
-            belt_point_information = [belt for belt in belt_point_information if not self.detect_belt_overlap(belt)]
+            logger.debug(f"Factory layout extracted:")
+            logger.debug(f"  - Obstacles: {len(self.obstacle_map) if self.obstacle_map else 0} cells")
+            logger.debug(f"  - Belt points: {len(belt_point_information)}")
+            logger.debug(f"  - Assemblers: {len(assembler_information)}")
+            logger.debug(f"  - Inserters: {len(inserter_information)}")
             
+            # Filter out overlapping and redundant belt points
+            logger.info("Filtering belt points for overlaps and conflicts")
+            original_count = len(belt_point_information)
             
-            belt_point_information = [belt for belt in belt_point_information if not self.detect_assembler_overlap(belt, assembler_information)]
+            # Remove belts that overlap with existing user-defined belts
+            belt_point_information = [belt for belt in belt_point_information 
+                                    if not self.detect_belt_overlap(belt)]
+            
+            # Remove belts that overlap with assemblers (direct insertion preferred)
+            belt_point_information = [belt for belt in belt_point_information 
+                                    if not self.detect_assembler_overlap(belt, assembler_information)]
 
+            filtered_count = len(belt_point_information)
+            logger.info(f"Filtered belt points: {original_count} -> {filtered_count}")
             
-            retrieval_points = self.get_retrieval_points(belt_point_information,assembler_information)
+            # Generate material retrieval points for pathfinding
+            logger.info("Generating material retrieval points")
+            retrieval_points = self.get_retrieval_points(belt_point_information, assembler_information)
             
+            # Add output points for the main factory output
+            output_points = self.add_out_point_information(self.output_item, assembler_information, belt_point_information)
+            retrieval_points.update(output_points)
             
-            # add output belt if needed to form all possible to all possible
-            retrieval_points.update(self.add_out_point_information(self.output_item,assembler_information,belt_point_information))
+            logger.info(f"Generated {len(retrieval_points)} retrieval point groups")
+            logger.debug(f"Retrieval points: {list(retrieval_points.keys())}")
             
-           
-            
-            logger.info(f"retrieval points: {retrieval_points}")
-            
-            # rearrange such that we first build paths for outputs
+            # Prioritize output item paths for better routing
             self.retrieval_points = self.rearrange_dict(retrieval_points, self.output_item)
             
             try:
-             
-                splitters = self.prepare_splitter_information(self.input_information,self.output_information)
+                # Prepare splitter information for complex routing scenarios
+                logger.info("Preparing splitter configurations")
+                splitters = self.prepare_splitter_information(self.input_information, self.output_information)
  
          
                 # Create the pathfinder
@@ -1500,6 +2026,21 @@ class FactorioProductionTree:
         return None            
     
     def load_data(self, file_path):
+        """
+        Load factory data from a JSON file.
+        
+        This method restores the complete factory state from a previously saved
+        JSON file, including production data, layout information, paths, and
+        all other factory configuration data.
+        
+        Args:
+            file_path (str): Path to the JSON file containing factory data
+            
+        Returns:
+            bool: True if loading was successful, False otherwise
+        """
+        logger.info(f"Loading factory data from {file_path}")
+        
         try:
             # Read the data from the file
             with open(file_path, "r") as file:
@@ -1508,14 +2049,16 @@ class FactorioProductionTree:
             # Restore the values from the loaded data
             self.output_item = data.get("output_item")
             self.amount = data.get("amount")
-            self.max_output = data.get("max_ouput")
+            self.max_output = data.get("max_ouput")  # Note: keeping original typo for compatibility
             self.production_data = data.get("production_data")
             self.grid_width = data.get("grid_width")
             self.grid_height = data.get("grid_height")
             self.input_items = data.get("input_items")
             self.placed_inserter_information = data.get("placed_inserter_information", [])
             self.power_pole_information = data.get("power_pole_information", [])
-            # Load complex data structures
+            
+            logger.debug(f"Basic factory data loaded: output_item={self.output_item}, "
+                        f"grid_size={self.grid_width}x{self.grid_height}")
             
             # Handle input_information (with special handling for orientation dictionary)
             self.input_information = data.get("input_information", {})
@@ -1569,10 +2112,12 @@ class FactorioProductionTree:
             self.paths = data.get("paths", {})
 
             logger.info(f"Production tree data successfully loaded from {file_path}")
+            logger.debug(f"Loaded {len(self.production_data)} production items, "
+                        f"{len(self.paths)} paths, {len(self.retrieval_points)} retrieval points")
             return True
 
         except Exception as e:
-            logger.info(f"Failed to load production tree data: {e}")
+            logger.error(f"Failed to load production tree data: {e}")
             import traceback
             traceback.print_exc()
             return False
@@ -1580,9 +2125,18 @@ class FactorioProductionTree:
     def place_power_poles(self,file_path):
         """
         Place power poles using the SMT solver to power assemblers and inserters.
-        The function also handles JSON serialization of power pole information 
-        and saves it directly to the specified JSON file.
+        
+        This method sets up power pole constraints in the SMT solver and finds
+        an optimal placement that minimizes the number of power poles while
+        ensuring all factory components are powered.
+        
+        Args:
+            file_path (str): Path to save the power pole information JSON file
+            
+        Returns:
+            bool: True if power poles were placed successfully, False otherwise
         """
+        logger.info("Starting power pole placement optimization")
         
         # Check if SMT solver exists
         if not self.z3_solver:
@@ -1669,6 +2223,23 @@ class FactorioProductionTree:
             return False
     
     def store_data(self, file_path, paths, placed_inserter_information):
+        """
+        Store complete factory data to a JSON file.
+        
+        This method serializes all factory data including production requirements,
+        layout information, belt paths, inserter placements, and power pole
+        configurations to a JSON file for later loading.
+        
+        Args:
+            file_path (str): Path where the JSON file should be saved
+            paths (dict): Dictionary containing all belt/pipe paths
+            placed_inserter_information (list): List of inserter placement data
+            
+        Returns:
+            bool: True if data was stored successfully, False otherwise
+        """
+        logger.info(f"Storing factory data to {file_path}")
+        
         try:
             # We want to preserve the power_pole_information that was created in place_power_poles
             # So we'll store it temporarily if it exists
@@ -1703,6 +2274,9 @@ class FactorioProductionTree:
                         serializable_obstacle_map.append(row.tolist())
                     else:
                         serializable_obstacle_map.append(list(row))
+                        
+            logger.debug(f"Prepared serializable obstacle map with {len(serializable_obstacle_map)} rows")
+            
             # Create serializable versions of complex objects
             serializable_input_info = {}
             if self.input_information:
@@ -1881,11 +2455,33 @@ class FactorioProductionTree:
             logger.info(f"Production tree data successfully stored to {file_path}")
         
         except Exception as e:
-            logger.info(f"Failed to store production tree data: {e}")
+            logger.error(f"Failed to store production tree data: {e}")
             import traceback
             traceback.print_exc()
+            return False
+        
+        logger.info(f"Factory data successfully stored to {file_path}")
+        return True
+            
     def visualize_factory(self, paths=None, placed_inserter_information=None, cell_size=50, store=False, file_path=None):
-        logger.info(f'visualizing factory layout')
+        """
+        Create a visual representation of the factory layout using Pygame.
+        
+        This method generates a graphical visualization of the complete factory
+        including assemblers, inserters, belts, pipes, and power poles. The
+        visualization can be displayed interactively or saved to a file.
+        
+        Args:
+            paths (dict, optional): Dictionary of belt/pipe paths to visualize
+            placed_inserter_information (list, optional): List of additional inserter placements
+            cell_size (int, optional): Size of each grid cell in pixels. Defaults to 50.
+            store (bool, optional): Whether to save the visualization to a file. Defaults to False.
+            file_path (str, optional): Path to save the visualization image
+            
+        Returns:
+            None
+        """
+        logger.info(f'Starting factory layout visualization with cell size {cell_size}')
         
         # Initialize pygame
         pygame.init()
@@ -1894,7 +2490,8 @@ class FactorioProductionTree:
         window = pygame.display.set_mode((window_width, window_height))
         pygame.display.set_caption('Module Layout Visualization')
         clock = pygame.time.Clock()
-          # Always use stored data for visualization to ensure consistency
+        
+        # Always use stored data for visualization to ensure consistency
         belt_point_information = self.belt_point_information if hasattr(self, 'belt_point_information') else []
         assembler_information = self.assembler_information if hasattr(self, 'assembler_information') else []
         inserter_information = self.inserter_information if hasattr(self, 'inserter_information') else []
@@ -2695,10 +3292,23 @@ class FactorioProductionTree:
   
   
     def calculate_max_output(self):
+        """
+        Calculate the maximum output rate for the current factory configuration.
+        
+        This method determines the theoretical maximum production rate based on
+        the number of assemblers, machine type, and recipe parameters for the
+        main output item.
+        
+        Returns:
+            float: Maximum output rate in items per minute
+        """
+        logger.info(f"Calculating maximum output for {self.output_item}")
+        
         # Get the item recipe
         recipe = self.item_lookup[self.output_item].get("recipe", {})
         
         if not recipe:
+            logger.warning(f"No recipe found for {self.output_item}")
             return 0
         
         # Get the time per unit and yield per recipe
@@ -2723,8 +3333,26 @@ class FactorioProductionTree:
         assembler_count = self.production_data.get(self.output_item, {}).get('assemblers', 0)
         
         # Calculate and return the maximum output
-        return assembler_count * crafting_speed * cycles_per_minute * yield_per_recipe 
+        max_output = assembler_count * crafting_speed * cycles_per_minute * yield_per_recipe
+        logger.info(f"Maximum output calculated: {max_output} items/min "
+                   f"({assembler_count} assemblers × {crafting_speed} speed × {cycles_per_minute} cycles/min × {yield_per_recipe} yield)")
+        return max_output
+        
     def count_assemblers(self,production_data):
+        """
+        Count the number of assemblers for each item in the production data.
+        
+        This method extracts assembler counts from the production data and
+        returns them in a simplified dictionary format.
+        
+        Args:
+            production_data (dict): Dictionary containing production data for all items
+            
+        Returns:
+            dict: Dictionary mapping item IDs to their assembler counts
+        """
+        logger.debug("Counting assemblers for all production items")
+        
         assembler_counts = {}
     
         for item, data in production_data.items():
@@ -2733,12 +3361,28 @@ class FactorioProductionTree:
                 assembler_counts[item] = data['assemblers']
             else:
                 assembler_counts[item] = 0  # Assume 0 assemblers if the field is not present
+                
+        logger.debug(f"Assembler counts: {assembler_counts}")
         return assembler_counts
     
     def create_blueprint(self, json_path, output_path):
         """
         Create a Factorio blueprint from saved factory data using Draftsman.
+        
+        This method loads factory data from a JSON file and converts it into
+        a Factorio blueprint format that can be imported into the game.
+        The blueprint includes all assemblers, inserters, belts, pipes, and
+        power poles with correct positioning and connections.
+        
+        Args:
+            json_path (str): Path to the JSON file containing factory data
+            output_path (str): Path where the blueprint file should be saved
+            
+        Returns:
+            bool: True if blueprint was created successfully, False otherwise
         """
+        logger.info(f"Creating Factorio blueprint from {json_path}")
+        
         try:
             # Load the saved factory data
             if not self.load_data(json_path):
@@ -2749,6 +3393,10 @@ class FactorioProductionTree:
             
             # Create a new blueprint with a name based on output item and amount
             blueprint = Blueprint()
+            blueprint.label = f"{self.output_item}_{self.amount}_per_minute"
+            blueprint.description = f"Factory producing {self.amount} {self.output_item} per minute"
+            
+            logger.info(f"Blueprint created with label: {blueprint.label}")
             
             # Track occupied positions to avoid overlap
             occupied_positions = set()
@@ -3431,22 +4079,69 @@ class FactorioProductionTree:
         
 
 def plot_csv_data(file_path):
-    # Read the CSV file
-    df = pd.read_csv(file_path)
+    """
+    Generate PNG plots from execution time CSV data.
+    
+    This function reads CSV data containing execution times for different items and methods,
+    then generates violin plots and box plots for analysis. The plots are saved in PNG format
+    for easy viewing and integration into various document formats.
+    
+    Args:
+        file_path (str): Path to the CSV file containing execution time data.
+                        Expected columns: Item, Amount, Method, Assemblers, Execution Time (seconds)
+    
+    Returns:
+        None: Plots are saved to the 'Plots' directory in PNG format
+        
+    Example:
+        >>> plot_csv_data("execution_times.csv")
+        # Generates plots in Plots/{item}/{method}/ directories
+    """
+    logger.info(f"Starting plot generation from {file_path}")
+    
+    # Configure matplotlib for high-quality PNG output
+    logger.info("Configuring matplotlib for PNG output")
+    plt.rcParams.update({
+        'font.family': 'serif',
+        'font.size': 12,
+        'axes.titlesize': 14,
+        'axes.labelsize': 12,
+        'xtick.labelsize': 10,
+        'ytick.labelsize': 10,
+        'legend.fontsize': 10,
+        'figure.dpi': 300,  # High DPI for crisp PNG images
+        'savefig.dpi': 300,  # High DPI for saved figures
+        'savefig.format': 'png'
+    })
+    
+    # Read and validate CSV data
+    logger.info(f"Reading CSV data from {file_path}")
+    try:
+        df = pd.read_csv(file_path)
+        logger.info(f"Successfully loaded {len(df)} rows of data")
+    except FileNotFoundError:
+        logger.error(f"CSV file not found: {file_path}")
+        return
+    except Exception as e:
+        logger.error(f"Error reading CSV file: {e}")
+        return
 
-    # Ensure relevant columns are numeric
+    # Ensure relevant columns are numeric and handle conversion errors
+    logger.info("Processing and cleaning data columns")
     df['Execution Time (seconds)'] = pd.to_numeric(df['Execution Time (seconds)'], errors='coerce')
     df['Amount'] = pd.to_numeric(df['Amount'], errors='coerce')
     
-    # Parse the 'Assemblers' column as a dictionary (if it's a string representation of a dictionary)
+    # Parse the 'Assemblers' column as a dictionary (if it's a string representation)
     df['Assemblers'] = df['Assemblers'].apply(lambda x: ast.literal_eval(x) if isinstance(x, str) else x)
     
-    # Extract the number of assemblers (e.g., counting the number of items in the dictionary)
+    # Extract the number of assemblers by summing dictionary values
     df['Assembler Count'] = df['Assemblers'].apply(lambda x: sum(x.values()) if isinstance(x, dict) else 0)
+    logger.info(f"Data processing complete. Assembler counts range: {df['Assembler Count'].min()}-{df['Assembler Count'].max()}")
 
-    # Get unique items and methods
+    # Get unique items and methods for plot generation
     items = df['Item'].unique()
     methods = df['Method'].unique()
+    logger.info(f"Found {len(items)} unique items and {len(methods)} unique methods")
 
     # Create directory for saving plots
     output_dir = "Plots"
@@ -3471,55 +4166,91 @@ def plot_csv_data(file_path):
             plt.ylabel('Execution Time (seconds)')
             plt.grid(True)
             
-            # Save the violin plot
+            # Save the violin plot as PNG
             violin_plot_path = os.path.join(method_plot_dir, f'{item}_{method}_violin_plot.png')
-            plt.savefig(violin_plot_path)
+            plt.savefig(violin_plot_path, format='png', bbox_inches='tight', dpi=300)
             plt.close()  # Close the plot to prevent overlap with other subplots
 
             # Plot boxplot
             plt.figure(figsize=(8, 6))
             ax = sns.boxplot(x='Assembler Count', y='Execution Time (seconds)', hue='Minimizer', data=item_method_data, palette={1: 'red', 0: 'blue'}, legend=False)
-            ax.set_yscale('log')  # Set y-axis to log scale plt.title(f'{item} - {method_type} (Boxplot)')
+            ax.set_yscale('log')  # Set y-axis to log scale
+            plt.title(f'{item} - {method_type}')
             plt.xlabel('Number of Assemblers')
             plt.ylabel('Execution Time (seconds)')
             plt.grid(True)
             
-            # Save the boxplot
+            # Save the boxplot as PNG
             box_plot_path = os.path.join(method_plot_dir, f'{item}_{method}_box_plot.png')
-            plt.savefig(box_plot_path)
+            plt.savefig(box_plot_path, format='png', bbox_inches='tight', dpi=300)
             plt.close()  # Close the plot to prevent overlap with other subplots
+            
+            logger.info(f"Generated plots for {item} - {method}: violin and box plots saved")
 
-    logger.info(f"Plots saved in {output_dir}")
+    logger.info(f"All plots saved in {output_dir} directory")
+    logger.info("Plot generation complete")
 
 
 
-# Function to log method execution times with additional information
 def log_method_time(item, amount, method_name, assembler_counts,start_time, end_time, solver_type):
+    """
+    Log method execution times to a CSV file for performance analysis.
+    
+    This function records the execution time of factory optimization methods
+    along with relevant metadata to a CSV file for later analysis and plotting.
+    
+    Args:
+        item (str): Name of the item being produced
+        amount (int): Target production amount
+        method_name (str): Name of the method being timed
+        assembler_counts (dict): Dictionary of assembler counts for each item
+        start_time (float): Start time timestamp
+        end_time (float): End time timestamp
+        solver_type (str): Type of solver used ("z3" or "gurobi")
+        
+    Returns:
+        None: Data is written to "execution_times.csv" file
+    """
     execution_time = end_time - start_time
-    logger.info(f"Execution time for {method_name}: {execution_time:.4f} seconds.")
+    logger.info(f"Execution time for {method_name}: {execution_time:.4f} seconds")
     
     # Open the CSV file and append the data
     try:
         with open("execution_times.csv", "a", newline="") as file:
             writer = csv.writer(file)
-            writer.writerow([item, amount, method_name,assembler_counts,execution_time,solver_type])
+            writer.writerow([item, amount, method_name, assembler_counts, execution_time, solver_type])
+        
+        logger.debug(f"Logged execution time for {method_name}: {execution_time:.4f}s")
     except Exception as e:
-        logger.error(f"Error logger execution time for {method_name}: {e}")
+        logger.error(f"Error logging execution time for {method_name}: {e}")
         
      
        
 def main():
+    """
+    Main function for running factory optimization examples.
+    
+    This function demonstrates the usage of the FactorioProductionTree class
+    with various production scenarios. It can be configured to run simple
+    examples or evaluation runs for performance testing.
+    """
     #factory = FactorioProductionTree(16,10)
     #factory.create_blueprint("Modules/electronic-circuit_120_[]_module.json", "Blueprints/electronic-circuit_120_[]_module.txt")
 
     Simple_Run()
     
-    #Eval_Runs("copper-cable",start=1,end=1,step=1,rep_per_step=10)
+    #Eval_Runs("electronic-circuit",start=1,end=1,step=1,rep_per_step=10)
    
 
 def Simple_Run():
+    """
+    Run a simple factory optimization example.
     
-    logger.info("start")
+    This function demonstrates basic usage of the FactorioProductionTree class
+    by creating a factory to produce electronic circuits with specific input
+    constraints and solver configuration.
+    """
+    logger.info("Starting simple factory optimization run")
     
     # Example item and amount
     item_to_produce = "electronic-circuit"  # "copper-cable" or "electronic-circuit"
@@ -3527,10 +4258,12 @@ def Simple_Run():
     solver_type = "z3"  # "gurobi" or "z3"
     input_items = ['copper-cable']  # Using explicit input items
     
+    logger.info(f"Configuration: {item_to_produce} @ {amount_needed}/min using {solver_type} solver")
     
-    # init 
+    # Initialize factory with specified grid size
     #factorioProductionTree = FactorioProductionTree(10,8)
     factorioProductionTree = FactorioProductionTree(16,10)
+    logger.info("Factory initialized with 16x10 grid")
     factorioProductionTree.amount = amount_needed
     production_data  = factorioProductionTree.calculate_production(item_to_produce,amount_needed,input_items=input_items) #60
     factorioProductionTree.production_data = production_data
@@ -3708,5 +4441,5 @@ if __name__ == "__main__":
     #    except Exception as e:
     #        logger.error(f"Error initializing CSV file: {e}")
 
-    #plot_csv_data("execution_times.csv")
-    main()
+    plot_csv_data("execution_times.csv")
+    #main()
