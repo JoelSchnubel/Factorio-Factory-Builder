@@ -10,12 +10,8 @@ for the application and handles web requests for:
 - Solver evaluation and performance analysis
 - Configuration management through web interface
 
-The application integrates multiple solver backends (Z3, Gurobi) and provides
+The application integrates multiple solver backends and provides
 both API endpoints and web interfaces for factory optimization.
-
-Author: [Your Name]
-Date: [Current Date]
-Version: 1.0.0
 """
 
 #! .venv\Scripts\python.exe
