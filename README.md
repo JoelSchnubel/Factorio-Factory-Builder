@@ -3,6 +3,7 @@
 [![Python](https://img.shields.io/badge/Python-3.8%2B-blue.svg)](https://www.python.org/downloads/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.68%2B-009688.svg)](https://fastapi.tiangolo.com/)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15836543.svg)](https://doi.org/10.5281/zenodo.15836543)
 
 A comprehensive framework for optimizing Factorio factory layouts using SMT solvers and advanced pathfinding algorithms. This project applies formal methods to solve the complex problem of factory design automation, achieving up to 97x performance improvements over previous approaches.
 
