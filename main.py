@@ -42,7 +42,7 @@ logger.info("Starting Factorio Blueprint Generator application")
 
 # Initialize FastAPI app with metadata
 app = FastAPI(
-    title="Factorio Blueprint Generator",
+    title="Factorio Blueprint Builder",
     description="A web interface for generating Factorio blueprints and factories",
     version="1.0.0"
 )
