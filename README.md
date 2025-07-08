@@ -154,7 +154,6 @@ solver_eval.save_results_to_csv(results)
 ```
 ├── FactorioProductionTree.py     # Main production planning and optimization
 ├── SMT_Solver.py                 # Z3 SMT solver integration
-├── GurobiSolver.py               # Gurobi optimization solver
 ├── MultiAgentPathfinder.py       # A* pathfinding for belt routing
 ├── FactoryBuilder.py             # Multi-module factory construction
 ├── solver_eval.py                # Solver evaluation framework
@@ -165,7 +164,6 @@ solver_eval.save_results_to_csv(results)
 
 - **FactorioProductionTree**: Main factory planning and optimization
 - **SMTSolver**: Z3-based layout optimization
-- **GurobiSolver**: Alternative optimization backend
 - **MultiAgentPathfinder**: Pathfinding for material transport
 - **FactoryBuilder**: Large-scale factory construction
 
@@ -214,9 +212,13 @@ Results are saved to `results/solver_evaluation.csv` with detailed performance m
 
 Contains all Factorio recipes with ingredients, crafting times, and machine requirements.
 
+Custome recipes can be added to the file.
+
 ### Machine Data (`machine_data.json`)
 
 Defines machine capabilities, crafting speeds, and transport specifications.
+
+Can be adapted to include new machines with specialized I/O points.
 
 ## 🤝 Contributing
 
@@ -228,12 +230,12 @@ Contributions are welcome! Please follow these steps:
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-### Development Guidelines
+## Remark 
 
-- Follow PEP 8 style guidelines
-- Add comprehensive docstrings
-- Include unit tests for new features
-- Update documentation as needed
+If you encounter an error while creating a module, it's most likely due to a missing asset for the item or machine you're trying to use. Only a selection of item assets and the most essential machine, inserter, and belt assets are preloaded.
+
+To add new assets, simply copy the image from the Factorio Wiki and place it in the assets folder. Make sure all filenames are in lowercase and use hyphens `-` instead of underscores `_`.
+
 
 ## 🎓 Academic Usage
 
@@ -241,7 +243,7 @@ This project is part of a Bachelor's thesis: "Optimization of Factorio Factory L
 
 ### Citation
 
-If you use this software in your research, please cite using GitHubs cite feature:
+If you use this software in your research, please cite using GitHubs cite feature.
 
 ## 📜 License
 
