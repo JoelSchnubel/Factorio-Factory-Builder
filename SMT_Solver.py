@@ -127,6 +127,7 @@ class SMTSolver:
         self.model = None
 
         self.power_poles = [] 
+        self.placed_inserters = []  # Store placed inserters from pathfinding results
         self.power_pole_type = None  
      
              
@@ -169,7 +170,87 @@ class SMTSolver:
     
     
     
-    def setup_power_poles(self, max_poles=None):
+    def setup_power_poles(self, placed_inserter_information, max_poles=None):
+        
+        # Initialize placed_inserters list if it doesn't exist
+        if not hasattr(self, 'placed_inserters'):
+            self.placed_inserters = []
+        
+        logger.info("Adding placed inserter information")
+        logger.debug(f"placed_inserter_information type: {type(placed_inserter_information)}")
+        logger.debug(f"placed_inserter_information content: {placed_inserter_information}")
+        
+        # Handle the correct structure from MultiAgentPathfinder
+        # placed_inserter_information is a dict with item_key -> {position_str -> inserter_pos}
+        if placed_inserter_information and isinstance(placed_inserter_information, dict):
+            for item_key, inserter_dict in placed_inserter_information.items():
+                logger.debug(f"Processing item '{item_key}' with inserters: {inserter_dict}")
+                
+                if isinstance(inserter_dict, dict):
+                    for position_str, inserter_pos in inserter_dict.items():
+                        # Parse belt position from position_str (e.g., "(4, 1)" -> (4, 1))
+                        try:
+                            # Remove parentheses and split by comma
+                            belt_pos_str = position_str.strip("()").split(", ")
+                            belt_x, belt_y = int(belt_pos_str[0]), int(belt_pos_str[1])
+                        except (ValueError, IndexError) as e:
+                            logger.warning(f"Failed to parse belt position from '{position_str}': {e}")
+                            continue
+                        
+                        # Extract inserter coordinates from inserter_pos (which should be a tuple/list)
+                        if isinstance(inserter_pos, (tuple, list)) and len(inserter_pos) >= 2:
+                            inserter_x, inserter_y = inserter_pos[0], inserter_pos[1]
+                            
+                            # Create unique IDs
+                            inserter_id = f"placed_inserter_{item_key}_{position_str}_{len(self.placed_inserters)}"
+                            belt_id = f"placed_belt_{item_key}_{position_str}_{len(self.placed_inserters)}"
+                            
+                            # Create the belt object first
+                            placed_belt = Belt(
+                                id=belt_id,
+                                type='transport-belt',
+                                item=item_key,
+                                int_x=belt_x,
+                                int_y=belt_y,
+                                solver=self
+                            )
+                            
+                            # Create the inserter object with the belt
+                            placed_inserter = Inserter(
+                                id=inserter_id,
+                                type='inserter',  # Default type
+                                belt=placed_belt,
+                                item=item_key,   # Use the item key as the item type
+                                solver=self
+                            )
+                            
+                            # Set the inserter position (at inserter_pos)
+                            placed_inserter.x = self.Int(f"{inserter_id}_x")
+                            placed_inserter.y = self.Int(f"{inserter_id}_y")
+                            
+                            # Add constraints to fix the inserter position
+                            self.solver.add(placed_inserter.x == inserter_x)
+                            self.solver.add(placed_inserter.y == inserter_y)
+                            
+                            # Set the belt position (at position_str coordinates)
+                            self.solver.add(placed_belt.x == belt_x)
+                            self.solver.add(placed_belt.y == belt_y)
+                            
+                            # Add to the placed_inserters list
+                            self.placed_inserters.append(placed_inserter)
+                            
+                            logger.debug(f"Added placed inserter {inserter_id} at position ({inserter_x}, {inserter_y}) for item {item_key}")
+                            logger.debug(f"Added placed belt {belt_id} at position ({belt_x}, {belt_y}) for item {item_key}")
+                        else:
+                            logger.warning(f"Invalid inserter position format: {inserter_pos}")
+                else:
+                    logger.warning(f"Invalid inserter dict format for item {item_key}: {inserter_dict}")
+        else:
+            logger.warning(f"Invalid placed_inserter_information format: {type(placed_inserter_information)}")
+        
+        
+        logger.info(f"Added {len(self.placed_inserters)} placed inserters to power pole system")
+        
         logger.info("Setting up power poles")
         
         # Get power pole settings from config
@@ -265,7 +346,7 @@ class SMTSolver:
                 ))
             logger.debug(f"Added pole-pole overlap constraint for pole {pole1.id}")
             
-        # 3b. Power poles must not overlap with inserters
+        # 3b. Power poles must not overlap with inserters (from assemblers)
         for pole in self.power_poles:
             for assembler in self.assemblers:
                 for inserter in assembler.inserters:
@@ -279,6 +360,22 @@ class SMTSolver:
                         )
                     ))
             logger.debug(f"Added inserter overlap constraint for pole {pole.id}")
+            
+        # 3b2. Power poles must not overlap with placed inserters
+        if hasattr(self, 'placed_inserters'):
+            for pole in self.power_poles:
+                for placed_inserter in self.placed_inserters:
+                    self.solver.add(self.Implies(
+                        pole.is_used,
+                        self.Or(
+                            pole.x + self.power_pole_width <= placed_inserter.x,
+                            pole.x > placed_inserter.x,
+                            pole.y + self.power_pole_height <= placed_inserter.y,
+                            pole.y > placed_inserter.y
+                        )
+                    ))
+                logger.debug(f"Added placed inserter overlap constraint for pole {pole.id}")
+        
             
         # 3c. Power poles must not overlap with belts
         for pole in self.power_poles:
@@ -310,6 +407,23 @@ class SMTSolver:
                     )
                 ))
             logger.debug(f"Added global belt overlap constraint for pole {pole.id}")
+        
+        # 3e. Power poles must not overlap with placed belts
+        if hasattr(self, 'placed_inserters'):
+            for pole in self.power_poles:
+                for placed_inserter in self.placed_inserters:
+                    if placed_inserter.belt:
+                        self.solver.add(self.Implies(
+                            pole.is_used,
+                            self.Or(
+                                pole.x + self.power_pole_width <= placed_inserter.belt.x,
+                                pole.x > placed_inserter.belt.x,
+                                pole.y + self.power_pole_height <= placed_inserter.belt.y,
+                                pole.y > placed_inserter.belt.y
+                            )
+                        ))
+                logger.debug(f"Added placed belt overlap constraint for pole {pole.id}")
+        
         
         logger.debug("Adding coverage variables for assemblers and inserters")
         # 4. Create coverage variables for each entity (assembler and inserter)
@@ -379,6 +493,35 @@ class SMTSolver:
                 self.solver.add(inserter.is_covered == self.Or(inserter_coverage_conditions))
                 logger.debug(f"Added coverage conditions for inserter {inserter.id}: {len(inserter_coverage_conditions)} conditions")
         
+        # For placed inserters, check if they're covered by ANY power pole
+        if hasattr(self, 'placed_inserters'):
+            logger.debug("Defining coverage conditions for placed inserters")
+            for placed_inserter in self.placed_inserters:
+                # Add coverage variable for placed inserter
+                placed_inserter.is_covered = self.Bool(f"placed_inserter_{placed_inserter.id}_covered")
+                
+                inserter_coverage_conditions = []
+                
+                for pole in self.power_poles:                    
+                    pole_center_x = pole.x + self.power_pole_width // 2
+                    pole_center_y = pole.y + self.power_pole_height // 2
+                    # Square coverage area for placed inserters as well
+                    x_distance_constraint = Abs(placed_inserter.x - pole_center_x) <= self.power_pole_radius
+                    y_distance_constraint = Abs(placed_inserter.y - pole_center_y) <= self.power_pole_radius
+                    distance_constraint = self.And(x_distance_constraint, y_distance_constraint)
+                    
+                    inserter_coverage_conditions.append(self.And(pole.is_used, distance_constraint))
+                
+                if not inserter_coverage_conditions:
+                    logger.warning(f"No coverage conditions for placed inserter {placed_inserter.id}!")
+                    # Create at least one condition to avoid empty OR
+                    inserter_coverage_conditions.append(self.Bool(f"dummy_coverage_{placed_inserter.id}"))
+                    self.solver.add(inserter_coverage_conditions[0] == False)
+                    
+                self.solver.add(placed_inserter.is_covered == self.Or(inserter_coverage_conditions))
+                logger.debug(f"Added coverage conditions for placed inserter {placed_inserter.id}: {len(inserter_coverage_conditions)} conditions")
+        
+        
         # 6. HARD CONSTRAINT: All entities MUST be covered
         logger.debug("Adding hard coverage constraints - all entities must be covered")
         for assembler in self.assemblers:
@@ -388,6 +531,13 @@ class SMTSolver:
             for inserter in assembler.inserters:
                 self.solver.add(inserter.is_covered)
                 logger.debug(f"Added hard constraint: Inserter {inserter.id} must be covered")
+        
+        # HARD CONSTRAINT: All placed inserters MUST be covered
+        if hasattr(self, 'placed_inserters'):
+            for placed_inserter in self.placed_inserters:
+                self.solver.add(placed_inserter.is_covered)
+                logger.debug(f"Added hard constraint: Placed inserter {placed_inserter.id} must be covered")
+        
         
         # 7. Ensure at least one pole is used if we have entities
         if self.assemblers:

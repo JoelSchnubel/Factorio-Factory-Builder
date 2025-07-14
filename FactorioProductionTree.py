@@ -25,7 +25,7 @@ Key Features:
 - Interactive manual configuration of input/output points
 - Blueprint export compatible with Factorio game
 - Performance analysis and execution time logging
-- High-quality PNG plot generation for analysis and documentation
+- LaTeX-ready plot generation using PGF format with scale annotations
 """
 
 import json
@@ -34,6 +34,7 @@ import math
 import ast, os
 import csv
 import time
+import traceback
 import pandas as pd
 import matplotlib.pyplot as plt
 from z3 import And , Or
@@ -2122,7 +2123,7 @@ class FactorioProductionTree:
             traceback.print_exc()
             return False
         
-    def place_power_poles(self,file_path):
+    def place_power_poles(self,file_path,placed_inserter_information):
         """
         Place power poles using the SMT solver to power assemblers and inserters.
         
@@ -2153,7 +2154,7 @@ class FactorioProductionTree:
     
         # Set up power poles in the SMT solver
         # This will create power pole variables and add constraints
-        self.z3_solver.setup_power_poles()
+        self.z3_solver.setup_power_poles(placed_inserter_information)
         
         # Minimize the number of power poles while ensuring coverage
         logger.info("Minimizing number of power poles")
@@ -2529,7 +2530,8 @@ class FactorioProductionTree:
             # Store data for future use
             self.belt_point_information = belt_point_information
             self.assembler_information = assembler_information
-            self.inserter_information = new_inserter_info            # Store power pole information for drawing if not already set
+            self.inserter_information = new_inserter_info            
+            # Store power pole information for drawing if not already set
             # Always preserve existing power pole information if it exists
             if not hasattr(self, 'power_pole_information') or not self.power_pole_information:
                 logger.info(f"Using new power pole information with {len(power_pole_information)} poles")
@@ -2567,12 +2569,16 @@ class FactorioProductionTree:
         self._draw_factory_base(window, assembler_information, inserter_information, item_images, images, cell_size)
         self._draw_io_points(window, item_images, cell_size)
         self._draw_io_paths(window, images,item_images, cell_size)
+       
         if store and file_path:
-            pygame.image.save(window, file_path.replace('.png', '_no_paths.png'))
+            pygame.image.save(window, file_path.replace('.png', '_no_paths_no_power.png'))
         
-
         # 2. Full view with paths
         self._draw_factory_paths(window, paths, images, item_images, cell_size)
+        if store and file_path:
+            pygame.image.save(window, file_path.replace('.png', '_no_power.png'))
+            
+        self._draw_power_poles(window, images, cell_size)
         if store and file_path:
             pygame.image.save(window, file_path)
         
@@ -2622,54 +2628,8 @@ class FactorioProductionTree:
         
         return images
 
-    def _load_item_images(self, cell_size):
-        """Load and scale item images."""
-        item_images = {}
-        assets_folder = 'assets'
-        excluded_images = {'assembler.png', 'inserter.png', 'conveyor.png', 'underground_belt.png', 'splitter.png'}
-        
-        for filename in os.listdir(assets_folder):
-            if filename.endswith('.png') and filename not in excluded_images:
-                item_path = os.path.join(assets_folder, filename)
-                image = pygame.image.load(item_path)
-                item_images[filename[:-4]] = pygame.transform.scale(image, (cell_size, cell_size))
-        
-        return item_images
-
-    def _draw_factory_base(self, window, assembler_information, inserter_information, item_images, images, cell_size):
-        """Draw the base factory layout without paths."""
-        # Fill background
-        window.fill(WHITE)
-        
-        # Draw grid lines
-        for row in range(self.grid_height):
-            for col in range(self.grid_width):
-                rect = pygame.Rect(col * cell_size, row * cell_size, cell_size, cell_size)
-                pygame.draw.rect(window, BLACK, rect, 1)
-        
-        # Draw assemblers
-        for assembler_item, assembler_x, assembler_y,width,height,machine_type,orientation_idx  in assembler_information:
-            pixel_x = assembler_x * cell_size
-            pixel_y = assembler_y * cell_size
-            
-            # Choose the correct image based on machine_type
-            if machine_type == "chemical-plant" and "chemical-plant" in images:
-                machine_image = images["chemical-plant"]
-            elif machine_type == "oil-refinery" and "oil-refinery" in images:
-                machine_image = images["oil-refinery"]
-            elif machine_type in images:
-                # Use specific machine image if available
-                machine_image = images[machine_type]
-            else:
-                # Fall back to default assembler
-                machine_image = images['assembler']
-        
-            window.blit(machine_image, (pixel_x, pixel_y))
-            
-            # Draw item icon on top of assembler
-            if assembler_item in item_images:
-                window.blit(item_images[assembler_item], (pixel_x, pixel_y))
-                
+    
+    def _draw_power_poles(self,window, images, cell_size):
         # Draw power poles if they exist
         if hasattr(self, 'power_pole_information') and self.power_pole_information:
             # Load power pole image if it doesn't exist yet
@@ -2733,6 +2693,57 @@ class FactorioProductionTree:
                     radius_pixels * 2
                 )
                 #pygame.draw.rect(window, (0, 0, 139, 150) , coverage_rect, 2)
+        
+    
+    def _load_item_images(self, cell_size):
+        """Load and scale item images."""
+        item_images = {}
+        assets_folder = 'assets'
+        excluded_images = {'assembler.png', 'inserter.png', 'conveyor.png', 'underground_belt.png', 'splitter.png'}
+        
+        for filename in os.listdir(assets_folder):
+            if filename.endswith('.png') and filename not in excluded_images:
+                item_path = os.path.join(assets_folder, filename)
+                image = pygame.image.load(item_path)
+                item_images[filename[:-4]] = pygame.transform.scale(image, (cell_size, cell_size))
+        
+        return item_images
+
+    def _draw_factory_base(self, window, assembler_information, inserter_information, item_images, images, cell_size):
+        """Draw the base factory layout without paths."""
+        # Fill background
+        window.fill(WHITE)
+        
+        # Draw grid lines
+        for row in range(self.grid_height):
+            for col in range(self.grid_width):
+                rect = pygame.Rect(col * cell_size, row * cell_size, cell_size, cell_size)
+                pygame.draw.rect(window, BLACK, rect, 1)
+        
+        # Draw assemblers
+        for assembler_item, assembler_x, assembler_y,width,height,machine_type,orientation_idx  in assembler_information:
+            pixel_x = assembler_x * cell_size
+            pixel_y = assembler_y * cell_size
+            
+            # Choose the correct image based on machine_type
+            if machine_type == "chemical-plant" and "chemical-plant" in images:
+                machine_image = images["chemical-plant"]
+            elif machine_type == "oil-refinery" and "oil-refinery" in images:
+                machine_image = images["oil-refinery"]
+            elif machine_type in images:
+                # Use specific machine image if available
+                machine_image = images[machine_type]
+            else:
+                # Fall back to default assembler
+                machine_image = images['assembler']
+        
+            window.blit(machine_image, (pixel_x, pixel_y))
+            
+            # Draw item icon on top of assembler
+            if assembler_item in item_images:
+                window.blit(item_images[assembler_item], (pixel_x, pixel_y))
+                
+        
                 
         # Draw inserters
         for inserter_data in inserter_information:
@@ -4080,18 +4091,18 @@ class FactorioProductionTree:
 
 def plot_csv_data(file_path):
     """
-    Generate PNG plots from execution time CSV data.
+    Generate LaTeX-ready plots from execution time CSV data.
     
     This function reads CSV data containing execution times for different items and methods,
-    then generates violin plots and box plots for analysis. The plots are saved in PNG format
-    for easy viewing and integration into various document formats.
+    then generates violin plots and box plots for analysis. The plots are configured for
+    LaTeX integration using PGF format with proper font settings and scale annotations.
     
     Args:
         file_path (str): Path to the CSV file containing execution time data.
                         Expected columns: Item, Amount, Method, Assemblers, Execution Time (seconds)
     
     Returns:
-        None: Plots are saved to the 'Plots' directory in PNG format
+        None: Plots are saved to the 'Plots' directory in PGF format
         
     Example:
         >>> plot_csv_data("execution_times.csv")
@@ -4099,9 +4110,11 @@ def plot_csv_data(file_path):
     """
     logger.info(f"Starting plot generation from {file_path}")
     
-    # Configure matplotlib for high-quality PNG output
-    logger.info("Configuring matplotlib for PNG output")
+    # Configure matplotlib for LaTeX output with better font handling
+    logger.info("Configuring matplotlib for LaTeX-ready PGF output")
     plt.rcParams.update({
+        "pgf.texsystem": "pdflatex",
+        "text.usetex": True,
         'font.family': 'serif',
         'font.size': 12,
         'axes.titlesize': 14,
@@ -4109,9 +4122,8 @@ def plot_csv_data(file_path):
         'xtick.labelsize': 10,
         'ytick.labelsize': 10,
         'legend.fontsize': 10,
-        'figure.dpi': 300,  # High DPI for crisp PNG images
-        'savefig.dpi': 300,  # High DPI for saved figures
-        'savefig.format': 'png'
+        'pgf.rcfonts': True,  # Use matplotlib's font system
+        'pgf.preamble': r'\usepackage{amsmath}\usepackage{amssymb}'
     })
     
     # Read and validate CSV data
@@ -4163,26 +4175,26 @@ def plot_csv_data(file_path):
             method_type = 'Building Belts' if method.lower() == 'build_belts' else 'Solving'
             plt.title(f'{item} - {method_type} (Violin Plot)')
             plt.xlabel('Number of Assemblers')
-            plt.ylabel('Execution Time (seconds)')
+            plt.ylabel('Execution Time (seconds) - Linear Scale')
             plt.grid(True)
             
-            # Save the violin plot as PNG
-            violin_plot_path = os.path.join(method_plot_dir, f'{item}_{method}_violin_plot.png')
-            plt.savefig(violin_plot_path, format='png', bbox_inches='tight', dpi=300)
-            plt.close()  # Close the plot to prevent overlap with other subplots
+            # Save the violin plot as PGF for LaTeX
+            #violin_plot_path = os.path.join(method_plot_dir, f'{item}_{method}_violin_plot.pgf')
+            #plt.savefig(violin_plot_path, format='png', bbox_inches='tight')
+            #plt.close()  # Close the plot to prevent overlap with other subplots
 
-            # Plot boxplot
+            # Plot boxplot with blue color and log scale
             plt.figure(figsize=(8, 6))
-            ax = sns.boxplot(x='Assembler Count', y='Execution Time (seconds)', hue='Minimizer', data=item_method_data, palette={1: 'red', 0: 'blue'}, legend=False)
+            ax = sns.boxplot(x='Assembler Count', y='Execution Time (seconds)', hue='Minimizer', data=item_method_data, palette={1: 'blue', 0: 'blue'}, legend=False, showfliers=False)
             ax.set_yscale('log')  # Set y-axis to log scale
             plt.title(f'{item} - {method_type}')
             plt.xlabel('Number of Assemblers')
-            plt.ylabel('Execution Time (seconds)')
+            plt.ylabel('Execution Time (seconds) - Logarithmic Scale')
             plt.grid(True)
             
-            # Save the boxplot as PNG
+            # Save the boxplot as PGF for LaTeX
             box_plot_path = os.path.join(method_plot_dir, f'{item}_{method}_box_plot.png')
-            plt.savefig(box_plot_path, format='png', bbox_inches='tight', dpi=300)
+            plt.savefig(box_plot_path, format='png', bbox_inches='tight')
             plt.close()  # Close the plot to prevent overlap with other subplots
             
             logger.info(f"Generated plots for {item} - {method}: violin and box plots saved")
@@ -4254,9 +4266,9 @@ def Simple_Run():
     
     # Example item and amount
     item_to_produce = "electronic-circuit"  # "copper-cable" or "electronic-circuit"
-    amount_needed = 120
+    amount_needed = 100
     solver_type = "z3"  # "gurobi" or "z3"
-    input_items = ['copper-cable']  # Using explicit input items
+    input_items = [] #["copper-cable"]  # Using explicit input items
     
     logger.info(f"Configuration: {item_to_produce} @ {amount_needed}/min using {solver_type} solver")
     
@@ -4301,8 +4313,11 @@ def Simple_Run():
     logger.info("saving data")
     factorioProductionTree.store_data(f'Modules/{item_to_produce}_{amount_needed}_{input_items}_module',paths,placed_inserter_information)
     
-    factorioProductionTree.place_power_poles(f'Modules/{item_to_produce}_{amount_needed}_{input_items}_module.json')
-        
+    start_time = time.perf_counter()
+    factorioProductionTree.place_power_poles(f'Modules/{item_to_produce}_{amount_needed}_{input_items}_module.json',placed_inserter_information)
+    end_time = time.perf_counter()
+    log_method_time(item_to_produce, 1, "place_power_pole", assembler_counts, start_time, end_time,solver_type)
+    
     factorioProductionTree.create_blueprint(f'Modules/{item_to_produce}_{amount_needed}_{input_items}_module.json',f'Blueprints/{item_to_produce}_{amount_needed}_{input_items}_module.txt')
         
     factorioProductionTree.visualize_factory(paths,placed_inserter_information,store=True,file_path=f'Modules/{item_to_produce}_{amount_needed}_{input_items}_module.png')
@@ -4427,7 +4442,72 @@ def Eval_Runs(item_to_produce, start, end, step, rep_per_step):
            
         
  
-
+    
+def visualize_form_json(module_json_path):
+    """
+    Load factory data from a JSON file and create a visualization.
+    
+    This function loads previously saved factory data from a JSON file and
+    generates a visual representation of the factory layout. It creates
+    a new FactorioProductionTree instance, loads the data, and calls the
+    visualization method.
+    
+    Args:
+        module_json_path (str): Path to the JSON file containing factory data
+        
+    Returns:
+        None: Visualization is displayed and optionally saved
+    """
+    logger.info(f"Loading and visualizing factory data from {module_json_path}")
+    
+    try:
+        # Load the JSON data to get grid dimensions
+        with open(module_json_path, 'r') as f:
+            data = json.load(f)
+        
+        # Extract grid dimensions from the JSON data
+        grid_width = data.get('grid_width', 16)
+        grid_height = data.get('grid_height', 10)
+        
+        logger.info(f"Creating factory with dimensions {grid_width}x{grid_height}")
+        
+        # Create a new FactorioProductionTree instance
+        factory = FactorioProductionTree(grid_width, grid_height)
+        
+        # Load the data from the JSON file
+        if factory.load_data(module_json_path):
+            logger.info("Factory data loaded successfully")
+            
+            # Extract the base filename for saving visualization
+            base_filename = os.path.splitext(os.path.basename(module_json_path))[0]
+            output_path = f'Modules/{base_filename}_visualization.png'
+            
+            # Visualize the factory using the loaded data
+            # The paths and placed_inserter_information are loaded into the factory object
+            paths = getattr(factory, 'paths', None)
+            placed_inserter_information = getattr(factory, 'placed_inserter_information', None)
+            
+            logger.info("Starting factory visualization")
+            factory.visualize_factory(
+                paths=paths,
+                placed_inserter_information=placed_inserter_information,
+                store=True,
+                file_path=output_path
+            )
+            
+            logger.info(f"Factory visualization completed and saved to {output_path}")
+            
+        else:
+            logger.error(f"Failed to load factory data from {module_json_path}")
+            
+    except FileNotFoundError:
+        logger.error(f"JSON file not found: {module_json_path}")
+    except json.JSONDecodeError as e:
+        logger.error(f"Error parsing JSON file: {e}")
+    except Exception as e:
+        logger.error(f"Error visualizing factory from JSON: {e}")
+        traceback.print_exc()
+    
 
 if __name__ == "__main__":
 
@@ -4441,5 +4521,11 @@ if __name__ == "__main__":
     #    except Exception as e:
     #        logger.error(f"Error initializing CSV file: {e}")
 
-    plot_csv_data("execution_times.csv")
-    #main()
+    #plot_csv_data("execution_times.csv")
+    
+    # Example usage of visualize_form_json function
+    # Uncomment the line below to visualize the electronic-circuit factory
+    # visualize_form_json("Modules/electronic-circuit_120_[]_module.json")
+    #visualize_form_json("Modules/electronic-circuit_120_[]_module.json")
+    main()
+    

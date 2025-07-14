@@ -477,10 +477,10 @@ class FactoryBuilder:
             self.add_paths_to_json(path,inter_block_paths)
             
             blueprint_path= f"Blueprints/blueprint_{self.output_item}_{self.amount}.txt"
-            create_blueprint_from_json(path, output_path=blueprint_path)
+            self.create_blueprint_from_json(path, output_path=blueprint_path)
             
             factory_img_path= f"Factorys/factory_{self.output_item}_{self.amount}.png"
-            visualize_factory(json_path=path, save_path=factory_img_path)
+            self.visualize_factory(json_path=path, save_path=factory_img_path)
 
         logger.info(f"Factory dimensions: {self.final_x} x {self.final_y}")
         logger.info(f"Final blocks: {self.final_blocks}")
@@ -1200,6 +1200,8 @@ class FactoryBuilder:
  
     
     def get_num_subfactories(self):
+        if self.final_blocks is None:
+            return 0
         return len(self.final_blocks)
     
         
@@ -1728,6 +1730,9 @@ class FactoryBuilder:
         # Create connections by finding the closest valid pairs
         connections = []
         
+        # Track existing connections between blocks for each item to prevent duplicates
+        existing_block_connections = {}  # Format: {item: {(output_block, input_block): distance}}
+        
         # For each item type, connect OUTPUT points (sources) to INPUT points (destinations)
         for item, output_list in outputs_by_item.items():
             # Skip if no inputs for this item
@@ -1737,6 +1742,9 @@ class FactoryBuilder:
             
             available_inputs = inputs_by_item[item].copy()
             available_outputs = output_list.copy()
+            
+            # Initialize tracking for this item
+            existing_block_connections[item] = {}
             
             logger.debug(f"Processing {item}: {len(available_outputs)} outputs, {len(available_inputs)} inputs")
             
@@ -1768,7 +1776,36 @@ class FactoryBuilder:
                             logger.debug(f"Skipping external-to-external connection for {item}")
                             continue
                         
-                        # Rule 3: Complexity check - only allow connections from lower/equal complexity to higher/equal complexity
+                        # Rule 3: Check if we already have a connection between these two blocks for this item (in either direction)
+                        block_pair_forward = (output_block, input_block)
+                        block_pair_reverse = (input_block, output_block)
+                        
+                        # Check both directions to prevent any duplicate connections between the same blocks
+                        existing_connection_key = None
+                        existing_distance = float('inf')
+                        
+                        if block_pair_forward in existing_block_connections[item]:
+                            existing_connection_key = block_pair_forward
+                            existing_distance = existing_block_connections[item][block_pair_forward]
+                        elif block_pair_reverse in existing_block_connections[item]:
+                            existing_connection_key = block_pair_reverse
+                            existing_distance = existing_block_connections[item][block_pair_reverse]
+                        
+                        if existing_connection_key:
+                            # Calculate current distance to compare
+                            try:
+                                current_distance = abs(output_pos[0] - input_pos[0]) + abs(output_pos[1] - input_pos[1])
+                                if current_distance >= existing_distance:
+                                    logger.debug(f"Skipping connection {output_block} -> {input_block} for {item}: existing shorter connection between these blocks (dist {existing_distance}) vs current (dist {current_distance})")
+                                    continue
+                                else:
+                                    logger.debug(f"Found shorter connection {output_block} -> {input_block} for {item}: new (dist {current_distance}) vs existing (dist {existing_distance})")
+                                    # We'll update this connection if it becomes the closest pair
+                            except Exception as e:
+                                logger.error(f"Error calculating distance for duplicate check: {e}")
+                                continue
+                        
+                        # Rule 4: Complexity check - only allow connections from lower/equal complexity to higher/equal complexity
                         output_item_type = self.get_block_item_type(output_block)
                         input_item_type = self.get_block_item_type(input_block)
                         
@@ -1781,18 +1818,20 @@ class FactoryBuilder:
                                 logger.debug(f"Skipping connection: {output_item_type}(complexity:{output_complexity}) -> {input_item_type}(complexity:{input_complexity})")
                                 continue
                         
-                        # Rule 4: Ensure positions are valid lists
+                        # Rule 5: Ensure positions are valid lists
                         if isinstance(output_pos, tuple):
                             output_pos = list(output_pos)
                         if isinstance(input_pos, tuple):
                             input_pos = list(input_pos)
                         
-                        # Rule 5: Make sure we're dealing with numeric positions
+                        # Rule 6: Make sure we're dealing with numeric positions
                         if not (isinstance(output_pos, list) and len(output_pos) >= 2 and 
                                 isinstance(input_pos, list) and len(input_pos) >= 2):
                             logger.warning(f"Invalid position format: output={output_pos}, input={input_pos}")
                             continue
-                            
+
+                       
+                       
                         try:
                             # Calculate Manhattan distance
                             distance = abs(output_pos[0] - input_pos[0]) + abs(output_pos[1] - input_pos[1])
@@ -1811,7 +1850,37 @@ class FactoryBuilder:
                     
                     # Validate that we have OUTPUT -> INPUT connection
                     if source_output in available_outputs and target_input in available_inputs:
-                        connections.append({
+                        output_block = source_output["block_id"]
+                        input_block = target_input["block_id"]
+                        block_pair_forward = (output_block, input_block)
+                        block_pair_reverse = (input_block, output_block)
+                        
+                        # Check if we need to replace an existing connection (in either direction)
+                        connection_to_replace = None
+                        existing_connection_key = None
+                        
+                        # Check for existing connection in forward direction
+                        if block_pair_forward in existing_block_connections[item]:
+                            existing_connection_key = block_pair_forward
+                            for idx, existing_conn in enumerate(connections):
+                                if (existing_conn["item"] == item and 
+                                    existing_conn["source"]["block_id"] == output_block and 
+                                    existing_conn["target"]["block_id"] == input_block):
+                                    connection_to_replace = idx
+                                    break
+                        
+                        # Check for existing connection in reverse direction
+                        elif block_pair_reverse in existing_block_connections[item]:
+                            existing_connection_key = block_pair_reverse
+                            for idx, existing_conn in enumerate(connections):
+                                if (existing_conn["item"] == item and 
+                                    ((existing_conn["source"]["block_id"] == output_block and existing_conn["target"]["block_id"] == input_block) or
+                                     (existing_conn["source"]["block_id"] == input_block and existing_conn["target"]["block_id"] == output_block))):
+                                    connection_to_replace = idx
+                                    break
+                        
+                        # Create the new connection
+                        new_connection = {
                             "item": item,
                             "source": {
                                 "position": source_output["position"],
@@ -1826,12 +1895,27 @@ class FactoryBuilder:
                                 "type": "input"   # Target is an input point
                             },
                             "distance": closest_distance
-                        })
+                        }
+                        
+                        if connection_to_replace is not None:
+                            # Replace the existing connection
+                            old_connection = connections[connection_to_replace]
+                            connections[connection_to_replace] = new_connection
+                            logger.info(f"Replaced bidirectional connection for {item}: {output_block} -> {input_block}, old distance: {old_connection['distance']}, new distance: {closest_distance}")
+                            
+                            # Remove the old tracking entry and add the new one
+                            if existing_connection_key:
+                                del existing_block_connections[item][existing_connection_key]
+                        else:
+                            # Add new connection
+                            connections.append(new_connection)
+                            logger.info(f"Created valid OUTPUT->INPUT connection for {item}: {output_block} -> {input_block}, distance: {closest_distance}")
+                        
+                        # Update the tracking with the new forward direction
+                        existing_block_connections[item][block_pair_forward] = closest_distance
                         
                         available_outputs.remove(source_output)
                         available_inputs.remove(target_input)
-                        
-                        logger.info(f"Created valid OUTPUT->INPUT connection for {item}: {source_output['block_id']} -> {target_input['block_id']}, distance: {closest_distance}")
                     else:
                         logger.error(f"Invalid pair found - points not in available lists!")
                         break
@@ -1909,12 +1993,21 @@ class FactoryBuilder:
                 if 0 <= second_x < grid_width and 0 <= second_y < grid_height:
                     obstacle_map[second_y][second_x] = 1
         
-        
+
+            for power_pole in factory_data["entities"].get("power_poles", []):
+                pos_x, pos_y = power_pole["position"]
+                # Power poles occupy a 1x1 area
+                if 0 <= pos_x < grid_width and 0 <= pos_y < grid_height:
+                    obstacle_map[pos_y][pos_x] = 1
+            
             # Prepare connection points for the pathfinder
             connection_points = {}
         
             # Create connections from the point connection data
             point_connections = self.create_point_connections(factory_data)
+            
+            logger.info(f"Created {len(point_connections)} point connections for pathfinding")
+            logger.debug(f"Point connections: {point_connections}")
             
             # Process each connection to add to connection_points
             for idx, connection in enumerate(point_connections):
@@ -1950,9 +2043,8 @@ class FactoryBuilder:
         if not connection_points:
             logger.warning("No valid connections to route! Please check your gate connections.")
             return {}, {}
+
         
-        
-        logger.debug(f"Connection points for pathfinding: {connection_points}")
         # Create and run the MultiAgentPathfinder
         try:
             pathfinder = MultiAgentPathfinder(
@@ -2188,6 +2280,9 @@ class FactoryBuilder:
                 return parts[1]  # Return the item type part
         
         return None
+    
+    
+    
 def manhattan_distance(p1, p2):
     """Calculate the Manhattan distance between two points."""
     return abs(p1[0] - p2[0]) + abs(p1[1] - p2[1])
@@ -3732,6 +3827,7 @@ def is_fluid_item(item_id):
     
 if __name__ == "__main__":
     
-    plot_csv_data("execution_times_big_factory.csv")
-    #main()
+    #plot_csv_data("execution_times_big_factory.csv")
+    main()
+
 

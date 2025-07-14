@@ -1,0 +1,324 @@
+{
+    "output_item": "copper-cable",
+    "max_ouput": 120.0,
+    "amount": 120,
+    "production_data": {
+        "copper-cable": {
+            "amount_per_minute": 120,
+            "assemblers": 1,
+            "input_inserters": [
+                {
+                    "id": "copper-plate",
+                    "inserters": 1,
+                    "amount": 1
+                }
+            ],
+            "belts": 1,
+            "capacity": 0
+        },
+        "copper-plate": {
+            "amount_per_minute": 60.0,
+            "capacity": 0
+        }
+    },
+    "grid_width": 7,
+    "grid_height": 5,
+    "input_items": [
+        "copper-plate"
+    ],
+    "input_information": {
+        "copper-plate": {
+            "input": [
+                4,
+                0
+            ],
+            "output": [
+                0,
+                0
+            ],
+            "paths": {
+                "copper-plate": [
+                    {
+                        "path": [
+                            [
+                                0,
+                                4
+                            ],
+                            [
+                                0,
+                                3
+                            ],
+                            [
+                                0,
+                                2
+                            ],
+                            [
+                                0,
+                                1
+                            ],
+                            [
+                                0,
+                                0
+                            ]
+                        ],
+                        "start": [
+                            0,
+                            4
+                        ],
+                        "destination": [
+                            0,
+                            0
+                        ],
+                        "underground_segments": {},
+                        "start_splitter": false,
+                        "dest_splitter": false,
+                        "orientation": {
+                            "(0, 4)": [
+                                0,
+                                -1
+                            ],
+                            "(0, 3)": [
+                                0,
+                                -1
+                            ],
+                            "(0, 2)": [
+                                0,
+                                -1
+                            ],
+                            "(0, 1)": [
+                                0,
+                                -1
+                            ],
+                            "(0, 0)": [
+                                0,
+                                -1
+                            ]
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "output_information": {
+        "copper-cable": {
+            "input": [
+                4,
+                6
+            ],
+            "output": [
+                0,
+                6
+            ],
+            "paths": {
+                "copper-cable": [
+                    {
+                        "path": [
+                            [
+                                6,
+                                4
+                            ],
+                            [
+                                6,
+                                3
+                            ],
+                            [
+                                6,
+                                2
+                            ],
+                            [
+                                6,
+                                1
+                            ],
+                            [
+                                6,
+                                0
+                            ]
+                        ],
+                        "start": [
+                            6,
+                            4
+                        ],
+                        "destination": [
+                            6,
+                            0
+                        ],
+                        "underground_segments": {},
+                        "start_splitter": null,
+                        "dest_splitter": null,
+                        "orientation": {
+                            "(6, 4)": [
+                                0,
+                                -1
+                            ],
+                            "(6, 3)": [
+                                0,
+                                -1
+                            ],
+                            "(6, 2)": [
+                                0,
+                                -1
+                            ],
+                            "(6, 1)": [
+                                0,
+                                -1
+                            ],
+                            "(6, 0)": [
+                                0,
+                                -1
+                            ]
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "inserter_information": [
+        [
+            "copper-plate",
+            1,
+            2,
+            "east"
+        ]
+    ],
+    "belt_point_information": [
+        [
+            "copper-plate",
+            0,
+            2,
+            "end"
+        ]
+    ],
+    "assembler_information": [
+        [
+            "copper-cable",
+            2,
+            0,
+            3,
+            3,
+            "assembling-machine-1",
+            0
+        ]
+    ],
+    "retrieval_points": {
+        "copper-cable_0_0": {
+            "item": "copper-cable",
+            "destination": [
+                [
+                    6,
+                    2
+                ],
+                [
+                    6,
+                    1
+                ],
+                [
+                    6,
+                    4
+                ],
+                [
+                    6,
+                    0
+                ],
+                [
+                    6,
+                    3
+                ]
+            ],
+            "start_points": [
+                [
+                    6,
+                    0
+                ]
+            ],
+            "inserter_mapping": {
+                "(6, 0)": [
+                    5,
+                    0
+                ],
+                "(6, 1)": [
+                    5,
+                    1
+                ],
+                "(6, 2)": [
+                    5,
+                    2
+                ],
+                "(4, 4)": [
+                    4,
+                    3
+                ],
+                "(3, 4)": [
+                    3,
+                    3
+                ],
+                "(2, 4)": [
+                    2,
+                    3
+                ]
+            }
+        }
+    },
+    "obstacle_map": [
+        [
+            1,
+            0,
+            33,
+            33,
+            33,
+            0,
+            22
+        ],
+        [
+            1,
+            0,
+            33,
+            33,
+            33,
+            0,
+            22
+        ],
+        [
+            99,
+            44,
+            33,
+            33,
+            33,
+            0,
+            22
+        ],
+        [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            22
+        ],
+        [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            22
+        ]
+    ],
+    "paths": {},
+    "placed_inserter_information": {
+        "copper-cable_0_0": {
+            "(6, 0)": [
+                5,
+                0
+            ]
+        }
+    },
+    "power_pole_information": [
+        [
+            "medium-electric-pole",
+            4,
+            3
+        ]
+    ]
+}

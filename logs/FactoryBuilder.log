@@ -1,0 +1,11 @@
+2025-07-14 16:38:09,665 - FactoryBuilder - INFO - Starting manual configuration setup
+2025-07-14 16:38:31,898 - FactoryBuilder - INFO - Setting up configuration for electronic-circuit: 100 units/min
+2025-07-14 16:38:31,898 - FactoryBuilder - INFO - Initializing FactoryBuilder for electronic-circuit: 100 units/min
+2025-07-14 16:38:31,899 - FactoryBuilder - INFO - Max assemblers per module: 5
+2025-07-14 16:38:31,899 - FactoryBuilder - INFO - Initial module grid size: 15x15
+2025-07-14 16:38:31,899 - FactoryBuilder - INFO - Loading recipe data from recipes.json
+2025-07-14 16:38:31,903 - FactoryBuilder - INFO - Successfully loaded 214 recipes
+2025-07-14 16:38:31,903 - FactoryBuilder - INFO - Loaded 214 recipes
+2025-07-14 16:38:31,903 - FactoryBuilder - INFO - FactoryBuilder initialization complete
+2025-07-14 16:38:31,904 - FactoryBuilder - INFO - Running manual recipe splitting - configure your modules and I/O points
+2025-07-14 16:40:16,799 - FactoryBuilder - INFO - Selected items: set()

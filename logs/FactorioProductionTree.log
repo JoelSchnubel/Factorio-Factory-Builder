@@ -1,0 +1,62 @@
+2025-07-14 16:38:31,904 - FactorioProductionTree - INFO - Initializing FactorioProductionTree with grid size 15x15
+2025-07-14 16:38:31,904 - FactorioProductionTree - INFO - Loading configuration from config.json
+2025-07-14 16:38:31,905 - FactorioProductionTree - INFO - Configuration file loaded successfully
+2025-07-14 16:38:31,905 - FactorioProductionTree - INFO - Configuration loaded successfully
+2025-07-14 16:38:31,905 - FactorioProductionTree - INFO - Grid dimensions set to 15x15
+2025-07-14 16:38:31,905 - FactorioProductionTree - INFO - Loading JSON data from recipes.json
+2025-07-14 16:38:31,908 - FactorioProductionTree - INFO - Successfully loaded recipes.json
+2025-07-14 16:38:31,908 - FactorioProductionTree - INFO - Loading JSON data from machine_data.json
+2025-07-14 16:38:31,908 - FactorioProductionTree - INFO - Successfully loaded machine_data.json
+2025-07-14 16:38:31,910 - FactorioProductionTree - INFO - Recipe and machine data loaded successfully
+2025-07-14 16:38:31,910 - FactorioProductionTree - INFO - Item lookup created with 214 items
+2025-07-14 16:38:31,910 - FactorioProductionTree - INFO - FactorioProductionTree initialization complete
+2025-07-14 16:38:31,910 - FactorioProductionTree - INFO - Calculating production for electronic-circuit: 100 items/minute
+2025-07-14 16:38:31,911 - FactorioProductionTree - INFO - Set output item to electronic-circuit, input items: []
+2025-07-14 16:38:31,911 - FactorioProductionTree - DEBUG - Calculating assemblers for electronic-circuit: 100.0 runs/min
+2025-07-14 16:38:31,911 - FactorioProductionTree - DEBUG - Getting machine type for recipe electronic-circuit
+2025-07-14 16:38:31,912 - FactorioProductionTree - DEBUG - Using default machine type assembling-machine-1 for recipe electronic-circuit
+2025-07-14 16:38:31,912 - FactorioProductionTree - DEBUG - Using machine type assembling-machine-1 with crafting speed 0.5
+2025-07-14 16:38:31,912 - FactorioProductionTree - DEBUG - Assemblers needed for electronic-circuit: 1.6666666666666667
+2025-07-14 16:38:31,913 - FactorioProductionTree - INFO - Calculating production for copper-cable: 300.0 items/minute
+2025-07-14 16:38:31,913 - FactorioProductionTree - DEBUG - Calculating assemblers for copper-cable: 150.0 runs/min
+2025-07-14 16:38:31,914 - FactorioProductionTree - DEBUG - Getting machine type for recipe copper-cable
+2025-07-14 16:38:31,914 - FactorioProductionTree - DEBUG - Using default machine type assembling-machine-1 for recipe copper-cable
+2025-07-14 16:38:31,914 - FactorioProductionTree - DEBUG - Using machine type assembling-machine-1 with crafting speed 0.5
+2025-07-14 16:38:31,915 - FactorioProductionTree - DEBUG - Assemblers needed for copper-cable: 2.5
+2025-07-14 16:38:31,915 - FactorioProductionTree - INFO - Calculating production for copper-plate: 150.0 items/minute
+2025-07-14 16:38:31,916 - FactorioProductionTree - INFO - copper-plate treated as base material (no ingredients or missing recipe data)
+2025-07-14 16:38:31,916 - FactorioProductionTree - DEBUG - Calculating belts for 150.0 items/min
+2025-07-14 16:38:31,917 - FactorioProductionTree - DEBUG - Belts needed: 0.16666666666666666 (type: transport-belt)
+2025-07-14 16:38:31,917 - FactorioProductionTree - DEBUG - Calculating belts for 300.0 items/min
+2025-07-14 16:38:31,917 - FactorioProductionTree - DEBUG - Belts needed: 0.3333333333333333 (type: transport-belt)
+2025-07-14 16:38:31,918 - FactorioProductionTree - INFO - Calculating production for iron-plate: 100.0 items/minute
+2025-07-14 16:38:31,918 - FactorioProductionTree - INFO - iron-plate treated as base material (no ingredients or missing recipe data)
+2025-07-14 16:38:31,919 - FactorioProductionTree - DEBUG - Calculating belts for 100.0 items/min
+2025-07-14 16:38:31,919 - FactorioProductionTree - DEBUG - Belts needed: 0.1111111111111111 (type: transport-belt)
+2025-07-14 16:38:31,919 - FactorioProductionTree - INFO - Calculating production capacities for all items
+2025-07-14 16:38:31,920 - FactorioProductionTree - INFO - Created reverse mapping for 3 items
+2025-07-14 16:38:31,920 - FactorioProductionTree - DEBUG - No consumers for item electronic-circuit, capacity set to 0
+2025-07-14 16:38:31,920 - FactorioProductionTree - DEBUG - Item copper-cable: 3 assemblers, 2 total needed, capacity: 2
+2025-07-14 16:38:31,920 - FactorioProductionTree - DEBUG - Set capacity to 0 for output item copper-plate
+2025-07-14 16:38:31,920 - FactorioProductionTree - DEBUG - Set capacity to 0 for output item iron-plate
+2025-07-14 16:38:31,921 - FactorioProductionTree - INFO - Production capacities calculated successfully
+2025-07-14 16:40:21,191 - FactorioProductionTree - INFO - Initializing FactorioProductionTree with grid size 15x15
+2025-07-14 16:40:21,192 - FactorioProductionTree - INFO - Loading configuration from config.json
+2025-07-14 16:40:21,194 - FactorioProductionTree - INFO - Configuration file loaded successfully
+2025-07-14 16:40:21,194 - FactorioProductionTree - INFO - Configuration loaded successfully
+2025-07-14 16:40:21,194 - FactorioProductionTree - INFO - Grid dimensions set to 15x15
+2025-07-14 16:40:21,195 - FactorioProductionTree - INFO - Loading JSON data from recipes.json
+2025-07-14 16:40:21,199 - FactorioProductionTree - INFO - Successfully loaded recipes.json
+2025-07-14 16:40:21,200 - FactorioProductionTree - INFO - Loading JSON data from machine_data.json
+2025-07-14 16:40:21,202 - FactorioProductionTree - INFO - Successfully loaded machine_data.json
+2025-07-14 16:40:21,204 - FactorioProductionTree - INFO - Recipe and machine data loaded successfully
+2025-07-14 16:40:21,205 - FactorioProductionTree - INFO - Item lookup created with 214 items
+2025-07-14 16:40:21,205 - FactorioProductionTree - INFO - FactorioProductionTree initialization complete
+2025-07-14 16:40:21,206 - FactorioProductionTree - INFO - Loading factory data from E:/Bachelor-Thesis/Modules/electronic-circuit_100_[]_module.json
+2025-07-14 16:40:21,207 - FactorioProductionTree - DEBUG - Basic factory data loaded: output_item=electronic-circuit, grid_size=16x10
+2025-07-14 16:40:21,208 - FactorioProductionTree - INFO - Production tree data successfully loaded from E:/Bachelor-Thesis/Modules/electronic-circuit_100_[]_module.json
+2025-07-14 16:40:21,209 - FactorioProductionTree - DEBUG - Loaded 4 production items, 4 paths, 4 retrieval points
+2025-07-14 16:40:21,210 - FactorioProductionTree - INFO - Calculating maximum output for electronic-circuit
+2025-07-14 16:40:21,210 - FactorioProductionTree - DEBUG - Getting machine type for recipe electronic-circuit
+2025-07-14 16:40:21,212 - FactorioProductionTree - DEBUG - Using default machine type assembling-machine-1 for recipe electronic-circuit
+2025-07-14 16:40:21,213 - FactorioProductionTree - INFO - Maximum output calculated: 120.0 items/min (2 assemblers × 0.5 speed × 120.0 cycles/min × 1 yield)

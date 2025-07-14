@@ -1,0 +1,5 @@
+2025-07-08 13:58:49,760 - MainApp - INFO - Starting Factorio Blueprint Generator application
+2025-07-08 13:58:49,761 - MainApp - INFO - FastAPI application initialized
+2025-07-08 13:58:49,761 - MainApp - INFO - Templates directory ready: templates
+2025-07-08 13:58:49,762 - MainApp - INFO - Static files directory ready: static
+2025-07-08 13:58:49,762 - MainApp - INFO - Template engine and static file serving configured

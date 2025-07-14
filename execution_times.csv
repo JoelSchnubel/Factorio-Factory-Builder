@@ -1,0 +1,114 @@
+Item,Amount,Minimizer,Method,Assemblers,Execution Time (seconds)
+electronic-circuit,1,1,solve,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",1.2307490000021062
+electronic-circuit,1,1,build_belts,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.245407400005206
+electronic-circuit,1,1,solve,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",1.29201180000382
+electronic-circuit,1,1,build_belts,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.1840682999973069
+electronic-circuit,1,1,solve,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",1.2297808000002988
+electronic-circuit,1,1,build_belts,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.23439659999712603
+electronic-circuit,1,1,solve,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",1.3003570999935619
+electronic-circuit,1,1,build_belts,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.22752570000011474
+electronic-circuit,1,1,solve,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",1.1679485000058776
+electronic-circuit,1,1,build_belts,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.15206370000669267
+electronic-circuit,1,1,solve,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",1.1749001999996835
+electronic-circuit,1,1,build_belts,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.17463169999973616
+electronic-circuit,1,1,solve,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",1.2098775999984355
+electronic-circuit,1,1,build_belts,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.20330709999689134
+electronic-circuit,1,1,solve,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",1.255926300000283
+electronic-circuit,1,1,build_belts,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.17792130000452744
+electronic-circuit,1,1,solve,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",1.1915580999993836
+electronic-circuit,1,1,build_belts,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.13771989999804646
+electronic-circuit,1,1,solve,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",1.1898158000039984
+electronic-circuit,1,1,build_belts,"{'electronic-circuit': 1, 'copper-cable': 1, 'copper-plate': 0, 'iron-plate': 0}",0.1315111999938381
+electronic-circuit,50,1,solve,"{'electronic-circuit': 1, 'copper-cable': 2, 'copper-plate': 0, 'iron-plate': 0}",2.3997679999956745
+electronic-circuit,50,1,build_belts,"{'electronic-circuit': 1, 'copper-cable': 2, 'copper-plate': 0, 'iron-plate': 0}",0.16032620000623865
+electronic-circuit,50,1,solve,"{'electronic-circuit': 1, 'copper-cable': 2, 'copper-plate': 0, 'iron-plate': 0}",2.331507299997611
+electronic-circuit,50,1,build_belts,"{'electronic-circuit': 1, 'copper-cable': 2, 'copper-plate': 0, 'iron-plate': 0}",0.18278870000358438
+electronic-circuit,50,1,solve,"{'electronic-circuit': 1, 'copper-cable': 2, 'copper-plate': 0, 'iron-plate': 0}",2.1392463999945903
+electronic-circuit,50,1,build_belts,"{'electronic-circuit': 1, 'copper-cable': 2, 'copper-plate': 0, 'iron-plate': 0}",0.18101690000185044
+electronic-circuit,50,1,solve,"{'electronic-circuit': 1, 'copper-cable': 2, 'copper-plate': 0, 'iron-plate': 0}",2.3334003999989363
+electronic-circuit,50,1,build_belts,"{'electronic-circuit': 1, 'copper-cable': 2, 'copper-plate': 0, 'iron-plate': 0}",0.15183319999778178
+electronic-circuit,50,1,solve,"{'electronic-circuit': 1, 'copper-cable': 2, 'copper-plate': 0, 'iron-plate': 0}",2.4012289000020246
+electronic-circuit,50,1,build_belts,"{'electronic-circuit': 1, 'copper-cable': 2, 'copper-plate': 0, 'iron-plate': 0}",0.2001285000005737
+electronic-circuit,50,1,solve,"{'electronic-circuit': 1, 'copper-cable': 2, 'copper-plate': 0, 'iron-plate': 0}",2.2970066999987466
+electronic-circuit,50,1,build_belts,"{'electronic-circuit': 1, 'copper-cable': 2, 'copper-plate': 0, 'iron-plate': 0}",0.199771999999939
+electronic-circuit,50,1,solve,"{'electronic-circuit': 1, 'copper-cable': 2, 'copper-plate': 0, 'iron-plate': 0}",2.4553223000038997
+electronic-circuit,50,1,build_belts,"{'electronic-circuit': 1, 'copper-cable': 2, 'copper-plate': 0, 'iron-plate': 0}",0.1948188000023947
+electronic-circuit,50,1,solve,"{'electronic-circuit': 1, 'copper-cable': 2, 'copper-plate': 0, 'iron-plate': 0}",2.231733799999347
+electronic-circuit,50,1,build_belts,"{'electronic-circuit': 1, 'copper-cable': 2, 'copper-plate': 0, 'iron-plate': 0}",0.13755110000056447
+electronic-circuit,50,1,solve,"{'electronic-circuit': 1, 'copper-cable': 2, 'copper-plate': 0, 'iron-plate': 0}",2.285554399997636
+electronic-circuit,50,1,build_belts,"{'electronic-circuit': 1, 'copper-cable': 2, 'copper-plate': 0, 'iron-plate': 0}",0.23159189999569207
+electronic-circuit,50,1,solve,"{'electronic-circuit': 1, 'copper-cable': 2, 'copper-plate': 0, 'iron-plate': 0}",2.1857922000053804
+electronic-circuit,50,1,build_belts,"{'electronic-circuit': 1, 'copper-cable': 2, 'copper-plate': 0, 'iron-plate': 0}",0.13671769999928074
+electronic-circuit,100,1,solve,"{'electronic-circuit': 2, 'copper-cable': 3, 'copper-plate': 0, 'iron-plate': 0}",12.643159800005378
+electronic-circuit,100,1,build_belts,"{'electronic-circuit': 2, 'copper-cable': 3, 'copper-plate': 0, 'iron-plate': 0}",0.6413459000032162
+electronic-circuit,100,1,solve,"{'electronic-circuit': 2, 'copper-cable': 3, 'copper-plate': 0, 'iron-plate': 0}",12.141434400000435
+electronic-circuit,100,1,build_belts,"{'electronic-circuit': 2, 'copper-cable': 3, 'copper-plate': 0, 'iron-plate': 0}",0.6625267000054009
+electronic-circuit,100,1,solve,"{'electronic-circuit': 2, 'copper-cable': 3, 'copper-plate': 0, 'iron-plate': 0}",12.3829493000012
+electronic-circuit,100,1,build_belts,"{'electronic-circuit': 2, 'copper-cable': 3, 'copper-plate': 0, 'iron-plate': 0}",0.8144969999993918
+electronic-circuit,100,1,solve,"{'electronic-circuit': 2, 'copper-cable': 3, 'copper-plate': 0, 'iron-plate': 0}",12.786963799997466
+electronic-circuit,100,1,build_belts,"{'electronic-circuit': 2, 'copper-cable': 3, 'copper-plate': 0, 'iron-plate': 0}",0.679823899998155
+electronic-circuit,100,1,solve,"{'electronic-circuit': 2, 'copper-cable': 3, 'copper-plate': 0, 'iron-plate': 0}",13.844212199997855
+electronic-circuit,100,1,build_belts,"{'electronic-circuit': 2, 'copper-cable': 3, 'copper-plate': 0, 'iron-plate': 0}",0.6084542000025976
+electronic-circuit,100,1,solve,"{'electronic-circuit': 2, 'copper-cable': 3, 'copper-plate': 0, 'iron-plate': 0}",11.006792700005462
+electronic-circuit,100,1,build_belts,"{'electronic-circuit': 2, 'copper-cable': 3, 'copper-plate': 0, 'iron-plate': 0}",0.6952549000052386
+electronic-circuit,100,1,solve,"{'electronic-circuit': 2, 'copper-cable': 3, 'copper-plate': 0, 'iron-plate': 0}",13.289945999997144
+electronic-circuit,100,1,build_belts,"{'electronic-circuit': 2, 'copper-cable': 3, 'copper-plate': 0, 'iron-plate': 0}",0.5209237999952165
+electronic-circuit,100,1,solve,"{'electronic-circuit': 2, 'copper-cable': 3, 'copper-plate': 0, 'iron-plate': 0}",15.526063499994052
+electronic-circuit,100,1,build_belts,"{'electronic-circuit': 2, 'copper-cable': 3, 'copper-plate': 0, 'iron-plate': 0}",0.5101223999954527
+electronic-circuit,100,1,solve,"{'electronic-circuit': 2, 'copper-cable': 3, 'copper-plate': 0, 'iron-plate': 0}",11.477444299998751
+electronic-circuit,100,1,build_belts,"{'electronic-circuit': 2, 'copper-cable': 3, 'copper-plate': 0, 'iron-plate': 0}",0.7525758000047063
+electronic-circuit,100,1,solve,"{'electronic-circuit': 2, 'copper-cable': 3, 'copper-plate': 0, 'iron-plate': 0}",15.000223700000788
+electronic-circuit,100,1,build_belts,"{'electronic-circuit': 2, 'copper-cable': 3, 'copper-plate': 0, 'iron-plate': 0}",0.6249554000023636
+electronic-circuit,150,1,solve,"{'electronic-circuit': 3, 'copper-cable': 4, 'copper-plate': 0, 'iron-plate': 0}",138.20492760000343
+electronic-circuit,150,1,build_belts,"{'electronic-circuit': 3, 'copper-cable': 4, 'copper-plate': 0, 'iron-plate': 0}",25.114238200003456
+electronic-circuit,150,1,solve,"{'electronic-circuit': 3, 'copper-cable': 4, 'copper-plate': 0, 'iron-plate': 0}",150.43603850000363
+electronic-circuit,150,1,build_belts,"{'electronic-circuit': 3, 'copper-cable': 4, 'copper-plate': 0, 'iron-plate': 0}",33.3556247000015
+electronic-circuit,150,1,solve,"{'electronic-circuit': 3, 'copper-cable': 4, 'copper-plate': 0, 'iron-plate': 0}",84.6411761000054
+electronic-circuit,150,1,build_belts,"{'electronic-circuit': 3, 'copper-cable': 4, 'copper-plate': 0, 'iron-plate': 0}",10.93106540000008
+electronic-circuit,150,1,solve,"{'electronic-circuit': 3, 'copper-cable': 4, 'copper-plate': 0, 'iron-plate': 0}",108.19171869999991
+electronic-circuit,150,1,build_belts,"{'electronic-circuit': 3, 'copper-cable': 4, 'copper-plate': 0, 'iron-plate': 0}",17.28372930000478
+electronic-circuit,150,1,solve,"{'electronic-circuit': 3, 'copper-cable': 4, 'copper-plate': 0, 'iron-plate': 0}",179.99673299999995
+electronic-circuit,150,1,build_belts,"{'electronic-circuit': 3, 'copper-cable': 4, 'copper-plate': 0, 'iron-plate': 0}",38.216125699997065
+electronic-circuit,150,1,solve,"{'electronic-circuit': 3, 'copper-cable': 4, 'copper-plate': 0, 'iron-plate': 0}",137.6842975000036
+electronic-circuit,150,1,build_belts,"{'electronic-circuit': 3, 'copper-cable': 4, 'copper-plate': 0, 'iron-plate': 0}",16.171735199997784
+electronic-circuit,150,1,solve,"{'electronic-circuit': 3, 'copper-cable': 4, 'copper-plate': 0, 'iron-plate': 0}",99.54221819999657
+electronic-circuit,150,1,build_belts,"{'electronic-circuit': 3, 'copper-cable': 4, 'copper-plate': 0, 'iron-plate': 0}",12.039692499994999
+electronic-circuit,150,1,solve,"{'electronic-circuit': 3, 'copper-cable': 4, 'copper-plate': 0, 'iron-plate': 0}",111.44143470000563
+electronic-circuit,150,1,build_belts,"{'electronic-circuit': 3, 'copper-cable': 4, 'copper-plate': 0, 'iron-plate': 0}",17.356904300002498
+electronic-circuit,150,1,solve,"{'electronic-circuit': 3, 'copper-cable': 4, 'copper-plate': 0, 'iron-plate': 0}",118.30670559999999
+electronic-circuit,150,1,build_belts,"{'electronic-circuit': 3, 'copper-cable': 4, 'copper-plate': 0, 'iron-plate': 0}",20.063776599999983
+electronic-circuit,150,1,solve,"{'electronic-circuit': 3, 'copper-cable': 4, 'copper-plate': 0, 'iron-plate': 0}",137.5666194000005
+
+electronic-circuit,1,solve,"{'electronic-circuit': 1, 'copper-cable': 0, 'iron-plate': 0}",0.7331772000034107,z3
+electronic-circuit,1,build_belts,"{'electronic-circuit': 1, 'copper-cable': 0, 'iron-plate': 0}",0.26995820000593085,z3
+electronic-circuit,1,solve,"{'electronic-circuit': 1, 'copper-cable': 0, 'iron-plate': 0}",0.9966440999996848,z3
+electronic-circuit,1,build_belts,"{'electronic-circuit': 1, 'copper-cable': 0, 'iron-plate': 0}",0.42563119999249466,z3
+electronic-circuit,1,solve,"{'electronic-circuit': 1, 'copper-cable': 0, 'iron-plate': 0}",0.7027636999991955,z3
+electronic-circuit,1,build_belts,"{'electronic-circuit': 1, 'copper-cable': 0, 'iron-plate': 0}",0.202227200003108,z3
+electronic-circuit,1,solve,"{'electronic-circuit': 1, 'copper-cable': 0, 'iron-plate': 0}",0.7669020999892382,z3
+electronic-circuit,1,build_belts,"{'electronic-circuit': 1, 'copper-cable': 0, 'iron-plate': 0}",0.15436480000789743,z3
+electronic-circuit,1,solve,"{'electronic-circuit': 1, 'copper-cable': 0, 'iron-plate': 0}",0.6960341999947559,z3
+electronic-circuit,1,build_belts,"{'electronic-circuit': 1, 'copper-cable': 0, 'iron-plate': 0}",0.11048619999201037,z3
+electronic-circuit,1,solve,"{'electronic-circuit': 1, 'copper-cable': 0, 'iron-plate': 0}",0.745896399996127,z3
+electronic-circuit,1,build_belts,"{'electronic-circuit': 1, 'copper-cable': 0, 'iron-plate': 0}",0.09875979999196716,z3
+electronic-circuit,1,place_power_pole,"{'electronic-circuit': 1, 'copper-cable': 0, 'iron-plate': 0}",0.11503929999889806,z3
+electronic-circuit,1,solve,"{'electronic-circuit': 1, 'copper-cable': 0, 'iron-plate': 0}",0.7010875999985728,z3
+electronic-circuit,1,build_belts,"{'electronic-circuit': 1, 'copper-cable': 0, 'iron-plate': 0}",0.09929480000573676,z3
+electronic-circuit,1,place_power_pole,"{'electronic-circuit': 1, 'copper-cable': 0, 'iron-plate': 0}",0.11966530000790954,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.353174100004253,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.04594070000166539,z3
+copper-cable,1,place_power_pole,"{'copper-cable': 1, 'copper-plate': 0}",0.09701500000664964,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.35019179999653716,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.049044999992474914,z3
+copper-cable,1,place_power_pole,"{'copper-cable': 1, 'copper-plate': 0}",0.09611969999969006,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.3283603000018047,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.043431099998997524,z3
+copper-cable,1,place_power_pole,"{'copper-cable': 1, 'copper-plate': 0}",0.10628989999531768,z3
+copper-cable,1,solve,"{'copper-cable': 1, 'copper-plate': 0}",0.3144240000110585,z3
+copper-cable,1,build_belts,"{'copper-cable': 1, 'copper-plate': 0}",0.05678119999356568,z3
+copper-cable,1,place_power_pole,"{'copper-cable': 1, 'copper-plate': 0}",0.10648879999644123,z3
+electronic-circuit,1,solve,"{'electronic-circuit': 2, 'copper-cable': 3, 'copper-plate': 0, 'iron-plate': 0}",13.256469100000686,z3
+electronic-circuit,1,build_belts,"{'electronic-circuit': 2, 'copper-cable': 3, 'copper-plate': 0, 'iron-plate': 0}",17.88657729999977,z3
+electronic-circuit,1,solve,"{'electronic-circuit': 2, 'copper-cable': 3, 'copper-plate': 0, 'iron-plate': 0}",21.370224799989955,z3
+electronic-circuit,1,build_belts,"{'electronic-circuit': 2, 'copper-cable': 3, 'copper-plate': 0, 'iron-plate': 0}",1.630734799997299,z3
+electronic-circuit,1,place_power_pole,"{'electronic-circuit': 2, 'copper-cable': 3, 'copper-plate': 0, 'iron-plate': 0}",1.9711386999988463,z3

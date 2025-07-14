@@ -231,6 +231,8 @@ class FactoryZ3Solver:
         # Initialize data structures for blocks and gates
         self.blocks = []  # Collection of all blocks in the layout
         self.gates = []   # Flat list of all gates across blocks
+        self.fixed_gates = []  # Collection of fixed I/O gates
+        self.fixed_blocks = []  # Collection of fixed blocks
         
         # Z3 variables for layout bounds optimization
         self.max_x = Int("max_x")  # Maximum layout width
@@ -546,7 +548,7 @@ class FactoryZ3Solver:
                         logger.debug(f"    ✓ Item {item} is ALIGNED")
                     else:
                         misaligned_items.append(item)
-                        logger.debug(f"    ✗ Item {item} is MISALIGNED")
+                        logger.debug(f"    X Item {item} is MISALIGNED")
                 
                 # Calculate required spacing based on misaligned items
                 # Spacing needed = misaligned items - aligned gates (but at least 0)
@@ -584,7 +586,7 @@ class FactoryZ3Solver:
                         self.consumers[producer.id] = []
                     self.consumers[producer.id].append(consumer.id)
                     
-                    logger.debug(f"Compatibility established between {producer.id} → {consumer.id}:")
+                    logger.debug(f"Compatibility established between {producer.id} -> {consumer.id}:")
                     logger.debug(f"  - Aligned items: {aligned_items}")
                     logger.debug(f"  - Misaligned items: {misaligned_items}")
                     logger.debug(f"  - Aligned gates: {aligned_gate_count}")
@@ -789,6 +791,12 @@ class FactoryZ3Solver:
         self.solver.add(self.max_x >= 0)
         self.solver.add(self.max_y >= 0)
         constraint_count += 2
+        
+        # Ensure maximum layout dimensions accommodate all fixed gates
+        for gate in self.fixed_gates:
+            self.solver.add(self.max_x >= gate.x + 1)  # Layout must be wide enough for fixed gates
+            self.solver.add(self.max_y >= gate.y + 1)  # Layout must be tall enough for fixed gates
+            constraint_count += 2
         
         logger.info(f"Added {constraint_count} boundary constraints for {len(self.blocks)} blocks")
         logger.debug("All blocks constrained to non-negative coordinates and within max layout bounds")
@@ -1190,7 +1198,7 @@ class FactoryZ3Solver:
                     
                     connections.append(connection_data)
                     inputs.remove(best_input)
-                    logger.debug(f"Connected aligned gates: {output['id']} → {best_input['id']} with positions ({output['x']}, {output['y']}) → ({best_input['x']}, {best_input['y']})")
+                    logger.debug(f"Connected aligned gates: {output['id']} -> {best_input['id']} with positions ({output['x']}, {output['y']}) -> ({best_input['x']}, {best_input['y']})")
                 else:
                     # Filter available inputs to exclude those from the same block
                     available_inputs = inputs
@@ -1219,7 +1227,7 @@ class FactoryZ3Solver:
                         
                         connections.append(connection_data)
                         inputs.remove(best_input)
-                        logger.debug(f"Connected nearest gates: {output['id']} → {best_input['id']} with positions ({output['x']}, {output['y']}) → ({best_input['x']}, {best_input['y']})")
+                        logger.debug(f"Connected nearest gates: {output['id']} -> {best_input['id']} with positions ({output['x']}, {output['y']}) -> ({best_input['x']}, {best_input['y']})")
                     else:
                         # Skip if there are no valid inputs from different blocks
                         logger.debug(f"Skipped connection for {output['id']} as all inputs are from the same block")
@@ -1564,69 +1572,75 @@ class FactoryZ3Solver:
         return item_complexity
 
     def add_complexity_based_positioning_constraints(self):
-        """
-        Add simplified complexity-based positioning constraints.
-        Fix the lowest complexity module at a specific position above I/O points,
-        then let spacing constraints handle the rest.
-        """
-        logger.info("Adding simplified complexity-based positioning constraints")
+            """
+            Add simplified complexity-based positioning constraints.
+            Fix the lowest complexity module at a specific position above I/O points,
+            then let spacing constraints handle the rest.
+            """
+            logger.info("Adding simplified complexity-based positioning constraints")
+            
+            # Get all non-fixed blocks (exclude 1x1 I/O gate blocks)
+            # Use fixed_blocks list to identify I/O gate blocks since is_fixed_gate_block
+            # hasn't been set yet at this point in the constraint building process
+            fixed_block_ids = set()
+            if hasattr(self, 'fixed_blocks'):
+                fixed_block_ids = {block.id for block in self.fixed_blocks}
+            
+            production_blocks = [block for block in self.blocks 
+                            if block.id not in fixed_block_ids]
+            
+            if not production_blocks:
+                logger.warning("No production blocks found for complexity-based positioning")
+                return
+            
+            # Find the block with the lowest complexity
+            lowest_complexity_block = None
+            lowest_complexity = float('inf')
+            
+            for block in production_blocks:
+                primary_item = self._get_primary_output_item(block)
+                if primary_item:
+                    complexity = self.item_complexity.get(primary_item, 999)
+                    logger.debug(f"Block {block.id} produces {primary_item} with complexity {complexity}")
+                    
+                    if complexity < lowest_complexity:
+                        lowest_complexity = complexity
+                        lowest_complexity_block = block
+            
+            if not lowest_complexity_block:
+                logger.warning("No block with valid complexity found")
+                return
+            
+            # Count the number of I/O points to determine distance
+            num_io_points = 0
+            if hasattr(self, 'fixed_gates'):
+                num_io_points = len(self.fixed_gates)
+            
+            # Get the highest Y coordinate of I/O gates
+            max_io_y = 0
+            if hasattr(self, 'fixed_gates'):
+                for gate in self.fixed_gates:
+                    # Since gates are fixed, we can get their position from the solver
+                    # For now, assume they're at Y=29 based on the user selection
+                    max_io_y = max(max_io_y, 29)  # Use the known Y position from the logs
+            
+            # Calculate the fixed position for the lowest complexity block
+            # Position it above I/O points with distance equal to number of I/O points
+            fixed_y_position = max_io_y - lowest_complexity_block.height - num_io_points
+            
+            # Ensure the position is not negative
+            fixed_y_position = max(0, fixed_y_position)
+            
+            # Add hard constraint to fix the lowest complexity block position
+            self.solver.add(lowest_complexity_block.y == fixed_y_position)
+            
+            logger.info(f"Fixed lowest complexity block {lowest_complexity_block.id} "
+                    f"(complexity {lowest_complexity}) at Y={fixed_y_position}")
+            logger.info(f"Distance from I/O points: {num_io_points} units (based on {num_io_points} I/O points)")
+            
+            # Let the existing spacing constraints handle positioning of other blocks
+            logger.info("Other blocks will be positioned using existing spacing and alignment constraints")
         
-        # Get all non-fixed blocks (exclude 1x1 I/O gate blocks)
-        production_blocks = [block for block in self.blocks 
-                           if not (hasattr(block, 'is_fixed_gate_block') and block.is_fixed_gate_block)]
-        
-        if not production_blocks:
-            logger.warning("No production blocks found for complexity-based positioning")
-            return
-        
-        # Find the block with the lowest complexity
-        lowest_complexity_block = None
-        lowest_complexity = float('inf')
-        
-        for block in production_blocks:
-            primary_item = self._get_primary_output_item(block)
-            if primary_item:
-                complexity = self.item_complexity.get(primary_item, 999)
-                logger.debug(f"Block {block.id} produces {primary_item} with complexity {complexity}")
-                
-                if complexity < lowest_complexity:
-                    lowest_complexity = complexity
-                    lowest_complexity_block = block
-        
-        if not lowest_complexity_block:
-            logger.warning("No block with valid complexity found")
-            return
-        
-        # Count the number of I/O points to determine distance
-        num_io_points = 0
-        if hasattr(self, 'fixed_gates'):
-            num_io_points = len(self.fixed_gates)
-        
-        # Get the highest Y coordinate of I/O gates
-        max_io_y = 0
-        if hasattr(self, 'fixed_gates'):
-            for gate in self.fixed_gates:
-                # Since gates are fixed, we can get their position from the solver
-                # For now, assume they're at Y=29 based on the user selection
-                max_io_y = max(max_io_y, 29)  # Use the known Y position from the logs
-        
-        # Calculate the fixed position for the lowest complexity block
-        # Position it above I/O points with distance equal to number of I/O points
-        fixed_y_position = max_io_y - lowest_complexity_block.height - num_io_points
-        
-        # Ensure the position is not negative
-        fixed_y_position = max(0, fixed_y_position)
-        
-        # Add hard constraint to fix the lowest complexity block position
-        self.solver.add(lowest_complexity_block.y == fixed_y_position)
-        
-        logger.info(f"Fixed lowest complexity block {lowest_complexity_block.id} "
-                   f"(complexity {lowest_complexity}) at Y={fixed_y_position}")
-        logger.info(f"Distance from I/O points: {num_io_points} units (based on {num_io_points} I/O points)")
-        
-        # Let the existing spacing constraints handle positioning of other blocks
-        logger.info("Other blocks will be positioned using existing spacing and alignment constraints")
-    
     def _get_primary_output_item(self, block):
         """
         Determine the primary output item for a block.
